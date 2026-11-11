@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Booking Platform</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f3f6fb;color:#17243a}
+header{background:#102d50;color:white;padding:17px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:bold;cursor:pointer;color:#66c4ff}
+button{border:0;padding:11px 16px;border-radius:9px;cursor:pointer;font-weight:bold}
+.primary{background:#1677e8;color:white}
+.secondary{background:#e8f1ff;color:#1765ba}
+.danger{background:#ffe5e5;color:#c62828}
+.container{max-width:1050px;margin:auto;padding:22px 16px}
+.hero{background:linear-gradient(120deg,#10365f,#1679ce);color:white;padding:35px 25px;border-radius:18px;margin-bottom:22px}
+.hero h1{font-size:30px;margin-bottom:12px}
+.hero p{line-height:1.7;color:#dbeaff}
+.section-title{margin:25px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:white;border-radius:14px;padding:18px;box-shadow:0 3px 15px #162e4b0d}
+.card h3{margin-bottom:10px}
+.card p{color:#69788e;line-height:1.7;font-size:14px}
+.price{font-size:19px;color:#087c53;font-weight:bold;margin:12px 0}
+input,select,textarea{width:100%;padding:12px;margin:8px 0 14px;border:1px solid #d7dfeb;border-radius:8px;font-size:15px;background:white}
+label{font-size:14px;font-weight:bold}
+.form-card{max-width:460px;margin:25px auto}
+.hidden{display:none!important}
+nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:12px 4px;border-top:1px solid #e4e9f0;z-index:10}
+nav button{background:white;color:#53647b;padding:8px 5px;font-size:12px}
+nav button.active{color:#0877df}
+nav span{display:block;font-size:19px;margin-bottom:4px}
+main{padding-bottom:85px}
+.stat{font-size:24px;font-weight:bold;color:#1474d0;margin:8px 0}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;background:#fff0cf;color:#9a6900}
+.admin-layout{display:grid;grid-template-columns:1fr 2fr;gap:15px}
+.user-item{padding:14px;border-bottom:1px solid #e8edf4;cursor:pointer}
+.user-item:hover{background:#eef5ff}
+.small{font-size:12px;color:#718096}
+footer{text-align:center;color:#8794a5;font-size:12px;padding:20px}
+@media(max-width:600px){
+ .hero h1{font-size:24px}
+ .admin-layout{grid-template-columns:1fr}
+ header{padding:14px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo" onclick="secretClick()">✈ TRAVEL PRO</div>
+  <button class="secondary" onclick="show('login')">Login</button>
+</header>
+
+<main class="container">
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero">
+    <h1>Explore The World 🌍</h1>
+    <p>သင့်အိပ်မက်ထဲက ခရီးစဉ်တွေကို ကျွန်ုပ်တို့နဲ့အတူ စတင်လိုက်ပါ။</p>
+    <br>
+    <button class="primary" onclick="show('trips')">Explore Trips →</button>
+    <button class="secondary" onclick="show('deposit')">Deposit Money</button>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <p>My Wallet Balance</p>
+      <div class="stat" id="homeBalance">0 MMK</div>
+      <button class="secondary" onclick="show('profile')">View Wallet</button>
+    </div>
+    <div class="card">
+      <p>My Bookings</p>
+      <div class="stat" id="bookingCount">0</div>
+      <button class="secondary" onclick="show('history')">View History</button>
+    </div>
+  </div>
+
+  <h2 class="section-title">Popular Trips 🌴</h2>
+  <div class="grid" id="homeTrips"></div>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="hidden">
+  <div class="card form-card">
+    <h2>Welcome Back 👋</h2>
+    <p>သင့်အကောင့်ထဲ ဝင်ရောက်ပါ။</p><br>
+    <label>Phone / Email</label>
+    <input id="loginContact" placeholder="Phone or Email">
+    <label>Password</label>
+    <input id="loginPassword" type="password" placeholder="Password">
+    <button class="primary" style="width:100%" onclick="login()">Log In</button>
+    <br><br>
+    <p>အကောင့်မရှိသေးဘူးလား? <a href="#" onclick="show('register')">Sign Up</a></p>
+  </div>
+</section>
+
+<!-- REGISTER -->
+<section id="register" class="hidden">
+  <div class="card form-card">
+    <h2>Create Account</h2>
+    <p>အကောင့်အသစ်ဖွင့်ပါ။</p><br>
+    <label>အမည်</label>
+    <input id="regName" placeholder="Your Name">
+    <label>Phone / Email</label>
+    <input id="regContact" placeholder="Phone or Email">
+    <label>Password</label>
+    <input id="regPassword" type="password" placeholder="Create Password">
+    <label>တည်နေရာ</label>
+    <input id="regLocation" placeholder="Your Location">
+    <label>Invite / Referral Code</label>
+    <input id="regReferral" placeholder="Optional">
+    <button class="primary" style="width:100%" onclick="register()">Sign Up</button>
+    <br><br>
+    <p>အကောင့်ရှိပြီးသားလား? <a href="#" onclick="show('login')">Log In</a></p>
+  </div>
+</section>
+
+<!-- TRIPS -->
+<section id="trips" class="hidden">
+  <h2>🌍 Available Trips</h2>
+  <p class="small">သင့်စိတ်ကြိုက် ခရီးစဉ်ကို ရွေးချယ်ပါ။</p><br>
+  <div class="grid" id="tripList"></div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking" class="hidden">
+  <div class="card form-card">
+    <h2>Trip Booking</h2>
+    <h3 id="selectedTrip"></h3>
+    <label>ခရီးသည်အရေအတွက်</label>
+    <input id="people" type="number" value="1" min="1">
+    <label>ခရီးစဉ်ရက်စွဲ</label>
+    <input id="travelDate" type="date">
+    <button class="primary" style="width:100%" onclick="bookTrip()">Confirm Booking</button>
+  </div>
+</section>
+
+<!-- DEPOSIT -->
+<section id="deposit" class="hidden">
+  <div class="card form-card">
+    <h2>💰 Deposit Request</h2>
+    <p>ငွေသွင်းတောင်းခံမှု ပြုလုပ်ပါ။</p><br>
+    <label>Deposit Amount (MMK)</label>
+    <input id="depositAmount" type="number" min="1" placeholder="Enter Amount">
+    <label>Payment Method</label>
+    <select id="paymentMethod">
+      <option value="Bank Transfer">Bank Transfer</option>
+      <option value="Mobile Payment">Mobile Payment</option>
+      <option value="Other">Other</option>
+    </select>
+    <label>Transaction Reference</label>
+    <input id="transactionRef" placeholder="Transaction ID">
+    <label>Payment Slip</label>
+    <input id="paymentSlip" type="file" accept="image/*">
+    <p class="small">Demo Version: Slip ကို အမှန်တကယ် Server သို့ Upload မလုပ်သေးပါ။</p><br>
+    <button class="primary" style="width:100%" onclick="submitDeposit()">Submit Deposit</button>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history" class="hidden">
+  <h2>📋 My History</h2>
+  <h3 class="section-title">Deposit History</h3>
+  <div id="depositHistory" class="grid"></div>
+  <h3 class="section-title">Booking History</h3>
+  <div id="bookingHistory" class="grid"></div>
+</section>
+
+<!-- CUSTOMER SERVICE -->
+<section id="support" class="hidden">
+  <div class="card form-card">
+    <h2>🎧 Customer Service</h2>
+    <p>ကျွန်ုပ်တို့ကို စာပို့ပြီး အကူအညီတောင်းနိုင်ပါတယ်။</p><br>
+    <label>Message</label>
+    <textarea id="supportMessage" rows="5" placeholder="Write your message..."></textarea>
+    <button class="primary" style="width:100%" onclick="sendMessage()">Send Message</button>
+    <p id="supportResult"></p>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="hidden">
+  <div class="card">
+    <h2>👤 My Profile</h2><br>
+    <p>Name: <b id="profileName">Guest</b></p><br>
+    <p>Phone / Email: <b id="profileContact">-</b></p><br>
+    <p>Location: <b id="profileLocation">-</b></p><br>
+    <p>Referral Code: <b id="profileReferral">-</b></p><br>
+    <hr><br>
+    <p>Wallet Balance</p>
+    <div class="stat" id="profileBalance">0 MMK</div>
+    <button class="primary" onclick="show('deposit')">+ Deposit</button>
+    <button class="secondary" onclick="logout()">Log Out</button>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="hidden">
+  <h2>⚙ Admin Dashboard</h2>
+  <p class="small">DEMO ONLY — Real Admin Authorization မပါသေးပါ။</p><br>
+  <div class="grid">
+    <div class="card"><p>Total Customers</p><div class="stat" id="adminUsers">0</div></div>
+    <div class="card"><p>Pending Deposits</p><div class="stat" id="adminPending">0</div></div>
+    <div class="card"><p>Approved Deposits</p><div class="stat" id="adminApproved">0</div></div>
+  </div>
+  <h3 class="section-title">Deposit Requests</h3>
+  <div id="adminDeposits" class="grid"></div>
+  <br>
+  <h3 class="section-title">Customer List</h3>
+  <div id="adminCustomerList" class="grid"></div>
+</section>
+
+</main>
+
+<nav>
+  <button id="nav-home" class="active" onclick="show('home')"><span>🏠</span>Home</button>
+  <button id="nav-support" onclick="show('support')"><span>🎧</span>Support</button>
+  <button id="nav-history" onclick="show('history')"><span>📋</span>History</button>
+  <button id="nav-profile" onclick="show('profile')"><span>👤</span>Profile</button>
+</nav>
+
+<footer>TRAVEL PRO © 2026 · Trip Booking Platform</footer>
+
+<script>
+const trips = [
+ {id:1,name:"Bagan Adventure",place:"Bagan, Myanmar",price:85000,icon:"🏯"},
+ {id:2,name:"Inle Lake Tour",place:"Shan State, Myanmar",price:120000,icon:"🚣"},
+ {id:3,name:"Ngapali Beach",place:"Rakhine, Myanmar",price:180000,icon:"🏖️"},
+ {id:4,name:"Mountain Escape",place:"Pyin Oo Lwin, Myanmar",price:95000,icon:"🏔️"}
+];
+
+let currentUser = null;
+let users = [];
+let deposits = [];
+let bookings = [];
+let messages = [];
+let chosenTrip = null;
+let logoClicks = [];
+
+function money(n){
+ return Number(n).toLocaleString("en-US")+" MMK";
+}
+
+function show(id){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ const nav=document.getElementById("nav-"+id);
+ if(nav)nav.classList.add("active");
+
+ if(id==="profile" || id==="home") updateUI();
+ if(id==="history") renderHistory();
+ if(id==="admin") renderAdmin();
+ window.scrollTo(0,0);
+}
+
+function secretClick(){
+ const now=Date.now();
+ logoClicks=logoClicks.filter(t=>now-t<3000);
+ logoClicks.push(now);
+ if(logoClicks.length>=7){
+  logoClicks=[];
+  show("support");
+  alert("Customer Service Access");
+ }
+}
+
+function register(){
+ const name=document.getElementById("regName").value.trim();
+ const contact=document.getElementById("regContact").value.trim();
+ const password=document.getElementById("regPassword").value;
+ const location=document.getElementById("regLocation").value.trim();
+ const referral=document.getElementById("regReferral").value.trim();
+
+ if(!name || !contact || !password){
+  alert("လိုအပ်သော အချက်အလက်များ ဖြည့်ပါ။");
+  return;
+ }
+ if(users.some(u=>u.contact===contact)){
+  alert("Account already exists.");
+  return;
+ }
+
+ const user={
+  id:Date.now(),
+  name,contact,password,location,
+  referral:"TP"+Math.random().toString(36).substring(2,8).toUpperCase(),
+  invitedBy:referral,
+  balance:0
+ };
+ users.push(user);
+ currentUser=user;
+ updateUI();
+ alert("Registration Successful!");
+ show("home");
+}
+
+function login(){
+ const contact=document.getElementById("loginContact").value.trim();
+ const password=document.getElementById("loginPassword").value;
+
+ const user=users.find(u=>u.contact===contact && u.password===password);
+ if(!user){
+  alert("Account not found. Please register first.");
+  return;
+ }
+ currentUser=user;
+ updateUI();
+ show("home");
+}
+
+function logout(){
+ currentUser=null;
+ show("login");
+}
+
+function updateUI(){
+ const user=currentUser;
+ document.getElementById("homeBalance").textContent=money(user?user.balance:0);
+ document.getElementById("bookingCount").textContent=bookings.filter(b=>user&&b.userId===user.id).length;
+ document.getElementById("profileName").textContent=user?user.name:"Guest";
+ document.getElementById("profileContact").textContent=user?user.contact:"-";
+ document.getElementById("profileLocation").textContent=user?user.location:"-";
+ document.getElementById("profileReferral").textContent=user?user.referral:"-";
+ document.getElementById("profileBalance").textContent=money(user?user.balance:0);
+}
+
+function renderTrips(){
+ const html=trips.map(t=>`
+ <div class="card">
+  <div style="font-size:40px">${t.icon}</div>
+  <h3>${t.name}</h3>
+  <p>${t.place}</p>
+  <div class="price">${money(t.price)}</div>
+  <button class="primary" onclick="selectTrip(${t.id})">Book Now</button>
+ </div>`).join("");
+ document.getElementById("tripList").innerHTML=html;
+ document.getElementById("homeTrips").innerHTML=html;
+}
+
+function selectTrip(id){
+ if(!currentUser){
+  alert("Please login first.");
+  show("login");
+  return;
+ }
+ chosenTrip=trips.find(t=>t.id===id);
+ document.getElementById("selectedTrip").textContent=chosenTrip.name+" — "+money(chosenTrip.price);
+ show("booking");
+}
+
+function bookTrip(){
+ if(!currentUser || !chosenTrip)return;
+ const quantity=Number(document.getElementById("people").value);
+ const date=document.getElementById("travelDate").value;
+
+ if(!Number.isInteger(quantity)||quantity<1||!date){
+  alert("ခရီးသည်အရေအတွက်နှင့် ရက်စွဲဖြည့်ပါ။");
+  return;
+ }
+
+ const total=chosenTrip.price*quantity;
+ if(currentUser.balance<total){
+  alert("Wallet Balance မလုံလောက်ပါ။ Deposit ပြုလုပ်ပါ။");
+  show("deposit");
+  return;
+ }
+
+ currentUser.balance-=total;
+ bookings.push({
+  id:Date.now(),userId:currentUser.id,
+  trip:chosenTrip.name,quantity,date,total,
+  status:"CONFIRMED"
+ });
+
+ updateUI();
+ alert("Booking Confirmed!");
+ show("history");
+}
+
+function submitDeposit(){
+ if(!currentUser){
+  alert("Please login first.");
+  show("login");
+  return;
+ }
+ const amount=Number(document.getElementById("depositAmount").value);
+ const method=document.getElementById("paymentMethod").value;
+ const ref=document.getElementById("transactionRef").value.trim();
+ const file=document.getElementById("paymentSlip").files[0];
+
+ if(!Number.isFinite(amount)||amount<=0||!ref||!file){
+  alert("Amount, Transaction Reference နဲ့ Slip ဖြည့်ပါ။");
+  return;
+ }
+ if(file.size>5*1024*1024){
+  alert("Slip image must be under 5MB.");
+  return;
+ }
+
+ deposits.push({
+  id:Date.now(),userId:currentUser.id,
+  amount,method,ref,
+  fileName:file.name,
+  status:"PENDING"
+ });
+
+ alert("Deposit Request Submitted! Admin စစ်ဆေးပေးပါမယ်။");
+ document.getElementById("depositAmount").value="";
+ document.getElementById("transactionRef").value="";
+ document.getElementById("paymentSlip").value="";
+ show("history");
+}
+
+function renderHistory(){
+ const mine=currentUser;
+ const myDeposits=deposits.filter(d=>mine&&d.userId===mine.id);
+ const myBookings=bookings.filter(b=>mine&&b.userId===mine.id);
+
+ document.getElementById("depositHistory").innerHTML=myDeposits.map(d=>`
+ <div class="card">
+  <h3>${money(d.amount)}</h3>
+  <p>${d.method} · ${d.ref}</p>
+  <br><span class="status">${d.status}</span>
+ </div>`).join("")||"<p>No deposits yet.</p>";
+
+ document.getElementById("bookingHistory").innerHTML=myBookings.map(b=>`
+ <div class="card">
+  <h3>${b.trip}</h3>
+  <p>Date: ${b.date}</p>
+  <p>Travelers: ${b.quantity}</p>
+  <p>Total: ${money(b.total)}</p>
+  <span class="status">${b.status}</span>
+ </div>`).join("")||"<p>No bookings yet.</p>";
+}
+
+function renderAdmin(){
+ document.getElementById("adminUsers").textContent=users.length;
+ document.getElementById("adminPending").textContent=deposits.filter(d=>d.status==="PENDING").length;
+ document.getElementById("adminApproved").textContent=deposits.filter(d=>d.status==="APPROVED").length;
+
+ document.getElementById("adminDeposits").innerHTML=deposits.map(d=>{
+  const u=users.find(x=>x.id===d.userId);
+  return `<div class="card">
+   <h3>${u?u.name:"Unknown"}</h3>
+   <p>${u?u.contact:"-"}</p>
+   <p>Amount: ${money(d.amount)}</p>
+   <p>Method: ${d.method}</p>
+   <p>Reference: ${d.ref}</p>
+   <p>Slip: ${d.fileName}</p><br>
+   <span class="status">${d.status}</span><br><br>
+   ${d.status==="PENDING"?`
+    <button class="primary" onclick="approve(${d.id})">Approve</button>
+    <button class="danger" onclick="reject(${d.id})">Reject</button>
+   `:""}
+  </div>`;
+ }).join("")||"<p>No deposit requests.</p>";
+
+ document.getElementById("adminCustomerList").innerHTML=users.map(u=>`
+ <div class="card">
+  <h3>${u.name}</h3>
+  <p>${u.contact}</p>
+  <p>${u.location}</p>
+  <p>Referral: ${u.referral}</p>
+  <p>Balance: ${money(u.balance)}</p>
+ </div>`).join("")||"<p>No customers.</p>";
+}
+
+function approve(id){
+ const d=deposits.find(x=>x.id===id);
+ if(!d||d.status!=="PENDING")return;
+ const u=users.find(x=>x.id===d.userId);
+ if(!u)return;
+ d.status="APPROVED";
+ u.balance+=d.amount;
+ renderAdmin();
+}
+
+function reject(id){
+ const d=deposits.find(x=>x.id===id);
+ if(!d||d.status!=="PENDING")return;
+ d.status="REJECTED";
+ renderAdmin();
+}
+
+function sendMessage(){
+ if(!currentUser){
+  alert("Please login first.");
+  show("login");
+  return;
+ }
+ const msg=document.getElementById("supportMessage").value.trim();
+ if(!msg)return;
+ messages.push({user:currentUser.name,message:msg});
+ document.getElementById("supportMessage").value="";
+ document.getElementById("supportResult").textContent="Message saved in this demo.";
+}
+
+// Demo admin access. This is NOT production authentication.
+function adminLogin(){
+ const key=prompt("Enter demo admin code:");
+ if(key==="TRAVEL2026"){
+  show("admin");
+ }else if(key!==null){
+  alert("Invalid admin code.");
+ }
+}
+
+renderTrips();
+updateUI();
+</script>
+
+</body>
+</html>
