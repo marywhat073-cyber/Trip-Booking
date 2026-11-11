@@ -1,50 +1,142 @@
 
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trip Booking Platform</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TRAVEL PRO | Luxury Hotel Booking</title>
 <style>
+:root {
+  --navy:#102B4E;
+  --blue:#1769AA;
+  --gold:#C5A15B;
+  --bg:#F4F7FB;
+  --white:#fff;
+  --text:#17283D;
+  --muted:#718096;
+  --line:#E5EAF0;
+  --glow:0 0 5px #38A9FF,0 0 18px #167CEB55;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f3f6fb;color:#17243a}
-header{background:#102d50;color:white;padding:17px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-.logo{font-size:21px;font-weight:bold;cursor:pointer;color:#66c4ff}
-button{border:0;padding:11px 16px;border-radius:9px;cursor:pointer;font-weight:bold}
-.primary{background:#1677e8;color:white}
-.secondary{background:#e8f1ff;color:#1765ba}
-.danger{background:#ffe5e5;color:#c62828}
-.container{max-width:1050px;margin:auto;padding:22px 16px}
-.hero{background:linear-gradient(120deg,#10365f,#1679ce);color:white;padding:35px 25px;border-radius:18px;margin-bottom:22px}
-.hero h1{font-size:30px;margin-bottom:12px}
-.hero p{line-height:1.7;color:#dbeaff}
-.section-title{margin:25px 0 14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.card{background:white;border-radius:14px;padding:18px;box-shadow:0 3px 15px #162e4b0d}
-.card h3{margin-bottom:10px}
-.card p{color:#69788e;line-height:1.7;font-size:14px}
-.price{font-size:19px;color:#087c53;font-weight:bold;margin:12px 0}
-input,select,textarea{width:100%;padding:12px;margin:8px 0 14px;border:1px solid #d7dfeb;border-radius:8px;font-size:15px;background:white}
-label{font-size:14px;font-weight:bold}
-.form-card{max-width:460px;margin:25px auto}
-.hidden{display:none!important}
-nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:12px 4px;border-top:1px solid #e4e9f0;z-index:10}
-nav button{background:white;color:#53647b;padding:8px 5px;font-size:12px}
-nav button.active{color:#0877df}
-nav span{display:block;font-size:19px;margin-bottom:4px}
-main{padding-bottom:85px}
-.stat{font-size:24px;font-weight:bold;color:#1474d0;margin:8px 0}
-.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;background:#fff0cf;color:#9a6900}
-.admin-layout{display:grid;grid-template-columns:1fr 2fr;gap:15px}
-.user-item{padding:14px;border-bottom:1px solid #e8edf4;cursor:pointer}
-.user-item:hover{background:#eef5ff}
-.small{font-size:12px;color:#718096}
-footer{text-align:center;color:#8794a5;font-size:12px;padding:20px}
-@media(max-width:600px){
- .hero h1{font-size:24px}
- .admin-layout{grid-template-columns:1fr}
- header{padding:14px}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+header{
+ background:var(--navy);color:white;
+ padding:15px 5%;display:flex;align-items:center;
+ justify-content:space-between;position:sticky;top:0;z-index:20;
+}
+.logo{font-size:22px;font-weight:800;letter-spacing:1px;cursor:pointer}
+.logo span{color:var(--gold)}
+.header-actions{display:flex;align-items:center;gap:12px}
+.header-actions button{padding:10px 17px;border-radius:7px}
+.gold-btn{background:var(--gold);color:white;font-weight:bold}
+.outline-btn{background:transparent;color:white;border:1px solid #ffffff70}
+.container{max-width:1200px;margin:auto;padding:24px 18px 100px}
+.hero{
+ min-height:300px;border-radius:16px;overflow:hidden;
+ position:relative;color:white;display:flex;align-items:center;
+ padding:35px;background:linear-gradient(90deg,#071b35e8,#071b3533),
+ url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600') center/cover;
+}
+.hero-content{max-width:570px}
+.hero h1{font-size:clamp(30px,5vw,48px);margin-bottom:15px}
+.hero p{line-height:1.8;color:#e7edf5}
+.hero button{margin-top:20px;padding:13px 22px;border-radius:7px}
+.search-panel{
+ background:white;padding:20px;border-radius:12px;
+ margin-top:-25px;position:relative;z-index:2;
+ box-shadow:0 10px 35px #102b4e18;
+ display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:12px;
+}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}
+.field input,.field select{
+ width:100%;padding:12px;border:1px solid var(--line);
+ border-radius:7px;min-width:0;background:white;
+}
+.search-btn,.primary{
+ background:var(--blue);color:white;padding:13px 20px;
+ border-radius:7px;font-weight:bold;
+}
+.section{margin-top:38px}
+.section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
+.section-heading h2{font-size:23px}
+.muted{color:var(--muted);font-size:13px}
+.carousel{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.hotel-card{
+ background:white;border-radius:12px;overflow:hidden;
+ border:1px solid var(--line);transition:.25s;
+}
+.hotel-card:hover{transform:translateY(-4px);box-shadow:0 12px 25px #102b4e14}
+.hotel-img{width:100%;height:190px;object-fit:cover;display:block}
+.hotel-info{padding:15px}
+.hotel-info h3{font-size:17px;margin-bottom:8px}
+.hotel-info p{font-size:13px;color:var(--muted);line-height:1.6}
+.hotel-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.price{color:var(--navy);font-size:19px;font-weight:bold}
+.price small{font-size:11px;color:var(--muted);font-weight:normal}
+.stars{color:#B68B36;font-size:13px}
+.book-btn{background:var(--navy);color:white;padding:10px 15px;border-radius:6px}
+.carousel-dots{display:flex;justify-content:center;gap:7px;margin-top:15px}
+.dot{width:8px;height:8px;border-radius:20px;background:#cbd5e1}
+.dot.active{width:24px;background:var(--blue)}
+.country-tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.country-tabs button{padding:10px 16px;background:white;border:1px solid var(--line);border-radius:20px;color:var(--text)}
+.country-tabs button.active{background:var(--navy);color:white}
+.hotel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.page{display:none}
+.page.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.stat-card,.panel{background:white;padding:20px;border:1px solid var(--line);border-radius:12px}
+.stat-number{font-size:27px;color:var(--navy);font-weight:bold;margin-top:9px}
+.booking-row{background:white;padding:17px;border-radius:10px;border:1px solid var(--line);margin:12px 0}
+.tag{font-size:11px;padding:5px 9px;border-radius:20px;background:#e8f3ff;color:#1769AA}
+.form-panel{max-width:600px;margin:auto;background:white;padding:25px;border-radius:13px}
+.form-panel input,.form-panel select,.form-panel textarea{
+ width:100%;padding:13px;margin:8px 0 16px;border:1px solid var(--line);border-radius:7px;
+}
+.form-panel label{font-size:13px;font-weight:bold}
+.full{width:100%}
+.bottom-nav{
+ position:fixed;bottom:0;left:0;width:100%;background:white;
+ display:flex;justify-content:center;gap:0;border-top:1px solid var(--line);
+ z-index:15;padding:10px 5%;
+}
+.bottom-nav button{flex:1;max-width:180px;background:white;color:var(--muted);padding:7px;font-size:12px}
+.bottom-nav button.active{color:var(--blue);font-weight:bold}
+.bottom-nav span{display:block;font-size:20px;margin-bottom:4px}
+.modal{
+ display:none;position:fixed;inset:0;background:#07182bc9;
+ z-index:100;align-items:center;justify-content:center;padding:18px;
+}
+.modal.show{display:flex}
+.modal-box{
+ width:100%;max-width:430px;background:white;border-radius:15px;
+ padding:27px;position:relative;border:1px solid #38A9FF;
+ box-shadow:var(--glow),0 20px 80px #0005;
+ animation:appear .25s ease;
+}
+@keyframes appear{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-box h2{color:var(--navy);margin-bottom:12px}
+.close{position:absolute;right:15px;top:13px;background:#edf2f7;border-radius:50%;width:30px;height:30px}
+.modal-box input{width:100%;padding:12px;margin:8px 0 15px;border:1px solid var(--line);border-radius:7px}
+.notice{padding:12px;background:#fff6df;color:#795b19;border-radius:7px;font-size:12px;line-height:1.6;margin:12px 0}
+.empty{background:white;padding:30px;text-align:center;border-radius:10px;color:var(--muted)}
+footer{text-align:center;padding:30px;color:var(--muted);font-size:12px}
+@media(max-width:800px){
+ .search-panel{grid-template-columns:1fr 1fr}
+ .carousel,.hotel-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:520px){
+ header{padding:13px}
+ .logo{font-size:17px}
+ .header-actions button{padding:9px;font-size:12px}
+ .hero{min-height:260px;padding:22px}
+ .search-panel{grid-template-columns:1fr;margin-top:12px}
+ .carousel,.hotel-grid{grid-template-columns:1fr}
+ .hotel-img{height:210px}
+ .stat-grid{grid-template-columns:1fr}
+ .section-heading h2{font-size:19px}
 }
 </style>
 </head>
@@ -52,470 +144,316 @@ footer{text-align:center;color:#8794a5;font-size:12px;padding:20px}
 <body>
 
 <header>
-  <div class="logo" onclick="secretClick()">✈ TRAVEL PRO</div>
-  <button class="secondary" onclick="show('login')">Login</button>
+ <div class="logo" onclick="tapLogo()">TRAVEL <span>PRO</span></div>
+ <div class="header-actions">
+  <button class="outline-btn" onclick="showPage('support')">Support</button>
+  <button class="gold-btn" onclick="showPage('profile')">My Account</button>
+ </div>
 </header>
 
 <main class="container">
 
-<!-- HOME -->
-<section id="home">
-  <div class="hero">
-    <h1>Explore The World 🌍</h1>
-    <p>သင့်အိပ်မက်ထဲက ခရီးစဉ်တွေကို ကျွန်ုပ်တို့နဲ့အတူ စတင်လိုက်ပါ။</p>
-    <br>
-    <button class="primary" onclick="show('trips')">Explore Trips →</button>
-    <button class="secondary" onclick="show('deposit')">Deposit Money</button>
+<section id="home" class="page active">
+ <div class="hero">
+  <div class="hero-content">
+   <p style="color:#e5bd70;font-weight:bold;letter-spacing:2px">DISCOVER THE WORLD</p>
+   <h1>Travel Beyond Expectations.</h1>
+   <p>Discover exceptional hotels, beautiful destinations and unforgettable travel experiences around the world.</p>
+   <button class="gold-btn" onclick="document.getElementById('directory').scrollIntoView({behavior:'smooth'})">Explore Hotels →</button>
   </div>
+ </div>
 
-  <div class="grid">
-    <div class="card">
-      <p>My Wallet Balance</p>
-      <div class="stat" id="homeBalance">0 MMK</div>
-      <button class="secondary" onclick="show('profile')">View Wallet</button>
-    </div>
-    <div class="card">
-      <p>My Bookings</p>
-      <div class="stat" id="bookingCount">0</div>
-      <button class="secondary" onclick="show('history')">View History</button>
-    </div>
+ <div class="search-panel">
+  <div class="field">
+   <label>DESTINATION / HOTEL</label>
+   <input id="searchText" placeholder="Where would you like to stay?">
   </div>
+  <div class="field">
+   <label>CHECK IN</label>
+   <input id="checkIn" type="date">
+  </div>
+  <div class="field">
+   <label>CHECK OUT</label>
+   <input id="checkOut" type="date">
+  </div>
+  <div class="field">
+   <label>GUESTS</label>
+   <select id="guests"><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option></select>
+  </div>
+  <button class="search-btn" onclick="searchHotels()">Search</button>
+ </div>
 
-  <h2 class="section-title">Popular Trips 🌴</h2>
-  <div class="grid" id="homeTrips"></div>
+ <div class="section">
+  <div class="section-heading">
+   <div><h2>Featured Hotels</h2><p class="muted">Handpicked stays for your next journey</p></div>
+   <span class="tag">FEATURED</span>
+  </div>
+  <div class="carousel" id="carousel"></div>
+  <div class="carousel-dots" id="dots"></div>
+ </div>
+
+ <div class="section" id="directory">
+  <div class="section-heading">
+   <div><h2>Explore Hotels Worldwide</h2><p class="muted">Discover destinations across the globe</p></div>
+  </div>
+  <div class="country-tabs" id="countryTabs"></div>
+  <div class="hotel-grid" id="hotelGrid"></div>
+ </div>
 </section>
 
-<!-- LOGIN -->
-<section id="login" class="hidden">
-  <div class="card form-card">
-    <h2>Welcome Back 👋</h2>
-    <p>သင့်အကောင့်ထဲ ဝင်ရောက်ပါ။</p><br>
-    <label>Phone / Email</label>
-    <input id="loginContact" placeholder="Phone or Email">
-    <label>Password</label>
-    <input id="loginPassword" type="password" placeholder="Password">
-    <button class="primary" style="width:100%" onclick="login()">Log In</button>
-    <br><br>
-    <p>အကောင့်မရှိသေးဘူးလား? <a href="#" onclick="show('register')">Sign Up</a></p>
+<section id="history" class="page">
+ <h2>Booking History</h2>
+ <p class="muted" style="margin:10px 0 20px">Your booking requests and reservation records</p>
+ <div class="stat-grid">
+  <div class="stat-card"><p class="muted">Daily Booking Requests</p><div class="stat-number" id="dailyCount">0 / 30</div></div>
+  <div class="stat-card"><p class="muted">Total Requests</p><div class="stat-number" id="totalCount">0</div></div>
+  <div class="stat-card"><p class="muted">Booking Status</p><div class="stat-number">Active</div></div>
+ </div>
+ <div id="historyList" style="margin-top:20px"></div>
+</section>
+
+<section id="support" class="page">
+ <div class="form-panel">
+  <h2>Customer Support</h2>
+  <p class="muted">Our support team is here to help.</p><br>
+  <label>Your Name</label><input id="supportName" placeholder="Your name">
+  <label>Email or Phone</label><input id="supportContact" placeholder="Your contact">
+  <label>Message</label><textarea id="supportText" rows="5" placeholder="How can we help?"></textarea>
+  <button class="primary full" onclick="sendSupport()">Send Message</button>
+  <p id="supportStatus" class="muted" style="margin-top:12px"></p>
+ </div>
+</section>
+
+<section id="profile" class="page">
+ <h2>My Account</h2><br>
+ <div class="panel">
+  <h3>Welcome, Guest</h3>
+  <p class="muted" style="margin-top:8px">Your travel account</p><br>
+  <div class="stat-grid">
+   <div><p class="muted">Booking Requests</p><div class="stat-number" id="profileBookings">0</div></div>
+   <div><p class="muted">Membership</p><div class="stat-number" style="font-size:20px">Standard</div></div>
+   <div><p class="muted">Daily Limit</p><div class="stat-number" style="font-size:20px">30</div></div>
   </div>
+  <div class="notice">Demo mode: No real payment has been taken. Connect a secure booking and payment backend before accepting customers.</div>
+ </div>
 </section>
 
-<!-- REGISTER -->
-<section id="register" class="hidden">
-  <div class="card form-card">
-    <h2>Create Account</h2>
-    <p>အကောင့်အသစ်ဖွင့်ပါ။</p><br>
-    <label>အမည်</label>
-    <input id="regName" placeholder="Your Name">
-    <label>Phone / Email</label>
-    <input id="regContact" placeholder="Phone or Email">
-    <label>Password</label>
-    <input id="regPassword" type="password" placeholder="Create Password">
-    <label>တည်နေရာ</label>
-    <input id="regLocation" placeholder="Your Location">
-    <label>Invite / Referral Code</label>
-    <input id="regReferral" placeholder="Optional">
-    <button class="primary" style="width:100%" onclick="register()">Sign Up</button>
-    <br><br>
-    <p>အကောင့်ရှိပြီးသားလား? <a href="#" onclick="show('login')">Log In</a></p>
-  </div>
-</section>
-
-<!-- TRIPS -->
-<section id="trips" class="hidden">
-  <h2>🌍 Available Trips</h2>
-  <p class="small">သင့်စိတ်ကြိုက် ခရီးစဉ်ကို ရွေးချယ်ပါ။</p><br>
-  <div class="grid" id="tripList"></div>
-</section>
-
-<!-- BOOKING -->
-<section id="booking" class="hidden">
-  <div class="card form-card">
-    <h2>Trip Booking</h2>
-    <h3 id="selectedTrip"></h3>
-    <label>ခရီးသည်အရေအတွက်</label>
-    <input id="people" type="number" value="1" min="1">
-    <label>ခရီးစဉ်ရက်စွဲ</label>
-    <input id="travelDate" type="date">
-    <button class="primary" style="width:100%" onclick="bookTrip()">Confirm Booking</button>
-  </div>
-</section>
-
-<!-- DEPOSIT -->
-<section id="deposit" class="hidden">
-  <div class="card form-card">
-    <h2>💰 Deposit Request</h2>
-    <p>ငွေသွင်းတောင်းခံမှု ပြုလုပ်ပါ။</p><br>
-    <label>Deposit Amount (MMK)</label>
-    <input id="depositAmount" type="number" min="1" placeholder="Enter Amount">
-    <label>Payment Method</label>
-    <select id="paymentMethod">
-      <option value="Bank Transfer">Bank Transfer</option>
-      <option value="Mobile Payment">Mobile Payment</option>
-      <option value="Other">Other</option>
-    </select>
-    <label>Transaction Reference</label>
-    <input id="transactionRef" placeholder="Transaction ID">
-    <label>Payment Slip</label>
-    <input id="paymentSlip" type="file" accept="image/*">
-    <p class="small">Demo Version: Slip ကို အမှန်တကယ် Server သို့ Upload မလုပ်သေးပါ။</p><br>
-    <button class="primary" style="width:100%" onclick="submitDeposit()">Submit Deposit</button>
-  </div>
-</section>
-
-<!-- HISTORY -->
-<section id="history" class="hidden">
-  <h2>📋 My History</h2>
-  <h3 class="section-title">Deposit History</h3>
-  <div id="depositHistory" class="grid"></div>
-  <h3 class="section-title">Booking History</h3>
-  <div id="bookingHistory" class="grid"></div>
-</section>
-
-<!-- CUSTOMER SERVICE -->
-<section id="support" class="hidden">
-  <div class="card form-card">
-    <h2>🎧 Customer Service</h2>
-    <p>ကျွန်ုပ်တို့ကို စာပို့ပြီး အကူအညီတောင်းနိုင်ပါတယ်။</p><br>
-    <label>Message</label>
-    <textarea id="supportMessage" rows="5" placeholder="Write your message..."></textarea>
-    <button class="primary" style="width:100%" onclick="sendMessage()">Send Message</button>
-    <p id="supportResult"></p>
-  </div>
-</section>
-
-<!-- PROFILE -->
-<section id="profile" class="hidden">
-  <div class="card">
-    <h2>👤 My Profile</h2><br>
-    <p>Name: <b id="profileName">Guest</b></p><br>
-    <p>Phone / Email: <b id="profileContact">-</b></p><br>
-    <p>Location: <b id="profileLocation">-</b></p><br>
-    <p>Referral Code: <b id="profileReferral">-</b></p><br>
-    <hr><br>
-    <p>Wallet Balance</p>
-    <div class="stat" id="profileBalance">0 MMK</div>
-    <button class="primary" onclick="show('deposit')">+ Deposit</button>
-    <button class="secondary" onclick="logout()">Log Out</button>
-  </div>
-</section>
-
-<!-- ADMIN -->
-<section id="admin" class="hidden">
-  <h2>⚙ Admin Dashboard</h2>
-  <p class="small">DEMO ONLY — Real Admin Authorization မပါသေးပါ။</p><br>
-  <div class="grid">
-    <div class="card"><p>Total Customers</p><div class="stat" id="adminUsers">0</div></div>
-    <div class="card"><p>Pending Deposits</p><div class="stat" id="adminPending">0</div></div>
-    <div class="card"><p>Approved Deposits</p><div class="stat" id="adminApproved">0</div></div>
-  </div>
-  <h3 class="section-title">Deposit Requests</h3>
-  <div id="adminDeposits" class="grid"></div>
-  <br>
-  <h3 class="section-title">Customer List</h3>
-  <div id="adminCustomerList" class="grid"></div>
+<section id="booking" class="page">
+ <div class="form-panel">
+  <h2>Hotel Booking Request</h2>
+  <p id="bookingHotel" class="muted" style="margin:10px 0 20px"></p>
+  <label>Guest Name</label><input id="guestName" placeholder="Full name">
+  <label>Contact Number / Email</label><input id="guestContact" placeholder="Your contact">
+  <label>Check-in</label><input type="date" id="bookingIn">
+  <label>Check-out</label><input type="date" id="bookingOut">
+  <label>Number of Guests</label><select id="bookingGuests"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+  <div class="notice">This is a booking inquiry prototype. Final availability and pricing must be confirmed by the hotel or an authorized booking provider.</div>
+  <button class="primary full" onclick="submitBooking()">Submit Booking Request</button>
+  <button class="outline-btn full" style="color:var(--navy);border-color:var(--line);margin-top:10px" onclick="showPage('home')">Cancel</button>
+ </div>
 </section>
 
 </main>
 
-<nav>
-  <button id="nav-home" class="active" onclick="show('home')"><span>🏠</span>Home</button>
-  <button id="nav-support" onclick="show('support')"><span>🎧</span>Support</button>
-  <button id="nav-history" onclick="show('history')"><span>📋</span>History</button>
-  <button id="nav-profile" onclick="show('profile')"><span>👤</span>Profile</button>
+<nav class="bottom-nav">
+ <button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+ <button data-page="support" onclick="showPage('support')"><span>✉</span>Support</button>
+ <button data-page="history" onclick="showPage('history')"><span>▤</span>History</button>
+ <button data-page="profile" onclick="showPage('profile')"><span>♙</span>Profile</button>
 </nav>
 
-<footer>TRAVEL PRO © 2026 · Trip Booking Platform</footer>
+<!-- SECRET ACCESS MODAL -->
+<div class="modal" id="secretModal" onclick="closeOutside(event)">
+ <div class="modal-box">
+  <button class="close" onclick="closeModal()">×</button>
+  <h2>Secure Staff Access</h2>
+  <p class="muted">Authorized Admin / Customer Service login</p>
+  <form onsubmit="staffLogin(event)">
+   <label>Phone Number</label>
+   <input id="staffPhone" type="tel" autocomplete="username" placeholder="Enter registered phone">
+   <label>Password</label>
+   <input id="staffPassword" type="password" autocomplete="current-password" placeholder="Enter password">
+   <button class="primary full" type="submit">Secure Login</button>
+  </form>
+  <div class="notice">Staff credentials must be verified by a secure server. Do not store passwords in this HTML file.</div>
+  <p id="staffStatus" class="muted"></p>
+ </div>
+</div>
+
+<footer>TRAVEL PRO · PREMIUM HOTEL BOOKING · © 2026</footer>
 
 <script>
-const trips = [
- {id:1,name:"Bagan Adventure",place:"Bagan, Myanmar",price:85000,icon:"🏯"},
- {id:2,name:"Inle Lake Tour",place:"Shan State, Myanmar",price:120000,icon:"🚣"},
- {id:3,name:"Ngapali Beach",place:"Rakhine, Myanmar",price:180000,icon:"🏖️"},
- {id:4,name:"Mountain Escape",place:"Pyin Oo Lwin, Myanmar",price:95000,icon:"🏔️"}
+const hotels = [
+ {id:1,name:"Luxury Beach Resort",country:"Thailand",city:"Phuket",price:185,currency:"USD",rating:"4.9",image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
+ {id:2,name:"Grand Riverside Hotel",country:"Singapore",city:"Singapore",price:220,currency:"USD",rating:"4.8",image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
+ {id:3,name:"Mountain View Retreat",country:"Japan",city:"Kyoto",price:160,currency:"USD",rating:"4.8",image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
+ {id:4,name:"Ocean Pearl Resort",country:"Maldives",city:"Malé",price:420,currency:"USD",rating:"5.0",image:"https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=900"},
+ {id:5,name:"Royal City Hotel",country:"United Arab Emirates",city:"Dubai",price:260,currency:"USD",rating:"4.9",image:"https://images.unsplash.com/photo-1582719508461-905c673771fd?w=900"},
+ {id:6,name:"Heritage Garden Stay",country:"Myanmar",city:"Bagan",price:95,currency:"USD",rating:"4.7",image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
+ {id:7,name:"Urban Grand Hotel",country:"Thailand",city:"Bangkok",price:110,currency:"USD",rating:"4.7",image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
+ {id:8,name:"Kyoto Garden Hotel",country:"Japan",city:"Kyoto",price:175,currency:"USD",rating:"4.9",image:"https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=900"},
+ {id:9,name:"Marina Bay Stay",country:"Singapore",city:"Singapore",price:240,currency:"USD",rating:"4.8",image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"}
 ];
 
-let currentUser = null;
-let users = [];
-let deposits = [];
-let bookings = [];
-let messages = [];
-let chosenTrip = null;
-let logoClicks = [];
+let slide=0;
+let selectedHotel=null;
+let orders=JSON.parse(localStorage.getItem("travelBookings")||"[]");
+let country="All";
+let taps=[];
+const MAX_DAILY=30;
 
-function money(n){
- return Number(n).toLocaleString("en-US")+" MMK";
+function card(h){
+ return `<article class="hotel-card">
+ <img class="hotel-img" src="${h.image}" alt="${h.name}" loading="lazy">
+ <div class="hotel-info">
+  <div class="stars">★ ${h.rating} <span class="muted">· ${h.city}, ${h.country}</span></div>
+  <h3>${h.name}</h3>
+  <p>Premium accommodation · Availability subject to confirmation</p>
+  <div class="hotel-bottom">
+   <div class="price">$${h.price}<small> / night</small></div>
+   <button class="book-btn" onclick="startBooking(${h.id})">Book Now</button>
+  </div>
+ </div></article>`;
 }
 
-function show(id){
- document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
-
- document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
- const nav=document.getElementById("nav-"+id);
- if(nav)nav.classList.add("active");
-
- if(id==="profile" || id==="home") updateUI();
- if(id==="history") renderHistory();
- if(id==="admin") renderAdmin();
- window.scrollTo(0,0);
+function renderCarousel(){
+ const featured=hotels.slice(slide,slide+3);
+ const items=featured.length===3?featured:hotels.slice(0,3);
+ document.getElementById("carousel").innerHTML=items.map(card).join("");
+ document.getElementById("dots").innerHTML=hotels.slice(0,6).map((h,i)=>
+ `<button aria-label="Slide ${i+1}" class="dot ${i===slide?'active':''}" onclick="slide=i;renderCarousel()"></button>`
+ ).join("");
 }
-
-function secretClick(){
- const now=Date.now();
- logoClicks=logoClicks.filter(t=>now-t<3000);
- logoClicks.push(now);
- if(logoClicks.length>=7){
-  logoClicks=[];
-  show("support");
-  alert("Customer Service Access");
- }
+function nextSlide(){
+ slide=(slide+1)%6;
+ renderCarousel();
 }
+setInterval(nextSlide,4500);
 
-function register(){
- const name=document.getElementById("regName").value.trim();
- const contact=document.getElementById("regContact").value.trim();
- const password=document.getElementById("regPassword").value;
- const location=document.getElementById("regLocation").value.trim();
- const referral=document.getElementById("regReferral").value.trim();
-
- if(!name || !contact || !password){
-  alert("လိုအပ်သော အချက်အလက်များ ဖြည့်ပါ။");
-  return;
+function renderCountries(){
+ const countries=["All",...new Set(hotels.map(h=>h.country))];
+ document.getElementById("countryTabs").innerHTML=countries.map(c=>
+ `<button class="${c===country?'active':''}" onclick="country='${c}';renderDirectory()">${c}</button>`
+ ).join("");
+}
+function renderDirectory(){
+ renderCountries();
+ const list=hotels.filter(h=>country==="All"||h.country===country);
+ document.getElementById("hotelGrid").innerHTML=list.map(card).join("")||'<div class="empty">No hotels found.</div>';
+}
+function searchHotels(){
+ const q=document.getElementById("searchText").value.toLowerCase();
+ const results=hotels.filter(h=>(h.name+" "+h.city+" "+h.country).toLowerCase().includes(q));
+ country="All";
+ renderCountries();
+ document.getElementById("hotelGrid").innerHTML=results.map(card).join("")||'<div class="empty">No matching hotels.</div>';
+ document.getElementById("directory").scrollIntoView({behavior:"smooth"});
+}
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ if(id==="history")renderHistory();
+ if(id==="profile")updateStats();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function startBooking(id){
+ selectedHotel=hotels.find(h=>h.id===id);
+ if(!selectedHotel)return;
+ document.getElementById("bookingHotel").textContent=selectedHotel.name+" · "+selectedHotel.city+" · $"+selectedHotel.price+" per night";
+ showPage("booking");
+}
+function todayKey(){
+ const d=new Date();
+ return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+function submitBooking(){
+ const name=document.getElementById("guestName").value.trim();
+ const contact=document.getElementById("guestContact").value.trim();
+ const checkin=document.getElementById("bookingIn").value;
+ const checkout=document.getElementById("bookingOut").value;
+ const guests=Number(document.getElementById("bookingGuests").value);
+ if(!name||!contact||!checkin||!checkout){
+  alert("Please complete all required fields.");return;
  }
- if(users.some(u=>u.contact===contact)){
-  alert("Account already exists.");
-  return;
+ if(new Date(checkout)<=new Date(checkin)){
+  alert("Check-out must be after check-in.");return;
  }
-
- const user={
-  id:Date.now(),
-  name,contact,password,location,
-  referral:"TP"+Math.random().toString(36).substring(2,8).toUpperCase(),
-  invitedBy:referral,
-  balance:0
+ const count=orders.filter(o=>o.day===todayKey()).length;
+ if(count>=MAX_DAILY){
+  alert("Daily booking request limit reached (30).");return;
+ }
+ const order={
+  id:"TP-"+Date.now(),
+  hotel:selectedHotel.name,
+  city:selectedHotel.city,
+  price:selectedHotel.price,
+  name,contact,checkin,checkout,guests,
+  status:"REQUESTED",day:todayKey()
  };
- users.push(user);
- currentUser=user;
- updateUI();
- alert("Registration Successful!");
- show("home");
+ orders.unshift(order);
+ localStorage.setItem("travelBookings",JSON.stringify(orders));
+ alert("Booking inquiry submitted. Await confirmation.");
+ showPage("history");
 }
-
-function login(){
- const contact=document.getElementById("loginContact").value.trim();
- const password=document.getElementById("loginPassword").value;
-
- const user=users.find(u=>u.contact===contact && u.password===password);
- if(!user){
-  alert("Account not found. Please register first.");
-  return;
- }
- currentUser=user;
- updateUI();
- show("home");
-}
-
-function logout(){
- currentUser=null;
- show("login");
-}
-
-function updateUI(){
- const user=currentUser;
- document.getElementById("homeBalance").textContent=money(user?user.balance:0);
- document.getElementById("bookingCount").textContent=bookings.filter(b=>user&&b.userId===user.id).length;
- document.getElementById("profileName").textContent=user?user.name:"Guest";
- document.getElementById("profileContact").textContent=user?user.contact:"-";
- document.getElementById("profileLocation").textContent=user?user.location:"-";
- document.getElementById("profileReferral").textContent=user?user.referral:"-";
- document.getElementById("profileBalance").textContent=money(user?user.balance:0);
-}
-
-function renderTrips(){
- const html=trips.map(t=>`
- <div class="card">
-  <div style="font-size:40px">${t.icon}</div>
-  <h3>${t.name}</h3>
-  <p>${t.place}</p>
-  <div class="price">${money(t.price)}</div>
-  <button class="primary" onclick="selectTrip(${t.id})">Book Now</button>
- </div>`).join("");
- document.getElementById("tripList").innerHTML=html;
- document.getElementById("homeTrips").innerHTML=html;
-}
-
-function selectTrip(id){
- if(!currentUser){
-  alert("Please login first.");
-  show("login");
-  return;
- }
- chosenTrip=trips.find(t=>t.id===id);
- document.getElementById("selectedTrip").textContent=chosenTrip.name+" — "+money(chosenTrip.price);
- show("booking");
-}
-
-function bookTrip(){
- if(!currentUser || !chosenTrip)return;
- const quantity=Number(document.getElementById("people").value);
- const date=document.getElementById("travelDate").value;
-
- if(!Number.isInteger(quantity)||quantity<1||!date){
-  alert("ခရီးသည်အရေအတွက်နှင့် ရက်စွဲဖြည့်ပါ။");
-  return;
- }
-
- const total=chosenTrip.price*quantity;
- if(currentUser.balance<total){
-  alert("Wallet Balance မလုံလောက်ပါ။ Deposit ပြုလုပ်ပါ။");
-  show("deposit");
-  return;
- }
-
- currentUser.balance-=total;
- bookings.push({
-  id:Date.now(),userId:currentUser.id,
-  trip:chosenTrip.name,quantity,date,total,
-  status:"CONFIRMED"
- });
-
- updateUI();
- alert("Booking Confirmed!");
- show("history");
-}
-
-function submitDeposit(){
- if(!currentUser){
-  alert("Please login first.");
-  show("login");
-  return;
- }
- const amount=Number(document.getElementById("depositAmount").value);
- const method=document.getElementById("paymentMethod").value;
- const ref=document.getElementById("transactionRef").value.trim();
- const file=document.getElementById("paymentSlip").files[0];
-
- if(!Number.isFinite(amount)||amount<=0||!ref||!file){
-  alert("Amount, Transaction Reference နဲ့ Slip ဖြည့်ပါ။");
-  return;
- }
- if(file.size>5*1024*1024){
-  alert("Slip image must be under 5MB.");
-  return;
- }
-
- deposits.push({
-  id:Date.now(),userId:currentUser.id,
-  amount,method,ref,
-  fileName:file.name,
-  status:"PENDING"
- });
-
- alert("Deposit Request Submitted! Admin စစ်ဆေးပေးပါမယ်။");
- document.getElementById("depositAmount").value="";
- document.getElementById("transactionRef").value="";
- document.getElementById("paymentSlip").value="";
- show("history");
-}
-
 function renderHistory(){
- const mine=currentUser;
- const myDeposits=deposits.filter(d=>mine&&d.userId===mine.id);
- const myBookings=bookings.filter(b=>mine&&b.userId===mine.id);
-
- document.getElementById("depositHistory").innerHTML=myDeposits.map(d=>`
- <div class="card">
-  <h3>${money(d.amount)}</h3>
-  <p>${d.method} · ${d.ref}</p>
-  <br><span class="status">${d.status}</span>
- </div>`).join("")||"<p>No deposits yet.</p>";
-
- document.getElementById("bookingHistory").innerHTML=myBookings.map(b=>`
- <div class="card">
-  <h3>${b.trip}</h3>
-  <p>Date: ${b.date}</p>
-  <p>Travelers: ${b.quantity}</p>
-  <p>Total: ${money(b.total)}</p>
-  <span class="status">${b.status}</span>
- </div>`).join("")||"<p>No bookings yet.</p>";
+ const today=orders.filter(o=>o.day===todayKey()).length;
+ document.getElementById("dailyCount").textContent=today+" / 30";
+ document.getElementById("totalCount").textContent=orders.length;
+ document.getElementById("historyList").innerHTML=orders.map(o=>`
+ <div class="booking-row">
+  <h3>${escapeHTML(o.hotel)}</h3>
+  <p class="muted">${escapeHTML(o.city)} · ${escapeHTML(o.checkin)} to ${escapeHTML(o.checkout)}</p>
+  <p style="margin:9px 0">Guests: ${o.guests} · Indicative rate: $${o.price}/night</p>
+  <span class="tag">${o.status}</span>
+  <p class="muted" style="margin-top:8px">Reference: ${o.id}</p>
+ </div>`).join("")||'<div class="empty">No booking requests yet.</div>';
 }
-
-function renderAdmin(){
- document.getElementById("adminUsers").textContent=users.length;
- document.getElementById("adminPending").textContent=deposits.filter(d=>d.status==="PENDING").length;
- document.getElementById("adminApproved").textContent=deposits.filter(d=>d.status==="APPROVED").length;
-
- document.getElementById("adminDeposits").innerHTML=deposits.map(d=>{
-  const u=users.find(x=>x.id===d.userId);
-  return `<div class="card">
-   <h3>${u?u.name:"Unknown"}</h3>
-   <p>${u?u.contact:"-"}</p>
-   <p>Amount: ${money(d.amount)}</p>
-   <p>Method: ${d.method}</p>
-   <p>Reference: ${d.ref}</p>
-   <p>Slip: ${d.fileName}</p><br>
-   <span class="status">${d.status}</span><br><br>
-   ${d.status==="PENDING"?`
-    <button class="primary" onclick="approve(${d.id})">Approve</button>
-    <button class="danger" onclick="reject(${d.id})">Reject</button>
-   `:""}
-  </div>`;
- }).join("")||"<p>No deposit requests.</p>";
-
- document.getElementById("adminCustomerList").innerHTML=users.map(u=>`
- <div class="card">
-  <h3>${u.name}</h3>
-  <p>${u.contact}</p>
-  <p>${u.location}</p>
-  <p>Referral: ${u.referral}</p>
-  <p>Balance: ${money(u.balance)}</p>
- </div>`).join("")||"<p>No customers.</p>";
+function updateStats(){
+ document.getElementById("profileBookings").textContent=orders.length;
 }
-
-function approve(id){
- const d=deposits.find(x=>x.id===id);
- if(!d||d.status!=="PENDING")return;
- const u=users.find(x=>x.id===d.userId);
- if(!u)return;
- d.status="APPROVED";
- u.balance+=d.amount;
- renderAdmin();
+function tapLogo(){
+ const now=Date.now();
+ taps=taps.filter(t=>now-t<4000);
+ taps.push(now);
+ if(taps.length>=7){
+  taps=[];
+  document.getElementById("secretModal").classList.add("show");
+ }
 }
-
-function reject(id){
- const d=deposits.find(x=>x.id===id);
- if(!d||d.status!=="PENDING")return;
- d.status="REJECTED";
- renderAdmin();
+function closeModal(){
+ document.getElementById("secretModal").classList.remove("show");
 }
-
-function sendMessage(){
- if(!currentUser){
-  alert("Please login first.");
-  show("login");
+function closeOutside(e){
+ if(e.target.id==="secretModal")closeModal();
+}
+function staffLogin(e){
+ e.preventDefault();
+ const phone=document.getElementById("staffPhone").value.trim();
+ const password=document.getElementById("staffPassword").value;
+ if(!phone||!password){
+  document.getElementById("staffStatus").textContent="Enter your staff credentials.";
   return;
  }
- const msg=document.getElementById("supportMessage").value.trim();
- if(!msg)return;
- messages.push({user:currentUser.name,message:msg});
- document.getElementById("supportMessage").value="";
- document.getElementById("supportResult").textContent="Message saved in this demo.";
+ document.getElementById("staffStatus").textContent=
+ "Authentication server is not connected. Configure the secure /api/auth/login endpoint first.";
 }
-
-// Demo admin access. This is NOT production authentication.
-function adminLogin(){
- const key=prompt("Enter demo admin code:");
- if(key==="TRAVEL2026"){
-  show("admin");
- }else if(key!==null){
-  alert("Invalid admin code.");
- }
+function sendSupport(){
+ const name=document.getElementById("supportName").value.trim();
+ const contact=document.getElementById("supportContact").value.trim();
+ const msg=document.getElementById("supportText").value.trim();
+ if(!name||!contact||!msg){alert("Please fill in all fields.");return;}
+ document.getElementById("supportStatus").textContent=
+ "Demo message prepared. Connect the support API to deliver it to staff.";
 }
-
-renderTrips();
-updateUI();
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
+}
+renderCarousel();
+renderDirectory();
+updateStats();
 </script>
-
 </body>
 </html>
