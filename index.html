@@ -53,12 +53,12 @@ button{cursor:pointer}
 .btn-success{background:var(--green);color:white}
 .btn-block{width:100%}
 input,select,textarea{
- width:100%;padding:12px;border:1px solid var(--line);
+ width:100%;padding:10px 12px;border:1px solid var(--line);
  border-radius:9px;background:var(--card);color:var(--text);
  outline:none;
 }
 input:focus,select:focus,textarea:focus{border-color:var(--blue)}
-label{font-size:13px;font-weight:600;display:block;margin:12px 0 6px}
+label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
 header{
  background:var(--navy);color:white;position:sticky;top:0;
@@ -145,19 +145,26 @@ header{
 .stat-box{
  background:var(--card);border:1px solid var(--line);
  border-top:3px solid var(--blue);border-radius:10px;padding:16px;
- box-shadow:var(--shadow);
+ box-shadow:var(--shadow); position:relative;
+}
+.stat-box.glow{
+ animation:glowBorder 2s infinite;
+}
+@keyframes glowBorder{
+ 0%{box-shadow:0 0 5px var(--blue), inset 0 0 5px var(--blue)}
+ 50%{box-shadow:0 0 20px var(--gold), inset 0 0 10px var(--gold)}
+ 100%{box-shadow:0 0 5px var(--blue), inset 0 0 5px var(--blue)}
 }
 .stat-box span{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase}
 .stat-box strong{display:block;font-size:22px;margin-top:8px;color:var(--text)}
 
-/* Modal styling */
 .modal{
  position:fixed;inset:0;background:rgba(6,19,34,0.75);
  display:flex;align-items:center;justify-content:center;
  z-index:100;padding:14px;overflow:auto;
 }
 .modal-box{
- width:min(550px,100%);max-height:92vh;overflow:auto;
+ width:min(580px,100%);max-height:92vh;overflow:auto;
  background:var(--card);color:var(--text);
  border:2px solid #319cff;border-radius:17px;
  padding:23px;box-shadow:0 0 15px #168cff,0 0 35px #168cff77;
@@ -193,7 +200,6 @@ header{
 .chat-messages{height:340px;overflow:auto;padding:15px;background:var(--bg)}
 .chat-footer{padding:12px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
 
-/* Footer style like image 3 */
 footer{
  background:#0b192c;color:#a4b2c2;padding:40px 4% 80px;margin-top:40px;font-size:13px;border-top:1px solid #1f3555;
 }
@@ -201,7 +207,11 @@ footer{
 .footer-grid h4{color:white;margin-bottom:15px;font-size:16px}
 .footer-grid a{display:block;color:#a4b2c2;text-decoration:none;margin-bottom:8px}
 .footer-grid a:hover{color:white}
-.app-badges img{height:42px;cursor:pointer;margin-right:8px;margin-top:10px}
+.app-btn{
+ display:inline-flex;align-items:center;gap:8px;background:#1677c8;color:white;
+ padding:10px 18px;border-radius:25px;font-weight:700;cursor:pointer;margin-top:10px;
+ box-shadow:0 4px 12px rgba(22,119,200,0.4);
+}
 
 .splash{
  position:fixed;inset:0;background:linear-gradient(140deg,#091a30,#174b78);
@@ -312,21 +322,29 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 </section>
 
-<!-- BOOKING TEST -->
+<!-- BOOKING TEST (GET ORDER - 30/40 TASKS & RESET) -->
 <section class="page" id="bookingPage">
- <div class="section-title"><h2>Booking Task Center</h2><span class="tag">GET ORDER</span></div>
+ <div class="section-title">
+  <h2>Booking Task Center</h2>
+  <div>
+   <button class="btn btn-success" onclick="triggerGetOrder()" style="margin-right:8px">Get order[cite: 17]</button>
+   <button class="btn btn-danger" onclick="resetTaskProgress()">Reset Tasks</button>
+  </div>
+ </div>
  <div class="panel">
   <div class="stats">
-   <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$850.67</strong></div>
-   <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$152.67</strong></div>
-   <div class="stat-box"><span>Number of Tasks 📊</span><strong id="orderCircle">0/40</strong></div>
-   <div class="stat-box"><span>Frozen Amount 🔒</span><strong id="taskFrozen">$0.00</strong></div>
+   <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
+   <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
+   <div class="stat-box"><span>Number of Tasks 📊</span><strong id="orderCircle">0/30</strong></div>
+   <div class="stat-box glow" id="totalProfitBox"><span>Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
   </div>
 
-  <div class="progress" style="margin:20px 0"><span id="orderProgress"></span></div>
+  <div class="progress" style="margin:20px 0;height:10px;background:var(--line);border-radius:10px;overflow:hidden">
+   <span id="orderProgress" style="display:block;height:100%;width:0;background:var(--blue);transition:width .3s"></span>
+  </div>
 
-  <div style="text-align:center;margin-top:25px">
-   <button class="btn btn-danger btn-block" style="background:#e63946;padding:18px;font-size:18px;border-radius:30px" onclick="triggerGetOrder()">Get order</button>
+  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:20px;background:linear-gradient(135deg,#c8a45b,#f3e5ab);border-radius:12px;margin:15px 0;color:#17243a;font-weight:900;font-size:20px">
+   🎉 Congratulations! All tasks completed successfully! 🎆
   </div>
 
   <div id="bookingHotelArea" style="margin-top:25px"></div>
@@ -347,35 +365,27 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 
  <div class="panel hidden" id="memberProfile">
-  <div class="profile-head">
-   <img id="profileImage" class="profile-photo" src="https://placehold.co/100x100?text=User" alt="Profile">
+  <div class="profile-head" style="display:flex;align-items:center;gap:16px">
+   <img id="profileImage" class="profile-photo" src="https://placehold.co/100x100?text=User" alt="Profile" style="width:80px;height:80px;border-radius:50%;border:3px solid var(--gold)">
    <div>
     <h3 id="profileName">User</h3>
     <p class="muted" id="profileId">User ID</p>
-    <label class="btn btn-light" style="display:inline-block">Upload Photo<input id="profileUpload" type="file" accept="image/*" hidden></label>
    </div>
   </div>
 
-  <div class="stats">
+  <div class="stats" style="margin-top:15px">
    <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
    <div class="stat-box"><span>Shop ID</span><strong id="shopId">-</strong></div>
    <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
    <div class="stat-box"><span>VIP Level</span><strong id="vipLevel">LV1</strong></div>
-   <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/40</strong></div>
+   <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
    <div class="stat-box"><span>Referral Bonus</span><strong id="referralBonus">$0.00</strong></div>
   </div>
 
-  <div class="notice">
+  <div class="notice" style="background:var(--bg);padding:15px;border-radius:10px;margin:15px 0">
    <h3>My Invitation Link</h3>
-   <input id="inviteLink" readonly>
+   <input id="inviteLink" readonly style="margin:8px 0">
    <button class="btn btn-block" onclick="copyInviteLink()">Copy Invitation Link</button>
-   <button class="btn btn-dark btn-block" onclick="shareInviteLink()" style="margin-top:8px">Share Invitation Link</button>
-  </div>
-
-  <div class="notice" style="text-align:center">
-   <h3>Platform Scan</h3>
-   <img id="inviteQR" src="" alt="Invitation QR Code" width="160" height="160">
-   <p class="muted">Scan this QR code to open your invitation link.</p>
   </div>
 
   <button class="btn btn-light btn-block" onclick="showPage('historyPage',this)">View History</button>
@@ -383,7 +393,7 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 </section>
 
-<!-- STAFF PAGE (ADMIN & CS) -->
+<!-- STAFF PAGE (ADMIN & CS WITH EDIT/SAVE TABLE) -->
 <section class="page" id="staffPage">
  <div class="section-title">
   <h2>Staff Management Center</h2>
@@ -395,28 +405,31 @@ th{color:var(--muted);background:var(--bg)}
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
- <!-- ADMIN VIEW -->
+ <!-- ADMIN VIEW WITH EDIT & SAVE -->
  <div id="adminWorkspace" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
-   <h3>User Accounts Management Table</h3>
-   <button class="btn" onclick="alert('New user created successfully.')">+ 新增 (Add)</button>
+   <h3>User Accounts Management Table (English headers)[cite: 16]</h3>
+   <div>
+    <button class="btn btn-gold" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit Table</button>
+    <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save Changes</button>
+   </div>
   </div>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th>用户ID</th>
-      <th>邮箱/Identity</th>
-      <th>全名</th>
-      <th>邀请码</th>
-      <th>会员级别</th>
-      <th>钱包余额</th>
-      <th>冻结余额</th>
-      <th>可提现额</th>
-      <th>完成订单</th>
-      <th>账号封禁/开放</th>
-      <th>在线</th>
-      <th>操作 (Actions)</th>
+      <th>User ID</th>
+      <th>Identity / Email</th>
+      <th>Full Name</th>
+      <th>Invite Code</th>
+      <th>VIP Level</th>
+      <th>Wallet Balance</th>
+      <th>Frozen Amount</th>
+      <th>Withdrawable</th>
+      <th>Completed Orders</th>
+      <th>Account Status</th>
+      <th>Online</th>
+      <th>Actions</th>
      </tr>
     </thead>
     <tbody id="adminTableRows"></tbody>
@@ -424,7 +437,7 @@ th{color:var(--muted);background:var(--bg)}
   </div>
  </div>
 
- <!-- CUSTOMER SERVICE VIEW -->
+ <!-- CS VIEW -->
  <div id="csWorkspace" class="staff-layout hidden">
   <aside class="staff-sidebar">
    <h3>Client Chats</h3>
@@ -453,16 +466,14 @@ th{color:var(--muted);background:var(--bg)}
 </section>
 
 </main>
-
-<!-- FOOTER WITH PLAY STORE & APP STORE (IMAGE 3) -->
+<!-- FOOTER WITH PHONE INSTALL APP BUTTON -->
 <footer>
  <div class="container footer-grid" style="margin:0 auto">
   <div>
    <h4>Trip Booking</h4>
    <p>International Hotel Booking & Travel Platform.</p>
-   <div class="app-badges">
-    <img src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" alt="Google Play" onclick="simulateAppDownload('Android APK')">
-    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" onclick="simulateAppDownload('iOS App')">
+   <div class="app-btn" onclick="installMobileApp()">
+    📱 Install Phone App
    </div>
   </div>
   <div>
@@ -555,11 +566,11 @@ th{color:var(--muted);background:var(--bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v7",
- current:"tb_current_v7",
- language:"tb_language_v7",
- theme:"tb_theme_v7",
- activity:"tb_activity_v7"
+ users:"tb_users_v8",
+ current:"tb_current_v8",
+ language:"tb_language_v8",
+ theme:"tb_theme_v8",
+ activity:"tb_activity_v8"
 };
 
 const read = key => {
@@ -580,9 +591,9 @@ let tapCount = 0;
 let tapTimer = null;
 let transactionType = "deposit";
 let activeOrderTask = null;
+let isTableEditing = false;
 let detectedLocation = "Bangkok, Thailand (IP: 171.96.x.x)";
 
-/* Auto detect IP / Location simulation */
 fetch('https://ipapi.co/json/')
  .then(res => res.json())
  .then(data => {
@@ -736,8 +747,9 @@ async function submitAuth() {
     inviteCode:inviteCodeInput || ("INV"+Math.floor(1000+Math.random()*9000)),
     invitedBy:inviteCodeInput,
     passwordHash:hash,
-    balance:850.67 + bonus,
-    commission:152.67,
+    balance:0.00 + bonus,
+    commission:0.00,
+    totalProfit:0.00,
     orders:0,
     vipLevel:"LV1",
     status:"online",
@@ -746,7 +758,7 @@ async function submitAuth() {
     lastSeen:new Date().toISOString(),
     transactions:[],
     bookings:[],
-    messages:[{sender:"support",text:"Hello, this is Amazon/Trip customer service. How can I help you?",time:new Date().toLocaleTimeString()}],
+    messages:[{sender:"support",text:"Hello, this is Trip customer service. How can I help you?",time:new Date().toLocaleTimeString()}],
     profileImage:""
    };
 
@@ -790,45 +802,35 @@ function logout() {
 }
 
 function generateFakeActivityAndUsers() {
- if(users.length < 50) {
-  const fakeNames = ["Aung Aung","Mya Mya","John Smith","David Lee","Elena Rostova","Kenji Sato","Li Wei","Carlos Gomez","Sophie Turner","Ahmed Khan"];
-  for(let i=1; i<=500; i++) {
-   const rName = fakeNames[i % fakeNames.length] + " " + i;
+ if(users.length < 20) {
+  const fakeNames = ["Aung Aung","Mya Mya","John Smith","David Lee","Elena Rostova","Kenji Sato","Li Wei","Carlos Gomez"];
+  for(let i=1; i<=20; i++) {
    users.push({
     id:"TB" + (90000000 + i),
-    name: rName,
+    name: fakeNames[i % fakeNames.length] + " " + i,
     identity: "user" + i + "@mail.com",
     shopId: "SH-" + (10000 + i),
     inviteCode: "INV" + i,
-    balance: Math.floor(Math.random() * 2500) + 100,
-    commission: Math.floor(Math.random() * 300),
-    orders: Math.floor(Math.random() * 40),
-    vipLevel: "LV" + (Math.floor(Math.random()*3)+1),
-    status: Math.random() > 0.5 ? "online" : "offline",
+    balance: 0.00,
+    commission: 0.00,
+    totalProfit: 0.00,
+    orders: 0,
+    vipLevel: "LV1",
+    status: "offline",
     accountLockedUntil: null,
     createdAt: new Date().toISOString(),
-    transactions: [{date:new Date().toLocaleDateString(), type:"deposit", amount:500, status:"Approved"}],
+    transactions: [],
     bookings: [],
     messages: []
    });
   }
   saveUsers();
  }
-
- if(activities.length === 0) {
-  activities = [
-   "User TB839201 deposited $500.00 successfully.",
-   "User TB492019 completed 40/40 booking orders.",
-   "User TB102938 withdrew $1,250.00 via Customer Service.",
-   "New account registered with ID TB774829."
-  ];
-  write(KEYS.activity, activities);
- }
 }
 
 setInterval(()=>{
  const randomUser = "TB" + Math.floor(10000000 + Math.random()*90000000);
- const actions = ["deposited $" + (Math.floor(Math.random()*800)+50), "withdrew $" + (Math.floor(Math.random()*1500)+100), "completed 40 booking tasks", "joined Trip Booking platform"];
+ const actions = ["deposited funds", "completed booking tasks", "withdrew commission", "joined Trip Booking platform"];
  const act = `User ${randomUser} ${actions[Math.floor(Math.random()*actions.length)]}.`;
  activities.unshift(act);
  if(activities.length > 50) activities.pop();
@@ -868,11 +870,10 @@ function updateUI() {
   $("shopId").textContent = currentUser.shopId || "-";
   $("inviteCode").textContent = currentUser.inviteCode || "-";
   $("vipLevel").textContent = currentUser.vipLevel || "LV1";
-  $("profileOrders").textContent = (currentUser.orders||0) + "/40";
+  $("profileOrders").textContent = (currentUser.orders||0) + "/30";
   $("referralBonus").textContent = "$" + ((currentUser.balance > 0 ? 15 : 0)).toFixed(2);
   const link = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
   $("inviteLink").value = link;
-  $("inviteQR").src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(link);
  } else {
   $("guestAuthActions").classList.remove("hidden");
   $("memberProfile").classList.add("hidden");
@@ -926,14 +927,18 @@ function renderBooking() {
   return;
  }
  const orders = currentUser.orders || 0;
- $("orderCircle").textContent = orders + "/40";
- $("orderProgress").style.width = (orders / 40 * 100) + "%";
- $("taskWallet").textContent = "$" + (currentUser.balance || 850.67).toFixed(2);
- $("taskProfit").textContent = "$" + (currentUser.commission || 152.67).toFixed(2);
+ $("orderCircle").textContent = orders + "/30";
+ $("orderProgress").style.width = (orders / 30 * 100) + "%";
+ $("taskWallet").textContent = "$" + (currentUser.balance || 0).toFixed(2);
+ $("taskProfit").textContent = "$" + (currentUser.commission || 0).toFixed(2);
+ $("taskTotalProfit").textContent = "$" + (currentUser.totalProfit || 0).toFixed(2);
 
- if(orders >= 40) {
-  $("bookingHotelArea").innerHTML = `<p class="empty" style="color:var(--green)">Congratulations! All 40 booking orders completed successfully.</p>`;
+ if(orders >= 30) {
+  $("celebrationBanner").classList.remove("hidden");
+  $("bookingHotelArea.innerHTML") = `<p class="empty" style="color:var(--green);font-weight:700">All 30 orders successfully completed!</p>`;
   return;
+ } else {
+  $("celebrationBanner").classList.add("hidden");
  }
 
  if(activeOrderTask) {
@@ -945,7 +950,7 @@ function renderBooking() {
     <div class="card-body">
      <span class="tag">${hotel.country}</span>
      <h3>${hotel.name}</h3>
-     <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Est. Commission: <b style="color:var(--blue)">+$${profit}</b></p>
+     <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Commission: <b style="color:var(--blue)">+$${profit}</b></p>
      
      <h3 style="margin-top:15px">Choose Your Review</h3>
      <div id="reviewOptions">
@@ -967,9 +972,9 @@ function renderBooking() {
 
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
- if((currentUser.orders || 0) >= 40) { alert("You have already completed 40 orders."); return; }
+ if((currentUser.orders || 0) >= 30) { alert("You have already completed 30 orders."); return; }
  const hotel = hotels[currentUser.orders % hotels.length];
- const profit = Number((hotel.price * 0.03).toFixed(2));
+ const profit = Number((hotel.price * 0.05).toFixed(2));
  activeOrderTask = {hotel, profit};
  renderBooking();
 }
@@ -977,6 +982,7 @@ function triggerGetOrder() {
 function confirmSubmitBooking(profit, price) {
  currentUser.balance += profit;
  currentUser.commission = (currentUser.commission || 0) + profit;
+ currentUser.totalProfit = (currentUser.totalProfit || 0) + profit;
  currentUser.orders = (currentUser.orders || 0) + 1;
  if(!currentUser.bookings) currentUser.bookings = [];
  currentUser.bookings.unshift({
@@ -991,6 +997,16 @@ function confirmSubmitBooking(profit, price) {
  updateUI();
  renderBooking();
  alert(`Booking order confirmed! Earned commission: +$${profit}`);
+}
+
+function resetTaskProgress() {
+ if(!currentUser) { openAuth('login'); return; }
+ currentUser.orders = 0;
+ currentUser.commission = 0;
+ saveUsers();
+ updateUI();
+ renderBooking();
+ alert("Task progress reset to 0!");
 }
 
 function openTransactionModal(type) {
@@ -1009,7 +1025,6 @@ function submitTransaction() {
   currentUser.transactions.unshift({date:new Date().toLocaleString(), type:"Deposit", amount:amt, status:"Approved"});
   currentUser.messages.push({sender:"support", text:`Your deposit of $${amt} has been approved.`, time:new Date().toLocaleTimeString()});
  } else {
-  if(currentUser.orders < 40) { alert("Withdrawal requires 40 completed booking tasks!"); return; }
   if(currentUser.balance < amt) { alert("Insufficient wallet balance."); return; }
   currentUser.balance -= amt;
   currentUser.transactions.unshift({date:new Date().toLocaleString(), type:"Withdrawal", amount:amt, status:"Processed"});
@@ -1029,7 +1044,7 @@ function renderSupportChat() {
  }
  $("supportMessages").innerHTML = (currentUser.messages||[]).map(m => `
   <div class="message ${m.sender==='user'?'mine':''}" style="max-width:85%;padding:10px 12px;border-radius:12px;background:${m.sender==='user'?'#dceeff':'var(--card)'};margin:8px 0;margin-left:${m.sender==='user'?'auto':'0'}">
-   <b>${m.sender==='user'?'You':'Amazon/Trip CS'}</b>
+   <b>${m.sender==='user'?'You':'Trip CS'}</b>
    <p>${m.text}</p>
    <small class="muted" style="font-size:10px">${m.time}</small>
   </div>
@@ -1068,7 +1083,7 @@ function renderHistory() {
  `).join("") || `<tr><td colspan="4" style="text-align:center">No transactions yet.</td></tr>`;
 
  $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
-  <div class="notice"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit} · <span class="online">${b.status}</span></p></div>
+  <div class="notice" style="background:var(--bg);padding:10px;border-radius:8px;margin:6px 0"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit}</p></div>
  `).join("") || `<p class="empty">No booking records yet.</p>`;
 }
 
@@ -1114,45 +1129,50 @@ function switchStaffTab(role) {
 
 function renderAdminTable() {
  const tbody = $("adminTableRows");
- tbody.innerHTML = users.slice(0, 30).map(u => `
+ tbody.innerHTML = users.map((u, idx) => `
   <tr>
    <td>${u.id}</td>
-   <td>${u.identity}</td>
-   <td>${u.name}</td>
-   <td>${u.inviteCode || '-'}</td>
+   <td>${isTableEditing ? `<input id="ed_id_${idx}" value="${u.identity}">` : u.identity}</td>
+   <td>${isTableEditing ? `<input id="ed_name_${idx}" value="${u.name}">` : u.name}</td>
+   <td>${isTableEditing ? `<input id="ed_inv_${idx}" value="${u.inviteCode||''}">` : (u.inviteCode || '-')}</td>
    <td>${u.vipLevel || 'LV1'}</td>
-   <td>$${(u.balance||0).toFixed(2)}</td>
+   <td>${isTableEditing ? `<input id="ed_bal_${idx}" type="number" value="${u.balance}">` : '$'+(u.balance||0).toFixed(2)}</td>
    <td>$0.00</td>
    <td>$${(u.balance||0).toFixed(2)}</td>
-   <td>${u.orders||0} / 40</td>
-   <td><button class="btn btn-light" style="padding:2px 6px;font-size:10px" onclick="toggleLockUser('${u.id}')">${u.accountLockedUntil ? 'Unblock' : 'Lock'}</button></td>
+   <td>${u.orders||0} / 30</td>
+   <td><span class="status online">Active</span></td>
    <td><span style="color:${u.status==='online'?'var(--green)':'var(--red)'}">● ${u.status}</span></td>
    <td>
-    <button class="btn" style="padding:4px 8px;font-size:11px" onclick="editUserAccount('${u.id}')">编辑 (Edit)</button>
+    <button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}\\nLocation: ${u.location||'N/A'}')">View</button>
    </td>
   </tr>
  `).join("");
 }
 
-function toggleLockUser(id) {
- const u = users.find(x=>x.id===id);
- if(u) {
-  u.accountLockedUntil = u.accountLockedUntil ? null : new Date(Date.now() + 86400000).toISOString();
-  saveUsers();
-  renderAdminTable();
- }
+function toggleTableEditMode() {
+ isTableEditing = true;
+ $("tableEditBtn").classList.add("hidden");
+ $("tableSaveBtn").classList.remove("hidden");
+ renderAdminTable();
 }
 
-function editUserAccount(id) {
- const u = users.find(x=>x.id===id);
- if(!u) return;
- const newBal = prompt("Edit user balance ($):", u.balance);
- if(newBal !== null) {
-  u.balance = Number(newBal);
-  saveUsers();
-  renderAdminTable();
-  alert("User account updated successfully!");
- }
+function saveTableEditMode() {
+ users.forEach((u, idx) => {
+  const emailInput = $("ed_id_" + idx);
+  const nameInput = $("ed_name_" + idx);
+  const invInput = $("ed_inv_" + idx);
+  const balInput = $("ed_bal_" + idx);
+  if(emailInput) u.identity = emailInput.value;
+  if(nameInput) u.name = nameInput.value;
+  if(invInput) u.inviteCode = invInput.value;
+  if(balInput) u.balance = Number(balInput.value);
+ });
+ isTableEditing = false;
+ $("tableEditBtn").classList.remove("hidden");
+ $("tableSaveBtn").classList.add("hidden");
+ saveUsers();
+ renderAdminTable();
+ alert("All user accounts data successfully updated and saved!");
 }
 
 function renderCSUsers() {
@@ -1198,8 +1218,8 @@ function sendStaffMessage() {
 
 function appendStaffChar(char) { $("staffInput").value += char; }
 
-function simulateAppDownload(platform) {
- alert(`Downloading official Trip Booking ${platform} package. Installation started automatically.`);
+function installMobileApp() {
+ alert("Trip Booking App installation package downloaded successfully! The app shortcut has been added to your phone screen.");
 }
 
 function copyInviteLink() {
@@ -1207,14 +1227,6 @@ function copyInviteLink() {
  copyText.select();
  document.execCommand("copy");
  alert("Invitation link copied to clipboard!");
-}
-
-function shareInviteLink() {
- if (navigator.share) {
-  navigator.share({title: 'Trip Booking', text: 'Join Trip Booking!', url: $("inviteLink").value});
- } else {
-  copyInviteLink();
- }
 }
 </script>
 </body>
