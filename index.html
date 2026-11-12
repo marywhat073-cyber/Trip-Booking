@@ -64,7 +64,7 @@ header{
  display:flex;align-items:center;justify-content:space-between;
  gap:12px;box-shadow:var(--shadow);
 }
-.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary)}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary);user-select:none}
 .logo span{color:#e41e3f}
 .header-actions{display:flex;gap:8px;align-items:center}
 .header-actions select{width:auto;background:var(--fb-bg);color:var(--fb-text);border-color:var(--fb-border)}
@@ -144,8 +144,21 @@ header{
 
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
 .chat-header{background:var(--fb-card);border-bottom:1px solid var(--fb-border);color:var(--fb-text);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
-.chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
+.chat-messages{height:380px;overflow:auto;padding:14px;background:var(--fb-bg)}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
+
+/* Pulsing blue button animation */
+@keyframes pulseBtn {
+ 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
+ 50% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(24,119,242, 0); }
+ 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
+}
+.pulsing-btn {
+ background: var(--fb-primary); color: white;
+ padding: 14px 22px; border-radius: 30px; font-size: 15px; font-weight: 700;
+ border: 0; cursor: pointer; animation: pulseBtn 1.5s infinite;
+ display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+}
 
 footer{
  background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
@@ -154,10 +167,6 @@ footer{
 .footer-grid h4{color:#e4e6eb;margin-bottom:12px;font-size:15px}
 .footer-grid a{display:block;color:#b0b3b8;text-decoration:none;margin-bottom:6px}
 .footer-grid a:hover{color:white;text-decoration:underline}
-.app-btn{
- display:inline-flex;align-items:center;gap:8px;background:var(--fb-primary);color:white;
- padding:8px 16px;border-radius:20px;font-weight:600;cursor:pointer;margin-top:8px;
-}
 
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);white-space:nowrap}
@@ -212,7 +221,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div id="countryHotels"></div>
 </section>
 
-<!-- SUPPORT (CUSTOMER SERVICE CENTER - FULL PAGE AS REQUESTED) -->
+<!-- SUPPORT (CUSTOMER SERVICE CENTER - WITH PULSING BUTTON & 3RD IMAGE AVATAR) -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2>Customer Service Center</h2></div>
  <div class="chat-window" style="max-width:900px;margin:0 auto">
@@ -227,7 +236,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div>🔊 ✕</div>
   </div>
   
-  <div class="chat-messages" id="supportMessages" style="height:450px"></div>
+  <div class="chat-messages" id="supportMessages" style="height:420px"></div>
   
   <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
@@ -282,7 +291,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- PROFILE (WITH ADDED USER DETAILS & ADMIN ACCESS) -->
+<!-- PROFILE -->
 <section class="page" id="profilePage">
  <div class="section-title"><h2>My Profile</h2></div>
 
@@ -330,9 +339,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
  </div>
 
- <div class="staff-top">
-  <button class="btn btn-dark" id="adminTabBtn" onclick="switchStaffTab('admin')">ADMIN</button>
-  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
+ <div class="staff-top" style="display:flex;gap:10px;margin-bottom:16px">
+  <button class="btn btn-dark" id="adminTabBtn" onclick="switchStaffTab('admin')" style="flex:1">ADMIN</button>
+  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')" style="flex:1">CUSTOMER SERVICE</button>
  </div>
 
  <!-- ADMIN WORKSPACE -->
@@ -372,7 +381,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="staff-main panel" style="padding:0;overflow:hidden">
    <div class="chat-window" style="border:0">
     <div class="chat-header"><span id="activeChatClientName">Client Chat</span></div>
-    <div class="chat-messages" id="staffMessages"></div>
+    <div class="chat-messages" id="staffMessages" style="height:350px"></div>
     <div class="chat-footer">
      <button class="btn-light" onclick="appendStaffChar('😊')">😊</button>
      <input id="staffInput" type="text" placeholder="Type reply as CS..." style="flex:1">
@@ -389,9 +398,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div>
    <h4>Trip Booking</h4>
    <p>International Hotel Booking & Travel Platform.</p>
-   <div class="app-btn" onclick="installMobileApp()">
-    📱 Install Phone App
-   </div>
   </div>
   <div>
    <h4>Quick Links</h4>
@@ -436,16 +442,18 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
+<!-- STAFF PORTAL MODAL (12344321 PASSWORD ONLY) -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h2>Staff Portal</h2>
+   <h2>Staff Portal Access</h2>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
   </div>
-  <label>Staff Phone</label><input id="staffPhone" value="09775191427">
-  <label>Password</label><input id="staffPassword" type="password" value="12344321">
-  <p id="staffMessage" class="muted"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
+  <p class="muted">Enter staff password to access Admin and Customer Service.</p>
+  <label>Staff Password</label>
+  <input id="staffPasswordInput" type="password" placeholder="Enter password (12344321)">
+  <p id="staffMessage" class="muted" style="color:var(--fb-danger)"></p>
+  <button class="btn btn-block" style="margin-top:14px" onclick="staffLogin()">Sign In</button>
  </div>
 </div>
 
@@ -455,10 +463,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v10",
- current:"tb_current_v10",
- theme:"tb_theme_v10",
- activity:"tb_activity_v10"
+ users:"tb_users_v11",
+ current:"tb_current_v11",
+ theme:"tb_theme_v11",
+ activity:"tb_activity_v11"
 };
 
 const read = key => {
@@ -473,8 +481,8 @@ let activities = read(KEYS.activity);
 let currentUser = null;
 let selectedUserId = null;
 let authMode = "login";
-let tapCount = 0;
-let tapTimer = null;
+let logoClickCount = 0;
+let logoTimer = null;
 let activeOrderTask = null;
 let isTableEditing = false;
 
@@ -507,14 +515,17 @@ window.addEventListener("load",()=>{
  initApp();
 });
 
+/* LOGO 10 CLICKS TO OPEN STAFF PORTAL */
 $("logo").addEventListener("click",()=>{
- tapCount++;
- clearTimeout(tapTimer);
- if(tapCount>=7) {
-  tapCount=0;
+ logoClickCount++;
+ clearTimeout(logoTimer);
+ if(logoClickCount >= 10) {
+  logoClickCount = 0;
   $("staffModal").classList.remove("hidden");
+  $("staffPasswordInput").value = "";
+  $("staffMessage").textContent = "";
  } else {
-  tapTimer=setTimeout(()=>tapCount=0,2000);
+  logoTimer = setTimeout(()=> logoClickCount = 0, 3000);
  }
 });
 
@@ -566,7 +577,7 @@ async function submitAuth() {
    countBox: 30,
    transactions: [],
    bookings: [],
-   messages: [] // No auto message, pure manual user/CS chat
+   messages: [] // No auto message, manual only
   };
   users.push(newUser);
   write(KEYS.users, users);
@@ -750,20 +761,19 @@ function resetTaskProgress() {
  alert("Task progress reset to 0.");
 }
 
-/* CUSTOMER SERVICE CHAT WITH QUICK PROMPT BUTTON & NO AUTO-REPLY */
+/* CUSTOMER SERVICE CHAT WITH PULSING BLUE BUTTON & MANUAL CHAT */
 function renderSupportChat() {
  if(!currentUser) {
-  $("supportMessages").innerHTML = `<p class="empty">Please login to chat with Customer Service.</p>`;
+  $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px">Please login to chat with Customer Service.</p>`;
   return;
  }
  
  let msgsHtml = "";
  if((currentUser.messages||[]).length === 0) {
-  // Quick Prompt Button with pulsing animation
   msgsHtml = `
-   <div style="text-align:center;margin:30px 0">
-    <button onclick="sendQuickGreeting()" style="background:var(--fb-primary);color:white;padding:14px 24px;border-radius:30px;font-size:15px;box-shadow:0 0 0 rgba(24,119,242,0.4);animation:pulseBtn 1.5s infinite">
-     မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
+   <div style="text-align:center;margin:40px 0">
+    <button class="pulsing-btn" onclick="sendQuickGreeting()">
+     💬 မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
     </button>
    </div>
   `;
@@ -782,7 +792,7 @@ function renderSupportChat() {
 
 function sendQuickGreeting() {
  if(!currentUser) return;
- currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။", time:new Date().toLocaleTimeString()});
+ currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်。", time:new Date().toLocaleTimeString()});
  write(KEYS.users, users);
  renderSupportChat();
 }
@@ -799,16 +809,6 @@ function sendSupportMessage() {
 
 function appendSupportChar(char) { $("supportInput").value += char; }
 
-/* Add CSS pulse animation for quick prompt button */
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `
-@keyframes pulseBtn {
- 0% { box-shadow: 0 0 0 0 rgba(24,119,242, 0.5); }
- 70% { box-shadow: 0 0 0 15px rgba(24,119,242, 0); }
- 100% { box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
-}`;
-document.head.appendChild(styleSheet);
-
 function renderHistory() {
  if(!currentUser) {
   $("historyRows").innerHTML = `<tr><td colspan="4" style="text-align:center">Please login.</td></tr>`;
@@ -824,17 +824,16 @@ function renderHistory() {
  `).join("") || `<p class="empty">No bookings.</p>`;
 }
 
-/* STAFF PORTAL */
+/* STAFF PORTAL LOGIN WITH 12344321 PASSWORD */
 function staffLogin() {
- const phone = $("staffPhone").value.trim();
- const pass = $("staffPassword").value;
- if(phone === "09775191427" && pass === "12344321") {
+ const pass = $("staffPasswordInput").value;
+ if(pass === "12344321") {
   closeModal('staffModal');
   $("staffPage").classList.remove("hidden");
   showPage('staffPage');
   switchStaffTab('admin');
  } else {
-  $("staffMessage").textContent = "Invalid Staff credentials!";
+  $("staffMessage").textContent = "Invalid password! Use 12344321";
  }
 }
 
@@ -942,10 +941,6 @@ function sendStaffMessage() {
 }
 
 function appendStaffChar(char) { $("staffInput").value += char; }
-
-function installMobileApp() {
- alert("Trip Booking App package downloaded and added to your phone screen shortcut!");
-}
 
 function copyInviteLink() {
  navigator.clipboard.writeText($("inviteLink").value);
