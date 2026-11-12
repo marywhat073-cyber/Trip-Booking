@@ -59,6 +59,7 @@ input,select,textarea{
 }
 input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 label{font-size:13px;font-weight:600;display:block;margin:12px 0 6px}
+
 header{
  background:var(--navy);color:white;position:sticky;top:0;
  z-index:20;padding:13px 4%;
@@ -70,9 +71,11 @@ header{
 .header-actions{display:flex;gap:9px;align-items:center}
 .header-actions select{width:auto;background:#1b3555;color:white;border-color:#405674}
 .header-actions button{padding:9px 12px;border-radius:8px}
+
 .container{width:min(1200px,94%);margin:22px auto 100px}
 .page{display:none}
 .page.active{display:block}
+
 .hero{
  min-height:260px;border-radius:18px;overflow:hidden;
  background:linear-gradient(90deg,#10243fee,#10243f33),
@@ -81,11 +84,13 @@ header{
 }
 .hero h1{font-size:clamp(28px,5vw,45px);margin:0 0 12px}
 .hero p{max-width:500px;line-height:1.7}
+
 .section-title{
  display:flex;justify-content:space-between;align-items:center;
  gap:10px;margin:28px 0 15px;
 }
 .section-title h2{font-size:21px;margin:0}
+
 .hotel-grid{
  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
  gap:17px;
@@ -102,12 +107,14 @@ header{
  display:inline-block;background:#eaf3ff;color:#1767a5;
  padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700;
 }
+
 .activity-ticker{
  background:var(--card);border:1px solid var(--line);border-radius:12px;
  padding:12px 16px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:10px;
  box-shadow:var(--shadow);overflow:hidden;white-space:nowrap;
 }
 .activity-ticker span{color:var(--gold);font-weight:700}
+
 .bottom-nav{
  position:fixed;bottom:0;left:0;right:0;z-index:25;
  background:var(--card);border-top:1px solid var(--line);
@@ -126,65 +133,39 @@ header{
  margin:-17px 5px 0;padding:10px 2px;
  box-shadow:0 5px 16px #1677c855;
 }
+
 .panel{
  background:var(--card);border:1px solid var(--line);
  border-radius:15px;padding:18px;box-shadow:var(--shadow);
 }
 .stats{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
- gap:12px;margin:16px 0;
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:15px;margin:16px 0;
 }
-.stat{
- background:var(--bg);border:1px solid var(--line);
- border-radius:11px;padding:14px;
+.stat-box{
+ background:var(--card);border:1px solid var(--line);
+ border-top:3px solid var(--blue);border-radius:10px;padding:16px;
+ box-shadow:var(--shadow);
 }
-.stat strong{display:block;font-size:19px;margin-top:8px;overflow-wrap:anywhere}
-.progress{
- height:13px;background:var(--line);border-radius:20px;
- overflow:hidden;margin:12px 0;
-}
-.progress span{
- display:block;height:100%;width:0;background:linear-gradient(90deg,#1677c8,#5ab4f1);
- transition:width .3s;
-}
-.task-circle{
- width:100px;height:100px;border:8px solid var(--blue);
- border-radius:50%;display:grid;place-items:center;
- font-size:23px;font-weight:900;margin:15px auto;
-}
-.review-option{
- display:flex;align-items:flex-start;gap:9px;
- border:1px solid var(--line);border-radius:9px;
- padding:11px;margin:8px 0;cursor:pointer;
-}
-.review-option input{width:auto;margin-top:3px}
-.profile-head{display:flex;align-items:center;gap:16px}
-.profile-photo{
- width:80px;height:80px;border-radius:50%;object-fit:cover;
- border:3px solid var(--gold);
-}
-.table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);white-space:nowrap}
-th{color:var(--muted)}
-.status{font-size:11px;font-weight:700}
-.online{color:var(--green)}
-.offline{color:var(--muted)}
+.stat-box span{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase}
+.stat-box strong{display:block;font-size:22px;margin-top:8px;color:var(--text)}
+
+/* Modal styling centered with glowing border */
 .modal{
- position:fixed;inset:0;background:#061322c9;
+ position:fixed;inset:0;background:rgba(6,19,34,0.75);
  display:flex;align-items:center;justify-content:center;
  z-index:100;padding:14px;overflow:auto;
 }
 .modal-box{
- width:min(460px,100%);max-height:92vh;overflow:auto;
+ width:min(550px,100%);max-height:92vh;overflow:auto;
  background:var(--card);color:var(--text);
- border:1px solid #319cff;border-radius:17px;
- padding:23px;box-shadow:0 0 10px #168cff,0 0 30px #168cff77;
+ border:2px solid #319cff;border-radius:17px;
+ padding:23px;box-shadow:0 0 15px #168cff,0 0 35px #168cff77;
  animation:pop .22s ease;
 }
 @keyframes pop{
- from{opacity:0;transform:translateY(12px) scale(.97)}
- to{opacity:1;transform:none}
+ from{opacity:0;transform:scale(.93)}
+ to{opacity:1;transform:scale(1)}
 }
 .modal-head{display:flex;justify-content:space-between;align-items:center}
 .close{
@@ -197,80 +178,35 @@ th{color:var(--muted)}
  position:absolute;right:8px;top:5px;
  border:0;background:none;color:var(--muted);font-size:19px;
 }
-.staff-top{
- display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;
-}
+
+.staff-top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
 .staff-top button{flex:1;min-width:140px;padding:15px;font-size:16px}
-.staff-layout{
- display:grid;grid-template-columns:300px minmax(0,1fr);
- gap:15px;min-height:650px;
-}
-.staff-sidebar,.staff-main,.staff-info{
- background:var(--card);border:1px solid var(--line);
- border-radius:13px;padding:13px;min-width:0;
-}
+.staff-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:15px;min-height:650px}
+.staff-sidebar,.staff-main,.staff-info{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px;min-width:0}
 .staff-sidebar{max-height:750px;overflow:auto}
-.user-item{
- display:flex;align-items:center;gap:10px;padding:11px 7px;
- border-bottom:1px solid var(--line);cursor:pointer;border-radius:8px;
-}
+.user-item{display:flex;align-items:center;gap:10px;padding:11px 7px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:8px}
 .user-item:hover,.user-item.selected{background:var(--bg)}
 .user-item p{margin:4px 0}
-.staff-main{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:13px}
-.staff-detail{min-width:0}
-.staff-info{height:max-content}
-.chat-box{
- height:350px;overflow:auto;background:var(--bg);
- border:1px solid var(--line);border-radius:10px;padding:12px;
-}
-.message{
- max-width:85%;width:max-content;padding:10px 12px;
- border-radius:12px;background:var(--card);
- border:1px solid var(--line);margin:8px 0;
- overflow-wrap:anywhere;
-}
-.message.mine{margin-left:auto;background:#dceeff;color:#17334f}
-.message img,.message video{display:block;max-width:220px;max-height:200px;margin-top:7px;border-radius:8px}
-.chat-compose{display:flex;gap:7px;align-items:center;margin-top:9px}
-.chat-compose input[type=text]{flex:1;min-width:0}
-.chat-compose button{padding:10px}
-.chat-tools{display:flex;gap:6px;margin-top:8px}
-.chat-tools label{
- margin:0;background:var(--bg);border:1px solid var(--line);
- border-radius:8px;padding:9px;cursor:pointer;
-}
-.chat-tools input{display:none}
+
+/* Chat Box Design like Image 3 */
+.chat-window{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+.chat-header{background:var(--blue);color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
+.chat-messages{height:340px;overflow:auto;padding:15px;background:var(--bg)}
+.chat-footer{padding:12px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+
 .splash{
  position:fixed;inset:0;background:linear-gradient(140deg,#091a30,#174b78);
- z-index:200;display:grid;place-items:center;color:white;
- transition:opacity .7s;
+ z-index:200;display:grid;place-items:center;color:white;transition:opacity .7s;
 }
 .splash h1{font-size:clamp(28px,6vw,52px);text-align:center}
 .splash span{color:var(--gold)}
-.notice{
- background:var(--bg);border:1px solid var(--line);
- border-radius:10px;padding:12px;margin:8px 0;
-}
-.empty{text-align:center;padding:30px;color:var(--muted)}
-@media(max-width:850px){
- .staff-layout{grid-template-columns:1fr}
- .staff-sidebar{max-height:250px}
- .staff-main{grid-template-columns:1fr}
- .staff-info{order:2}
-}
-@media(max-width:520px){
- header{padding:11px 3%}
- .logo{font-size:18px}
- .header-actions select{max-width:95px;font-size:11px}
- .container{width:94%;margin-top:13px}
- .hero{min-height:220px;padding:22px}
- .hotel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .hotel-img{height:125px}
- .card-body{padding:10px}
- .card-body h3{font-size:14px}
- .price{font-size:16px}
- .panel{padding:13px}
-}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);background:var(--bg)}
+.status{font-size:11px;font-weight:700}
+.online{color:var(--green)}
+.offline{color:var(--muted)}
 </style>
 </head>
 <body>
@@ -326,34 +262,28 @@ th{color:var(--muted)}
  <div id="countryHotels"></div>
 </section>
 
-<!-- SUPPORT -->
+<!-- SUPPORT (CUSTOMER SERVICE - IMAGE 3 STYLE) -->
 <section class="page" id="supportPage">
- <div class="section-title"><h2>Customer Service & Transactions</h2></div>
- <div class="panel">
-  <div class="profile-head">
-   <img class="avatar" src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=150" alt="Customer service">
-   <div>
-    <strong>Trip Booking Customer Service</strong>
-    <p class="muted">Support & Deposit/Withdrawal Center</p>
+ <div class="section-title"><h2>Customer Service Center</h2></div>
+ <div class="chat-window">
+  <div class="chat-header">
+   <div style="display:flex;align-items:center;gap:10px">
+    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" style="width:35px;height:35px;border-radius:50%;object-fit:cover">
+    <span>Trip Booking Customer Service</span>
    </div>
+   <div>🔊 ➖ ✕</div>
   </div>
-  <div style="display:flex;gap:10px;margin:15px 0">
-   <button class="btn" style="flex:1" onclick="openTransactionModal('deposit')">Deposit Funds</button>
-   <button class="btn btn-dark" style="flex:1" onclick="openTransactionModal('withdrawal')">Withdrawal ($15 & 30 Bookings Req)</button>
-  </div>
-  <div class="chat-box" id="supportMessages"></div>
-  <div class="chat-tools">
-   <label title="Photo">📷 Photo<input id="supportPhoto" type="file" accept="image/*"></label>
-   <label title="Video">🎥 Video<input id="supportVideo" type="file" accept="video/*"></label>
-   <label title="Camera">📸 Camera<input id="supportCamera" type="file" accept="image/*" capture="environment"></label>
-   <button class="btn-light" onclick="deleteLastSupportMessage()">⌫ Delete last</button>
-  </div>
-  <div class="chat-compose">
-   <input id="supportInput" type="text" placeholder="Write a message...">
+  <div class="chat-messages" id="supportMessages"></div>
+  <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-   <button class="btn-light" onclick="backspaceSupportInput()">⌫</button>
+   <label style="margin:0;cursor:pointer">📷<input id="supportPhoto" type="file" accept="image/*" hidden></label>
+   <input id="supportInput" type="text" placeholder="Please enter message..." style="flex:1">
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
+ </div>
+ <div style="display:flex;gap:10px;margin-top:15px">
+  <button class="btn" style="flex:1" onclick="openTransactionModal('deposit')">Deposit Funds</button>
+  <button class="btn btn-dark" style="flex:1" onclick="openTransactionModal('withdrawal')">Withdrawal ($15 & 30 Bookings)</button>
  </div>
 </section>
 
@@ -373,23 +303,24 @@ th{color:var(--muted)}
  </div>
 </section>
 
-<!-- BOOKING TEST -->
+<!-- BOOKING TEST (GET ORDER - IMAGE 5 STYLE) -->
 <section class="page" id="bookingPage">
- <div class="section-title"><h2>Booking Test (30 Orders)</h2><span class="tag">DEMO TASK</span></div>
+ <div class="section-title"><h2>Booking Task Center</h2><span class="tag">GET ORDER</span></div>
  <div class="panel">
-  <!-- ၄ ဘောင် (လက်ကျန်ငွေ၊ အမြတ်၊ လိုအပ်ငွေ၊ စုစုပေါင်းအမြတ်) -->
-  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
-   <div class="stat">Wallet Balance<strong id="taskWallet">$0.00</strong></div>
-   <div class="stat">Current Profit<strong id="taskProfit">$0.00</strong></div>
-   <div class="stat">Required Capital<strong id="taskRequired">$0.00</strong></div>
-   <div class="stat">Total Profit<strong id="taskTotalProfit">$0.00</strong></div>
+  <div class="stats">
+   <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$850.67</strong></div>
+   <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$152.67</strong></div>
+   <div class="stat-box"><span>Number of Tasks 📊</span><strong id="orderCircle">0/40</strong></div>
+   <div class="stat-box"><span>Frozen Amount 🔒</span><strong id="taskFrozen">$0.00</strong></div>
   </div>
 
-  <h3 style="text-align:center; margin-top:20px">Daily Task Progress</h3>
-  <div class="task-circle" id="orderCircle">0/30</div>
-  <div class="progress"><span id="orderProgress"></span></div>
+  <div class="progress" style="margin:20px 0"><span id="orderProgress"></span></div>
 
-  <div id="bookingHotelArea" style="margin-top:20px"></div>
+  <div style="text-align:center;margin-top:25px">
+   <button class="btn btn-danger btn-block" style="background:#e63946;padding:18px;font-size:18px;border-radius:30px" onclick="triggerGetOrder()">Get order</button>
+  </div>
+
+  <div id="bookingHotelArea" style="margin-top:25px"></div>
  </div>
 </section>
 
@@ -417,11 +348,11 @@ th{color:var(--muted)}
   </div>
 
   <div class="stats">
-   <div class="stat">Wallet Balance<strong id="walletBalance">$0.00</strong></div>
-   <div class="stat">Shop ID<strong id="shopId">-</strong></div>
-   <div class="stat">Invite Code<strong id="inviteCode">-</strong></div>
-   <div class="stat">Completed Bookings<strong id="profileOrders">0/30</strong></div>
-   <div class="stat">Referral Bonus<strong id="referralBonus">$0.00</strong></div>
+   <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span>Shop ID</span><strong id="shopId">-</strong></div>
+   <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
+   <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/40</strong></div>
+   <div class="stat-box"><span>Referral Bonus</span><strong id="referralBonus">$0.00</strong></div>
   </div>
 
   <div class="notice">
@@ -435,11 +366,6 @@ th{color:var(--muted)}
    <h3>Platform Scan</h3>
    <img id="inviteQR" src="" alt="Invitation QR Code" width="160" height="160">
    <p class="muted">Scan this QR code to open your invitation link.</p>
-  </div>
-
-  <div class="notice">
-   <h3>Referral Bonus Rules</h3>
-   <p>Invite a new user using your referral code. Get $15 bonus instantly upon registration! Withdrawal requires 30 verified completed bookings.</p>
   </div>
 
   <button class="btn btn-light btn-block" onclick="showPage('historyPage',this)">View History</button>
@@ -459,21 +385,39 @@ th{color:var(--muted)}
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
- <!-- ADMIN VIEW -->
- <div id="adminWorkspace" class="staff-layout">
-  <aside class="staff-sidebar">
-   <h3>Registered Users</h3>
-   <input id="adminSearch" placeholder="Search users...">
-   <div id="adminUserList"></div>
-  </aside>
-  <div class="staff-main" style="grid-template-columns:1fr">
-   <div class="staff-detail" id="adminUserDetail">
-    <p class="empty">Select a user from the left sidebar to view details, table orders, and edit parameters.</p>
-   </div>
+ <!-- ADMIN VIEW (TABLE FORMAT - IMAGE 2 STYLE) -->
+ <div id="adminWorkspace" class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+   <h3>User Accounts Management Table</h3>
+   <button class="btn" onclick="alert('New user created successfully.')">+ 新增 (Add)</button>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>用户ID (User ID)</th>
+      <th>邮箱 (Email/Identity)</th>
+      <th>全名 (Full Name)</th>
+      <th>会员邀请码</th>
+      <th>上级邀请码</th>
+      <th>会员备注</th>
+      <th>会员级别</th>
+      <th>钱包余额</th>
+      <th>冻结余额</th>
+      <th>可提现额</th>
+      <th>完成订单</th>
+      <th>会员状态</th>
+      <th>会员身份</th>
+      <th>在线</th>
+      <th>操作 (Actions)</th>
+     </tr>
+    </thead>
+    <tbody id="adminTableRows"></tbody>
+   </table>
   </div>
  </div>
 
- <!-- CUSTOMER SERVICE VIEW -->
+ <!-- CUSTOMER SERVICE VIEW (CHAT - IMAGE 3 STYLE) -->
  <div id="csWorkspace" class="staff-layout hidden">
   <aside class="staff-sidebar">
    <h3>Client Chats</h3>
@@ -483,16 +427,14 @@ th{color:var(--muted)}
   <div class="staff-main">
    <div class="staff-detail">
     <div id="csUserTitle">Select a client chat.</div>
-    <div class="chat-box" id="staffMessages"></div>
-    <div class="chat-tools">
-     <label>📷 Photo<input id="staffPhoto" type="file" accept="image/*"></label>
-     <label>🎥 Video<input id="staffVideo" type="file" accept="video/*"></label>
-     <label>📸 Camera<input id="staffCamera" type="file" accept="image/*" capture="environment"></label>
-     <button class="btn-light" onclick="deleteLastStaffMessage()">⌫ Delete last</button>
-    </div>
-    <div class="chat-compose">
-     <input id="staffInput" type="text" placeholder="Reply to client...">
-     <button class="btn" onclick="sendStaffMessage()">➤</button>
+    <div class="chat-window">
+     <div class="chat-header"><span id="activeChatClientName">Client Chat</span><span>🔊 ✕</span></div>
+     <div class="chat-messages" id="staffMessages"></div>
+     <div class="chat-footer">
+      <button class="btn-light" onclick="appendStaffChar('😊')">😊</button>
+      <input id="staffInput" type="text" placeholder="Type reply..." style="flex:1">
+      <button class="btn" onclick="sendStaffMessage()">➤</button>
+     </div>
     </div>
    </div>
    <aside class="staff-info">
@@ -581,14 +523,11 @@ th{color:var(--muted)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v5",
- current:"tb_current_v5",
- chats:"tb_chats_v5",
- language:"tb_language_v5",
- theme:"tb_theme_v5",
- activity:"tb_activity_v5",
- staffSession:"tb_staff_session_v5",
- settings:"tb_task_settings_v5"
+ users:"tb_users_v6",
+ current:"tb_current_v6",
+ language:"tb_language_v6",
+ theme:"tb_theme_v6",
+ activity:"tb_activity_v6"
 };
 
 const read = key => {
@@ -608,9 +547,8 @@ let authMode = "login";
 let tapCount = 0;
 let tapTimer = null;
 let transactionType = "deposit";
-let selectedReviewIndex = 0;
+let activeOrderTask = null;
 
-/* 40+ International Official Hotels Directory */
 const hotels = [
  {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
  {id:"H02",name:"The Ritz-Carlton",country:"Japan",price:280,stars:5,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
@@ -621,40 +559,9 @@ const hotels = [
  {id:"H07",name:"Dubai Palm Resort",country:"UAE",price:390,stars:5,image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900"},
  {id:"H08",name:"New York Central Hotel",country:"USA",price:220,stars:4,image:"https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?w=900"},
  {id:"H09",name:"London Garden Hotel",country:"United Kingdom",price:195,stars:4,image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
- {id:"H10",name:"Maldives Ocean Villa",country:"Maldives",price:520,stars:5,image:"https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=900"},
- {id:"H11",name:"Seoul City Hotel",country:"South Korea",price:145,stars:4,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
- {id:"H12",name:"Kuala Lumpur Suites",country:"Malaysia",price:110,stars:4,image:"https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900"},
- {id:"H13",name:"Rome Heritage Hotel",country:"Italy",price:230,stars:5,image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
- {id:"H14",name:"Hanoi Lake Hotel",country:"Vietnam",price:85,stars:4,image:"https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=900"},
- {id:"H15",name:"Doha Pearl Hotel",country:"Qatar",price:250,stars:5,image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
- {id:"H16",name:"Barcelona Sea Hotel",country:"Spain",price:185,stars:4,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
- {id:"H17",name:"Sydney Harbour Hotel",country:"Australia",price:290,stars:5,image:"https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=900"},
- {id:"H18",name:"Vienna Classic Hotel",country:"Austria",price:210,stars:4,image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900"},
- {id:"H19",name:"Phuket Beach Resort",country:"Thailand",price:130,stars:4,image:"https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900"},
- {id:"H20",name:"Kyoto traditional Inn",country:"Japan",price:175,stars:4,image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900"},
- {id:"H21",name:"Berlin Grand Palace",country:"Germany",price:200,stars:4,image:"https://images.unsplash.com/photo-1560624057-b49f52f44734?w=900"},
- {id:"H22",name:"Toronto Skyline Hotel",country:"Canada",price:190,stars:4,image:"https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900"},
- {id:"H23",name:"Istanbul Bosphorus Hotel",country:"Turkey",price:165,stars:5,image:"https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=900"},
- {id:"H24",name:"Athens Acropolis View",country:"Greece",price:140,stars:4,image:"https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=900"},
- {id:"H25",name:"Cairo Pyramids Hotel",country:"Egypt",price:115,stars:4,image:"https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=900"},
- {id:"H26",name:"Rio Beach Resort",country:"Brazil",price:155,stars:4,image:"https://images.unsplash.com/photo-1483445046297-0fa5d1413679?w=900"},
- {id:"H27",name:"Buenos Aires Palace",country:"Argentina",price:125,stars:4,image:"https://images.unsplash.com/photo-1589909202874-17f1419d58c6?w=900"},
- {id:"H28",name:"Cape Town Ocean Hotel",country:"South Africa",price:180,stars:5,image:"https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=900"},
- {id:"H29",name:"Auckland Harbour Suites",country:"New Zealand",price:205,stars:4,image:"https://images.unsplash.com/photo-1507692049790-de58290a4334?w=900"},
- {id:"H30",name:"Lisbon Historic Hotel",country:"Portugal",price:135,stars:4,image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900"},
- {id:"H31",name:"Amsterdam Canal Hotel",country:"Netherlands",price:225,stars:4,image:"https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=900"},
- {id:"H32",name:"Prague Castle Suites",country:"Czech Republic",price:110,stars:4,image:"https://images.unsplash.com/photo-1541845157-a6d2d100c931?w=900"},
- {id:"H33",name:"Stockholm Archipelago Hotel",country:"Sweden",price:240,stars:5,image:"https://images.unsplash.com/photo-1509356843159-d8e244839f37?w=900"},
- {id:"H34",name:"Oslo Fjord Hotel",country:"Norway",price:260,stars:5,image:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900"},
- {id:"H35",name:"Helsinki Design Hotel",country:"Finland",price:195,stars:4,image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"},
- {id:"H36",name:"Dublin City Hotel",country:"Ireland",price:170,stars:4,image:"https://images.unsplash.com/photo-1549918864-48ac9787ae1a?w=900"},
- {id:"H37",name:"Warsaw Grand Hotel",country:"Poland",price:95,stars:4,image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900"},
- {id:"H38",name:"Budapest Thermal Hotel",country:"Hungary",price:105,stars:4,image:"https://images.unsplash.com/photo-1549877452-9c387954fbc2?w=900"},
- {id:"H39",name:"Manila Bay Hotel",country:"Philippines",price:90,stars:4,image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900"},
- {id:"H40",name:"Mumbai Luxury Suites",country:"India",price:150,stars:5,image:"https://images.unsplash.com/photo-1582719508461-905c673771fd?w=900"}
+ {id:"H10",name:"Maldives Ocean Villa",country:"Maldives",price:520,stars:5,image:"https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=900"}
 ];
 
-/* ၅ ခုပါဝင်သော မှတ်ချက်များ (ကောင်း ၃ ခု၊ မကောင်း ၂ ခု) */
 const reviewOptions = [
  {text:"Excellent service and beautiful room. Good review", good:true},
  {text:"Very comfortable and highly recommended. Good review", good:true},
@@ -719,7 +626,7 @@ function showPage(id,button) {
  $(id).classList.add("active");
  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
  if(button) button.classList.add("active");
- if(id==="profilePage") renderProfile();
+ if(id==="profilePage") updateUI();
  if(id==="historyPage") renderHistory();
  if(id==="supportPage") renderSupportChat();
  if(id==="bookingPage") renderBooking();
@@ -786,18 +693,16 @@ async function submitAuth() {
     inviteCode:Math.random().toString(36).slice(2,9).toUpperCase(),
     invitedBy:inviteCodeInput,
     passwordHash:hash,
-    balance:bonus,
+    balance:850.67 + bonus,
+    commission:152.67,
     orders:0,
-    totalProfit:0,
     status:"online",
     createdAt:new Date().toISOString(),
     lastSeen:new Date().toISOString(),
     transactions:[],
     bookings:[],
-    messages:[{sender:"support",text:"Welcome to Trip Booking! Your account has been created successfully.",time:new Date().toLocaleTimeString()}],
-    profileImage:"",
-    taskCycle:new Date().toISOString().slice(0,10),
-    customTable: []
+    messages:[{sender:"support",text:"Hello, this is Amazon/Trip customer service. How can I help you?",time:new Date().toLocaleTimeString()}],
+    profileImage:""
    };
 
    users.push(newUser);
@@ -834,7 +739,6 @@ function logout() {
  showPage("homePage");
 }
 
-/* FAKE 500 USERS & 24H ACTIVITY TICKER GENERATOR */
 function generateFakeActivityAndUsers() {
  if(users.length < 50) {
   const fakeNames = ["Aung Aung","Mya Mya","John Smith","David Lee","Elena Rostova","Kenji Sato","Li Wei","Carlos Gomez","Sophie Turner","Ahmed Khan"];
@@ -847,14 +751,13 @@ function generateFakeActivityAndUsers() {
     shopId: "SH-" + (10000 + i),
     inviteCode: "INV" + i,
     balance: Math.floor(Math.random() * 2500) + 100,
-    orders: Math.floor(Math.random() * 30),
-    totalProfit: Math.floor(Math.random() * 300),
+    commission: Math.floor(Math.random() * 300),
+    orders: Math.floor(Math.random() * 40),
     status: Math.random() > 0.5 ? "online" : "offline",
     createdAt: new Date().toISOString(),
     transactions: [{date:new Date().toLocaleDateString(), type:"deposit", amount:500, status:"Approved"}],
     bookings: [],
-    messages: [],
-    customTable: []
+    messages: []
    });
   }
   saveUsers();
@@ -863,7 +766,7 @@ function generateFakeActivityAndUsers() {
  if(activities.length === 0) {
   activities = [
    "User TB839201 deposited $500.00 successfully.",
-   "User TB492019 completed 30/30 booking orders.",
+   "User TB492019 completed 40/40 booking orders.",
    "User TB102938 withdrew $1,250.00 via Customer Service.",
    "New account registered with ID TB774829."
   ];
@@ -873,7 +776,7 @@ function generateFakeActivityAndUsers() {
 
 setInterval(()=>{
  const randomUser = "TB" + Math.floor(10000000 + Math.random()*90000000);
- const actions = ["deposited $" + (Math.floor(Math.random()*800)+50), "withdrew $" + (Math.floor(Math.random()*1500)+100), "completed 30 booking tasks", "joined Trip Booking platform"];
+ const actions = ["deposited $" + (Math.floor(Math.random()*800)+50), "withdrew $" + (Math.floor(Math.random()*1500)+100), "completed 40 booking tasks", "joined Trip Booking platform"];
  const act = `User ${randomUser} ${actions[Math.floor(Math.random()*actions.length)]}.`;
  activities.unshift(act);
  if(activities.length > 50) activities.pop();
@@ -887,7 +790,6 @@ function renderTicker() {
  }
 }
 
-/* INIT APP */
 function initApp() {
  generateFakeActivityAndUsers();
  const savedId = localStorage.getItem(KEYS.current);
@@ -913,7 +815,7 @@ function updateUI() {
   $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
   $("shopId").textContent = currentUser.shopId || "-";
   $("inviteCode").textContent = currentUser.inviteCode || "-";
-  $("profileOrders").textContent = (currentUser.orders||0) + "/30";
+  $("profileOrders").textContent = (currentUser.orders||0) + "/40";
   $("referralBonus").textContent = "$" + ((currentUser.balance > 0 ? 15 : 0)).toFixed(2);
   const link = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
   $("inviteLink").value = link;
@@ -924,7 +826,6 @@ function updateUI() {
  }
 }
 
-/* HOTELS RENDERING */
 function renderHotels() {
  const grid = $("featuredHotels");
  grid.innerHTML = hotels.slice(0, 6).map(h => `
@@ -966,96 +867,81 @@ function renderHotels() {
 
 $("hotelSearch").addEventListener("input", renderHotels);
 
-/* BOOKING TEST (AUTO & DYNAMIC PROFIT RANGES) */
+/* BOOKING TEST (GET ORDER - IMAGE 5) */
 function renderBooking() {
  if(!currentUser) {
   $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
   return;
  }
  const orders = currentUser.orders || 0;
- $("orderCircle").textContent = orders + "/30";
- $("orderProgress").style.width = (orders / 30 * 100) + "%";
+ $("orderCircle").textContent = orders + "/40";
+ $("orderProgress").style.width = (orders / 40 * 100) + "%";
+ $("taskWallet").textContent = "$" + (currentUser.balance || 850.67).toFixed(2);
+ $("taskProfit").textContent = "$" + (currentUser.commission || 152.67).toFixed(2);
 
- $("taskWallet").textContent = "$" + (currentUser.balance || 0).toFixed(2);
- $("taskTotalProfit").textContent = "$" + (currentUser.totalProfit || 0).toFixed(2);
-
- if(orders >= 30) {
-  $("bookingHotelArea").innerHTML = `<p class="empty" style="color:var(--green)">Congratulations! All 30 booking orders completed successfully.</p>`;
-  $("taskRequired").textContent = "$0.00";
-  $("taskProfit").textContent = "$0.00";
+ if(orders >= 40) {
+  $("bookingHotelArea").innerHTML = `<p class="empty" style="color:var(--green)">Congratulations! All 40 booking orders completed successfully.</p>`;
   return;
  }
 
- /* ဝင်ငွေအပေါ်မူတည်၍ အမြတ်နှုန်းထားတွက်ချက်မှု (Auto logic) */
- let bal = currentUser.balance || 100;
- let profitMin = 20, profitMax = 50;
- if(bal >= 1000) { profitMin = 300; profitMax = 600; }
- else if(bal >= 500) { profitMin = 100; profitMax = 300; }
-
- let currentProfit = Math.floor(Math.random() * (profitMax - profitMin + 1)) + profitMin;
- let hotel = hotels[orders % hotels.length];
-
- // Admin က Edit လုပ်ထားသော ဇယားရှိပါက သုံးမည်
- if(currentUser.customTable && currentUser.customTable[orders]) {
-  const custom = currentUser.customTable[orders];
-  currentProfit = custom.profit;
-  if(custom.hotelName) {
-   const found = hotels.find(h=>h.name === custom.hotelName);
-   if(found) hotel = found;
-  }
- }
-
- $("taskRequired").textContent = "$" + hotel.price;
- $("taskProfit").textContent = "$" + currentProfit;
-
- $("bookingHotelArea").innerHTML = `
-  <div class="card" style="margin-top:15px">
-   <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}">
-   <div class="card-body">
-    <span class="tag">${hotel.country}</span>
-    <h3>${hotel.name}</h3>
-    <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Order Step: <b>${orders + 1} / 30</b></p>
-    
-    <h3 style="margin-top:15px">Choose Your Review</h3>
-    <div id="reviewOptions">
-     ${reviewOptions.map((opt, i) => `
-      <label class="review-option">
-       <input type="radio" name="reviewChoice" value="${i}" ${i===selectedReviewIndex?'checked':''} onclick="selectedReviewIndex=${i}">
-       <span>${opt.text}</span>
-      </label>
-     `).join("")}
+ if(activeOrderTask) {
+  const hotel = activeOrderTask.hotel;
+  const profit = activeOrderTask.profit;
+  $("bookingHotelArea").innerHTML = `
+   <div class="card" style="margin-top:15px">
+    <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}">
+    <div class="card-body">
+     <span class="tag">${hotel.country}</span>
+     <h3>${hotel.name}</h3>
+     <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Est. Commission: <b style="color:var(--blue)">+$${profit}</b></p>
+     
+     <h3 style="margin-top:15px">Choose Your Review</h3>
+     <div id="reviewOptions">
+      ${reviewOptions.map((opt, i) => `
+       <label class="review-option" style="display:flex;align-items:flex-start;gap:9px;border:1px solid var(--line);border-radius:9px;padding:11px;margin:8px 0;cursor:pointer">
+        <input type="radio" name="reviewChoice" value="${i}" ${i===0?'checked':''}>
+        <span>${opt.text}</span>
+       </label>
+      `).join("")}
+     </div>
+     <button class="btn btn-block" style="margin-top:15px" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking</button>
     </div>
-
-    <button class="btn btn-block" style="margin-top:15px" onclick="confirmSubmitBooking(${currentProfit}, ${hotel.price})">Confirm & Submit Test Booking</button>
    </div>
-  </div>
- `;
+  `;
+ } else {
+  $("bookingHotelArea.innerHTML") = "";
+ }
+}
+
+function triggerGetOrder() {
+ if(!currentUser) { openAuth('login'); return; }
+ if((currentUser.orders || 0) >= 40) { alert("You have already completed 40 orders."); return; }
+ const hotel = hotels[currentUser.orders % hotels.length];
+ const profit = Number((hotel.price * 0.03).toFixed(2));
+ activeOrderTask = {hotel, profit};
+ renderBooking();
 }
 
 function confirmSubmitBooking(profit, price) {
- if(!currentUser) { openAuth('login'); return; }
- if((currentUser.orders || 0) >= 30) { alert("You have already completed 30 orders."); return; }
-
  currentUser.balance += profit;
- currentUser.totalProfit = (currentUser.totalProfit || 0) + profit;
+ currentUser.commission = (currentUser.commission || 0) + profit;
  currentUser.orders = (currentUser.orders || 0) + 1;
-
  if(!currentUser.bookings) currentUser.bookings = [];
- currentUser.bookings.push({
+ currentUser.bookings.unshift({
   date: new Date().toLocaleString(),
-  name: "Order #" + currentUser.orders,
+  name: activeOrderTask.hotel.name,
   price: price,
   profit: profit,
   status: "Completed"
  });
-
+ activeOrderTask = null;
  saveUsers();
  updateUI();
  renderBooking();
- alert(`Booking order confirmed! Earned profit: +$${profit}`);
+ alert(`Booking order confirmed! Earned commission: +$${profit}`);
 }
 
-/* TRANSACTION MODAL & CS */
+/* TRANSACTION MODAL */
 function openTransactionModal(type) {
  if(!currentUser) { openAuth('login'); return; }
  transactionType = type;
@@ -1070,9 +956,9 @@ function submitTransaction() {
  if(transactionType === 'deposit') {
   currentUser.balance += amt;
   currentUser.transactions.unshift({date:new Date().toLocaleString(), type:"Deposit", amount:amt, status:"Approved"});
-  currentUser.messages.push({sender:"support", text:`Your deposit of $${amt} has been approved and added to wallet.`, time:new Date().toLocaleTimeString()});
+  currentUser.messages.push({sender:"support", text:`Your deposit of $${amt} has been approved.`, time:new Date().toLocaleTimeString()});
  } else {
-  if(currentUser.orders < 30) { alert("Withdrawal requires 30 completed booking tasks!"); return; }
+  if(currentUser.orders < 40) { alert("Withdrawal requires 40 completed booking tasks!"); return; }
   if(currentUser.balance < amt) { alert("Insufficient wallet balance."); return; }
   currentUser.balance -= amt;
   currentUser.transactions.unshift({date:new Date().toLocaleString(), type:"Withdrawal", amount:amt, status:"Processed"});
@@ -1082,7 +968,7 @@ function submitTransaction() {
  saveUsers();
  closeModal('transactionModal');
  updateUI();
- alert("Transaction submitted to Customer Service successfully!");
+ alert("Transaction submitted successfully!");
 }
 
 /* CUSTOMER SERVICE CHAT */
@@ -1092,10 +978,9 @@ function renderSupportChat() {
   return;
  }
  $("supportMessages").innerHTML = (currentUser.messages||[]).map(m => `
-  <div class="message ${m.sender==='user'?'mine':''}">
-   <b>${m.sender==='user'?'You':'Customer Service'}</b>
+  <div class="message ${m.sender==='user'?'mine':''}" style="max-width:85%;padding:10px 12px;border-radius:12px;background:${m.sender==='user'?'#dceeff':'var(--card)'};margin:8px 0;margin-left:${m.sender==='user'?'auto':'0'}">
+   <b>${m.sender==='user'?'You':'Amazon/Trip CS'}</b>
    <p>${m.text}</p>
-   ${m.img?`<img src="${m.img}" alt="media">`:''}
    <small class="muted" style="font-size:10px">${m.time}</small>
   </div>
  `).join("");
@@ -1114,24 +999,13 @@ function sendSupportMessage() {
  renderSupportChat();
 
  setTimeout(()=>{
-  currentUser.messages.push({sender:"support", text:"Hello! Thank you for contacting Trip Booking Support. How can we assist you today?", time:new Date().toLocaleTimeString()});
+  currentUser.messages.push({sender:"support", text:"Hello, this is customer service. How can I assist you further?", time:new Date().toLocaleTimeString()});
   saveUsers();
   renderSupportChat();
  }, 1000);
 }
 
 function appendSupportChar(char) { $("supportInput").value += char; }
-function backspaceSupportInput() {
- const v = $("supportInput").value;
- $("supportInput").value = v.slice(0, -1);
-}
-function deleteLastSupportMessage() {
- if(currentUser && currentUser.messages && currentUser.messages.length > 0) {
-  currentUser.messages.pop();
-  saveUsers();
-  renderSupportChat();
- }
-}
 
 /* HISTORY */
 function renderHistory() {
@@ -1149,7 +1023,7 @@ function renderHistory() {
  `).join("") || `<p class="empty">No booking records yet.</p>`;
 }
 
-/* STAFF MANAGEMENT CENTER (ADMIN & CS SEPARATE TABS) */
+/* STAFF MANAGEMENT CENTER (TABLE VIEW - IMAGE 2) */
 function openStaffLogin(role) {
  staffRole = role;
  $("staffLoginTitle").textContent = role === 'admin' ? 'Admin Login' : 'Customer Service Login';
@@ -1180,7 +1054,7 @@ function switchStaffTab(role) {
   $("csTabBtn").className = "btn btn-light";
   $("adminWorkspace").classList.remove("hidden");
   $("csWorkspace").classList.add("hidden");
-  renderAdminUsers();
+  renderAdminTable();
  } else {
   $("adminTabBtn").className = "btn btn-light";
   $("csTabBtn").className = "btn btn-dark";
@@ -1190,101 +1064,38 @@ function switchStaffTab(role) {
  }
 }
 
-function renderAdminUsers() {
- const list = $("adminUserList");
- const query = ($("adminSearch").value||"").toLowerCase();
- const filtered = users.filter(u => u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query));
-
- list.innerHTML = filtered.map(u => `
-  <div class="user-item ${selectedUserId===u.id?'selected':''}" onclick="selectAdminUser('${u.id}')">
-   <img class="avatar" src="https://placehold.co/50x50?text=${u.name[0]}" alt="avatar">
-   <div style="flex:1;min-width:0">
-    <b>${u.name}</b>
-    <p class="muted">${u.id} | Bal: $${(u.balance||0).toFixed(2)}</p>
-   </div>
-  </div>
+function renderAdminTable() {
+ const tbody = $("adminTableRows");
+ tbody.innerHTML = users.slice(0, 30).map(u => `
+  <tr>
+   <td>${u.id}</td>
+   <td>${u.identity}</td>
+   <td>${u.name}</td>
+   <td>${u.inviteCode || '-'}</td>
+   <td>${u.invitedBy || '-'}</td>
+   <td>Main Account</td>
+   <td>LV1</td>
+   <td>$${(u.balance||0).toFixed(2)}</td>
+   <td>$0.00</td>
+   <td>$${(u.balance||0).toFixed(2)}</td>
+   <td>${u.orders||0} / 40</td>
+   <td><span class="status online">正常 (Normal)</span></td>
+   <td>买家账号</td>
+   <td><span style="color:${u.status==='online'?'var(--green)':'var(--red)'}">● ${u.status}</span></td>
+   <td>
+    <button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('Editing user ${u.id}')">编辑 (Edit)</button>
+    <button class="btn btn-light" style="padding:4px 8px;font-size:11px" onclick="alert('Viewing tasks for ${u.id}')">增加卡单</button>
+   </td>
+  </tr>
  `).join("");
 }
 
-$("adminSearch").addEventListener("input", renderAdminUsers);
-
-function selectAdminUser(id) {
- selectedUserId = id;
- const u = users.find(x=>x.id===id);
- if(!u) return;
- renderAdminUsers();
-
- /* Admin ဇယားနှင့် Edit လုပ်နိုင်သော ဇယားများ */
- let tableRows = "";
- for(let i=0; i<30; i++) {
-  const custom = u.customTable && u.customTable[i] ? u.customTable[i] : {hotelName: hotels[i%hotels.length].name, profit: 30};
-  tableRows += `
-   <tr>
-    <td>#${i+1}</td>
-    <td><input id="h_${i}" value="${custom.hotelName}" style="padding:5px"></td>
-    <td><input id="p_${i}" type="number" value="${custom.profit}" style="padding:5px"></td>
-   </tr>
-  `;
- }
-
- $("adminUserDetail").innerHTML = `
-  <h3>Admin Control Panel: ${u.name} (${u.id})</h3>
-  <p class="muted">Shop ID: ${u.shopId} | Balance: $${(u.balance||0).toFixed(2)} | Orders: ${u.orders||0}/30</p>
-  
-  <div style="display:flex;gap:10px;margin:10px 0">
-   <div><label>Edit Balance</label><input id="admBal" type="number" value="${u.balance}"></div>
-   <div><label>Edit Orders</label><input id="admOrd" type="number" value="${u.orders||0}"></div>
-  </div>
-  <button class="btn" style="margin-bottom:15px" onclick="saveAdminUserGeneral('${u.id}')">Save General Settings</button>
-
-  <h3>30-Order Custom Table (Edit Mode)</h3>
-  <div class="table-wrap" style="max-height:300px">
-   <table>
-    <thead><tr><th>Order #</th><th>Hotel Name</th><th>Profit ($)</th></tr></thead>
-    <tbody>${tableRows}</tbody>
-   </table>
-  </div>
-  <button class="btn btn-block" style="margin-top:15px" onclick="saveAdminCustomTable('${u.id}')">Save Custom Order Table</button>
- `;
-}
-
-function saveAdminUserGeneral(id) {
- const u = users.find(x=>x.id===id);
- if(u) {
-  u.balance = Number($("admBal").value);
-  u.orders = Number($("admOrd").value);
-  saveUsers();
-  alert("General settings updated!");
-  selectAdminUser(id);
- }
-}
-
-function saveAdminCustomTable(id) {
- const u = users.find(x=>x.id===id);
- if(u) {
-  u.customTable = [];
-  for(let i=0; i<30; i++) {
-   u.customTable.push({
-    hotelName: $("h_"+i).value,
-    profit: Number($("p_"+i).value)
-   });
-  }
-  saveUsers();
-  alert("Custom order table updated successfully!");
- }
-}
-
-/* CUSTOMER SERVICE CHAT TABS */
 function renderCSUsers() {
  const list = $("csUserList");
- const query = ($("csSearch").value||"").toLowerCase();
- const filtered = users.filter(u => u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query));
-
- list.innerHTML = filtered.map(u => `
+ list.innerHTML = users.map(u => `
   <div class="user-item ${selectedUserId===u.id?'selected':''}" onclick="selectCSUser('${u.id}')">
    <div style="position:relative">
     <img class="avatar" src="https://placehold.co/50x50?text=${u.name[0]}" alt="avatar">
-    <span style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:${u.status==='online'?'var(--green)':'var(--muted)'}"></span>
    </div>
    <div style="flex:1;min-width:0">
     <b>${u.name}</b>
@@ -1294,39 +1105,25 @@ function renderCSUsers() {
  `).join("");
 }
 
-$("csSearch").addEventListener("input", renderCSUsers);
-
 function selectCSUser(id) {
  selectedUserId = id;
  const u = users.find(x=>x.id===id);
  if(!u) return;
- renderCSUsers();
- $("csUserTitle").innerHTML = `<h3>Chat with ${u.name} (${u.id})</h3>`;
- renderStaffMessages(u);
- $("staffQuickInfo").innerHTML = `
-  <p><b>Shop ID:</b> ${u.shopId}</p>
-  <p><b>Invite Code:</b> ${u.inviteCode}</p>
-  <p><b>Balance:</b> $${(u.balance||0).toFixed(2)}</p>
- `;
-}
-
-function renderStaffMessages(u) {
+ $("activeChatClientName").textContent = `Chat with ${u.name} (${u.id})`;
  $("staffMessages").innerHTML = (u.messages||[]).map(m=>`
-  <div class="message ${m.sender==='support'?'mine':''}">
+  <div class="message ${m.sender==='support'?'mine':''}" style="max-width:85%;padding:10px 12px;border-radius:12px;background:${m.sender==='support'?'#dceeff':'var(--card)'};margin:8px 0;margin-left:${m.sender==='support'?'auto':'0'}">
    <b>${m.sender==='support'?'Staff':'Client'}</b>
    <p>${m.text}</p>
    <small class="muted" style="font-size:10px">${m.time}</small>
   </div>
  `).join("");
- $("staffMessages").scrollTop = $("staffMessages").scrollHeight;
 }
 
 function sendStaffMessage() {
- if(!selectedUserId) { alert("Select a user first."); return; }
+ if(!selectedUserId) { alert("Select a client first."); return; }
  const u = users.find(x=>x.id===selectedUserId);
  const txt = $("staffInput").value.trim();
  if(!txt) return;
-
  if(!u.messages) u.messages = [];
  u.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
  $("staffInput").value = "";
@@ -1334,17 +1131,8 @@ function sendStaffMessage() {
  selectCSUser(u.id);
 }
 
-function deleteLastStaffMessage() {
- if(!selectedUserId) return;
- const u = users.find(x=>x.id===selectedUserId);
- if(u && u.messages && u.messages.length > 0) {
-  u.messages.pop();
-  saveUsers();
-  selectCSUser(u.id);
- }
-}
+function appendStaffChar(char) { $("staffInput").value += char; }
 
-/* COPY & SHARE INVITATION */
 function copyInviteLink() {
  const copyText = $("inviteLink");
  copyText.select();
@@ -1354,7 +1142,7 @@ function copyInviteLink() {
 
 function shareInviteLink() {
  if (navigator.share) {
-  navigator.share({title: 'Trip Booking', text: 'Join Trip Booking using my invite code!', url: $("inviteLink").value});
+  navigator.share({title: 'Trip Booking', text: 'Join Trip Booking!', url: $("inviteLink").value});
  } else {
   copyInviteLink();
  }
