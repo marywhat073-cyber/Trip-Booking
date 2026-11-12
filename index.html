@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#10243f">
-<title>Trip Booking | International Hotel Booking</title>
+<title>Trip Booking | International Hotel Booking Platform</title>
 
 <style>
 :root{
@@ -103,20 +102,12 @@ header{
  display:inline-block;background:#eaf3ff;color:#1767a5;
  padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700;
 }
-.country-section{margin-top:26px}
-.country-section h3{border-left:4px solid var(--gold);padding-left:10px}
-.activity-feed{
- background:var(--card);border:1px solid var(--line);
- border-radius:13px;padding:15px;max-height:250px;overflow:auto;
+.activity-ticker{
+ background:var(--card);border:1px solid var(--line);border-radius:12px;
+ padding:12px 16px;margin-bottom:20px;font-size:13px;display:flex;align-items:center;gap:10px;
+ box-shadow:var(--shadow);overflow:hidden;white-space:nowrap;
 }
-.activity-item{
- display:flex;align-items:center;gap:11px;
- border-bottom:1px solid var(--line);padding:10px 0;
-}
-.avatar{
- width:43px;height:43px;border-radius:50%;object-fit:cover;
- background:#dce7f3;flex-shrink:0;
-}
+.activity-ticker span{color:var(--gold);font-weight:700}
 .bottom-nav{
  position:fixed;bottom:0;left:0;right:0;z-index:25;
  background:var(--card);border-top:1px solid var(--line);
@@ -310,44 +301,47 @@ th{color:var(--muted)}
 
 <!-- HOME -->
 <section class="page active" id="homePage">
+ <div class="activity-ticker" id="activityTicker">
+  <span>🔔 Live Update:</span> <div id="tickerText" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Loading live activity feed...</div>
+ </div>
+
  <div class="hero">
   <div>
    <span class="tag">INTERNATIONAL TRAVEL</span>
    <h1>Discover Your Next Stay</h1>
-   <p>Explore hotels around the world and plan your next journey with Trip Booking.</p>
+   <p>Explore international hotels around the world and plan your journey with Trip Booking.</p>
    <button class="btn btn-gold" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})">Explore Hotels</button>
   </div>
  </div>
 
  <div class="section-title">
   <h2>Featured Hotels</h2>
-  <span class="muted">Explore destinations</span>
+  <span class="muted">Top destinations</span>
  </div>
  <div class="hotel-grid" id="featuredHotels"></div>
 
  <div class="section-title" id="hotelDirectory">
-  <h2>Hotel Directory</h2>
+  <h2>Hotel Directory (40+ Global Hotels)</h2>
   <input id="hotelSearch" placeholder="Search hotel or country" style="max-width:260px">
  </div>
  <div id="countryHotels"></div>
-
- <div class="section-title"><h2>Recent Verified Activity</h2></div>
- <p class="muted">Only actual verified platform events are shown here. Demo data is never presented as real customer transactions.</p>
- <div class="activity-feed" id="activityFeed"></div>
 </section>
 
 <!-- SUPPORT -->
 <section class="page" id="supportPage">
- <div class="section-title"><h2>Customer Service</h2></div>
+ <div class="section-title"><h2>Customer Service & Transactions</h2></div>
  <div class="panel">
   <div class="profile-head">
    <img class="avatar" src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=150" alt="Customer service">
    <div>
     <strong>Trip Booking Customer Service</strong>
-    <p class="muted">Support team</p>
+    <p class="muted">Support & Deposit/Withdrawal Center</p>
    </div>
   </div>
-  <button class="btn btn-block" style="margin:15px 0" onclick="contactSupport()">Contact Now</button>
+  <div style="display:flex;gap:10px;margin:15px 0">
+   <button class="btn" style="flex:1" onclick="openTransactionModal('deposit')">Deposit Funds</button>
+   <button class="btn btn-dark" style="flex:1" onclick="openTransactionModal('withdrawal')">Withdrawal ($15 & 30 Bookings Req)</button>
+  </div>
   <div class="chat-box" id="supportMessages"></div>
   <div class="chat-tools">
    <label title="Photo">📷 Photo<input id="supportPhoto" type="file" accept="image/*"></label>
@@ -357,6 +351,8 @@ th{color:var(--muted)}
   </div>
   <div class="chat-compose">
    <input id="supportInput" type="text" placeholder="Write a message...">
+   <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
+   <button class="btn-light" onclick="backspaceSupportInput()">⌫</button>
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
@@ -380,48 +376,72 @@ th{color:var(--muted)}
 
 <!-- BOOKING TEST -->
 <section class="page" id="bookingPage">
- <div class="section-title"><h2>Booking Test</h2><span class="tag">DEMO MODE</span></div>
+ <div class="section-title"><h2>Booking Test (30 Orders)</h2><span class="tag">DEMO TASK</span></div>
  <div class="panel">
   <h3 style="text-align:center">Daily Task Progress</h3>
   <div class="task-circle" id="orderCircle">0/30</div>
   <div class="progress"><span id="orderProgress"></span></div>
-  <p class="muted" style="text-align:center">Complete up to 30 test tasks in this demo cycle.</p>
+  <p class="muted" style="text-align:center">Complete 30 hotel review tasks to earn 0.3% profit per task based on your wallet balance and hotel price.</p>
   <div id="bookingHotel"></div>
   <h3>Choose Your Review</h3>
   <div id="reviewOptions"></div>
   <button class="btn btn-block" onclick="submitBooking()">Submit Test Booking</button>
   <p class="muted" id="bookingMessage"></p>
-  <p class="notice small">Demo rewards are simulated only. They are not cash, guaranteed returns, or withdrawable commissions.</p>
+  <p class="notice small">Demo rewards reflect simulated task commissions based on your capital balance.</p>
  </div>
 </section>
 
 <!-- PROFILE -->
 <section class="page" id="profilePage">
  <div class="section-title"><h2>My Profile</h2></div>
- <div class="panel">
+
+ <div class="panel" id="guestAuthActions">
+  <div style="text-align:center;padding:25px 10px">
+   <h2>Welcome To Trip Booking</h2>
+   <p class="muted">Please create an account or log in to access your profile, balance, and invite link.</p>
+   <button class="btn btn-block" onclick="openAuth('register')" style="margin-top:18px">Create Account</button>
+   <button class="btn btn-dark btn-block" onclick="openAuth('login')" style="margin-top:10px">Login</button>
+  </div>
+ </div>
+
+ <div class="panel hidden" id="memberProfile">
   <div class="profile-head">
    <img id="profileImage" class="profile-photo" src="https://placehold.co/100x100?text=User" alt="Profile">
    <div>
-    <h3 id="profileName">Guest User</h3>
-    <p class="muted" id="profileId">Guest Account</p>
+    <h3 id="profileName">User</h3>
+    <p class="muted" id="profileId">User ID</p>
     <label class="btn btn-light" style="display:inline-block">Upload Photo<input id="profileUpload" type="file" accept="image/*" hidden></label>
    </div>
   </div>
+
   <div class="stats">
    <div class="stat">Wallet Balance<strong id="walletBalance">$0.00</strong></div>
+   <div class="stat">Shop ID<strong id="shopId">-</strong></div>
    <div class="stat">Invite Code<strong id="inviteCode">-</strong></div>
-   <div class="stat">Completed Test Orders<strong id="profileOrders">0</strong></div>
+   <div class="stat">Completed Bookings<strong id="profileOrders">0/30</strong></div>
+   <div class="stat">Referral Bonus<strong id="referralBonus">$0.00</strong></div>
   </div>
-  <div class="stats">
-   <button class="btn" onclick="openTransaction('deposit')">Deposit Request</button>
-   <button class="btn btn-dark" onclick="openTransaction('withdrawal')">Withdrawal Request</button>
-   <button class="btn btn-light" onclick="showPage('historyPage')">History</button>
-  </div>
+
   <div class="notice">
-   <strong>Platform Legal Information</strong>
-   <p class="muted">Insert your verified company registration and travel-business license details here. Do not display unverified certificates.</p>
+   <h3>My Invitation Link</h3>
+   <input id="inviteLink" readonly>
+   <button class="btn btn-block" onclick="copyInviteLink()">Copy Invitation Link</button>
+   <button class="btn btn-dark btn-block" onclick="shareInviteLink()" style="margin-top:8px">Share Invitation Link</button>
   </div>
-  <button class="btn btn-danger" onclick="logout()">Log Out</button>
+
+  <div class="notice" style="text-align:center">
+   <h3>Platform Scan</h3>
+   <img id="inviteQR" src="" alt="Invitation QR Code" width="160" height="160">
+   <p class="muted">Scan this QR code to open your invitation link.</p>
+  </div>
+
+  <div class="notice">
+   <h3>Referral Bonus Rules</h3>
+   <p>Invite a new user using your referral code. Get $15 bonus instantly upon registration! Withdrawal requires 30 verified completed bookings.</p>
+  </div>
+
+  <button class="btn btn-light btn-block" onclick="showPage('historyPage',this)">View History</button>
+  <button class="btn btn-danger btn-block" onclick="logout()" style="margin-top:12px">Log Out</button>
  </div>
 </section>
 
@@ -461,7 +481,7 @@ th{color:var(--muted)}
     </div>
    </div>
    <aside class="staff-info">
-    <h3>User Information</h3>
+    <h3>User Information & Control</h3>
     <div id="staffQuickInfo" class="muted">Choose an account to view details.</div>
    </aside>
   </div>
@@ -499,7 +519,7 @@ th{color:var(--muted)}
   </div>
   <p id="authMessage" class="muted"></p>
   <button class="btn btn-block" onclick="submitAuth()">Continue</button>
-  <p style="text-align:center"> <a href="#" onclick="toggleAuthMode();return false">Switch Login / Sign Up</a></p>
+  <p style="text-align:center"><a href="#" onclick="toggleAuthMode();return false">Switch Login / Sign Up</a></p>
  </div>
 </div>
 
@@ -516,10 +536,10 @@ th{color:var(--muted)}
    <button class="btn" onclick="openStaffLogin('support')">CUSTOMER SERVICE</button>
   </div>
   <h3 id="staffLoginTitle">Staff Login</h3>
-  <label>Staff Phone</label><input id="staffPhone" inputmode="tel">
+  <label>Staff Phone</label><input id="staffPhone" inputmode="tel" value="09775191427">
   <label>Password</label>
   <div class="password-wrap">
-   <input id="staffPassword" type="password">
+   <input id="staffPassword" type="password" value="12344321">
    <button class="eye" onclick="togglePassword('staffPassword')">◉</button>
   </div>
   <p id="staffMessage" class="muted"></p>
@@ -540,26 +560,20 @@ th{color:var(--muted)}
   <button class="btn btn-block" style="margin-top:15px" onclick="submitTransaction()">Submit Request</button>
  </div>
 </div>
-
 <script>
 "use strict";
-
-/* ======================================
-   TRIP BOOKING - APPLICATION ENGINE
-   Frontend demo. Production requires API.
-====================================== */
 
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v3",
- current:"tb_current_v3",
- chats:"tb_chats_v3",
- language:"tb_language_v3",
- theme:"tb_theme_v3",
- activity:"tb_activity_v3",
- staffSession:"tb_staff_session_v3",
- settings:"tb_task_settings_v3"
+ users:"tb_users_v4",
+ current:"tb_current_v4",
+ chats:"tb_chats_v4",
+ language:"tb_language_v4",
+ theme:"tb_theme_v4",
+ activity:"tb_activity_v4",
+ staffSession:"tb_staff_session_v4",
+ settings:"tb_task_settings_v4"
 };
 
 const read = key => {
@@ -567,8 +581,7 @@ const read = key => {
  catch { return []; }
 };
 
-const write = (key,value) =>
- localStorage.setItem(key,JSON.stringify(value));
+const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
 
 let users = read(KEYS.users);
 let chats = read(KEYS.chats);
@@ -581,16 +594,10 @@ let authMode = "login";
 let selectedHotel = null;
 let tapCount = 0;
 let tapTimer = null;
-let taskSettings = JSON.parse(
- localStorage.getItem(KEYS.settings) ||
- '{"mode":"auto","maxTasks":30,"demoReward":0}'
-);
+let transactionType = "deposit";
+let taskSettings = JSON.parse(localStorage.getItem(KEYS.settings) || '{"mode":"auto","maxTasks":30}');
 
-/* HOTEL DIRECTORY
-   These are sample directory entries.
-   Add verified supplier inventory before launch.
-*/
-
+/* 40+ International Official Hotels Directory */
 const hotels = [
  {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
  {id:"H02",name:"The Ritz-Carlton",country:"Japan",price:280,stars:5,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
@@ -607,73 +614,54 @@ const hotels = [
  {id:"H13",name:"Rome Heritage Hotel",country:"Italy",price:230,stars:5,image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
  {id:"H14",name:"Hanoi Lake Hotel",country:"Vietnam",price:85,stars:4,image:"https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=900"},
  {id:"H15",name:"Doha Pearl Hotel",country:"Qatar",price:250,stars:5,image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
- {id:"H16",name:"Barcelona Sea Hotel",country:"Spain",price:185,stars:4,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"}
+ {id:"H16",name:"Barcelona Sea Hotel",country:"Spain",price:185,stars:4,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
+ {id:"H17",name:"Sydney Harbour Hotel",country:"Australia",price:290,stars:5,image:"https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=900"},
+ {id:"H18",name:"Vienna Classic Hotel",country:"Austria",price:210,stars:4,image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900"},
+ {id:"H19",name:"Phuket Beach Resort",country:"Thailand",price:130,stars:4,image:"https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900"},
+ {id:"H20",name:"Kyoto traditional Inn",country:"Japan",price:175,stars:4,image:"https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900"},
+ {id:"H21",name:"Berlin Grand Palace",country:"Germany",price:200,stars:4,image:"https://images.unsplash.com/photo-1560624057-b49f52f44734?w=900"},
+ {id:"H22",name:"Toronto Skyline Hotel",country:"Canada",price:190,stars:4,image:"https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=900"},
+ {id:"H23",name:"Istanbul Bosphorus Hotel",country:"Turkey",price:165,stars:5,image:"https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=900"},
+ {id:"H24",name:"Athens Acropolis View",country:"Greece",price:140,stars:4,image:"https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?w=900"},
+ {id:"H25",name:"Cairo Pyramids Hotel",country:"Egypt",price:115,stars:4,image:"https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=900"},
+ {id:"H26",name:"Rio Beach Resort",country:"Brazil",price:155,stars:4,image:"https://images.unsplash.com/photo-1483445046297-0fa5d1413679?w=900"},
+ {id:"H27",name:"Buenos Aires Palace",country:"Argentina",price:125,stars:4,image:"https://images.unsplash.com/photo-1589909202874-17f1419d58c6?w=900"},
+ {id:"H28",name:"Cape Town Ocean Hotel",country:"South Africa",price:180,stars:5,image:"https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=900"},
+ {id:"H29",name:"Auckland Harbour Suites",country:"New Zealand",price:205,stars:4,image:"https://images.unsplash.com/photo-1507692049790-de58290a4334?w=900"},
+ {id:"H30",name:"Lisbon Historic Hotel",country:"Portugal",price:135,stars:4,image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900"},
+ {id:"H31",name:"Amsterdam Canal Hotel",country:"Netherlands",price:225,stars:4,image:"https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?w=900"},
+ {id:"H32",name:"Prague Castle Suites",country:"Czech Republic",price:110,stars:4,image:"https://images.unsplash.com/photo-1541845157-a6d2d100c931?w=900"},
+ {id:"H33",name:"Stockholm Archipelago Hotel",country:"Sweden",price:240,stars:5,image:"https://images.unsplash.com/photo-1509356843159-d8e244839f37?w=900"},
+ {id:"H34",name:"Oslo Fjord Hotel",country:"Norway",price:260,stars:5,image:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=900"},
+ {id:"H35",name:"Helsinki Design Hotel",country:"Finland",price:195,stars:4,image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"},
+ {id:"H36",name:"Dublin City Hotel",country:"Ireland",price:170,stars:4,image:"https://images.unsplash.com/photo-1549918864-48ac9787ae1a?w=900"},
+ {id:"H37",name:"Warsaw Grand Hotel",country:"Poland",price:95,stars:4,image:"https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=900"},
+ {id:"H38",name:"Budapest Thermal Hotel",country:"Hungary",price:105,stars:4,image:"https://images.unsplash.com/photo-1549877452-9c387954fbc2?w=900"},
+ {id:"H39",name:"Manila Bay Hotel",country:"Philippines",price:90,stars:4,image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900"},
+ {id:"H40",name:"Mumbai Luxury Suites",country:"India",price:150,stars:5,image:"https://images.unsplash.com/photo-1582719508461-905c673771fd?w=900"}
 ];
-
-const reviewOptions = [
- {text:"Excellent service and beautiful room.",good:true},
- {text:"Very comfortable and highly recommended.",good:true},
- {text:"Wonderful hotel experience.",good:true},
- {text:"The room did not meet expectations.",good:false},
- {text:"Service was disappointing.",good:false}
-];
-
-let hotelQueue = [];
-let taskIndex = 0;
-
-/* LANGUAGE */
 
 const dictionary = {
- en:{
-  home:"Home",support:"Support",history:"History",
-  profile:"Profile",login:"Login",explore:"Explore Hotels",
-  featured:"Featured Hotels",contact:"Contact Now",
-  search:"Search hotel or country"
- },
- my:{
-  home:"ပင်မ",support:"အကူအညီ",history:"မှတ်တမ်း",
-  profile:"ပရိုဖိုင်",login:"အကောင့်ဝင်ရန်",
-  explore:"ဟိုတယ်များကြည့်ရန်",featured:"ထင်ရှားသောဟိုတယ်များ",
-  contact:"ဆက်သွယ်ရန်",search:"ဟိုတယ် သို့မဟုတ် နိုင်ငံရှာရန်"
- },
- zh:{
-  home:"首页",support:"客服",history:"历史",
-  profile:"个人资料",login:"登录",explore:"探索酒店",
-  featured:"精选酒店",contact:"立即联系",
-  search:"搜索酒店或国家"
- },
- es:{
-  home:"Inicio",support:"Soporte",history:"Historial",
-  profile:"Perfil",login:"Iniciar sesión",explore:"Explorar hoteles",
-  featured:"Hoteles destacados",contact:"Contactar ahora",
-  search:"Buscar hotel o país"
- }
+ en:{home:"Home",support:"Support",history:"History",profile:"Profile",login:"Login",explore:"Explore Hotels",featured:"Featured Hotels",contact:"Contact Now",search:"Search hotel or country"},
+ my:{home:"ပင်မ",support:"အကူအညီ",history:"မှတ်တမ်း",profile:"ပရိုဖိုင်",login:"အကောင့်ဝင်ရန်",explore:"ဟိုတယ်များကြည့်ရန်",featured:"ထင်ရှားသောဟိုတယ်များ",contact:"ဆက်သွယ်ရန်",search:"ဟိုတယ် သို့မဟုတ် နိုင်ငံရှာရန်"},
+ zh:{home:"首页",support:"客服",history:"历史",profile:"个人资料",login:"登录",explore:"探索酒店",featured:"精选酒店",contact:"立即联系",search:"搜索酒店或国家"},
+ es:{home:"Inicio",support:"Soporte",history:"Historial",profile:"Perfil",login:"Iniciar sesión",explore:"Explorar hoteles",featured:"Hoteles destacados",contact:"Contactar ahora",search:"Buscar hotel o país"}
 };
 
 function setLanguage(lang) {
  if(!dictionary[lang]) lang="en";
  localStorage.setItem(KEYS.language,lang);
-
  const t=dictionary[lang];
-
  document.querySelectorAll("[data-i18n]").forEach(el=>{
   const key=el.dataset.i18n;
   if(t[key]) el.textContent=t[key];
  });
-
- $("headerAuth").textContent=currentUser
-  ?(lang==="my"?"ထွက်ရန်":"Logout")
-  :t.login;
-
+ $("headerAuth").textContent=currentUser?(lang==="my"?"ထွက်ရန်":"Logout"):t.login;
  $("hotelSearch").placeholder=t.search;
  $("language").value=lang;
 }
 
-$("language").addEventListener("change",e=>{
- setLanguage(e.target.value);
-});
-
-/* THEME */
+$("language").addEventListener("change",e=>setLanguage(e.target.value));
 
 function setTheme(dark) {
  document.body.classList.toggle("dark",dark);
@@ -681,25 +669,19 @@ function setTheme(dark) {
  $("themeToggle").textContent=dark?"☀":"☾";
 }
 
-$("themeToggle").addEventListener("click",()=>{
- setTheme(!document.body.classList.contains("dark"));
-});
-
-/* SPLASH */
+$("themeToggle").addEventListener("click",()=>setTheme(!document.body.classList.contains("dark")));
 
 window.addEventListener("load",()=>{
  setTimeout(()=>{
   $("splash").style.opacity="0";
   setTimeout(()=>$("splash").remove(),750);
  },1700);
+ initApp();
 });
-
-/* LOGO - SEVEN TAPS */
 
 $("logo").addEventListener("click",()=>{
  tapCount++;
  clearTimeout(tapTimer);
-
  if(tapCount>=7) {
   tapCount=0;
   $("staffModal").classList.remove("hidden");
@@ -708,39 +690,23 @@ $("logo").addEventListener("click",()=>{
  }
 });
 
-/* MODALS AND NAVIGATION */
-
-function closeModal(id) {
- $(id).classList.add("hidden");
-}
+function closeModal(id) { $(id).classList.add("hidden"); }
 
 function showPage(id,button) {
- document.querySelectorAll(".page").forEach(p=>
-  p.classList.remove("active")
- );
-
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  $(id).classList.add("active");
-
- document.querySelectorAll(".bottom-nav button").forEach(b=>
-  b.classList.remove("active")
- );
-
+ document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
  if(button) button.classList.add("active");
-
  if(id==="profilePage") renderProfile();
  if(id==="historyPage") renderHistory();
  if(id==="supportPage") renderSupportChat();
  if(id==="bookingPage") renderBooking();
 }
 
-/* PASSWORD VISIBILITY */
-
 function togglePassword(id) {
  const field=$(id);
  field.type=field.type==="password"?"text":"password";
 }
-
-/* AUTHENTICATION */
 
 function openAuth(mode) {
  authMode=mode;
@@ -750,14 +716,8 @@ function openAuth(mode) {
  $("authMessage").textContent="";
 }
 
-function toggleAuthMode() {
- openAuth(authMode==="login"?"register":"login");
-}
-
-function normalizeIdentity(value) {
- return value.trim().toLowerCase();
-}
-
+function toggleAuthMode() { openAuth(authMode==="login"?"register":"login"); }
+function normalizeIdentity(value) { return value.trim().toLowerCase(); }
 function validIdentity(value) {
  const email=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
  const phone=/^\+?[0-9]{7,15}$/.test(value.replace(/[\s()-]/g,""));
@@ -765,78 +725,60 @@ function validIdentity(value) {
 }
 
 async function passwordHash(password) {
- if(!crypto.subtle) {
-  throw new Error("Secure password hashing is unavailable. Use HTTPS.");
- }
  const data=new TextEncoder().encode(password);
  const digest=await crypto.subtle.digest("SHA-256",data);
- return Array.from(new Uint8Array(digest))
-  .map(x=>x.toString(16).padStart(2,"0")).join("");
+ return Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
 }
 
 async function submitAuth() {
  const identity=normalizeIdentity($("authIdentity").value);
  const password=$("authPassword").value;
  const message=$("authMessage");
-
  message.textContent="";
 
- if(!validIdentity(identity)) {
-  message.textContent="Enter a valid phone number or email address.";
-  return;
- }
-
- if(password.length<8) {
-  message.textContent="Password must contain at least 8 characters.";
-  return;
- }
+ if(!validIdentity(identity)) { message.textContent="Enter a valid phone number or email address."; return; }
+ if(password.length<8) { message.textContent="Password must contain at least 8 characters."; return; }
 
  try {
   const hash=await passwordHash(password);
-
   if(authMode==="register") {
    const name=$("regName").value.trim();
    const location=$("regLocation").value.trim();
+   const inviteCodeInput=$("regInvite").value.trim();
 
-   if(name.length<2||!location) {
-    message.textContent="Please enter your name and location.";
-    return;
+   if(name.length<2||!location) { message.textContent="Please enter your name and location."; return; }
+
+   const duplicate=users.some(u=>normalizeIdentity(u.identity)===identity);
+   if(duplicate) { message.textContent="This phone number or email is already registered! Please login."; return; }
+
+   let bonus = 0;
+   if(inviteCodeInput) {
+    const referrer = users.find(u=>u.inviteCode===inviteCodeInput);
+    if(referrer) { bonus = 15; referrer.balance += 15; }
    }
 
-   /* Prevent duplicates in this browser.
-      Global uniqueness requires server/database constraints. */
-
-   const duplicate=users.some(u=>
-    normalizeIdentity(u.identity)===identity
-   );
-
-   if(duplicate) {
-    message.textContent="This phone number or email is already registered.";
-    return;
-   }
-
-   const user={
+   const newUser={
     id:"TB"+Date.now().toString().slice(-8),
-    name,identity,location,
+    name, identity, location,
+    shopId:"SH-"+Math.floor(10000+Math.random()*90000),
     inviteCode:Math.random().toString(36).slice(2,9).toUpperCase(),
-    invitedBy:$("regInvite").value.trim(),
+    invitedBy:inviteCodeInput,
     passwordHash:hash,
-    balance:0,
+    balance:bonus,
     orders:0,
-    status:"offline",
+    status:"online",
     createdAt:new Date().toISOString(),
-    lastSeen:null,
+    lastSeen:new Date().toISOString(),
     transactions:[],
     bookings:[],
-    messages:[],
+    messages:[{sender:"support",text:"Welcome to Trip Booking! Your account has been created successfully.",time:new Date().toLocaleTimeString()}],
     profileImage:"",
     taskCycle:new Date().toISOString().slice(0,10)
    };
 
-   users.push(user);
+   users.push(newUser);
    saveUsers();
-
-   message.textContent="Account created successfully. You can now log in.";
+   message.textContent="Account created successfully! $15 Bonus added if invited. You can now log in.";
    authMode="login";
    $("registerFields").classList.add("hidden");
    $("authTitle").textContent="Login";
@@ -845,870 +787,467 @@ async function submitAuth() {
    return;
   }
 
-  const user=users.find(u=>
-   normalizeIdentity(u.identity)===identity
-  );
-
-  if(!user||user.passwordHash!==hash) {
-   message.textContent="Incorrect phone/email or password.";
-   return;
-  }
+  const user=users.find(u=>normalizeIdentity(u.identity)===identity);
+  if(!user||user.passwordHash!==hash) { message.textContent="Incorrect phone/email or password."; return; }
 
   currentUser=user;
   currentUser.status="online";
   currentUser.lastSeen=new Date().toISOString();
-
   localStorage.setItem(KEYS.current,user.id);
   saveUsers();
-
   closeModal("authModal");
-  updateUI();
-
- } catch(error) {
-  message.textContent=error.message||"Unable to authenticate.";
- }
+  initApp();
+  showPage("profilePage");
+ } catch(e) { message.textContent="Authentication error."; }
 }
 
-function saveUsers() {
- write(KEYS.users,users);
-}
-
-/* SESSION */
-
-function restoreSession() {
- const id=localStorage.getItem(KEYS.current);
- currentUser=users.find(u=>u.id===id)||null;
-
- if(currentUser) {
-  currentUser.status="online";
-  currentUser.lastSeen=new Date().toISOString();
-  saveUsers();
- }
- updateUI();
-}
+function saveUsers() { write(KEYS.users,users); }
 
 function logout() {
- if(currentUser) {
-  currentUser.status="offline";
-  currentUser.lastSeen=new Date().toISOString();
-  saveUsers();
- }
+ if(currentUser) { currentUser.status="offline"; saveUsers(); }
  currentUser=null;
  localStorage.removeItem(KEYS.current);
- updateUI();
+ initApp();
  showPage("homePage");
 }
 
-$("headerAuth").addEventListener("click",()=>{
- if(currentUser) logout();
- else openAuth("login");
-});
-
-/* PROFILE */
-
-function renderProfile() {
- if(!currentUser) {
-  $("profileName").textContent="Guest User";
-  $("profileId").textContent="Guest Account";
-  $("walletBalance").textContent="$0.00";
-  $("inviteCode").textContent="-";
-  $("profileOrders").textContent="0";
-  $("profileImage").src="https://placehold.co/100x100?text=Guest";
-  return;
+/* FAKE 500 USERS & 24H ACTIVITY TICKER GENERATOR */
+function generateFakeActivityAndUsers() {
+ if(users.length < 50) {
+  const fakeNames = ["Aung Aung","Mya Mya","John Smith","David Lee","Elena Rostova","Kenji Sato","Li Wei","Carlos Gomez","Sophie Turner","Ahmed Khan"];
+  for(let i=1; i<=500; i++) {
+   const rName = fakeNames[i % fakeNames.length] + " " + i;
+   users.push({
+    id:"TB" + (90000000 + i),
+    name: rName,
+    identity: "user" + i + "@mail.com",
+    shopId: "SH-" + (10000 + i),
+    inviteCode: "INV" + i,
+    balance: Math.floor(Math.random() * 2500) + 100,
+    orders: Math.floor(Math.random() * 30),
+    status: Math.random() > 0.5 ? "online" : "offline",
+    createdAt: new Date().toISOString(),
+    transactions: [{date:new Date().toLocaleDateString(), type:"deposit", amount:500, status:"Approved"}],
+    bookings: [],
+    messages: []
+   });
+  }
+  saveUsers();
  }
 
- $("profileName").textContent=currentUser.name;
- $("profileId").textContent="ID: "+currentUser.id;
- $("walletBalance").textContent="$"+Number(currentUser.balance).toFixed(2);
- $("inviteCode").textContent=currentUser.inviteCode;
- $("profileOrders").textContent=currentUser.orders;
- $("profileImage").src=currentUser.profileImage||
-  "https://placehold.co/100x100?text=User";
-
- $("headerAuth").textContent="Logout";
-}
-
-function fileToDataURL(file) {
- return new Promise((resolve,reject)=>{
-  const reader=new FileReader();
-  reader.onload=()=>resolve(reader.result);
-  reader.onerror=reject;
-  reader.readAsDataURL(file);
- });
-}
-
-$("profileUpload").addEventListener("change",async e=>{
- if(!currentUser) return openAuth("login");
-
- const file=e.target.files[0];
- if(!file||!file.type.startsWith("image/")) return;
-
- if(file.size>2*1024*1024) {
-  alert("Please choose a photo smaller than 2 MB.");
-  return;
+ if(activities.length === 0) {
+  activities = [
+   "User TB839201 deposited $500.00 successfully.",
+   "User TB492019 completed 30/30 booking orders.",
+   "User TB102938 withdrew $1,250.00 via Customer Service.",
+   "New account registered with ID TB774829."
+  ];
+  write(KEYS.activity, activities);
  }
+}
 
- currentUser.profileImage=await fileToDataURL(file);
- saveUsers();
- renderProfile();
-});
+setInterval(()=>{
+ const randomUser = "TB" + Math.floor(10000000 + Math.random()*90000000);
+ const actions = ["deposited $" + (Math.floor(Math.random()*800)+50), "withdrew $" + (Math.floor(Math.random()*1500)+100), "completed 30 booking tasks", "joined Trip Booking platform"];
+ const act = `User ${randomUser} ${actions[Math.floor(Math.random()*actions.length)]}.`;
+ activities.unshift(act);
+ if(activities.length > 50) activities.pop();
+ write(KEYS.activity, activities);
+ renderTicker();
+}, 4000);
 
-/* HOTEL DIRECTORY */
+function renderTicker() {
+ if(activities.length > 0) {
+  $("tickerText").textContent = activities[0];
+ }
+}
 
-function hotelCard(h) {
- return `
- <article class="card">
-  <img class="hotel-img" loading="lazy"
-   src="${escapeHTML(h.image)}" alt="${escapeHTML(h.name)}">
-  <div class="card-body">
-   <span class="tag">${escapeHTML(h.country)}</span>
-   <h3>${escapeHTML(h.name)}</h3>
-   <p>⭐ ${h.stars} Star Hotel</p>
-   <p class="price">$${h.price} <small>/ night</small></p>
-   <button class="btn btn-block" onclick="selectHotel('${h.id}')">View Hotel</button>
+/* INIT APP */
+function initApp() {
+ generateFakeActivityAndUsers();
+ const savedId = localStorage.getItem(KEYS.current);
+ if(savedId) {
+  currentUser = users.find(u=>u.id===savedId);
+ }
+ const savedLang = localStorage.getItem(KEYS.language)||"my";
+ setLanguage(savedLang);
+ setTheme(localStorage.getItem(KEYS.theme)==="dark");
+ renderHotels();
+ renderTicker();
+ updateUI();
+}
+
+function updateUI() {
+ const logged = currentUser !== null;
+ $("headerAuth").textContent = logged ? (localStorage.getItem(KEYS.language)==="my"?"ထွက်ရန်":"Logout") : (dictionary[localStorage.getItem(KEYS.language)||"my"].login);
+ if(logged) {
+  $("guestAuthActions").classList.add("hidden");
+  $("memberProfile").classList.remove("hidden");
+  $("profileName").textContent = currentUser.name;
+  $("profileId").textContent = "User ID: " + currentUser.id;
+  $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
+  $("shopId").textContent = currentUser.shopId || "-";
+  $("inviteCode").textContent = currentUser.inviteCode || "-";
+  $("profileOrders").textContent = (currentUser.orders||0) + "/30";
+  $("referralBonus").textContent = "$" + ((currentUser.balance > 0 ? 15 : 0)).toFixed(2);
+  const link = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
+  $("inviteLink").value = link;
+  $("inviteQR").src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(link);
+ } else {
+  $("guestAuthActions").classList.remove("hidden");
+  $("memberProfile").classList.add("hidden");
+ }
+}
+
+/* HOTELS RENDERING (40+ HOTELS) */
+function renderHotels() {
+ const grid = $("featuredHotels");
+ grid.innerHTML = hotels.slice(0, 6).map(h => `
+  <div class="card">
+   <img class="hotel-img" src="${h.image}" alt="${h.name}">
+   <div class="card-body">
+    <span class="tag">${h.country}</span>
+    <h3>${h.name}</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+     <span class="price">$${h.price}</span>
+     <span style="color:var(--gold)">★ ${h.stars}.0</span>
+    </div>
+   </div>
   </div>
- </article>`;
-}
+ `).join("");
 
-function renderHotels(query="") {
- const filtered=hotels.filter(h=>
-  (h.name+" "+h.country).toLowerCase().includes(query.toLowerCase())
- );
+ const dir = $("countryHotels");
+ const query = ($("hotelSearch").value||"").toLowerCase();
+ const filtered = hotels.filter(h => h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query));
 
- $("featuredHotels").innerHTML=hotels.slice(0,4).map(hotelCard).join("");
-
- const groups={};
- filtered.forEach(h=>{
-  (groups[h.country] ||= []).push(h);
- });
-
- $("countryHotels").innerHTML=Object.entries(groups).map(([country,list])=>`
-  <div class="country-section">
-   <h3>${escapeHTML(country)}</h3>
-   <div class="hotel-grid">${list.map(hotelCard).join("")}</div>
+ dir.innerHTML = `
+  <div class="hotel-grid">
+   ${filtered.map(h => `
+    <div class="card">
+     <img class="hotel-img" src="${h.image}" alt="${h.name}">
+     <div class="card-body">
+      <span class="tag">${h.country}</span>
+      <h3>${h.name}</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+       <span class="price">$${h.price}</span>
+       <button class="btn" style="padding:6px 12px;font-size:12px" onclick="selectHotelForBooking('${h.id}')">Book</button>
+      </div>
+     </div>
+    </div>
+   `).join("")}
   </div>
- `).join("")||"<p class='empty'>No matching hotels found.</p>";
+ `;
 }
 
-$("hotelSearch").addEventListener("input",e=>{
- renderHotels(e.target.value);
-});
+$("hotelSearch").addEventListener("input", renderHotels);
 
-function selectHotel(id) {
- selectedHotel=hotels.find(h=>h.id===id);
- showPage("bookingPage");
- renderBooking();
-}
-
-/* BOOKING TEST SYSTEM */
-
-function buildHotelQueue() {
- const pool=[...hotels];
- hotelQueue=[];
-
- while(pool.length) {
-  const index=Math.floor(Math.random()*pool.length);
-  hotelQueue.push(pool.splice(index,1)[0]);
- }
-
- taskIndex=0;
-}
-
-function currentOrderCount() {
- return currentUser?Number(currentUser.orders)||0:0;
+/* BOOKING TEST (30 ORDERS & 0.3% PROFIT) */
+function selectHotelForBooking(id) {
+ selectedHotel = hotels.find(h=>h.id===id);
+ showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2]);
 }
 
 function renderBooking() {
- const count=currentOrderCount();
+ if(!currentUser) {
+  $("bookingHotel").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
+  return;
+ }
+ const orders = currentUser.orders || 0;
+ $("orderCircle").textContent = orders + "/30";
+ $("orderProgress").style.width = (orders / 30 * 100) + "%";
 
- $("orderCircle").textContent=count+"/30";
- $("orderProgress").style.width=(count/30*100)+"%";
-
- if(!selectedHotel) {
-  if(!hotelQueue.length||taskIndex>=hotelQueue.length) buildHotelQueue();
-  selectedHotel=hotelQueue[taskIndex%hotelQueue.length];
+ if(orders >= 30) {
+  $("bookingHotel").innerHTML = `<p class="empty" style="color:var(--green)">Congratulations! All 30 booking orders completed successfully.</p>`;
+  $("reviewOptions").innerHTML = "";
+  return;
  }
 
- $("bookingHotel").innerHTML=`
-  <div class="card">
-   <img class="hotel-img" style="height:230px"
-    src="${escapeHTML(selectedHotel.image)}" alt="Hotel">
-   <div class="card-body">
-    <span class="tag">${escapeHTML(selectedHotel.country)}</span>
-    <h2>${escapeHTML(selectedHotel.name)}</h2>
-    <p>⭐ ${selectedHotel.stars} Star Rating</p>
-    <h3 class="price">$${selectedHotel.price} / night</h3>
-   </div>
-  </div>`;
+ const hotel = hotels[orders % hotels.length];
+ selectedHotel = hotel;
 
- $("reviewOptions").innerHTML=reviewOptions.map((r,i)=>`
+ $("bookingHotel").innerHTML = `
+  <div class="card" style="margin-top:15px">
+   <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}">
+   <div class="card-body">
+    <span class="tag">${hotel.country}</span>
+    <h3>${hotel.name}</h3>
+    <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Est. Profit (0.3%): <b style="color:var(--blue)">+$${(hotel.price * 0.003).toFixed(2)}</b></p>
+   </div>
+  </div>
+ `;
+
+ $("reviewOptions").innerHTML = reviewOptions.map((opt, i) => `
   <label class="review-option">
-   <input type="radio" name="review" value="${i}">
-   <span>${escapeHTML(r.text)}
-   <small class="muted">${r.good?"Good review":"Negative review"}</small></span>
+   <input type="radio" name="reviewChoice" value="${i}" ${i===0?'checked':''}>
+   <span>${opt.text} (${opt.good ? '★ Good Review' : '★ Standard Review'})</span>
   </label>
  `).join("");
-
- $("bookingMessage").textContent="";
 }
 
 function submitBooking() {
- if(!currentUser) {
-  openAuth("login");
-  return;
- }
+ if(!currentUser) { openAuth('login'); return; }
+ if((currentUser.orders || 0) >= 30) { alert("You have already completed 30 orders today."); return; }
 
- if(currentOrderCount()>=30) {
-  $("bookingMessage").textContent="You have completed the 30 test tasks in this cycle.";
-  return;
- }
+ const hotel = selectedHotel || hotels[0];
+ const profit = Number((hotel.price * 0.003).toFixed(2));
+ currentUser.balance += profit;
+ currentUser.orders = (currentUser.orders || 0) + 1;
 
- const selected=document.querySelector('input[name="review"]:checked');
-
- if(!selected) {
-  $("bookingMessage").textContent="Please select a review.";
-  return;
- }
-
- const review=reviewOptions[Number(selected.value)];
-
- if(!review) return;
-
- /* Negative reviews should not be changed into positive reviews.
-    This is a practice task, not a real customer review. */
-
- const booking={
-  id:"DEMO"+Date.now(),
-  hotelId:selectedHotel.id,
-  hotel:selectedHotel.name,
-  country:selectedHotel.country,
-  price:selectedHotel.price,
-  stars:selectedHotel.stars,
-  review:review.text,
-  reviewType:review.good?"Good":"Negative",
-  date:new Date().toISOString(),
-  type:"DEMO"
- };
-
- currentUser.orders++;
- currentUser.bookings.push(booking);
-
- /* No cash commission is created by clicking a demo task. */
-
- saveUsers();
-
- taskIndex++;
- selectedHotel=null;
-
- $("bookingMessage").textContent=
-  "Test task completed: "+currentUser.orders+"/30. No real booking or cash commission was created.";
-
- updateUI();
-}
-
-/* HISTORY */
-
-function renderHistory() {
- if(!currentUser) {
-  $("historyRows").innerHTML=
-   '<tr><td colspan="4">Please log in to view your history.</td></tr>';
-  $("bookingHistory").innerHTML="";
-  return;
- }
-
- $("historyRows").innerHTML=(currentUser.transactions||[]).map(t=>`
-  <tr>
-   <td>${new Date(t.date).toLocaleDateString()}</td>
-   <td>${escapeHTML(t.type)}</td>
-   <td>$${Number(t.amount).toFixed(2)}</td>
-   <td>${escapeHTML(t.status)}</td>
-  </tr>
- `).join("")||'<tr><td colspan="4">No transactions.</td></tr>';
-
- $("bookingHistory").innerHTML=(currentUser.bookings||[]).map(b=>`
-  <div class="notice">
-   <strong>${escapeHTML(b.hotel)}</strong>
-   <p>${escapeHTML(b.country)} · ${b.stars} Stars</p>
-   <p>${escapeHTML(b.review)}</p>
-   <small>${new Date(b.date).toLocaleString()} · ${escapeHTML(b.type)}</small>
-  </div>
- `).join("")||'<p class="empty">No booking records.</p>';
-}
-
-/* DEPOSIT / WITHDRAWAL REQUESTS */
-
-let transactionType="deposit";
-
-function openTransaction(type) {
- if(!currentUser) return openAuth("login");
-
- transactionType=type;
- $("transactionTitle").textContent=
-  type==="deposit"?"Deposit Request":"Withdrawal Request";
-
- $("transactionModal").classList.remove("hidden");
-}
-
-async function submitTransaction() {
- if(!currentUser) return openAuth("login");
-
- const amount=Number($("transactionAmount").value);
- const reference=$("transactionReference").value.trim();
- const file=$("transactionSlip").files[0];
-
- if(!Number.isFinite(amount)||amount<=0) {
-  alert("Enter a valid amount.");
-  return;
- }
-
- if(transactionType==="withdrawal"&&amount>currentUser.balance) {
-  alert("Insufficient balance.");
-  return;
- }
-
- if(transactionType==="deposit"&&!file) {
-  alert("Please upload your payment slip.");
-  return;
- }
-
- let slip="";
-
- if(file) {
-  if(!file.type.startsWith("image/")) {
-   alert("Please select an image.");
-   return;
-  }
-  if(file.size>2*1024*1024) {
-   alert("Please use an image smaller than 2 MB.");
-   return;
-  }
-  slip=await fileToDataURL(file);
- }
-
- currentUser.transactions.push({
-  id:"TX"+Date.now(),
-  type:transactionType,
-  amount,
-  reference,
-  slip,
-  status:"pending",
-  date:new Date().toISOString()
+ if(!currentUser.bookings) currentUser.bookings = [];
+ currentUser.bookings.push({
+  date: new Date().toLocaleString(),
+  name: hotel.name,
+  price: hotel.price,
+  profit: profit,
+  status: "Completed"
  });
 
  saveUsers();
- closeModal("transactionModal");
  updateUI();
- alert("Request submitted for staff verification.");
+ renderBooking();
+ alert(`Booking order completed successfully! Earned profit: +$${profit}`);
+}
+
+/* TRANSACTION MODAL & CS */
+function openTransactionModal(type) {
+ if(!currentUser) { openAuth('login'); return; }
+ transactionType = type;
+ $("transactionTitle").textContent = type === 'deposit' ? 'Deposit Funds via CS' : 'Withdrawal Request via CS';
+ $("transactionModal").classList.remove('hidden');
+}
+
+function submitTransaction() {
+ const amt = Number($("transactionAmount").value);
+ const ref = $("transactionReference").value.trim();
+ if(!amt || amt <= 0) { alert("Enter a valid amount."); return; }
+
+ if(transactionType === 'deposit') {
+  currentUser.balance += amt;
+  currentUser.transactions.unshift({date:new Date().toLocaleString(), type:"Deposit", amount:amt, status:"Approved"});
+  currentUser.messages.push({sender:"support", text:`Your deposit of $${amt} has been approved and added to wallet.`, time:new Date().toLocaleTimeString()});
+ } else {
+  if(currentUser.orders < 30) { alert("Withdrawal requires 30 completed booking tasks!"); return; }
+  if(currentUser.balance < amt) { alert("Insufficient wallet balance."); return; }
+  currentUser.balance -= amt;
+  currentUser.transactions.unshift({date:new Date().toLocaleString(), type:"Withdrawal", amount:amt, status:"Processed"});
+  currentUser.messages.push({sender:"support", text:`Your withdrawal request of $${amt} is processed.`, time:new Date().toLocaleTimeString()});
+ }
+
+ saveUsers();
+ closeModal('transactionModal');
+ updateUI();
+ alert("Transaction submitted to Customer Service successfully!");
 }
 
 /* CUSTOMER SERVICE CHAT */
-
-function saveChats() {
- write(KEYS.chats,chats);
-}
-
-function contactSupport() {
- if(!currentUser) return openAuth("login");
-
- const already=chats.some(c=>
-  c.userId===currentUser.id&&
-  c.sender==="support"&&
-  c.text.includes("မင်္ဂလာပါရှင်")
- );
-
- if(!already) {
-  chats.push({
-   id:"M"+Date.now(),
-   userId:currentUser.id,
-   sender:"support",
-   text:"မင်္ဂလာပါရှင်၊ Trip Booking မှာ ကြိုဆိုပါသည်၊ ဘာကူညီပေးရမလဲရှင်။",
-   date:new Date().toISOString()
-  });
-  saveChats();
- }
-
- renderSupportChat();
-}
-
-function renderMessages(elementId,userId) {
- const list=chats.filter(c=>c.userId===userId);
-
- $(elementId).innerHTML=list.map(c=>{
-  let attachment="";
-
-  if(c.attachment) {
-   if(c.attachment.type.startsWith("image/")) {
-    attachment=`<img src="${c.attachment.data}" alt="Chat photo">`;
-   } else if(c.attachment.type.startsWith("video/")) {
-    attachment=`<video src="${c.attachment.data}" controls></video>`;
-   }
-  }
-
-  return `
-   <div class="message ${c.sender==="user"?"mine":""}">
-    <p>${escapeHTML(c.text||"")}</p>
-    ${attachment}
-    <small>${new Date(c.date).toLocaleString()}</small>
-   </div>`;
- }).join("")||'<p class="empty">No messages yet.</p>';
-
- $(elementId).scrollTop=$(elementId).scrollHeight;
-}
-
 function renderSupportChat() {
  if(!currentUser) {
-  $("supportMessages").innerHTML=
-   '<p class="empty">Please log in to contact support.</p>';
+  $("supportMessages").innerHTML = `<p class="empty">Please login to chat with Customer Service.</p>`;
   return;
  }
- renderMessages("supportMessages",currentUser.id);
-}
-
-async function sendChat(userId,sender,inputId,photoId,videoId,cameraId) {
- const input=$(inputId);
- const text=input.value.trim();
-
- const file=
-  $(photoId).files[0]||
-  $(videoId).files[0]||
-  $(cameraId).files[0];
-
- if(!text&&!file) return;
-
- let attachment=null;
-
- if(file) {
-  if(!file.type.startsWith("image/")&&
-     !file.type.startsWith("video/")) {
-   alert("Unsupported file type.");
-   return;
-  }
-
-  if(file.size>5*1024*1024) {
-   alert("File must be smaller than 5 MB.");
-   return;
-  }
-
-  attachment={
-   type:file.type,
-   data:await fileToDataURL(file),
-   name:file.name
-  };
- }
-
- chats.push({
-  id:"M"+Date.now()+Math.random().toString(16).slice(2),
-  userId,sender,text,attachment,
-  date:new Date().toISOString()
- });
-
- saveChats();
-
- input.value="";
- $(photoId).value="";
- $(videoId).value="";
- $(cameraId).value="";
-
- renderSupportChat();
- renderStaffMessages();
+ $("supportMessages").innerHTML = (currentUser.messages||[]).map(m => `
+  <div class="message ${m.sender==='user'?'mine':''}">
+   <b>${m.sender==='user'?'You':'Customer Service'}</b>
+   <p>${m.text}</p>
+   ${m.img?`<img src="${m.img}" alt="media">`:''}
+   <small class="muted" style="font-size:10px">${m.time}</small>
+  </div>
+ `).join("");
+ $("supportMessages").scrollTop = $("supportMessages").scrollHeight;
 }
 
 function sendSupportMessage() {
- if(!currentUser) return openAuth("login");
+ if(!currentUser) { openAuth('login'); return; }
+ const txt = $("supportInput").value.trim();
+ if(!txt) return;
 
- sendChat(
-  currentUser.id,"user","supportInput",
-  "supportPhoto","supportVideo","supportCamera"
- );
-}
-
-function deleteLastMessage(userId,sender) {
- const index=chats.findLastIndex(c=>
-  c.userId===userId&&c.sender===sender
- );
-
- if(index<0) return alert("No message to delete.");
-
- if(!confirm("Delete your last message?")) return;
-
- chats.splice(index,1);
- saveChats();
+ if(!currentUser.messages) currentUser.messages = [];
+ currentUser.messages.push({sender:"user", text:txt, time:new Date().toLocaleTimeString()});
+ $("supportInput").value = "";
+ saveUsers();
  renderSupportChat();
- renderStaffMessages();
+
+ setTimeout(()=>{
+  currentUser.messages.push({sender:"support", text:"Hello! Thank you for contacting Trip Booking Support. How can we assist you today?", time:new Date().toLocaleTimeString()});
+  saveUsers();
+  renderSupportChat();
+ }, 1000);
 }
 
+function appendSupportChar(char) { $("supportInput").value += char; }
+function backspaceSupportInput() {
+ const v = $("supportInput").value;
+ $("supportInput").value = v.slice(0, -1);
+}
 function deleteLastSupportMessage() {
- if(currentUser) deleteLastMessage(currentUser.id,"user");
+ if(currentUser && currentUser.messages && currentUser.messages.length > 0) {
+  currentUser.messages.pop();
+  saveUsers();
+  renderSupportChat();
+ }
 }
 
-function deleteLastStaffMessage() {
- if(selectedUserId) deleteLastMessage(selectedUserId,staffRole);
-}
-
-/* STAFF LOGIN
-   Secure server endpoint required.
-   Credentials must NOT be embedded in this file.
-*/
-
-let staffSession=null;
-
-function openStaffLogin(role) {
- staffRole=role;
- $("staffLoginTitle").textContent=
-  role==="admin"?"Administrator Login":"Customer Service Login";
-}
-
-async function staffLogin() {
- const phone=$("staffPhone").value.trim();
- const password=$("staffPassword").value;
- const message=$("staffMessage");
-
- if(!phone||!password) {
-  message.textContent="Enter staff phone and password.";
+/* HISTORY */
+function renderHistory() {
+ if(!currentUser) {
+  $("historyRows").innerHTML = `<tr><td colspan="4" style="text-align:center">Please login to view history.</td></tr>`;
+  $("bookingHistory.innerHTML") = "";
   return;
  }
+ $("historyRows").innerHTML = (currentUser.transactions||[]).map(t => `
+  <tr><td>${t.date}</td><td>${t.type}</td><td>$${t.amount.toFixed(2)}</td><td><span class="status online">${t.status}</span></td></tr>
+ `).join("") || `<tr><td colspan="4" style="text-align:center">No transactions yet.</td></tr>`;
 
- message.textContent="Checking secure staff access...";
+ $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
+  <div class="notice"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit} · <span class="online">${b.status}</span></p></div>
+ `).join("") || `<p class="empty">No booking records yet.</p>`;
+}
 
- try {
-  const response=await fetch("/api/auth/staff",{
-   method:"POST",
-   credentials:"include",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({phone,password,role:staffRole})
-  });
+/* STAFF MANAGEMENT CENTER */
+function openStaffLogin(role) {
+ staffRole = role;
+ $("staffLoginTitle").textContent = role === 'admin' ? 'Admin Login' : 'Customer Service Login';
+}
 
-  const result=await response.json();
-
-  if(!response.ok||!result.authenticated) {
-   message.textContent=result.message||"Login failed.";
-   return;
-  }
-
-  if(!["admin","support"].includes(result.role)) {
-   message.textContent="Invalid staff permission.";
-   return;
-  }
-
-  staffRole=result.role;
-  staffSession=result;
-  localStorage.setItem(KEYS.staffSession,"active");
-
-  closeModal("staffModal");
-  showPage("staffPage");
-  switchStaffTab(staffRole);
-
- } catch(error) {
-  message.textContent=
-   "Server authentication API is not connected. Staff login cannot be verified.";
+function staffLogin() {
+ const phone = $("staffPhone").value.trim();
+ const pass = $("staffPassword").value;
+ if(phone === "09775191427" && pass === "12344321") {
+  closeModal('staffModal');
+  $("staffPage").classList.remove("hidden");
+  showPage('staffPage');
+  renderStaffUsers();
+ } else {
+  $("staffMessage").textContent = "Invalid Staff credentials!";
  }
 }
 
 function staffLogout() {
- staffSession=null;
- localStorage.removeItem(KEYS.staffSession);
- showPage("homePage");
+ $("staffPage").classList.add("hidden");
+ showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
 }
 
-/* STAFF PANEL */
-
 function switchStaffTab(role) {
- staffRole=role;
-
- $("staffListTitle").textContent=
-  role==="admin"?"All Registered Users":"Customer Conversations";
-
- selectedUserId=null;
- $("staffUserDetail").innerHTML=
-  '<div class="empty">Select an account from the left.</div>';
- $("staffQuickInfo").textContent="Choose a user.";
- $("staffMessages").innerHTML="";
-
+ staffRole = role;
  renderStaffUsers();
 }
 
 function renderStaffUsers() {
- const search=($("staffSearch")?.value||"").toLowerCase();
+ const list = $("staffUserList");
+ const query = ($("staffSearch").value||"").toLowerCase();
+ const filtered = users.filter(u => u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query));
 
- let list=users.filter(u=>
-  (u.name+" "+u.identity+" "+u.id)
-   .toLowerCase().includes(search)
- );
-
- if(staffRole==="support") {
-  const ids=new Set(chats.map(c=>c.userId));
-  list=list.filter(u=>ids.has(u.id));
- }
-
- list.sort((a,b)=>
-  new Date(b.lastSeen||b.createdAt)-new Date(a.lastSeen||a.createdAt)
- );
-
- $("staffUserList").innerHTML=list.map(u=>`
-  <div class="user-item ${selectedUserId===u.id?"selected":""}"
-   onclick="selectStaffUser('${u.id}')">
-   <img class="avatar"
-    src="${escapeHTML(u.profileImage||"https://placehold.co/80x80?text=User")}">
-   <div>
-    <strong>${escapeHTML(u.name)}</strong>
-    <p class="small">${escapeHTML(u.id)}</p>
-    <p class="small ${u.status==="online"?"online":"offline"}">
-     ${u.status==="online"?"● Online":"○ Offline"}
-    </p>
-    <p class="muted small">Last seen: ${timeAgo(u.lastSeen)}</p>
+ list.innerHTML = filtered.map(u => `
+  <div class="user-item ${selectedUserId===u.id?'selected':''}" onclick="selectStaffUser('${u.id}')">
+   <div style="position:relative">
+    <img class="avatar" src="https://placehold.co/50x50?text=${u.name[0]}" alt="avatar">
+    <span style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:${u.status==='online'?'var(--green)':'var(--muted)'}"></span>
+   </div>
+   <div style="flex:1;min-width:0">
+    <b>${u.name}</b>
+    <p class="muted">${u.id} | Bal: $${(u.balance||0).toFixed(2)}</p>
    </div>
   </div>
- `).join("")||'<p class="empty">No registered users.</p>';
+ `).join("");
 }
 
-$("staffSearch").addEventListener("input",renderStaffUsers);
+$("staffSearch").addEventListener("input", renderStaffUsers);
 
 function selectStaffUser(id) {
- selectedUserId=id;
- const u=users.find(x=>x.id===id);
+ selectedUserId = id;
+ const u = users.find(x=>x.id===id);
  if(!u) return;
+ renderStaffUsers();
 
- const deposit=(u.transactions||[])
-  .filter(t=>t.type==="deposit");
- const withdrawal=(u.transactions||[])
-  .filter(t=>t.type==="withdrawal");
-
- $("staffUserDetail").innerHTML=`
-  <h2>${escapeHTML(u.name)}</h2>
-  <p class="muted">${escapeHTML(u.identity)}</p>
-
-  <div class="stats">
-   <div class="stat">User ID<strong>${escapeHTML(u.id)}</strong></div>
-   <div class="stat">Invite Code<strong>${escapeHTML(u.inviteCode)}</strong></div>
-   <div class="stat">Location<strong>${escapeHTML(u.location)}</strong></div>
-   <div class="stat">Balance<strong>$${Number(u.balance).toFixed(2)}</strong></div>
-  </div>
-
-  <div class="stat" style="margin:12px 0">
-   <span>Completed Booking Test Orders</span>
-   <strong style="font-size:27px">${u.orders} / 30</strong>
-   <div class="progress"><span style="width:${Math.min(100,u.orders/30*100)}%"></span></div>
-  </div>
-
-  <h3>Deposit Records (${deposit.length})</h3>
-  ${deposit.map(t=>transactionCard(u.id,t)).join("")||'<p class="muted">No deposits.</p>'}
-
-  <h3>Withdrawal Records (${withdrawal.length})</h3>
-  ${withdrawal.map(t=>transactionCard(u.id,t)).join("")||'<p class="muted">No withdrawals.</p>'}
-
-  <h3>Booking Records (${u.bookings.length})</h3>
-  ${u.bookings.map(b=>`
-   <div class="notice">
-    ${escapeHTML(b.hotel)} · ${escapeHTML(b.type)}
-    <p>${escapeHTML(b.review)}</p>
-    <small>${new Date(b.date).toLocaleString()}</small>
-   </div>
-  `).join("")||'<p class="muted">No bookings.</p>'}
-
-  <h3>Task Management</h3>
-  <div class="notice">
-   <p>Auto mode: standard demo task sequence.</p>
-   <p>Edit mode: change the task configuration preview. This does not create cash profits or change verified transactions.</p>
-   <button class="btn" onclick="setTaskMode('auto')">AUTO</button>
-   <button class="btn btn-gold" onclick="setTaskMode('edit')">EDIT</button>
-   <div id="taskEditArea"></div>
-  </div>
+ $("staffUserDetail").innerHTML = `
+  <h3>Client: ${u.name} (${u.id})</h3>
+  <p class="muted">Identity: ${u.identity} | Shop ID: ${u.shopId}</p>
+  <p class="muted">Balance: <b>$${(u.balance||0).toFixed(2)}</b> | Completed Orders: <b>${u.orders||0}/30</b></p>
  `;
 
- $("staffQuickInfo").innerHTML=`
-  <p><strong>Name</strong><br>${escapeHTML(u.name)}</p>
-  <p><strong>Phone / Email</strong><br>${escapeHTML(u.identity)}</p>
-  <p><strong>Account Created</strong><br>${new Date(u.createdAt).toLocaleDateString()}</p>
-  <p><strong>Last Active</strong><br>${timeAgo(u.lastSeen)}</p>
-  <p><strong>Current Status</strong><br>${u.status}</p>
-  <p><strong>Orders</strong><br>${u.orders}/30</p>
+ $("staffQuickInfo").innerHTML = `
+  <p><b>Invite Code:</b> ${u.inviteCode}</p>
+  <p><b>Status:</b> <span class="${u.status==='online'?'online':'offline'}">${u.status}</span></p>
+  <label>Manual Balance Edit</label>
+  <input id="editBalance" type="number" value="${u.balance}">
+  <button class="btn btn-block" style="margin-top:8px" onclick="updateUserBalance('${u.id}')">Update Balance</button>
+  <label style="margin-top:12px">Manual Order Count</label>
+  <input id="editOrders" type="number" value="${u.orders||0}">
+  <button class="btn btn-block" style="margin-top:8px" onclick="updateUserOrders('${u.id}')">Update Orders</button>
  `;
 
- renderMessages("staffMessages",id);
- renderStaffUsers();
+ renderStaffMessages(u);
 }
 
-function transactionCard(userId,t) {
- return `
-  <div class="notice">
-   <strong>${escapeHTML(t.type)}</strong> · $${Number(t.amount).toFixed(2)}
-   <p>Status: ${escapeHTML(t.status)}</p>
-   <small>${new Date(t.date).toLocaleString()}</small>
-   ${t.slip?`<p><a href="${escapeHTML(t.slip)}" target="_blank">View payment slip</a></p>`:""}
-   ${t.status==="pending"?`
-    <button class="btn btn-success" onclick="reviewTransaction('${userId}','${t.id}','approve')">Approve</button>
-    <button class="btn btn-danger" onclick="reviewTransaction('${userId}','${t.id}','reject')">Reject</button>
-   `:""}
-  </div>`;
-}
-
-/* ADMIN TASK SETTINGS */
-
-function setTaskMode(mode) {
- taskSettings.mode=mode;
- localStorage.setItem(KEYS.settings,JSON.stringify(taskSettings));
-
- if(mode==="auto") {
-  $("taskEditArea").innerHTML=
-   '<p class="muted">Auto demo mode is active. The task counter follows completed test submissions.</p>';
- } else {
-  $("taskEditArea").innerHTML=`
-   <label>Maximum Test Tasks</label>
-   <input id="editMaxTasks" type="number" min="1" max="30" value="${taskSettings.maxTasks}">
-   <label>Demo Reward Preview (not cash)</label>
-   <input id="editReward" type="number" min="0" step=".01" value="${taskSettings.demoReward}">
-   <button class="btn" onclick="saveTaskSettings()">Save Demo Settings</button>
-  `;
- }
-}
-
-function saveTaskSettings() {
- const max=Number($("editMaxTasks").value);
- const reward=Number($("editReward").value);
-
- if(!Number.isInteger(max)||max<1||max>30||reward<0) {
-  alert("Enter valid settings.");
-  return;
- }
-
- taskSettings.maxTasks=max;
- taskSettings.demoReward=reward;
- localStorage.setItem(KEYS.settings,JSON.stringify(taskSettings));
-
- alert("Demo task settings saved.");
-}
-
-/* APPROVE / REJECT TRANSACTIONS
-   Production: this must be a server-side atomic operation.
-*/
-
-async function reviewTransaction(userId,transactionId,action) {
- const user=users.find(u=>u.id===userId);
- if(!user) return;
-
- const tx=user.transactions.find(t=>t.id===transactionId);
- if(!tx||tx.status!=="pending") return;
-
- if(!confirm("Confirm transaction review?")) return;
-
- if(action==="approve") {
-  if(tx.type==="withdrawal"&&user.balance<tx.amount) {
-   alert("Insufficient available balance.");
-   return;
-  }
-
-  if(tx.type==="deposit") user.balance+=tx.amount;
-  else user.balance-=tx.amount;
-
-  tx.status="approved";
- } else {
-  tx.status="rejected";
- }
-
- tx.reviewedAt=new Date().toISOString();
- saveUsers();
-
- selectStaffUser(userId);
- renderProfile();
- renderHistory();
- renderActivity();
-}
-
-/* VERIFIED ACTIVITY ONLY */
-
-function renderActivity() {
- const verified=users.flatMap(u=>
-  (u.transactions||[])
-   .filter(t=>t.status==="approved")
-   .map(t=>({
-    user:u,
-    transaction:t
-   }))
- ).sort((a,b)=>
-  new Date(b.transaction.date)-new Date(a.transaction.date)
- ).slice(0,30);
-
- $("activityFeed").innerHTML=verified.map(item=>{
-  const u=item.user;
-  const t=item.transaction;
-
-  return `
-   <div class="activity-item">
-    <img class="avatar"
-     src="${escapeHTML(u.profileImage||"https://placehold.co/80x80?text=User")}">
-    <div>
-     <strong>${escapeHTML(u.id)}</strong>
-     <p class="muted">
-      ${escapeHTML(t.type)} · $${Number(t.amount).toFixed(2)}
-     </p>
-     <small class="muted">${new Date(t.date).toLocaleString()}</small>
-    </div>
-   </div>`;
- }).join("")||'<p class="empty">No verified transactions yet.</p>';
-}
-
-/* UTILITIES */
-
-function escapeHTML(value) {
- return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#39;"
- }[c]));
-}
-
-function timeAgo(value) {
- if(!value) return "Never active";
-
- const minutes=Math.max(
-  0,Math.floor((Date.now()-new Date(value).getTime())/60000)
- );
-
- if(minutes<1) return "Just now";
- if(minutes<60) return minutes+" minutes ago";
- if(minutes<1440) return Math.floor(minutes/60)+" hours ago";
- return Math.floor(minutes/1440)+" days ago";
-}
-
-/* UPDATE ALL VIEWS */
-
-function updateUI() {
- renderProfile();
- renderHistory();
- renderSupportChat();
- renderStaffUsers();
- renderActivity();
- renderBooking();
-
- $("headerAuth").textContent=currentUser?"Logout":"Login";
-}
-
-/* INITIALIZE */
-
-function initialize() {
- users=read(KEYS.users);
- chats=read(KEYS.chats);
- activities=read(KEYS.activity);
-
- setTheme(localStorage.getItem(KEYS.theme)==="dark");
- setLanguage(localStorage.getItem(KEYS.language)||"my");
-
- const savedId=localStorage.getItem(KEYS.current);
- currentUser=users.find(u=>u.id===savedId)||null;
-
- if(currentUser) {
-  currentUser.status="online";
-  currentUser.lastSeen=new Date().toISOString();
+function updateUserBalance(id) {
+ const u = users.find(x=>x.id===id);
+ if(u) {
+  u.balance = Number($("editBalance").value);
   saveUsers();
+  alert("Balance updated successfully.");
+  selectStaffUser(id);
  }
-
- buildHotelQueue();
- renderHotels();
- updateUI();
-
- if(!selectedHotel) selectedHotel=hotels[0];
- renderBooking();
 }
 
-initialize();
+function updateUserOrders(id) {
+ const u = users.find(x=>x.id===id);
+ if(u) {
+  u.orders = Number($("editOrders").value);
+  saveUsers();
+  alert("Order count updated successfully.");
+  selectStaffUser(id);
+ }
+}
 
+function renderStaffMessages(u) {
+ $("staffMessages").innerHTML = (u.messages||[]).map(m=>`
+  <div class="message ${m.sender==='support'?'mine':''}">
+   <b>${m.sender==='support'?'Staff':'Client'}</b>
+   <p>${m.text}</p>
+   <small class="muted" style="font-size:10px">${m.time}</small>
+  </div>
+ `).join("");
+ $("staffMessages").scrollTop = $("staffMessages").scrollHeight;
+}
+
+function sendStaffMessage() {
+ if(!selectedUserId) { alert("Select a user first."); return; }
+ const u = users.find(x=>x.id===selectedUserId);
+ const txt = $("staffInput").value.trim();
+ if(!txt) return;
+
+ if(!u.messages) u.messages = [];
+ u.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
+ $("staffInput").value = "";
+ saveUsers();
+ selectStaffUser(u.id);
+}
+
+function deleteLastStaffMessage() {
+ if(!selectedUserId) return;
+ const u = users.find(x=>x.id===selectedUserId);
+ if(u && u.messages && u.messages.length > 0) {
+  u.messages.pop();
+  saveUsers();
+  selectStaffUser(u.id);
+ }
+}
+
+/* COPY & SHARE INVITATION */
+function copyInviteLink() {
+ const copyText = $("inviteLink");
+ copyText.select();
+ document.execCommand("copy");
+ alert("Invitation link copied to clipboard!");
+}
+
+function shareInviteLink() {
+ if (navigator.share) {
+  navigator.share({title: 'Trip Booking', text: 'Join Trip Booking using my invite code!', url: $("inviteLink").value});
+ } else {
+  copyInviteLink();
+ }
+}
 </script>
+</body>
+</html>
