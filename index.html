@@ -184,12 +184,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .close{background:none;border:0;font-size:18px;cursor:pointer;color:var(--fb-muted)}
-
-@keyframes pulseBtn {
- 0% { box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
- 70% { box-shadow: 0 0 0 15px rgba(24,119,242, 0); }
- 100% { box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
-}
 </style>
 </head>
 <body>
@@ -197,7 +191,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <header>
  <div class="logo" id="logo">TRIP <span>BOOKING</span></div>
  <div class="header-actions">
-  <select id="language" aria-label="Language">
+  <select id="language" aria-label="Language" onchange="changeLanguage(this.value)">
    <option value="en">English</option>
    <option value="my">မြန်မာ</option>
    <option value="zh">中文</option>
@@ -212,41 +206,41 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <!-- HOME -->
 <section class="page active" id="homePage">
  <div class="activity-ticker" id="activityTicker">
-  <span>🔔 Live:</span> <div id="tickerText" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Loading live activity feed...</div>
+  <span>🔔 <span data-i18n="liveTicker">Live</span>:</span> <div id="tickerText" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Loading live activity feed...</div>
  </div>
 
  <div class="hero">
   <div>
-   <span class="tag">INTERNATIONAL TRAVEL</span>
-   <h1>Discover Your Next Stay</h1>
-   <p>Explore international hotels around the world and plan your journey with Trip Booking.</p>
-   <button class="btn" style="margin-top:12px" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})">Explore Hotels</button>
+   <span class="tag" data-i18n="heroTag">INTERNATIONAL TRAVEL</span>
+   <h1 data-i18n="heroTitle">Discover Your Next Stay</h1>
+   <p data-i18n="heroDesc">Explore international hotels around the world and plan your journey with Trip Booking.</p>
+   <button class="btn" style="margin-top:12px" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
   </div>
  </div>
 
  <div class="section-title">
-  <h2>Featured Hotels</h2>
-  <span class="muted">Top destinations</span>
+  <h2 data-i18n="featHotels">Featured Hotels</h2>
+  <span class="muted" data-i18n="topDest">Top destinations</span>
  </div>
  <div class="hotel-grid" id="featuredHotels"></div>
 
  <div class="section-title" id="hotelDirectory">
-  <h2>Hotel Directory (40+ Global Hotels)</h2>
-  <input id="hotelSearch" placeholder="Search hotel or country" style="max-width:240px">
+  <h2 data-i18n="hotelDir">Hotel Directory (40+ Global Hotels)</h2>
+  <input id="hotelSearch" placeholder="Search hotel or country" data-i18n-placeholder="searchPlaceholder" style="max-width:240px">
  </div>
  <div id="countryHotels"></div>
 </section>
 
 <!-- SUPPORT (CUSTOMER SERVICE CENTER) -->
 <section class="page" id="supportPage">
- <div class="section-title"><h2>Customer Service Center</h2></div>
+ <div class="section-title"><h2 data-i18n="csCenter">Customer Service Center</h2></div>
  <div class="chat-window" style="max-width:900px;margin:0 auto">
   <div class="chat-header">
    <div style="display:flex;align-items:center;gap:10px">
     <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120" style="width:40px;height:40px;border-radius:50%;object-fit:cover" alt="CS Agent">
     <div>
-     <div style="font-size:15px">Trip Booking Support (Online)</div>
-     <div class="muted" style="font-size:11px">We are here to help you 24/7</div>
+     <div style="font-size:15px" data-i18n="csOnline">Trip Booking Support (Online)</div>
+     <div class="muted" style="font-size:11px" data-i18n="csHelp24">We are here to help you 24/7</div>
     </div>
    </div>
    <div>🔊 ✕</div>
@@ -256,7 +250,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   
   <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-   <input id="supportInput" type="text" placeholder="Type your message here..." style="flex:1">
+   <input id="supportInput" type="text" placeholder="Type your message here..." data-i18n-placeholder="typeMsg" style="flex:1">
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
@@ -264,16 +258,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- HISTORY -->
 <section class="page" id="historyPage">
- <div class="section-title"><h2>Booking & Transaction History</h2></div>
+ <div class="section-title"><h2 data-i18n="histTitle">Booking & Transaction History</h2></div>
  <div class="panel">
-  <h3>Transactions & Referral Bonuses</h3>
+  <h3 data-i18n="transTitle">Transactions & Referral Bonuses</h3>
   <div class="table-wrap">
    <table>
-    <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+    <thead><tr><th data-i18n="thDate">Date</th><th data-i18n="thType">Type</th><th data-i18n="thAmount">Amount</th><th data-i18n="thStatus">Status</th></tr></thead>
     <tbody id="historyRows"></tbody>
    </table>
   </div>
-  <h3 style="margin-top:20px">Booking Records</h3>
+  <h3 style="margin-top:20px" data-i18n="bookingRec">Booking Records</h3>
   <div id="bookingHistory"></div>
  </div>
 </section>
@@ -281,30 +275,29 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <!-- BOOKING TASK CENTER -->
 <section class="page" id="bookingPage">
  <div class="section-title">
-  <h2>Booking Task Center</h2>
+  <h2 data-i18n="taskCenter">Booking Task Center</h2>
   <div>
-   <button class="btn btn-success" onclick="triggerGetOrder()" style="margin-right:6px">Get order</button>
-   <button class="btn btn-danger" onclick="resetTaskProgress()">Reset</button>
+   <button class="btn btn-success" onclick="triggerGetOrder()" style="margin-right:6px" data-i18n="getOrderBtn">Get order</button>
+   <button class="btn btn-danger" onclick="resetTaskProgress()" data-i18n="resetBtn">Reset</button>
   </div>
  </div>
  <div class="panel">
   <div class="stats">
-   <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
-   <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span>Daily Task Limit 📊</span><strong id="orderCircle">0/30</strong></div>
-   <div class="stat-box" style="border-top-color:var(--fb-success)"><span>Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="dailyLimit">Daily Task Limit 📊</span><strong id="orderCircle">0/30</strong></div>
+   <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
   </div>
 
   <div style="margin:16px 0;height:8px;background:var(--fb-border);border-radius:4px;overflow:hidden">
    <span id="orderProgress" style="display:block;height:100%;width:0;background:var(--fb-primary);transition:width .3s"></span>
   </div>
 
-  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(66,183,42,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)">
+  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(66,183,42,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)" data-i18n="taskCompleteMsg">
    🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆
   </div>
 
-  <!-- Special Task Warning Box -->
-  <div id="specialTaskAlert" class="hidden" style="background:rgba(250,56,62,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600">
+  <div id="specialTaskAlert" class="hidden" style="background:rgba(250,56,62,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600" data-i18n="specialTaskMsg">
    ⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.
   </div>
 
@@ -314,14 +307,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- PROFILE -->
 <section class="page" id="profilePage">
- <div class="section-title"><h2>My Profile</h2></div>
+ <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
 
  <div class="panel" id="guestAuthActions">
   <div style="text-align:center;padding:20px">
-   <h2>Welcome To Trip Booking</h2>
-   <p class="muted">Please login or register to manage your account.</p>
-   <button class="btn btn-block" onclick="openAuth('register')" style="margin-top:14px">Create Account</button>
-   <button class="btn btn-light btn-block" onclick="openAuth('login')" style="margin-top:8px">Login</button>
+   <h2 data-i18n="welcomeTrip">Welcome To Trip Booking</h2>
+   <p class="muted" data-i18n="loginPrompt">Please login or register to manage your account.</p>
+   <button class="btn btn-block" onclick="openAuth('register')" style="margin-top:14px" data-i18n="createAcc">Create Account</button>
+   <button class="btn btn-light btn-block" onclick="openAuth('login')" style="margin-top:8px" data-i18n="loginBtn">Login</button>
   </div>
  </div>
 
@@ -335,35 +328,35 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div class="stats" style="margin-top:14px">
-   <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
-   <div class="stat-box"><span>VIP Level</span><strong id="vipLevel" style="color:var(--fb-primary)">LV1</strong></div>
-   <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
-   <div class="stat-box" style="border-top-color:var(--fb-success)"><span>Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
-   <div class="stat-box"><span>Invited Friends</span><strong id="invitedCount">0</strong></div>
-   <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
+   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="vipLevelTitle">VIP Level</span><strong id="vipLevel" style="color:var(--fb-primary)">LV1</strong></div>
+   <div class="stat-box"><span data-i18n="completedBookings">Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
+   <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="refBonus">Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="invitedFriends">Invited Friends</span><strong id="invitedCount">0</strong></div>
+   <div class="stat-box"><span data-i18n="inviteCodeTitle">Invite Code</span><strong id="inviteCode">-</strong></div>
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
-   <button class="btn btn-success" onclick="openFinanceModal('deposit')">💳 Deposit (ငွေသွင်းရန်)</button>
-   <button class="btn btn-danger" onclick="openFinanceModal('withdraw')">💸 Withdraw (ငွေထုတ်ရန်)</button>
+   <button class="btn btn-success" onclick="openFinanceModal('deposit')" data-i18n="depositBtn">💳 Deposit (ငွေသွင်းရန်)</button>
+   <button class="btn btn-danger" onclick="openFinanceModal('withdraw')" data-i18n="withdrawBtn">💸 Withdraw (ငွေထုတ်ရန်)</button>
   </div>
 
   <!-- VIP Tiers & Limits Overview -->
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3>VIP Membership Levels & Limits</h3>
-   <p class="muted small">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
+   <h3 data-i18n="vipTiersHead">VIP Membership Levels & Limits</h3>
+   <p class="muted small" data-i18n="vipTiersDesc">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
    <div class="vip-grid" id="vipTiersDisplay"></div>
   </div>
 
   <!-- Invitation Link Box -->
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3>Invitation & Referral Program</h3>
-   <p class="muted small">Share your invite code. Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
+   <h3 data-i18n="refProgramHead">Invitation & Referral Program</h3>
+   <p class="muted small" data-i18n="refProgramDesc">Share your invite code. Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
    <input id="inviteLink" readonly style="margin:8px 0">
-   <button class="btn btn-block" onclick="copyInviteLink()">Copy Invitation Link</button>
+   <button class="btn btn-block" onclick="copyInviteLink()" data-i18n="copyInviteBtn">Copy Invitation Link</button>
   </div>
 
-  <button class="btn btn-danger btn-block" onclick="logout()">Log Out</button>
+  <button class="btn btn-danger btn-block" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
  </div>
 </section>
 
@@ -409,7 +402,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
  </div>
 
- <!-- ADMIN FINANCE WORKSPACE (DEPOSIT / WITHDRAWAL REQUESTS) -->
+ <!-- ADMIN FINANCE WORKSPACE -->
  <div id="adminFinanceWorkspace" class="panel hidden">
   <h3>Pending Deposit & Withdrawal Requests</h3>
   <p class="muted">Approve or reject user fund requests here.</p>
@@ -464,14 +457,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    </div>
   </div>
   <div>
-   <h4>Quick Links</h4>
-   <a href="#" onclick="showPage('homePage')">Home</a>
-   <a href="#" onclick="showPage('supportPage')">Customer Support</a>
-   <a href="#" onclick="showPage('bookingPage')">Booking Tasks</a>
-   <a href="#" onclick="showPage('profilePage')">My Profile</a>
+   <h4 data-i18n="quickLinks">Quick Links</h4>
+   <a href="#" onclick="showPage('homePage')" data-i18n="navHome">Home</a>
+   <a href="#" onclick="showPage('supportPage')" data-i18n="navSupport">Customer Support</a>
+   <a href="#" onclick="showPage('bookingPage')" data-i18n="navBooking">Booking Tasks</a>
+   <a href="#" onclick="showPage('profilePage')" data-i18n="navProfile">My Profile</a>
   </div>
   <div>
-   <h4>Contact Information</h4>
+   <h4 data-i18n="contactInfo">Contact Information</h4>
    <p>Address: 12101 Dry Valley Road North, Seattle</p>
    <p>Telephone: 1-855-266-9299</p>
    <p>Email: cs-reply@tripbooking.com</p>
@@ -480,29 +473,29 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </footer>
 
 <nav class="bottom-nav">
- <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span>Home</span></button>
- <button onclick="showPage('supportPage',this)"><span class="nav-icon">💬</span><span>Support</span></button>
- <button class="booking-nav" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span>Get Order</span></button>
- <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span>History</span></button>
- <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span>Profile</span></button>
+ <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
+ <button onclick="showPage('supportPage',this)"><span class="nav-icon">💬</span><span data-i18n="navSupport">Support</span></button>
+ <button class="booking-nav" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
+ <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
+ <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
 <!-- MODALS -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h2 id="authTitle">Login</h2>
+   <h2 id="authTitle" data-i18n="loginBtn">Login</h2>
    <button class="close" onclick="closeModal('authModal')">✕</button>
   </div>
   <div id="registerFields" class="hidden">
-   <label>Full Name</label><input id="regName" placeholder="Enter your full name">
-   <label>Invite Code (Optional)</label><input id="regInvite" placeholder="e.g. INV1">
+   <label data-i18n="fullNameLabel">Full Name</label><input id="regName" placeholder="Enter your full name">
+   <label data-i18n="inviteCodeLabel">Invite Code (Optional)</label><input id="regInvite" placeholder="e.g. INV1">
   </div>
-  <label>Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
-  <label>Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
+  <label data-i18n="identityLabel">Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
+  <label data-i18n="passwordLabel">Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
   <p id="authMessage" class="muted" style="color:var(--fb-danger)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()">Continue</button>
-  <p style="text-align:center"><a href="#" onclick="toggleAuthMode();return false">Switch Login / Register</a></p>
+  <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
+  <p style="text-align:center"><a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a></p>
  </div>
 </div>
 
@@ -518,7 +511,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- FINANCE MODAL (DEPOSIT / WITHDRAW) -->
+<!-- FINANCE MODAL -->
 <div class="modal hidden" id="financeModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -526,12 +519,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="close" onclick="closeModal('financeModal')">✕</button>
   </div>
   <p id="financeLimitHint" class="muted small" style="margin-bottom:8px"></p>
-  <label>Amount ($)</label>
+  <label data-i18n="amountLabel">Amount ($)</label>
   <input id="financeAmount" type="number" placeholder="Enter amount">
-  <label>Payment / Bank Note</label>
+  <label data-i18n="noteLabel">Payment / Bank Note</label>
   <input id="financeNote" placeholder="e.g. KBZ Pay / Wave / USDT">
   <p id="financeMsg" class="muted" style="margin-top:6px;color:var(--fb-success)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="submitFinanceRequest()">Submit Request</button>
+  <button class="btn btn-block" style="margin-top:12px" onclick="submitFinanceRequest()" data-i18n="submitReqBtn">Submit Request</button>
  </div>
 </div>
 
@@ -541,14 +534,219 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v11",
- current:"tb_current_v11",
- theme:"tb_theme_v11",
- activity:"tb_activity_v11",
- finance:"tb_finance_v2"
+ users:"tb_users_v12",
+ current:"tb_current_v12",
+ theme:"tb_theme_v12",
+ activity:"tb_activity_v12",
+ finance:"tb_finance_v3",
+ lang:"tb_lang_v1"
 };
 
-// VIP Levels Configuration (Task Limits, Profit Multipliers, Max Withdrawal Limits)
+// MULTI-LANGUAGE DICTIONARY (English, Burmese, Chinese)
+const TRANSLATIONS = {
+ en: {
+  heroTag: "INTERNATIONAL TRAVEL",
+  heroTitle: "Discover Your Next Stay",
+  heroDesc: "Explore international hotels around the world and plan your journey with Trip Booking.",
+  exploreBtn: "Explore Hotels",
+  featHotels: "Featured Hotels",
+  topDest: "Top destinations",
+  hotelDir: "Hotel Directory (40+ Global Hotels)",
+  searchPlaceholder: "Search hotel or country",
+  liveTicker: "Live",
+  csCenter: "Customer Service Center",
+  csOnline: "Trip Booking Support (Online)",
+  csHelp24: "We are here to help you 24/7",
+  typeMsg: "Type your message here...",
+  histTitle: "Booking & Transaction History",
+  transTitle: "Transactions & Referral Bonuses",
+  bookingRec: "Booking Records",
+  thDate: "Date",
+  thType: "Type",
+  thAmount: "Amount",
+  thStatus: "Status",
+  taskCenter: "Booking Task Center",
+  getOrderBtn: "Get order",
+  resetBtn: "Reset",
+  accBal: "Account Balance 💳",
+  taskComm: "Task Commission 💰",
+  dailyLimit: "Daily Task Limit 📊",
+  totalProfit: "Total Profit 🌟",
+  taskCompleteMsg: "🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆",
+  specialTaskMsg: "⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.",
+  myProfile: "My Profile",
+  welcomeTrip: "Welcome To Trip Booking",
+  loginPrompt: "Please login or register to manage your account.",
+  createAcc: "Create Account",
+  loginBtn: "Login",
+  walletBal: "Wallet Balance",
+  vipLevelTitle: "VIP Level",
+  completedBookings: "Completed Bookings",
+  refBonus: "Referral Bonus (10%)",
+  invitedFriends: "Invited Friends",
+  inviteCodeTitle: "Invite Code",
+  depositBtn: "💳 Deposit",
+  withdrawBtn: "💸 Withdraw",
+  vipTiersHead: "VIP Membership Levels & Limits",
+  vipTiersDesc: "Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.",
+  refProgramHead: "Invitation & Referral Program",
+  refProgramDesc: "Share your invite code. Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!",
+  copyInviteBtn: "Copy Invitation Link",
+  logoutBtn: "Log Out",
+  quickLinks: "Quick Links",
+  navHome: "Home",
+  navSupport: "Support",
+  navBooking: "Get Order",
+  navHistory: "History",
+  navProfile: "Profile",
+  contactInfo: "Contact Information",
+  fullNameLabel: "Full Name",
+  inviteCodeLabel: "Invite Code (Optional)",
+  identityLabel: "Phone Number or Email",
+  passwordLabel: "Password",
+  continueBtn: "Continue",
+  switchAuth: "Switch Login / Register",
+  amountLabel: "Amount ($)",
+  noteLabel: "Payment / Bank Note",
+  submitReqBtn: "Submit Request",
+  upgradeVipBtn: "🚀 Upgrade VIP"
+ },
+ my: {
+  heroTag: "နိုင်ငံတကာ ခရီးသွားလုပ်ငန်း",
+  heroTitle: "သင်၏ နောက်ထပ် တည်းခိုမှုကို ရှာဖွေပါ",
+  heroDesc: "ကမ္ဘာတစ်ဝှမ်းမှ ဟိုတယ်များကို ရှာဖွေပြီး Trip Booking ဖြင့် သင့်ခရီးစဉ်ကို စီစဉ်ပါ။",
+  exploreBtn: "ဟိုတယ်များ ကြည့်ရန်",
+  featHotels: "ထင်ရှားသော ဟိုတယ်များ",
+  topDest: "လူကြိုက်အများဆုံး နေရာများ",
+  hotelDir: "ဟိုတယ်လမ်းညွှန် (ဟိုတယ် ၄၀+)",
+  searchPlaceholder: "ဟိုတယ် သို့မဟုတ် နိုင်ငံ ရှာရန်",
+  liveTicker: "တိုက်ရိုက်",
+  csCenter: "ဖောက်သည် ဝန်ဆောင်မှုစင်တာ",
+  csOnline: "Trip Booking ပံ့ပိုးမှု (အွန်လိုင်း)",
+  csHelp24: "ကျွန်ုပ်တို့ အမြဲတမ်း ကူညီပေးရန် အဆင်သင့်ရှိပါသည်",
+  typeMsg: "သင့်မက်ဆေ့ချ်ကို ဤနေရာတွင် ရိုက်ထည့်ပါ...",
+  histTitle: "ဘိုကင်နှင့် ငွေကြေးလွှဲပြောင်းမှု မှတ်တမ်း",
+  transTitle: "ငွေလွှဲမှုများနှင့် မိတ်ဆက်ဘောနပ်စ်များ",
+  bookingRec: "ဘိုကင်မှတ်တမ်းများ",
+  thDate: "ရက်စွဲ",
+  thType: "အမျိုးအစား",
+  thAmount: "ပမာဏ",
+  thStatus: "အခြေအနေ",
+  taskCenter: "ဘိုကင် တာဝန်စင်တာ",
+  getOrderBtn: "အော်ဒါယူမည်",
+  resetBtn: "ပြန်စရန်",
+  accBal: "အကောင့် လက်ကျန် 💳",
+  taskComm: "ကော်မရှင် 💰",
+  dailyLimit: "နေ့စဉ် တာဝန်အကန့်အသတ် 📊",
+  totalProfit: "စုစုပေါင်း အမြတ် 🌟",
+  taskCompleteMsg: "🎉 ဂုဏ်ယူပါတယ်! သင်၏ VIP အဆင့်အတွက် နေ့စဉ်အော်ဒါများ အားလုံး ပြီးဆုံးပါပြီ! 🎆",
+  specialTaskMsg: "⚠️ အထူးပေါင်းစပ်အော်ဒါ တွေ့ရှိပါပြီ! လက်ကျန်ငွေ မလုံလောက်ပါ။ ဆက်လက်လုပ်ဆောင်ရန် ကန်စတာမားဆားဗစ်သို့ ဆက်သွယ်ပါ သို့မဟုတ် ငွေသွင်းပါ။",
+  myProfile: "ကျွန်ုပ်၏ ကိုယ်ရေးအချက်အလက်",
+  welcomeTrip: "Trip Booking မှ ကြိုဆိုပါတယ်",
+  loginPrompt: "သင့်အကောင့်ကို စီမံခန့်ခွဲရန် အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။",
+  createAcc: "အကောင့်အသစ်ဖွင့်ရန်",
+  loginBtn: "အကောင့်ဝင်ရန်",
+  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်",
+  vipLevelTitle: "VIP အဆင့်",
+  completedBookings: "ပြီးမြောက်သော ဘိုကင်များ",
+  refBonus: "မိတ်ဆက်ဘောနပ်စ် (၁၀%)",
+  invitedFriends: "ဖိတ်ခေါ်ထားသူများ",
+  inviteCodeTitle: "ဖိတ်ခေါ်ကုဒ်",
+  depositBtn: "💳 ငွေသွင်းရန်",
+  withdrawBtn: "💸 ငွေထုတ်ရန်",
+  vipTiersHead: "VIP အဖွဲ့ဝင်အဆင့်များနှင့် အကန့်အသတ်များ",
+  vipTiersDesc: "VIP အဆင့်မြင့်လေလေ နေ့စဉ်တာဝန်ကန့်အသတ်၊ အမြတ်နှုန်းနှင့် ငွေထုတ်ယူနိုင်မှု ပမာဏ များပြားလေလေ ဖြစ်သည်။",
+  refProgramHead: "မိတ်ဆက်ပရိုဂရမ် (Referral)",
+  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ်ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုကင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
+  copyInviteBtn: "ဖိတ်ခေါ်လင့်ခ် ကူးယူရန်",
+  logoutBtn: "အကောင့်ထွက်ရန်",
+  quickLinks: "အမြန်လင့်ခ်များ",
+  navHome: "ပင်မ",
+  navSupport: "အကူအညီ",
+  navBooking: "အော်ဒါယူ",
+  navHistory: "မှတ်တမ်း",
+  navProfile: "ကိုယ်ရေး",
+  contactInfo: "ဆက်သွယ်ရန် အချက်အလက်",
+  fullNameLabel: "အမည်ပြည့်စုံ",
+  inviteCodeLabel: "ဖိတ်ခေါ်ကုဒ် (ရှိလျှင်)",
+  identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
+  passwordLabel: "စကားဝှက်",
+  continueBtn: "ဆက်လုပ်ရန်",
+  switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
+  amountLabel: "ပမာဏ ($)",
+  noteLabel: "ငွေပေးချေမှု မှတ်စု",
+  submitReqBtn: "တောင်းဆိုချက် ပို့မည်",
+  upgradeVipBtn: "🚀 VIP တိုးမြှင့်ရန်"
+ },
+ zh: {
+  heroTag: "国际旅游",
+  heroTitle: "发现您的下一站住宿",
+  heroDesc: "通过 Trip Booking 探索全球国际酒店并规划您的行程。",
+  exploreBtn: "探索酒店",
+  featHotels: "精选酒店",
+  topDest: "热门目的地",
+  hotelDir: "酒店目录 (40+ 全球酒店)",
+  searchPlaceholder: "搜索酒店或国家",
+  liveTicker: "实时",
+  csCenter: "客服中心",
+  csOnline: "Trip Booking 客服 (在线)",
+  csHelp24: "我们 24/7 全天候为您服务",
+  typeMsg: "在此输入您的消息...",
+  histTitle: "预订与交易历史",
+  transTitle: "交易与推荐奖励",
+  bookingRec: "预订记录",
+  thDate: "日期",
+  thType: "类型",
+  thAmount: "金额",
+  thStatus: "状态",
+  taskCenter: "预订任务中心",
+  getOrderBtn: "获取订单",
+  resetBtn: "重置",
+  accBal: "账户余额 💳",
+  taskComm: "任务佣金 💰",
+  dailyLimit: "每日任务限制 📊",
+  totalProfit: "总利润 🌟",
+  taskCompleteMsg: "🎉 恭喜！您VIP等级的每日订单已全部完成！ 🎆",
+  specialTaskMsg: "⚠️ 检测到特殊组合订单！余额不足。请联系客服或充值以继续。",
+  myProfile: "我的资料",
+  welcomeTrip: "欢迎来到 Trip Booking",
+  loginPrompt: "请登录或注册以管理您的账户。",
+  createAcc: "创建账户",
+  loginBtn: "登录",
+  walletBal: "钱包余额",
+  vipLevelTitle: "VIP 等级",
+  completedBookings: "已完成预订",
+  refBonus: "推荐奖金 (10%)",
+  invitedFriends: "邀请的好友",
+  inviteCodeTitle: "邀请码",
+  depositBtn: "💳 充值",
+  withdrawBtn: "💸 提现",
+  vipTiersHead: "VIP 会员等级与限制",
+  vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务限制、更高的利润率和更高的提现额度。",
+  refProgramHead: "邀请与推荐计划",
+  refProgramDesc: "分享您的邀请码。每次您的好友完成预订任务时，即可自动获得 <b>10% 佣金</b>！",
+  copyInviteBtn: "复制邀请链接",
+  logoutBtn: "登出",
+  quickLinks: "快速链接",
+  navHome: "首页",
+  navSupport: "客服",
+  navBooking: "获取订单",
+  navHistory: "历史",
+  navProfile: "我的",
+  contactInfo: "联系信息",
+  fullNameLabel: "全名",
+  inviteCodeLabel: "邀请码 (可选)",
+  identityLabel: "手机号或邮箱",
+  passwordLabel: "密码",
+  continueBtn: "继续",
+  switchAuth: "切换 登录 / 注册",
+  amountLabel: "金额 ($)",
+  noteLabel: "支付备注",
+  submitReqBtn: "提交请求",
+  upgradeVipBtn: "🚀 升级 VIP"
+ }
+};
+
 const VIP_CONFIG = {
  LV1: { name: "LV1 (Standard)", maxTasks: 30, multiplier: 1.0, maxWithdraw: 500 },
  LV2: { name: "LV2 (Silver)", maxTasks: 45, multiplier: 1.5, maxWithdraw: 2000 },
@@ -573,6 +771,7 @@ let tapTimer = null;
 let activeOrderTask = null;
 let isTableEditing = false;
 let currentFinanceType = 'deposit';
+let currentLang = localStorage.getItem(KEYS.lang) || 'en';
 
 const hotels = [
  {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
@@ -594,13 +793,38 @@ function toggleTheme() {
  $("themeToggle").textContent = isDark ? "☀️" : "🌙";
 }
 
+function changeLanguage(lang) {
+ currentLang = lang;
+ localStorage.setItem(KEYS.lang, lang);
+ $("language").value = lang;
+ updateTranslations();
+}
+
+function updateTranslations() {
+ const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+ document.querySelectorAll("[data-i18n]").forEach(el => {
+  const key = el.getAttribute("data-i18n");
+  if(dict[key]) {
+   el.innerHTML = dict[key];
+  }
+ });
+ document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+  const key = el.getAttribute("data-i18n-placeholder");
+  if(dict[key]) {
+   el.placeholder = dict[key];
+  }
+ });
+}
+
 window.addEventListener("load",()=>{
  const savedTheme = localStorage.getItem(KEYS.theme);
  if(savedTheme === "dark") {
   document.body.classList.add("dark");
   $("themeToggle").textContent = "☀️";
  }
- // Check URL invite code parameter
+ $("language").value = currentLang;
+ updateTranslations();
+
  const urlParams = new URLSearchParams(window.location.search);
  const inviteParam = urlParams.get('invite');
  if(inviteParam) {
@@ -638,7 +862,7 @@ function openAuth(mode) {
  authMode=mode;
  $("authModal").classList.remove("hidden");
  $("registerFields").classList.toggle("hidden",mode==="login");
- $("authTitle").textContent=mode==="login"?"Login":"Create Account";
+ $("authTitle").textContent = mode==="login" ? (TRANSLATIONS[currentLang].loginBtn || "Login") : (TRANSLATIONS[currentLang].createAcc || "Create Account");
  $("authMessage").textContent="";
 }
 
@@ -660,7 +884,6 @@ async function submitAuth() {
   const name = $("regName").value.trim() || "User";
   const inputInvite = $("regInvite").value.trim().toUpperCase();
   
-  // Validate referral invite code
   let validReferrer = null;
   if(inputInvite) {
    validReferrer = users.find(u => u.inviteCode === inputInvite);
@@ -693,9 +916,7 @@ async function submitAuth() {
   users.push(newUser);
   write(KEYS.users, users);
   message.style.color = "var(--fb-success)";
-  message.textContent = validReferrer 
-   ? `Account created with referral code (${inputInvite})! Please login.` 
-   : "Account created successfully! Please login.";
+  message.textContent = "Account created successfully! Please login.";
   authMode = "login";
   $("registerFields").classList.add("hidden");
   return;
@@ -746,7 +967,7 @@ function getVipSpecs(vipCode) {
 
 function updateUI() {
  const logged = currentUser !== null;
- $("headerAuth").textContent = logged ? "Logout" : "Login";
+ $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Logout") : (TRANSLATIONS[currentLang].loginBtn || "Login");
  if(logged) {
   const vipSpecs = getVipSpecs(currentUser.vipLevel);
   $("guestAuthActions").classList.add("hidden");
@@ -761,7 +982,8 @@ function updateUI() {
   $("inviteCode").textContent = currentUser.inviteCode;
   $("inviteLink").value = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
 
-  // Render VIP Tiers Card Grid
+  // Render VIP Tiers Card Grid with Upgrade Request button
+  const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
   $("vipTiersDisplay").innerHTML = Object.keys(VIP_CONFIG).map(key => {
    const tier = VIP_CONFIG[key];
    const isCurrent = currentUser.vipLevel === key;
@@ -769,7 +991,7 @@ function updateUI() {
     <div class="vip-card ${isCurrent ? 'active-vip' : ''}">
      <div style="display:flex;justify-content:space-between;align-items:center">
       <strong style="color:var(--fb-primary)">${tier.name}</strong>
-      ${isCurrent ? '<span class="tag">Current</span>' : ''}
+      ${isCurrent ? '<span class="tag">Current</span>' : `<button class="btn" style="padding:2px 6px;font-size:11px" onclick="requestVipUpgrade('${key}')">${dict.upgradeVipBtn || '🚀 Upgrade VIP'}</button>`}
      </div>
      <div class="muted small" style="margin-top:6px">Daily Tasks: <b>${tier.maxTasks} Orders</b></div>
      <div class="muted small">Profit Rate: <b>${tier.multiplier}x Boost</b></div>
@@ -781,6 +1003,17 @@ function updateUI() {
   $("guestAuthActions").classList.remove("hidden");
   $("memberProfile").classList.add("hidden");
  }
+}
+
+function requestVipUpgrade(targetVip) {
+ if(!currentUser) return;
+ // Send a message to Customer Service directly without auto-reply
+ if(!currentUser.messages) currentUser.messages = [];
+ const upgradeReqText = `Hello Customer Service, I would like to request an upgrade for my account to ${targetVip}. Please guide me through the process.`;
+ currentUser.messages.push({sender:"user", text:upgradeReqText, time:new Date().toLocaleTimeString()});
+ write(KEYS.users, users);
+ alert(`VIP Upgrade request for ${targetVip} sent to Customer Service! Please check your support chat.`);
+ showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1]);
 }
 
 function renderHotels() {
@@ -810,7 +1043,7 @@ function renderHotels() {
       <h3>${h.name}</h3>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
        <span class="price">$${h.price}</span>
-       <button class="btn" style="padding:4px 8px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">Book</button>
+       <button class="btn" style="padding:4px 8px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="exploreBtn">Book</button>
       </div>
      </div>
     </div>
@@ -844,13 +1077,11 @@ function renderBooking() {
   $("celebrationBanner").classList.add("hidden");
  }
 
- // Special Combination Order Rule
  const isSpecialTask = (orders === 5 || orders === 12 || orders === 20);
  const requiredBalance = isSpecialTask ? (currentUser.negDollar || 100) : 0;
 
  if(isSpecialTask && (currentUser.balance || 0) < requiredBalance) {
   $("specialTaskAlert").classList.remove("hidden");
-  $("specialTaskAlert").textContent = `⚠️ Special Combination Order (#${orders + 1}) requires a temporary balance of $${requiredBalance}. Please contact Customer Service or deposit funds.`;
  } else {
   $("specialTaskAlert").classList.add("hidden");
  }
@@ -906,7 +1137,6 @@ function confirmSubmitBooking(profit, price, isSpecialTask) {
  if(!currentUser.bookings) currentUser.bookings = [];
  currentUser.bookings.unshift({date:new Date().toLocaleString(), name:activeOrderTask.hotel.name, price, profit});
 
- // Referral 10% Commission Distribution to Referrer
  if(currentUser.referredBy) {
   const referrer = users.find(u => u.id === currentUser.referredBy);
   if(referrer) {
@@ -939,7 +1169,6 @@ function resetTaskProgress() {
  alert("Task progress reset to 0.");
 }
 
-/* FINANCE DEPOSIT / WITHDRAW MODAL WITH VIP LIMITS */
 function openFinanceModal(type) {
  if(!currentUser) { openAuth('login'); return; }
  currentFinanceType = type;
@@ -994,51 +1223,38 @@ function submitFinanceRequest() {
  
  $("financeMsg").style.color = "var(--fb-success)";
  $("financeMsg").textContent = "Request submitted successfully! Waiting for admin approval.";
- setTimeout(() => {
+ setTimeout => {
   closeModal('financeModal');
  }, 1500);
 }
 
-/* CUSTOMER SERVICE CHAT WITH PULSING BLUE BUTTON & AUTO GREETING */
+// CUSTOMER SERVICE CHAT (NO AUTO REPLY, USER SENDS MANUALLY, ADMIN REPLIES MANUALLY)
 function renderSupportChat() {
  if(!currentUser) {
   $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px;">Please login to chat with Customer Service.</p>`;
   return;
  }
  
- let msgsHtml = "";
- if((currentUser.messages||[]).length === 0) {
-  msgsHtml = `
-   <div style="text-align:center;margin:40px 0;">
-    <button onclick="sendQuickGreeting()" style="background:var(--fb-primary);color:white;padding:16px 28px;border-radius:30px;font-size:15px;animation:pulseBtn 1.5s infinite;cursor:pointer;border:0;font-weight:600;">
-     မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါသည်။ ဘာများ ကူညီရမလဲရှင့်။
-    </button>
-   </div>
-  `;
- }
-
- msgsHtml += (currentUser.messages||[]).map(m => `
+ let msgsHtml = (currentUser.messages||[]).map(m => `
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='user'?'white':'var(--fb-text)'};margin:8px 0;margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
    <small style="font-size:10px;opacity:0.8">${m.sender==='user'?'You':'CS'}</small>
    <div>${m.text}</div>
   </div>
  `).join("");
 
+ if((currentUser.messages||[]).length === 0) {
+  msgsHtml = `<p class="muted" style="text-align:center;padding:30px;">Send a message to our Customer Service 24/7.</p>`;
+ }
+
  $("supportMessages").innerHTML = msgsHtml;
  $("supportMessages").scrollTop = $("supportMessages").scrollHeight;
-}
-
-function sendQuickGreeting() {
- if(!currentUser) return;
- currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါသည်။ ဘာများ ကူညီရမလဲရှင့်။", time:new Date().toLocaleTimeString()});
- write(KEYS.users, users);
- renderSupportChat();
 }
 
 function sendSupportMessage() {
  if(!currentUser) { openAuth('login'); return; }
  const txt = $("supportInput").value.trim();
  if(!txt) return;
+ if(!currentUser.messages) currentUser.messages = [];
  currentUser.messages.push({sender:"user", text:txt, time:new Date().toLocaleTimeString()});
  $("supportInput").value = "";
  write(KEYS.users, users);
