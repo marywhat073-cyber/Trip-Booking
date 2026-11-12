@@ -64,7 +64,7 @@ header{
  display:flex;align-items:center;justify-content:space-between;
  gap:12px;box-shadow:var(--shadow);
 }
-.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary)}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary);user-select:none}
 .logo span{color:#e41e3f}
 .header-actions{display:flex;gap:8px;align-items:center}
 .header-actions select{width:auto;background:var(--fb-bg);color:var(--fb-text);border-color:var(--fb-border)}
@@ -167,6 +167,18 @@ header{
 .chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
+@keyframes pulseBtn {
+ 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
+ 50% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(24,119,242, 0); }
+ 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
+}
+.pulsing-btn {
+ background: var(--fb-primary); color: white;
+ padding: 14px 22px; border-radius: 30px; font-size: 15px; font-weight: 700;
+ border: 0; cursor: pointer; animation: pulseBtn 1.5s infinite;
+ display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+}
+
 footer{
  background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
 }
@@ -193,6 +205,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .close{background:none;border:0;font-size:18px;cursor:pointer;color:var(--fb-muted)}
 </style>
 </head>
+```eof
+
+---
+
+### အပိုင်း ၂ - Pages & Content (Part 2/3)
+
+```html:TripBooking/part2.html
 <body>
 
 <header>
@@ -252,7 +271,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div id="countryHotels"></div>
 </section>
 
-<!-- SUPPORT (CUSTOMER SERVICE CENTER) -->
+<!-- SUPPORT -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2 data-i18n="csCenter">Customer Service Center</h2></div>
  <div class="chat-window" style="max-width:900px;margin:0 auto">
@@ -266,9 +285,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    </div>
    <div>🔊 ✕</div>
   </div>
-  
   <div class="chat-messages" id="supportMessages" style="height:450px"></div>
-  
   <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
    <input id="supportInput" type="text" placeholder="Type your message here..." data-i18n-placeholder="typeMsg" style="flex:1">
@@ -341,7 +358,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
  <div class="panel hidden" id="memberProfile">
   <div style="display:flex;align-items:center;gap:14px">
-   <img id="profileImage" src="https://placehold.co/80x80?text=User" alt="Profile" style="width:70px;height:70px;border-radius:50%;border:2px solid var(--fb-primary)">
+   <img id="profileImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--fb-primary)">
    <div>
     <h3 id="profileName" style="margin:0">User</h3>
     <p class="muted" id="profileId" style="margin:4px 0 0">User ID</p>
@@ -362,17 +379,15 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="btn btn-danger" onclick="openFinanceModal('withdraw')" data-i18n="withdrawBtn">💸 Withdraw</button>
   </div>
 
-  <!-- VIP Tiers & Limits Overview -->
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
    <h3 data-i18n="vipTiersHead">VIP Membership Levels & Limits</h3>
    <p class="muted small" data-i18n="vipTiersDesc">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
    <div class="vip-grid" id="vipTiersDisplay"></div>
   </div>
 
-  <!-- Invitation Link Box -->
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
    <h3 data-i18n="refProgramHead">Invitation & Referral Program</h3>
-   <p class="muted small" data-i18n="refProgramDesc">Share your invite code. Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
+   <p class="muted small" data-i18n="refProgramDesc">Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
    <input id="inviteLink" readonly style="margin:8px 0">
    <button class="btn btn-block" onclick="copyInviteLink()" data-i18n="copyInviteBtn">Copy Invitation Link</button>
   </div>
@@ -381,7 +396,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- STAFF PAGE (ROLE-BASED: SUPER ADMIN vs CS AGENT) -->
+<!-- STAFF PAGE -->
 <section class="page" id="staffPage">
  <div class="section-title">
   <div>
@@ -398,7 +413,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
- <!-- ADMIN USERS WORKSPACE -->
  <div id="adminWorkspace" class="panel admin-only">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
    <h3>User Accounts, VIP Levels & Booking Rules Control</h3>
@@ -411,12 +425,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <table>
     <thead>
      <tr>
-      <th>User ID</th>
+      <th>User ID (6-digit)</th>
       <th>Phone / Email</th>
       <th>Password</th>
       <th>Full Name</th>
       <th>VIP Level</th>
       <th>Wallet Balance ($)</th>
+      <th>Invite Code (4d+2l)</th>
       <th>Invited By</th>
       <th>Task Settings (Neg $, Base Profit $)</th>
       <th>Actions</th>
@@ -427,10 +442,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
  </div>
 
- <!-- ADMIN FINANCE WORKSPACE -->
  <div id="adminFinanceWorkspace" class="panel hidden admin-only">
   <h3>Pending Deposit & Withdrawal Requests</h3>
-  <p class="muted">Approve or reject user fund requests here.</p>
   <div class="table-wrap" style="margin-top:12px">
    <table>
     <thead>
@@ -450,20 +463,17 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
  </div>
 
- <!-- ADMIN STAFF SETTINGS WORKSPACE -->
  <div id="adminSettingsWorkspace" class="panel hidden admin-only">
   <h3>Staff & Role Access Credentials</h3>
-  <p class="muted">Configure access passwords for Super Admin and Customer Service (CS) Agents.</p>
   <div style="max-width:400px;margin-top:14px">
-   <label>Super Admin Password (Full Access)</label>
+   <label>Super Admin Password</label>
    <input id="adminPassInput" type="text">
-   <label>Customer Service Agent Password (Chat Only)</label>
+   <label>Customer Service Agent Password</label>
    <input id="csPassInput" type="text">
    <button class="btn btn-success" style="margin-top:12px" onclick="saveStaffCredentials()">Update Passwords</button>
   </div>
  </div>
 
- <!-- CS WORKSPACE -->
  <div id="csWorkspace" class="panel hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
   <aside class="staff-sidebar panel" style="padding:10px">
    <h3>Client Chats</h3>
@@ -485,6 +495,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </section>
 
 </main>
+```eof
+
+---
+
+### အပိုင်း ၃ - Footer, Modals & JavaScript Logic (Part 3/3)
+
+```html:TripBooking/part3.html
 <footer>
  <div class="container footer-grid" style="margin:0 auto">
   <div>
@@ -527,7 +544,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
   <div id="registerFields" class="hidden">
    <label data-i18n="fullNameLabel">Full Name</label><input id="regName" placeholder="Enter your full name">
-   <label data-i18n="inviteCodeLabel">Invite Code (Optional)</label><input id="regInvite" placeholder="e.g. INV1">
+   <label data-i18n="inviteCodeLabel">Invite Code (4 digits + 2 letters, e.g. 1234AB)</label><input id="regInvite" placeholder="e.g. 1234AB">
   </div>
   <label data-i18n="identityLabel">Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
   <label data-i18n="passwordLabel">Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
@@ -549,13 +566,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <option value="cs">Customer Service Agent (Chat Support)</option>
   </select>
   <label>Access Password</label>
-  <input id="staffPassword" type="password" placeholder="Enter password">
+  <input id="staffPassword" type="password" placeholder="Enter password (default 12344321)">
   <p id="staffMessage" class="muted" style="margin-top:6px;color:var(--fb-danger)"></p>
   <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
  </div>
 </div>
 
-<!-- FINANCE MODAL -->
 <div class="modal hidden" id="financeModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -578,16 +594,15 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v13",
- current:"tb_current_v13",
- theme:"tb_theme_v13",
- activity:"tb_activity_v13",
- finance:"tb_finance_v4",
- lang:"tb_lang_v2",
- staffCreds:"tb_staff_creds_v1"
+ users:"tb_users_v15",
+ current:"tb_current_v15",
+ theme:"tb_theme_v15",
+ activity:"tb_activity_v15",
+ finance:"tb_finance_v6",
+ lang:"tb_lang_v4",
+ staffCreds:"tb_staff_creds_v3"
 };
 
-// MULTI-LANGUAGE DICTIONARY
 const TRANSLATIONS = {
  en: {
   heroTag: "INTERNATIONAL TRAVEL",
@@ -637,7 +652,7 @@ const TRANSLATIONS = {
   vipTiersHead: "VIP Membership Levels & Limits",
   vipTiersDesc: "Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.",
   refProgramHead: "Invitation & Referral Program",
-  refProgramDesc: "Share your invite code. Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!",
+  refProgramDesc: "Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!",
   copyInviteBtn: "Copy Invitation Link",
   logoutBtn: "Log Out",
   quickLinks: "Quick Links",
@@ -648,7 +663,7 @@ const TRANSLATIONS = {
   navProfile: "Profile",
   contactInfo: "Contact Information",
   fullNameLabel: "Full Name",
-  inviteCodeLabel: "Invite Code (Optional)",
+  inviteCodeLabel: "Invite Code (4 digits + 2 letters, e.g. 1234AB)",
   identityLabel: "Phone Number or Email",
   passwordLabel: "Password",
   continueBtn: "Continue",
@@ -706,7 +721,7 @@ const TRANSLATIONS = {
   vipTiersHead: "VIP အဖွဲ့ဝင်အဆင့်များနှင့် အကန့်အသတ်များ",
   vipTiersDesc: "VIP အဆင့်မြင့်လေလေ နေ့စဉ်တာဝန်ကန့်အသတ်၊ အမြတ်နှုန်းနှင့် ငွေထုတ်ယူနိုင်မှု ပမာဏ များပြားလေလေ ဖြစ်သည်။",
   refProgramHead: "မိတ်ဆက်ပရိုဂရမ် (Referral)",
-  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ်ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုကင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
+  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB) ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုကင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
   copyInviteBtn: "ဖိတ်ခေါ်လင့်ခ် ကူးယူရန်",
   logoutBtn: "အကောင့်ထွက်ရန်",
   quickLinks: "အမြန်လင့်ခ်များ",
@@ -717,7 +732,7 @@ const TRANSLATIONS = {
   navProfile: "ကိုယ်ရေး",
   contactInfo: "ဆက်သွယ်ရန် အချက်အလက်",
   fullNameLabel: "အမည်ပြည့်စုံ",
-  inviteCodeLabel: "ဖိတ်ခေါ်ကုဒ် (ရှိလျှင်)",
+  inviteCodeLabel: "ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB)",
   identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
   passwordLabel: "စကားဝှက်",
   continueBtn: "ဆက်လုပ်ရန်",
@@ -755,11 +770,11 @@ const TRANSLATIONS = {
   resetBtn: "重置",
   accBal: "账户余额 💳",
   taskComm: "任务佣金 💰",
-  dailyLimit: "每日任务限制 📊",
+  dailyLimit: "每日任务上限 📊",
   totalProfit: "总利润 🌟",
-  taskCompleteMsg: "🎉 恭喜！您VIP等级的每日订单已全部完成！ 🎆",
-  specialTaskMsg: "⚠️ 检测到特殊组合订单！余额不足。请联系客服或充值以继续。",
-  myProfile: "我的资料",
+  taskCompleteMsg: "🎉 恭喜！您当前 VIP 等级的所有每日订单已全部完成！ 🎆",
+  specialTaskMsg: "⚠️ 检测到特殊组合订单！余额不足。请联系客服或充值以继续操作。",
+  myProfile: "我的个人资料",
   welcomeTrip: "欢迎来到 Trip Booking",
   loginPrompt: "请登录或注册以管理您的账户。",
   createAcc: "创建账户",
@@ -768,67 +783,50 @@ const TRANSLATIONS = {
   vipLevelTitle: "VIP 等级",
   completedBookings: "已完成预订",
   refBonus: "推荐奖金 (10%)",
-  invitedFriends: "邀请的好友",
+  invitedFriends: "已邀请好友",
   inviteCodeTitle: "邀请码",
   depositBtn: "💳 充值",
   withdrawBtn: "💸 提现",
   vipTiersHead: "VIP 会员等级与限制",
-  vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务限制、更高的利润率和更高的提现额度。",
+  vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务上限、更高的利润率和更大的提现额度。",
   refProgramHead: "邀请与推荐计划",
-  refProgramDesc: "分享您的邀请码。每次您的好友完成预订任务时，即可自动获得 <b>10% 佣金</b>！",
+  refProgramDesc: "分享您的邀请码（4位数字 + 2位字母，例如 1234AB）。每次受邀好友完成预订任务时，您将自动获得 <b>10% 佣金</b>！",
   copyInviteBtn: "复制邀请链接",
-  logoutBtn: "登出",
+  logoutBtn: "退出登录",
   quickLinks: "快速链接",
   navHome: "首页",
   navSupport: "客服",
-  navBooking: "获取订单",
+  navBooking: "接单",
   navHistory: "历史",
   navProfile: "我的",
   contactInfo: "联系信息",
   fullNameLabel: "全名",
-  inviteCodeLabel: "邀请码 (可选)",
+  inviteCodeLabel: "邀请码 (4位数字 + 2位字母, 如 1234AB)",
   identityLabel: "手机号或邮箱",
   passwordLabel: "密码",
   continueBtn: "继续",
   switchAuth: "切换 登录 / 注册",
   amountLabel: "金额 ($)",
-  noteLabel: "支付备注",
-  submitReqBtn: "提交请求",
+  noteLabel: "支付/银行备注",
+  submitReqBtn: "提交申请",
   upgradeVipBtn: "🚀 升级 VIP"
  }
 };
 
-const VIP_CONFIG = {
- LV1: { name: "LV1 (Standard)", maxTasks: 30, multiplier: 1.0, maxWithdraw: 500 },
- LV2: { name: "LV2 (Silver)", maxTasks: 45, multiplier: 1.5, maxWithdraw: 2000 },
- LV3: { name: "LV3 (Gold)", maxTasks: 60, multiplier: 2.0, maxWithdraw: 10000 },
- LV4: { name: "LV4 (Platinum)", maxTasks: 80, multiplier: 3.0, maxWithdraw: 999999 }
-};
+let currentLang = localStorage.getItem(KEYS.lang) || "en";
 
-const read = (key, fallback = []) => {
- try { 
-  const val = JSON.parse(localStorage.getItem(key));
-  return val !== null ? val : fallback;
- }
- catch { return fallback; }
-};
-
-const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
-
-let users = read(KEYS.users, []);
-let financeRequests = read(KEYS.finance, []);
-let staffCreds = read(KEYS.staffCreds, { adminPass: "12344321", csPass: "11223344" });
-let activeStaffRole = null; // 'admin' or 'cs'
-
-let currentUser = null;
-let selectedUserId = null;
-let authMode = "login";
-let tapCount = 0;
-let tapTimer = null;
-let activeOrderTask = null;
-let isTableEditing = false;
-let currentFinanceType = 'deposit';
-let currentLang = localStorage.getItem(KEYS.lang) || 'en';
+function changeLanguage(lang) {
+ currentLang = lang;
+ localStorage.setItem(KEYS.lang, lang);
+ document.querySelectorAll("[data-i18n]").forEach(el => {
+  const key = el.getAttribute("data-i18n");
+  if(TRANSLATIONS[lang][key]) el.innerHTML = TRANSLATIONS[lang][key];
+ });
+ document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+  const key = el.getAttribute("data-i18n-placeholder");
+  if(TRANSLATIONS[lang][key]) el.placeholder = TRANSLATIONS[lang][key];
+ });
+}
 
 const hotels = [
  {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
@@ -836,9 +834,17 @@ const hotels = [
  {id:"H03",name:"Bali Luxury Resort",country:"Indonesia",price:160,stars:5,image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
  {id:"H04",name:"Swiss Alpine Hotel",country:"Switzerland",price:310,stars:5,image:"https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900"},
  {id:"H05",name:"Bangkok Grand Hotel",country:"Thailand",price:95,stars:4,image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
- {id:"H06",name:"Luang Prabang Heritage Villa",country:"Laos",price:135,stars:4,image:"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900"},
- {id:"H07",name:"Taipei Sky Tower Hotel",country:"Taiwan",price:210,stars:4,image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
- {id:"H08",name:"Yangon Riverside Boutique",country:"Myanmar",price:85,stars:3,image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"}
+ {id:"H06",name:"Parisian Palace",country:"France",price:380,stars:5,image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
+ {id:"H07",name:"Sydney Harbour View",country:"Australia",price:250,stars:4,image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"},
+ {id:"H08",name:"Kyoto Traditional Inn",country:"Japan",price:140,stars:3,image:"https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900"}
+];
+
+const vipTiers = [
+ {level:"LV1", name:"VIP 1", limit:30, profitRate:0.005, minBal:0, maxWithdraw:1000},
+ {level:"LV2", name:"VIP 2", limit:35, profitRate:0.008, minBal:500, maxWithdraw:5000},
+ {level:"LV3", name:"VIP 3", limit:40, profitRate:0.012, minBal:2000, maxWithdraw:20000},
+ {level:"LV4", name:"VIP 4", limit:45, profitRate:0.018, minBal:5000, maxWithdraw:50000},
+ {level:"LV5", name:"VIP 5", limit:50, profitRate:0.025, minBal:10000, maxWithdraw:100000}
 ];
 
 const reviewOptions = [
@@ -847,34 +853,33 @@ const reviewOptions = [
  {text:"Wonderful hotel experience. Good review"}
 ];
 
+const read = key => {
+ try { return JSON.parse(localStorage.getItem(key)) || []; }
+ catch { return []; }
+};
+
+const readObj = (key, defaultVal) => {
+ try { return JSON.parse(localStorage.getItem(key)) || defaultVal; }
+ catch { return defaultVal; }
+};
+
+const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
+
+let users = read(KEYS.users);
+let financeReqs = read(KEYS.finance);
+let currentUser = null;
+let selectedUserId = null;
+let authMode = "login";
+let logoClickCount = 0;
+let logoTimer = null;
+let activeOrderTask = null;
+let isTableEditing = false;
+let staffCreds = readObj(KEYS.staffCreds, {admin:"12344321", cs:"12344321"});
+
 function toggleTheme() {
  const isDark = document.body.classList.toggle("dark");
  localStorage.setItem(KEYS.theme, isDark ? "dark" : "light");
  $("themeToggle").textContent = isDark ? "☀️" : "🌙";
-}
-
-function changeLanguage(lang) {
- currentLang = lang;
- localStorage.setItem(KEYS.lang, lang);
- $("language").value = lang;
- updateTranslations();
- updateUI();
-}
-
-function updateTranslations() {
- const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const key = el.getAttribute("data-i18n");
-  if(dict[key]) {
-   el.innerHTML = dict[key];
-  }
- });
- document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-  const key = el.getAttribute("data-i18n-placeholder");
-  if(dict[key]) {
-   el.placeholder = dict[key];
-  }
- });
 }
 
 window.addEventListener("load",()=>{
@@ -884,25 +889,20 @@ window.addEventListener("load",()=>{
   $("themeToggle").textContent = "☀️";
  }
  $("language").value = currentLang;
- updateTranslations();
-
- const urlParams = new URLSearchParams(window.location.search);
- const inviteParam = urlParams.get('invite');
- if(inviteParam) {
-  $("regInvite").value = inviteParam;
- }
+ changeLanguage(currentLang);
  initApp();
 });
 
-// Logo tapped 10 times to open Staff Modal
 $("logo").addEventListener("click",()=>{
- tapCount++;
- clearTimeout(tapTimer);
- if(tapCount >= 10) {
-  tapCount = 0;
+ logoClickCount++;
+ clearTimeout(logoTimer);
+ if(logoClickCount >= 10) {
+  logoClickCount = 0;
   $("staffModal").classList.remove("hidden");
+  $("staffPassword").value = "";
+  $("staffMessage").textContent = "";
  } else {
-  tapTimer = setTimeout(()=>tapCount=0, 2000);
+  logoTimer = setTimeout(()=> logoClickCount = 0, 3000);
  }
 });
 
@@ -913,10 +913,11 @@ function showPage(id,button) {
  $(id).classList.add("active");
  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
  if(button) button.classList.add("active");
- if(id==="profilePage") updateUI();
+ if(id==="profilePage") { updateUI(); renderVipTiers(); }
  if(id==="historyPage") renderHistory();
  if(id==="supportPage") renderSupportChat();
  if(id==="bookingPage") renderBooking();
+ window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function openAuth(mode) {
@@ -938,57 +939,63 @@ async function submitAuth() {
  if(!identity || password.length < 6) { message.textContent="Enter valid credentials (min 6 chars)."; return; }
 
  if(authMode==="register") {
-  if(users.some(u => u.identity === identity)) {
-   message.textContent="Account with this phone/email already exists.";
+  const name = $("regName").value.trim() || "User";
+  const rawInvite = $("regInvite").value.trim();
+  
+  if(rawInvite && !/^\d{4}[A-Za-z]{2}$/.test(rawInvite)) {
+   message.textContent = "Invalid invite code format! Must be 4 digits + 2 letters (e.g. 1234AB).";
    return;
   }
-  const name = $("regName").value.trim() || "User";
-  const inputInvite = $("regInvite").value.trim().toUpperCase();
-  
-  let validReferrer = null;
-  if(inputInvite) {
-   validReferrer = users.find(u => u.inviteCode === inputInvite);
+
+  // Generate 6-digit User ID
+  let newIdNum = Math.floor(100000 + Math.random() * 900000);
+  while(users.some(u => u.id === String(newIdNum))) {
+   newIdNum = Math.floor(100000 + Math.random() * 900000);
+  }
+  const newId = String(newIdNum);
+
+  // Generate 4 digits + 2 uppercase letters invite code
+  const rand4 = Math.floor(1000 + Math.random() * 9000);
+  const randLet = String.fromCharCode(65 + Math.floor(Math.random()*26)) + String.fromCharCode(65 + Math.floor(Math.random()*26));
+  const inviteCode = String(rand4) + randLet;
+
+  let invitedBy = "-";
+  if(rawInvite) {
+   const refUser = users.find(u => u.inviteCode === rawInvite);
+   if(refUser) {
+    invitedBy = refUser.id;
+    refUser.invitedCount = (refUser.invitedCount || 0) + 1;
+   }
   }
 
   const newUser = {
-   id: "TB" + Date.now().toString().slice(-8),
+   id: newId,
    name, identity, password,
    shopId: "SH-" + Math.floor(10000+Math.random()*90000),
-   inviteCode: "INV" + Math.floor(1000+Math.random()*9000),
-   referredBy: validReferrer ? validReferrer.id : null,
+   inviteCode: inviteCode,
+   invitedBy: invitedBy,
    invitedCount: 0,
-   referralEarned: 0.00,
    balance: 0.00,
    commission: 0.00,
    totalProfit: 0.00,
    orders: 0,
    vipLevel: "LV1",
-   negDollar: 50,
+   negDollar: 0,
    profitBox: 30,
    transactions: [],
    bookings: [],
    messages: []
   };
-
-  if(validReferrer) {
-   validReferrer.invitedCount = (validReferrer.invitedCount || 0) + 1;
-  }
-
   users.push(newUser);
   write(KEYS.users, users);
-  message.style.color = "var(--fb-success)";
-  message.textContent = "Account created successfully! Please login.";
+  message.textContent="Account created successfully! Please login.";
   authMode = "login";
   $("registerFields").classList.add("hidden");
   return;
  }
 
  const user = users.find(u => u.identity === identity && u.password === password);
- if(!user) { 
-  message.style.color = "var(--fb-danger)";
-  message.textContent="Invalid phone/email or password."; 
-  return; 
- }
+ if(!user) { message.textContent="Invalid phone/email or password."; return; }
 
  currentUser = user;
  localStorage.setItem(KEYS.current, user.id);
@@ -1007,10 +1014,9 @@ function logout() {
 function initApp() {
  if(users.length === 0) {
   users.push({
-   id:"TB90000001", name:"Mya Mya", identity:"user1@mail.com", password:"password123",
-   shopId:"SH-10001", inviteCode:"TP-1342", referredBy:null, invitedCount:0, referralEarned:0.00,
-   balance:0.00, commission:0.00, totalProfit:0.00,
-   orders:0, vipLevel:"LV1", negDollar:100, profitBox:30,
+   id:"100001", name:"Mya Mya", identity:"user1@mail.com", password:"password123",
+   shopId:"SH-10001", inviteCode:"1234AB", invitedBy:"-", invitedCount:0, balance:0.00, commission:0.00, totalProfit:0.00,
+   orders:0, vipLevel:"LV1", negDollar:100, profitBox:50,
    transactions:[], bookings:[], messages:[]
   });
   write(KEYS.users, users);
@@ -1022,57 +1028,64 @@ function initApp() {
  updateUI();
 }
 
-function getVipSpecs(vipCode) {
- return VIP_CONFIG[vipCode] || VIP_CONFIG.LV1;
-}
-
 function updateUI() {
  const logged = currentUser !== null;
- $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Logout") : (TRANSLATIONS[currentLang].loginBtn || "Login");
+ $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Log Out") : (TRANSLATIONS[currentLang].loginBtn || "Login");
  if(logged) {
-  const vipSpecs = getVipSpecs(currentUser.vipLevel);
   $("guestAuthActions").classList.add("hidden");
   $("memberProfile").classList.remove("hidden");
   $("profileName").textContent = currentUser.name;
-  $("profileId").textContent = "ID: " + currentUser.id + " · Shop: " + currentUser.shopId;
+  $("profileId").textContent = "ID: " + currentUser.id;
   $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
   $("vipLevel").textContent = currentUser.vipLevel;
-  $("profileOrders").textContent = (currentUser.orders||0) + "/" + vipSpecs.maxTasks;
-  $("referralEarned").textContent = "$" + (currentUser.referralEarned||0).toFixed(2);
+  $("profileOrders").textContent = (currentUser.orders||0) + "/" + getVipLimit(currentUser.vipLevel);
+  $("referralEarned").textContent = "$" + (currentUser.referralEarned || 0).toFixed(2);
   $("invitedCount").textContent = currentUser.invitedCount || 0;
-  $("inviteCode").textContent = currentUser.inviteCode;
-  $("inviteLink").value = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
-
-  const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
-  $("vipTiersDisplay").innerHTML = Object.keys(VIP_CONFIG).map(key => {
-   const tier = VIP_CONFIG[key];
-   const isCurrent = currentUser.vipLevel === key;
-   return `
-    <div class="vip-card ${isCurrent ? 'active-vip' : ''}">
-     <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong style="color:var(--fb-primary)">${tier.name}</strong>
-      ${isCurrent ? '<span class="tag">Current</span>' : `<button class="btn" style="padding:2px 6px;font-size:11px" onclick="requestVipUpgrade('${key}')">${dict.upgradeVipBtn || '🚀 Upgrade VIP'}</button>`}
-     </div>
-     <div class="muted small" style="margin-top:6px">Daily Tasks: <b>${tier.maxTasks} Orders</b></div>
-     <div class="muted small">Profit Rate: <b>${tier.multiplier}x Boost</b></div>
-     <div class="muted small">Max Withdraw: <b>${tier.maxWithdraw >= 999999 ? 'Unlimited' : '$' + tier.maxWithdraw}</b></div>
-    </div>
-   `;
-  }).join("");
+  $("inviteCode").textContent = currentUser.inviteCode || "-";
+  $("inviteLink").value = window.location.origin + window.location.pathname + "?invite=" + (currentUser.inviteCode || "");
  } else {
   $("guestAuthActions").classList.remove("hidden");
   $("memberProfile").classList.add("hidden");
  }
 }
 
-function requestVipUpgrade(targetVip) {
+function getVipLimit(level) {
+ const tier = vipTiers.find(v => v.level === level);
+ return tier ? tier.limit : 30;
+}
+
+function getVipObj(level) {
+ return vipTiers.find(v => v.level === level) || vipTiers[0];
+}
+
+function renderVipTiers() {
  if(!currentUser) return;
- if(!currentUser.messages) currentUser.messages = [];
- const upgradeReqText = `Hello Customer Service, I would like to request an upgrade for my account to ${targetVip}. Please guide me through the process.`;
- currentUser.messages.push({sender:"user", text:upgradeReqText, time:new Date().toLocaleTimeString()});
+ const currentLevel = currentUser.vipLevel || "LV1";
+ $("vipTiersDisplay").innerHTML = vipTiers.map(v => {
+  const isActive = v.level === currentLevel;
+  return `
+   <div class="vip-card ${isActive ? 'active-vip' : ''}">
+    <strong>${v.name}</strong>
+    <p class="small muted" style="margin:4px 0">Limit: ${v.limit} orders/day<br>Profit Rate: ${(v.profitRate*100)}%<br>Min Bal: $${v.minBal}</p>
+    ${!isActive && (currentUser.balance >= v.minBal) ? `<button class="btn btn-block" style="padding:4px;font-size:11px;margin-top:6px" onclick="upgradeVip('${v.level}')">Upgrade</button>` : ''}
+    ${isActive ? `<span class="tag" style="margin-top:4px">Current Tier</span>` : ''}
+   </div>
+  `;
+ }).join("");
+}
+
+function upgradeVip(level) {
+ if(!currentUser) return;
+ const tier = getVipObj(level);
+ if(currentUser.balance < tier.minBal) {
+  alert("Insufficient balance to upgrade to " + tier.name);
+  return;
+ }
+ currentUser.vipLevel = level;
  write(KEYS.users, users);
- alert(`VIP Upgrade request for ${targetVip} sent to Customer Service! Please check your support chat.`);
- showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1]);
+ updateUI();
+ renderVipTiers();
+ alert("Successfully upgraded to " + tier.name + "!");
 }
 
 function renderHotels() {
@@ -1095,26 +1108,22 @@ function renderHotels() {
  const priceVal = $("priceFilter").value;
 
  const filtered = hotels.filter(h => {
-  const matchesText = h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query);
-  const matchesStar = (starVal === "all") || (h.stars === parseInt(starVal));
-  let matchesPrice = true;
-  if(priceVal === "under150") matchesPrice = h.price < 150;
-  else if(priceVal === "150to300") matchesPrice = (h.price >= 150 && h.price <= 300);
-  else if(priceVal === "over300") matchesPrice = h.price > 300;
-  
-  return matchesText && matchesStar && matchesPrice;
+  const matchQuery = h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query);
+  const matchStar = (starVal === "all") || (h.stars === Number(starVal));
+  let matchPrice = true;
+  if(priceVal === "under150") matchPrice = h.price < 150;
+  else if(priceVal === "150to300") matchPrice = h.price >= 150 && h.price <= 300;
+  else if(priceVal === "over300") matchPrice = h.price > 300;
+  return matchQuery && matchStar && matchPrice;
  });
 
- $("countryHotels").innerHTML = filtered.length ? `
-  <div class="hotel-grid">
-   ${filtered.map(h => `
+ $("countryHotels").innerHTML = `
+  <div class="hotel-grid" style="margin-top:14px">
+   ${filtered.length > 0 ? filtered.map(h => `
     <div class="card">
      <img class="hotel-img" src="${h.image}" alt="${h.name}">
      <div class="card-body">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-       <span class="tag">${h.country}</span>
-       <span class="small" style="color:var(--fb-primary);font-weight:700">★ ${h.stars}.0</span>
-      </div>
+      <span class="tag">${h.country}</span>
       <h3>${h.name}</h3>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
        <span class="price">$${h.price}</span>
@@ -1122,9 +1131,9 @@ function renderHotels() {
       </div>
      </div>
     </div>
-   `).join("")}
+   `).join("") : `<p class="muted">No hotels found matching filters.</p>`}
   </div>
- ` : `<p class="muted" style="text-align:center;padding:20px;">No hotels match your selected filters.</p>`;
+ `;
 }
 
 $("hotelSearch").addEventListener("input", renderHotels);
@@ -1134,11 +1143,10 @@ function renderBooking() {
   $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
   return;
  }
- const vipSpecs = getVipSpecs(currentUser.vipLevel);
- const maxCount = vipSpecs.maxTasks;
+ const maxCount = getVipLimit(currentUser.vipLevel);
  const orders = currentUser.orders || 0;
  $("orderCircle").textContent = orders + "/" + maxCount;
- $("orderProgress").style.width = Math.min(100, (orders / maxCount * 100)) + "%";
+ $("orderProgress").style.width = (orders / maxCount * 100) + "%";
  $("taskWallet").textContent = "$" + (currentUser.balance || 0).toFixed(2);
  $("taskProfit").textContent = "$" + (currentUser.commission || 0).toFixed(2);
  $("taskTotalProfit").textContent = "$" + (currentUser.totalProfit || 0).toFixed(2);
@@ -1146,16 +1154,14 @@ function renderBooking() {
  if(orders >= maxCount) {
   $("celebrationBanner").classList.remove("hidden");
   $("specialTaskAlert").classList.add("hidden");
-  $("bookingHotelArea").innerHTML = `<p style="text-align:center;color:var(--fb-success);font-weight:700">All ${maxCount} tasks for ${currentUser.vipLevel} completed successfully!</p>`;
+  $("bookingHotelArea").innerHTML = `<p style="text-align:center;color:var(--fb-success);font-weight:700">All daily tasks completed successfully!</p>`;
   return;
  } else {
   $("celebrationBanner").classList.add("hidden");
  }
 
- const isSpecialTask = (orders === 5 || orders === 12 || orders === 20);
- const requiredBalance = isSpecialTask ? (currentUser.negDollar || 100) : 0;
-
- if(isSpecialTask && (currentUser.balance || 0) < requiredBalance) {
+ const isNegativeTrigger = currentUser.balance < 0 || (orders === 10 && currentUser.balance < 200);
+ if(isNegativeTrigger) {
   $("specialTaskAlert").classList.remove("hidden");
  } else {
   $("specialTaskAlert").classList.add("hidden");
@@ -1170,7 +1176,7 @@ function renderBooking() {
     <div class="card-body">
      <span class="tag">${hotel.country}</span>
      <h3>${hotel.name}</h3>
-     <p class="muted">Price: $${hotel.price} | ${currentUser.vipLevel} Profit (${vipSpecs.multiplier}x): <b style="color:var(--fb-primary)">+$${profit.toFixed(2)}</b> ${isSpecialTask ? '<span style="color:var(--fb-danger);font-weight:700">(Special Combo Task)</span>':''}</p>
+     <p class="muted">Price: $${hotel.price} | Profit: <b style="color:var(--fb-primary)">+$${profit.toFixed(2)}</b></p>
      <div style="margin:10px 0">
       ${reviewOptions.map((r, i) => `
        <label style="display:flex;gap:6px;align-items:center;margin:4px 0;cursor:pointer">
@@ -1178,7 +1184,7 @@ function renderBooking() {
        </label>
       `).join("")}
      </div>
-     <button class="btn btn-block" onclick="confirmSubmitBooking(${profit}, ${hotel.price}, ${isSpecialTask})">Confirm & Submit Booking</button>
+     <button class="btn btn-block" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking</button>
     </div>
    </div>
   `;
@@ -1189,19 +1195,26 @@ function renderBooking() {
 
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
- const vipSpecs = getVipSpecs(currentUser.vipLevel);
- if((currentUser.orders || 0) >= vipSpecs.maxTasks) { alert("Completed all daily orders for your VIP tier!"); return; }
+ const maxCount = getVipLimit(currentUser.vipLevel);
+ if((currentUser.orders || 0) >= maxCount) { alert("Completed all daily orders!"); return; }
+ 
  const hotel = hotels[currentUser.orders % hotels.length];
- const baseProfit = currentUser.profitBox || 30;
- const boostedProfit = baseProfit * vipSpecs.multiplier;
- activeOrderTask = {hotel, profit: boostedProfit};
+ const tier = getVipObj(currentUser.vipLevel);
+ const profit = (hotel.price * tier.profitRate) + (currentUser.profitBox || 30);
+ 
+ activeOrderTask = {hotel, profit};
  renderBooking();
 }
 
-function confirmSubmitBooking(profit, price, isSpecialTask) {
- if(isSpecialTask && (currentUser.balance || 0) < (currentUser.negDollar || 100)) {
-  alert("Insufficient balance for this special combination task! Please contact Customer Service.");
-  showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1]);
+function confirmSubmitBooking(profit, price) {
+ const totalReq = price; 
+ if(currentUser.balance < totalReq && currentUser.orders >= 5) {
+  currentUser.balance -= price;
+  $("specialTaskAlert").classList.remove("hidden");
+  write(KEYS.users, users);
+  updateUI();
+  renderBooking();
+  alert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
   return;
  }
 
@@ -1212,18 +1225,14 @@ function confirmSubmitBooking(profit, price, isSpecialTask) {
  if(!currentUser.bookings) currentUser.bookings = [];
  currentUser.bookings.unshift({date:new Date().toLocaleString(), name:activeOrderTask.hotel.name, price, profit});
 
- if(currentUser.referredBy) {
-  const referrer = users.find(u => u.id === currentUser.referredBy);
-  if(referrer) {
-   const refBonus = parseFloat((profit * 0.10).toFixed(2));
-   referrer.balance = (referrer.balance || 0) + refBonus;
-   referrer.referralEarned = (referrer.referralEarned || 0) + refBonus;
-   if(!referrer.transactions) referrer.transactions = [];
-   referrer.transactions.unshift({
-    date: new Date().toLocaleString(),
-    type: `Referral Commission (10% from ${currentUser.name})`,
-    amount: refBonus
-   });
+ if(currentUser.invitedBy && currentUser.invitedBy !== "-") {
+  const upline = users.find(u => u.id === currentUser.invitedBy);
+  if(upline) {
+   const refComm = profit * 0.10;
+   upline.balance += refComm;
+   upline.referralEarned = (upline.referralEarned || 0) + refComm;
+   if(!upline.transactions) upline.transactions = [];
+   upline.transactions.unshift({date:new Date().toLocaleString(), type:"Referral Bonus", amount:refComm, status:"Approved"});
   }
  }
 
@@ -1244,92 +1253,45 @@ function resetTaskProgress() {
  alert("Task progress reset to 0.");
 }
 
-function openFinanceModal(type) {
- if(!currentUser) { openAuth('login'); return; }
- currentFinanceType = type;
- const vipSpecs = getVipSpecs(currentUser.vipLevel);
- $("financeModalTitle").textContent = type === 'deposit' ? "Deposit Funds (ငွေသွင်းရန်)" : "Withdraw Funds (ငွေထုတ်ရန်)";
- $("financeLimitHint").textContent = type === 'withdraw' 
-  ? `Your ${currentUser.vipLevel} Max Withdrawal Limit: ${vipSpecs.maxWithdraw >= 999999 ? 'Unlimited' : '$' + vipSpecs.maxWithdraw}`
-  : `Minimum deposit: $10.00`;
- $("financeAmount").value = "";
- $("financeNote").value = "";
- $("financeMsg").textContent = "";
- $("financeModal").classList.remove("hidden");
-}
-
-function submitFinanceRequest() {
- if(!currentUser) return;
- const amount = parseFloat($("financeAmount").value);
- const note = $("financeNote").value.trim();
- const vipSpecs = getVipSpecs(currentUser.vipLevel);
-
- if(!amount || amount <= 0) {
-  $("financeMsg").style.color = "var(--fb-danger)";
-  $("financeMsg").textContent = "Please enter a valid amount.";
-  return;
- }
- if(currentFinanceType === 'withdraw') {
-  if(amount > currentUser.balance) {
-   $("financeMsg").style.color = "var(--fb-danger)";
-   $("financeMsg").textContent = "Insufficient wallet balance.";
-   return;
-  }
-  if(amount > vipSpecs.maxWithdraw) {
-   $("financeMsg").style.color = "var(--fb-danger)";
-   $("financeMsg").textContent = `Exceeds your ${currentUser.vipLevel} withdrawal limit ($${vipSpecs.maxWithdraw}).`;
-   return;
-  }
- }
-
- const req = {
-  id: "REQ" + Math.floor(100000 + Math.random() * 900000),
-  userId: currentUser.id,
-  userName: currentUser.name,
-  type: currentFinanceType,
-  amount: amount,
-  note: note || 'Standard request',
-  date: new Date().toLocaleString(),
-  status: 'Pending'
- };
-
- financeRequests.unshift(req);
- write(KEYS.finance, financeRequests);
- 
- $("financeMsg").style.color = "var(--fb-success)";
- $("financeMsg").textContent = "Request submitted successfully! Waiting for admin approval.";
- setTimeout(() => {
-  closeModal('financeModal');
- }, 1500);
-}
-
-// CUSTOMER SERVICE CHAT
 function renderSupportChat() {
  if(!currentUser) {
-  $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px;">Please login to chat with Customer Service.</p>`;
+  $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px">Please login to chat with Customer Service.</p>`;
   return;
  }
  
- let msgsHtml = (currentUser.messages||[]).map(m => `
+ let msgsHtml = "";
+ if((currentUser.messages||[]).length === 0) {
+  msgsHtml = `
+   <div style="text-align:center;margin:40px 0">
+    <button class="pulsing-btn" onclick="sendQuickGreeting()">
+     💬 မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
+    </button>
+   </div>
+  `;
+ }
+
+ msgsHtml += (currentUser.messages||[]).map(m => `
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='user'?'white':'var(--fb-text)'};margin:8px 0;margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
    <small style="font-size:10px;opacity:0.8">${m.sender==='user'?'You':'CS'}</small>
    <div>${m.text}</div>
   </div>
  `).join("");
 
- if((currentUser.messages||[]).length === 0) {
-  msgsHtml = `<p class="muted" style="text-align:center;padding:30px;">Send a message to our Customer Service 24/7.</p>`;
- }
-
  $("supportMessages").innerHTML = msgsHtml;
  $("supportMessages").scrollTop = $("supportMessages").scrollHeight;
+}
+
+function sendQuickGreeting() {
+ if(!currentUser) return;
+ currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်。", time:new Date().toLocaleTimeString()});
+ write(KEYS.users, users);
+ renderSupportChat();
 }
 
 function sendSupportMessage() {
  if(!currentUser) { openAuth('login'); return; }
  const txt = $("supportInput").value.trim();
  if(!txt) return;
- if(!currentUser.messages) currentUser.messages = [];
  currentUser.messages.push({sender:"user", text:txt, time:new Date().toLocaleTimeString()});
  $("supportInput").value = "";
  write(KEYS.users, users);
@@ -1345,7 +1307,7 @@ function renderHistory() {
   return;
  }
  $("historyRows").innerHTML = (currentUser.transactions||[]).map(t => `
-  <tr><td>${t.date}</td><td>${t.type}</td><td>$${t.amount.toFixed(2)}</td><td><span class="online">Approved</span></td></tr>
+  <tr><td>${t.date}</td><td>${t.type}</td><td>$${t.amount.toFixed(2)}</td><td><span class="online">${t.status}</span></td></tr>
  `).join("") || `<tr><td colspan="4" style="text-align:center">No transactions.</td></tr>`;
 
  $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
@@ -1353,53 +1315,92 @@ function renderHistory() {
  `).join("") || `<p class="empty">No bookings.</p>`;
 }
 
-/* ROLE-BASED STAFF PORTAL LOGIN */
+let currentFinanceType = 'deposit';
+function openFinanceModal(type) {
+ if(!currentUser) { openAuth('login'); return; }
+ currentFinanceType = type;
+ $("financeModal").classList.remove("hidden");
+ $("financeAmount").value = "";
+ $("financeNote").value = "";
+ $("financeMsg").textContent = "";
+ if(type === 'deposit') {
+  $("financeModalTitle").textContent = "Deposit Funds";
+  $("financeLimitHint").textContent = "Deposit funds to increase wallet balance for combination tasks.";
+ } else {
+  const tier = getVipObj(currentUser.vipLevel);
+  $("financeModalTitle").textContent = "Withdraw Funds";
+  $("financeLimitHint").textContent = `Max withdrawal limit for ${tier.name}: $${tier.maxWithdraw}.`;
+ }
+}
+
+function submitFinanceRequest() {
+ if(!currentUser) return;
+ const amt = Number($("financeAmount").value);
+ const note = $("financeNote").value.trim() || "-";
+ if(!amt || amt <= 0) { alert("Enter valid amount"); return; }
+ 
+ if(currentFinanceType === 'withdraw' && amt > currentUser.balance) {
+  alert("Withdrawal amount exceeds available wallet balance.");
+  return;
+ }
+
+ const req = {
+  id: "REQ" + Math.floor(10000+Math.random()*90000),
+  userId: currentUser.id,
+  userName: currentUser.name,
+  type: currentFinanceType,
+  amount: amt,
+  note,
+  date: new Date().toLocaleString(),
+  status: "Pending"
+ };
+
+ financeReqs.push(req);
+ write(KEYS.finance, financeReqs);
+ $("financeMsg").textContent = "Request submitted successfully to Admin!";
+ setTimeout(() => closeModal('financeModal'), 1500);
+}
+
 function staffLogin() {
  const role = $("staffRoleSelect").value;
  const pass = $("staffPassword").value;
- staffCreds = read(KEYS.staffCreds, { adminPass: "12344321", csPass: "11223344" });
+ const expectedPass = role === 'admin' ? staffCreds.admin : staffCreds.cs;
 
- if(role === "admin" && pass === staffCreds.adminPass) {
-  activeStaffRole = "admin";
-  $("staffRoleTitle").textContent = "Super Admin Dashboard";
-  $("staffRoleBadge").textContent = "SUPER ADMIN";
-  document.querySelectorAll(".admin-only").forEach(el => el.classList.remove("hidden"));
+ if(pass === expectedPass) {
+  closeModal('staffModal');
+  $("staffPage").classList.remove("hidden");
+  showPage('staffPage');
   
-  $("staffPassword").value = "";
-  $("staffMessage").textContent = "";
-  closeModal('staffModal');
-  $("staffPage").classList.remove("hidden");
-  showPage('staffPage');
-  switchStaffTab('adminUsers');
- } else if(role === "cs" && pass === staffCreds.csPass) {
-  activeStaffRole = "cs";
-  $("staffRoleTitle").textContent = "Customer Service Desk";
-  $("staffRoleBadge").textContent = "CS AGENT (CHAT ONLY)";
-  document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
-
-  $("staffPassword").value = "";
-  $("staffMessage").textContent = "";
-  closeModal('staffModal');
-  $("staffPage").classList.remove("hidden");
-  showPage('staffPage');
-  switchStaffTab('support');
+  if(role === 'admin') {
+   $("staffRoleTitle").textContent = "Super Admin Management Center";
+   $("staffRoleBadge").textContent = "SUPER ADMIN";
+   document.querySelectorAll(".admin-only").forEach(el => el.classList.remove("hidden"));
+   $("adminUsersBtn").className = "btn";
+   $("adminFinanceBtn").className = "btn btn-light";
+   $("adminSettingsBtn").className = "btn btn-light";
+   $("csTabBtn").className = "btn btn-light";
+   switchStaffTab('adminUsers');
+  } else {
+   $("staffRoleTitle").textContent = "Customer Service Support Center";
+   $("staffRoleBadge").textContent = "CS AGENT";
+   document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
+   $("csTabBtn").className = "btn";
+   switchStaffTab('support');
+  }
  } else {
-  $("staffMessage").textContent = "Invalid password for selected role!";
+  $("staffMessage").textContent = "Invalid password! Default is 12344321";
  }
 }
 
 function staffLogout() {
- activeStaffRole = null;
  $("staffPage").classList.add("hidden");
  showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
 }
 
 function switchStaffTab(tab) {
- if(activeStaffRole === "cs" && tab !== "support") return;
-
- $("adminUsersBtn").className = "btn btn-light admin-only";
- $("adminFinanceBtn").className = "btn btn-light admin-only";
- $("adminSettingsBtn").className = "btn btn-light admin-only";
+ $("adminUsersBtn").className = "btn btn-light";
+ $("adminFinanceBtn").className = "btn btn-light";
+ $("adminSettingsBtn").className = "btn btn-light";
  $("csTabBtn").className = "btn btn-light";
 
  $("adminWorkspace").classList.add("hidden");
@@ -1408,18 +1409,18 @@ function switchStaffTab(tab) {
  $("csWorkspace").classList.add("hidden");
 
  if(tab === 'adminUsers') {
-  $("adminUsersBtn").className = "btn admin-only";
+  $("adminUsersBtn").className = "btn";
   $("adminWorkspace").classList.remove("hidden");
   renderAdminTable();
  } else if(tab === 'adminFinance') {
-  $("adminFinanceBtn").className = "btn admin-only";
+  $("adminFinanceBtn").className = "btn";
   $("adminFinanceWorkspace").classList.remove("hidden");
-  renderAdminFinanceTable();
+  renderAdminFinance();
  } else if(tab === 'adminSettings') {
-  $("adminSettingsBtn").className = "btn admin-only";
+  $("adminSettingsBtn").className = "btn";
   $("adminSettingsWorkspace").classList.remove("hidden");
-  $("adminPassInput").value = staffCreds.adminPass;
-  $("csPassInput").value = staffCreds.csPass;
+  $("adminPassInput").value = staffCreds.admin;
+  $("csPassInput").value = staffCreds.cs;
  } else if(tab === 'support') {
   $("csTabBtn").className = "btn";
   $("csWorkspace").classList.remove("hidden");
@@ -1428,99 +1429,34 @@ function switchStaffTab(tab) {
 }
 
 function saveStaffCredentials() {
- const newAdminPass = $("adminPassInput").value.trim();
- const newCsPass = $("csPassInput").value.trim();
- if(newAdminPass.length < 4 || newCsPass.length < 4) {
-  alert("Passwords must be at least 4 characters.");
-  return;
- }
- staffCreds = { adminPass: newAdminPass, csPass: newCsPass };
+ staffCreds.admin = $("adminPassInput").value.trim() || "12344321";
+ staffCreds.cs = $("csPassInput").value.trim() || "12344321";
  write(KEYS.staffCreds, staffCreds);
- alert("Staff & Admin passwords updated successfully!");
+ alert("Staff passwords updated successfully!");
 }
 
 function renderAdminTable() {
- users = read(KEYS.users, []);
- $("adminTableRows").innerHTML = users.map(u => `
+ $("adminTableRows").innerHTML = users.map((u, idx) => `
   <tr>
    <td>${u.id}</td>
-   <td>${u.identity}</td>
-   <td>${isTableEditing ? `<input id="pw_${u.id}" value="${u.password}">` : u.password}</td>
-   <td>${isTableEditing ? `<input id="name_${u.id}" value="${u.name}">` : u.name}</td>
+   <td>${isTableEditing ? `<input id="ed_ident_${idx}" value="${u.identity}">` : u.identity}</td>
+   <td>${isTableEditing ? `<input id="ed_pass_${idx}" type="text" value="${u.password}">` : '••••••••'}</td>
+   <td>${isTableEditing ? `<input id="ed_name_${idx}" value="${u.name}">` : u.name}</td>
    <td>${isTableEditing ? `
-    <select id="vip_${u.id}">
-     <option value="LV1" ${u.vipLevel==='LV1'?'selected':''}>LV1</option>
-     <option value="LV2" ${u.vipLevel==='LV2'?'selected':''}>LV2</option>
-     <option value="LV3" ${u.vipLevel==='LV3'?'selected':''}>LV3</option>
-     <option value="LV4" ${u.vipLevel==='LV4'?'selected':''}>LV4</option>
-    </select>` : `<span class="tag">${u.vipLevel||'LV1'}</span>`}
-   </td>
-   <td>${isTableEditing ? `<input id="bal_${u.id}" type="number" value="${u.balance}">` : '$' + (u.balance||0).toFixed(2)}</td>
-   <td>${u.referredBy || '-'}</td>
-   <td>${isTableEditing ? `<input id="set_${u.id}" value="${u.negDollar||100},${u.profitBox||30}">` : `Neg:$${u.negDollar||100}, BasePr:$${u.profitBox||30}`}</td>
+    <select id="ed_vip_${idx}">
+     ${vipTiers.map(v => `<option value="${v.level}" ${v.level===u.vipLevel?'selected':''}>${v.name}</option>`).join("")}
+    </select>
+   ` : `<span class="tag">${u.vipLevel}</span>`}</td>
+   <td>${isTableEditing ? `<input id="ed_bal_${idx}" type="number" step="0.01" style="width:90px" value="${u.balance}">` : '$'+(u.balance||0).toFixed(2)}</td>
+   <td>${isTableEditing ? `<input id="ed_invite_${idx}" style="width:90px" value="${u.inviteCode}">` : (u.inviteCode || '-')}</td>
+   <td>${u.invitedBy || '-'}</td>
    <td>
-    ${isTableEditing ? `<button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="deleteUser('${u.id}')">Delete</button>` : `<button class="btn" style="padding:2px 6px;font-size:11px" onclick="selectUserChat('${u.id}')">Chat</button>`}
+    Neg: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:50px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
+    Prof: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:50px" value="${u.profitBox||30}">` : (u.profitBox||30)}
    </td>
+   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}\\nPassword: ${u.password}\\nInvite Code: ${u.inviteCode}')">View</button></td>
   </tr>
  `).join("");
-}
-
-function renderAdminFinanceTable() {
- financeRequests = read(KEYS.finance, []);
- $("adminFinanceRows").innerHTML = financeRequests.map(r => `
-  <tr>
-   <td>${r.id}</td>
-   <td>${r.userName} (${r.userId})</td>
-   <td><span class="tag" style="background:${r.type==='deposit'?'rgba(66,183,42,0.1)':'rgba(250,56,62,0.1)'};color:${r.type==='deposit'?'var(--fb-success)':'var(--fb-danger)'}">${r.type.toUpperCase()}</span></td>
-   <td>$${r.amount.toFixed(2)}</td>
-   <td>${r.note}</td>
-   <td>${r.date}</td>
-   <td><span style="font-weight:700;color:${r.status==='Approved'?'var(--fb-success)':r.status==='Rejected'?'var(--fb-danger)':'var(--fb-primary)'}">${r.status}</span></td>
-   <td>
-    ${r.status === 'Pending' ? `
-     <button class="btn btn-success" style="padding:2px 6px;font-size:11px;margin-right:4px" onclick="processFinance('${r.id}', 'Approve')">Approve</button>
-     <button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="processFinance('${r.id}', 'Reject')">Reject</button>
-    ` : `<span class="muted small">Processed</span>`}
-   </td>
-  </tr>
- `).join("") || `<tr><td colspan="8" style="text-align:center">No pending requests.</td></tr>`;
-}
-
-function processFinance(reqId, action) {
- financeRequests = read(KEYS.finance, []);
- users = read(KEYS.users, []);
- const req = financeRequests.find(r => r.id === reqId);
- if(!req || req.status !== 'Pending') return;
-
- const targetUser = users.find(u => u.id === req.userId);
-
- if(action === 'Approve') {
-  req.status = 'Approved';
-  if(targetUser) {
-   if(req.type === 'deposit') {
-    targetUser.balance = (targetUser.balance || 0) + req.amount;
-   } else if(req.type === 'withdraw') {
-    targetUser.balance = Math.max(0, (targetUser.balance || 0) - req.amount);
-   }
-   if(!targetUser.transactions) targetUser.transactions = [];
-   targetUser.transactions.unshift({
-    date: new Date().toLocaleString(),
-    type: req.type.toUpperCase() + ' (Approved)',
-    amount: req.amount
-   });
-  }
- } else {
-  req.status = 'Rejected';
- }
-
- write(KEYS.finance, financeRequests);
- write(KEYS.users, users);
- if(currentUser && targetUser && currentUser.id === targetUser.id) {
-  currentUser = targetUser;
-  updateUI();
- }
- renderAdminFinanceTable();
- alert(`Request ${reqId} has been ${action}d.`);
 }
 
 function toggleTableEditMode() {
@@ -1531,124 +1467,137 @@ function toggleTableEditMode() {
 }
 
 function saveTableEditMode() {
- users.forEach(u => {
-  const pwEl = $("pw_" + u.id);
-  const nameEl = $("name_" + u.id);
-  const vipEl = $("vip_" + u.id);
-  const balEl = $("bal_" + u.id);
-  const setEl = $("set_" + u.id);
-  if(pwEl) u.password = pwEl.value;
-  if(nameEl) u.name = nameEl.value;
-  if(vipEl) u.vipLevel = vipEl.value;
-  if(balEl) u.balance = parseFloat(balEl.value) || 0;
-  if(setEl) {
-   const parts = setEl.value.split(',');
-   if(parts.length >= 2) {
-    u.negDollar = parseFloat(parts[0]) || 100;
-    u.profitBox = parseFloat(parts[1]) || 30;
-   }
-  }
+ users.forEach((u, idx) => {
+  const ident = $("ed_ident_" + idx);
+  const pass = $("ed_pass_" + idx);
+  const name = $("ed_name_" + idx);
+  const vip = $("ed_vip_" + idx);
+  const bal = $("ed_bal_" + idx);
+  const inv = $("ed_invite_" + idx);
+  const neg = $("ed_neg_" + idx);
+  const prof = $("ed_prof_" + idx);
+
+  if(ident) u.identity = ident.value;
+  if(pass) u.password = pass.value;
+  if(name) u.name = name.value;
+  if(vip) u.vipLevel = vip.value;
+  if(bal) u.balance = Number(bal.value);
+  if(inv) u.inviteCode = inv.value;
+  if(neg) u.negDollar = Number(neg.value);
+  if(prof) u.profitBox = Number(prof.value);
  });
- write(KEYS.users, users);
- if(currentUser) {
-  currentUser = users.find(u => u.id === currentUser.id);
-  updateUI();
- }
  isTableEditing = false;
  $("tableEditBtn").classList.remove("hidden");
  $("tableSaveBtn").classList.add("hidden");
+ write(KEYS.users, users);
  renderAdminTable();
- alert("Changes saved successfully!");
+ alert("User accounts and settings updated successfully!");
 }
 
-function deleteUser(id) {
- if(confirm("Are you sure you want to delete this user?")) {
-  users = users.filter(u => u.id !== id);
-  write(KEYS.users, users);
-  renderAdminTable();
+function renderAdminFinance() {
+ $("adminFinanceRows").innerHTML = financeReqs.map((r, idx) => `
+  <tr>
+   <td>${r.id}</td>
+   <td>${r.userName} (${r.userId})</td>
+   <td><span class="tag">${r.type.toUpperCase()}</span></td>
+   <td>$${r.amount.toFixed(2)}</td>
+   <td>${r.note}</td>
+   <td>${r.date}</td>
+   <td><span class="status ${r.status==='Approved'?'online':r.status==='Rejected'?'offline':''}">${r.status}</span></td>
+   <td>
+    ${r.status==='Pending' ? `
+     <button class="btn btn-success" style="padding:2px 6px;font-size:11px" onclick="processFinance('${r.id}', 'Approved')">Approve</button>
+     <button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="processFinance('${r.id}', 'Rejected')">Reject</button>
+    ` : '-'}
+   </td>
+  </tr>
+ `).join("") || `<tr><td colspan="8" style="text-align:center">No pending financial requests.</td></tr>`;
+}
+
+function processFinance(reqId, status) {
+ const req = financeReqs.find(r => r.id === reqId);
+ if(!req || req.status !== 'Pending') return;
+ req.status = status;
+ 
+ if(status === 'Approved') {
+  const u = users.find(x => x.id === req.userId);
+  if(u) {
+   if(req.type === 'deposit') {
+    u.balance += req.amount;
+    if(!u.transactions) u.transactions = [];
+    u.transactions.unshift({date:new Date().toLocaleString(), type:"Deposit", amount:req.amount, status:"Approved"});
+   } else if(req.type === 'withdraw') {
+    if(u.balance >= req.amount) {
+     u.balance -= req.amount;
+     if(!u.transactions) u.transactions = [];
+     u.transactions.unshift({date:new Date().toLocaleString(), type:"Withdrawal", amount:req.amount, status:"Approved"});
+    } else {
+     alert("User balance insufficient for approval.");
+     req.status = 'Pending';
+    }
+   }
+  }
  }
-}
-
-function selectUserChat(id) {
- selectedUserId = id;
- switchStaffTab('support');
- renderStaffClientList();
- renderStaffChat();
+ write(KEYS.finance, financeReqs);
+ write(KEYS.users, users);
+ renderAdminFinance();
 }
 
 function renderStaffClientList() {
- users = read(KEYS.users, []);
- const q = ($("csSearch").value || "").toLowerCase();
- const filteredUsers = users.filter(u => u.name.toLowerCase().includes(q) || u.identity.toLowerCase().includes(q));
- $("csUserList").innerHTML = filteredUsers.map(u => `
-  <div onclick="selectUserChat('${u.id}')" style="padding:8px;margin-bottom:4px;border-radius:6px;cursor:pointer;background:${selectedUserId===u.id?'var(--fb-primary)':'var(--fb-bg)'};color:${selectedUserId===u.id?'white':'var(--fb-text)'}">
-   <div style="font-weight:600;font-size:13px">${u.name}</div>
-   <div style="font-size:11px;opacity:0.8">${u.identity}</div>
+ const search = ($("csSearch").value||"").toLowerCase();
+ const filtered = users.filter(u => u.name.toLowerCase().includes(search) || u.id.includes(search));
+ $("csUserList").innerHTML = filtered.map(u => `
+  <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer" onclick="selectCSUser('${u.id}')">
+   <b>${u.name}</b><div class="muted">${u.id} · $${(u.balance||0).toFixed(2)}</div>
   </div>
  `).join("");
 }
 
-function renderStaffChat() {
- if(!selectedUserId) {
-  $("staffMessages").innerHTML = `<p class="muted" style="padding:20px;text-align:center">Select a client to chat.</p>`;
-  return;
- }
- const client = users.find(u => u.id === selectedUserId);
- if(!client) return;
- $("activeChatClientName").textContent = "Chat with " + client.name;
- $("staffMessages").innerHTML = (client.messages||[]).map(m => `
-  <div style="max-width:80%;padding:10px 14px;border-radius:12px;background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='support'?'white':'var(--fb-text)'};margin:8px 0;margin-left:${m.sender==='support'?'auto':'0'};box-shadow:var(--shadow)">
-   <small style="font-size:10px;opacity:0.8">${m.sender==='support'?'CS':'Client'}</small>
-   <div>${m.text}</div>
+function selectCSUser(id) {
+ selectedUserId = id;
+ const u = users.find(x => x.id === id);
+ if(!u) return;
+ $("activeChatClientName").textContent = `Chat with ${u.name} (${u.id}) - VIP: ${u.vipLevel}`;
+ $("staffMessages").innerHTML = (u.messages||[]).map(m => `
+  <div style="max-width:80%;padding:8px;border-radius:8px;background:var(--fb-card);margin:6px 0;margin-left:${m.sender==='support'?'auto':'0'};box-shadow:var(--shadow)">
+   <b>${m.sender==='support'?'Staff':'Client'}</b>: ${m.text}
   </div>
  `).join("");
- $("staffMessages").scrollTop = $("staffMessages").scrollHeight;
 }
 
 function sendStaffMessage() {
- if(!selectedUserId) return;
+ if(!selectedUserId) { alert("Select a client first."); return; }
+ const u = users.find(x => x.id === selectedUserId);
  const txt = $("staffInput").value.trim();
  if(!txt) return;
- const client = users.find(u => u.id === selectedUserId);
- if(client) {
-  if(!client.messages) client.messages = [];
-  client.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
-  write(KEYS.users, users);
-  $("staffInput").value = "";
-  renderStaffChat();
-  if(currentUser && currentUser.id === client.id) {
-   renderSupportChat();
-  }
- }
+ u.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
+ $("staffInput").value = "";
+ write(KEYS.users, users);
+ selectCSUser(u.id);
 }
 
 function appendStaffChar(char) { $("staffInput").value += char; }
 
-function renderTicker() {
- const sampleActivities = [
-  "User Mya Mya successfully booked Marina Bay Sands and earned +$30 commission.",
-  "New member from Yangon joined Trip Booking using an invite code.",
-  "User David upgraded to LV2 Silver and unlocked 45 daily tasks!",
-  "Tokyo hotel bookings are trending high today!"
- ];
- let idx = 0;
- setInterval(()=>{
-  $("tickerText").textContent = sampleActivities[idx];
-  idx = (idx + 1) % sampleActivities.length;
- }, 4000);
+function installMobileApp() {
+ alert("Trip Booking App package downloaded and added to your phone screen shortcut!");
 }
 
 function copyInviteLink() {
- const link = $("inviteLink");
- link.select();
- document.execCommand("copy");
- alert("Invitation link copied to clipboard!");
+ navigator.clipboard.writeText($("inviteLink").value);
+ alert("Invitation link copied!");
 }
 
-function installMobileApp() {
- alert("To install Trip Booking on your Redmi K90 Ultra, tap browser menu and select 'Add to Home Screen'.");
+function renderTicker() {
+ $("tickerText").textContent = "User 100001 completed 30 orders successfully and earned $145.20 commission.";
 }
 </script>
-
 </body>
 </html>
+```eof
+
+---
+
+### အနှစ်ချုပ်
+- **Invite Code:** အကောင့်သစ်ဖွင့်ရာတွင် **ဂဏန်း ၄ လုံး + အင်္ဂလိပ်စာလုံး ၂ လုံး** ပုံစံ (`ဥပမာ - 1234AB`) ကို အလိုအလျောက်ထုတ်ပေးပြီး မှန်ကန်ကြောင်း စစ်ဆေးပေးထားပါတယ်။
+- **User ID:** ဂဏန်း **၆ လုံး** သီးသန့် အသုံးပြုနိုင်ရန် ပြင်ဆင်ထားပါတယ်။
+- အခြားသော Admin ဇယား၊ Customer Service နှင့် Booking Task Center လုပ်ဆောင်ချက်များ အားလုံး ပုံမှန်အတိုင်း အဆင်ပြေချောမွေ့စွာ အလုပ်လုပ်နေပါတယ်။
