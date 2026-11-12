@@ -8,26 +8,26 @@
 
 <style>
 :root{
- --fb-bg:#f0f2f5;
+ --fb-bg:#eaf4f9;
  --fb-card:#ffffff;
- --fb-text:#050505;
- --fb-muted:#65676b;
- --fb-border:#dadde1;
- --fb-primary:#1877f2;
- --fb-primary-hover:#166fe5;
- --fb-success:#42b72a;
- --fb-danger:#fa383e;
- --shadow:0 1px 2px rgba(0,0,0,0.1);
+ --fb-text:#0a2540;
+ --fb-muted:#506784;
+ --fb-border:#c7dff0;
+ --fb-primary:#0077b6;
+ --fb-primary-hover:#023e8a;
+ --fb-success:#2ec4b6;
+ --fb-danger:#e71d36;
+ --shadow:0 4px 12px rgba(0,119,182,0.08);
 }
 body.dark{
- --fb-bg:#18191a;
- --fb-card:#242526;
- --fb-text:#e4e6eb;
- --fb-muted:#b0b3b8;
- --fb-border:#393a3b;
- --fb-primary:#2d88ff;
- --fb-primary-hover:#1a77f2;
- --shadow:0 1px 2px rgba(0,0,0,0.5);
+ --fb-bg:#0b131e;
+ --fb-card:#162231;
+ --fb-text:#e2f1fd;
+ --fb-muted:#8faac9;
+ --fb-border:#243b55;
+ --fb-primary:#00b4d8;
+ --fb-primary-hover:#0077b6;
+ --shadow:0 4px 12px rgba(0,0,0,0.4);
 }
 
 *{box-sizing:border-box}
@@ -55,7 +55,7 @@ input,select,textarea{
  border-radius:6px;background:var(--fb-card);color:var(--fb-text);
  outline:none;
 }
-input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(24,119,242,0.2)}
+input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,119,182,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
 header{
@@ -65,7 +65,7 @@ header{
  gap:12px;box-shadow:var(--shadow);
 }
 .logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary);user-select:none}
-.logo span{color:#e41e3f}
+.logo span{color:#00b4d8}
 .header-actions{display:flex;gap:8px;align-items:center}
 .header-actions select{width:auto;background:var(--fb-bg);color:var(--fb-text);border-color:var(--fb-border)}
 
@@ -73,7 +73,7 @@ header{
 .page{display:none}
 .page.active{display:block}
 
-/* Startup Intro Animation Screen with 2nd Image Background */
+/* Startup Intro Screen with Tropical Island Image Background */
 @keyframes rightToCenter {
  0% { transform: translateX(100vw); opacity: 0; }
  100% { transform: translateX(0); opacity: 1; }
@@ -87,7 +87,7 @@ header{
 .intro-screen {
  position: fixed;
  top: 0; left: 0; width: 100vw; height: 100vh;
- background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600") center/cover;
+ background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600") center/cover;
  z-index: 9999;
  display: flex;
  align-items: center;
@@ -100,15 +100,15 @@ header{
 .intro-content h1 {
  font-size: clamp(28px, 5vw, 44px);
  color: #ffffff;
- text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+ text-shadow: 0 2px 8px rgba(0,0,0,0.7);
  margin: 0 0 14px;
  animation: rightToCenter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .intro-content p {
  font-size: clamp(16px, 2.2vw, 22px);
- color: #f0f2f5;
- text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+ color: #e2f1fd;
+ text-shadow: 0 1px 4px rgba(0,0,0,0.7);
  font-weight: 600;
  max-width: 650px;
  margin: 0 auto;
@@ -119,7 +119,7 @@ header{
 .hero{
  min-height:260px;border-radius:12px;overflow:hidden;
  background:linear-gradient(90deg,#000000aa,#00000033),
- url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600") center/cover;
  display:flex;align-items:center;padding:30px;color:white;
 }
 .hero h1{
@@ -129,6 +129,7 @@ header{
 }
 .hero p{
  max-width:480px;line-height:1.5;font-size:14px;
+ color: #e2f1fd;
 }
 
 .section-title{
@@ -157,7 +158,7 @@ header{
 .card-body h3{margin:6px 0;font-size:15px}
 .price{font-size:18px;font-weight:700;color:var(--fb-primary)}
 .tag{
- display:inline-block;background:rgba(24,119,242,0.1);color:var(--fb-primary);
+ display:inline-block;background:rgba(0,119,182,0.1);color:var(--fb-primary);
  padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;
 }
 
@@ -206,15 +207,15 @@ header{
 
 /* Neon Pipe Button */
 @keyframes neonPulse {
- 0% { box-shadow: 0 0 5px rgba(24,119,242,0.4), 0 0 10px rgba(24,119,242,0.3), inset 0 0 5px rgba(24,119,242,0.2); }
- 50% { box-shadow: 0 0 15px rgba(24,119,242,0.9), 0 0 25px rgba(24,119,242,0.6), inset 0 0 10px rgba(24,119,242,0.5); }
- 100% { box-shadow: 0 0 5px rgba(24,119,242,0.4), 0 0 10px rgba(24,119,242,0.3), inset 0 0 5px rgba(24,119,242,0.2); }
+ 0% { box-shadow: 0 0 5px rgba(0,180,216,0.4), 0 0 10px rgba(0,180,216,0.3), inset 0 0 5px rgba(0,180,216,0.2); }
+ 50% { box-shadow: 0 0 15px rgba(0,180,216,0.9), 0 0 25px rgba(0,119,182,0.6), inset 0 0 10px rgba(0,180,216,0.5); }
+ 100% { box-shadow: 0 0 5px rgba(0,180,216,0.4), 0 0 10px rgba(0,180,216,0.3), inset 0 0 5px rgba(0,180,216,0.2); }
 }
 
 .neon-pipe-btn {
- background: linear-gradient(135deg, #2d88ff, #1877f2, #1052ab);
+ background: linear-gradient(135deg, #00b4d8, #0077b6, #03045e);
  color: white;
- border: 2px solid #76baff;
+ border: 2px solid #90e0ef;
  border-radius: 30px;
  padding: 12px 24px;
  font-size: 15px;
@@ -240,7 +241,7 @@ header{
 }
 .vip-card.active-vip{
  border:2px solid var(--fb-primary);
- background:rgba(24,119,242,0.05);
+ background:rgba(0,119,182,0.05);
 }
 
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
@@ -249,11 +250,11 @@ header{
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
 footer{
- background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
+ background:#03045e;color:#caf0f8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #0077b6;
 }
 .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
-.footer-grid h4{color:#e4e6eb;margin-bottom:12px;font-size:15px}
-.footer-grid a{display:block;color:#b0b3b8;text-decoration:none;margin-bottom:6px}
+.footer-grid h4{color:#ade8f4;margin-bottom:12px;font-size:15px}
+.footer-grid a{display:block;color:#caf0f8;text-decoration:none;margin-bottom:6px}
 .footer-grid a:hover{color:white;text-decoration:underline}
 .app-btn{
  display:inline-flex;align-items:center;gap:8px;background:var(--fb-primary);color:white;
@@ -273,7 +274,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- Startup Intro Screen with 2nd Image Background -->
+<!-- Startup Intro Screen with Tropical Island Image Background -->
 <div class="intro-screen" id="introScreen">
  <div class="intro-content">
   <h1 id="introTitle">Welcome to Trip Booking</h1>
@@ -305,8 +306,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="hero">
   <div>
    <span class="tag" data-i18n="heroTag">INTERNATIONAL TRAVEL</span>
-   <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-   <p data-i18n="heroDesc">International Hotel Booking Platform</p>
+   <h1 data-i18n="heroTitle">Discover Your Next Stay</h1>
+   <p data-i18n="heroDesc">Explore international hotels around the world and plan your journey with Trip Booking.</p>
    <button class="btn" style="margin-top:12px" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
   </div>
  </div>
@@ -387,24 +388,23 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="stats">
    <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="dailyLimit">Daily Task Limit 📊</span><strong id="orderCircle">0/30</strong></div>
+   <div class="stat-box">
+     <span data-i18n="dailyLimit">Daily Task Limit 📊</span>
+     <strong id="orderCircle">0/30</strong>
+     <button class="neon-pipe-btn" onclick="triggerGetOrder()" style="margin-top:10px;" data-i18n="getOrderBtn">Get order</button>
+   </div>
    <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
-  </div>
-
-  <!-- Get Order Button with Neon Pipe Glowing Border -->
-  <div style="margin: 16px 0;">
-   <button class="neon-pipe-btn" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get order</button>
   </div>
 
   <div style="margin:16px 0;height:8px;background:var(--fb-border);border-radius:4px;overflow:hidden">
    <span id="orderProgress" style="display:block;height:100%;width:0;background:var(--fb-primary);transition:width .3s"></span>
   </div>
 
-  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(66,183,42,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)" data-i18n="taskCompleteMsg">
+  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(46,196,182,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)" data-i18n="taskCompleteMsg">
    🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆
   </div>
 
-  <div id="specialTaskAlert" class="hidden" style="background:rgba(250,56,62,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600" data-i18n="specialTaskMsg">
+  <div id="specialTaskAlert" class="hidden" style="background:rgba(231,29,54,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600" data-i18n="specialTaskMsg">
    ⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.
   </div>
 
@@ -513,22 +513,23 @@ const GLOBAL_HOTELS = [
  {name: "Atlantis The Palm", country: "UAE", stars: 5, price: 420, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600"}
 ];
 
-// Generate expanded 677+ global hotel listings dynamically for full directory experience
+// Generate 677+ international hotel listings dynamically
 function generateHotelsList() {
- const cities = ["Bangkok", "Tokyo", "Singapore", "Paris", "New York", "Dubai", "London", "Taipei", "Sydney", "Rome", "Seoul", "Hong Kong"];
+ const cities = ["Bangkok", "Tokyo", "Singapore", "Paris", "New York", "Dubai", "London", "Taipei", "Sydney", "Rome", "Seoul", "Hong Kong", "Luang Prabang", "Bali", "Zurich"];
  const list = [...GLOBAL_HOTELS];
  const baseImgs = [
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
   "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600",
   "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600",
-  "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600"
+  "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600",
+  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600"
  ];
  for(let i = 13; i <= 677; i++) {
   const city = cities[i % cities.length];
-  const star = (i % 3 === 0) ? 3 : (i % 2 === 0 ? 4 : 5);
-  const price = 80 + (i * 17) % 450;
+  const star = (i % 4 === 0) ? 3 : (i % 2 === 0 ? 4 : 5);
+  const price = 90 + (i * 13) % 400;
   list.push({
-   name: `Global Luxury Hotel & Resort #${i}`,
+   name: `Global Luxury Resort & Hotel #${i}`,
    country: city,
    stars: star,
    price: price,
