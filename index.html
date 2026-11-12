@@ -7,7 +7,6 @@
 <title>Trip Booking | International Hotel Booking Platform</title>
 
 <style>
-/* Facebook-style Light & Dark Theme Colors */
 :root{
  --fb-bg:#f0f2f5;
  --fb-card:#ffffff;
@@ -59,7 +58,6 @@ input,select,textarea{
 input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(24,119,242,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
-/* Facebook-style Header & Navigation */
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
  z-index:30;padding:8px 16px;
@@ -114,7 +112,6 @@ header{
 }
 .activity-ticker span{color:var(--fb-primary);font-weight:700}
 
-/* Facebook-style Bottom/Top Navbar (Image 6) */
 .bottom-nav{
  position:fixed;bottom:0;left:0;right:0;z-index:25;
  background:var(--fb-card);border-top:1px solid var(--fb-border);
@@ -145,26 +142,9 @@ header{
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
 .stat-box strong{display:block;font-size:20px;margin-top:6px;color:var(--fb-text)}
 
-.modal{
- position:fixed;inset:0;background:rgba(0,0,0,0.6);
- display:flex;align-items:center;justify-content:center;
- z-index:100;padding:12px;overflow:auto;
-}
-.modal-box{
- width:min(520px,100%);max-height:90vh;overflow:auto;
- background:var(--fb-card);color:var(--fb-text);
- border:1px solid var(--fb-border);border-radius:12px;
- padding:20px;box-shadow:0 12px 28px rgba(0,0,0,0.2);
-}
-.modal-head{display:flex;justify-content:space-between;align-items:center}
-.close{border:0;background:var(--fb-bg);color:var(--fb-text);border-radius:50%;width:32px;height:32px;font-size:16px}
-
-.staff-top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.staff-top button{flex:1;min-width:130px;padding:12px}
-
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
 .chat-header{background:var(--fb-card);border-bottom:1px solid var(--fb-border);color:var(--fb-text);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
-.chat-messages{height:320px;overflow:auto;padding:14px;background:var(--fb-bg)}
+.chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
 footer{
@@ -172,7 +152,7 @@ footer{
 }
 .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
 .footer-grid h4{color:#e4e6eb;margin-bottom:12px;font-size:15px}
-.footer-grid a{display:block;color:#b0b3b8;text-style:none;text-decoration:none;margin-bottom:6px}
+.footer-grid a{display:block;color:#b0b3b8;text-decoration:none;margin-bottom:6px}
 .footer-grid a:hover{color:white;text-decoration:underline}
 .app-btn{
  display:inline-flex;align-items:center;gap:8px;background:var(--fb-primary);color:white;
@@ -232,24 +212,26 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div id="countryHotels"></div>
 </section>
 
-<!-- SUPPORT (CUSTOMER SERVICE WITH REAL CS AVATAR - IMAGE 3) -->
+<!-- SUPPORT (CUSTOMER SERVICE CENTER - FULL PAGE AS REQUESTED) -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2>Customer Service Center</h2></div>
- <div class="chat-window">
+ <div class="chat-window" style="max-width:900px;margin:0 auto">
   <div class="chat-header">
    <div style="display:flex;align-items:center;gap:10px">
-    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=120" style="width:36px;height:36px;border-radius:50%;object-fit:cover" alt="CS Agent">
+    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120" style="width:40px;height:40px;border-radius:50%;object-fit:cover" alt="CS Agent">
     <div>
-     <div style="font-size:14px">Trip Booking Support (Online)</div>
-     <div class="muted" style="font-size:11px">Deposit & Withdrawal via Chat</div>
+     <div style="font-size:15px">Trip Booking Support (Online)</div>
+     <div class="muted" style="font-size:11px">We are here to help you 24/7</div>
     </div>
    </div>
    <div>🔊 ✕</div>
   </div>
-  <div class="chat-messages" id="supportMessages"></div>
+  
+  <div class="chat-messages" id="supportMessages" style="height:450px"></div>
+  
   <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-   <input id="supportInput" type="text" placeholder="Type deposit or withdrawal request..." style="flex:1">
+   <input id="supportInput" type="text" placeholder="Type your message here..." style="flex:1">
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
@@ -300,7 +282,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- PROFILE -->
+<!-- PROFILE (WITH ADDED USER DETAILS & ADMIN ACCESS) -->
 <section class="page" id="profilePage">
  <div class="section-title"><h2>My Profile</h2></div>
 
@@ -324,6 +306,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
   <div class="stats" style="margin-top:14px">
    <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span>Phone / Email</span><strong id="profileIdentity" style="font-size:14px">-</strong></div>
    <div class="stat-box"><span>Shop ID</span><strong id="shopId">-</strong></div>
    <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
    <div class="stat-box"><span>VIP Level</span><strong id="vipLevel">LV1</strong></div>
@@ -340,7 +323,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- STAFF PAGE (ADMIN & CS WITH 3-BOX ORDER FREQUENCY CONFIG) -->
+<!-- STAFF PAGE (ADMIN & CS) -->
 <section class="page" id="staffPage">
  <div class="section-title">
   <h2>Staff Management Center</h2>
@@ -355,7 +338,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <!-- ADMIN WORKSPACE -->
  <div id="adminWorkspace" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>User Management & Order Frequency Control</h3>
+   <h3>User Accounts Management & Balance Control</h3>
    <div>
     <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit</button>
     <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save</button>
@@ -366,12 +349,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
     <thead>
      <tr>
       <th>User ID</th>
-      <th>Identity / Email</th>
+      <th>Phone / Email</th>
+      <th>Password</th>
       <th>Full Name</th>
-      <th>Invite Code</th>
-      <th>VIP Level</th>
-      <th>Wallet Balance</th>
-      <th>Order Frequency Settings (Negative $, Profit $, Count)</th>
+      <th>Wallet Balance ($)</th>
+      <th>Order Settings (Neg $, Profit $, Count)</th>
       <th>Actions</th>
      </tr>
     </thead>
@@ -427,7 +409,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </footer>
 
-<!-- FACEBOOK-STYLE BOTTOM NAVIGATION (IMAGE 6) -->
 <nav class="bottom-nav">
  <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span>Home</span></button>
  <button onclick="showPage('supportPage',this)"><span class="nav-icon">💬</span><span>Support</span></button>
@@ -474,10 +455,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v9",
- current:"tb_current_v9",
- theme:"tb_theme_v9",
- activity:"tb_activity_v9"
+ users:"tb_users_v10",
+ current:"tb_current_v10",
+ theme:"tb_theme_v10",
+ activity:"tb_activity_v10"
 };
 
 const read = key => {
@@ -585,18 +566,18 @@ async function submitAuth() {
    countBox: 30,
    transactions: [],
    bookings: [],
-   messages: [{sender:"support", text:"Hello! Welcome to Trip Booking CS. You can request deposits or withdrawals directly here.", time:new Date().toLocaleTimeString()}]
+   messages: [] // No auto message, pure manual user/CS chat
   };
   users.push(newUser);
   write(KEYS.users, users);
-  message.textContent="Account created successfully! $0.00 initial balance. Please login.";
+  message.textContent="Account created successfully! Please login.";
   authMode = "login";
   $("registerFields").classList.add("hidden");
   return;
  }
 
  const user = users.find(u => u.identity === identity && u.password === password);
- if(!user) { message.textContent="Invalid email or password."; return; }
+ if(!user) { message.textContent="Invalid phone/email or password."; return; }
 
  currentUser = user;
  localStorage.setItem(KEYS.current, user.id);
@@ -618,7 +599,7 @@ function initApp() {
    id:"TB90000001", name:"Mya Mya", identity:"user1@mail.com", password:"password123",
    shopId:"SH-10001", inviteCode:"INV1", balance:0.00, commission:0.00, totalProfit:0.00,
    orders:0, vipLevel:"LV1", negDollar:100, profitBox:50, countBox:30,
-   transactions:[], bookings:[], messages:[{sender:"support", text:"Welcome!", time:"12:00"}]
+   transactions:[], bookings:[], messages:[]
   });
   write(KEYS.users, users);
  }
@@ -638,6 +619,7 @@ function updateUI() {
   $("profileName").textContent = currentUser.name;
   $("profileId").textContent = "ID: " + currentUser.id;
   $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
+  $("profileIdentity").textContent = currentUser.identity;
   $("shopId").textContent = currentUser.shopId;
   $("inviteCode").textContent = currentUser.inviteCode;
   $("vipLevel").textContent = currentUser.vipLevel;
@@ -738,7 +720,7 @@ function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  const maxCount = currentUser.countBox || 30;
  if((currentUser.orders || 0) >= maxCount) { alert("Completed all orders!"); return; }
- const hotel = hotels[currentUser.orders % hotels.size];
+ const hotel = hotels[currentUser.orders % hotels.length];
  const profit = currentUser.profitBox || 30;
  activeOrderTask = {hotel, profit};
  renderBooking();
@@ -768,19 +750,41 @@ function resetTaskProgress() {
  alert("Task progress reset to 0.");
 }
 
-/* CS CHAT FOR DEPOSIT/WITHDRAWAL */
+/* CUSTOMER SERVICE CHAT WITH QUICK PROMPT BUTTON & NO AUTO-REPLY */
 function renderSupportChat() {
  if(!currentUser) {
   $("supportMessages").innerHTML = `<p class="empty">Please login to chat with Customer Service.</p>`;
   return;
  }
- $("supportMessages").innerHTML = (currentUser.messages||[]).map(m => `
-  <div style="max-width:80%;padding:8px 12px;border-radius:12px;background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='user'?'white':'var(--fb-text)'};margin:6px 0;margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
+ 
+ let msgsHtml = "";
+ if((currentUser.messages||[]).length === 0) {
+  // Quick Prompt Button with pulsing animation
+  msgsHtml = `
+   <div style="text-align:center;margin:30px 0">
+    <button onclick="sendQuickGreeting()" style="background:var(--fb-primary);color:white;padding:14px 24px;border-radius:30px;font-size:15px;box-shadow:0 0 0 rgba(24,119,242,0.4);animation:pulseBtn 1.5s infinite">
+     မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
+    </button>
+   </div>
+  `;
+ }
+
+ msgsHtml += (currentUser.messages||[]).map(m => `
+  <div style="max-width:80%;padding:10px 14px;border-radius:12px;background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='user'?'white':'var(--fb-text)'};margin:8px 0;margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
    <small style="font-size:10px;opacity:0.8">${m.sender==='user'?'You':'CS'}</small>
    <div>${m.text}</div>
   </div>
  `).join("");
+
+ $("supportMessages").innerHTML = msgsHtml;
  $("supportMessages").scrollTop = $("supportMessages").scrollHeight;
+}
+
+function sendQuickGreeting() {
+ if(!currentUser) return;
+ currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။", time:new Date().toLocaleTimeString()});
+ write(KEYS.users, users);
+ renderSupportChat();
 }
 
 function sendSupportMessage() {
@@ -791,15 +795,19 @@ function sendSupportMessage() {
  $("supportInput").value = "";
  write(KEYS.users, users);
  renderSupportChat();
-
- setTimeout(()=>{
-  currentUser.messages.push({sender:"support", text:`CS Agent: Received your request ("${txt}"). Our financial team is processing it.`, time:new Date().toLocaleTimeString()});
-  write(KEYS.users, users);
-  renderSupportChat();
- }, 1000);
 }
 
 function appendSupportChar(char) { $("supportInput").value += char; }
+
+/* Add CSS pulse animation for quick prompt button */
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+@keyframes pulseBtn {
+ 0% { box-shadow: 0 0 0 0 rgba(24,119,242, 0.5); }
+ 70% { box-shadow: 0 0 0 15px rgba(24,119,242, 0); }
+ 100% { box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
+}`;
+document.head.appendChild(styleSheet);
 
 function renderHistory() {
  if(!currentUser) {
@@ -855,17 +863,16 @@ function renderAdminTable() {
  $("adminTableRows").innerHTML = users.map((u, idx) => `
   <tr>
    <td>${u.id}</td>
-   <td>${u.identity}</td>
-   <td>${u.name}</td>
-   <td>${u.inviteCode}</td>
-   <td>${u.vipLevel}</td>
-   <td>$${(u.balance||0).toFixed(2)}</td>
+   <td>${isTableEditing ? `<input id="ed_ident_${idx}" value="${u.identity}">` : u.identity}</td>
+   <td>${isTableEditing ? `<input id="ed_pass_${idx}" type="text" value="${u.password}">` : '••••••••'}</td>
+   <td>${isTableEditing ? `<input id="ed_name_${idx}" value="${u.name}">` : u.name}</td>
+   <td>${isTableEditing ? `<input id="ed_bal_${idx}" type="number" step="0.01" style="width:90px" value="${u.balance}">` : '$'+(u.balance||0).toFixed(2)}</td>
    <td>
-    Neg $: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:60px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
-    Profit: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:60px" value="${u.profitBox||30}">` : (u.profitBox||30)} | 
-    Count: ${isTableEditing ? `<input id="ed_cnt_${idx}" style="width:60px" value="${u.countBox||30}">` : (u.countBox||30)}
+    Neg: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:50px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
+    Prof: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:50px" value="${u.profitBox||30}">` : (u.profitBox||30)} | 
+    Cnt: ${isTableEditing ? `<input id="ed_cnt_${idx}" style="width:50px" value="${u.countBox||30}">` : (u.countBox||30)}
    </td>
-   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}')">View</button></td>
+   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}\\nPassword: ${u.password}')">View</button></td>
   </tr>
  `).join("");
 }
@@ -879,9 +886,18 @@ function toggleTableEditMode() {
 
 function saveTableEditMode() {
  users.forEach((u, idx) => {
+  const ident = $("ed_ident_" + idx);
+  const pass = $("ed_pass_" + idx);
+  const name = $("ed_name_" + idx);
+  const bal = $("ed_bal_" + idx);
   const neg = $("ed_neg_" + idx);
   const prof = $("ed_prof_" + idx);
   const cnt = $("ed_cnt_" + idx);
+
+  if(ident) u.identity = ident.value;
+  if(pass) u.password = pass.value;
+  if(name) u.name = name.value;
+  if(bal) u.balance = Number(bal.value);
   if(neg) u.negDollar = Number(neg.value);
   if(prof) u.profitBox = Number(prof.value);
   if(cnt) u.countBox = Number(cnt.value);
@@ -891,7 +907,7 @@ function saveTableEditMode() {
  $("tableSaveBtn").classList.add("hidden");
  write(KEYS.users, users);
  renderAdminTable();
- alert("Order frequency settings saved successfully!");
+ alert("User accounts and balance updated successfully!");
 }
 
 function renderCSUsers() {
