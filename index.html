@@ -1,158 +1,331 @@
 
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#102B4E">
-<title>Trip Booking | International Hotel Booking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Booking | International Travel</title>
 
 <style>
-:root{
- --navy:#102B4E;
- --blue:#1769AA;
- --gold:#C5A15B;
- --bg:#F3F6FA;
- --card:#FFFFFF;
- --text:#17283D;
- --muted:#718096;
- --line:#E3E9F0;
+:root {
+  --navy:#10243b;
+  --navy2:#183653;
+  --blue:#1676c5;
+  --gold:#d5ad62;
+  --bg:#f3f6fa;
+  --card:#ffffff;
+  --text:#243449;
+  --muted:#718096;
+  --line:#e2e9f0;
+  --danger:#d94b55;
+  --success:#15976b;
+  --glow:0 0 16px rgba(22,118,197,.35);
 }
-body.dark{
- --bg:#101923;
- --card:#1A2837;
- --text:#E8EEF5;
- --muted:#A6B4C3;
- --line:#314254;
+* {box-sizing:border-box;margin:0;padding:0}
+body {
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
 }
-*{box-sizing:border-box}
-body{
- margin:0;background:var(--bg);color:var(--text);
- font-family:Arial,sans-serif;
- transition:background .3s,color .3s;
+body.dark {
+  --bg:#101923;
+  --card:#1b2938;
+  --text:#edf3fa;
+  --muted:#a2b1c1;
+  --line:#344354;
 }
-button,input,select,textarea{font:inherit}
-button{cursor:pointer;border:0;border-radius:8px;padding:11px 15px}
-.primary{background:var(--blue);color:white}
-.gold{background:var(--gold);color:white}
-.soft{background:#EAF2FA;color:#174F83}
-header{
- background:var(--navy);color:white;padding:15px 5%;
- display:flex;justify-content:space-between;align-items:center;
- position:sticky;top:0;z-index:20;
+button,input,select,textarea {font:inherit}
+button {cursor:pointer}
+.hidden {display:none!important}
+header {
+  background:var(--navy);
+  color:white;
+  padding:15px 5%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  position:sticky;
+  top:0;
+  z-index:20;
 }
-.logo{font-size:22px;font-weight:900;letter-spacing:1px;cursor:pointer}
-.logo span{color:var(--gold)}
-.head{display:flex;gap:8px;align-items:center}
-.head select,.head button{
- background:#243E5D;color:white;border:1px solid #66809A;
- padding:9px;border-radius:7px;
+.logo {
+  font-size:23px;
+  font-weight:800;
+  color:white;
+  cursor:pointer;
+  letter-spacing:1px;
 }
-.container{max-width:1200px;margin:auto;padding:22px 16px 100px}
-.page{display:none}
-.page.active{display:block}
-.hero{
- min-height:300px;border-radius:16px;padding:35px;
- color:white;display:flex;flex-direction:column;
- justify-content:center;background-size:cover;background-position:center;
- transition:background-image .5s;
+.logo span {color:var(--gold)}
+.header-actions {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
 }
-.hero h1{font-size:clamp(30px,5vw,46px);max-width:650px}
-.hero p{line-height:1.7;max-width:550px}
-.search,.panel{
- background:var(--card);border:1px solid var(--line);
- border-radius:12px;padding:18px;margin-top:18px;
+.btn {
+  border:0;
+  border-radius:8px;
+  padding:11px 16px;
+  font-weight:600;
+  background:var(--blue);
+  color:white;
 }
-.search{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px}
-label{display:block;font-size:12px;font-weight:bold;color:var(--muted);margin:10px 0 6px}
-input,select,textarea{
- width:100%;padding:11px;border:1px solid var(--line);
- border-radius:8px;background:var(--card);color:var(--text);
+.btn:hover {filter:brightness(1.1)}
+.btn-gold {background:var(--gold);color:#172638}
+.btn-outline {
+  background:transparent;
+  border:1px solid #718096;
+  color:inherit;
 }
-.section{margin-top:30px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
-.hotel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.hotel img{width:100%;height:190px;object-fit:cover}
-.hotel-body{padding:15px}
-.hotel h3{margin:9px 0}
-.muted{color:var(--muted)}
-.stars{color:#C49B42}
-.price{color:var(--blue);font-size:21px;font-weight:bold}
-.hotel-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
-.tabs,.actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
-.tabs button{background:var(--card);border:1px solid var(--line);color:var(--text)}
-.tabs button.active{background:var(--navy);color:white}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.stat{padding:17px;background:var(--card);border:1px solid var(--line);border-radius:10px}
-.stat strong{display:block;font-size:24px;color:var(--blue);margin-top:10px}
-.progress{height:12px;background:var(--line);border-radius:20px;overflow:hidden;margin:15px 0}
-.progress span{display:block;height:100%;background:linear-gradient(90deg,#1769AA,#55B9EF);width:0;transition:width .3s}
-.notice{background:#FFF5DC;color:#76591B;padding:13px;border-radius:8px;line-height:1.6;font-size:13px}
-.bottom{
- position:fixed;bottom:0;left:0;right:0;display:flex;
- justify-content:center;background:var(--card);
- border-top:1px solid var(--line);z-index:20;padding:7px;
+.btn-danger {background:var(--danger)}
+.btn-success {background:var(--success)}
+main {
+  max-width:1250px;
+  margin:auto;
+  padding:24px 18px 100px;
 }
-.bottom button{flex:1;max-width:160px;background:none;color:var(--muted);font-size:12px}
-.bottom button.active{color:var(--blue)}
-.bottom span{display:block;font-size:20px}
-.form{max-width:580px;margin:20px auto}
-.full{width:100%;margin-top:15px}
-.modal{
- display:none;position:fixed;inset:0;background:#07182BCC;
- z-index:100;align-items:center;justify-content:center;padding:16px;
+.hero {
+  background:linear-gradient(110deg,#10243b,#1c5685);
+  color:white;
+  border-radius:17px;
+  padding:45px 30px;
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  overflow:hidden;
 }
-.modal.show{display:flex}
-.dialog{
- position:relative;background:var(--card);color:var(--text);
- width:100%;max-width:440px;padding:25px;border-radius:15px;
- border:1px solid #38A9FF;
- box-shadow:0 0 10px #38A9FF,0 0 28px #167CEB88;
- animation:dialogIn .25s ease;
+.hero h1 {font-size:clamp(28px,5vw,43px);margin-bottom:12px}
+.hero p {color:#d8e7f5;line-height:1.7}
+.section-title {
+  margin:30px 0 16px;
+  font-size:22px;
+  font-weight:750;
 }
-@keyframes dialogIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-.close{position:absolute;right:10px;top:10px;background:#eee;color:#111}
-.dialog input{margin-bottom:8px}
-.admin-layout{display:grid;grid-template-columns:270px 1fr;gap:15px}
-.user-list{max-height:450px;overflow:auto}
-.user-item{padding:14px;border-bottom:1px solid var(--line);cursor:pointer}
-.user-item:hover{background:#EAF2FA;color:#174F83}
-.row{padding:13px 0;border-bottom:1px solid var(--line)}
-.status{font-size:12px;font-weight:bold;color:#B17D25}
-#splashScreen{
- position:fixed;inset:0;z-index:99999;
- background:linear-gradient(135deg,#071B35,#102B4E,#174B78);
- display:flex;justify-content:center;align-items:center;
- text-align:center;color:white;
- transition:opacity .8s ease,visibility .8s ease;
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:17px;
 }
-#splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none}
-.splash-content{padding:25px;animation:splashEnter 1s ease}
-.splash-logo{font-size:36px;font-weight:900;letter-spacing:3px}
-.splash-logo span{color:var(--gold)}
-.splash-content h1{font-size:clamp(28px,5vw,46px);margin:25px 0 10px}
-.splash-content p{color:#C7D6E5}
-.splash-loader{
- width:45px;height:45px;border:3px solid #ffffff35;
- border-top-color:var(--gold);border-radius:50%;
- margin:30px auto 0;animation:spin 1s linear infinite;
+.card {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:13px;
+  overflow:hidden;
+  box-shadow:0 3px 12px rgba(0,0,0,.04);
 }
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes splashEnter{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.empty{padding:25px;text-align:center;color:var(--muted)}
-@media(max-width:760px){
- .grid{grid-template-columns:repeat(2,1fr)}
- .search{grid-template-columns:1fr 1fr}
- .admin-layout{grid-template-columns:1fr}
+.card-body {padding:16px}
+.hotel-img {
+  width:100%;
+  height:165px;
+  object-fit:cover;
+  background:#dce5ed;
 }
-@media(max-width:520px){
- .grid,.stats{grid-template-columns:1fr}
- .hero{padding:23px}
- header{padding:12px}
- .logo{font-size:16px}
- .container{padding:13px 10px 90px}
- .bottom button{padding:6px 2px;font-size:10px}
- .head select{max-width:85px}
+.hotel-price {font-size:20px;font-weight:800;color:var(--blue);margin:12px 0}
+.muted {color:var(--muted);font-size:13px}
+.tag {
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#e8f2fc;
+  color:#1769a8;
+  font-size:12px;
+  margin:5px 0;
+}
+.panel {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:18px;
+}
+.form-group {margin-bottom:15px}
+.form-group label {
+  display:block;
+  font-size:13px;
+  font-weight:650;
+  margin-bottom:7px;
+}
+.form-group input,.form-group select,.form-group textarea,
+.chat-input {
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:8px;
+  padding:12px;
+  outline:none;
+}
+.form-group input:focus,.form-group textarea:focus {
+  border-color:var(--blue);
+  box-shadow:var(--glow);
+}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
+  gap:12px;
+}
+.stat {
+  background:var(--bg);
+  border:1px solid var(--line);
+  padding:15px;
+  border-radius:10px;
+}
+.stat strong {display:block;font-size:21px;margin-top:8px}
+.progress {
+  background:var(--line);
+  height:12px;
+  border-radius:20px;
+  overflow:hidden;
+  margin:12px 0;
+}
+.progress div {
+  height:100%;
+  background:var(--blue);
+  width:0;
+  transition:width .3s;
+}
+.bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:30;
+  background:var(--card);
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:center;
+  gap:clamp(10px,5vw,55px);
+  padding:12px;
+}
+.bottom-nav button {
+  background:none;
+  border:0;
+  color:var(--muted);
+  font-size:12px;
+  display:grid;
+  gap:4px;
+  justify-items:center;
+}
+.bottom-nav button.active {color:var(--blue);font-weight:bold}
+.page {display:none}
+.page.active {display:block}
+.modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+.modal-box {
+  background:var(--card);
+  color:var(--text);
+  width:100%;
+  max-width:440px;
+  padding:25px;
+  border-radius:15px;
+  border:1px solid #39aaff;
+  box-shadow:0 0 8px #39aaff,0 0 24px rgba(22,118,197,.55);
+  max-height:90vh;
+  overflow:auto;
+}
+.modal-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.close {
+  border:0;
+  background:var(--bg);
+  color:var(--text);
+  padding:8px 12px;
+  border-radius:7px;
+}
+.admin-tabs {display:flex;gap:10px;margin-bottom:18px}
+.admin-layout {
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:15px;
+  min-height:500px;
+}
+.user-list {
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:auto;
+  max-height:650px;
+}
+.user-item {
+  padding:13px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.user-item:hover,.user-item.selected {background:var(--bg)}
+.avatar {
+  width:40px;height:40px;border-radius:50%;
+  object-fit:cover;background:#dce5ed;
+}
+.user-detail {min-width:0}
+.chat-messages {
+  height:300px;
+  overflow-y:auto;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  margin:12px 0;
+}
+.message {
+  max-width:80%;
+  padding:10px;
+  border-radius:10px;
+  margin:8px 0;
+  background:var(--card);
+  border:1px solid var(--line);
+  overflow-wrap:anywhere;
+}
+.message.mine {margin-left:auto;background:#dceeff;color:#17334c}
+.message img,.message video {max-width:100%;border-radius:8px}
+.chat-tools {display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chat-tools input[type=text] {flex:1;min-width:120px}
+.profile-top {display:flex;align-items:center;gap:15px;margin-bottom:20px}
+.profile-photo {
+  width:75px;height:75px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--gold);
+}
+.splash {
+  position:fixed;inset:0;background:var(--navy);color:white;
+  z-index:200;display:flex;align-items:center;justify-content:center;
+  text-align:center;transition:opacity .7s;
+}
+.splash h1 {font-size:clamp(30px,7vw,55px);letter-spacing:2px}
+.splash span {color:var(--gold)}
+.notice {
+  padding:12px;border-radius:9px;background:var(--bg);
+  border:1px solid var(--line);margin:10px 0;
+}
+table {width:100%;border-collapse:collapse}
+th,td {padding:11px;text-align:left;border-bottom:1px solid var(--line);font-size:13px}
+.table-wrap {overflow-x:auto}
+@media(max-width:720px) {
+  .admin-layout {grid-template-columns:1fr}
+  .user-list {max-height:230px}
+  .hero {padding:28px 20px}
+  main {padding:15px 12px 95px}
+  header {padding:13px}
+  .bottom-nav {justify-content:space-around;gap:4px}
+  .bottom-nav button {font-size:11px}
 }
 </style>
 </head>
@@ -160,702 +333,1131 @@ input,select,textarea{
 <body>
 
 <!-- WELCOME SPLASH -->
-<div id="splashScreen">
- <div class="splash-content">
-  <div class="splash-logo">TRIP <span>BOOKING</span></div>
-  <h1>Welcome To Trip Booking</h1>
-  <p>Premium International Hotel Booking</p>
-  <div class="splash-loader"></div>
- </div>
+<div class="splash" id="splash">
+  <div>
+    <h1>Welcome To <span>Trip Booking</span></h1>
+    <p style="margin-top:18px;color:#c5d6e8">
+      Your Journey, Our Priority
+    </p>
+  </div>
 </div>
 
+<!-- HEADER -->
 <header>
- <div class="logo" onclick="logoTap()">TRIP <span>BOOKING</span></div>
- <div class="head">
-  <select id="language" onchange="changeLanguage(this.value)">
-   <option value="my">မြန်မာ</option>
-   <option value="en">English</option>
-   <option value="zh">中文</option>
-   <option value="es">Español</option>
-  </select>
-  <button onclick="toggleTheme()" id="themeBtn">☾</button>
-  <button onclick="openModal('authModal')">Account</button>
- </div>
+  <div class="logo" id="logo" title="Trip Booking">
+    TRIP <span>BOOKING</span>
+  </div>
+
+  <div class="header-actions">
+    <button class="btn btn-outline" onclick="openStaff('admin')">
+      Admin
+    </button>
+    <button class="btn btn-outline" onclick="openStaff('support')">
+      Customer Service
+    </button>
+    <select id="language" aria-label="Language">
+      <option value="my">မြန်မာ</option>
+      <option value="en">English</option>
+      <option value="zh">中文</option>
+      <option value="es">Español</option>
+    </select>
+    <button class="btn btn-outline" id="themeToggle">
+      ☾
+    </button>
+    <button class="btn" onclick="openAuth('login')">Login</button>
+  </div>
 </header>
 
-<main class="container">
+<main>
 
 <!-- HOME -->
-<section id="home" class="page active">
- <div class="hero" id="heroBanner">
-  <small style="color:#E8C77F">PREMIUM INTERNATIONAL HOTELS</small>
-  <h1 data-t="hero">Discover Your Next Extraordinary Stay</h1>
-  <p data-t="subtitle">Explore premium hotels around the world.</p>
-  <button class="gold" onclick="document.getElementById('directory').scrollIntoView()">
-   Explore Hotels
-  </button>
- </div>
+<section id="homePage" class="page active">
+  <div class="hero">
+    <div>
+      <h1>Discover Your Next Journey</h1>
+      <p>Explore hotels and destinations around the world.</p>
+      <button class="btn btn-gold" onclick="showPage('hotelsPage')">
+        Explore Hotels
+      </button>
+    </div>
+    <div style="font-size:65px">✈</div>
+  </div>
 
- <div class="search">
-  <div>
-   <label>DESTINATION / HOTEL</label>
-   <input id="hotelSearch" placeholder="Search hotel or country">
-  </div>
-  <div>
-   <label>CHECK IN</label>
-   <input type="date" id="checkIn">
-  </div>
-  <div>
-   <label>CHECK OUT</label>
-   <input type="date" id="checkOut">
-  </div>
-  <button class="primary" onclick="renderHotels()">Search</button>
- </div>
-
- <div class="section">
-  <h2>Featured Hotels</h2>
+  <h2 class="section-title">Featured Hotels</h2>
   <div class="grid" id="featuredHotels"></div>
- </div>
 
- <div class="section" id="directory">
-  <h2>International Hotel Directory</h2>
-  <div class="tabs" id="countryTabs"></div>
-  <div class="grid" id="hotelList"></div>
- </div>
-</section>
-
-<!-- PROFILE -->
-<section id="profile" class="page">
- <h2>My Profile</h2>
- <div class="panel">
-  <h2 id="profileName">Guest User</h2>
-  <p class="muted" id="profileInfo">Browsing as Guest</p>
-  <div class="stats">
-   <div class="stat">Wallet Balance<strong id="wallet">$0.00</strong></div>
-   <div class="stat">Daily Progress<strong id="profileProgress">0/30</strong></div>
-   <div class="stat">Bookings<strong id="bookingCount">0</strong></div>
+  <h2 class="section-title">Recent Platform Activity</h2>
+  <div class="panel">
+    <p class="muted">Verified activity only. No fabricated customer transactions.</p>
+    <div id="activityFeed"></div>
   </div>
-  <div class="actions">
-   <button class="primary" onclick="showPage('deposit')">Deposit</button>
-   <button class="soft" onclick="showPage('withdraw')">Withdrawal</button>
-   <button class="soft" onclick="showPage('history')">History</button>
+</section>
+
+<!-- HOTELS -->
+<section id="hotelsPage" class="page">
+  <h2 class="section-title">International Hotel Directory</h2>
+  <div class="form-group">
+    <input id="hotelSearch" placeholder="Search hotel or country...">
   </div>
-  <p class="muted" id="profileHint">Guest browsing is available. Log in to submit personal requests.</p>
- </div>
- <div class="panel">
-  <h3>Official Certification / Legal Information</h3>
-  <p class="muted">Company registration and verified travel license details must be published here after official verification.</p>
-  <p>License Number: Not provided</p>
- </div>
-</section>
-
-<!-- TASKS -->
-<section id="tasks" class="page">
- <h2>Hotel Review Activity</h2>
- <div class="panel">
-  <b>Daily Activity Progress</b>
-  <b style="float:right" id="progressText">0 / 30</b>
-  <div class="progress"><span id="progressBar"></span></div>
-  <p class="muted" id="taskStatus">Browse hotel review activities.</p>
- </div>
- <div class="panel section" id="taskContent"></div>
- <p class="notice">Reviews are activity records only. No guaranteed investment return or cash profit is generated by clicking or rating hotels.</p>
-</section>
-
-<!-- SUPPORT -->
-<section id="support" class="page">
- <div class="panel form">
-  <h2>Trip Booking Customer Service</h2>
-  <p class="muted">Customer Care Team</p>
-  <div id="chatBox" class="panel" style="min-height:140px"></div>
-  <button class="primary full" onclick="sendGreeting()">Contact Now</button>
-  <div style="display:flex;gap:8px;margin-top:12px">
-   <input id="chatInput" placeholder="Write a message">
-   <button class="primary" onclick="sendMessage()">Send</button>
-  </div>
- </div>
-</section>
-
-<!-- HISTORY -->
-<section id="history" class="page">
- <h2>Transaction & Booking History</h2>
- <div class="panel" id="historyContent"></div>
-</section>
-
-<!-- DEPOSIT -->
-<section id="deposit" class="page">
- <div class="panel form">
-  <h2>Deposit Request</h2>
-  <p class="notice">Demo request only. No real money is transferred. Use a verified payment provider for production.</p>
-  <label>Amount (USD)</label>
-  <input type="number" id="depositAmount" min="1">
-  <label>Payment Reference</label>
-  <input id="paymentReference">
-  <button class="primary full" onclick="submitMoneyRequest('Deposit')">Submit Deposit Request</button>
- </div>
-</section>
-
-<!-- WITHDRAW -->
-<section id="withdraw" class="page">
- <div class="panel form">
-  <h2>Withdrawal Request</h2>
-  <label>Amount (USD)</label>
-  <input type="number" id="withdrawAmount" min="1">
-  <label>Payment Account</label>
-  <input id="withdrawAccount">
-  <button class="primary full" onclick="submitMoneyRequest('Withdrawal')">Submit Withdrawal Request</button>
- </div>
+  <div class="grid" id="hotelGrid"></div>
 </section>
 
 <!-- BOOKING -->
-<section id="booking" class="page">
- <div class="panel form">
-  <h2>Hotel Booking Request</h2>
-  <p id="selectedHotel"></p>
-  <label>Guest Name</label>
-  <input id="guestName">
-  <label>Phone / Email</label>
-  <input id="guestContact">
-  <label>Check In</label>
-  <input type="date" id="bookingIn">
-  <label>Check Out</label>
-  <input type="date" id="bookingOut">
-  <button class="primary full" onclick="submitBooking()">Submit Booking</button>
- </div>
+<section id="bookingPage" class="page">
+  <h2 class="section-title">Hotel Booking</h2>
+  <div class="panel">
+    <h3>Booking Progress</h3>
+    <div class="progress"><div id="orderProgress"></div></div>
+    <strong id="orderCount">0 / 30</strong>
+    <p class="muted">Only confirmed real bookings count toward progress.</p>
+  </div>
+  <div id="bookingHotel" class="panel"></div>
+  <div class="panel">
+    <h3>Guest Review</h3>
+    <div id="reviewOptions"></div>
+    <button class="btn" onclick="submitBooking()">Submit Booking</button>
+    <p id="bookingMessage" class="notice hidden"></p>
+  </div>
 </section>
 
-<!-- ADMIN -->
-<section id="admin" class="page">
- <h2>Admin Management Dashboard</h2>
- <p class="notice">Staff dashboard. Production user management and financial approvals require a secured backend.</p>
- <div class="stats">
-  <div class="stat">Registered Users<strong id="adminUserCount">0</strong></div>
-  <div class="stat">Booking Records<strong id="adminBookingCount">0</strong></div>
-  <div class="stat">Pending Requests<strong id="adminPendingCount">0</strong></div>
- </div>
- <div class="admin-layout section">
+<!-- HISTORY -->
+<section id="historyPage" class="page">
+  <h2 class="section-title">Transaction & Booking History</h2>
+  <div class="panel table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+      <tbody id="historyRows"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profilePage" class="page">
+  <h2 class="section-title">My Profile</h2>
   <div class="panel">
-   <h3>Registered Customers</h3>
-   <div id="adminUsers" class="user-list"></div>
+    <div class="profile-top">
+      <img id="profileImage" class="profile-photo"
+        src="https://placehold.co/100x100?text=User" alt="Profile">
+      <div>
+        <h3 id="profileName">Guest User</h3>
+        <p class="muted" id="profileId">Guest Account</p>
+        <input type="file" id="profileUpload" accept="image/*">
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat">Wallet Balance<strong id="walletBalance">$0.00</strong></div>
+      <div class="stat">Invite Code<strong id="inviteCode">-</strong></div>
+      <div class="stat">Bookings<strong id="profileOrders">0</strong></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+      <button class="btn" onclick="openTransaction('deposit')">Deposit Request</button>
+      <button class="btn btn-outline" onclick="openTransaction('withdrawal')">Withdrawal Request</button>
+      <button class="btn btn-outline" onclick="showPage('historyPage')">History</button>
+    </div>
   </div>
   <div class="panel">
-   <div id="adminDetails">Select a customer from the list.</div>
-   <hr>
-   <h3>Reward Policy</h3>
-   <p class="muted">Configure transparent loyalty points for verified bookings.</p>
-   <label>Management Mode</label>
-   <select id="adminMode">
-    <option>Automatic Policy</option>
-    <option>Manual Review</option>
-   </select>
-   <label>Points Per Verified Booking</label>
-   <input type="number" id="rewardPoints" value="10">
-   <button class="primary" onclick="savePolicy()">Save Policy</button>
-   <hr>
-   <h3>Money Requests</h3>
-   <div id="adminRequests"></div>
+    <h3>Account Settings</h3>
+    <p class="muted">Language, theme and account preferences.</p>
+    <button class="btn btn-outline" onclick="logout()">Log Out</button>
   </div>
- </div>
+  <div class="panel">
+    <h3>Official Legal Information</h3>
+    <p class="muted">License and registration details must be supplied and verified by the actual platform operator. No unverified certification is displayed.</p>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="supportPage" class="page">
+  <h2 class="section-title">Trip Booking Customer Service</h2>
+  <div class="panel">
+    <h3>Customer Support</h3>
+    <p class="muted">Our team is ready to help with your bookings and account questions.</p>
+    <button class="btn" onclick="contactSupport()">Contact Now</button>
+  </div>
+  <div class="panel">
+    <div class="chat-messages" id="supportMessages"></div>
+    <div class="chat-tools">
+      <input type="file" id="supportFile" accept="image/*,video/*">
+      <input type="text" id="supportInput" placeholder="Type a message...">
+      <button class="btn" onclick="sendSupportMessage()">➤</button>
+      <button class="btn btn-outline" onclick="deleteLastSupportMessage()">⌫</button>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF DASHBOARD -->
+<section id="staffPage" class="page">
+  <h2 class="section-title">Management Dashboard</h2>
+  <div class="admin-tabs">
+    <button class="btn" onclick="switchStaffTab('admin')">Admin</button>
+    <button class="btn btn-outline" onclick="switchStaffTab('support')">Customer Service</button>
+  </div>
+  <div class="admin-layout">
+    <div class="user-list">
+      <div class="card-body"><strong id="staffListTitle">Registered Users</strong></div>
+      <div id="staffUserList"></div>
+    </div>
+    <div>
+      <div id="staffUserDetail" class="panel">
+        Select a user from the left sidebar.
+      </div>
+      <div class="panel">
+        <h3>Direct Messages</h3>
+        <div class="chat-messages" id="staffMessages"></div>
+        <div class="chat-tools">
+          <input type="file" id="staffFile" accept="image/*,video/*">
+          <input type="text" id="staffInput" placeholder="Reply to user...">
+          <button class="btn" onclick="sendStaffMessage()">➤</button>
+          <button class="btn btn-outline" onclick="deleteLastStaffMessage()">⌫</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 </main>
 
-<!-- NAVIGATION -->
-<nav class="bottom">
- <button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
- <button data-page="tasks" onclick="showPage('tasks')"><span>▣</span>Tasks</button>
- <button data-page="support" onclick="showPage('support')"><span>✉</span>Support</button>
- <button data-page="history" onclick="showPage('history')"><span>▤</span>History</button>
- <button data-page="profile" onclick="showPage('profile')"><span>♙</span>Profile</button>
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <button class="active" onclick="showPage('homePage',this)">⌂<span>Home</span></button>
+  <button onclick="showPage('supportPage',this)">✉<span>Support</span></button>
+  <button onclick="showPage('historyPage',this)">◷<span>History</span></button>
+  <button onclick="showPage('profilePage',this)">◉<span>Profile</span></button>
 </nav>
 
-<!-- ACCOUNT MODAL -->
-<div class="modal" id="authModal">
- <div class="dialog">
-  <button class="close" onclick="closeModal('authModal')">✕</button>
-  <h2>Account Access</h2>
-  <label>Full Name (Sign Up)</label>
-  <input id="regName">
-  <label>Phone / Email</label>
-  <input id="regContact">
-  <label>Password</label>
-  <input id="regPassword" type="password">
-  <label>Location</label>
-  <input id="regLocation">
-  <label>Invite Code</label>
-  <input id="regInvite">
-  <div class="actions">
-   <button class="primary" onclick="registerUser()">Sign Up</button>
-   <button class="soft" onclick="loginUser()">Log In</button>
+<!-- AUTH MODAL -->
+<div class="modal hidden" id="authModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="authTitle">Login</h2>
+      <button class="close" onclick="closeModal('authModal')">✕</button>
+    </div>
+    <div id="registerFields">
+      <div class="form-group"><label>Name</label><input id="regName"></div>
+      <div class="form-group"><label>Location</label><input id="regLocation"></div>
+      <div class="form-group"><label>Invite Code</label><input id="regInvite"></div>
+    </div>
+    <div class="form-group"><label>Phone or Email</label><input id="authIdentity"></div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="authPassword">
+      <button class="btn btn-outline" onclick="togglePassword('authPassword')">Show / Hide</button>
+    </div>
+    <button class="btn" style="width:100%" onclick="submitAuth()">Continue</button>
+    <p id="authMessage" class="notice hidden"></p>
+    <button class="btn btn-outline" style="width:100%;margin-top:10px"
+      onclick="toggleAuthMode()">Create Account / Login</button>
   </div>
-  <p id="authMessage" class="muted"></p>
- </div>
 </div>
 
-<!-- STAFF MODAL -->
-<div class="modal" id="staffModal">
- <div class="dialog">
-  <button class="close" onclick="closeModal('staffModal')">✕</button>
-  <h2>Staff Access</h2>
-  <p class="muted">Administrator / Customer Service</p>
-  <label>Staff Phone</label>
-  <input id="staffPhone" type="tel" placeholder="Staff phone number">
-  <label>Password</label>
-  <input id="staffPassword" type="password" placeholder="Staff password">
-  <button class="primary full" onclick="staffLogin()">Sign In</button>
-  <p id="staffMessage" class="muted" aria-live="polite"></p>
- </div>
+<!-- STAFF LOGIN MODAL -->
+<div class="modal hidden" id="staffModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="staffLoginTitle">Staff Access</h2>
+      <button class="close" onclick="closeModal('staffModal')">✕</button>
+    </div>
+    <p class="muted" style="margin-bottom:18px">Administrator / Customer Service</p>
+    <div class="form-group"><label>Staff Phone</label><input id="staffPhone"></div>
+    <div class="form-group"><label>Password</label><input id="staffPassword" type="password"></div>
+    <button class="btn" style="width:100%" onclick="staffLogin()">Sign In</button>
+    <p id="staffMessage" class="notice hidden"></p>
+  </div>
+</div>
+
+<!-- TRANSACTION MODAL -->
+<div class="modal hidden" id="transactionModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="transactionTitle">Deposit</h2>
+      <button class="close" onclick="closeModal('transactionModal')">✕</button>
+    </div>
+    <div class="form-group"><label>Amount (USD)</label><input id="transactionAmount" type="number" min="1"></div>
+    <div class="form-group"><label>Payment Reference</label><input id="transactionReference"></div>
+    <div class="form-group"><label>Payment Slip</label><input type="file" id="transactionSlip" accept="image/*"></div>
+    <button class="btn" onclick="submitTransaction()">Submit Request</button>
+    <p class="muted" style="margin-top:10px">Requests remain pending until verified by an authorized operator.</p>
+  </div>
+</div>
+
+<div class="modal hidden" id="logoModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>Staff Access</h2>
+      <button class="close" onclick="closeModal('logoModal')">✕</button>
+    </div>
+    <p>Choose your staff portal.</p>
+    <button class="btn" style="width:100%;margin-top:12px" onclick="closeModal('logoModal');openStaff('admin')">Admin</button>
+    <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="closeModal('logoModal');openStaff('support')">Customer Service</button>
+  </div>
 </div>
 
 <script>
-/* HOTEL DATA */
-const hotels=[
- {id:1,name:"The Shoreline Retreat",country:"Thailand",city:"Phuket",price:185,stars:5,img:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
- {id:2,name:"Marina Bay Grand",country:"Singapore",city:"Singapore",price:220,stars:5,img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
- {id:3,name:"Kyoto Garden Stay",country:"Japan",city:"Kyoto",price:160,stars:4,img:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
- {id:4,name:"Azure Lagoon Resort",country:"Maldives",city:"Male",price:420,stars:5,img:"https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=900"},
- {id:5,name:"Downtown Palace",country:"UAE",city:"Dubai",price:260,stars:5,img:"https://images.unsplash.com/photo-1582719508461-905c673771fd?w=900"},
- {id:6,name:"Bagan Heritage House",country:"Myanmar",city:"Bagan",price:95,stars:4,img:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
- {id:7,name:"Bangkok Riverside",country:"Thailand",city:"Bangkok",price:110,stars:4,img:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
- {id:8,name:"Alpine City Hotel",country:"Switzerland",city:"Zurich",price:310,stars:5,img:"https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=900"},
- {id:9,name:"Barcelona Central",country:"Spain",city:"Barcelona",price:175,stars:4,img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"}
-];
+"use strict";
 
-const $=id=>document.getElementById(id);
+/* ==================================
+   TRIP BOOKING - FRONTEND APPLICATION
+================================== */
 
-const translations={
- en:{hero:"Discover Your Next Extraordinary Stay",subtitle:"Explore premium hotels around the world."},
- my:{hero:"သင့်အတွက် ထူးခြားတဲ့ ခရီးစဉ်ကို စတင်လိုက်ပါ",subtitle:"ကမ္ဘာတစ်ဝန်းရှိ ဟိုတယ်များကို ရှာဖွေလိုက်ပါ။"},
- zh:{hero:"发现下一段非凡旅程",subtitle:"探索世界各地的优质酒店。"},
- es:{hero:"Descubre tu próxima estancia extraordinaria",subtitle:"Explora hoteles de todo el mundo."}
+const $ = id => document.getElementById(id);
+const DB = {
+  users:"trip_users_v1",
+  current:"trip_current_user_v1",
+  history:"trip_history_v1",
+  chats:"trip_chats_v1",
+  theme:"trip_theme_v1",
+  language:"trip_language_v1"
 };
 
-let language=localStorage.getItem("tp_language")||"my";
-let darkMode=localStorage.getItem("tp_dark")==="true";
-let users=JSON.parse(localStorage.getItem("tp_users")||"[]");
-let currentUser=JSON.parse(localStorage.getItem("tp_current")||"null");
-let records=JSON.parse(localStorage.getItem("tp_records")||"[]");
-let requests=JSON.parse(localStorage.getItem("tp_requests")||"[]");
-let selectedHotel=null;
-let selectedCountry="All";
-let logoClicks=[];
-let activeAdminUser=null;
+const read = key => {
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch { return []; }
+};
+const save = (key,value) =>
+  localStorage.setItem(key,JSON.stringify(value));
 
-/* STAFF DEMO LOGIN
-   IMPORTANT: This is not secure production authentication.
-   Anyone who can read the public source can see these credentials.
-*/
-const STAFF_PHONE="09775191427";
-const STAFF_PASSWORD="12344321";
+let users = read(DB.users);
+let currentUser = null;
+let staffRole = "admin";
+let selectedUserId = null;
+let authMode = "login";
+let tapCount = 0;
+let tapTimer = null;
+let selectedHotel = null;
 
-/* STORAGE */
-function saveData(){
- localStorage.setItem("tp_users",JSON.stringify(users));
- localStorage.setItem("tp_current",JSON.stringify(currentUser));
- localStorage.setItem("tp_records",JSON.stringify(records));
- localStorage.setItem("tp_requests",JSON.stringify(requests));
-}
-function syncCurrentUser(){
- if(!currentUser)return;
- const i=users.findIndex(u=>u.id===currentUser.id);
- if(i>=0)users[i]=currentUser;
- saveData();
-}
-
-/* NAVIGATION - GUESTS CAN VIEW ALL PAGES */
-function showPage(id){
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
- document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
- if(id==="profile")updateProfile();
- if(id==="tasks")renderTasks();
- if(id==="history")renderHistory();
- if(id==="admin"){
-  if(sessionStorage.getItem("tp_staff_login")!=="true"){
-   alert("Staff login is required to open the Admin Dashboard.");
-   openModal("staffModal");
-   return;
-  }
-  renderAdmin();
+const hotels = [
+ {
+  id:"h1",name:"Marina Bay Sands",country:"Singapore",
+  price:420,stars:5,
+  image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"
+ },
+ {
+  id:"h2",name:"The Ritz-Carlton",country:"Japan",
+  price:280,stars:5,
+  image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"
+ },
+ {
+  id:"h3",name:"Bali Luxury Resort",country:"Indonesia",
+  price:160,stars:5,
+  image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"
+ },
+ {
+  id:"h4",name:"Swiss Alpine Hotel",country:"Switzerland",
+  price:310,stars:5,
+  image:"https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900"
+ },
+ {
+  id:"h5",name:"Bangkok Grand Hotel",country:"Thailand",
+  price:95,stars:4,
+  image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"
+ },
+ {
+  id:"h6",name:"Paris Royal Suites",country:"France",
+  price:350,stars:5,
+  image:"https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=900"
  }
- window.scrollTo({top:0,behavior:"smooth"});
-}
-function openModal(id){$(id).classList.add("show")}
-function closeModal(id){$(id).classList.remove("show")}
+];
+
+const reviews = [
+ "Excellent hotel and wonderful service.",
+ "Beautiful room and very comfortable stay.",
+ "Highly recommended. Great experience.",
+ "The service was disappointing.",
+ "The room did not meet expectations."
+];
 
 /* LANGUAGE */
-function changeLanguage(value){
- language=value;
- localStorage.setItem("tp_language",value);
- document.querySelectorAll("[data-t]").forEach(el=>{
-  el.textContent=translations[value][el.dataset.t]||el.textContent;
+
+const translations = {
+ en:{
+  home:"Home",support:"Support",history:"History",
+  profile:"Profile",featured:"Featured Hotels",
+  explore:"Explore Hotels",login:"Login",
+  contact:"Contact Now"
+ },
+ my:{
+  home:"ပင်မ",support:"အကူအညီ",history:"မှတ်တမ်း",
+  profile:"ပရိုဖိုင်",featured:"ထင်ရှားသော ဟိုတယ်များ",
+  explore:"ဟိုတယ်များကြည့်ရန်",login:"အကောင့်ဝင်ရန်",
+  contact:"ဆက်သွယ်ရန်"
+ },
+ zh:{
+  home:"首页",support:"客服",history:"历史",
+  profile:"个人资料",featured:"精选酒店",
+  explore:"探索酒店",login:"登录",
+  contact:"立即联系"
+ },
+ es:{
+  home:"Inicio",support:"Soporte",history:"Historial",
+  profile:"Perfil",featured:"Hoteles destacados",
+  explore:"Explorar hoteles",login:"Iniciar sesión",
+  contact:"Contactar ahora"
+ }
+};
+
+function setLanguage(lang) {
+ localStorage.setItem(DB.language,lang);
+ const t=translations[lang] || translations.en;
+
+ document.querySelectorAll(".bottom-nav button").forEach((b,i)=>{
+  const labels=[t.home,t.support,t.history,t.profile];
+  b.lastElementChild.textContent=labels[i];
  });
+
+ $("authTitle").textContent=t.login;
+ $("contactSupportLabel")?.textContent;
+ $("language").value=lang;
 }
+
+$("language").addEventListener("change",e=>{
+ setLanguage(e.target.value);
+});
+
+setLanguage(localStorage.getItem(DB.language)||"en");
 
 /* THEME */
-function toggleTheme(){
- darkMode=!darkMode;
- document.body.classList.toggle("dark",darkMode);
- localStorage.setItem("tp_dark",darkMode);
- $("themeBtn").textContent=darkMode?"☀":"☾";
+
+function setTheme(dark) {
+ document.body.classList.toggle("dark",dark);
+ localStorage.setItem(DB.theme,dark?"dark":"light");
+ $("themeToggle").textContent=dark?"☀":"☾";
 }
 
-/* HOTEL LIST */
-function hotelCard(h){
- return `<article class="hotel">
-  <img src="${h.img}" alt="${h.name}" loading="lazy">
-  <div class="hotel-body">
-   <div class="stars">★ ${h.stars}.0 · ${h.city}, ${h.country}</div>
-   <h3>${h.name}</h3>
-   <p class="muted">Indicative listing price per night.</p>
-   <div class="hotel-bottom">
-    <span class="price">$${h.price}</span>
-    <button class="primary" onclick="bookHotel(${h.id})">Book</button>
-   </div>
-  </div>
- </article>`;
-}
-function renderHotels(){
- const query=($("hotelSearch").value||"").toLowerCase();
- $("featuredHotels").innerHTML=hotels.slice(0,6).map(hotelCard).join("");
- const countries=["All",...new Set(hotels.map(h=>h.country))];
- $("countryTabs").innerHTML=countries.map(c=>
-  `<button class="${selectedCountry===c?'active':''}" onclick="filterCountry('${c}')">${c}</button>`
- ).join("");
- const filtered=hotels.filter(h=>
-  (selectedCountry==="All"||h.country===selectedCountry)&&
-  (h.name+" "+h.country+" "+h.city).toLowerCase().includes(query)
+setTheme(localStorage.getItem(DB.theme)==="dark");
+
+$("themeToggle").addEventListener("click",()=>{
+ setTheme(!document.body.classList.contains("dark"));
+});
+
+/* SPLASH SCREEN */
+
+window.addEventListener("load",()=>{
+ setTimeout(()=>{
+  $("splash").style.opacity="0";
+  setTimeout(()=>$("splash").remove(),750);
+ },1800);
+});
+
+/* LOGO SECRET ACCESS */
+
+$("logo").addEventListener("click",()=>{
+ tapCount++;
+ clearTimeout(tapTimer);
+
+ if(tapCount>=7) {
+  tapCount=0;
+  $("logoModal").classList.remove("hidden");
+ } else {
+  tapTimer=setTimeout(()=>tapCount=0,1800);
+ }
+});
+
+/* PAGE NAVIGATION */
+
+function showPage(id,button) {
+ document.querySelectorAll(".page").forEach(p=>
+  p.classList.remove("active")
  );
- $("hotelList").innerHTML=filtered.map(hotelCard).join("")||'<div class="empty">No hotels found.</div>';
-}
-function filterCountry(c){selectedCountry=c;renderHotels()}
 
-/* REGISTRATION */
-function registerUser(){
- const name=$("regName").value.trim();
- const contact=$("regContact").value.trim();
- const password=$("regPassword").value;
- const location=$("regLocation").value.trim();
- if(!name||!contact||password.length<8){
-  $("authMessage").textContent="Please enter your name, contact and a password of at least 8 characters.";
-  return;
+ $(id).classList.add("active");
+
+ if(button) {
+  document.querySelectorAll(".bottom-nav button").forEach(b=>
+   b.classList.remove("active")
+  );
+  button.classList.add("active");
  }
- if(users.some(u=>u.contact===contact)){
-  $("authMessage").textContent="Account already exists. Please log in.";
-  return;
- }
- const user={
-  id:"TP"+Date.now(),name,contact,location,
-  invite:"INV"+Math.random().toString(36).slice(2,8).toUpperCase(),
-  balance:0,progress:0,day:new Date().toDateString()
- };
- users.push(user);
- currentUser=user;
- saveData();
- closeModal("authModal");
- showPage("profile");
+
+ if(id==="historyPage") renderHistory();
+ if(id==="profilePage") renderProfile();
+ if(id==="supportPage") renderSupportChat();
 }
-function loginUser(){
- const contact=$("regContact").value.trim();
- const user=users.find(u=>u.contact===contact);
- if(!user){
-  $("authMessage").textContent="Account not found. Please sign up first.";
+
+function closeModal(id) {
+ $(id).classList.add("hidden");
+}
+
+/* AUTHENTICATION - DEMO USER ACCOUNTS */
+
+function openAuth(mode) {
+ authMode=mode;
+ $("authModal").classList.remove("hidden");
+ $("registerFields").classList.toggle("hidden",mode==="login");
+ $("authTitle").textContent=mode==="login"?"Login":"Create Account";
+ $("authMessage").classList.add("hidden");
+}
+
+function toggleAuthMode() {
+ openAuth(authMode==="login"?"register":"login");
+}
+
+function togglePassword(id) {
+ const el=$(id);
+ el.type=el.type==="password"?"text":"password";
+}
+
+async function hashPassword(password) {
+ const bytes=new TextEncoder().encode(password);
+ const hash=await crypto.subtle.digest("SHA-256",bytes);
+ return Array.from(new Uint8Array(hash))
+  .map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+async function submitAuth() {
+ const identity=$("authIdentity").value.trim().toLowerCase();
+ const password=$("authPassword").value;
+ const message=$("authMessage");
+
+ if(!identity || !password) {
+  message.textContent="Please enter your login information.";
+  message.classList.remove("hidden");
   return;
  }
+
+ const passwordHash=await hashPassword(password);
+
+ if(authMode==="register") {
+  const name=$("regName").value.trim();
+  const location=$("regLocation").value.trim();
+
+  if(!name || !location) {
+   message.textContent="Name and location are required.";
+   message.classList.remove("hidden");
+   return;
+  }
+
+  if(users.some(u=>u.identity===identity)) {
+   message.textContent="This phone number or email is already registered.";
+   message.classList.remove("hidden");
+   return;
+  }
+
+  const user={
+   id:"TB"+Date.now(),
+   name,
+   identity,
+   location,
+   inviteCode:Math.random().toString(36).substring(2,9).toUpperCase(),
+   invitedBy:$("regInvite").value.trim(),
+   passwordHash,
+   balance:0,
+   orders:0,
+   status:"offline",
+   createdAt:new Date().toISOString(),
+   lastSeen:new Date().toISOString(),
+   transactions:[],
+   bookings:[],
+   profileImage:""
+  };
+
+  users.push(user);
+  save(DB.users,users);
+
+  message.textContent="Account created successfully. Please log in.";
+  message.classList.remove("hidden");
+  authMode="login";
+  $("registerFields").classList.add("hidden");
+  $("authTitle").textContent="Login";
+
+  renderStaffUsers();
+  return;
+ }
+
+ const user=users.find(u=>u.identity===identity);
+
+ if(!user || user.passwordHash!==passwordHash) {
+  message.textContent="Incorrect phone/email or password.";
+  message.classList.remove("hidden");
+  return;
+ }
+
  currentUser=user;
- saveData();
+ user.status="online";
+ user.lastSeen=new Date().toISOString();
+ save(DB.users,users);
+ localStorage.setItem(DB.current,user.id);
+
  closeModal("authModal");
- showPage("profile");
+ updateUI();
 }
-function requireLogin(){
- if(!currentUser){
-  alert("Please create an account or log in to submit this request. You can continue browsing as a guest.");
-  openModal("authModal");
-  return false;
+
+/* LOGOUT */
+
+function logout() {
+ if(currentUser) {
+  currentUser.status="offline";
+  currentUser.lastSeen=new Date().toISOString();
+  save(DB.users,users);
  }
- if(currentUser.day!==new Date().toDateString()){
-  currentUser.day=new Date().toDateString();
-  currentUser.progress=0;
-  syncCurrentUser();
+ currentUser=null;
+ localStorage.removeItem(DB.current);
+ updateUI();
+ showPage("homePage");
+}
+
+/* RESTORE SESSION */
+
+function restoreSession() {
+ const id=localStorage.getItem(DB.current);
+ currentUser=users.find(u=>u.id===id)||null;
+
+ if(currentUser) {
+  currentUser.status="online";
+  currentUser.lastSeen=new Date().toISOString();
+  save(DB.users,users);
  }
- return true;
+ updateUI();
+}
+
+function updateUI() {
+ renderProfile();
+ renderStaffUsers();
+ renderHistory();
+ renderActivity();
+ renderHotels();
+ renderBooking();
 }
 
 /* PROFILE */
-function updateProfile(){
- $("profileName").textContent=currentUser?.name||"Guest User";
- $("profileInfo").textContent=currentUser
-  ?`User ID: ${currentUser.id} | Invite Code: ${currentUser.invite}`
-  :"Browsing as Guest · No account required";
- $("wallet").textContent="$"+(currentUser?.balance||0).toFixed(2);
- $("profileProgress").textContent=(currentUser?.progress||0)+"/30";
- $("bookingCount").textContent=records.filter(r=>r.userId===currentUser?.id&&r.type==="Booking").length;
- $("profileHint").textContent=currentUser
-  ?"Your account information is stored in this browser demo."
-  :"You can view this page without an account. Log in only when submitting personal requests.";
+
+function renderProfile() {
+ if(!currentUser) {
+  $("profileName").textContent="Guest User";
+  $("profileId").textContent="Guest Account";
+  $("walletBalance").textContent="$0.00";
+  $("inviteCode").textContent="-";
+  $("profileOrders").textContent="0";
+  return;
+ }
+
+ $("profileName").textContent=currentUser.name;
+ $("profileId").textContent=currentUser.id;
+ $("walletBalance").textContent="$"+currentUser.balance.toFixed(2);
+ $("inviteCode").textContent=currentUser.inviteCode;
+ $("profileOrders").textContent=currentUser.orders;
+
+ $("profileImage").src=currentUser.profileImage||
+  "https://placehold.co/100x100?text=User";
 }
 
-/* HOTEL BOOKING */
-function bookHotel(id){
+$("profileUpload").addEventListener("change",async e=>{
+ if(!currentUser) return alert("Please log in first.");
+
+ const file=e.target.files[0];
+ if(!file || !file.type.startsWith("image/")) return;
+
+ const image=await fileToDataURL(file);
+ currentUser.profileImage=image;
+ save(DB.users,users);
+ renderProfile();
+});
+
+/* HOTEL DIRECTORY */
+
+function renderHotels(query="") {
+ const filtered=hotels.filter(h=>
+  (h.name+" "+h.country).toLowerCase().includes(query.toLowerCase())
+ );
+
+ $("featuredHotels").innerHTML=hotels.slice(0,3).map(h=>hotelCard(h)).join("");
+ $("hotelGrid").innerHTML=filtered.map(h=>hotelCard(h)).join("");
+}
+
+function hotelCard(h) {
+ return `
+ <article class="card">
+  <img class="hotel-img" src="${h.image}" alt="${escapeHTML(h.name)}">
+  <div class="card-body">
+   <span class="tag">${escapeHTML(h.country)}</span>
+   <h3>${escapeHTML(h.name)}</h3>
+   <p>⭐ ${h.stars} Star Hotel</p>
+   <p class="hotel-price">$${h.price} <small>/ night</small></p>
+   <button class="btn" onclick="selectHotel('${h.id}')">View Hotel</button>
+  </div>
+ </article>`;
+}
+
+$("hotelSearch").addEventListener("input",e=>
+ renderHotels(e.target.value)
+);
+
+function selectHotel(id) {
  selectedHotel=hotels.find(h=>h.id===id);
- if(!selectedHotel)return;
- $("selectedHotel").textContent=selectedHotel.name+" · $"+selectedHotel.price+" per night";
- showPage("booking");
-}
-function submitBooking(){
- if(!requireLogin())return;
- const guest=$("guestName").value.trim();
- const contact=$("guestContact").value.trim();
- const ci=$("bookingIn").value;
- const co=$("bookingOut").value;
- if(!selectedHotel||!guest||!contact||!ci||!co||co<=ci){
-  alert("Please complete valid booking information.");
-  return;
- }
- records.unshift({
-  id:Date.now(),userId:currentUser.id,type:"Booking",
-  name:selectedHotel.name,date:new Date().toLocaleString(),
-  status:"REQUESTED",checkIn:ci,checkOut:co
- });
- saveData();
- alert("Booking request submitted. Availability and final price require confirmation.");
- showPage("history");
+ renderBooking();
+ showPage("bookingPage");
 }
 
-/* DAILY HOTEL REVIEW TRACKER */
-function renderTasks(){
- const count=currentUser?.progress||0;
- $("progressText").textContent=count+" / 30";
- $("progressBar").style.width=(count/30*100)+"%";
- if(count>=30){
-  $("taskStatus").textContent="Daily activity target completed.";
-  $("taskContent").innerHTML="<h2>30 / 30 Completed</h2>";
-  return;
- }
- const hotel=hotels[count%hotels.length];
- $("taskStatus").textContent="Complete genuine hotel review activities.";
- $("taskContent").innerHTML=`
-  <img src="${hotel.img}" style="width:100%;max-height:260px;object-fit:cover;border-radius:10px">
-  <h2>${hotel.name}</h2>
-  <p>${hotel.city}, ${hotel.country}</p>
-  <p class="stars">★ ${hotel.stars}</p>
-  <label>Your Rating</label>
-  <select id="reviewRating">
-   <option value="5">5 Stars</option>
-   <option value="4">4 Stars</option>
-   <option value="3">3 Stars</option>
-   <option value="2">2 Stars</option>
-   <option value="1">1 Star</option>
-  </select>
-  <label>Honest Review</label>
-  <textarea id="reviewText" rows="4"></textarea>
-  <button class="primary full" onclick="submitReview(${hotel.id})">Submit Review</button>`;
-}
-function submitReview(id){
- if(!requireLogin())return;
- const review=$("reviewText").value.trim();
- if(review.length<10){
-  alert("Please write a review with at least 10 characters.");
-  return;
- }
- const hotel=hotels.find(h=>h.id===id);
- records.unshift({
-  id:Date.now(),userId:currentUser.id,type:"Hotel Review",
-  name:hotel.name,rating:$("reviewRating").value,
-  review,date:new Date().toLocaleString(),status:"SUBMITTED"
- });
- currentUser.progress=Math.min(30,(currentUser.progress||0)+1);
- syncCurrentUser();
- updateProfile();
- renderTasks();
- alert("Review submitted successfully.");
+/* BOOKING */
+
+function renderBooking() {
+ if(!selectedHotel) selectedHotel=hotels[0];
+
+ const progress=currentUser?Math.min(currentUser.orders,30):0;
+ $("orderCount").textContent=progress+" / 30";
+ $("orderProgress").style.width=(progress/30*100)+"%";
+
+ $("bookingHotel").innerHTML=`
+  <img class="hotel-img" src="${selectedHotel.image}" alt="Hotel">
+  <div class="card-body">
+   <h2>${escapeHTML(selectedHotel.name)}</h2>
+   <p>${escapeHTML(selectedHotel.country)} · ⭐ ${selectedHotel.stars}</p>
+   <h3 class="hotel-price">$${selectedHotel.price} / night</h3>
+   <p class="muted">Actual bookings require guest details, date selection and supplier confirmation.</p>
+  </div>`;
+
+ $("reviewOptions").innerHTML=reviews.map((r,i)=>`
+  <label style="display:block;margin:12px 0">
+   <input type="radio" name="review" value="${i}" ${i===0?"checked":""}>
+   ${escapeHTML(r)}
+  </label>
+ `).join("");
 }
 
-/* DEPOSIT / WITHDRAW REQUESTS */
-function submitMoneyRequest(type){
- if(!requireLogin())return;
- const amount=Number(type==="Deposit"?$("depositAmount").value:$("withdrawAmount").value);
- if(!Number.isFinite(amount)||amount<=0){
-  alert("Enter a valid amount.");
+function submitBooking() {
+ const message=$("bookingMessage");
+
+ if(!currentUser) {
+  message.textContent="Please log in before booking.";
+  message.classList.remove("hidden");
   return;
  }
- const reference=type==="Deposit"?$("paymentReference").value.trim():$("withdrawAccount").value.trim();
- if(!reference){
-  alert("Please provide the payment reference or account.");
-  return;
- }
- requests.unshift({
-  id:Date.now(),userId:currentUser.id,type,amount,reference,
-  status:"PENDING",date:new Date().toLocaleString()
- });
- saveData();
- alert(type+" request recorded for admin review. No money was transferred.");
- showPage("history");
+
+ message.textContent="Please complete a real hotel reservation and receive supplier confirmation before a booking is recorded.";
+ message.classList.remove("hidden");
 }
 
 /* HISTORY */
-function renderHistory(){
- const own=records.filter(r=>r.userId===currentUser?.id);
- const money=requests.filter(r=>r.userId===currentUser?.id);
- const all=[...own,...money];
- $("historyContent").innerHTML=all.map(r=>`
-  <div class="row">
-   <b>${escapeHTML(r.type)}: ${escapeHTML(r.name||("$"+r.amount))}</b>
-   <p class="muted">${escapeHTML(r.date||"")} · <span class="status">${escapeHTML(r.status)}</span></p>
-  </div>
- `).join("")||'<div class="empty">No records yet. Guests can browse this page without signing in.</div>';
+
+function renderHistory() {
+ const rows=currentUser?.transactions||[];
+
+ $("historyRows").innerHTML=rows.length?rows.map(t=>`
+  <tr>
+   <td>${new Date(t.date).toLocaleDateString()}</td>
+   <td>${escapeHTML(t.type)}</td>
+   <td>$${Number(t.amount).toFixed(2)}</td>
+   <td>${escapeHTML(t.status)}</td>
+  </tr>
+ `).join(""):`<tr><td colspan="4">No transactions yet.</td></tr>`;
 }
 
-/* CUSTOMER SERVICE */
-function sendGreeting(){
- if($("chatBox").dataset.greeted==="true")return;
- $("chatBox").dataset.greeted="true";
- const row=document.createElement("div");
- row.className="row";
- const b=document.createElement("b");
- b.textContent="Trip Booking Customer Service";
- const p=document.createElement("p");
- p.textContent="မင်္ဂလာပါရှင်၊ Trip Booking မှာ ကြိုဆိုပါသည်၊ ဘာကူညီပေးရမလဲရှင်။";
- row.append(b,p);
- $("chatBox").append(row);
-}
-function sendMessage(){
- const message=$("chatInput").value.trim();
- if(!message)return;
- const row=document.createElement("div");
- row.className="row";
- const b=document.createElement("b");
- b.textContent="Guest";
- const p=document.createElement("p");
- p.textContent=message;
- row.append(b,p);
- $("chatBox").append(row);
- $("chatInput").value="";
+/* DEPOSIT / WITHDRAWAL REQUESTS */
+
+function openTransaction(type) {
+ if(!currentUser) return openAuth("login");
+
+ window.transactionType=type;
+ $("transactionTitle").textContent=
+  type==="deposit"?"Deposit Request":"Withdrawal Request";
+ $("transactionModal").classList.remove("hidden");
 }
 
-/* LOGO 7-TAP STAFF ACCESS */
-function logoTap(){
- const now=Date.now();
- logoClicks=logoClicks.filter(t=>now-t<4000);
- logoClicks.push(now);
- if(logoClicks.length>=7){
-  logoClicks=[];
-  $("staffMessage").textContent="";
-  openModal("staffModal");
+async function submitTransaction() {
+ if(!currentUser) return;
+
+ const amount=Number($("transactionAmount").value);
+ const reference=$("transactionReference").value.trim();
+
+ if(!Number.isFinite(amount)||amount<=0)
+  return alert("Enter a valid amount.");
+
+ if(window.transactionType==="withdrawal" && amount>currentUser.balance)
+  return alert("Insufficient available balance.");
+
+ const file=$("transactionSlip").files[0];
+ let slip="";
+
+ if(file) {
+  if(!file.type.startsWith("image/"))
+   return alert("Please select an image slip.");
+  slip=await fileToDataURL(file);
  }
+
+ const record={
+  id:"TX"+Date.now(),
+  type:window.transactionType,
+  amount,
+  reference,
+  slip,
+  status:"pending",
+  date:new Date().toISOString()
+ };
+
+ currentUser.transactions.push(record);
+ save(DB.users,users);
+
+ closeModal("transactionModal");
+ renderHistory();
+ renderProfile();
+ renderStaffUsers();
+ alert("Request submitted. It must be verified by an authorized operator.");
 }
 
-/* STAFF LOGIN - DEMO */
-function staffLogin(){
+/* CUSTOMER SERVICE CHAT */
+
+function getChats() {
+ return read(DB.chats);
+}
+
+function renderSupportChat() {
+ if(!currentUser) {
+  $("supportMessages").innerHTML=
+   "<p>Please log in to start a support conversation.</p>";
+  return;
+ }
+
+ renderChat("supportMessages",currentUser.id);
+}
+
+function contactSupport() {
+ if(!currentUser) return openAuth("login");
+
+ const chats=getChats();
+ const existing=chats.some(c=>
+  c.userId===currentUser.id && c.sender==="support"
+ );
+
+ if(!existing) {
+  chats.push({
+   userId:currentUser.id,
+   sender:"support",
+   text:"မင်္ဂလာပါရှင်၊ Trip Booking မှာ ကြိုဆိုပါသည်၊ ဘာကူညီပေးရမလဲရှင်။",
+   date:new Date().toISOString()
+  });
+  save(DB.chats,chats);
+ }
+
+ renderSupportChat();
+}
+
+async function sendSupportMessage() {
+ if(!currentUser) return openAuth("login");
+
+ const input=$("supportInput");
+ const file=$("supportFile").files[0];
+ const text=input.value.trim();
+
+ if(!text&&!file) return;
+
+ await addChatMessage(currentUser.id,"user",text,file);
+ input.value="";
+ $("supportFile").value="";
+ renderSupportChat();
+ renderStaffMessages();
+}
+
+async function addChatMessage(userId,sender,text,file) {
+ const chats=getChats();
+ let attachment=null;
+
+ if(file) {
+  if(!file.type.startsWith("image/")&&!file.type.startsWith("video/"))
+   throw new Error("Unsupported attachment.");
+  attachment={
+   type:file.type,
+   data:await fileToDataURL(file),
+   name:file.name
+  };
+ }
+
+ chats.push({
+  userId,sender,text,
+  attachment,
+  date:new Date().toISOString()
+ });
+
+ save(DB.chats,chats);
+}
+
+function renderChat(elementId,userId) {
+ const chats=getChats().filter(c=>c.userId===userId);
+
+ $(elementId).innerHTML=chats.map(c=>{
+  let media="";
+
+  if(c.attachment) {
+   media=c.attachment.type.startsWith("image/")
+    ?`<img src="${c.attachment.data}" alt="Attachment">`
+    :`<video src="${c.attachment.data}" controls></video>`;
+  }
+
+  return `
+   <div class="message ${c.sender==="user"?"mine":""}">
+    <p>${escapeHTML(c.text||"")}</p>
+    ${media}
+    <small>${new Date(c.date).toLocaleString()}</small>
+   </div>`;
+ }).join("");
+
+ $(elementId).scrollTop=$(elementId).scrollHeight;
+}
+
+function deleteLastSupportMessage() {
+ if(!currentUser) return;
+
+ const chats=getChats();
+ const index=chats.findLastIndex(c=>
+  c.userId===currentUser.id && c.sender==="user"
+ );
+
+ if(index<0) return;
+
+ if(!confirm("Delete your last message?")) return;
+
+ chats.splice(index,1);
+ save(DB.chats,chats);
+ renderSupportChat();
+}
+
+/* STAFF LOGIN
+   IMPORTANT:
+   This calls a server endpoint.
+   Do not put staff passwords in this HTML file.
+*/
+
+function openStaff(role) {
+ staffRole=role;
+ $("staffLoginTitle").textContent=
+  role==="admin"?"Administrator Login":"Customer Service Login";
+
+ $("staffModal").classList.remove("hidden");
+}
+
+async function staffLogin() {
  const phone=$("staffPhone").value.trim();
  const password=$("staffPassword").value;
- if(phone===STAFF_PHONE&&password===STAFF_PASSWORD){
-  sessionStorage.setItem("tp_staff_login","true");
-  $("staffMessage").textContent="Login successful.";
+ const message=$("staffMessage");
+
+ message.classList.remove("hidden");
+
+ try {
+  const response=await fetch("/api/auth/staff",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   credentials:"include",
+   body:JSON.stringify({phone,password,role:staffRole})
+  });
+
+  const result=await response.json();
+
+  if(!response.ok || !result.authenticated) {
+   message.textContent=result.message||"Staff authentication failed.";
+   return;
+  }
+
+  if(!result.role || !["admin","support"].includes(result.role)) {
+   message.textContent="Invalid staff permissions.";
+   return;
+  }
+
+  staffRole=result.role;
   closeModal("staffModal");
-  showPage("admin");
-  renderAdmin();
- }else{
-  $("staffMessage").textContent="Incorrect phone number or password. Please try again.";
+  showPage("staffPage");
+  renderStaffUsers();
+
+ } catch(error) {
+  message.textContent=
+   "Staff login requires a working server authentication endpoint. Frontend alone cannot verify staff credentials.";
  }
 }
 
-/* ADMIN DASHBOARD */
-function renderAdmin(){
- if(sessionStorage.getItem("tp_staff_login")!=="true")return;
- $("adminUserCount").textContent=users.length;
- $("adminBookingCount").textContent=records.filter(r=>r.type==="Booking").length;
- $("adminPendingCount").textContent=requests.filter(r=>r.status==="PENDING").length;
- $("adminUsers").innerHTML=users.map(u=>`
-  <div class="user-item" onclick="showAdminUser('${u.id}')">
-   <b>${escapeHTML(u.name)}</b><br>
-   <small>${escapeHTML(u.contact)}</small>
-  </div>`).join("")||'<div class="empty">No registered customers.</div>';
- $("adminRequests").innerHTML=requests.map(r=>`
-  <div class="row">
-   <b>${escapeHTML(r.type)} · $${Number(r.amount).toFixed(2)}</b>
-   <p class="muted">${escapeHTML(r.status)} · ${escapeHTML(r.date)}</p>
-   ${r.status==="PENDING"?`
-    <button class="primary" onclick="reviewRequest(${r.id},'REVIEWED')">Mark Reviewed</button>
-    <button class="soft" onclick="reviewRequest(${r.id},'REJECTED')">Reject</button>`:""}
-  </div>`).join("")||"No requests.";
-}
-function showAdminUser(id){
- const u=users.find(x=>x.id===id);
- if(!u)return;
- activeAdminUser=id;
- const activity=records.filter(r=>r.userId===id);
- $("adminDetails").innerHTML=`
-  <h2>${escapeHTML(u.name)}</h2>
-  <p>${escapeHTML(u.contact)}</p>
-  <p>Location: ${escapeHTML(u.location||"—")}</p>
-  <p>User ID: ${escapeHTML(u.id)}</p>
-  <p>Invite Code: ${escapeHTML(u.invite)}</p>
-  <p>Wallet Balance: $${Number(u.balance||0).toFixed(2)}</p>
-  <h3>Booking & Activity History</h3>
-  ${activity.map(r=>`<div class="row">${escapeHTML(r.type)} · ${escapeHTML(r.name||"")} · ${escapeHTML(r.status)}</div>`).join("")||"No activity yet."}`;
-}
-function reviewRequest(id,status){
- if(sessionStorage.getItem("tp_staff_login")!=="true")return;
- const r=requests.find(x=>x.id===id);
- if(!r)return;
- r.status=status;
- saveData();
- renderAdmin();
-}
-function savePolicy(){
- if(sessionStorage.getItem("tp_staff_login")!=="true")return;
- alert("Demo policy saved. Production rules must be stored and validated on the server.");
+/* ADMIN / CUSTOMER SERVICE */
+
+function switchStaffTab(role) {
+ staffRole=role;
+ $("staffListTitle").textContent=
+  role==="admin"?"Registered Users":"Customer Conversations";
+ renderStaffUsers();
 }
 
-/* SAFE TEXT */
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+function renderStaffUsers() {
+ const query=staffRole==="support"
+  ?getChats().map(c=>c.userId):users.map(u=>u.id);
+
+ const unique=[...new Set(query)];
+ const list=users.filter(u=>unique.includes(u.id));
+
+ $("staffUserList").innerHTML=list.map(u=>`
+  <div class="user-item ${selectedUserId===u.id?"selected":""}"
+   onclick="selectStaffUser('${u.id}')">
+   <img class="avatar"
+    src="${u.profileImage||"https://placehold.co/80x80?text=User"}">
+   <div>
+    <strong>${escapeHTML(u.name)}</strong>
+    <p class="muted">${u.status==="online"?"🟢 Online":"⚪ Offline"}</p>
+    <p class="muted">${timeAgo(u.lastSeen)}</p>
+   </div>
+  </div>
+ `).join("")||"<p class='card-body'>No registered users yet.</p>";
+}
+
+function selectStaffUser(id) {
+ selectedUserId=id;
+ const u=users.find(x=>x.id===id);
+ if(!u) return;
+
+ const transactions=u.transactions||[];
+ const bookings=u.bookings||[];
+
+ $("staffUserDetail").innerHTML=`
+  <h2>${escapeHTML(u.name)}</h2>
+  <p class="muted">${escapeHTML(u.id)}</p>
+  <div class="stats" style="margin-top:15px">
+   <div class="stat">Location<strong>${escapeHTML(u.location)}</strong></div>
+   <div class="stat">Invite Code<strong>${escapeHTML(u.inviteCode)}</strong></div>
+   <div class="stat">Wallet<strong>$${u.balance.toFixed(2)}</strong></div>
+   <div class="stat">Orders<strong>${u.orders}/30</strong></div>
+  </div>
+  <div class="notice">
+   <strong>Account:</strong> ${escapeHTML(u.identity)}<br>
+   <strong>Created:</strong> ${new Date(u.createdAt).toLocaleString()}<br>
+   <strong>Last seen:</strong> ${new Date(u.lastSeen).toLocaleString()}
+  </div>
+  <h3>Transactions</h3>
+  <div class="table-wrap">
+   <table>
+    <tr><th>Type</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+    ${transactions.map(t=>`
+     <tr>
+      <td>${escapeHTML(t.type)}</td>
+      <td>$${t.amount.toFixed(2)}</td>
+      <td>${escapeHTML(t.status)}</td>
+      <td>${t.status==="pending"?
+       `<button class="btn btn-success" onclick="reviewTransaction('${u.id}','${t.id}','approve')">Approve</button>
+        <button class="btn btn-danger" onclick="reviewTransaction('${u.id}','${t.id}','reject')">Reject</button>`
+       :"-"}
+      </td>
+     </tr>`).join("")}
+   </table>
+  </div>
+  <h3 style="margin-top:18px">Account Management</h3>
+  <p class="muted">Read-only frontend demo. Balance changes require an audited backend transaction.</p>
+  <p>Booking records: ${bookings.length}</p>
+ `;
+
+ renderChat("staffMessages",id);
+ renderStaffUsers();
+}
+
+async function sendStaffMessage() {
+ if(!selectedUserId) return alert("Select a user first.");
+
+ const text=$("staffInput").value.trim();
+ const file=$("staffFile").files[0];
+ if(!text&&!file) return;
+
+ await addChatMessage(selectedUserId,staffRole,text,file);
+
+ $("staffInput").value="";
+ $("staffFile").value="";
+ renderStaffMessages();
+ renderSupportChat();
+}
+
+function renderStaffMessages() {
+ if(selectedUserId) renderChat("staffMessages",selectedUserId);
+}
+
+function deleteLastStaffMessage() {
+ if(!selectedUserId) return;
+
+ const chats=getChats();
+ const index=chats.findLastIndex(c=>
+  c.userId===selectedUserId && c.sender!=="user"
+ );
+
+ if(index<0) return;
+ if(!confirm("Delete your last staff message?")) return;
+
+ chats.splice(index,1);
+ save(DB.chats,chats);
+ renderStaffMessages();
+}
+
+function reviewTransaction(userId,transactionId,action) {
+ const user=users.find(u=>u.id===userId);
+ if(!user) return;
+
+ const tx=user.transactions.find(t=>t.id===transactionId);
+ if(!tx||tx.status!=="pending") return;
+
+ if(!confirm("Confirm this transaction review?")) return;
+
+ if(action==="approve") {
+  if(tx.type==="deposit") {
+   user.balance+=tx.amount;
+  } else {
+   if(user.balance<tx.amount)
+    return alert("Insufficient available balance.");
+   user.balance-=tx.amount;
+  }
+  tx.status="approved";
+ } else {
+  tx.status="rejected";
+ }
+
+ tx.reviewedAt=new Date().toISOString();
+ save(DB.users,users);
+ renderStaffUsers();
+ selectStaffUser(userId);
+ updateUI();
+}
+
+/* ACTIVITY FEED - VERIFIED USER EVENTS ONLY */
+
+function renderActivity() {
+ const activities=users.flatMap(u=>
+  (u.transactions||[])
+   .filter(t=>t.status==="approved")
+   .map(t=>({user:u.name,type:t.type,amount:t.amount,date:t.date}))
+ ).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,20);
+
+ $("activityFeed").innerHTML=activities.map(a=>`
+  <div class="notice">
+   ${escapeHTML(a.user)} · ${escapeHTML(a.type)}
+   · $${a.amount.toFixed(2)}
+   <small>${new Date(a.date).toLocaleString()}</small>
+  </div>
+ `).join("")||"<p class='muted'>No verified activity yet.</p>";
+}
+
+/* UTILITIES */
+
+function fileToDataURL(file) {
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+  reader.onload=()=>resolve(reader.result);
+  reader.onerror=reject;
+  reader.readAsDataURL(file);
+ });
+}
+
+function escapeHTML(value) {
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
  }[c]));
 }
 
-/* SIX PROMO SLIDES */
-let bannerIndex=0;
-const bannerImages=[
- "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1500",
- "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1500",
- "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=1500",
- "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1500",
- "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1500",
- "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=1500"
-];
-function nextBanner(){
- bannerIndex=(bannerIndex+1)%bannerImages.length;
- $("heroBanner").style.backgroundImage=
- `linear-gradient(90deg,#071B35E8,#071B3530),url("${bannerImages[bannerIndex]}")`;
+function timeAgo(date) {
+ if(!date) return "Unknown";
+ const minutes=Math.max(0,Math.floor((Date.now()-new Date(date))/60000));
+ if(minutes<1) return "Just now";
+ if(minutes<60) return minutes+" minutes ago";
+ if(minutes<1440) return Math.floor(minutes/60)+" hours ago";
+ return Math.floor(minutes/1440)+" days ago";
 }
 
-/* STARTUP */
-document.addEventListener("DOMContentLoaded",()=>{
- document.body.classList.toggle("dark",darkMode);
- $("themeBtn").textContent=darkMode?"☀":"☾";
- $("language").value=language;
- document.querySelectorAll("[data-t]").forEach(el=>{
-  el.textContent=translations[language][el.dataset.t];
- });
- $("heroBanner").style.backgroundImage=
- `linear-gradient(90deg,#071B35E8,#071B3530),url("${bannerImages[0]}")`;
- $("hotelSearch").addEventListener("input",renderHotels);
- renderHotels();
- updateProfile();
- renderTasks();
- renderHistory();
- setInterval(nextBanner,5000);
-});
+/* INITIALIZATION */
 
-/* SPLASH: WELCOME FIRST, THEN MAIN PLATFORM */
-window.addEventListener("load",()=>{
- const splash=$("splashScreen");
- setTimeout(()=>{
-  splash.classList.add("hide");
-  setTimeout(()=>splash.remove(),850);
- },2500);
-});
+restoreSession();
+renderHotels();
+renderBooking();
+renderActivity();
+
 </script>
 </body>
 </html>
