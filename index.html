@@ -84,9 +84,16 @@ header{
 
 .section-title{
  display:flex;justify-content:space-between;align-items:center;
- gap:10px;margin:24px 0 12px;
+ gap:10px;margin:24px 0 12px;flex-wrap:wrap;
 }
 .section-title h2{font-size:18px;margin:0}
+
+.filter-bar{
+ display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.filter-bar input, .filter-bar select{
+ width:auto;min-width:140px;padding:8px 10px;font-size:13px;
+}
 
 .hotel-grid{
  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -225,8 +232,22 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="hotel-grid" id="featuredHotels"></div>
 
  <div class="section-title" id="hotelDirectory">
-  <h2 data-i18n="hotelDir">Hotel Directory (40+ Global Hotels)</h2>
-  <input id="hotelSearch" placeholder="Search hotel or country" data-i18n-placeholder="searchPlaceholder" style="max-width:240px">
+  <h2 data-i18n="hotelDir">Hotel Directory (Global Hotels)</h2>
+  <div class="filter-bar">
+   <input id="hotelSearch" placeholder="Search hotel or country" data-i18n-placeholder="searchPlaceholder">
+   <select id="starFilter" onchange="renderHotels()">
+    <option value="all" data-i18n="allStars">All Stars ⭐</option>
+    <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
+    <option value="4">4 Stars ⭐⭐⭐⭐</option>
+    <option value="3">3 Stars ⭐⭐⭐</option>
+   </select>
+   <select id="priceFilter" onchange="renderHotels()">
+    <option value="all" data-i18n="allPrices">All Prices 💰</option>
+    <option value="under150">Under $150</option>
+    <option value="150to300">$150 - $300</option>
+    <option value="over300">Over $300</option>
+   </select>
+  </div>
  </div>
  <div id="countryHotels"></div>
 </section>
@@ -337,8 +358,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
-   <button class="btn btn-success" onclick="openFinanceModal('deposit')" data-i18n="depositBtn">💳 Deposit (ငွေသွင်းရန်)</button>
-   <button class="btn btn-danger" onclick="openFinanceModal('withdraw')" data-i18n="withdrawBtn">💸 Withdraw (ငွေထုတ်ရန်)</button>
+   <button class="btn btn-success" onclick="openFinanceModal('deposit')" data-i18n="depositBtn">💳 Deposit</button>
+   <button class="btn btn-danger" onclick="openFinanceModal('withdraw')" data-i18n="withdrawBtn">💸 Withdraw</button>
   </div>
 
   <!-- VIP Tiers & Limits Overview -->
@@ -360,21 +381,25 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- STAFF PAGE (ADMIN & CS) -->
+<!-- STAFF PAGE (ROLE-BASED: SUPER ADMIN vs CS AGENT) -->
 <section class="page" id="staffPage">
  <div class="section-title">
-  <h2>Staff Management Center</h2>
+  <div>
+   <h2 id="staffRoleTitle">Staff Management Center</h2>
+   <span class="tag" id="staffRoleBadge">ROLE</span>
+  </div>
   <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
  </div>
 
- <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-  <button class="btn" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS & VIP MANAGEMENT</button>
-  <button class="btn btn-light" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
+ <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="staffNavTabs">
+  <button class="btn admin-only" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS & VIP MANAGEMENT</button>
+  <button class="btn btn-light admin-only" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
+  <button class="btn btn-light admin-only" id="adminSettingsBtn" onclick="switchStaffTab('adminSettings')">STAFF ACCOUNTS</button>
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
  <!-- ADMIN USERS WORKSPACE -->
- <div id="adminWorkspace" class="panel">
+ <div id="adminWorkspace" class="panel admin-only">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
    <h3>User Accounts, VIP Levels & Booking Rules Control</h3>
    <div>
@@ -403,7 +428,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <!-- ADMIN FINANCE WORKSPACE -->
- <div id="adminFinanceWorkspace" class="panel hidden">
+ <div id="adminFinanceWorkspace" class="panel hidden admin-only">
   <h3>Pending Deposit & Withdrawal Requests</h3>
   <p class="muted">Approve or reject user fund requests here.</p>
   <div class="table-wrap" style="margin-top:12px">
@@ -425,11 +450,24 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
  </div>
 
+ <!-- ADMIN STAFF SETTINGS WORKSPACE -->
+ <div id="adminSettingsWorkspace" class="panel hidden admin-only">
+  <h3>Staff & Role Access Credentials</h3>
+  <p class="muted">Configure access passwords for Super Admin and Customer Service (CS) Agents.</p>
+  <div style="max-width:400px;margin-top:14px">
+   <label>Super Admin Password (Full Access)</label>
+   <input id="adminPassInput" type="text">
+   <label>Customer Service Agent Password (Chat Only)</label>
+   <input id="csPassInput" type="text">
+   <button class="btn btn-success" style="margin-top:12px" onclick="saveStaffCredentials()">Update Passwords</button>
+  </div>
+ </div>
+
  <!-- CS WORKSPACE -->
  <div id="csWorkspace" class="panel hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
   <aside class="staff-sidebar panel" style="padding:10px">
    <h3>Client Chats</h3>
-   <input id="csSearch" placeholder="Search clients..." style="margin:8px 0">
+   <input id="csSearch" placeholder="Search clients..." style="margin:8px 0" oninput="renderStaffClientList()">
    <div id="csUserList"></div>
   </aside>
   <div class="staff-main panel" style="padding:0;overflow:hidden">
@@ -502,10 +540,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div class="modal hidden" id="staffModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h2>Staff Portal</h2>
+   <h2>Staff & Admin Portal</h2>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
   </div>
-  <label>Staff Password</label><input id="staffPassword" type="password" placeholder="Enter password">
+  <label>Select Role</label>
+  <select id="staffRoleSelect">
+   <option value="admin">Super Admin (Full Control)</option>
+   <option value="cs">Customer Service Agent (Chat Support)</option>
+  </select>
+  <label>Access Password</label>
+  <input id="staffPassword" type="password" placeholder="Enter password">
   <p id="staffMessage" class="muted" style="margin-top:6px;color:var(--fb-danger)"></p>
   <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
  </div>
@@ -534,15 +578,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v12",
- current:"tb_current_v12",
- theme:"tb_theme_v12",
- activity:"tb_activity_v12",
- finance:"tb_finance_v3",
- lang:"tb_lang_v1"
+ users:"tb_users_v13",
+ current:"tb_current_v13",
+ theme:"tb_theme_v13",
+ activity:"tb_activity_v13",
+ finance:"tb_finance_v4",
+ lang:"tb_lang_v2",
+ staffCreds:"tb_staff_creds_v1"
 };
 
-// MULTI-LANGUAGE DICTIONARY (English, Burmese, Chinese)
+// MULTI-LANGUAGE DICTIONARY
 const TRANSLATIONS = {
  en: {
   heroTag: "INTERNATIONAL TRAVEL",
@@ -551,8 +596,10 @@ const TRANSLATIONS = {
   exploreBtn: "Explore Hotels",
   featHotels: "Featured Hotels",
   topDest: "Top destinations",
-  hotelDir: "Hotel Directory (40+ Global Hotels)",
+  hotelDir: "Hotel Directory (Global Hotels)",
   searchPlaceholder: "Search hotel or country",
+  allStars: "All Stars ⭐",
+  allPrices: "All Prices 💰",
   liveTicker: "Live",
   csCenter: "Customer Service Center",
   csOnline: "Trip Booking Support (Online)",
@@ -618,8 +665,10 @@ const TRANSLATIONS = {
   exploreBtn: "ဟိုတယ်များ ကြည့်ရန်",
   featHotels: "ထင်ရှားသော ဟိုတယ်များ",
   topDest: "လူကြိုက်အများဆုံး နေရာများ",
-  hotelDir: "ဟိုတယ်လမ်းညွှန် (ဟိုတယ် ၄၀+)",
+  hotelDir: "ဟိုတယ်လမ်းညွှန် (နိုင်ငံတကာ ဟိုတယ်များ)",
   searchPlaceholder: "ဟိုတယ် သို့မဟုတ် နိုင်ငံ ရှာရန်",
+  allStars: "ကြယ်ပွင့်အားလုံး ⭐",
+  allPrices: "ဈေးနှုန်းအားလုံး 💰",
   liveTicker: "တိုက်ရိုက်",
   csCenter: "ဖောက်သည် ဝန်ဆောင်မှုစင်တာ",
   csOnline: "Trip Booking ပံ့ပိုးမှု (အွန်လိုင်း)",
@@ -685,8 +734,10 @@ const TRANSLATIONS = {
   exploreBtn: "探索酒店",
   featHotels: "精选酒店",
   topDest: "热门目的地",
-  hotelDir: "酒店目录 (40+ 全球酒店)",
+  hotelDir: "酒店目录 (全球酒店)",
   searchPlaceholder: "搜索酒店或国家",
+  allStars: "所有星级 ⭐",
+  allPrices: "所有价格 💰",
   liveTicker: "实时",
   csCenter: "客服中心",
   csOnline: "Trip Booking 客服 (在线)",
@@ -754,15 +805,21 @@ const VIP_CONFIG = {
  LV4: { name: "LV4 (Platinum)", maxTasks: 80, multiplier: 3.0, maxWithdraw: 999999 }
 };
 
-const read = key => {
- try { return JSON.parse(localStorage.getItem(key)) || []; }
- catch { return []; }
+const read = (key, fallback = []) => {
+ try { 
+  const val = JSON.parse(localStorage.getItem(key));
+  return val !== null ? val : fallback;
+ }
+ catch { return fallback; }
 };
 
 const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
 
-let users = read(KEYS.users);
-let financeRequests = read(KEYS.finance);
+let users = read(KEYS.users, []);
+let financeRequests = read(KEYS.finance, []);
+let staffCreds = read(KEYS.staffCreds, { adminPass: "12344321", csPass: "11223344" });
+let activeStaffRole = null; // 'admin' or 'cs'
+
 let currentUser = null;
 let selectedUserId = null;
 let authMode = "login";
@@ -778,7 +835,10 @@ const hotels = [
  {id:"H02",name:"The Ritz-Carlton",country:"Japan",price:280,stars:5,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
  {id:"H03",name:"Bali Luxury Resort",country:"Indonesia",price:160,stars:5,image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
  {id:"H04",name:"Swiss Alpine Hotel",country:"Switzerland",price:310,stars:5,image:"https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900"},
- {id:"H05",name:"Bangkok Grand Hotel",country:"Thailand",price:95,stars:4,image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"}
+ {id:"H05",name:"Bangkok Grand Hotel",country:"Thailand",price:95,stars:4,image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
+ {id:"H06",name:"Luang Prabang Heritage Villa",country:"Laos",price:135,stars:4,image:"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900"},
+ {id:"H07",name:"Taipei Sky Tower Hotel",country:"Taiwan",price:210,stars:4,image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
+ {id:"H08",name:"Yangon Riverside Boutique",country:"Myanmar",price:85,stars:3,image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"}
 ];
 
 const reviewOptions = [
@@ -798,6 +858,7 @@ function changeLanguage(lang) {
  localStorage.setItem(KEYS.lang, lang);
  $("language").value = lang;
  updateTranslations();
+ updateUI();
 }
 
 function updateTranslations() {
@@ -982,7 +1043,6 @@ function updateUI() {
   $("inviteCode").textContent = currentUser.inviteCode;
   $("inviteLink").value = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
 
-  // Render VIP Tiers Card Grid with Upgrade Request button
   const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
   $("vipTiersDisplay").innerHTML = Object.keys(VIP_CONFIG).map(key => {
    const tier = VIP_CONFIG[key];
@@ -1007,7 +1067,6 @@ function updateUI() {
 
 function requestVipUpgrade(targetVip) {
  if(!currentUser) return;
- // Send a message to Customer Service directly without auto-reply
  if(!currentUser.messages) currentUser.messages = [];
  const upgradeReqText = `Hello Customer Service, I would like to request an upgrade for my account to ${targetVip}. Please guide me through the process.`;
  currentUser.messages.push({sender:"user", text:upgradeReqText, time:new Date().toLocaleTimeString()});
@@ -1032,24 +1091,40 @@ function renderHotels() {
  `).join("");
 
  const query = ($("hotelSearch").value||"").toLowerCase();
- const filtered = hotels.filter(h => h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query));
- $("countryHotels").innerHTML = `
+ const starVal = $("starFilter").value;
+ const priceVal = $("priceFilter").value;
+
+ const filtered = hotels.filter(h => {
+  const matchesText = h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query);
+  const matchesStar = (starVal === "all") || (h.stars === parseInt(starVal));
+  let matchesPrice = true;
+  if(priceVal === "under150") matchesPrice = h.price < 150;
+  else if(priceVal === "150to300") matchesPrice = (h.price >= 150 && h.price <= 300);
+  else if(priceVal === "over300") matchesPrice = h.price > 300;
+  
+  return matchesText && matchesStar && matchesPrice;
+ });
+
+ $("countryHotels").innerHTML = filtered.length ? `
   <div class="hotel-grid">
    ${filtered.map(h => `
     <div class="card">
      <img class="hotel-img" src="${h.image}" alt="${h.name}">
      <div class="card-body">
-      <span class="tag">${h.country}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+       <span class="tag">${h.country}</span>
+       <span class="small" style="color:var(--fb-primary);font-weight:700">★ ${h.stars}.0</span>
+      </div>
       <h3>${h.name}</h3>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
        <span class="price">$${h.price}</span>
-       <button class="btn" style="padding:4px 8px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="exploreBtn">Book</button>
+       <button class="btn" style="padding:4px 8px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">Book</button>
       </div>
      </div>
     </div>
    `).join("")}
   </div>
- `;
+ ` : `<p class="muted" style="text-align:center;padding:20px;">No hotels match your selected filters.</p>`;
 }
 
 $("hotelSearch").addEventListener("input", renderHotels);
@@ -1223,12 +1298,12 @@ function submitFinanceRequest() {
  
  $("financeMsg").style.color = "var(--fb-success)";
  $("financeMsg").textContent = "Request submitted successfully! Waiting for admin approval.";
- setTimeout => {
+ setTimeout(() => {
   closeModal('financeModal');
  }, 1500);
 }
 
-// CUSTOMER SERVICE CHAT (NO AUTO REPLY, USER SENDS MANUALLY, ADMIN REPLIES MANUALLY)
+// CUSTOMER SERVICE CHAT
 function renderSupportChat() {
  if(!currentUser) {
   $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px;">Please login to chat with Customer Service.</p>`;
@@ -1278,43 +1353,73 @@ function renderHistory() {
  `).join("") || `<p class="empty">No bookings.</p>`;
 }
 
-/* STAFF PORTAL LOGIN WITH PASSWORD 12344321 */
+/* ROLE-BASED STAFF PORTAL LOGIN */
 function staffLogin() {
+ const role = $("staffRoleSelect").value;
  const pass = $("staffPassword").value;
- if(pass === "12344321") {
+ staffCreds = read(KEYS.staffCreds, { adminPass: "12344321", csPass: "11223344" });
+
+ if(role === "admin" && pass === staffCreds.adminPass) {
+  activeStaffRole = "admin";
+  $("staffRoleTitle").textContent = "Super Admin Dashboard";
+  $("staffRoleBadge").textContent = "SUPER ADMIN";
+  document.querySelectorAll(".admin-only").forEach(el => el.classList.remove("hidden"));
+  
   $("staffPassword").value = "";
   $("staffMessage").textContent = "";
   closeModal('staffModal');
   $("staffPage").classList.remove("hidden");
   showPage('staffPage');
   switchStaffTab('adminUsers');
+ } else if(role === "cs" && pass === staffCreds.csPass) {
+  activeStaffRole = "cs";
+  $("staffRoleTitle").textContent = "Customer Service Desk";
+  $("staffRoleBadge").textContent = "CS AGENT (CHAT ONLY)";
+  document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
+
+  $("staffPassword").value = "";
+  $("staffMessage").textContent = "";
+  closeModal('staffModal');
+  $("staffPage").classList.remove("hidden");
+  showPage('staffPage');
+  switchStaffTab('support');
  } else {
-  $("staffMessage").textContent = "Invalid password! Use 12344321";
+  $("staffMessage").textContent = "Invalid password for selected role!";
  }
 }
 
 function staffLogout() {
+ activeStaffRole = null;
  $("staffPage").classList.add("hidden");
  showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
 }
 
 function switchStaffTab(tab) {
- $("adminUsersBtn").className = "btn btn-light";
- $("adminFinanceBtn").className = "btn btn-light";
+ if(activeStaffRole === "cs" && tab !== "support") return;
+
+ $("adminUsersBtn").className = "btn btn-light admin-only";
+ $("adminFinanceBtn").className = "btn btn-light admin-only";
+ $("adminSettingsBtn").className = "btn btn-light admin-only";
  $("csTabBtn").className = "btn btn-light";
 
  $("adminWorkspace").classList.add("hidden");
  $("adminFinanceWorkspace").classList.add("hidden");
+ $("adminSettingsWorkspace").classList.add("hidden");
  $("csWorkspace").classList.add("hidden");
 
  if(tab === 'adminUsers') {
-  $("adminUsersBtn").className = "btn";
+  $("adminUsersBtn").className = "btn admin-only";
   $("adminWorkspace").classList.remove("hidden");
   renderAdminTable();
  } else if(tab === 'adminFinance') {
-  $("adminFinanceBtn").className = "btn";
+  $("adminFinanceBtn").className = "btn admin-only";
   $("adminFinanceWorkspace").classList.remove("hidden");
   renderAdminFinanceTable();
+ } else if(tab === 'adminSettings') {
+  $("adminSettingsBtn").className = "btn admin-only";
+  $("adminSettingsWorkspace").classList.remove("hidden");
+  $("adminPassInput").value = staffCreds.adminPass;
+  $("csPassInput").value = staffCreds.csPass;
  } else if(tab === 'support') {
   $("csTabBtn").className = "btn";
   $("csWorkspace").classList.remove("hidden");
@@ -1322,8 +1427,20 @@ function switchStaffTab(tab) {
  }
 }
 
+function saveStaffCredentials() {
+ const newAdminPass = $("adminPassInput").value.trim();
+ const newCsPass = $("csPassInput").value.trim();
+ if(newAdminPass.length < 4 || newCsPass.length < 4) {
+  alert("Passwords must be at least 4 characters.");
+  return;
+ }
+ staffCreds = { adminPass: newAdminPass, csPass: newCsPass };
+ write(KEYS.staffCreds, staffCreds);
+ alert("Staff & Admin passwords updated successfully!");
+}
+
 function renderAdminTable() {
- users = read(KEYS.users);
+ users = read(KEYS.users, []);
  $("adminTableRows").innerHTML = users.map(u => `
   <tr>
    <td>${u.id}</td>
@@ -1349,7 +1466,7 @@ function renderAdminTable() {
 }
 
 function renderAdminFinanceTable() {
- financeRequests = read(KEYS.finance);
+ financeRequests = read(KEYS.finance, []);
  $("adminFinanceRows").innerHTML = financeRequests.map(r => `
   <tr>
    <td>${r.id}</td>
@@ -1370,8 +1487,8 @@ function renderAdminFinanceTable() {
 }
 
 function processFinance(reqId, action) {
- financeRequests = read(KEYS.finance);
- users = read(KEYS.users);
+ financeRequests = read(KEYS.finance, []);
+ users = read(KEYS.users, []);
  const req = financeRequests.find(r => r.id === reqId);
  if(!req || req.status !== 'Pending') return;
 
@@ -1460,8 +1577,10 @@ function selectUserChat(id) {
 }
 
 function renderStaffClientList() {
- users = read(KEYS.users);
- $("csUserList").innerHTML = users.map(u => `
+ users = read(KEYS.users, []);
+ const q = ($("csSearch").value || "").toLowerCase();
+ const filteredUsers = users.filter(u => u.name.toLowerCase().includes(q) || u.identity.toLowerCase().includes(q));
+ $("csUserList").innerHTML = filteredUsers.map(u => `
   <div onclick="selectUserChat('${u.id}')" style="padding:8px;margin-bottom:4px;border-radius:6px;cursor:pointer;background:${selectedUserId===u.id?'var(--fb-primary)':'var(--fb-bg)'};color:${selectedUserId===u.id?'white':'var(--fb-text)'}">
    <div style="font-weight:600;font-size:13px">${u.name}</div>
    <div style="font-size:11px;opacity:0.8">${u.identity}</div>
