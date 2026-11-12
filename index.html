@@ -273,7 +273,6 @@ th{color:var(--muted)}
 }
 </style>
 </head>
-
 <body>
 
 <div class="splash" id="splash">
@@ -378,16 +377,19 @@ th{color:var(--muted)}
 <section class="page" id="bookingPage">
  <div class="section-title"><h2>Booking Test (30 Orders)</h2><span class="tag">DEMO TASK</span></div>
  <div class="panel">
-  <h3 style="text-align:center">Daily Task Progress</h3>
+  <!-- ၄ ဘောင် (လက်ကျန်ငွေ၊ အမြတ်၊ လိုအပ်ငွေ၊ စုစုပေါင်းအမြတ်) -->
+  <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+   <div class="stat">Wallet Balance<strong id="taskWallet">$0.00</strong></div>
+   <div class="stat">Current Profit<strong id="taskProfit">$0.00</strong></div>
+   <div class="stat">Required Capital<strong id="taskRequired">$0.00</strong></div>
+   <div class="stat">Total Profit<strong id="taskTotalProfit">$0.00</strong></div>
+  </div>
+
+  <h3 style="text-align:center; margin-top:20px">Daily Task Progress</h3>
   <div class="task-circle" id="orderCircle">0/30</div>
   <div class="progress"><span id="orderProgress"></span></div>
-  <p class="muted" style="text-align:center">Complete 30 hotel review tasks to earn 0.3% profit per task based on your wallet balance and hotel price.</p>
-  <div id="bookingHotel"></div>
-  <h3>Choose Your Review</h3>
-  <div id="reviewOptions"></div>
-  <button class="btn btn-block" onclick="submitBooking()">Submit Test Booking</button>
-  <p class="muted" id="bookingMessage"></p>
-  <p class="notice small">Demo rewards reflect simulated task commissions based on your capital balance.</p>
+
+  <div id="bookingHotelArea" style="margin-top:20px"></div>
  </div>
 </section>
 
@@ -445,7 +447,7 @@ th{color:var(--muted)}
  </div>
 </section>
 
-<!-- STAFF PAGE -->
+<!-- STAFF PAGE (ADMIN & CS SEPARATED) -->
 <section class="page" id="staffPage">
  <div class="section-title">
   <h2>Staff Management Center</h2>
@@ -453,21 +455,34 @@ th{color:var(--muted)}
  </div>
 
  <div class="staff-top">
-  <button class="btn btn-dark" onclick="switchStaffTab('admin')">ADMIN</button>
-  <button class="btn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
+  <button class="btn btn-dark" id="adminTabBtn" onclick="switchStaffTab('admin')">ADMIN</button>
+  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
- <div class="staff-layout">
+ <!-- ADMIN VIEW -->
+ <div id="adminWorkspace" class="staff-layout">
   <aside class="staff-sidebar">
-   <h3 id="staffListTitle">Registered Users</h3>
-   <input id="staffSearch" placeholder="Search users...">
-   <div id="staffUserList"></div>
+   <h3>Registered Users</h3>
+   <input id="adminSearch" placeholder="Search users...">
+   <div id="adminUserList"></div>
   </aside>
+  <div class="staff-main" style="grid-template-columns:1fr">
+   <div class="staff-detail" id="adminUserDetail">
+    <p class="empty">Select a user from the left sidebar to view details, table orders, and edit parameters.</p>
+   </div>
+  </div>
+ </div>
 
+ <!-- CUSTOMER SERVICE VIEW -->
+ <div id="csWorkspace" class="staff-layout hidden">
+  <aside class="staff-sidebar">
+   <h3>Client Chats</h3>
+   <input id="csSearch" placeholder="Search clients...">
+   <div id="csUserList"></div>
+  </aside>
   <div class="staff-main">
    <div class="staff-detail">
-    <div id="staffUserDetail" class="empty">Select a user from the left sidebar.</div>
-    <h3>Messages</h3>
+    <div id="csUserTitle">Select a client chat.</div>
     <div class="chat-box" id="staffMessages"></div>
     <div class="chat-tools">
      <label>📷 Photo<input id="staffPhoto" type="file" accept="image/*"></label>
@@ -476,13 +491,13 @@ th{color:var(--muted)}
      <button class="btn-light" onclick="deleteLastStaffMessage()">⌫ Delete last</button>
     </div>
     <div class="chat-compose">
-     <input id="staffInput" type="text" placeholder="Reply to user...">
+     <input id="staffInput" type="text" placeholder="Reply to client...">
      <button class="btn" onclick="sendStaffMessage()">➤</button>
     </div>
    </div>
    <aside class="staff-info">
-    <h3>User Information & Control</h3>
-    <div id="staffQuickInfo" class="muted">Choose an account to view details.</div>
+    <h3>Client Quick Info</h3>
+    <div id="staffQuickInfo" class="muted">Choose an account.</div>
    </aside>
   </div>
  </div>
@@ -566,14 +581,14 @@ th{color:var(--muted)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v4",
- current:"tb_current_v4",
- chats:"tb_chats_v4",
- language:"tb_language_v4",
- theme:"tb_theme_v4",
- activity:"tb_activity_v4",
- staffSession:"tb_staff_session_v4",
- settings:"tb_task_settings_v4"
+ users:"tb_users_v5",
+ current:"tb_current_v5",
+ chats:"tb_chats_v5",
+ language:"tb_language_v5",
+ theme:"tb_theme_v5",
+ activity:"tb_activity_v5",
+ staffSession:"tb_staff_session_v5",
+ settings:"tb_task_settings_v5"
 };
 
 const read = key => {
@@ -584,18 +599,16 @@ const read = key => {
 const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
 
 let users = read(KEYS.users);
-let chats = read(KEYS.chats);
 let activities = read(KEYS.activity);
 
 let currentUser = null;
 let selectedUserId = null;
 let staffRole = "admin";
 let authMode = "login";
-let selectedHotel = null;
 let tapCount = 0;
 let tapTimer = null;
 let transactionType = "deposit";
-let taskSettings = JSON.parse(localStorage.getItem(KEYS.settings) || '{"mode":"auto","maxTasks":30}');
+let selectedReviewIndex = 0;
 
 /* 40+ International Official Hotels Directory */
 const hotels = [
@@ -639,6 +652,15 @@ const hotels = [
  {id:"H38",name:"Budapest Thermal Hotel",country:"Hungary",price:105,stars:4,image:"https://images.unsplash.com/photo-1549877452-9c387954fbc2?w=900"},
  {id:"H39",name:"Manila Bay Hotel",country:"Philippines",price:90,stars:4,image:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900"},
  {id:"H40",name:"Mumbai Luxury Suites",country:"India",price:150,stars:5,image:"https://images.unsplash.com/photo-1582719508461-905c673771fd?w=900"}
+];
+
+/* ၅ ခုပါဝင်သော မှတ်ချက်များ (ကောင်း ၃ ခု၊ မကောင်း ၂ ခု) */
+const reviewOptions = [
+ {text:"Excellent service and beautiful room. Good review", good:true},
+ {text:"Very comfortable and highly recommended. Good review", good:true},
+ {text:"Wonderful hotel experience. Good review", good:true},
+ {text:"The room did not meet expectations. Negative review", good:false},
+ {text:"Service was disappointing. Negative review", good:false}
 ];
 
 const dictionary = {
@@ -766,6 +788,7 @@ async function submitAuth() {
     passwordHash:hash,
     balance:bonus,
     orders:0,
+    totalProfit:0,
     status:"online",
     createdAt:new Date().toISOString(),
     lastSeen:new Date().toISOString(),
@@ -773,7 +796,8 @@ async function submitAuth() {
     bookings:[],
     messages:[{sender:"support",text:"Welcome to Trip Booking! Your account has been created successfully.",time:new Date().toLocaleTimeString()}],
     profileImage:"",
-    taskCycle:new Date().toISOString().slice(0,10)
+    taskCycle:new Date().toISOString().slice(0,10),
+    customTable: []
    };
 
    users.push(newUser);
@@ -783,7 +807,6 @@ async function submitAuth() {
    $("registerFields").classList.add("hidden");
    $("authTitle").textContent="Login";
    $("authPassword").value="";
-   renderStaffUsers();
    return;
   }
 
@@ -825,11 +848,13 @@ function generateFakeActivityAndUsers() {
     inviteCode: "INV" + i,
     balance: Math.floor(Math.random() * 2500) + 100,
     orders: Math.floor(Math.random() * 30),
+    totalProfit: Math.floor(Math.random() * 300),
     status: Math.random() > 0.5 ? "online" : "offline",
     createdAt: new Date().toISOString(),
     transactions: [{date:new Date().toLocaleDateString(), type:"deposit", amount:500, status:"Approved"}],
     bookings: [],
-    messages: []
+    messages: [],
+    customTable: []
    });
   }
   saveUsers();
@@ -899,7 +924,7 @@ function updateUI() {
  }
 }
 
-/* HOTELS RENDERING (40+ HOTELS) */
+/* HOTELS RENDERING */
 function renderHotels() {
  const grid = $("featuredHotels");
  grid.innerHTML = hotels.slice(0, 6).map(h => `
@@ -930,7 +955,7 @@ function renderHotels() {
       <h3>${h.name}</h3>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
        <span class="price">$${h.price}</span>
-       <button class="btn" style="padding:6px 12px;font-size:12px" onclick="selectHotelForBooking('${h.id}')">Book</button>
+       <button class="btn" style="padding:6px 12px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">Book Test</button>
       </div>
      </div>
     </div>
@@ -941,63 +966,85 @@ function renderHotels() {
 
 $("hotelSearch").addEventListener("input", renderHotels);
 
-/* BOOKING TEST (30 ORDERS & 0.3% PROFIT) */
-function selectHotelForBooking(id) {
- selectedHotel = hotels.find(h=>h.id===id);
- showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2]);
-}
-
+/* BOOKING TEST (AUTO & DYNAMIC PROFIT RANGES) */
 function renderBooking() {
  if(!currentUser) {
-  $("bookingHotel").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
+  $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
   return;
  }
  const orders = currentUser.orders || 0;
  $("orderCircle").textContent = orders + "/30";
  $("orderProgress").style.width = (orders / 30 * 100) + "%";
 
+ $("taskWallet").textContent = "$" + (currentUser.balance || 0).toFixed(2);
+ $("taskTotalProfit").textContent = "$" + (currentUser.totalProfit || 0).toFixed(2);
+
  if(orders >= 30) {
-  $("bookingHotel").innerHTML = `<p class="empty" style="color:var(--green)">Congratulations! All 30 booking orders completed successfully.</p>`;
-  $("reviewOptions").innerHTML = "";
+  $("bookingHotelArea").innerHTML = `<p class="empty" style="color:var(--green)">Congratulations! All 30 booking orders completed successfully.</p>`;
+  $("taskRequired").textContent = "$0.00";
+  $("taskProfit").textContent = "$0.00";
   return;
  }
 
- const hotel = hotels[orders % hotels.length];
- selectedHotel = hotel;
+ /* ဝင်ငွေအပေါ်မူတည်၍ အမြတ်နှုန်းထားတွက်ချက်မှု (Auto logic) */
+ let bal = currentUser.balance || 100;
+ let profitMin = 20, profitMax = 50;
+ if(bal >= 1000) { profitMin = 300; profitMax = 600; }
+ else if(bal >= 500) { profitMin = 100; profitMax = 300; }
 
- $("bookingHotel").innerHTML = `
+ let currentProfit = Math.floor(Math.random() * (profitMax - profitMin + 1)) + profitMin;
+ let hotel = hotels[orders % hotels.length];
+
+ // Admin က Edit လုပ်ထားသော ဇယားရှိပါက သုံးမည်
+ if(currentUser.customTable && currentUser.customTable[orders]) {
+  const custom = currentUser.customTable[orders];
+  currentProfit = custom.profit;
+  if(custom.hotelName) {
+   const found = hotels.find(h=>h.name === custom.hotelName);
+   if(found) hotel = found;
+  }
+ }
+
+ $("taskRequired").textContent = "$" + hotel.price;
+ $("taskProfit").textContent = "$" + currentProfit;
+
+ $("bookingHotelArea").innerHTML = `
   <div class="card" style="margin-top:15px">
    <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}">
    <div class="card-body">
     <span class="tag">${hotel.country}</span>
     <h3>${hotel.name}</h3>
-    <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Est. Profit (0.3%): <b style="color:var(--blue)">+$${(hotel.price * 0.003).toFixed(2)}</b></p>
+    <p class="muted">Hotel Price: <b>$${hotel.price}</b> | Order Step: <b>${orders + 1} / 30</b></p>
+    
+    <h3 style="margin-top:15px">Choose Your Review</h3>
+    <div id="reviewOptions">
+     ${reviewOptions.map((opt, i) => `
+      <label class="review-option">
+       <input type="radio" name="reviewChoice" value="${i}" ${i===selectedReviewIndex?'checked':''} onclick="selectedReviewIndex=${i}">
+       <span>${opt.text}</span>
+      </label>
+     `).join("")}
+    </div>
+
+    <button class="btn btn-block" style="margin-top:15px" onclick="confirmSubmitBooking(${currentProfit}, ${hotel.price})">Confirm & Submit Test Booking</button>
    </div>
   </div>
  `;
-
- $("reviewOptions").innerHTML = reviewOptions.map((opt, i) => `
-  <label class="review-option">
-   <input type="radio" name="reviewChoice" value="${i}" ${i===0?'checked':''}>
-   <span>${opt.text} (${opt.good ? '★ Good Review' : '★ Standard Review'})</span>
-  </label>
- `).join("");
 }
 
-function submitBooking() {
+function confirmSubmitBooking(profit, price) {
  if(!currentUser) { openAuth('login'); return; }
- if((currentUser.orders || 0) >= 30) { alert("You have already completed 30 orders today."); return; }
+ if((currentUser.orders || 0) >= 30) { alert("You have already completed 30 orders."); return; }
 
- const hotel = selectedHotel || hotels[0];
- const profit = Number((hotel.price * 0.003).toFixed(2));
  currentUser.balance += profit;
+ currentUser.totalProfit = (currentUser.totalProfit || 0) + profit;
  currentUser.orders = (currentUser.orders || 0) + 1;
 
  if(!currentUser.bookings) currentUser.bookings = [];
  currentUser.bookings.push({
   date: new Date().toLocaleString(),
-  name: hotel.name,
-  price: hotel.price,
+  name: "Order #" + currentUser.orders,
+  price: price,
   profit: profit,
   status: "Completed"
  });
@@ -1005,7 +1052,7 @@ function submitBooking() {
  saveUsers();
  updateUI();
  renderBooking();
- alert(`Booking order completed successfully! Earned profit: +$${profit}`);
+ alert(`Booking order confirmed! Earned profit: +$${profit}`);
 }
 
 /* TRANSACTION MODAL & CS */
@@ -1018,7 +1065,6 @@ function openTransactionModal(type) {
 
 function submitTransaction() {
  const amt = Number($("transactionAmount").value);
- const ref = $("transactionReference").value.trim();
  if(!amt || amt <= 0) { alert("Enter a valid amount."); return; }
 
  if(transactionType === 'deposit') {
@@ -1091,7 +1137,7 @@ function deleteLastSupportMessage() {
 function renderHistory() {
  if(!currentUser) {
   $("historyRows").innerHTML = `<tr><td colspan="4" style="text-align:center">Please login to view history.</td></tr>`;
-  $("bookingHistory.innerHTML") = "";
+  $("bookingHistory").innerHTML = "";
   return;
  }
  $("historyRows").innerHTML = (currentUser.transactions||[]).map(t => `
@@ -1103,7 +1149,7 @@ function renderHistory() {
  `).join("") || `<p class="empty">No booking records yet.</p>`;
 }
 
-/* STAFF MANAGEMENT CENTER */
+/* STAFF MANAGEMENT CENTER (ADMIN & CS SEPARATE TABS) */
 function openStaffLogin(role) {
  staffRole = role;
  $("staffLoginTitle").textContent = role === 'admin' ? 'Admin Login' : 'Customer Service Login';
@@ -1116,7 +1162,7 @@ function staffLogin() {
   closeModal('staffModal');
   $("staffPage").classList.remove("hidden");
   showPage('staffPage');
-  renderStaffUsers();
+  switchStaffTab('admin');
  } else {
   $("staffMessage").textContent = "Invalid Staff credentials!";
  }
@@ -1129,20 +1175,29 @@ function staffLogout() {
 
 function switchStaffTab(role) {
  staffRole = role;
- renderStaffUsers();
+ if(role === 'admin') {
+  $("adminTabBtn").className = "btn btn-dark";
+  $("csTabBtn").className = "btn btn-light";
+  $("adminWorkspace").classList.remove("hidden");
+  $("csWorkspace").classList.add("hidden");
+  renderAdminUsers();
+ } else {
+  $("adminTabBtn").className = "btn btn-light";
+  $("csTabBtn").className = "btn btn-dark";
+  $("adminWorkspace").classList.add("hidden");
+  $("csWorkspace").classList.remove("hidden");
+  renderCSUsers();
+ }
 }
 
-function renderStaffUsers() {
- const list = $("staffUserList");
- const query = ($("staffSearch").value||"").toLowerCase();
+function renderAdminUsers() {
+ const list = $("adminUserList");
+ const query = ($("adminSearch").value||"").toLowerCase();
  const filtered = users.filter(u => u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query));
 
  list.innerHTML = filtered.map(u => `
-  <div class="user-item ${selectedUserId===u.id?'selected':''}" onclick="selectStaffUser('${u.id}')">
-   <div style="position:relative">
-    <img class="avatar" src="https://placehold.co/50x50?text=${u.name[0]}" alt="avatar">
-    <span style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:${u.status==='online'?'var(--green)':'var(--muted)'}"></span>
-   </div>
+  <div class="user-item ${selectedUserId===u.id?'selected':''}" onclick="selectAdminUser('${u.id}')">
+   <img class="avatar" src="https://placehold.co/50x50?text=${u.name[0]}" alt="avatar">
    <div style="flex:1;min-width:0">
     <b>${u.name}</b>
     <p class="muted">${u.id} | Bal: $${(u.balance||0).toFixed(2)}</p>
@@ -1151,52 +1206,108 @@ function renderStaffUsers() {
  `).join("");
 }
 
-$("staffSearch").addEventListener("input", renderStaffUsers);
+$("adminSearch").addEventListener("input", renderAdminUsers);
 
-function selectStaffUser(id) {
+function selectAdminUser(id) {
  selectedUserId = id;
  const u = users.find(x=>x.id===id);
  if(!u) return;
- renderStaffUsers();
+ renderAdminUsers();
 
- $("staffUserDetail").innerHTML = `
-  <h3>Client: ${u.name} (${u.id})</h3>
-  <p class="muted">Identity: ${u.identity} | Shop ID: ${u.shopId}</p>
-  <p class="muted">Balance: <b>$${(u.balance||0).toFixed(2)}</b> | Completed Orders: <b>${u.orders||0}/30</b></p>
+ /* Admin ဇယားနှင့် Edit လုပ်နိုင်သော ဇယားများ */
+ let tableRows = "";
+ for(let i=0; i<30; i++) {
+  const custom = u.customTable && u.customTable[i] ? u.customTable[i] : {hotelName: hotels[i%hotels.length].name, profit: 30};
+  tableRows += `
+   <tr>
+    <td>#${i+1}</td>
+    <td><input id="h_${i}" value="${custom.hotelName}" style="padding:5px"></td>
+    <td><input id="p_${i}" type="number" value="${custom.profit}" style="padding:5px"></td>
+   </tr>
+  `;
+ }
+
+ $("adminUserDetail").innerHTML = `
+  <h3>Admin Control Panel: ${u.name} (${u.id})</h3>
+  <p class="muted">Shop ID: ${u.shopId} | Balance: $${(u.balance||0).toFixed(2)} | Orders: ${u.orders||0}/30</p>
+  
+  <div style="display:flex;gap:10px;margin:10px 0">
+   <div><label>Edit Balance</label><input id="admBal" type="number" value="${u.balance}"></div>
+   <div><label>Edit Orders</label><input id="admOrd" type="number" value="${u.orders||0}"></div>
+  </div>
+  <button class="btn" style="margin-bottom:15px" onclick="saveAdminUserGeneral('${u.id}')">Save General Settings</button>
+
+  <h3>30-Order Custom Table (Edit Mode)</h3>
+  <div class="table-wrap" style="max-height:300px">
+   <table>
+    <thead><tr><th>Order #</th><th>Hotel Name</th><th>Profit ($)</th></tr></thead>
+    <tbody>${tableRows}</tbody>
+   </table>
+  </div>
+  <button class="btn btn-block" style="margin-top:15px" onclick="saveAdminCustomTable('${u.id}')">Save Custom Order Table</button>
  `;
+}
 
- $("staffQuickInfo").innerHTML = `
-  <p><b>Invite Code:</b> ${u.inviteCode}</p>
-  <p><b>Status:</b> <span class="${u.status==='online'?'online':'offline'}">${u.status}</span></p>
-  <label>Manual Balance Edit</label>
-  <input id="editBalance" type="number" value="${u.balance}">
-  <button class="btn btn-block" style="margin-top:8px" onclick="updateUserBalance('${u.id}')">Update Balance</button>
-  <label style="margin-top:12px">Manual Order Count</label>
-  <input id="editOrders" type="number" value="${u.orders||0}">
-  <button class="btn btn-block" style="margin-top:8px" onclick="updateUserOrders('${u.id}')">Update Orders</button>
- `;
+function saveAdminUserGeneral(id) {
+ const u = users.find(x=>x.id===id);
+ if(u) {
+  u.balance = Number($("admBal").value);
+  u.orders = Number($("admOrd").value);
+  saveUsers();
+  alert("General settings updated!");
+  selectAdminUser(id);
+ }
+}
 
+function saveAdminCustomTable(id) {
+ const u = users.find(x=>x.id===id);
+ if(u) {
+  u.customTable = [];
+  for(let i=0; i<30; i++) {
+   u.customTable.push({
+    hotelName: $("h_"+i).value,
+    profit: Number($("p_"+i).value)
+   });
+  }
+  saveUsers();
+  alert("Custom order table updated successfully!");
+ }
+}
+
+/* CUSTOMER SERVICE CHAT TABS */
+function renderCSUsers() {
+ const list = $("csUserList");
+ const query = ($("csSearch").value||"").toLowerCase();
+ const filtered = users.filter(u => u.name.toLowerCase().includes(query) || u.id.toLowerCase().includes(query));
+
+ list.innerHTML = filtered.map(u => `
+  <div class="user-item ${selectedUserId===u.id?'selected':''}" onclick="selectCSUser('${u.id}')">
+   <div style="position:relative">
+    <img class="avatar" src="https://placehold.co/50x50?text=${u.name[0]}" alt="avatar">
+    <span style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:${u.status==='online'?'var(--green)':'var(--muted)'}"></span>
+   </div>
+   <div style="flex:1;min-width:0">
+    <b>${u.name}</b>
+    <p class="muted">${u.id}</p>
+   </div>
+  </div>
+ `).join("");
+}
+
+$("csSearch").addEventListener("input", renderCSUsers);
+
+function selectCSUser(id) {
+ selectedUserId = id;
+ const u = users.find(x=>x.id===id);
+ if(!u) return;
+ renderCSUsers();
+ $("csUserTitle").innerHTML = `<h3>Chat with ${u.name} (${u.id})</h3>`;
  renderStaffMessages(u);
-}
-
-function updateUserBalance(id) {
- const u = users.find(x=>x.id===id);
- if(u) {
-  u.balance = Number($("editBalance").value);
-  saveUsers();
-  alert("Balance updated successfully.");
-  selectStaffUser(id);
- }
-}
-
-function updateUserOrders(id) {
- const u = users.find(x=>x.id===id);
- if(u) {
-  u.orders = Number($("editOrders").value);
-  saveUsers();
-  alert("Order count updated successfully.");
-  selectStaffUser(id);
- }
+ $("staffQuickInfo").innerHTML = `
+  <p><b>Shop ID:</b> ${u.shopId}</p>
+  <p><b>Invite Code:</b> ${u.inviteCode}</p>
+  <p><b>Balance:</b> $${(u.balance||0).toFixed(2)}</p>
+ `;
 }
 
 function renderStaffMessages(u) {
@@ -1220,7 +1331,7 @@ function sendStaffMessage() {
  u.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
  $("staffInput").value = "";
  saveUsers();
- selectStaffUser(u.id);
+ selectCSUser(u.id);
 }
 
 function deleteLastStaffMessage() {
@@ -1229,7 +1340,7 @@ function deleteLastStaffMessage() {
  if(u && u.messages && u.messages.length > 0) {
   u.messages.pop();
   saveUsers();
-  selectStaffUser(u.id);
+  selectCSUser(u.id);
  }
 }
 
