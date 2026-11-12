@@ -5,7 +5,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
 <title>Trip Booking | International Hotel Booking Platform</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Trip Booking | International Hotel Booking Platform</title>
 
+  <style>
+    /* --- ဤနေရာတွင် Welcome Screen Animation CSS များကို ထည့်ပါ --- */
+    #welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #0f172a;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      overflow: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .main-title {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      animation: slideFromRight 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes slideFromRight {
+      0% { transform: translateX(100vw); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+
+    .sub-title {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .sub-title span {
+      display: inline-block;
+      opacity: 0;
+      animation: gatherCenter 1.5s ease-out forwards;
+      animation-delay: 1s;
+    }
+
+    @keyframes gatherCenter {
+      0% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0.5); }
+      100% { opacity: 1; transform: translate(0, 0) scale(1); }
+    }
+
+    .fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+    /* -------------------------------------------------- */
+
+    /* သင့်ရဲ့ မူရင်း CSS များ (root, body စသည်ဖြင့် ဆက်ရေးရန်) */
+    :root {
+      --fb-bg:#f0f2f5;
+      /* ကျန်တာတွေ ဒီအောက်မှာ ဆက်ရှိနေပါမယ် */
 <style>
 :root{
  --fb-bg:#f0f2f5;
@@ -179,6 +246,20 @@ header{
  display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
 }
 
+/* Professional Matching Animation for Get Order */
+@keyframes scanning {
+ 0% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+ 100% { background-position: 0% 50%; }
+}
+.matching-overlay {
+ background: linear-gradient(270deg, #1877f2, #42b72a, #2d88ff);
+ background-size: 200% 200%;
+ animation: scanning 2s ease infinite;
+ color: white; padding: 30px; border-radius: 12px; text-align: center;
+ font-weight: 700; font-size: 16px; box-shadow: 0 8px 24px rgba(24,119,242,0.3);
+}
+
 footer{
  background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
 }
@@ -303,20 +384,21 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- BOOKING TASK CENTER -->
+<!-- BOOKING TASK CENTER (GET ORDER BUTTON PLACED BELOW TASK LIMIT AS REQUESTED) -->
 <section class="page" id="bookingPage">
  <div class="section-title">
   <h2 data-i18n="taskCenter">Booking Task Center</h2>
-  <div>
-   <button class="btn btn-success" onclick="triggerGetOrder()" style="margin-right:6px" data-i18n="getOrderBtn">Get order</button>
-   <button class="btn btn-danger" onclick="resetTaskProgress()" data-i18n="resetBtn">Reset</button>
-  </div>
  </div>
  <div class="panel">
   <div class="stats">
    <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="dailyLimit">Daily Task Limit 📊</span><strong id="orderCircle">0/30</strong></div>
+   <div class="stat-box">
+     <span data-i18n="dailyLimit">Daily Task Limit 📊</span>
+     <strong id="orderCircle">0/30</strong>
+     <!-- Get Order button placed directly below task limit count as requested -->
+     <button class="btn btn-success btn-block" onclick="triggerGetOrder()" style="margin-top:10px" data-i18n="getOrderBtn">Get order</button>
+   </div>
    <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
   </div>
 
@@ -336,7 +418,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- PROFILE -->
+<!-- PROFILE (DEPOSIT & WITHDRAW BUTTONS REMOVED AS REQUESTED) -->
 <section class="page" id="profilePage">
  <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
 
@@ -365,11 +447,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="refBonus">Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="invitedFriends">Invited Friends</span><strong id="invitedCount">0</strong></div>
    <div class="stat-box"><span data-i18n="inviteCodeTitle">Invite Code</span><strong id="inviteCode">-</strong></div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
-   <button class="btn btn-success" onclick="openFinanceModal('deposit')" data-i18n="depositBtn">💳 Deposit</button>
-   <button class="btn btn-danger" onclick="openFinanceModal('withdraw')" data-i18n="withdrawBtn">💸 Withdraw</button>
   </div>
 
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
@@ -559,35 +636,19 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<div class="modal hidden" id="financeModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h2 id="financeModalTitle">Deposit Funds</h2>
-   <button class="close" onclick="closeModal('financeModal')">✕</button>
-  </div>
-  <p id="financeLimitHint" class="muted small" style="margin-bottom:8px"></p>
-  <label data-i18n="amountLabel">Amount ($)</label>
-  <input id="financeAmount" type="number" placeholder="Enter amount">
-  <label data-i18n="noteLabel">Payment / Bank Note</label>
-  <input id="financeNote" placeholder="e.g. KBZ Pay / Wave / USDT">
-  <p id="financeMsg" class="muted" style="margin-top:6px;color:var(--fb-success)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="submitFinanceRequest()" data-i18n="submitReqBtn">Submit Request</button>
- </div>
-</div>
-
 <script>
 "use strict";
 
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v16",
- current:"tb_current_v16",
- theme:"tb_theme_v16",
- activity:"tb_activity_v16",
- finance:"tb_finance_v7",
- lang:"tb_lang_v5",
- staffCreds:"tb_staff_creds_v4"
+ users:"tb_users_v17",
+ current:"tb_current_v17",
+ theme:"tb_theme_v17",
+ activity:"tb_activity_v17",
+ finance:"tb_finance_v8",
+ lang:"tb_lang_v6",
+ staffCreds:"tb_staff_creds_v5"
 };
 
 const TRANSLATIONS = {
@@ -616,7 +677,6 @@ const TRANSLATIONS = {
   thStatus: "Status",
   taskCenter: "Booking Task Center",
   getOrderBtn: "Get order",
-  resetBtn: "Reset",
   accBal: "Account Balance 💳",
   taskComm: "Task Commission 💰",
   dailyLimit: "Daily Task Limit 📊",
@@ -634,8 +694,6 @@ const TRANSLATIONS = {
   refBonus: "Referral Bonus (10%)",
   invitedFriends: "Invited Friends",
   inviteCodeTitle: "Invite Code",
-  depositBtn: "💳 Deposit",
-  withdrawBtn: "💸 Withdraw",
   vipTiersHead: "VIP Membership Levels & Limits",
   vipTiersDesc: "Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.",
   refProgramHead: "Invitation & Referral Program",
@@ -655,9 +713,6 @@ const TRANSLATIONS = {
   passwordLabel: "Password",
   continueBtn: "Continue",
   switchAuth: "Switch Login / Register",
-  amountLabel: "Amount ($)",
-  noteLabel: "Payment / Bank Note",
-  submitReqBtn: "Submit Request",
   upgradeVipBtn: "🚀 Upgrade VIP"
  },
  my: {
@@ -685,7 +740,6 @@ const TRANSLATIONS = {
   thStatus: "အခြေအနေ",
   taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   getOrderBtn: "အော်ဒါယူမည်",
-  resetBtn: "ပြန်စရန်",
   accBal: "အကောင့် လက်ကျန် 💳",
   taskComm: "ကော်မရှင် 💰",
   dailyLimit: "နေ့စဉ် တာဝန်အကန့်အသတ် 📊",
@@ -703,8 +757,6 @@ const TRANSLATIONS = {
   refBonus: "မိတ်ဆက်ဘောနပ်စ် (၁၀%)",
   invitedFriends: "ဖိတ်ခေါ်ထားသူများ",
   inviteCodeTitle: "ဖိတ်ခေါ်ကုဒ်",
-  depositBtn: "💳 ငွေသွင်းရန်",
-  withdrawBtn: "💸 ငွေထုတ်ရန်",
   vipTiersHead: "VIP အဖွဲ့ဝင်အဆင့်များနှင့် အကန့်အသတ်များ",
   vipTiersDesc: "VIP အဆင့်မြင့်လေလေ နေ့စဉ်တာဝန်ကန့်အသတ်၊ အမြတ်နှုန်းနှင့် ငွေထုတ်ယူနိုင်မှု ပမာဏ များပြားလေလေ ဖြစ်သည်။",
   refProgramHead: "မိတ်ဆက်ပရိုဂရမ် (Referral)",
@@ -724,9 +776,6 @@ const TRANSLATIONS = {
   passwordLabel: "စကားဝှက်",
   continueBtn: "ဆက်လုပ်ရန်",
   switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
-  amountLabel: "ပမာဏ ($)",
-  noteLabel: "ငွေပေးချေမှု မှတ်စု",
-  submitReqBtn: "တောင်းဆိုချက် ပို့မည်",
   upgradeVipBtn: "🚀 VIP တိုးမြှင့်ရန်"
  },
  zh: {
@@ -754,7 +803,6 @@ const TRANSLATIONS = {
   thStatus: "状态",
   taskCenter: "预订任务中心",
   getOrderBtn: "获取订单",
-  resetBtn: "重置",
   accBal: "账户余额 💳",
   taskComm: "任务佣金 💰",
   dailyLimit: "每日任务上限 📊",
@@ -772,8 +820,6 @@ const TRANSLATIONS = {
   refBonus: "推荐奖金 (10%)",
   invitedFriends: "已邀请好友",
   inviteCodeTitle: "邀请码",
-  depositBtn: "💳 充值",
-  withdrawBtn: "💸 提现",
   vipTiersHead: "VIP 会员等级与限制",
   vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务上限、更高的利润率和更大的提现额度。",
   refProgramHead: "邀请与推荐计划",
@@ -793,9 +839,6 @@ const TRANSLATIONS = {
   passwordLabel: "密码",
   continueBtn: "继续",
   switchAuth: "切换 登录 / 注册",
-  amountLabel: "金额 ($)",
-  noteLabel: "支付/银行备注",
-  submitReqBtn: "提交申请",
   upgradeVipBtn: "🚀 升级 VIP"
  }
 };
@@ -934,14 +977,12 @@ async function submitAuth() {
    return;
   }
 
-  // Generate 6-digit User ID
   let newIdNum = Math.floor(100000 + Math.random() * 900000);
   while(users.some(u => u.id === String(newIdNum))) {
    newIdNum = Math.floor(100000 + Math.random() * 900000);
   }
   const newId = String(newIdNum);
 
-  // Generate 4 digits + 2 uppercase letters invite code
   const rand4 = Math.floor(1000 + Math.random() * 9000);
   const randLet = String.fromCharCode(65 + Math.floor(Math.random()*26)) + String.fromCharCode(65 + Math.floor(Math.random()*26));
   const inviteCode = String(rand4) + randLet;
@@ -1158,20 +1199,31 @@ function renderBooking() {
   const hotel = activeOrderTask.hotel;
   const profit = activeOrderTask.profit;
   $("bookingHotelArea").innerHTML = `
-   <div class="card">
-    <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}">
-    <div class="card-body">
-     <span class="tag">${hotel.country}</span>
-     <h3>${hotel.name}</h3>
-     <p class="muted">Price: $${hotel.price} | Profit: <b style="color:var(--fb-primary)">+$${profit.toFixed(2)}</b></p>
-     <div style="margin:10px 0">
+   <div class="card" style="max-width:600px;margin:0 auto;border:2px solid var(--fb-primary)">
+    <div style="background:var(--fb-primary);color:white;padding:10px 14px;font-weight:700;display:flex;justify-content:space-between;align-items:center">
+     <span>🏨 Premium Order Match Found</span>
+     <span class="tag" style="background:white;color:var(--fb-primary)">Task #${orders + 1}</span>
+    </div>
+    <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}" style="height:220px">
+    <div class="card-body" style="padding:16px">
+     <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="tag">${hotel.country}</span>
+      <span style="color:var(--fb-primary);font-weight:700">★ ${hotel.stars}.0 Rated</span>
+     </div>
+     <h3 style="font-size:18px;margin:8px 0">${hotel.name}</h3>
+     <div style="background:var(--fb-bg);padding:12px;border-radius:8px;margin:10px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div><span class="muted" style="font-size:11px">Order Amount</span><br><strong style="font-size:16px">$${hotel.price}</strong></div>
+      <div><span class="muted" style="font-size:11px">Expected Commission</span><br><strong style="font-size:16px;color:var(--fb-success)">+$${profit.toFixed(2)}</strong></div>
+     </div>
+     <div style="margin:12px 0">
+      <label style="margin-bottom:6px">Select Guest Review Experience:</label>
       ${reviewOptions.map((r, i) => `
-       <label style="display:flex;gap:6px;align-items:center;margin:4px 0;cursor:pointer">
-        <input type="radio" name="rev" ${i===0?'checked':''}> <span>${r.text}</span>
+       <label style="display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;background:var(--fb-bg);padding:8px;border-radius:6px">
+        <input type="radio" name="rev" ${i===0?'checked':''}> <span style="font-size:13px">${r.text}</span>
        </label>
       `).join("")}
      </div>
-     <button class="btn btn-block" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking</button>
+     <button class="btn btn-block" style="padding:12px;font-size:15px;margin-top:14px" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking Order</button>
     </div>
    </div>
   `;
@@ -1180,17 +1232,27 @@ function renderBooking() {
  }
 }
 
+/* Professional Matching Animation before displaying hotel order */
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  const maxCount = getVipLimit(currentUser.vipLevel);
  if((currentUser.orders || 0) >= maxCount) { alert("Completed all daily orders!"); return; }
  
- const hotel = hotels[currentUser.orders % hotels.length];
- const tier = getVipObj(currentUser.vipLevel);
- const profit = (hotel.price * tier.profitRate) + (currentUser.profitBox || 30);
- 
- activeOrderTask = {hotel, profit};
- renderBooking();
+ $("bookingHotelArea").innerHTML = `
+  <div class="matching-overlay">
+   <div style="font-size:24px;margin-bottom:8px">🔍 ✈️</div>
+   Matching international hotel reservation system...<br>
+   <span style="font-size:12px;opacity:0.8">Please wait while securing high-yield commission task</span>
+  </div>
+ `;
+
+ setTimeout(() => {
+  const hotel = hotels[currentUser.orders % hotels.length];
+  const tier = getVipObj(currentUser.vipLevel);
+  const profit = (hotel.price * tier.profitRate) + (currentUser.profitBox || 30);
+  activeOrderTask = {hotel, profit};
+  renderBooking();
+}, 1200);
 }
 
 function confirmSubmitBooking(profit, price) {
@@ -1203,7 +1265,7 @@ function confirmSubmitBooking(profit, price) {
   renderBooking();
   alert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
   return;
- }
+}
 
  currentUser.balance += profit;
  currentUser.commission = (currentUser.commission || 0) + profit;
@@ -1228,16 +1290,6 @@ function confirmSubmitBooking(profit, price) {
  updateUI();
  renderBooking();
  alert(`Booking confirmed! Earned +$${profit.toFixed(2)}`);
-}
-
-function resetTaskProgress() {
- if(!currentUser) return;
- currentUser.orders = 0;
- currentUser.commission = 0;
- write(KEYS.users, users);
- updateUI();
- renderBooking();
- alert("Task progress reset to 0.");
 }
 
 function renderSupportChat() {
@@ -1300,52 +1352,6 @@ function renderHistory() {
  $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
   <div class="panel" style="margin:6px 0"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit.toFixed(2)}</p></div>
  `).join("") || `<p class="empty">No bookings.</p>`;
-}
-
-let currentFinanceType = 'deposit';
-function openFinanceModal(type) {
- if(!currentUser) { openAuth('login'); return; }
- currentFinanceType = type;
- $("financeModal").classList.remove("hidden");
- $("financeAmount").value = "";
- $("financeNote").value = "";
- $("financeMsg").textContent = "";
- if(type === 'deposit') {
-  $("financeModalTitle").textContent = "Deposit Funds";
-  $("financeLimitHint").textContent = "Deposit funds to increase wallet balance for combination tasks.";
- } else {
-  const tier = getVipObj(currentUser.vipLevel);
-  $("financeModalTitle").textContent = "Withdraw Funds";
-  $("financeLimitHint").textContent = `Max withdrawal limit for ${tier.name}: $${tier.maxWithdraw}.`;
- }
-}
-
-function submitFinanceRequest() {
- if(!currentUser) return;
- const amt = Number($("financeAmount").value);
- const note = $("financeNote").value.trim() || "-";
- if(!amt || amt <= 0) { alert("Enter valid amount"); return; }
- 
- if(currentFinanceType === 'withdraw' && amt > currentUser.balance) {
-  alert("Withdrawal amount exceeds available wallet balance.");
-  return;
- }
-
- const req = {
-  id: "REQ" + Math.floor(10000+Math.random()*90000),
-  userId: currentUser.id,
-  userName: currentUser.name,
-  type: currentFinanceType,
-  amount: amt,
-  note,
-  date: new Date().toLocaleString(),
-  status: "Pending"
- };
-
- financeReqs.push(req);
- write(KEYS.finance, financeReqs);
- $("financeMsg").textContent = "Request submitted successfully to Admin!";
- setTimeout(() => closeModal('financeModal'), 1500);
 }
 
 function staffLogin() {
@@ -1453,6 +1459,7 @@ function toggleTableEditMode() {
  renderAdminTable();
 }
 
+/* ADMIN LIVE WALLET UPDATE AS REQUESTED */
 function saveTableEditMode() {
  users.forEach((u, idx) => {
   const ident = $("ed_ident_" + idx);
@@ -1468,7 +1475,22 @@ function saveTableEditMode() {
   if(pass) u.password = pass.value;
   if(name) u.name = name.value;
   if(vip) u.vipLevel = vip.value;
-  if(bal) u.balance = Number(bal.value);
+  
+  if(bal) {
+   const newBal = Number(bal.value);
+   if(newBal !== u.balance) {
+    const diff = newBal - u.balance;
+    u.balance = newBal;
+    if(!u.transactions) u.transactions = [];
+    u.transactions.unshift({
+     date: new Date().toLocaleString(),
+     type: diff >= 0 ? "Admin Deposit (Adjustment)" : "Admin Deduction",
+     amount: Math.abs(diff),
+     status: "Approved"
+    });
+   }
+  }
+
   if(inv) u.inviteCode = inv.value;
   if(neg) u.negDollar = Number(neg.value);
   if(prof) u.profitBox = Number(prof.value);
@@ -1478,7 +1500,8 @@ function saveTableEditMode() {
  $("tableSaveBtn").classList.add("hidden");
  write(KEYS.users, users);
  renderAdminTable();
- alert("User accounts and settings updated successfully!");
+ updateUI();
+ alert("User accounts and balances updated successfully and synced instantly!");
 }
 
 function renderAdminFinance() {
