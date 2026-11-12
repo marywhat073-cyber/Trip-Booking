@@ -150,7 +150,7 @@ header{
 .stat-box span{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase}
 .stat-box strong{display:block;font-size:22px;margin-top:8px;color:var(--text)}
 
-/* Modal styling centered with glowing border */
+/* Modal styling */
 .modal{
  position:fixed;inset:0;background:rgba(6,19,34,0.75);
  display:flex;align-items:center;justify-content:center;
@@ -188,11 +188,20 @@ header{
 .user-item:hover,.user-item.selected{background:var(--bg)}
 .user-item p{margin:4px 0}
 
-/* Chat Box Design like Image 3 */
 .chat-window{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
 .chat-header{background:var(--blue);color:white;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
 .chat-messages{height:340px;overflow:auto;padding:15px;background:var(--bg)}
 .chat-footer{padding:12px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+
+/* Footer style like image 3 */
+footer{
+ background:#0b192c;color:#a4b2c2;padding:40px 4% 80px;margin-top:40px;font-size:13px;border-top:1px solid #1f3555;
+}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
+.footer-grid h4{color:white;margin-bottom:15px;font-size:16px}
+.footer-grid a{display:block;color:#a4b2c2;text-decoration:none;margin-bottom:8px}
+.footer-grid a:hover{color:white}
+.app-badges img{height:42px;cursor:pointer;margin-right:8px;margin-top:10px}
 
 .splash{
  position:fixed;inset:0;background:linear-gradient(140deg,#091a30,#174b78);
@@ -206,7 +215,7 @@ th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);white-spa
 th{color:var(--muted);background:var(--bg)}
 .status{font-size:11px;font-weight:700}
 .online{color:var(--green)}
-.offline{color:var(--muted)}
+.offline{color:var(--red)}
 </style>
 </head>
 <body>
@@ -262,7 +271,7 @@ th{color:var(--muted);background:var(--bg)}
  <div id="countryHotels"></div>
 </section>
 
-<!-- SUPPORT (CUSTOMER SERVICE - IMAGE 3 STYLE) -->
+<!-- SUPPORT -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2>Customer Service Center</h2></div>
  <div class="chat-window">
@@ -283,7 +292,7 @@ th{color:var(--muted);background:var(--bg)}
  </div>
  <div style="display:flex;gap:10px;margin-top:15px">
   <button class="btn" style="flex:1" onclick="openTransactionModal('deposit')">Deposit Funds</button>
-  <button class="btn btn-dark" style="flex:1" onclick="openTransactionModal('withdrawal')">Withdrawal ($15 & 30 Bookings)</button>
+  <button class="btn btn-dark" style="flex:1" onclick="openTransactionModal('withdrawal')">Withdrawal Request</button>
  </div>
 </section>
 
@@ -303,7 +312,7 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 </section>
 
-<!-- BOOKING TEST (GET ORDER - IMAGE 5 STYLE) -->
+<!-- BOOKING TEST -->
 <section class="page" id="bookingPage">
  <div class="section-title"><h2>Booking Task Center</h2><span class="tag">GET ORDER</span></div>
  <div class="panel">
@@ -351,6 +360,7 @@ th{color:var(--muted);background:var(--bg)}
    <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
    <div class="stat-box"><span>Shop ID</span><strong id="shopId">-</strong></div>
    <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
+   <div class="stat-box"><span>VIP Level</span><strong id="vipLevel">LV1</strong></div>
    <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/40</strong></div>
    <div class="stat-box"><span>Referral Bonus</span><strong id="referralBonus">$0.00</strong></div>
   </div>
@@ -373,7 +383,7 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 </section>
 
-<!-- STAFF PAGE (ADMIN & CS SEPARATED) -->
+<!-- STAFF PAGE (ADMIN & CS) -->
 <section class="page" id="staffPage">
  <div class="section-title">
   <h2>Staff Management Center</h2>
@@ -385,7 +395,7 @@ th{color:var(--muted);background:var(--bg)}
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
- <!-- ADMIN VIEW (TABLE FORMAT - IMAGE 2 STYLE) -->
+ <!-- ADMIN VIEW -->
  <div id="adminWorkspace" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
    <h3>User Accounts Management Table</h3>
@@ -395,19 +405,16 @@ th{color:var(--muted);background:var(--bg)}
    <table>
     <thead>
      <tr>
-      <th>用户ID (User ID)</th>
-      <th>邮箱 (Email/Identity)</th>
-      <th>全名 (Full Name)</th>
-      <th>会员邀请码</th>
-      <th>上级邀请码</th>
-      <th>会员备注</th>
+      <th>用户ID</th>
+      <th>邮箱/Identity</th>
+      <th>全名</th>
+      <th>邀请码</th>
       <th>会员级别</th>
       <th>钱包余额</th>
       <th>冻结余额</th>
       <th>可提现额</th>
       <th>完成订单</th>
-      <th>会员状态</th>
-      <th>会员身份</th>
+      <th>账号封禁/开放</th>
       <th>在线</th>
       <th>操作 (Actions)</th>
      </tr>
@@ -417,7 +424,7 @@ th{color:var(--muted);background:var(--bg)}
   </div>
  </div>
 
- <!-- CUSTOMER SERVICE VIEW (CHAT - IMAGE 3 STYLE) -->
+ <!-- CUSTOMER SERVICE VIEW -->
  <div id="csWorkspace" class="staff-layout hidden">
   <aside class="staff-sidebar">
    <h3>Client Chats</h3>
@@ -447,6 +454,33 @@ th{color:var(--muted);background:var(--bg)}
 
 </main>
 
+<!-- FOOTER WITH PLAY STORE & APP STORE (IMAGE 3) -->
+<footer>
+ <div class="container footer-grid" style="margin:0 auto">
+  <div>
+   <h4>Trip Booking</h4>
+   <p>International Hotel Booking & Travel Platform.</p>
+   <div class="app-badges">
+    <img src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" alt="Google Play" onclick="simulateAppDownload('Android APK')">
+    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" onclick="simulateAppDownload('iOS App')">
+   </div>
+  </div>
+  <div>
+   <h4>Quick Links</h4>
+   <a href="#" onclick="showPage('homePage')">Home</a>
+   <a href="#" onclick="showPage('supportPage')">Customer Support</a>
+   <a href="#" onclick="showPage('bookingPage')">Booking Tasks</a>
+   <a href="#" onclick="showPage('profilePage')">My Profile</a>
+  </div>
+  <div>
+   <h4>Contact Information</h4>
+   <p>Address: 12101 Dry Valley Road North, Seattle</p>
+   <p>Telephone: 1-855-266-9299</p>
+   <p>Email: cs-reply@tripbooking.com</p>
+  </div>
+ </div>
+</footer>
+
 <nav class="bottom-nav">
  <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">⌂</span><span data-i18n="home">Home</span></button>
  <button onclick="showPage('supportPage',this)"><span class="nav-icon">☏</span><span data-i18n="support">Support</span></button>
@@ -455,7 +489,7 @@ th{color:var(--muted);background:var(--bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">♙</span><span data-i18n="profile">Profile</span></button>
 </nav>
 
-<!-- AUTH MODAL -->
+<!-- MODALS -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -464,8 +498,8 @@ th{color:var(--muted);background:var(--bg)}
   </div>
   <div id="registerFields" class="hidden">
    <label>Full Name</label><input id="regName" autocomplete="name">
-   <label>Location</label><input id="regLocation">
-   <label>Invite Code (optional)</label><input id="regInvite">
+   <label>Location (Auto-detected IP/Location)</label><input id="regLocation" readonly>
+   <label>Invite Code (Auto / Optional)</label><input id="regInvite">
   </div>
   <label>Phone Number or Email</label>
   <input id="authIdentity" autocomplete="username">
@@ -480,7 +514,6 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 </div>
 
-<!-- SECRET STAFF MODAL -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -504,7 +537,6 @@ th{color:var(--muted);background:var(--bg)}
  </div>
 </div>
 
-<!-- TRANSACTION MODAL -->
 <div class="modal hidden" id="transactionModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -523,11 +555,11 @@ th{color:var(--muted);background:var(--bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v6",
- current:"tb_current_v6",
- language:"tb_language_v6",
- theme:"tb_theme_v6",
- activity:"tb_activity_v6"
+ users:"tb_users_v7",
+ current:"tb_current_v7",
+ language:"tb_language_v7",
+ theme:"tb_theme_v7",
+ activity:"tb_activity_v7"
 };
 
 const read = key => {
@@ -548,6 +580,16 @@ let tapCount = 0;
 let tapTimer = null;
 let transactionType = "deposit";
 let activeOrderTask = null;
+let detectedLocation = "Bangkok, Thailand (IP: 171.96.x.x)";
+
+/* Auto detect IP / Location simulation */
+fetch('https://ipapi.co/json/')
+ .then(res => res.json())
+ .then(data => {
+  if(data && data.city) {
+   detectedLocation = `${data.city}, ${data.country_name} (IP: ${data.ip})`;
+  }
+ }).catch(()=>{});
 
 const hotels = [
  {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
@@ -642,6 +684,8 @@ function openAuth(mode) {
  $("authModal").classList.remove("hidden");
  $("registerFields").classList.toggle("hidden",mode==="login");
  $("authTitle").textContent=mode==="login"?"Login":"Create Account";
+ $("regLocation").value = detectedLocation;
+ $("regInvite").value = "INV" + Math.floor(1000 + Math.random()*9000);
  $("authMessage").textContent="";
 }
 
@@ -672,10 +716,9 @@ async function submitAuth() {
   const hash=await passwordHash(password);
   if(authMode==="register") {
    const name=$("regName").value.trim();
-   const location=$("regLocation").value.trim();
    const inviteCodeInput=$("regInvite").value.trim();
 
-   if(name.length<2||!location) { message.textContent="Please enter your name and location."; return; }
+   if(name.length<2) { message.textContent="Please enter your name."; return; }
 
    const duplicate=users.some(u=>normalizeIdentity(u.identity)===identity);
    if(duplicate) { message.textContent="This phone number or email is already registered! Please login."; return; }
@@ -688,15 +731,17 @@ async function submitAuth() {
 
    const newUser={
     id:"TB"+Date.now().toString().slice(-8),
-    name, identity, location,
+    name, identity, location:detectedLocation,
     shopId:"SH-"+Math.floor(10000+Math.random()*90000),
-    inviteCode:Math.random().toString(36).slice(2,9).toUpperCase(),
+    inviteCode:inviteCodeInput || ("INV"+Math.floor(1000+Math.random()*9000)),
     invitedBy:inviteCodeInput,
     passwordHash:hash,
     balance:850.67 + bonus,
     commission:152.67,
     orders:0,
+    vipLevel:"LV1",
     status:"online",
+    accountLockedUntil:null,
     createdAt:new Date().toISOString(),
     lastSeen:new Date().toISOString(),
     transactions:[],
@@ -707,7 +752,7 @@ async function submitAuth() {
 
    users.push(newUser);
    saveUsers();
-   message.textContent="Account created successfully! $15 Bonus added if invited. You can now log in.";
+   message.textContent="Account created successfully! $15 Bonus added. You can now log in.";
    authMode="login";
    $("registerFields").classList.add("hidden");
    $("authTitle").textContent="Login";
@@ -717,6 +762,11 @@ async function submitAuth() {
 
   const user=users.find(u=>normalizeIdentity(u.identity)===identity);
   if(!user||user.passwordHash!==hash) { message.textContent="Incorrect phone/email or password."; return; }
+
+  if(user.accountLockedUntil && new Date() < new Date(user.accountLockedUntil)) {
+   message.textContent=`Account is temporarily suspended until ${new Date(user.accountLockedUntil).toLocaleString()}.`;
+   return;
+  }
 
   currentUser=user;
   currentUser.status="online";
@@ -753,7 +803,9 @@ function generateFakeActivityAndUsers() {
     balance: Math.floor(Math.random() * 2500) + 100,
     commission: Math.floor(Math.random() * 300),
     orders: Math.floor(Math.random() * 40),
+    vipLevel: "LV" + (Math.floor(Math.random()*3)+1),
     status: Math.random() > 0.5 ? "online" : "offline",
+    accountLockedUntil: null,
     createdAt: new Date().toISOString(),
     transactions: [{date:new Date().toLocaleDateString(), type:"deposit", amount:500, status:"Approved"}],
     bookings: [],
@@ -815,6 +867,7 @@ function updateUI() {
   $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
   $("shopId").textContent = currentUser.shopId || "-";
   $("inviteCode").textContent = currentUser.inviteCode || "-";
+  $("vipLevel").textContent = currentUser.vipLevel || "LV1";
   $("profileOrders").textContent = (currentUser.orders||0) + "/40";
   $("referralBonus").textContent = "$" + ((currentUser.balance > 0 ? 15 : 0)).toFixed(2);
   const link = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
@@ -867,7 +920,6 @@ function renderHotels() {
 
 $("hotelSearch").addEventListener("input", renderHotels);
 
-/* BOOKING TEST (GET ORDER - IMAGE 5) */
 function renderBooking() {
  if(!currentUser) {
   $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
@@ -909,7 +961,7 @@ function renderBooking() {
    </div>
   `;
  } else {
-  $("bookingHotelArea.innerHTML") = "";
+  $("bookingHotelArea").innerHTML = "";
  }
 }
 
@@ -941,7 +993,6 @@ function confirmSubmitBooking(profit, price) {
  alert(`Booking order confirmed! Earned commission: +$${profit}`);
 }
 
-/* TRANSACTION MODAL */
 function openTransactionModal(type) {
  if(!currentUser) { openAuth('login'); return; }
  transactionType = type;
@@ -971,7 +1022,6 @@ function submitTransaction() {
  alert("Transaction submitted successfully!");
 }
 
-/* CUSTOMER SERVICE CHAT */
 function renderSupportChat() {
  if(!currentUser) {
   $("supportMessages").innerHTML = `<p class="empty">Please login to chat with Customer Service.</p>`;
@@ -1007,7 +1057,6 @@ function sendSupportMessage() {
 
 function appendSupportChar(char) { $("supportInput").value += char; }
 
-/* HISTORY */
 function renderHistory() {
  if(!currentUser) {
   $("historyRows").innerHTML = `<tr><td colspan="4" style="text-align:center">Please login to view history.</td></tr>`;
@@ -1023,7 +1072,6 @@ function renderHistory() {
  `).join("") || `<p class="empty">No booking records yet.</p>`;
 }
 
-/* STAFF MANAGEMENT CENTER (TABLE VIEW - IMAGE 2) */
 function openStaffLogin(role) {
  staffRole = role;
  $("staffLoginTitle").textContent = role === 'admin' ? 'Admin Login' : 'Customer Service Login';
@@ -1072,22 +1120,39 @@ function renderAdminTable() {
    <td>${u.identity}</td>
    <td>${u.name}</td>
    <td>${u.inviteCode || '-'}</td>
-   <td>${u.invitedBy || '-'}</td>
-   <td>Main Account</td>
-   <td>LV1</td>
+   <td>${u.vipLevel || 'LV1'}</td>
    <td>$${(u.balance||0).toFixed(2)}</td>
    <td>$0.00</td>
    <td>$${(u.balance||0).toFixed(2)}</td>
    <td>${u.orders||0} / 40</td>
-   <td><span class="status online">正常 (Normal)</span></td>
-   <td>买家账号</td>
+   <td><button class="btn btn-light" style="padding:2px 6px;font-size:10px" onclick="toggleLockUser('${u.id}')">${u.accountLockedUntil ? 'Unblock' : 'Lock'}</button></td>
    <td><span style="color:${u.status==='online'?'var(--green)':'var(--red)'}">● ${u.status}</span></td>
    <td>
-    <button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('Editing user ${u.id}')">编辑 (Edit)</button>
-    <button class="btn btn-light" style="padding:4px 8px;font-size:11px" onclick="alert('Viewing tasks for ${u.id}')">增加卡单</button>
+    <button class="btn" style="padding:4px 8px;font-size:11px" onclick="editUserAccount('${u.id}')">编辑 (Edit)</button>
    </td>
   </tr>
  `).join("");
+}
+
+function toggleLockUser(id) {
+ const u = users.find(x=>x.id===id);
+ if(u) {
+  u.accountLockedUntil = u.accountLockedUntil ? null : new Date(Date.now() + 86400000).toISOString();
+  saveUsers();
+  renderAdminTable();
+ }
+}
+
+function editUserAccount(id) {
+ const u = users.find(x=>x.id===id);
+ if(!u) return;
+ const newBal = prompt("Edit user balance ($):", u.balance);
+ if(newBal !== null) {
+  u.balance = Number(newBal);
+  saveUsers();
+  renderAdminTable();
+  alert("User account updated successfully!");
+ }
 }
 
 function renderCSUsers() {
@@ -1132,6 +1197,10 @@ function sendStaffMessage() {
 }
 
 function appendStaffChar(char) { $("staffInput").value += char; }
+
+function simulateAppDownload(platform) {
+ alert(`Downloading official Trip Booking ${platform} package. Installation started automatically.`);
+}
 
 function copyInviteLink() {
  const copyText = $("inviteLink");
