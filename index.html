@@ -132,7 +132,7 @@ header{
  border-radius:10px;padding:16px;box-shadow:var(--shadow);
 }
 .stats{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
  gap:12px;margin:14px 0;
 }
 .stat-box{
@@ -140,7 +140,20 @@ header{
  border-top:3px solid var(--fb-primary);border-radius:8px;padding:12px;
 }
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
-.stat-box strong{display:block;font-size:20px;margin-top:6px;color:var(--fb-text)}
+.stat-box strong{display:block;font-size:19px;margin-top:6px;color:var(--fb-text)}
+
+.vip-grid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:12px;margin-top:12px;
+}
+.vip-card{
+ background:var(--fb-bg);border:1px solid var(--fb-border);
+ border-radius:8px;padding:12px;position:relative;
+}
+.vip-card.active-vip{
+ border:2px solid var(--fb-primary);
+ background:rgba(24,119,242,0.05);
+}
 
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
 .chat-header{background:var(--fb-card);border-bottom:1px solid var(--fb-border);color:var(--fb-text);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
@@ -159,6 +172,7 @@ footer{
  padding:8px 16px;border-radius:20px;font-weight:600;cursor:pointer;margin-top:8px;
 }
 
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);white-space:nowrap}
 th{color:var(--fb-muted);background:var(--fb-bg)}
@@ -252,19 +266,19 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <section class="page" id="historyPage">
  <div class="section-title"><h2>Booking & Transaction History</h2></div>
  <div class="panel">
-  <h3>Transactions</h3>
+  <h3>Transactions & Referral Bonuses</h3>
   <div class="table-wrap">
    <table>
     <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
     <tbody id="historyRows"></tbody>
    </table>
   </div>
-  <h3>Booking Records</h3>
+  <h3 style="margin-top:20px">Booking Records</h3>
   <div id="bookingHistory"></div>
  </div>
 </section>
 
-<!-- BOOKING TEST -->
+<!-- BOOKING TASK CENTER -->
 <section class="page" id="bookingPage">
  <div class="section-title">
   <h2>Booking Task Center</h2>
@@ -277,7 +291,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="stats">
    <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span>Number of Tasks 📊</span><strong id="orderCircle">0/30</strong></div>
+   <div class="stat-box"><span>Daily Task Limit 📊</span><strong id="orderCircle">0/30</strong></div>
    <div class="stat-box" style="border-top-color:var(--fb-success)"><span>Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
   </div>
 
@@ -286,7 +300,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(66,183,42,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)">
-   🎉 Congratulations! All 30 orders successfully completed! 🎆
+   🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆
   </div>
 
   <!-- Special Task Warning Box -->
@@ -322,11 +336,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
   <div class="stats" style="margin-top:14px">
    <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
-   <div class="stat-box"><span>Phone / Email</span><strong id="profileIdentity" style="font-size:14px">-</strong></div>
-   <div class="stat-box"><span>Shop ID</span><strong id="shopId">-</strong></div>
-   <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
-   <div class="stat-box"><span>VIP Level</span><strong id="vipLevel">LV1</strong></div>
+   <div class="stat-box"><span>VIP Level</span><strong id="vipLevel" style="color:var(--fb-primary)">LV1</strong></div>
    <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
+   <div class="stat-box" style="border-top-color:var(--fb-success)"><span>Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
+   <div class="stat-box"><span>Invited Friends</span><strong id="invitedCount">0</strong></div>
+   <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0">
@@ -334,9 +348,18 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="btn btn-danger" onclick="openFinanceModal('withdraw')">💸 Withdraw (ငွေထုတ်ရန်)</button>
   </div>
 
+  <!-- VIP Tiers & Limits Overview -->
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3>My Invitation Link</h3>
-   <input id="inviteLink" readonly style="margin:6px 0">
+   <h3>VIP Membership Levels & Limits</h3>
+   <p class="muted small">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
+   <div class="vip-grid" id="vipTiersDisplay"></div>
+  </div>
+
+  <!-- Invitation Link Box -->
+  <div class="panel" style="background:var(--fb-bg);margin:14px 0">
+   <h3>Invitation & Referral Program</h3>
+   <p class="muted small">Share your invite code. Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
+   <input id="inviteLink" readonly style="margin:8px 0">
    <button class="btn btn-block" onclick="copyInviteLink()">Copy Invitation Link</button>
   </div>
 
@@ -352,7 +375,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-  <button class="btn" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS MANAGEMENT</button>
+  <button class="btn" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS & VIP MANAGEMENT</button>
   <button class="btn btn-light" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
   <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
@@ -360,7 +383,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <!-- ADMIN USERS WORKSPACE -->
  <div id="adminWorkspace" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>User Accounts Management & Booking Rules Control</h3>
+   <h3>User Accounts, VIP Levels & Booking Rules Control</h3>
    <div>
     <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit</button>
     <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save</button>
@@ -374,8 +397,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th>Phone / Email</th>
       <th>Password</th>
       <th>Full Name</th>
+      <th>VIP Level</th>
       <th>Wallet Balance ($)</th>
-      <th>Task Settings (Neg $, Profit $, Count)</th>
+      <th>Invited By</th>
+      <th>Task Settings (Neg $, Base Profit $)</th>
       <th>Actions</th>
      </tr>
     </thead>
@@ -396,6 +421,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th>User Name (ID)</th>
       <th>Type</th>
       <th>Amount ($)</th>
+      <th>Note</th>
       <th>Date</th>
       <th>Status</th>
       <th>Actions</th>
@@ -469,12 +495,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="close" onclick="closeModal('authModal')">✕</button>
   </div>
   <div id="registerFields" class="hidden">
-   <label>Full Name</label><input id="regName">
-   <label>Invite Code</label><input id="regInvite">
+   <label>Full Name</label><input id="regName" placeholder="Enter your full name">
+   <label>Invite Code (Optional)</label><input id="regInvite" placeholder="e.g. INV1">
   </div>
-  <label>Phone Number or Email</label><input id="authIdentity">
-  <label>Password</label><input id="authPassword" type="password">
-  <p id="authMessage" class="muted"></p>
+  <label>Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
+  <label>Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
+  <p id="authMessage" class="muted" style="color:var(--fb-danger)"></p>
   <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()">Continue</button>
   <p style="text-align:center"><a href="#" onclick="toggleAuthMode();return false">Switch Login / Register</a></p>
  </div>
@@ -499,6 +525,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <h2 id="financeModalTitle">Deposit Funds</h2>
    <button class="close" onclick="closeModal('financeModal')">✕</button>
   </div>
+  <p id="financeLimitHint" class="muted small" style="margin-bottom:8px"></p>
   <label>Amount ($)</label>
   <input id="financeAmount" type="number" placeholder="Enter amount">
   <label>Payment / Bank Note</label>
@@ -514,11 +541,19 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v10",
- current:"tb_current_v10",
- theme:"tb_theme_v10",
- activity:"tb_activity_v10",
- finance:"tb_finance_v1"
+ users:"tb_users_v11",
+ current:"tb_current_v11",
+ theme:"tb_theme_v11",
+ activity:"tb_activity_v11",
+ finance:"tb_finance_v2"
+};
+
+// VIP Levels Configuration (Task Limits, Profit Multipliers, Max Withdrawal Limits)
+const VIP_CONFIG = {
+ LV1: { name: "LV1 (Standard)", maxTasks: 30, multiplier: 1.0, maxWithdraw: 500 },
+ LV2: { name: "LV2 (Silver)", maxTasks: 45, multiplier: 1.5, maxWithdraw: 2000 },
+ LV3: { name: "LV3 (Gold)", maxTasks: 60, multiplier: 2.0, maxWithdraw: 10000 },
+ LV4: { name: "LV4 (Platinum)", maxTasks: 80, multiplier: 3.0, maxWithdraw: 999999 }
 };
 
 const read = key => {
@@ -530,7 +565,6 @@ const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
 
 let users = read(KEYS.users);
 let financeRequests = read(KEYS.finance);
-let activities = read(KEYS.activity);
 let currentUser = null;
 let selectedUserId = null;
 let authMode = "login";
@@ -565,6 +599,12 @@ window.addEventListener("load",()=>{
  if(savedTheme === "dark") {
   document.body.classList.add("dark");
   $("themeToggle").textContent = "☀️";
+ }
+ // Check URL invite code parameter
+ const urlParams = new URLSearchParams(window.location.search);
+ const inviteParam = urlParams.get('invite');
+ if(inviteParam) {
+  $("regInvite").value = inviteParam;
  }
  initApp();
 });
@@ -613,34 +653,60 @@ async function submitAuth() {
  if(!identity || password.length < 6) { message.textContent="Enter valid credentials (min 6 chars)."; return; }
 
  if(authMode==="register") {
+  if(users.some(u => u.identity === identity)) {
+   message.textContent="Account with this phone/email already exists.";
+   return;
+  }
   const name = $("regName").value.trim() || "User";
+  const inputInvite = $("regInvite").value.trim().toUpperCase();
+  
+  // Validate referral invite code
+  let validReferrer = null;
+  if(inputInvite) {
+   validReferrer = users.find(u => u.inviteCode === inputInvite);
+  }
+
   const newUser = {
    id: "TB" + Date.now().toString().slice(-8),
    name, identity, password,
    shopId: "SH-" + Math.floor(10000+Math.random()*90000),
    inviteCode: "INV" + Math.floor(1000+Math.random()*9000),
+   referredBy: validReferrer ? validReferrer.id : null,
+   invitedCount: 0,
+   referralEarned: 0.00,
    balance: 0.00,
    commission: 0.00,
    totalProfit: 0.00,
    orders: 0,
    vipLevel: "LV1",
-   negDollar: 50,  // Default negative balance threshold for special tasks
+   negDollar: 50,
    profitBox: 30,
-   countBox: 30,
    transactions: [],
    bookings: [],
    messages: []
   };
+
+  if(validReferrer) {
+   validReferrer.invitedCount = (validReferrer.invitedCount || 0) + 1;
+  }
+
   users.push(newUser);
   write(KEYS.users, users);
-  message.textContent="Account created successfully! Please login.";
+  message.style.color = "var(--fb-success)";
+  message.textContent = validReferrer 
+   ? `Account created with referral code (${inputInvite})! Please login.` 
+   : "Account created successfully! Please login.";
   authMode = "login";
   $("registerFields").classList.add("hidden");
   return;
  }
 
  const user = users.find(u => u.identity === identity && u.password === password);
- if(!user) { message.textContent="Invalid phone/email or password."; return; }
+ if(!user) { 
+  message.style.color = "var(--fb-danger)";
+  message.textContent="Invalid phone/email or password."; 
+  return; 
+ }
 
  currentUser = user;
  localStorage.setItem(KEYS.current, user.id);
@@ -660,8 +726,9 @@ function initApp() {
  if(users.length === 0) {
   users.push({
    id:"TB90000001", name:"Mya Mya", identity:"user1@mail.com", password:"password123",
-   shopId:"SH-10001", inviteCode:"INV1", balance:0.00, commission:0.00, totalProfit:0.00,
-   orders:0, vipLevel:"LV1", negDollar:100, profitBox:50, countBox:30,
+   shopId:"SH-10001", inviteCode:"INV1", referredBy:null, invitedCount:0, referralEarned:0.00,
+   balance:0.00, commission:0.00, totalProfit:0.00,
+   orders:0, vipLevel:"LV1", negDollar:100, profitBox:30,
    transactions:[], bookings:[], messages:[]
   });
   write(KEYS.users, users);
@@ -673,21 +740,43 @@ function initApp() {
  updateUI();
 }
 
+function getVipSpecs(vipCode) {
+ return VIP_CONFIG[vipCode] || VIP_CONFIG.LV1;
+}
+
 function updateUI() {
  const logged = currentUser !== null;
  $("headerAuth").textContent = logged ? "Logout" : "Login";
  if(logged) {
+  const vipSpecs = getVipSpecs(currentUser.vipLevel);
   $("guestAuthActions").classList.add("hidden");
   $("memberProfile").classList.remove("hidden");
   $("profileName").textContent = currentUser.name;
-  $("profileId").textContent = "ID: " + currentUser.id;
+  $("profileId").textContent = "ID: " + currentUser.id + " · Shop: " + currentUser.shopId;
   $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
-  $("profileIdentity").textContent = currentUser.identity;
-  $("shopId").textContent = currentUser.shopId;
-  $("inviteCode").textContent = currentUser.inviteCode;
   $("vipLevel").textContent = currentUser.vipLevel;
-  $("profileOrders").textContent = (currentUser.orders||0) + "/30";
+  $("profileOrders").textContent = (currentUser.orders||0) + "/" + vipSpecs.maxTasks;
+  $("referralEarned").textContent = "$" + (currentUser.referralEarned||0).toFixed(2);
+  $("invitedCount").textContent = currentUser.invitedCount || 0;
+  $("inviteCode").textContent = currentUser.inviteCode;
   $("inviteLink").value = window.location.origin + window.location.pathname + "?invite=" + currentUser.inviteCode;
+
+  // Render VIP Tiers Card Grid
+  $("vipTiersDisplay").innerHTML = Object.keys(VIP_CONFIG).map(key => {
+   const tier = VIP_CONFIG[key];
+   const isCurrent = currentUser.vipLevel === key;
+   return `
+    <div class="vip-card ${isCurrent ? 'active-vip' : ''}">
+     <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong style="color:var(--fb-primary)">${tier.name}</strong>
+      ${isCurrent ? '<span class="tag">Current</span>' : ''}
+     </div>
+     <div class="muted small" style="margin-top:6px">Daily Tasks: <b>${tier.maxTasks} Orders</b></div>
+     <div class="muted small">Profit Rate: <b>${tier.multiplier}x Boost</b></div>
+     <div class="muted small">Max Withdraw: <b>${tier.maxWithdraw >= 999999 ? 'Unlimited' : '$' + tier.maxWithdraw}</b></div>
+    </div>
+   `;
+  }).join("");
  } else {
   $("guestAuthActions").classList.remove("hidden");
   $("memberProfile").classList.add("hidden");
@@ -737,10 +826,11 @@ function renderBooking() {
   $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
   return;
  }
- const maxCount = currentUser.countBox || 30;
+ const vipSpecs = getVipSpecs(currentUser.vipLevel);
+ const maxCount = vipSpecs.maxTasks;
  const orders = currentUser.orders || 0;
  $("orderCircle").textContent = orders + "/" + maxCount;
- $("orderProgress").style.width = (orders / maxCount * 100) + "%";
+ $("orderProgress").style.width = Math.min(100, (orders / maxCount * 100)) + "%";
  $("taskWallet").textContent = "$" + (currentUser.balance || 0).toFixed(2);
  $("taskProfit").textContent = "$" + (currentUser.commission || 0).toFixed(2);
  $("taskTotalProfit").textContent = "$" + (currentUser.totalProfit || 0).toFixed(2);
@@ -748,19 +838,19 @@ function renderBooking() {
  if(orders >= maxCount) {
   $("celebrationBanner").classList.remove("hidden");
   $("specialTaskAlert").classList.add("hidden");
-  $("bookingHotelArea").innerHTML = `<p style="text-align:center;color:var(--fb-success);font-weight:700">All tasks completed successfully!</p>`;
+  $("bookingHotelArea").innerHTML = `<p style="text-align:center;color:var(--fb-success);font-weight:700">All ${maxCount} tasks for ${currentUser.vipLevel} completed successfully!</p>`;
   return;
  } else {
   $("celebrationBanner").classList.add("hidden");
  }
 
- // Check if current order triggers negative balance (Special / Combo Task Rule)
- const isSpecialTask = (orders === 5 || orders === 12 || orders === 20); // Configurable special order intervals
+ // Special Combination Order Rule
+ const isSpecialTask = (orders === 5 || orders === 12 || orders === 20);
  const requiredBalance = isSpecialTask ? (currentUser.negDollar || 100) : 0;
 
  if(isSpecialTask && (currentUser.balance || 0) < requiredBalance) {
   $("specialTaskAlert").classList.remove("hidden");
-  $("specialTaskAlert.textContent") = `⚠️ Special Combination Order (#${orders + 1}) requires a temporary balance of $${requiredBalance}. Please contact Customer Service or deposit funds.`;
+  $("specialTaskAlert").textContent = `⚠️ Special Combination Order (#${orders + 1}) requires a temporary balance of $${requiredBalance}. Please contact Customer Service or deposit funds.`;
  } else {
   $("specialTaskAlert").classList.add("hidden");
  }
@@ -774,7 +864,7 @@ function renderBooking() {
     <div class="card-body">
      <span class="tag">${hotel.country}</span>
      <h3>${hotel.name}</h3>
-     <p class="muted">Price: $${hotel.price} | Profit: <b style="color:var(--fb-primary)">+$${profit}</b> ${isSpecialTask ? '<span style="color:var(--fb-danger);font-weight:700">(Special Combo Task)</span>':''}</p>
+     <p class="muted">Price: $${hotel.price} | ${currentUser.vipLevel} Profit (${vipSpecs.multiplier}x): <b style="color:var(--fb-primary)">+$${profit.toFixed(2)}</b> ${isSpecialTask ? '<span style="color:var(--fb-danger);font-weight:700">(Special Combo Task)</span>':''}</p>
      <div style="margin:10px 0">
       ${reviewOptions.map((r, i) => `
        <label style="display:flex;gap:6px;align-items:center;margin:4px 0;cursor:pointer">
@@ -793,11 +883,12 @@ function renderBooking() {
 
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
- const maxCount = currentUser.countBox || 30;
- if((currentUser.orders || 0) >= maxCount) { alert("Completed all orders!"); return; }
+ const vipSpecs = getVipSpecs(currentUser.vipLevel);
+ if((currentUser.orders || 0) >= vipSpecs.maxTasks) { alert("Completed all daily orders for your VIP tier!"); return; }
  const hotel = hotels[currentUser.orders % hotels.length];
- const profit = currentUser.profitBox || 30;
- activeOrderTask = {hotel, profit};
+ const baseProfit = currentUser.profitBox || 30;
+ const boostedProfit = baseProfit * vipSpecs.multiplier;
+ activeOrderTask = {hotel, profit: boostedProfit};
  renderBooking();
 }
 
@@ -814,11 +905,28 @@ function confirmSubmitBooking(profit, price, isSpecialTask) {
  currentUser.orders = (currentUser.orders || 0) + 1;
  if(!currentUser.bookings) currentUser.bookings = [];
  currentUser.bookings.unshift({date:new Date().toLocaleString(), name:activeOrderTask.hotel.name, price, profit});
+
+ // Referral 10% Commission Distribution to Referrer
+ if(currentUser.referredBy) {
+  const referrer = users.find(u => u.id === currentUser.referredBy);
+  if(referrer) {
+   const refBonus = parseFloat((profit * 0.10).toFixed(2));
+   referrer.balance = (referrer.balance || 0) + refBonus;
+   referrer.referralEarned = (referrer.referralEarned || 0) + refBonus;
+   if(!referrer.transactions) referrer.transactions = [];
+   referrer.transactions.unshift({
+    date: new Date().toLocaleString(),
+    type: `Referral Commission (10% from ${currentUser.name})`,
+    amount: refBonus
+   });
+  }
+ }
+
  activeOrderTask = null;
  write(KEYS.users, users);
  updateUI();
  renderBooking();
- alert(`Booking confirmed! Earned +$${profit}`);
+ alert(`Booking confirmed! Earned +$${profit.toFixed(2)}`);
 }
 
 function resetTaskProgress() {
@@ -831,11 +939,15 @@ function resetTaskProgress() {
  alert("Task progress reset to 0.");
 }
 
-/* FINANCE DEPOSIT / WITHDRAW MODAL */
+/* FINANCE DEPOSIT / WITHDRAW MODAL WITH VIP LIMITS */
 function openFinanceModal(type) {
  if(!currentUser) { openAuth('login'); return; }
  currentFinanceType = type;
+ const vipSpecs = getVipSpecs(currentUser.vipLevel);
  $("financeModalTitle").textContent = type === 'deposit' ? "Deposit Funds (ငွေသွင်းရန်)" : "Withdraw Funds (ငွေထုတ်ရန်)";
+ $("financeLimitHint").textContent = type === 'withdraw' 
+  ? `Your ${currentUser.vipLevel} Max Withdrawal Limit: ${vipSpecs.maxWithdraw >= 999999 ? 'Unlimited' : '$' + vipSpecs.maxWithdraw}`
+  : `Minimum deposit: $10.00`;
  $("financeAmount").value = "";
  $("financeNote").value = "";
  $("financeMsg").textContent = "";
@@ -846,15 +958,24 @@ function submitFinanceRequest() {
  if(!currentUser) return;
  const amount = parseFloat($("financeAmount").value);
  const note = $("financeNote").value.trim();
+ const vipSpecs = getVipSpecs(currentUser.vipLevel);
+
  if(!amount || amount <= 0) {
   $("financeMsg").style.color = "var(--fb-danger)";
   $("financeMsg").textContent = "Please enter a valid amount.";
   return;
  }
- if(currentFinanceType === 'withdraw' && amount > currentUser.balance) {
-  $("financeMsg").style.color = "var(--fb-danger)";
-  $("financeMsg").textContent = "Insufficient balance for withdrawal.";
-  return;
+ if(currentFinanceType === 'withdraw') {
+  if(amount > currentUser.balance) {
+   $("financeMsg").style.color = "var(--fb-danger)";
+   $("financeMsg").textContent = "Insufficient wallet balance.";
+   return;
+  }
+  if(amount > vipSpecs.maxWithdraw) {
+   $("financeMsg").style.color = "var(--fb-danger)";
+   $("financeMsg").textContent = `Exceeds your ${currentUser.vipLevel} withdrawal limit ($${vipSpecs.maxWithdraw}).`;
+   return;
+  }
  }
 
  const req = {
@@ -933,11 +1054,11 @@ function renderHistory() {
   return;
  }
  $("historyRows").innerHTML = (currentUser.transactions||[]).map(t => `
-  <tr><td>${t.date}</td><td>${t.type}</td><td>$${t.amount}</td><td><span class="online">Approved</span></td></tr>
+  <tr><td>${t.date}</td><td>${t.type}</td><td>$${t.amount.toFixed(2)}</td><td><span class="online">Approved</span></td></tr>
  `).join("") || `<tr><td colspan="4" style="text-align:center">No transactions.</td></tr>`;
 
  $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
-  <div class="panel" style="margin:6px 0"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit}</p></div>
+  <div class="panel" style="margin:6px 0"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit.toFixed(2)}</p></div>
  `).join("") || `<p class="empty">No bookings.</p>`;
 }
 
@@ -993,8 +1114,17 @@ function renderAdminTable() {
    <td>${u.identity}</td>
    <td>${isTableEditing ? `<input id="pw_${u.id}" value="${u.password}">` : u.password}</td>
    <td>${isTableEditing ? `<input id="name_${u.id}" value="${u.name}">` : u.name}</td>
+   <td>${isTableEditing ? `
+    <select id="vip_${u.id}">
+     <option value="LV1" ${u.vipLevel==='LV1'?'selected':''}>LV1</option>
+     <option value="LV2" ${u.vipLevel==='LV2'?'selected':''}>LV2</option>
+     <option value="LV3" ${u.vipLevel==='LV3'?'selected':''}>LV3</option>
+     <option value="LV4" ${u.vipLevel==='LV4'?'selected':''}>LV4</option>
+    </select>` : `<span class="tag">${u.vipLevel||'LV1'}</span>`}
+   </td>
    <td>${isTableEditing ? `<input id="bal_${u.id}" type="number" value="${u.balance}">` : '$' + (u.balance||0).toFixed(2)}</td>
-   <td>${isTableEditing ? `<input id="set_${u.id}" value="${u.negDollar||100},${u.profitBox||30},${u.countBox||30}">` : `Neg:$${u.negDollar||100}, Pr:$${u.profitBox||30}, Cnt:${u.countBox||30}`}</td>
+   <td>${u.referredBy || '-'}</td>
+   <td>${isTableEditing ? `<input id="set_${u.id}" value="${u.negDollar||100},${u.profitBox||30}">` : `Neg:$${u.negDollar||100}, BasePr:$${u.profitBox||30}`}</td>
    <td>
     ${isTableEditing ? `<button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="deleteUser('${u.id}')">Delete</button>` : `<button class="btn" style="padding:2px 6px;font-size:11px" onclick="selectUserChat('${u.id}')">Chat</button>`}
    </td>
@@ -1010,6 +1140,7 @@ function renderAdminFinanceTable() {
    <td>${r.userName} (${r.userId})</td>
    <td><span class="tag" style="background:${r.type==='deposit'?'rgba(66,183,42,0.1)':'rgba(250,56,62,0.1)'};color:${r.type==='deposit'?'var(--fb-success)':'var(--fb-danger)'}">${r.type.toUpperCase()}</span></td>
    <td>$${r.amount.toFixed(2)}</td>
+   <td>${r.note}</td>
    <td>${r.date}</td>
    <td><span style="font-weight:700;color:${r.status==='Approved'?'var(--fb-success)':r.status==='Rejected'?'var(--fb-danger)':'var(--fb-primary)'}">${r.status}</span></td>
    <td>
@@ -1019,7 +1150,7 @@ function renderAdminFinanceTable() {
     ` : `<span class="muted small">Processed</span>`}
    </td>
   </tr>
- `).join("") || `<tr><td colspan="7" style="text-align:center">No pending requests.</td></tr>`;
+ `).join("") || `<tr><td colspan="8" style="text-align:center">No pending requests.</td></tr>`;
 }
 
 function processFinance(reqId, action) {
@@ -1070,21 +1201,26 @@ function saveTableEditMode() {
  users.forEach(u => {
   const pwEl = $("pw_" + u.id);
   const nameEl = $("name_" + u.id);
+  const vipEl = $("vip_" + u.id);
   const balEl = $("bal_" + u.id);
   const setEl = $("set_" + u.id);
   if(pwEl) u.password = pwEl.value;
   if(nameEl) u.name = nameEl.value;
+  if(vipEl) u.vipLevel = vipEl.value;
   if(balEl) u.balance = parseFloat(balEl.value) || 0;
   if(setEl) {
    const parts = setEl.value.split(',');
-   if(parts.length >= 3) {
+   if(parts.length >= 2) {
     u.negDollar = parseFloat(parts[0]) || 100;
     u.profitBox = parseFloat(parts[1]) || 30;
-    u.countBox = parseInt(parts[2]) || 30;
    }
   }
  });
  write(KEYS.users, users);
+ if(currentUser) {
+  currentUser = users.find(u => u.id === currentUser.id);
+  updateUI();
+ }
  isTableEditing = false;
  $("tableEditBtn").classList.remove("hidden");
  $("tableSaveBtn").classList.add("hidden");
@@ -1156,8 +1292,8 @@ function appendStaffChar(char) { $("staffInput").value += char; }
 function renderTicker() {
  const sampleActivities = [
   "User Mya Mya successfully booked Marina Bay Sands and earned +$30 commission.",
-  "New member from Yangon joined Trip Booking.",
-  "User David completed 30/30 booking tasks successfully.",
+  "New member from Yangon joined Trip Booking using an invite code.",
+  "User David upgraded to LV2 Silver and unlocked 45 daily tasks!",
   "Tokyo hotel bookings are trending high today!"
  ];
  let idx = 0;
