@@ -73,14 +73,45 @@ header{
 .page{display:none}
 .page.active{display:block}
 
-/* Hero Animations */
-@keyframes slideInRight {
+/* New Hero Intro Animation Styles */
+@keyframes rightToCenter {
  0% { transform: translateX(100vw); opacity: 0; }
  100% { transform: translateX(0); opacity: 1; }
 }
-@keyframes fadeInUp {
- 0% { transform: translateY(30px); opacity: 0; }
- 100% { transform: translateY(0); opacity: 1; }
+
+@keyframes fromFourSides {
+ 0% { transform: scale(0.3) translateY(40px); opacity: 0; filter: blur(4px); }
+ 100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+}
+
+.intro-screen {
+ position: fixed;
+ top: 0; left: 0; width: 100vw; height: 100vh;
+ background: var(--fb-bg);
+ z-index: 9999;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ text-align: center;
+ padding: 20px;
+ transition: opacity 0.5s ease;
+}
+
+.intro-content h1 {
+ font-size: clamp(26px, 4.5vw, 42px);
+ color: var(--fb-primary);
+ margin: 0 0 14px;
+ animation: rightToCenter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.intro-content p {
+ font-size: clamp(16px, 2vw, 20px);
+ color: var(--fb-text);
+ font-weight: 600;
+ max-width: 600px;
+ margin: 0 auto;
+ animation: fromFourSides 1.5s cubic-bezier(0.25, 1, 0.5, 1) 0.8s forwards;
+ opacity: 0;
 }
 
 .hero{
@@ -91,11 +122,10 @@ header{
 }
 .hero h1{
  font-size:clamp(24px,4vw,38px);margin:0 0 8px;
- animation: slideInRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+ color: var(--fb-primary);
 }
 .hero p{
  max-width:480px;line-height:1.5;font-size:14px;
- animation: fadeInUp 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .section-title{
@@ -154,16 +184,48 @@ header{
  background:var(--fb-card);border:1px solid var(--fb-border);
  border-radius:10px;padding:16px;box-shadow:var(--shadow);
 }
+
+/* Updated 2x2 Stats Grid for Booking Task Center */
 .stats{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
- gap:12px;margin:14px 0;
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:14px;margin:14px 0;
 }
+@media (max-width: 600px) {
+ .stats { grid-template-columns: 1fr; }
+}
+
 .stat-box{
  background:var(--fb-bg);border:1px solid var(--fb-border);
- border-top:3px solid var(--fb-primary);border-radius:8px;padding:12px;
+ border-top:3px solid var(--fb-primary);border-radius:8px;padding:14px;
 }
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
-.stat-box strong{display:block;font-size:19px;margin-top:6px;color:var(--fb-text)}
+.stat-box strong{display:block;font-size:20px;margin-top:6px;color:var(--fb-text)}
+
+/* Neon Pipe Button Styling for Get Order */
+@keyframes neonPulse {
+ 0% { box-shadow: 0 0 5px rgba(24,119,242,0.4), 0 0 10px rgba(24,119,242,0.3), inset 0 0 5px rgba(24,119,242,0.2); }
+ 50% { box-shadow: 0 0 15px rgba(24,119,242,0.9), 0 0 25px rgba(24,119,242,0.6), inset 0 0 10px rgba(24,119,242,0.5); }
+ 100% { box-shadow: 0 0 5px rgba(24,119,242,0.4), 0 0 10px rgba(24,119,242,0.3), inset 0 0 5px rgba(24,119,242,0.2); }
+}
+
+.neon-pipe-btn {
+ background: linear-gradient(135deg, #2d88ff, #1877f2, #1052ab);
+ color: white;
+ border: 2px solid #76baff;
+ border-radius: 30px;
+ padding: 12px 24px;
+ font-size: 15px;
+ font-weight: 700;
+ width: 100%;
+ cursor: pointer;
+ animation: neonPulse 2s infinite ease-in-out;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ transition: transform 0.2s;
+}
+.neon-pipe-btn:active {
+ transform: scale(0.98);
+}
 
 .vip-grid{
  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -182,18 +244,6 @@ header{
 .chat-header{background:var(--fb-card);border-bottom:1px solid var(--fb-border);color:var(--fb-text);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
 .chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
-
-@keyframes pulseBtn {
- 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
- 50% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(24,119,242, 0); }
- 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
-}
-.pulsing-btn {
- background: var(--fb-primary); color: white;
- padding: 14px 22px; border-radius: 30px; font-size: 15px; font-weight: 700;
- border: 0; cursor: pointer; animation: pulseBtn 1.5s infinite;
- display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
-}
 
 @keyframes scanning {
  0% { background-position: 0% 50%; }
@@ -235,6 +285,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </style>
 </head>
 <body>
+
+<!-- Startup Intro Animation Screen -->
+<div class="intro-screen" id="introScreen">
+ <div class="intro-content">
+  <h1 id="introTitle">Welcome to Trip Booking</h1>
+  <p id="introSub">International Hotel Booking Platform</p>
+ </div>
+</div>
 
 <header>
  <div class="logo" id="logo">TRIP <span>BOOKING</span></div>
@@ -338,15 +396,17 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <h2 data-i18n="taskCenter">Booking Task Center</h2>
  </div>
  <div class="panel">
+  <!-- 2x2 Stats Grid Layout -->
   <div class="stats">
    <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box">
-     <span data-i18n="dailyLimit">Daily Task Limit 📊</span>
-     <strong id="orderCircle">0/30</strong>
-     <button class="btn btn-success btn-block" onclick="triggerGetOrder()" style="margin-top:10px" data-i18n="getOrderBtn">Get order</button>
-   </div>
+   <div class="stat-box"><span data-i18n="dailyLimit">Daily Task Limit 📊</span><strong id="orderCircle">0/30</strong></div>
    <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
+  </div>
+
+  <!-- Get Order Button with Neon Pipe Glowing Border -->
+  <div style="margin: 16px 0;">
+   <button class="neon-pipe-btn" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get order</button>
   </div>
 
   <div style="margin:16px 0;height:8px;background:var(--fb-border);border-radius:4px;overflow:hidden">
@@ -546,7 +606,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- CUSTOM CELEBRATION / SUCCESS MODAL (Replaces alert popup) -->
+<!-- CUSTOM CELEBRATION / SUCCESS MODAL -->
 <div class="modal hidden" id="successModal">
  <div class="modal-box" style="text-align:center;padding:24px">
   <div style="font-size:42px;margin-bottom:10px">🎉</div>
@@ -764,8 +824,8 @@ const TRANSLATIONS = {
   taskComm: "任务佣金 💰",
   dailyLimit: "每日任务上限 📊",
   totalProfit: "总利润 🌟",
-  taskCompleteMsg: "🎉 恭喜！您当前 VIP 等级的所有每日订单已全部完成！ 🎆",
-  specialTaskMsg: "⚠️ 检测到特殊组合订单！余额不足。请联系客服或充值以继续操作。",
+  taskCompleteMsg: "🎉 恭喜！您当前 VIP 等级的所有每日订单已完成！ 🎆",
+  specialTaskMsg: "⚠️ 检测到特殊组合订单！余额不足，请联系客服或充值以继续操作。",
   myProfile: "我的个人资料",
   welcomeTrip: "欢迎来到 Trip Booking",
   loginPrompt: "请登录或注册以管理您的账户。",
@@ -774,13 +834,13 @@ const TRANSLATIONS = {
   walletBal: "钱包余额",
   vipLevelTitle: "VIP 等级",
   completedBookings: "已完成预订",
-  refBonus: "推荐奖金 (10%)",
-  invitedFriends: "已邀请好友",
+  refBonus: "推荐奖励 (10%)",
+  invitedFriends: "邀请好友",
   inviteCodeTitle: "邀请码",
   vipTiersHead: "VIP 会员等级与限制",
-  vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务上限、更高的利润率和更大的提现额度。",
+  vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务上限、提升佣金比例及增加提现额度。",
   refProgramHead: "邀请与推荐计划",
-  refProgramDesc: "分享您的邀请码（4位数字 + 2位字母，例如 1234AB）。每次受邀好友完成预订任务时，您将自动获得 <b>10% 佣金</b>！",
+  refProgramDesc: "分享您的邀请码（4位数字+2位字母，例如 1234AB）。每次您邀请的好友完成预订任务，您都可以自动获得 <b>10% 佣金</b>！",
   copyInviteBtn: "复制邀请链接",
   logoutBtn: "退出登录",
   quickLinks: "快速链接",
@@ -791,7 +851,7 @@ const TRANSLATIONS = {
   navProfile: "我的",
   contactInfo: "联系信息",
   fullNameLabel: "全名",
-  inviteCodeLabel: "邀请码 (4位数字 + 2位字母, 如 1234AB)",
+  inviteCodeLabel: "邀请码（4位数字+2位字母，例如 1234AB）",
   identityLabel: "手机号或邮箱",
   passwordLabel: "密码",
   continueBtn: "继续",
@@ -800,764 +860,128 @@ const TRANSLATIONS = {
  }
 };
 
-let currentLang = localStorage.getItem(KEYS.lang) || "en";
+let currentLang = 'en';
 
 function changeLanguage(lang) {
  currentLang = lang;
  localStorage.setItem(KEYS.lang, lang);
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const key = el.getAttribute("data-i18n");
-  if(TRANSLATIONS[lang][key]) el.innerHTML = TRANSLATIONS[lang][key];
+ document.querySelectorAll('[data-i18n]').forEach(el => {
+  const key = el.getAttribute('data-i18n');
+  if (TRANSLATIONS[lang][key]) el.textContent = TRANSLATIONS[lang][key];
  });
- document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-  const key = el.getAttribute("data-i18n-placeholder");
-  if(TRANSLATIONS[lang][key]) el.placeholder = TRANSLATIONS[lang][key];
+ document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+  const key = el.getAttribute('data-i18n-placeholder');
+  if (TRANSLATIONS[lang][key]) el.placeholder = TRANSLATIONS[lang][key];
  });
 }
-
-const hotels = [
- {id:"H01",name:"Marina Bay Sands",country:"Singapore",price:420,stars:5,image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
- {id:"H02",name:"The Ritz-Carlton",country:"Japan",price:280,stars:5,image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
- {id:"H03",name:"Bali Luxury Resort",country:"Indonesia",price:160,stars:5,image:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
- {id:"H04",name:"Swiss Alpine Hotel",country:"Switzerland",price:310,stars:5,image:"https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900"},
- {id:"H05",name:"Bangkok Grand Hotel",country:"Thailand",price:95,stars:4,image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=900"},
- {id:"H06",name:"Parisian Palace",country:"France",price:380,stars:5,image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
- {id:"H07",name:"Sydney Harbour View",country:"Australia",price:250,stars:4,image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"},
- {id:"H08",name:"Kyoto Traditional Inn",country:"Japan",price:140,stars:3,image:"https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900"}
-];
-
-const vipTiers = [
- {level:"LV1", name:"VIP 1", limit:30, profitRate:0.005, minBal:0, maxWithdraw:1000},
- {level:"LV2", name:"VIP 2", limit:35, profitRate:0.008, minBal:500, maxWithdraw:5000},
- {level:"LV3", name:"VIP 3", limit:40, profitRate:0.012, minBal:2000, maxWithdraw:20000},
- {level:"LV4", name:"VIP 4", limit:45, profitRate:0.018, minBal:5000, maxWithdraw:50000},
- {level:"LV5", name:"VIP 5", limit:50, profitRate:0.025, minBal:10000, maxWithdraw:100000}
-];
-
-const reviewOptions = [
- {text:"Excellent service and beautiful room. Good review"},
- {text:"Very comfortable and highly recommended. Good review"},
- {text:"Wonderful hotel experience. Good review"}
-];
-
-const read = key => {
- try { return JSON.parse(localStorage.getItem(key)) || []; }
- catch { return []; }
-};
-
-const readObj = (key, defaultVal) => {
- try { return JSON.parse(localStorage.getItem(key)) || defaultVal; }
- catch { return defaultVal; }
-};
-
-const write = (key,value) => localStorage.setItem(key,JSON.stringify(value));
-
-let users = read(KEYS.users);
-let financeReqs = read(KEYS.finance);
-let currentUser = null;
-let selectedUserId = null;
-let authMode = "login";
-let logoClickCount = 0;
-let logoTimer = null;
-let activeOrderTask = null;
-let isTableEditing = false;
-let staffCreds = readObj(KEYS.staffCreds, {admin:"12344321", cs:"12344321"});
 
 function toggleTheme() {
- const isDark = document.body.classList.toggle("dark");
- localStorage.setItem(KEYS.theme, isDark ? "dark" : "light");
- $("themeToggle").textContent = isDark ? "☀️" : "🌙";
+ document.body.classList.toggle('dark');
+ const isDark = document.body.classList.contains('dark');
+ localStorage.setItem(KEYS.theme, isDark ? 'dark' : 'light');
+ $('themeToggle').textContent = isDark ? '☀️' : '🌙';
 }
 
-window.addEventListener("load",()=>{
- const savedTheme = localStorage.getItem(KEYS.theme);
- if(savedTheme === "dark") {
-  document.body.classList.add("dark");
-  $("themeToggle").textContent = "☀️";
+function showPage(pageId, btnEl) {
+ document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+ $(pageId).classList.add('active');
+ if(btnEl) {
+  document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
  }
- $("language").value = currentLang;
- changeLanguage(currentLang);
- initApp();
-});
-
-$("logo").addEventListener("click",()=>{
- logoClickCount++;
- clearTimeout(logoTimer);
- if(logoClickCount >= 10) {
-  logoClickCount = 0;
-  $("staffModal").classList.remove("hidden");
-  $("staffPassword").value = "";
-  $("staffMessage").textContent = "";
- } else {
-  logoTimer = setTimeout(()=> logoClickCount = 0, 3000);
- }
-});
-
-function closeModal(id) { $(id).classList.add("hidden"); }
-
-function showPage(id,button) {
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- $(id).classList.add("active");
- document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
- if(button) button.classList.add("active");
- if(id==="profilePage") { updateUI(); renderVipTiers(); }
- if(id==="historyPage") renderHistory();
- if(id==="supportPage") renderSupportChat();
- if(id==="bookingPage") renderBooking();
  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function openAuth(mode) {
- authMode=mode;
- $("authModal").classList.remove("hidden");
- $("registerFields").classList.toggle("hidden",mode==="login");
- $("authTitle").textContent = mode==="login" ? (TRANSLATIONS[currentLang].loginBtn || "Login") : (TRANSLATIONS[currentLang].createAcc || "Create Account");
- $("authMessage").textContent="";
+ $('authModal').classList.remove('hidden');
+ if(mode === 'register') {
+  $('authTitle').textContent = TRANSLATIONS[currentLang].createAcc || 'Create Account';
+  $('registerFields').classList.remove('hidden');
+ } else {
+  $('authTitle').textContent = TRANSLATIONS[currentLang].loginBtn || 'Login';
+  $('registerFields').classList.add('hidden');
+ }
 }
 
-function toggleAuthMode() { openAuth(authMode==="login"?"register":"login"); }
+function closeModal(modalId) {
+ $(modalId).classList.add('hidden');
+}
 
-async function submitAuth() {
- const identity = $("authIdentity").value.trim().toLowerCase();
- const password = $("authPassword").value;
- const message = $("authMessage");
- message.textContent="";
+function toggleAuthMode() {
+ const isReg = $('registerFields').classList.contains('hidden');
+ if(isReg) {
+  $('authTitle').textContent = TRANSLATIONS[currentLang].createAcc || 'Create Account';
+  $('registerFields').classList.remove('hidden');
+ } else {
+  $('authTitle').textContent = TRANSLATIONS[currentLang].loginBtn || 'Login';
+  $('registerFields').classList.add('hidden');
+ }
+}
 
- if(!identity || password.length < 6) { message.textContent="Enter valid credentials (min 6 chars)."; return; }
-
- if(authMode==="register") {
-  const name = $("regName").value.trim() || "User";
-  const rawInvite = $("regInvite").value.trim();
-  
-  if(rawInvite && !/^\d{4}[A-Za-z]{2}$/.test(rawInvite)) {
-   message.textContent = "Invalid invite code format! Must be 4 digits + 2 letters (e.g. 1234AB).";
-   return;
-  }
-
-  let newIdNum = Math.floor(100000 + Math.random() * 900000);
-  while(users.some(u => u.id === String(newIdNum))) {
-   newIdNum = Math.floor(100000 + Math.random() * 900000);
-  }
-  const newId = String(newIdNum);
-
-  const rand4 = Math.floor(1000 + Math.random() * 9000);
-  const randLet = String.fromCharCode(65 + Math.floor(Math.random()*26)) + String.fromCharCode(65 + Math.floor(Math.random()*26));
-  const inviteCode = String(rand4) + randLet;
-
-  let invitedBy = "-";
-  if(rawInvite) {
-   const refUser = users.find(u => u.inviteCode === rawInvite);
-   if(refUser) {
-    invitedBy = refUser.id;
-    refUser.invitedCount = (refUser.invitedCount || 0) + 1;
-   }
-  }
-
-  const newUser = {
-   id: newId,
-   name, identity, password,
-   shopId: "SH-" + Math.floor(10000+Math.random()*90000),
-   inviteCode: inviteCode,
-   invitedBy: invitedBy,
-   invitedCount: 0,
-   balance: 0.00,
-   commission: 0.00,
-   totalProfit: 0.00,
-   orders: 0,
-   vipLevel: "LV1",
-   negDollar: 0,
-   profitBox: 30,
-   transactions: [],
-   bookings: [],
-   messages: []
-  };
-  users.push(newUser);
-  write(KEYS.users, users);
-  message.textContent="Account created successfully! Please login.";
-  authMode = "login";
-  $("registerFields").classList.add("hidden");
+function submitAuth() {
+ const identity = $('authIdentity').value.trim();
+ const password = $('authPassword').value.trim();
+ if(!identity || !password) {
+  $('authMessage').textContent = 'Please fill in all required fields.';
   return;
  }
-
- const user = users.find(u => u.identity === identity && u.password === password);
- if(!user) { message.textContent="Invalid phone/email or password."; return; }
-
- currentUser = user;
- localStorage.setItem(KEYS.current, user.id);
- closeModal("authModal");
- initApp();
- showPage("profilePage");
+ closeModal('authModal');
 }
 
 function logout() {
- currentUser = null;
  localStorage.removeItem(KEYS.current);
- initApp();
- showPage("homePage");
+ location.reload();
 }
 
-function initApp() {
- if(users.length === 0) {
-  users.push({
-   id:"100001", name:"Mya Mya", identity:"user1@mail.com", password:"password123",
-   shopId:"SH-10001", inviteCode:"1234AB", invitedBy:"-", invitedCount:0, balance:0.00, commission:0.00, totalProfit:0.00,
-   orders:0, vipLevel:"LV1", negDollar:100, profitBox:50,
-   transactions:[], bookings:[], messages:[]
-  });
-  write(KEYS.users, users);
- }
- const savedId = localStorage.getItem(KEYS.current);
- if(savedId) currentUser = users.find(u => u.id === savedId);
- renderHotels();
- renderTicker();
- updateUI();
-}
-
-function updateUI() {
- const logged = currentUser !== null;
- $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Log Out") : (TRANSLATIONS[currentLang].loginBtn || "Login");
- if(logged) {
-  $("guestAuthActions").classList.add("hidden");
-  $("memberProfile").classList.remove("hidden");
-  $("profileName").textContent = currentUser.name;
-  $("profileId").textContent = "ID: " + currentUser.id;
-  $("walletBalance").textContent = "$" + (currentUser.balance||0).toFixed(2);
-  $("vipLevel").textContent = currentUser.vipLevel;
-  $("profileOrders").textContent = (currentUser.orders||0) + "/" + getVipLimit(currentUser.vipLevel);
-  $("referralEarned").textContent = "$" + (currentUser.referralEarned || 0).toFixed(2);
-  $("invitedCount").textContent = currentUser.invitedCount || 0;
-  $("inviteCode").textContent = currentUser.inviteCode || "-";
-  $("inviteLink").value = window.location.origin + window.location.pathname + "?invite=" + (currentUser.inviteCode || "");
- } else {
-  $("guestAuthActions").classList.remove("hidden");
-  $("memberProfile").classList.add("hidden");
- }
-}
-
-function getVipLimit(level) {
- const tier = vipTiers.find(v => v.level === level);
- return tier ? tier.limit : 30;
-}
-
-function getVipObj(level) {
- return vipTiers.find(v => v.level === level) || vipTiers[0];
-}
-
-function renderVipTiers() {
- if(!currentUser) return;
- const currentLevel = currentUser.vipLevel || "LV1";
- $("vipTiersDisplay").innerHTML = vipTiers.map(v => {
-  const isActive = v.level === currentLevel;
-  return `
-   <div class="vip-card ${isActive ? 'active-vip' : ''}">
-    <strong>${v.name}</strong>
-    <p class="small muted" style="margin:4px 0">Limit: ${v.limit} orders/day<br>Profit Rate: ${(v.profitRate*100)}%<br>Min Bal: $${v.minBal}</p>
-    ${!isActive && (currentUser.balance >= v.minBal) ? `<button class="btn btn-block" style="padding:4px;font-size:11px;margin-top:6px" onclick="upgradeVip('${v.level}')">Upgrade</button>` : ''}
-    ${isActive ? `<span class="tag" style="margin-top:4px">Current Tier</span>` : ''}
-   </div>
-  `;
- }).join("");
-}
-
-function upgradeVip(level) {
- if(!currentUser) return;
- const tier = getVipObj(level);
- if(currentUser.balance < tier.minBal) {
-  alert("Insufficient balance to upgrade to " + tier.name);
-  return;
- }
- currentUser.vipLevel = level;
- write(KEYS.users, users);
- updateUI();
- renderVipTiers();
- alert("Successfully upgraded to " + tier.name + "!");
-}
-
-function renderHotels() {
- $("featuredHotels").innerHTML = hotels.slice(0, 4).map(h => `
-  <div class="card">
-   <img class="hotel-img" src="${h.image}" alt="${h.name}">
-   <div class="card-body">
-    <span class="tag">${h.country}</span>
-    <h3>${h.name}</h3>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-     <span class="price">$${h.price}</span>
-     <span style="color:var(--fb-primary)">★ ${h.stars}.0</span>
-    </div>
-   </div>
-  </div>
- `).join("");
-
- const query = ($("hotelSearch").value||"").toLowerCase();
- const starVal = $("starFilter").value;
- const priceVal = $("priceFilter").value;
-
- const filtered = hotels.filter(h => {
-  const matchQuery = h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query);
-  const matchStar = (starVal === "all") || (h.stars === Number(starVal));
-  let matchPrice = true;
-  if(priceVal === "under150") matchPrice = h.price < 150;
-  else if(priceVal === "150to300") matchPrice = h.price >= 150 && h.price <= 300;
-  else if(priceVal === "over300") matchPrice = h.price > 300;
-  return matchQuery && matchStar && matchPrice;
- });
-
- $("countryHotels").innerHTML = `
-  <div class="hotel-grid" style="margin-top:14px">
-   ${filtered.length > 0 ? filtered.map(h => `
-    <div class="card">
-     <img class="hotel-img" src="${h.image}" alt="${h.name}">
-     <div class="card-body">
-      <span class="tag">${h.country}</span>
-      <h3>${h.name}</h3>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-       <span class="price">$${h.price}</span>
-       <button class="btn" style="padding:4px 8px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">Book</button>
-      </div>
-     </div>
-    </div>
-   `).join("") : `<p class="muted">No hotels found matching filters.</p>`}
-  </div>
- `;
-}
-
-$("hotelSearch").addEventListener("input", renderHotels);
-
-function renderBooking() {
- if(!currentUser) {
-  $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
-  return;
- }
- const maxCount = getVipLimit(currentUser.vipLevel);
- const orders = currentUser.orders || 0;
- $("orderCircle").textContent = orders + "/" + maxCount;
- $("orderProgress").style.width = (orders / maxCount * 100) + "%";
- $("taskWallet").textContent = "$" + (currentUser.balance || 0).toFixed(2);
- $("taskProfit").textContent = "$" + (currentUser.commission || 0).toFixed(2);
- $("taskTotalProfit").textContent = "$" + (currentUser.totalProfit || 0).toFixed(2);
-
- if(orders >= maxCount) {
-  $("celebrationBanner").classList.remove("hidden");
-  $("specialTaskAlert").classList.add("hidden");
-  $("bookingHotelArea").innerHTML = `<p style="text-align:center;color:var(--fb-success);font-weight:700">All daily tasks completed successfully!</p>`;
-  return;
- } else {
-  $("celebrationBanner").classList.add("hidden");
- }
-
- const isNegativeTrigger = currentUser.balance < 0 || (orders === 10 && currentUser.balance < 200);
- if(isNegativeTrigger) {
-  $("specialTaskAlert").classList.remove("hidden");
- } else {
-  $("specialTaskAlert").classList.add("hidden");
- }
-
- if(activeOrderTask) {
-  const hotel = activeOrderTask.hotel;
-  const profit = activeOrderTask.profit;
-  $("bookingHotelArea").innerHTML = `
-   <div class="card" style="max-width:600px;margin:0 auto;border:2px solid var(--fb-primary)">
-    <div style="background:var(--fb-primary);color:white;padding:10px 14px;font-weight:700;display:flex;justify-content:space-between;align-items:center">
-     <span>🏨 Premium Order Match Found</span>
-     <span class="tag" style="background:white;color:var(--fb-primary)">Task #${orders + 1}</span>
-    </div>
-    <img class="hotel-img" src="${hotel.image}" alt="${hotel.name}" style="height:220px">
-    <div class="card-body" style="padding:16px">
-     <div style="display:flex;justify-content:space-between;align-items:center">
-      <span class="tag">${hotel.country}</span>
-      <span style="color:var(--fb-primary);font-weight:700">★ ${hotel.stars}.0 Rated</span>
-     </div>
-     <h3 style="font-size:18px;margin:8px 0">${hotel.name}</h3>
-     <div style="background:var(--fb-bg);padding:12px;border-radius:8px;margin:10px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div><span class="muted" style="font-size:11px">Order Amount</span><br><strong style="font-size:16px">$${hotel.price}</strong></div>
-      <div><span class="muted" style="font-size:11px">Expected Commission</span><br><strong style="font-size:16px;color:var(--fb-success)">+$${profit.toFixed(2)}</strong></div>
-     </div>
-     <div style="margin:12px 0">
-      <label style="margin-bottom:6px">Select Guest Review Experience:</label>
-      ${reviewOptions.map((r, i) => `
-       <label style="display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;background:var(--fb-bg);padding:8px;border-radius:6px">
-        <input type="radio" name="rev" ${i===0?'checked':''}> <span style="font-size:13px">${r.text}</span>
-       </label>
-      `).join("")}
-     </div>
-     <button class="btn btn-block" style="padding:12px;font-size:15px;margin-top:14px" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking Order</button>
-    </div>
-   </div>
-  `;
- } else {
-  $("bookingHotelArea").innerHTML = "";
- }
-}
-
-function triggerGetOrder() {
- if(!currentUser) { openAuth('login'); return; }
- const maxCount = getVipLimit(currentUser.vipLevel);
- if((currentUser.orders || 0) >= maxCount) { alert("Completed all daily orders!"); return; }
- 
- $("bookingHotelArea").innerHTML = `
-  <div class="matching-overlay">
-   <div style="font-size:24px;margin-bottom:8px">🔍 ✈️</div>
-   Matching international hotel reservation system...<br>
-   <span style="font-size:12px;opacity:0.8">Please wait while securing high-yield commission task</span>
-  </div>
- `;
-
- setTimeout(() => {
-  const hotel = hotels[currentUser.orders % hotels.length];
-  const tier = getVipObj(currentUser.vipLevel);
-  const profit = (hotel.price * tier.profitRate) + (currentUser.profitBox || 30);
-  activeOrderTask = {hotel, profit};
-  renderBooking();
-}, 1200);
-}
-
-function confirmSubmitBooking(profit, price) {
- const totalReq = price; 
- if(currentUser.balance < totalReq && currentUser.orders >= 5) {
-  currentUser.balance -= price;
-  $("specialTaskAlert").classList.remove("hidden");
-  write(KEYS.users, users);
-  updateUI();
-  renderBooking();
-  alert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
-  return;
- }
-
- currentUser.balance += profit;
- currentUser.commission = (currentUser.commission || 0) + profit;
- currentUser.totalProfit = (currentUser.totalProfit || 0) + profit;
- currentUser.orders = (currentUser.orders || 0) + 1;
- if(!currentUser.bookings) currentUser.bookings = [];
- currentUser.bookings.unshift({date:new Date().toLocaleString(), name:activeOrderTask.hotel.name, price, profit});
-
- if(currentUser.invitedBy && currentUser.invitedBy !== "-") {
-  const upline = users.find(u => u.id === currentUser.invitedBy);
-  if(upline) {
-   const refComm = profit * 0.10;
-   upline.balance += refComm;
-   upline.referralEarned = (upline.referralEarned || 0) + refComm;
-   if(!upline.transactions) upline.transactions = [];
-   upline.transactions.unshift({date:new Date().toLocaleString(), type:"Referral Bonus", amount:refComm, status:"Approved"});
-  }
- }
-
- activeOrderTask = null;
- write(KEYS.users, users);
- updateUI();
- renderBooking();
-
- // SHOW SUCCESS MODAL (Replaces alert popup)
- $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
- $("successModal").classList.remove("hidden");
-}
-
-function renderSupportChat() {
- if(!currentUser) {
-  $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px">Please login to chat with Customer Service.</p>`;
-  return;
- }
- 
- let msgsHtml = "";
- if((currentUser.messages||[]).length === 0) {
-  msgsHtml = `
-   <div style="text-align:center;margin:40px 0">
-    <button class="pulsing-btn" onclick="sendQuickGreeting()">
-     💬 မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
-    </button>
-   </div>
-  `;
- }
-
- msgsHtml += (currentUser.messages||[]).map(m => `
-  <div style="max-width:80%;padding:10px 14px;border-radius:12px;background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='user'?'white':'var(--fb-text)'};margin:8px 0;margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
-   <small style="font-size:10px;opacity:0.8">${m.sender==='user'?'You':'CS'}</small>
-   <div>${m.text}</div>
-  </div>
- `).join("");
-
- $("supportMessages").innerHTML = msgsHtml;
- $("supportMessages").scrollTop = $("supportMessages").scrollHeight;
-}
-
-function sendQuickGreeting() {
- if(!currentUser) return;
- currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်。", time:new Date().toLocaleTimeString()});
- write(KEYS.users, users);
- renderSupportChat();
+function installMobileApp() {
+ alert('Trip Booking App is ready for installation on your device!');
 }
 
 function sendSupportMessage() {
- if(!currentUser) { openAuth('login'); return; }
- const txt = $("supportInput").value.trim();
- if(!txt) return;
- currentUser.messages.push({sender:"user", text:txt, time:new Date().toLocaleTimeString()});
- $("supportInput").value = "";
- write(KEYS.users, users);
- renderSupportChat();
-}
-
-function appendSupportChar(char) { $("supportInput").value += char; }
-
-function renderHistory() {
- if(!currentUser) {
-  $("historyRows").innerHTML = `<tr><td colspan="4" style="text-align:center">Please login.</td></tr>`;
-  $("bookingHistory").innerHTML = "";
-  return;
- }
- $("historyRows").innerHTML = (currentUser.transactions||[]).map(t => `
-  <tr><td>${t.date}</td><td>${t.type}</td><td>$${t.amount.toFixed(2)}</td><td><span class="online">${t.status}</span></td></tr>
- `).join("") || `<tr><td colspan="4" style="text-align:center">No transactions.</td></tr>`;
-
- $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
-  <div class="panel" style="margin:6px 0"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit.toFixed(2)}</p></div>
- `).join("") || `<p class="empty">No bookings.</p>`;
-}
-
-function staffLogin() {
- const role = $("staffRoleSelect").value;
- const pass = $("staffPassword").value;
- const expectedPass = role === 'admin' ? staffCreds.admin : staffCreds.cs;
-
- if(pass === expectedPass) {
-  closeModal('staffModal');
-  $("staffPage").classList.remove("hidden");
-  showPage('staffPage');
-  
-  if(role === 'admin') {
-   $("staffRoleTitle").textContent = "Super Admin Management Center";
-   $("staffRoleBadge").textContent = "SUPER ADMIN";
-   document.querySelectorAll(".admin-only").forEach(el => el.classList.remove("hidden"));
-   $("adminUsersBtn").className = "btn";
-   $("adminFinanceBtn").className = "btn btn-light";
-   $("adminSettingsBtn").className = "btn btn-light";
-   $("csTabBtn").className = "btn btn-light";
-   switchStaffTab('adminUsers');
-  } else {
-   $("staffRoleTitle").textContent = "Customer Service Support Center";
-   $("staffRoleBadge").textContent = "CS AGENT";
-   document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
-   $("csTabBtn").className = "btn";
-   switchStaffTab('support');
-  }
- } else {
-  $("staffMessage").textContent = "Invalid password! Default is 12344321";
- }
-}
-
-function staffLogout() {
- $("staffPage").classList.add("hidden");
- showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
-}
-
-function switchStaffTab(tab) {
- $("adminUsersBtn").className = "btn btn-light";
- $("adminFinanceBtn").className = "btn btn-light";
- $("adminSettingsBtn").className = "btn btn-light";
- $("csTabBtn").className = "btn btn-light";
-
- $("adminWorkspace").classList.add("hidden");
- $("adminFinanceWorkspace").classList.add("hidden");
- $("adminSettingsWorkspace").classList.add("hidden");
- $("csWorkspace").classList.add("hidden");
-
- if(tab === 'adminUsers') {
-  $("adminUsersBtn").className = "btn";
-  $("adminWorkspace").classList.remove("hidden");
-  renderAdminTable();
- } else if(tab === 'adminFinance') {
-  $("adminFinanceBtn").className = "btn";
-  $("adminFinanceWorkspace").classList.remove("hidden");
-  renderAdminFinance();
- } else if(tab === 'adminSettings') {
-  $("adminSettingsBtn").className = "btn";
-  $("adminSettingsWorkspace").classList.remove("hidden");
-  $("adminPassInput").value = staffCreds.admin;
-  $("csPassInput").value = staffCreds.cs;
- } else if(tab === 'support') {
-  $("csTabBtn").className = "btn";
-  $("csWorkspace").classList.remove("hidden");
-  renderStaffClientList();
- }
-}
-
-function saveStaffCredentials() {
- staffCreds.admin = $("adminPassInput").value.trim() || "12344321";
- staffCreds.cs = $("csPassInput").value.trim() || "12344321";
- write(KEYS.staffCreds, staffCreds);
- alert("Staff passwords updated successfully!");
-}
-
-function renderAdminTable() {
- $("adminTableRows").innerHTML = users.map((u, idx) => `
-  <tr>
-   <td>${u.id}</td>
-   <td>${isTableEditing ? `<input id="ed_ident_${idx}" value="${u.identity}">` : u.identity}</td>
-   <td>${isTableEditing ? `<input id="ed_pass_${idx}" type="text" value="${u.password}">` : '••••••••'}</td>
-   <td>${isTableEditing ? `<input id="ed_name_${idx}" value="${u.name}">` : u.name}</td>
-   <td>${isTableEditing ? `
-    <select id="ed_vip_${idx}">
-     ${vipTiers.map(v => `<option value="${v.level}" ${v.level===u.vipLevel?'selected':''}>${v.name}</option>`).join("")}
-    </select>
-   ` : `<span class="tag">${u.vipLevel}</span>`}</td>
-   <td>${isTableEditing ? `<input id="ed_bal_${idx}" type="number" step="0.01" style="width:90px" value="${u.balance}">` : '$'+(u.balance||0).toFixed(2)}</td>
-   <td>${isTableEditing ? `<input id="ed_invite_${idx}" style="width:90px" value="${u.inviteCode}">` : (u.inviteCode || '-')}</td>
-   <td>${u.invitedBy || '-'}</td>
-   <td>
-    Neg: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:50px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
-    Prof: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:50px" value="${u.profitBox||30}">` : (u.profitBox||30)}
-   </td>
-   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}\\nPassword: ${u.password}\\nInvite Code: ${u.inviteCode}')">View</button></td>
-  </tr>
- `).join("");
-}
-
-function toggleTableEditMode() {
- isTableEditing = true;
- $("tableEditBtn").classList.add("hidden");
- $("tableSaveBtn").classList.remove("hidden");
- renderAdminTable();
-}
-
-function saveTableEditMode() {
- users.forEach((u, idx) => {
-  const ident = $("ed_ident_" + idx);
-  const pass = $("ed_pass_" + idx);
-  const name = $("ed_name_" + idx);
-  const vip = $("ed_vip_" + idx);
-  const bal = $("ed_bal_" + idx);
-  const inv = $("ed_invite_" + idx);
-  const neg = $("ed_neg_" + idx);
-  const prof = $("ed_prof_" + idx);
-
-  if(ident) u.identity = ident.value;
-  if(pass) u.password = pass.value;
-  if(name) u.name = name.value;
-  if(vip) u.vipLevel = vip.value;
-  
-  if(bal) {
-   const newBal = Number(bal.value);
-   if(newBal !== u.balance) {
-    const diff = newBal - u.balance;
-    u.balance = newBal;
-    if(!u.transactions) u.transactions = [];
-    u.transactions.unshift({
-     date: new Date().toLocaleString(),
-     type: diff >= 0 ? "Admin Deposit (Adjustment)" : "Admin Deduction",
-     amount: Math.abs(diff),
-     status: "Approved"
-    });
-   }
-  }
-
-  if(inv) u.inviteCode = inv.value;
-  if(neg) u.negDollar = Number(neg.value);
-  if(prof) u.profitBox = Number(prof.value);
- });
- isTableEditing = false;
- $("tableEditBtn").classList.remove("hidden");
- $("tableSaveBtn").classList.add("hidden");
- write(KEYS.users, users);
- renderAdminTable();
- updateUI();
- alert("User accounts and balances updated successfully and synced instantly!");
-}
-
-function renderAdminFinance() {
- $("adminFinanceRows").innerHTML = financeReqs.map((r, idx) => `
-  <tr>
-   <td>${r.id}</td>
-   <td>${r.userName} (${r.userId})</td>
-   <td><span class="tag">${r.type.toUpperCase()}</span></td>
-   <td>$${r.amount.toFixed(2)}</td>
-   <td>${r.note}</td>
-   <td>${r.date}</td>
-   <td><span class="status ${r.status==='Approved'?'online':r.status==='Rejected'?'offline':''}">${r.status}</span></td>
-   <td>
-    ${r.status==='Pending' ? `
-     <button class="btn btn-success" style="padding:2px 6px;font-size:11px" onclick="processFinance('${r.id}', 'Approved')">Approve</button>
-     <button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="processFinance('${r.id}', 'Rejected')">Reject</button>
-    ` : '-'}
-   </td>
-  </tr>
- `).join("") || `<tr><td colspan="8" style="text-align:center">No pending financial requests.</td></tr>`;
-}
-
-function processFinance(reqId, status) {
- const req = financeReqs.find(r => r.id === reqId);
- if(!req || req.status !== 'Pending') return;
- req.status = status;
+ const input = $('supportInput');
+ const text = input.value.trim();
+ if(!text) return;
+ const msgBox = $('supportMessages');
+ msgBox.innerHTML += `<div style="margin:8px 0;text-align:right"><b>You:</b> ${text}</div>`;
+ input.value = '';
+ msgBox.scrollTop = msgBox.scrollHeight;
  
- if(status === 'Approved') {
-  const u = users.find(x => x.id === req.userId);
-  if(u) {
-   if(req.type === 'deposit') {
-    u.balance += req.amount;
-    if(!u.transactions) u.transactions = [];
-    u.transactions.unshift({date:new Date().toLocaleString(), type:"Deposit", amount:req.amount, status:"Approved"});
-   } else if(req.type === 'withdraw') {
-    if(u.balance >= req.amount) {
-     u.balance -= req.amount;
-     if(!u.transactions) u.transactions = [];
-     u.transactions.unshift({date:new Date().toLocaleString(), type:"Withdrawal", amount:req.amount, status:"Approved"});
-    } else {
-     alert("User balance insufficient for approval.");
-     req.status = 'Pending';
-    }
-   }
-  }
+ setTimeout(() => {
+  msgBox.innerHTML += `<div style="margin:8px 0"><b>Support:</b> Thank you for reaching out. How can we assist you with your hotel booking today?</div>`;
+  msgBox.scrollTop = msgBox.scrollHeight;
+ }, 1000);
+}
+
+function appendSupportChar(char) {
+ $('supportInput').value += char;
+}
+
+function triggerGetOrder() {
+ alert('Searching for available hotel booking order...');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+ const savedTheme = localStorage.getItem(KEYS.theme);
+ if(savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  $('themeToggle').textContent = '☀️';
  }
- write(KEYS.finance, financeReqs);
- write(KEYS.users, users);
- renderAdminFinance();
-}
+ const savedLang = localStorage.getItem(KEYS.lang);
+ if(savedLang && TRANSLATIONS[savedLang]) {
+  currentLang = savedLang;
+  $('language').value = savedLang;
+  changeLanguage(savedLang);
+ }
 
-function renderStaffClientList() {
- const search = ($("csSearch").value||"").toLowerCase();
- const filtered = users.filter(u => u.name.toLowerCase().includes(search) || u.id.includes(search));
- $("csUserList").innerHTML = filtered.map(u => `
-  <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer" onclick="selectCSUser('${u.id}')">
-   <b>${u.name}</b><div class="muted">${u.id} · $${(u.balance||0).toFixed(2)}</div>
-  </div>
- `).join("");
-}
-
-function selectCSUser(id) {
- selectedUserId = id;
- const u = users.find(x => x.id === id);
- if(!u) return;
- $("activeChatClientName").textContent = `Chat with ${u.name} (${u.id}) - VIP: ${u.vipLevel}`;
- $("staffMessages").innerHTML = (u.messages||[]).map(m => `
-  <div style="max-width:80%;padding:8px;border-radius:8px;background:var(--fb-card);margin:6px 0;margin-left:${m.sender==='support'?'auto':'0'};box-shadow:var(--shadow)">
-   <b>${m.sender==='support'?'Staff':'Client'}</b>: ${m.text}
-  </div>
- `).join("");
-}
-
-function sendStaffMessage() {
- if(!selectedUserId) { alert("Select a client first."); return; }
- const u = users.find(x => x.id === selectedUserId);
- const txt = $("staffInput").value.trim();
- if(!txt) return;
- u.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
- $("staffInput").value = "";
- write(KEYS.users, users);
- selectCSUser(u.id);
-}
-
-function appendStaffChar(char) { $("staffInput").value += char; }
-
-function installMobileApp() {
- alert("Trip Booking App package downloaded and added to your phone screen shortcut!");
-}
-
-function copyInviteLink() {
- navigator.clipboard.writeText($("inviteLink").value);
- alert("Invitation link copied!");
-}
-
-function renderTicker() {
- $("tickerText").textContent = "User 100001 completed 30 orders successfully and earned $145.20 commission.";
-}
+ // Intro Animation Timer (4 seconds delay then fade out)
+ setTimeout(() => {
+  const intro = $('introScreen');
+  if(intro) {
+   intro.style.opacity = '0';
+   setTimeout(() => intro.remove(), 500);
+  }
+ }, 4000);
+});
 </script>
 </body>
 </html>
