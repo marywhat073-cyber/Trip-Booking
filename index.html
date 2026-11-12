@@ -5,74 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ffffff">
 <title>Trip Booking | International Hotel Booking Platform</title>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
-  <title>Trip Booking | International Hotel Booking Platform</title>
 
-  <style>
-    /* --- ဤနေရာတွင် Welcome Screen Animation CSS များကို ထည့်ပါ --- */
-    #welcome-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background-color: #0f172a;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      overflow: hidden;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-
-    .main-title {
-      font-size: 3rem;
-      font-weight: bold;
-      margin-bottom: 15px;
-      animation: slideFromRight 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    }
-
-    @keyframes slideFromRight {
-      0% { transform: translateX(100vw); opacity: 0; }
-      100% { transform: translateX(0); opacity: 1; }
-    }
-
-    .sub-title {
-      font-size: 1.5rem;
-      color: #38bdf8;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2px;
-    }
-
-    .sub-title span {
-      display: inline-block;
-      opacity: 0;
-      animation: gatherCenter 1.5s ease-out forwards;
-      animation-delay: 1s;
-    }
-
-    @keyframes gatherCenter {
-      0% { opacity: 0; transform: translate(var(--x), var(--y)) scale(0.5); }
-      100% { opacity: 1; transform: translate(0, 0) scale(1); }
-    }
-
-    .fade-out {
-      opacity: 0;
-      visibility: hidden;
-    }
-    /* -------------------------------------------------- */
-
-    /* သင့်ရဲ့ မူရင်း CSS များ (root, body စသည်ဖြင့် ဆက်ရေးရန်) */
-    :root {
-      --fb-bg:#f0f2f5;
-      /* ကျန်တာတွေ ဒီအောက်မှာ ဆက်ရှိနေပါမယ် */
 <style>
 :root{
  --fb-bg:#f0f2f5;
@@ -140,14 +73,30 @@ header{
 .page{display:none}
 .page.active{display:block}
 
+/* Hero Animations */
+@keyframes slideInRight {
+ 0% { transform: translateX(100vw); opacity: 0; }
+ 100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes fadeInUp {
+ 0% { transform: translateY(30px); opacity: 0; }
+ 100% { transform: translateY(0); opacity: 1; }
+}
+
 .hero{
- min-height:240px;border-radius:12px;overflow:hidden;
+ min-height:260px;border-radius:12px;overflow:hidden;
  background:linear-gradient(90deg,#000000aa,#00000033),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
  display:flex;align-items:center;padding:30px;color:white;
 }
-.hero h1{font-size:clamp(24px,4vw,38px);margin:0 0 8px}
-.hero p{max-width:480px;line-height:1.5;font-size:14px}
+.hero h1{
+ font-size:clamp(24px,4vw,38px);margin:0 0 8px;
+ animation: slideInRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.hero p{
+ max-width:480px;line-height:1.5;font-size:14px;
+ animation: fadeInUp 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
 
 .section-title{
  display:flex;justify-content:space-between;align-items:center;
@@ -246,7 +195,6 @@ header{
  display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
 }
 
-/* Professional Matching Animation for Get Order */
 @keyframes scanning {
  0% { background-position: 0% 50%; }
  50% { background-position: 100% 50%; }
@@ -312,8 +260,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="hero">
   <div>
    <span class="tag" data-i18n="heroTag">INTERNATIONAL TRAVEL</span>
-   <h1 data-i18n="heroTitle">Discover Your Next Stay</h1>
-   <p data-i18n="heroDesc">Explore international hotels around the world and plan your journey with Trip Booking.</p>
+   <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
+   <p data-i18n="heroDesc">International Hotel Booking Platform</p>
    <button class="btn" style="margin-top:12px" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
   </div>
  </div>
@@ -384,7 +332,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- BOOKING TASK CENTER (GET ORDER BUTTON PLACED BELOW TASK LIMIT AS REQUESTED) -->
+<!-- BOOKING TASK CENTER -->
 <section class="page" id="bookingPage">
  <div class="section-title">
   <h2 data-i18n="taskCenter">Booking Task Center</h2>
@@ -396,7 +344,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="stat-box">
      <span data-i18n="dailyLimit">Daily Task Limit 📊</span>
      <strong id="orderCircle">0/30</strong>
-     <!-- Get Order button placed directly below task limit count as requested -->
      <button class="btn btn-success btn-block" onclick="triggerGetOrder()" style="margin-top:10px" data-i18n="getOrderBtn">Get order</button>
    </div>
    <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
@@ -418,7 +365,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- PROFILE (DEPOSIT & WITHDRAW BUTTONS REMOVED AS REQUESTED) -->
+<!-- PROFILE -->
 <section class="page" id="profilePage">
  <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
 
@@ -599,6 +546,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
+<!-- CUSTOM CELEBRATION / SUCCESS MODAL (Replaces alert popup) -->
+<div class="modal hidden" id="successModal">
+ <div class="modal-box" style="text-align:center;padding:24px">
+  <div style="font-size:42px;margin-bottom:10px">🎉</div>
+  <h2 style="color:var(--fb-success);margin-bottom:8px">Booking Confirmed!</h2>
+  <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
+  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px">Awesome, Continue</button>
+ </div>
+</div>
+
 <!-- MODALS -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
@@ -642,20 +599,20 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v17",
- current:"tb_current_v17",
- theme:"tb_theme_v17",
- activity:"tb_activity_v17",
- finance:"tb_finance_v8",
- lang:"tb_lang_v6",
- staffCreds:"tb_staff_creds_v5"
+ users:"tb_users_v18",
+ current:"tb_current_v18",
+ theme:"tb_theme_v18",
+ activity:"tb_activity_v18",
+ finance:"tb_finance_v9",
+ lang:"tb_lang_v7",
+ staffCreds:"tb_staff_creds_v6"
 };
 
 const TRANSLATIONS = {
  en: {
   heroTag: "INTERNATIONAL TRAVEL",
-  heroTitle: "Discover Your Next Stay",
-  heroDesc: "Explore international hotels around the world and plan your journey with Trip Booking.",
+  heroTitle: "Welcome to Trip Booking",
+  heroDesc: "International Hotel Booking Platform",
   exploreBtn: "Explore Hotels",
   featHotels: "Featured Hotels",
   topDest: "Top destinations",
@@ -717,8 +674,8 @@ const TRANSLATIONS = {
  },
  my: {
   heroTag: "နိုင်ငံတကာ ခရီးသွားလုပ်ငန်း",
-  heroTitle: "သင်၏ နောက်ထပ် တည်းခိုမှုကို ရှာဖွေပါ",
-  heroDesc: "ကမ္ဘာတစ်ဝှမ်းမှ ဟိုတယ်များကို ရှာဖွေပြီး Trip Booking ဖြင့် သင့်ခရီးစဉ်ကို စီစဉ်ပါ။",
+  heroTitle: "Welcome to Trip Booking",
+  heroDesc: "International Hotel Booking Platform",
   exploreBtn: "ဟိုတယ်များ ကြည့်ရန်",
   featHotels: "ထင်ရှားသော ဟိုတယ်များ",
   topDest: "လူကြိုက်အများဆုံး နေရာများ",
@@ -780,8 +737,8 @@ const TRANSLATIONS = {
  },
  zh: {
   heroTag: "国际旅游",
-  heroTitle: "发现您的下一站住宿",
-  heroDesc: "通过 Trip Booking 探索全球国际酒店并规划您的行程。",
+  heroTitle: "Welcome to Trip Booking",
+  heroDesc: "International Hotel Booking Platform",
   exploreBtn: "探索酒店",
   featHotels: "精选酒店",
   topDest: "热门目的地",
@@ -1232,7 +1189,6 @@ function renderBooking() {
  }
 }
 
-/* Professional Matching Animation before displaying hotel order */
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  const maxCount = getVipLimit(currentUser.vipLevel);
@@ -1265,7 +1221,7 @@ function confirmSubmitBooking(profit, price) {
   renderBooking();
   alert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
   return;
-}
+ }
 
  currentUser.balance += profit;
  currentUser.commission = (currentUser.commission || 0) + profit;
@@ -1289,7 +1245,10 @@ function confirmSubmitBooking(profit, price) {
  write(KEYS.users, users);
  updateUI();
  renderBooking();
- alert(`Booking confirmed! Earned +$${profit.toFixed(2)}`);
+
+ // SHOW SUCCESS MODAL (Replaces alert popup)
+ $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
+ $("successModal").classList.remove("hidden");
 }
 
 function renderSupportChat() {
@@ -1459,7 +1418,6 @@ function toggleTableEditMode() {
  renderAdminTable();
 }
 
-/* ADMIN LIVE WALLET UPDATE AS REQUESTED */
 function saveTableEditMode() {
  users.forEach((u, idx) => {
   const ident = $("ed_ident_" + idx);
