@@ -73,7 +73,7 @@ header{
 .page{display:none}
 .page.active{display:block}
 
-/* New Hero Intro Animation Styles */
+/* Startup Intro Animation Screen with 2nd Image Background */
 @keyframes rightToCenter {
  0% { transform: translateX(100vw); opacity: 0; }
  100% { transform: translateX(0); opacity: 1; }
@@ -87,28 +87,30 @@ header{
 .intro-screen {
  position: fixed;
  top: 0; left: 0; width: 100vw; height: 100vh;
- background: var(--fb-bg);
+ background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600") center/cover;
  z-index: 9999;
  display: flex;
  align-items: center;
  justify-content: center;
  text-align: center;
  padding: 20px;
- transition: opacity 0.5s ease;
+ transition: opacity 0.6s ease;
 }
 
 .intro-content h1 {
- font-size: clamp(26px, 4.5vw, 42px);
- color: var(--fb-primary);
+ font-size: clamp(28px, 5vw, 44px);
+ color: #ffffff;
+ text-shadow: 0 2px 8px rgba(0,0,0,0.6);
  margin: 0 0 14px;
  animation: rightToCenter 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .intro-content p {
- font-size: clamp(16px, 2vw, 20px);
- color: var(--fb-text);
+ font-size: clamp(16px, 2.2vw, 22px);
+ color: #f0f2f5;
+ text-shadow: 0 1px 4px rgba(0,0,0,0.6);
  font-weight: 600;
- max-width: 600px;
+ max-width: 650px;
  margin: 0 auto;
  animation: fromFourSides 1.5s cubic-bezier(0.25, 1, 0.5, 1) 0.8s forwards;
  opacity: 0;
@@ -122,7 +124,8 @@ header{
 }
 .hero h1{
  font-size:clamp(24px,4vw,38px);margin:0 0 8px;
- color: var(--fb-primary);
+ color: #ffffff;
+ text-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 .hero p{
  max-width:480px;line-height:1.5;font-size:14px;
@@ -185,7 +188,7 @@ header{
  border-radius:10px;padding:16px;box-shadow:var(--shadow);
 }
 
-/* Updated 2x2 Stats Grid for Booking Task Center */
+/* 2x2 Stats Grid */
 .stats{
  display:grid;grid-template-columns:repeat(2,1fr);
  gap:14px;margin:14px 0;
@@ -201,7 +204,7 @@ header{
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
 .stat-box strong{display:block;font-size:20px;margin-top:6px;color:var(--fb-text)}
 
-/* Neon Pipe Button Styling for Get Order */
+/* Neon Pipe Button */
 @keyframes neonPulse {
  0% { box-shadow: 0 0 5px rgba(24,119,242,0.4), 0 0 10px rgba(24,119,242,0.3), inset 0 0 5px rgba(24,119,242,0.2); }
  50% { box-shadow: 0 0 15px rgba(24,119,242,0.9), 0 0 25px rgba(24,119,242,0.6), inset 0 0 10px rgba(24,119,242,0.5); }
@@ -245,19 +248,6 @@ header{
 .chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
-@keyframes scanning {
- 0% { background-position: 0% 50%; }
- 50% { background-position: 100% 50%; }
- 100% { background-position: 0% 50%; }
-}
-.matching-overlay {
- background: linear-gradient(270deg, #1877f2, #42b72a, #2d88ff);
- background-size: 200% 200%;
- animation: scanning 2s ease infinite;
- color: white; padding: 30px; border-radius: 12px; text-align: center;
- font-weight: 700; font-size: 16px; box-shadow: 0 8px 24px rgba(24,119,242,0.3);
-}
-
 footer{
  background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
 }
@@ -274,9 +264,6 @@ footer{
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);white-space:nowrap}
 th{color:var(--fb-muted);background:var(--fb-bg)}
-.status{font-size:11px;font-weight:700}
-.online{color:var(--fb-success)}
-.offline{color:var(--fb-danger)}
 
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100}
 .modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
@@ -286,7 +273,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- Startup Intro Animation Screen -->
+<!-- Startup Intro Screen with 2nd Image Background -->
 <div class="intro-screen" id="introScreen">
  <div class="intro-content">
   <h1 id="introTitle">Welcome to Trip Booking</h1>
@@ -333,7 +320,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="section-title" id="hotelDirectory">
   <h2 data-i18n="hotelDir">Hotel Directory (Global Hotels)</h2>
   <div class="filter-bar">
-   <input id="hotelSearch" placeholder="Search hotel or country" data-i18n-placeholder="searchPlaceholder">
+   <input id="hotelSearch" placeholder="Search hotel or country" data-i18n-placeholder="searchPlaceholder" oninput="renderHotels()">
    <select id="starFilter" onchange="renderHotels()">
     <option value="all" data-i18n="allStars">All Stars ⭐</option>
     <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
@@ -348,7 +335,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    </select>
   </div>
  </div>
- <div id="countryHotels"></div>
+ <div class="hotel-grid" id="countryHotels" style="margin-top:14px;"></div>
 </section>
 
 <!-- SUPPORT -->
@@ -396,7 +383,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <h2 data-i18n="taskCenter">Booking Task Center</h2>
  </div>
  <div class="panel">
-  <!-- 2x2 Stats Grid Layout -->
+  <!-- 2x2 Stats Grid -->
   <div class="stats">
    <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
@@ -456,118 +443,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="stat-box"><span data-i18n="inviteCodeTitle">Invite Code</span><strong id="inviteCode">-</strong></div>
   </div>
 
-  <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3 data-i18n="vipTiersHead">VIP Membership Levels & Limits</h3>
-   <p class="muted small" data-i18n="vipTiersDesc">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
-   <div class="vip-grid" id="vipTiersDisplay"></div>
-  </div>
-
-  <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3 data-i18n="refProgramHead">Invitation & Referral Program</h3>
-   <p class="muted small" data-i18n="refProgramDesc">Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
-   <input id="inviteLink" readonly style="margin:8px 0">
-   <button class="btn btn-block" onclick="copyInviteLink()" data-i18n="copyInviteBtn">Copy Invitation Link</button>
-  </div>
-
   <button class="btn btn-danger btn-block" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
- </div>
-</section>
-
-<!-- STAFF PAGE -->
-<section class="page" id="staffPage">
- <div class="section-title">
-  <div>
-   <h2 id="staffRoleTitle">Staff Management Center</h2>
-   <span class="tag" id="staffRoleBadge">ROLE</span>
-  </div>
-  <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
- </div>
-
- <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="staffNavTabs">
-  <button class="btn admin-only" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS & VIP MANAGEMENT</button>
-  <button class="btn btn-light admin-only" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
-  <button class="btn btn-light admin-only" id="adminSettingsBtn" onclick="switchStaffTab('adminSettings')">STAFF ACCOUNTS</button>
-  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
- </div>
-
- <div id="adminWorkspace" class="panel admin-only">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>User Accounts, VIP Levels & Booking Rules Control</h3>
-   <div>
-    <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit</button>
-    <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save</button>
-   </div>
-  </div>
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th>User ID (6-digit)</th>
-      <th>Phone / Email</th>
-      <th>Password</th>
-      <th>Full Name</th>
-      <th>VIP Level</th>
-      <th>Wallet Balance ($)</th>
-      <th>Invite Code (4d+2l)</th>
-      <th>Invited By</th>
-      <th>Task Settings (Neg $, Base Profit $)</th>
-      <th>Actions</th>
-     </tr>
-    </thead>
-    <tbody id="adminTableRows"></tbody>
-   </table>
-  </div>
- </div>
-
- <div id="adminFinanceWorkspace" class="panel hidden admin-only">
-  <h3>Pending Deposit & Withdrawal Requests</h3>
-  <div class="table-wrap" style="margin-top:12px">
-   <table>
-    <thead>
-     <tr>
-      <th>Request ID</th>
-      <th>User Name (ID)</th>
-      <th>Type</th>
-      <th>Amount ($)</th>
-      <th>Note</th>
-      <th>Date</th>
-      <th>Status</th>
-      <th>Actions</th>
-     </tr>
-    </thead>
-    <tbody id="adminFinanceRows"></tbody>
-   </table>
-  </div>
- </div>
-
- <div id="adminSettingsWorkspace" class="panel hidden admin-only">
-  <h3>Staff & Role Access Credentials</h3>
-  <div style="max-width:400px;margin-top:14px">
-   <label>Super Admin Password</label>
-   <input id="adminPassInput" type="text">
-   <label>Customer Service Agent Password</label>
-   <input id="csPassInput" type="text">
-   <button class="btn btn-success" style="margin-top:12px" onclick="saveStaffCredentials()">Update Passwords</button>
-  </div>
- </div>
-
- <div id="csWorkspace" class="panel hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
-  <aside class="staff-sidebar panel" style="padding:10px">
-   <h3>Client Chats</h3>
-   <input id="csSearch" placeholder="Search clients..." style="margin:8px 0" oninput="renderStaffClientList()">
-   <div id="csUserList"></div>
-  </aside>
-  <div class="staff-main panel" style="padding:0;overflow:hidden">
-   <div class="chat-window" style="border:0">
-    <div class="chat-header"><span id="activeChatClientName">Client Chat</span></div>
-    <div class="chat-messages" id="staffMessages"></div>
-    <div class="chat-footer">
-     <button class="btn-light" onclick="appendStaffChar('😊')">😊</button>
-     <input id="staffInput" type="text" placeholder="Type reply as CS..." style="flex:1">
-     <button class="btn" onclick="sendStaffMessage()">➤</button>
-    </div>
-   </div>
-  </div>
  </div>
 </section>
 
@@ -578,9 +454,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div>
    <h4>Trip Booking</h4>
    <p>International Hotel Booking & Travel Platform.</p>
-   <div class="app-btn" onclick="installMobileApp()">
-    📱 Install Phone App
-   </div>
+   <div class="app-btn" onclick="installMobileApp()">📱 Install Phone App</div>
   </div>
   <div>
    <h4 data-i18n="quickLinks">Quick Links</h4>
@@ -606,50 +480,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- CUSTOM CELEBRATION / SUCCESS MODAL -->
-<div class="modal hidden" id="successModal">
- <div class="modal-box" style="text-align:center;padding:24px">
-  <div style="font-size:42px;margin-bottom:10px">🎉</div>
-  <h2 style="color:var(--fb-success);margin-bottom:8px">Booking Confirmed!</h2>
-  <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
-  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px">Awesome, Continue</button>
- </div>
-</div>
-
 <!-- MODALS -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h2 id="authTitle" data-i18n="loginBtn">Login</h2>
+   <h2 id="authTitle">Login</h2>
    <button class="close" onclick="closeModal('authModal')">✕</button>
   </div>
-  <div id="registerFields" class="hidden">
-   <label data-i18n="fullNameLabel">Full Name</label><input id="regName" placeholder="Enter your full name">
-   <label data-i18n="inviteCodeLabel">Invite Code (4 digits + 2 letters, e.g. 1234AB)</label><input id="regInvite" placeholder="e.g. 1234AB">
-  </div>
-  <label data-i18n="identityLabel">Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
-  <label data-i18n="passwordLabel">Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
-  <p id="authMessage" class="muted" style="color:var(--fb-danger)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
-  <p style="text-align:center"><a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a></p>
- </div>
-</div>
-
-<div class="modal hidden" id="staffModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h2>Staff & Admin Portal</h2>
-   <button class="close" onclick="closeModal('staffModal')">✕</button>
-  </div>
-  <label>Select Role</label>
-  <select id="staffRoleSelect">
-   <option value="admin">Super Admin (Full Control)</option>
-   <option value="cs">Customer Service Agent (Chat Support)</option>
-  </select>
-  <label>Access Password</label>
-  <input id="staffPassword" type="password" placeholder="Enter password (default 12344321)">
-  <p id="staffMessage" class="muted" style="margin-top:6px;color:var(--fb-danger)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
+  <label>Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
+  <label>Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
+  <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()">Continue</button>
  </div>
 </div>
 
@@ -658,228 +498,90 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 const $ = id => document.getElementById(id);
 
-const KEYS = {
- users:"tb_users_v18",
- current:"tb_current_v18",
- theme:"tb_theme_v18",
- activity:"tb_activity_v18",
- finance:"tb_finance_v9",
- lang:"tb_lang_v7",
- staffCreds:"tb_staff_creds_v6"
-};
+const GLOBAL_HOTELS = [
+ {name: "Marina Bay Sands", country: "Singapore", stars: 5, price: 380, img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600"},
+ {name: "The Ritz-Carlton, Tokyo", country: "Japan", stars: 5, price: 450, img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600"},
+ {name: "Burj Al Arab", country: "UAE", stars: 5, price: 900, img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600"},
+ {name: "The Plaza New York", country: "USA", stars: 5, price: 520, img: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=600"},
+ {name: "Mandarin Oriental Bangkok", country: "Thailand", stars: 5, price: 290, img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600"},
+ {name: "Shangri-La Paris", country: "France", stars: 5, price: 610, img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600"},
+ {name: "Four Seasons Hotel George V", country: "France", stars: 5, price: 750, img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600"},
+ {name: "Hotel Indigo Taipei North", country: "Taiwan", stars: 4, price: 180, img: "https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=600"},
+ {name: "Siam Kempinski Hotel", country: "Thailand", stars: 5, price: 310, img: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=600"},
+ {name: "Bellagio Las Vegas", country: "USA", stars: 5, price: 240, img: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600"},
+ {name: "The Savoy London", country: "UK", stars: 5, price: 490, img: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600"},
+ {name: "Atlantis The Palm", country: "UAE", stars: 5, price: 420, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600"}
+];
 
-const TRANSLATIONS = {
- en: {
-  heroTag: "INTERNATIONAL TRAVEL",
-  heroTitle: "Welcome to Trip Booking",
-  heroDesc: "International Hotel Booking Platform",
-  exploreBtn: "Explore Hotels",
-  featHotels: "Featured Hotels",
-  topDest: "Top destinations",
-  hotelDir: "Hotel Directory (Global Hotels)",
-  searchPlaceholder: "Search hotel or country",
-  allStars: "All Stars ⭐",
-  allPrices: "All Prices 💰",
-  liveTicker: "Live",
-  csCenter: "Customer Service Center",
-  csOnline: "Trip Booking Support (Online)",
-  csHelp24: "We are here to help you 24/7",
-  typeMsg: "Type your message here...",
-  histTitle: "Booking & Transaction History",
-  transTitle: "Transactions & Referral Bonuses",
-  bookingRec: "Booking Records",
-  thDate: "Date",
-  thType: "Type",
-  thAmount: "Amount",
-  thStatus: "Status",
-  taskCenter: "Booking Task Center",
-  getOrderBtn: "Get order",
-  accBal: "Account Balance 💳",
-  taskComm: "Task Commission 💰",
-  dailyLimit: "Daily Task Limit 📊",
-  totalProfit: "Total Profit 🌟",
-  taskCompleteMsg: "🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆",
-  specialTaskMsg: "⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.",
-  myProfile: "My Profile",
-  welcomeTrip: "Welcome To Trip Booking",
-  loginPrompt: "Please login or register to manage your account.",
-  createAcc: "Create Account",
-  loginBtn: "Login",
-  walletBal: "Wallet Balance",
-  vipLevelTitle: "VIP Level",
-  completedBookings: "Completed Bookings",
-  refBonus: "Referral Bonus (10%)",
-  invitedFriends: "Invited Friends",
-  inviteCodeTitle: "Invite Code",
-  vipTiersHead: "VIP Membership Levels & Limits",
-  vipTiersDesc: "Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.",
-  refProgramHead: "Invitation & Referral Program",
-  refProgramDesc: "Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!",
-  copyInviteBtn: "Copy Invitation Link",
-  logoutBtn: "Log Out",
-  quickLinks: "Quick Links",
-  navHome: "Home",
-  navSupport: "Support",
-  navBooking: "Get Order",
-  navHistory: "History",
-  navProfile: "Profile",
-  contactInfo: "Contact Information",
-  fullNameLabel: "Full Name",
-  inviteCodeLabel: "Invite Code (4 digits + 2 letters, e.g. 1234AB)",
-  identityLabel: "Phone Number or Email",
-  passwordLabel: "Password",
-  continueBtn: "Continue",
-  switchAuth: "Switch Login / Register",
-  upgradeVipBtn: "🚀 Upgrade VIP"
- },
- my: {
-  heroTag: "နိုင်ငံတကာ ခရီးသွားလုပ်ငန်း",
-  heroTitle: "Welcome to Trip Booking",
-  heroDesc: "International Hotel Booking Platform",
-  exploreBtn: "ဟိုတယ်များ ကြည့်ရန်",
-  featHotels: "ထင်ရှားသော ဟိုတယ်များ",
-  topDest: "လူကြိုက်အများဆုံး နေရာများ",
-  hotelDir: "ဟိုတယ်လမ်းညွှန် (နိုင်ငံတကာ ဟိုတယ်များ)",
-  searchPlaceholder: "ဟိုတယ် သို့မဟုတ် နိုင်ငံ ရှာရန်",
-  allStars: "ကြယ်ပွင့်အားလုံး ⭐",
-  allPrices: "ဈေးနှုန်းအားလုံး 💰",
-  liveTicker: "တိုက်ရိုက်",
-  csCenter: "ဖောက်သည် ဝန်ဆောင်မှုစင်တာ",
-  csOnline: "Trip Booking ပံ့ပိုးမှု (အွန်လိုင်း)",
-  csHelp24: "ကျွန်ုပ်တို့ အမြဲတမ်း ကူညီပေးရန် အဆင်သင့်ရှိပါသည်",
-  typeMsg: "သင့်မက်ဆေ့ချ်ကို ဤနေရာတွင် ရိုက်ထည့်ပါ...",
-  histTitle: "ဘိုကင်နှင့် ငွေကြေးလွှဲပြောင်းမှု မှတ်တမ်း",
-  transTitle: "ငွေလွှဲမှုများနှင့် မိတ်ဆက်ဘောနပ်စ်များ",
-  bookingRec: "ဘိုကင်မှတ်တမ်းများ",
-  thDate: "ရက်စွဲ",
-  thType: "အမျိုးအစား",
-  thAmount: "ပမာဏ",
-  thStatus: "အခြေအနေ",
-  taskCenter: "ဘိုကင် တာဝန်စင်တာ",
-  getOrderBtn: "အော်ဒါယူမည်",
-  accBal: "အကောင့် လက်ကျန် 💳",
-  taskComm: "ကော်မရှင် 💰",
-  dailyLimit: "နေ့စဉ် တာဝန်အကန့်အသတ် 📊",
-  totalProfit: "စုစုပေါင်း အမြတ် 🌟",
-  taskCompleteMsg: "🎉 ဂုဏ်ယူပါတယ်! သင်၏ VIP အဆင့်အတွက် နေ့စဉ်အော်ဒါများ အားလုံး ပြီးဆုံးပါပြီ! 🎆",
-  specialTaskMsg: "⚠️ အထူးပေါင်းစပ်အော်ဒါ တွေ့ရှိပါပြီ! လက်ကျန်ငွေ မလုံလောက်ပါ။ ဆက်လက်လုပ်ဆောင်ရန် ကန်စတာမားဆားဗစ်သို့ ဆက်သွယ်ပါ သို့မဟုတ် ငွေသွင်းပါ။",
-  myProfile: "ကျွန်ုပ်၏ ကိုယ်ရေးအချက်အလက်",
-  welcomeTrip: "Trip Booking မှ ကြိုဆိုပါတယ်",
-  loginPrompt: "သင့်အကောင့်ကို စီမံခန့်ခွဲရန် အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။",
-  createAcc: "အကောင့်အသစ်ဖွင့်ရန်",
-  loginBtn: "အကောင့်ဝင်ရန်",
-  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်",
-  vipLevelTitle: "VIP အဆင့်",
-  completedBookings: "ပြီးမြောက်သော ဘိုကင်များ",
-  refBonus: "မိတ်ဆက်ဘောနပ်စ် (၁၀%)",
-  invitedFriends: "ဖိတ်ခေါ်ထားသူများ",
-  inviteCodeTitle: "ဖိတ်ခေါ်ကုဒ်",
-  vipTiersHead: "VIP အဖွဲ့ဝင်အဆင့်များနှင့် အကန့်အသတ်များ",
-  vipTiersDesc: "VIP အဆင့်မြင့်လေလေ နေ့စဉ်တာဝန်ကန့်အသတ်၊ အမြတ်နှုန်းနှင့် ငွေထုတ်ယူနိုင်မှု ပမာဏ များပြားလေလေ ဖြစ်သည်။",
-  refProgramHead: "မိတ်ဆက်ပရိုဂရမ် (Referral)",
-  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB) ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုကင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
-  copyInviteBtn: "ဖိတ်ခေါ်လင့်ခ် ကူးယူရန်",
-  logoutBtn: "အကောင့်ထွက်ရန်",
-  quickLinks: "အမြန်လင့်ခ်များ",
-  navHome: "ပင်မ",
-  navSupport: "အကူအညီ",
-  navBooking: "အော်ဒါယူ",
-  navHistory: "မှတ်တမ်း",
-  navProfile: "ကိုယ်ရေး",
-  contactInfo: "ဆက်သွယ်ရန် အချက်အလက်",
-  fullNameLabel: "အမည်ပြည့်စုံ",
-  inviteCodeLabel: "ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB)",
-  identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
-  passwordLabel: "စကားဝှက်",
-  continueBtn: "ဆက်လုပ်ရန်",
-  switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
-  upgradeVipBtn: "🚀 VIP တိုးမြှင့်ရန်"
- },
- zh: {
-  heroTag: "国际旅游",
-  heroTitle: "Welcome to Trip Booking",
-  heroDesc: "International Hotel Booking Platform",
-  exploreBtn: "探索酒店",
-  featHotels: "精选酒店",
-  topDest: "热门目的地",
-  hotelDir: "酒店目录 (全球酒店)",
-  searchPlaceholder: "搜索酒店或国家",
-  allStars: "所有星级 ⭐",
-  allPrices: "所有价格 💰",
-  liveTicker: "实时",
-  csCenter: "客服中心",
-  csOnline: "Trip Booking 客服 (在线)",
-  csHelp24: "我们 24/7 全天候为您服务",
-  typeMsg: "在此输入您的消息...",
-  histTitle: "预订与交易历史",
-  transTitle: "交易与推荐奖励",
-  bookingRec: "预订记录",
-  thDate: "日期",
-  thType: "类型",
-  thAmount: "金额",
-  thStatus: "状态",
-  taskCenter: "预订任务中心",
-  getOrderBtn: "获取订单",
-  accBal: "账户余额 💳",
-  taskComm: "任务佣金 💰",
-  dailyLimit: "每日任务上限 📊",
-  totalProfit: "总利润 🌟",
-  taskCompleteMsg: "🎉 恭喜！您当前 VIP 等级的所有每日订单已完成！ 🎆",
-  specialTaskMsg: "⚠️ 检测到特殊组合订单！余额不足，请联系客服或充值以继续操作。",
-  myProfile: "我的个人资料",
-  welcomeTrip: "欢迎来到 Trip Booking",
-  loginPrompt: "请登录或注册以管理您的账户。",
-  createAcc: "创建账户",
-  loginBtn: "登录",
-  walletBal: "钱包余额",
-  vipLevelTitle: "VIP 等级",
-  completedBookings: "已完成预订",
-  refBonus: "推荐奖励 (10%)",
-  invitedFriends: "邀请好友",
-  inviteCodeTitle: "邀请码",
-  vipTiersHead: "VIP 会员等级与限制",
-  vipTiersDesc: "更高的 VIP 等级可解锁更高的每日任务上限、提升佣金比例及增加提现额度。",
-  refProgramHead: "邀请与推荐计划",
-  refProgramDesc: "分享您的邀请码（4位数字+2位字母，例如 1234AB）。每次您邀请的好友完成预订任务，您都可以自动获得 <b>10% 佣金</b>！",
-  copyInviteBtn: "复制邀请链接",
-  logoutBtn: "退出登录",
-  quickLinks: "快速链接",
-  navHome: "首页",
-  navSupport: "客服",
-  navBooking: "接单",
-  navHistory: "历史",
-  navProfile: "我的",
-  contactInfo: "联系信息",
-  fullNameLabel: "全名",
-  inviteCodeLabel: "邀请码（4位数字+2位字母，例如 1234AB）",
-  identityLabel: "手机号或邮箱",
-  passwordLabel: "密码",
-  continueBtn: "继续",
-  switchAuth: "切换 登录 / 注册",
-  upgradeVipBtn: "🚀 升级 VIP"
+// Generate expanded 677+ global hotel listings dynamically for full directory experience
+function generateHotelsList() {
+ const cities = ["Bangkok", "Tokyo", "Singapore", "Paris", "New York", "Dubai", "London", "Taipei", "Sydney", "Rome", "Seoul", "Hong Kong"];
+ const list = [...GLOBAL_HOTELS];
+ const baseImgs = [
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+  "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600",
+  "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600",
+  "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600"
+ ];
+ for(let i = 13; i <= 677; i++) {
+  const city = cities[i % cities.length];
+  const star = (i % 3 === 0) ? 3 : (i % 2 === 0 ? 4 : 5);
+  const price = 80 + (i * 17) % 450;
+  list.push({
+   name: `Global Luxury Hotel & Resort #${i}`,
+   country: city,
+   stars: star,
+   price: price,
+   img: baseImgs[i % baseImgs.length]
+  });
  }
-};
-
-let currentLang = 'en';
-
-function changeLanguage(lang) {
- currentLang = lang;
- localStorage.setItem(KEYS.lang, lang);
- document.querySelectorAll('[data-i18n]').forEach(el => {
-  const key = el.getAttribute('data-i18n');
-  if (TRANSLATIONS[lang][key]) el.textContent = TRANSLATIONS[lang][key];
- });
- document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-  const key = el.getAttribute('data-i18n-placeholder');
-  if (TRANSLATIONS[lang][key]) el.placeholder = TRANSLATIONS[lang][key];
- });
+ return list;
 }
 
-function toggleTheme() {
- document.body.classList.toggle('dark');
- const isDark = document.body.classList.contains('dark');
- localStorage.setItem(KEYS.theme, isDark ? 'dark' : 'light');
- $('themeToggle').textContent = isDark ? '☀️' : '🌙';
+const ALL_HOTELS = generateHotelsList();
+
+function renderHotels() {
+ const search = ($('hotelSearch').value || "").toLowerCase();
+ const starVal = $('starFilter').value;
+ const priceVal = $('priceFilter').value;
+
+ const filtered = ALL_HOTELS.filter(h => {
+  const matchSearch = h.name.toLowerCase().includes(search) || h.country.toLowerCase().includes(search);
+  const matchStar = starVal === 'all' || h.stars.toString() === starVal;
+  let matchPrice = true;
+  if(priceVal === 'under150') matchPrice = h.price < 150;
+  else if(priceVal === '150to300') matchPrice = h.price >= 150 && h.price <= 300;
+  else if(priceVal === 'over300') matchPrice = h.price > 300;
+  return matchSearch && matchStar && matchPrice;
+ });
+
+ const featContainer = $('featuredHotels');
+ if(featContainer) {
+  featContainer.innerHTML = GLOBAL_HOTELS.slice(0, 4).map(h => `
+   <div class="card">
+    <img src="${h.img}" class="hotel-img" alt="${h.name}">
+    <div class="card-body">
+     <span class="tag">${'⭐'.repeat(h.stars)} ${h.country}</span>
+     <h3>${h.name}</h3>
+     <div class="price">$${h.price} <span class="muted small">/ night</span></div>
+    </div>
+   </div>
+  `).join('');
+ }
+
+ const dirContainer = $('countryHotels');
+ if(dirContainer) {
+  dirContainer.innerHTML = filtered.slice(0, 36).map(h => `
+   <div class="card">
+    <img src="${h.img}" class="hotel-img" alt="${h.name}">
+    <div class="card-body">
+     <span class="tag">${'⭐'.repeat(h.stars)} ${h.country}</span>
+     <h3>${h.name}</h3>
+     <div class="price">$${h.price} <span class="muted small">/ night</span></div>
+    </div>
+   </div>
+  `).join('');
+ }
 }
 
 function showPage(pageId, btnEl) {
@@ -894,42 +596,18 @@ function showPage(pageId, btnEl) {
 
 function openAuth(mode) {
  $('authModal').classList.remove('hidden');
- if(mode === 'register') {
-  $('authTitle').textContent = TRANSLATIONS[currentLang].createAcc || 'Create Account';
-  $('registerFields').classList.remove('hidden');
- } else {
-  $('authTitle').textContent = TRANSLATIONS[currentLang].loginBtn || 'Login';
-  $('registerFields').classList.add('hidden');
- }
 }
 
 function closeModal(modalId) {
  $(modalId).classList.add('hidden');
 }
 
-function toggleAuthMode() {
- const isReg = $('registerFields').classList.contains('hidden');
- if(isReg) {
-  $('authTitle').textContent = TRANSLATIONS[currentLang].createAcc || 'Create Account';
-  $('registerFields').classList.remove('hidden');
- } else {
-  $('authTitle').textContent = TRANSLATIONS[currentLang].loginBtn || 'Login';
-  $('registerFields').classList.add('hidden');
- }
-}
-
 function submitAuth() {
- const identity = $('authIdentity').value.trim();
- const password = $('authPassword').value.trim();
- if(!identity || !password) {
-  $('authMessage').textContent = 'Please fill in all required fields.';
-  return;
- }
  closeModal('authModal');
 }
 
 function logout() {
- localStorage.removeItem(KEYS.current);
+ localStorage.removeItem('tb_current_v18');
  location.reload();
 }
 
@@ -961,24 +639,14 @@ function triggerGetOrder() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
- const savedTheme = localStorage.getItem(KEYS.theme);
- if(savedTheme === 'dark') {
-  document.body.classList.add('dark');
-  $('themeToggle').textContent = '☀️';
- }
- const savedLang = localStorage.getItem(KEYS.lang);
- if(savedLang && TRANSLATIONS[savedLang]) {
-  currentLang = savedLang;
-  $('language').value = savedLang;
-  changeLanguage(savedLang);
- }
+ renderHotels();
 
  // Intro Animation Timer (4 seconds delay then fade out)
  setTimeout(() => {
   const intro = $('introScreen');
   if(intro) {
    intro.style.opacity = '0';
-   setTimeout(() => intro.remove(), 500);
+   setTimeout(() => intro.remove(), 600);
   }
  }, 4000);
 });
