@@ -64,7 +64,7 @@ header{
  display:flex;align-items:center;justify-content:space-between;
  gap:12px;box-shadow:var(--shadow);
 }
-.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary);user-select:none}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary)}
 .logo span{color:#e41e3f}
 .header-actions{display:flex;gap:8px;align-items:center}
 .header-actions select{width:auto;background:var(--fb-bg);color:var(--fb-text);border-color:var(--fb-border)}
@@ -144,21 +144,8 @@ header{
 
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
 .chat-header{background:var(--fb-card);border-bottom:1px solid var(--fb-border);color:var(--fb-text);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
-.chat-messages{height:380px;overflow:auto;padding:14px;background:var(--fb-bg)}
+.chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
-
-/* Pulsing blue button animation */
-@keyframes pulseBtn {
- 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
- 50% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(24,119,242, 0); }
- 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
-}
-.pulsing-btn {
- background: var(--fb-primary); color: white;
- padding: 14px 22px; border-radius: 30px; font-size: 15px; font-weight: 700;
- border: 0; cursor: pointer; animation: pulseBtn 1.5s infinite;
- display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
-}
 
 footer{
  background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
@@ -167,6 +154,10 @@ footer{
 .footer-grid h4{color:#e4e6eb;margin-bottom:12px;font-size:15px}
 .footer-grid a{display:block;color:#b0b3b8;text-decoration:none;margin-bottom:6px}
 .footer-grid a:hover{color:white;text-decoration:underline}
+.app-btn{
+ display:inline-flex;align-items:center;gap:8px;background:var(--fb-primary);color:white;
+ padding:8px 16px;border-radius:20px;font-weight:600;cursor:pointer;margin-top:8px;
+}
 
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);white-space:nowrap}
@@ -174,6 +165,18 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .status{font-size:11px;font-weight:700}
 .online{color:var(--fb-success)}
 .offline{color:var(--fb-danger)}
+
+/* Modal & Pulsing Animation styles */
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.close{background:none;border:0;font-size:18px;cursor:pointer;color:var(--fb-muted)}
+
+@keyframes pulseBtn {
+ 0% { box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
+ 70% { box-shadow: 0 0 0 15px rgba(24,119,242, 0); }
+ 100% { box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
+}
 </style>
 </head>
 <body>
@@ -221,7 +224,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div id="countryHotels"></div>
 </section>
 
-<!-- SUPPORT (CUSTOMER SERVICE CENTER - WITH PULSING BUTTON & 3RD IMAGE AVATAR) -->
+<!-- SUPPORT (CUSTOMER SERVICE CENTER) -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2>Customer Service Center</h2></div>
  <div class="chat-window" style="max-width:900px;margin:0 auto">
@@ -236,7 +239,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div>🔊 ✕</div>
   </div>
   
-  <div class="chat-messages" id="supportMessages" style="height:420px"></div>
+  <div class="chat-messages" id="supportMessages" style="height:450px"></div>
   
   <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
@@ -339,9 +342,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
  </div>
 
- <div class="staff-top" style="display:flex;gap:10px;margin-bottom:16px">
-  <button class="btn btn-dark" id="adminTabBtn" onclick="switchStaffTab('admin')" style="flex:1">ADMIN</button>
-  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')" style="flex:1">CUSTOMER SERVICE</button>
+ <div style="display:flex;gap:8px;margin-bottom:16px">
+  <button class="btn" id="adminTabBtn" onclick="switchStaffTab('admin')">ADMIN</button>
+  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
  </div>
 
  <!-- ADMIN WORKSPACE -->
@@ -362,7 +365,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th>Password</th>
       <th>Full Name</th>
       <th>Wallet Balance ($)</th>
-      <th>Order Settings (Neg $, Profit $, Count)</th>
+      <th>Order Settings</th>
       <th>Actions</th>
      </tr>
     </thead>
@@ -372,7 +375,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <!-- CS WORKSPACE -->
- <div id="csWorkspace" class="staff-layout hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
+ <div id="csWorkspace" class="panel hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
   <aside class="staff-sidebar panel" style="padding:10px">
    <h3>Client Chats</h3>
    <input id="csSearch" placeholder="Search clients..." style="margin:8px 0">
@@ -381,7 +384,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="staff-main panel" style="padding:0;overflow:hidden">
    <div class="chat-window" style="border:0">
     <div class="chat-header"><span id="activeChatClientName">Client Chat</span></div>
-    <div class="chat-messages" id="staffMessages" style="height:350px"></div>
+    <div class="chat-messages" id="staffMessages"></div>
     <div class="chat-footer">
      <button class="btn-light" onclick="appendStaffChar('😊')">😊</button>
      <input id="staffInput" type="text" placeholder="Type reply as CS..." style="flex:1">
@@ -398,6 +401,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div>
    <h4>Trip Booking</h4>
    <p>International Hotel Booking & Travel Platform.</p>
+   <div class="app-btn" onclick="installMobileApp()">
+    📱 Install Phone App
+   </div>
   </div>
   <div>
    <h4>Quick Links</h4>
@@ -442,18 +448,15 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- STAFF PORTAL MODAL (12344321 PASSWORD ONLY) -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h2>Staff Portal Access</h2>
+   <h2>Staff Portal</h2>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
   </div>
-  <p class="muted">Enter staff password to access Admin and Customer Service.</p>
-  <label>Staff Password</label>
-  <input id="staffPasswordInput" type="password" placeholder="Enter password (12344321)">
-  <p id="staffMessage" class="muted" style="color:var(--fb-danger)"></p>
-  <button class="btn btn-block" style="margin-top:14px" onclick="staffLogin()">Sign In</button>
+  <label>Staff Password</label><input id="staffPassword" type="password" placeholder="Enter password">
+  <p id="staffMessage" class="muted" style="margin-top:6px;color:var(--fb-danger)"></p>
+  <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
  </div>
 </div>
 
@@ -463,10 +466,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v11",
- current:"tb_current_v11",
- theme:"tb_theme_v11",
- activity:"tb_activity_v11"
+ users:"tb_users_v10",
+ current:"tb_current_v10",
+ theme:"tb_theme_v10",
+ activity:"tb_activity_v10"
 };
 
 const read = key => {
@@ -481,8 +484,8 @@ let activities = read(KEYS.activity);
 let currentUser = null;
 let selectedUserId = null;
 let authMode = "login";
-let logoClickCount = 0;
-let logoTimer = null;
+let tapCount = 0;
+let tapTimer = null;
 let activeOrderTask = null;
 let isTableEditing = false;
 
@@ -515,17 +518,15 @@ window.addEventListener("load",()=>{
  initApp();
 });
 
-/* LOGO 10 CLICKS TO OPEN STAFF PORTAL */
+// Logo tapped 10 times to open Staff Modal
 $("logo").addEventListener("click",()=>{
- logoClickCount++;
- clearTimeout(logoTimer);
- if(logoClickCount >= 10) {
-  logoClickCount = 0;
+ tapCount++;
+ clearTimeout(tapTimer);
+ if(tapCount >= 10) {
+  tapCount = 0;
   $("staffModal").classList.remove("hidden");
-  $("staffPasswordInput").value = "";
-  $("staffMessage").textContent = "";
  } else {
-  logoTimer = setTimeout(()=> logoClickCount = 0, 3000);
+  tapTimer = setTimeout(()=>tapCount=0, 2000);
  }
 });
 
@@ -577,7 +578,7 @@ async function submitAuth() {
    countBox: 30,
    transactions: [],
    bookings: [],
-   messages: [] // No auto message, manual only
+   messages: []
   };
   users.push(newUser);
   write(KEYS.users, users);
@@ -761,19 +762,19 @@ function resetTaskProgress() {
  alert("Task progress reset to 0.");
 }
 
-/* CUSTOMER SERVICE CHAT WITH PULSING BLUE BUTTON & MANUAL CHAT */
+/* CUSTOMER SERVICE CHAT WITH PULSING BLUE BUTTON & AUTO GREETING */
 function renderSupportChat() {
  if(!currentUser) {
-  $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px">Please login to chat with Customer Service.</p>`;
+  $("supportMessages").innerHTML = `<p class="empty" style="text-align:center;padding:20px;">Please login to chat with Customer Service.</p>`;
   return;
  }
  
  let msgsHtml = "";
  if((currentUser.messages||[]).length === 0) {
   msgsHtml = `
-   <div style="text-align:center;margin:40px 0">
-    <button class="pulsing-btn" onclick="sendQuickGreeting()">
-     💬 မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
+   <div style="text-align:center;margin:40px 0;">
+    <button onclick="sendQuickGreeting()" style="background:var(--fb-primary);color:white;padding:16px 28px;border-radius:30px;font-size:15px;animation:pulseBtn 1.5s infinite;cursor:pointer;border:0;font-weight:600;">
+     မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါသည်။ ဘာများ ကူညီရမလဲရှင့်။
     </button>
    </div>
   `;
@@ -792,7 +793,7 @@ function renderSupportChat() {
 
 function sendQuickGreeting() {
  if(!currentUser) return;
- currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်。", time:new Date().toLocaleTimeString()});
+ currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါသည်။ ဘာများ ကူညီရမလဲရှင့်။", time:new Date().toLocaleTimeString()});
  write(KEYS.users, users);
  renderSupportChat();
 }
@@ -824,14 +825,17 @@ function renderHistory() {
  `).join("") || `<p class="empty">No bookings.</p>`;
 }
 
-/* STAFF PORTAL LOGIN WITH 12344321 PASSWORD */
+/* STAFF PORTAL LOGIN WITH PASSWORD 12344321 */
 function staffLogin() {
- const pass = $("staffPasswordInput").value;
+ const pass = $("staffPassword").value;
  if(pass === "12344321") {
+  $("staffPassword").value = "";
+  $("staffMessage").textContent = "";
   closeModal('staffModal');
   $("staffPage").classList.remove("hidden");
   showPage('staffPage');
   switchStaffTab('admin');
+  renderAdminTable();
  } else {
   $("staffMessage").textContent = "Invalid password! Use 12344321";
  }
@@ -844,34 +848,33 @@ function staffLogout() {
 
 function switchStaffTab(role) {
  if(role === 'admin') {
-  $("adminTabBtn").className = "btn btn-dark";
+  $("adminTabBtn").className = "btn";
   $("csTabBtn").className = "btn btn-light";
   $("adminWorkspace").classList.remove("hidden");
   $("csWorkspace").classList.add("hidden");
   renderAdminTable();
  } else {
   $("adminTabBtn").className = "btn btn-light";
-  $("csTabBtn").className = "btn btn-dark";
+  $("csTabBtn").className = "btn";
   $("adminWorkspace").classList.add("hidden");
   $("csWorkspace").classList.remove("hidden");
-  renderCSUsers();
+  renderStaffClientList();
  }
 }
 
 function renderAdminTable() {
- $("adminTableRows").innerHTML = users.map((u, idx) => `
+ users = read(KEYS.users);
+ $("adminTableRows").innerHTML = users.map(u => `
   <tr>
    <td>${u.id}</td>
-   <td>${isTableEditing ? `<input id="ed_ident_${idx}" value="${u.identity}">` : u.identity}</td>
-   <td>${isTableEditing ? `<input id="ed_pass_${idx}" type="text" value="${u.password}">` : '••••••••'}</td>
-   <td>${isTableEditing ? `<input id="ed_name_${idx}" value="${u.name}">` : u.name}</td>
-   <td>${isTableEditing ? `<input id="ed_bal_${idx}" type="number" step="0.01" style="width:90px" value="${u.balance}">` : '$'+(u.balance||0).toFixed(2)}</td>
+   <td>${u.identity}</td>
+   <td>${isTableEditing ? `<input id="pw_${u.id}" value="${u.password}">` : u.password}</td>
+   <td>${isTableEditing ? `<input id="name_${u.id}" value="${u.name}">` : u.name}</td>
+   <td>${isTableEditing ? `<input id="bal_${u.id}" type="number" value="${u.balance}">` : '$' + (u.balance||0).toFixed(2)}</td>
+   <td>${isTableEditing ? `<input id="set_${u.id}" value="${u.negDollar||0},${u.profitBox||30},${u.countBox||30}">` : `Neg:$${u.negDollar||0}, Pr:$${u.profitBox||30}, Cnt:${u.countBox||30}`}</td>
    <td>
-    Neg: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:50px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
-    Prof: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:50px" value="${u.profitBox||30}">` : (u.profitBox||30)} | 
-    Cnt: ${isTableEditing ? `<input id="ed_cnt_${idx}" style="width:50px" value="${u.countBox||30}">` : (u.countBox||30)}
+    ${isTableEditing ? `<button class="btn btn-danger" style="padding:2px 6px;font-size:11px" onclick="deleteUser('${u.id}')">Delete</button>` : `<button class="btn" style="padding:2px 6px;font-size:11px" onclick="selectUserChat('${u.id}')">Chat</button>`}
    </td>
-   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}\\nPassword: ${u.password}')">View</button></td>
   </tr>
  `).join("");
 }
@@ -884,72 +887,117 @@ function toggleTableEditMode() {
 }
 
 function saveTableEditMode() {
- users.forEach((u, idx) => {
-  const ident = $("ed_ident_" + idx);
-  const pass = $("ed_pass_" + idx);
-  const name = $("ed_name_" + idx);
-  const bal = $("ed_bal_" + idx);
-  const neg = $("ed_neg_" + idx);
-  const prof = $("ed_prof_" + idx);
-  const cnt = $("ed_cnt_" + idx);
-
-  if(ident) u.identity = ident.value;
-  if(pass) u.password = pass.value;
-  if(name) u.name = name.value;
-  if(bal) u.balance = Number(bal.value);
-  if(neg) u.negDollar = Number(neg.value);
-  if(prof) u.profitBox = Number(prof.value);
-  if(cnt) u.countBox = Number(cnt.value);
+ users.forEach(u => {
+  const pwEl = $("pw_" + u.id);
+  const nameEl = $("name_" + u.id);
+  const balEl = $("bal_" + u.id);
+  const setEl = $("set_" + u.id);
+  if(pwEl) u.password = pwEl.value;
+  if(nameEl) u.name = nameEl.value;
+  if(balEl) u.balance = parseFloat(balEl.value) || 0;
+  if(setEl) {
+   const parts = setEl.value.split(',');
+   if(parts.length >= 3) {
+    u.negDollar = parseFloat(parts[0]) || 0;
+    u.profitBox = parseFloat(parts[1]) || 30;
+    u.countBox = parseInt(parts[2]) || 30;
+   }
+  }
  });
+ write(KEYS.users, users);
  isTableEditing = false;
  $("tableEditBtn").classList.remove("hidden");
  $("tableSaveBtn").classList.add("hidden");
- write(KEYS.users, users);
  renderAdminTable();
- alert("User accounts and balance updated successfully!");
+ alert("Changes saved successfully!");
 }
 
-function renderCSUsers() {
- $("csUserList").innerHTML = users.map(u => `
-  <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer" onclick="selectCSUser('${u.id}')">
-   <b>${u.name}</b><div class="muted">${u.id}</div>
-  </div>
- `).join("");
+function deleteUser(id) {
+ if(confirm("Are you sure you want to delete this user?")) {
+  users = users.filter(u => u.id !== id);
+  write(KEYS.users, users);
+  renderAdminTable();
+ }
 }
 
-function selectCSUser(id) {
+function selectUserChat(id) {
  selectedUserId = id;
- const u = users.find(x => x.id === id);
- if(!u) return;
- $("activeChatClientName").textContent = `Chat with ${u.name} (${u.id})`;
- $("staffMessages").innerHTML = (u.messages||[]).map(m => `
-  <div style="max-width:80%;padding:8px;border-radius:8px;background:var(--fb-card);margin:6px 0;margin-left:${m.sender==='support'?'auto':'0'}">
-   <b>${m.sender==='support'?'Staff':'Client'}</b>: ${m.text}
+ switchStaffTab('support');
+ renderStaffClientList();
+ renderStaffChat();
+}
+
+function renderStaffClientList() {
+ users = read(KEYS.users);
+ $("csUserList").innerHTML = users.map(u => `
+  <div onclick="selectUserChat('${u.id}')" style="padding:8px;margin-bottom:4px;border-radius:6px;cursor:pointer;background:${selectedUserId===u.id?'var(--fb-primary)':'var(--fb-bg)'};color:${selectedUserId===u.id?'white':'var(--fb-text)'}">
+   <div style="font-weight:600;font-size:13px">${u.name}</div>
+   <div style="font-size:11px;opacity:0.8">${u.identity}</div>
   </div>
  `).join("");
+}
+
+function renderStaffChat() {
+ if(!selectedUserId) {
+  $("staffMessages").innerHTML = `<p class="muted" style="padding:20px;text-align:center">Select a client to chat.</p>`;
+  return;
+ }
+ const client = users.find(u => u.id === selectedUserId);
+ if(!client) return;
+ $("activeChatClientName").textContent = "Chat with " + client.name;
+ $("staffMessages").innerHTML = (client.messages||[]).map(m => `
+  <div style="max-width:80%;padding:10px 14px;border-radius:12px;background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};color:${m.sender==='support'?'white':'var(--fb-text)'};margin:8px 0;margin-left:${m.sender==='support'?'auto':'0'};box-shadow:var(--shadow)">
+   <small style="font-size:10px;opacity:0.8">${m.sender==='support'?'CS':'Client'}</small>
+   <div>${m.text}</div>
+  </div>
+ `).join("");
+ $("staffMessages").scrollTop = $("staffMessages").scrollHeight;
 }
 
 function sendStaffMessage() {
- if(!selectedUserId) { alert("Select a client."); return; }
- const u = users.find(x => x.id === selectedUserId);
+ if(!selectedUserId) return;
  const txt = $("staffInput").value.trim();
  if(!txt) return;
- u.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
- $("staffInput").value = "";
- write(KEYS.users, users);
- selectCSUser(u.id);
+ const client = users.find(u => u.id === selectedUserId);
+ if(client) {
+  if(!client.messages) client.messages = [];
+  client.messages.push({sender:"support", text:txt, time:new Date().toLocaleTimeString()});
+  write(KEYS.users, users);
+  $("staffInput").value = "";
+  renderStaffChat();
+  if(currentUser && currentUser.id === client.id) {
+   renderSupportChat();
+  }
+ }
 }
 
-function appendStaffChar(char) { $("staffInput").value += char; }
-
-function copyInviteLink() {
- navigator.clipboard.writeText($("inviteLink").value);
- alert("Invitation link copied!");
-}
+function appendStaffChar(char) { $("staffInput.value") ? $("staffInput").value += char : $("staffInput").value += char; }
 
 function renderTicker() {
- $("tickerText").textContent = "User TB90000001 completed 30 orders successfully.";
+ const sampleActivities = [
+  "User Mya Mya successfully booked Marina Bay Sands and earned +$30 commission.",
+  "New member from Yangon joined Trip Booking.",
+  "User David completed 30/30 booking tasks successfully.",
+  "Tokyo hotel bookings are trending high today!"
+ ];
+ let idx = 0;
+ setInterval(()=>{
+  $("tickerText").textContent = sampleActivities[idx];
+  idx = (idx + 1) % sampleActivities.length;
+ }, 4000);
+}
+
+function copyInviteLink() {
+ const link = $("inviteLink");
+ link.select();
+ document.execCommand("copy");
+ alert("Invitation link copied to clipboard!");
+}
+
+function installMobileApp() {
+ alert("To install Trip Booking on your Redmi K90 Ultra, tap browser menu and select 'Add to Home Screen'.");
 }
 </script>
+
 </body>
 </html>
