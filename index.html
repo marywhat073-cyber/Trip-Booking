@@ -3,11 +3,12 @@
 <html lang="my">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRAVEL PRO | International Hotel Booking</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102B4E">
+<title>Trip Booking | International Hotel Booking</title>
 
 <style>
-:root {
+:root{
  --navy:#102B4E;
  --blue:#1769AA;
  --gold:#C5A15B;
@@ -17,277 +18,159 @@
  --muted:#718096;
  --line:#E3E9F0;
 }
-body.dark {
+body.dark{
  --bg:#101923;
  --card:#1A2837;
  --text:#E8EEF5;
  --muted:#A6B4C3;
  --line:#314254;
 }
-* {box-sizing:border-box}
-body {
- margin:0;
- background:var(--bg);
- color:var(--text);
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--bg);color:var(--text);
  font-family:Arial,sans-serif;
+ transition:background .3s,color .3s;
 }
-button,input,select,textarea {font:inherit}
-button {
- cursor:pointer;
- border:0;
- border-radius:8px;
- padding:11px 15px;
- font-weight:bold;
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;border-radius:8px;padding:11px 15px}
+.primary{background:var(--blue);color:white}
+.gold{background:var(--gold);color:white}
+.soft{background:#EAF2FA;color:#174F83}
+header{
+ background:var(--navy);color:white;padding:15px 5%;
+ display:flex;justify-content:space-between;align-items:center;
+ position:sticky;top:0;z-index:20;
 }
-.primary {background:var(--blue);color:white}
-.gold {background:var(--gold);color:white}
-.soft {background:#EAF2FA;color:#174F83}
-header {
- background:var(--navy);
- color:white;
- padding:15px 5%;
- display:flex;
- justify-content:space-between;
- align-items:center;
- position:sticky;
- top:0;
- z-index:10;
+.logo{font-size:22px;font-weight:900;letter-spacing:1px;cursor:pointer}
+.logo span{color:var(--gold)}
+.head{display:flex;gap:8px;align-items:center}
+.head select,.head button{
+ background:#243E5D;color:white;border:1px solid #66809A;
+ padding:9px;border-radius:7px;
 }
-.logo {
- font-size:22px;
- font-weight:900;
- cursor:pointer;
- letter-spacing:1px;
+.container{max-width:1200px;margin:auto;padding:22px 16px 100px}
+.page{display:none}
+.page.active{display:block}
+.hero{
+ min-height:300px;border-radius:16px;padding:35px;
+ color:white;display:flex;flex-direction:column;
+ justify-content:center;background-size:cover;background-position:center;
+ transition:background-image .5s;
 }
-.logo span {color:var(--gold)}
-.head {display:flex;gap:8px;align-items:center}
-.head select,.head button {
- background:#243E5D;
- color:white;
- padding:9px;
- border:1px solid #66809A;
+.hero h1{font-size:clamp(30px,5vw,46px);max-width:650px}
+.hero p{line-height:1.7;max-width:550px}
+.search,.panel{
+ background:var(--card);border:1px solid var(--line);
+ border-radius:12px;padding:18px;margin-top:18px;
 }
-.container {
- max-width:1200px;
- margin:auto;
- padding:22px 16px 100px;
+.search{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px}
+label{display:block;font-size:12px;font-weight:bold;color:var(--muted);margin:10px 0 6px}
+input,select,textarea{
+ width:100%;padding:11px;border:1px solid var(--line);
+ border-radius:8px;background:var(--card);color:var(--text);
 }
-.page {display:none}
-.page.active {display:block}
-.hero {
- min-height:300px;
- border-radius:16px;
- padding:40px;
- color:white;
- display:flex;
- flex-direction:column;
- justify-content:center;
- background:
- linear-gradient(90deg,#071B35E8,#071B3530),
- url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1500')
- center/cover;
+.section{margin-top:30px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.hotel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.hotel img{width:100%;height:190px;object-fit:cover}
+.hotel-body{padding:15px}
+.hotel h3{margin:9px 0}
+.muted{color:var(--muted)}
+.stars{color:#C49B42}
+.price{color:var(--blue);font-size:21px;font-weight:bold}
+.hotel-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.tabs,.actions{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
+.tabs button{background:var(--card);border:1px solid var(--line);color:var(--text)}
+.tabs button.active{background:var(--navy);color:white}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{padding:17px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.stat strong{display:block;font-size:24px;color:var(--blue);margin-top:10px}
+.progress{height:12px;background:var(--line);border-radius:20px;overflow:hidden;margin:15px 0}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,#1769AA,#55B9EF);width:0;transition:width .3s}
+.notice{background:#FFF5DC;color:#76591B;padding:13px;border-radius:8px;line-height:1.6;font-size:13px}
+.bottom{
+ position:fixed;bottom:0;left:0;right:0;display:flex;
+ justify-content:center;background:var(--card);
+ border-top:1px solid var(--line);z-index:20;padding:7px;
 }
-.hero h1 {font-size:clamp(30px,5vw,48px);max-width:650px}
-.hero p {line-height:1.7;max-width:550px}
-.search,.panel {
- background:var(--card);
- border:1px solid var(--line);
- border-radius:12px;
- padding:18px;
- margin-top:18px;
+.bottom button{flex:1;max-width:160px;background:none;color:var(--muted);font-size:12px}
+.bottom button.active{color:var(--blue)}
+.bottom span{display:block;font-size:20px}
+.form{max-width:580px;margin:20px auto}
+.full{width:100%;margin-top:15px}
+.modal{
+ display:none;position:fixed;inset:0;background:#07182BCC;
+ z-index:100;align-items:center;justify-content:center;padding:16px;
 }
-.search {
- display:grid;
- grid-template-columns:2fr 1fr 1fr auto;
- gap:12px;
-}
-label {
- display:block;
- font-size:12px;
- font-weight:bold;
- color:var(--muted);
- margin:10px 0 6px;
-}
-input,select,textarea {
- width:100%;
- padding:11px;
- border:1px solid var(--line);
- border-radius:8px;
- background:var(--card);
- color:var(--text);
-}
-.section {margin-top:30px}
-.grid {
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:17px;
-}
-.hotel {
- background:var(--card);
- border:1px solid var(--line);
- border-radius:12px;
- overflow:hidden;
-}
-.hotel img {
- width:100%;
- height:190px;
- object-fit:cover;
-}
-.hotel-body {padding:15px}
-.hotel h3 {margin:9px 0}
-.muted {color:var(--muted)}
-.stars {color:#C49B42}
-.price {
- color:var(--blue);
- font-size:21px;
- font-weight:bold;
-}
-.hotel-bottom {
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-top:14px;
-}
-.tabs,.actions {
- display:flex;
- gap:9px;
- flex-wrap:wrap;
- margin:15px 0;
-}
-.tabs button {
- background:var(--card);
- border:1px solid var(--line);
- color:var(--text);
-}
-.tabs button.active {
- background:var(--navy);
- color:white;
-}
-.stats {
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:12px;
-}
-.stat {
- padding:17px;
- background:var(--card);
- border:1px solid var(--line);
- border-radius:10px;
-}
-.stat strong {
- display:block;
- font-size:24px;
- color:var(--blue);
- margin-top:10px;
-}
-.progress {
- height:12px;
- background:var(--line);
- border-radius:20px;
- overflow:hidden;
- margin:15px 0;
-}
-.progress span {
- display:block;
- height:100%;
- background:linear-gradient(90deg,#1769AA,#55B9EF);
- width:0;
-}
-.notice {
- background:#FFF5DC;
- color:#76591B;
- padding:13px;
- border-radius:8px;
- line-height:1.6;
- font-size:13px;
-}
-.bottom {
- position:fixed;
- bottom:0;
- left:0;
- right:0;
- display:flex;
- justify-content:center;
- background:var(--card);
- border-top:1px solid var(--line);
- z-index:10;
- padding:7px;
-}
-.bottom button {
- flex:1;
- max-width:160px;
- background:none;
- color:var(--muted);
- font-size:12px;
-}
-.bottom button.active {color:var(--blue)}
-.bottom span {display:block;font-size:20px}
-.form {max-width:580px;margin:20px auto}
-.full {width:100%;margin-top:15px}
-.modal {
- display:none;
- position:fixed;
- inset:0;
- background:#07182BCC;
- z-index:30;
- align-items:center;
- justify-content:center;
- padding:16px;
-}
-.modal.show {display:flex}
-.dialog {
- position:relative;
- background:var(--card);
- color:var(--text);
- width:100%;
- max-width:440px;
- padding:25px;
- border-radius:15px;
+.modal.show{display:flex}
+.dialog{
+ position:relative;background:var(--card);color:var(--text);
+ width:100%;max-width:440px;padding:25px;border-radius:15px;
  border:1px solid #38A9FF;
  box-shadow:0 0 10px #38A9FF,0 0 28px #167CEB88;
+ animation:dialogIn .25s ease;
 }
-.close {
- position:absolute;
- right:10px;
- top:10px;
+@keyframes dialogIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.close{position:absolute;right:10px;top:10px;background:#eee;color:#111}
+.dialog input{margin-bottom:8px}
+.admin-layout{display:grid;grid-template-columns:270px 1fr;gap:15px}
+.user-list{max-height:450px;overflow:auto}
+.user-item{padding:14px;border-bottom:1px solid var(--line);cursor:pointer}
+.user-item:hover{background:#EAF2FA;color:#174F83}
+.row{padding:13px 0;border-bottom:1px solid var(--line)}
+.status{font-size:12px;font-weight:bold;color:#B17D25}
+#splashScreen{
+ position:fixed;inset:0;z-index:99999;
+ background:linear-gradient(135deg,#071B35,#102B4E,#174B78);
+ display:flex;justify-content:center;align-items:center;
+ text-align:center;color:white;
+ transition:opacity .8s ease,visibility .8s ease;
 }
-.dialog input {margin-bottom:8px}
-.admin-layout {
- display:grid;
- grid-template-columns:270px 1fr;
- gap:15px;
+#splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-content{padding:25px;animation:splashEnter 1s ease}
+.splash-logo{font-size:36px;font-weight:900;letter-spacing:3px}
+.splash-logo span{color:var(--gold)}
+.splash-content h1{font-size:clamp(28px,5vw,46px);margin:25px 0 10px}
+.splash-content p{color:#C7D6E5}
+.splash-loader{
+ width:45px;height:45px;border:3px solid #ffffff35;
+ border-top-color:var(--gold);border-radius:50%;
+ margin:30px auto 0;animation:spin 1s linear infinite;
 }
-.user-list {max-height:450px;overflow:auto}
-.user-item {
- padding:14px;
- border-bottom:1px solid var(--line);
- cursor:pointer;
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes splashEnter{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.empty{padding:25px;text-align:center;color:var(--muted)}
+@media(max-width:760px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .search{grid-template-columns:1fr 1fr}
+ .admin-layout{grid-template-columns:1fr}
 }
-.user-item:hover {background:#EAF2FA;color:#174F83}
-.row {
- padding:13px 0;
- border-bottom:1px solid var(--line);
-}
-@media(max-width:760px) {
- .grid {grid-template-columns:repeat(2,1fr)}
- .search {grid-template-columns:1fr 1fr}
- .admin-layout {grid-template-columns:1fr}
-}
-@media(max-width:520px) {
- .grid,.stats {grid-template-columns:1fr}
- .hero {padding:23px}
- header {padding:12px}
- .logo {font-size:17px}
- .container {padding:13px 10px 90px}
- .bottom button {padding:6px 2px;font-size:10px}
+@media(max-width:520px){
+ .grid,.stats{grid-template-columns:1fr}
+ .hero{padding:23px}
+ header{padding:12px}
+ .logo{font-size:16px}
+ .container{padding:13px 10px 90px}
+ .bottom button{padding:6px 2px;font-size:10px}
+ .head select{max-width:85px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- WELCOME SPLASH -->
+<div id="splashScreen">
+ <div class="splash-content">
+  <div class="splash-logo">TRIP <span>BOOKING</span></div>
+  <h1>Welcome To Trip Booking</h1>
+  <p>Premium International Hotel Booking</p>
+  <div class="splash-loader"></div>
+ </div>
+</div>
+
 <header>
- <div class="logo" onclick="logoTap()">TRAVEL <span>PRO</span></div>
+ <div class="logo" onclick="logoTap()">TRIP <span>BOOKING</span></div>
  <div class="head">
   <select id="language" onchange="changeLanguage(this.value)">
    <option value="my">မြန်မာ</option>
@@ -304,8 +187,7 @@ input,select,textarea {
 
 <!-- HOME -->
 <section id="home" class="page active">
-
- <div class="hero">
+ <div class="hero" id="heroBanner">
   <small style="color:#E8C77F">PREMIUM INTERNATIONAL HOTELS</small>
   <h1 data-t="hero">Discover Your Next Extraordinary Stay</h1>
   <p data-t="subtitle">Explore premium hotels around the world.</p>
@@ -340,45 +222,29 @@ input,select,textarea {
   <div class="tabs" id="countryTabs"></div>
   <div class="grid" id="hotelList"></div>
  </div>
-
 </section>
 
 <!-- PROFILE -->
 <section id="profile" class="page">
  <h2>My Profile</h2>
-
  <div class="panel">
   <h2 id="profileName">Guest User</h2>
-  <p class="muted" id="profileInfo">User ID: — | Invite Code: —</p>
-
+  <p class="muted" id="profileInfo">Browsing as Guest</p>
   <div class="stats">
-   <div class="stat">
-    Wallet Balance
-    <strong id="wallet">$0.00</strong>
-   </div>
-   <div class="stat">
-    Daily Progress
-    <strong id="profileProgress">0/30</strong>
-   </div>
-   <div class="stat">
-    Bookings
-    <strong id="bookingCount">0</strong>
-   </div>
+   <div class="stat">Wallet Balance<strong id="wallet">$0.00</strong></div>
+   <div class="stat">Daily Progress<strong id="profileProgress">0/30</strong></div>
+   <div class="stat">Bookings<strong id="bookingCount">0</strong></div>
   </div>
-
   <div class="actions">
    <button class="primary" onclick="showPage('deposit')">Deposit</button>
    <button class="soft" onclick="showPage('withdraw')">Withdrawal</button>
    <button class="soft" onclick="showPage('history')">History</button>
   </div>
+  <p class="muted" id="profileHint">Guest browsing is available. Log in to submit personal requests.</p>
  </div>
-
  <div class="panel">
   <h3>Official Certification / Legal Information</h3>
-  <p class="muted">
-   Company registration and verified travel license details
-   must be published here after official verification.
-  </p>
+  <p class="muted">Company registration and verified travel license details must be published here after official verification.</p>
   <p>License Number: Not provided</p>
  </div>
 </section>
@@ -386,22 +252,14 @@ input,select,textarea {
 <!-- TASKS -->
 <section id="tasks" class="page">
  <h2>Hotel Review Activity</h2>
-
  <div class="panel">
   <b>Daily Activity Progress</b>
   <b style="float:right" id="progressText">0 / 30</b>
   <div class="progress"><span id="progressBar"></span></div>
-  <p class="muted" id="taskStatus"></p>
+  <p class="muted" id="taskStatus">Browse hotel review activities.</p>
  </div>
-
  <div class="panel section" id="taskContent"></div>
-
- <p class="notice">
-  This feature records hotel review activity only.
-  It does not promise investment returns or guaranteed
-  income. Real booking commissions require verified
-  booking partner transactions.
- </p>
+ <p class="notice">Reviews are activity records only. No guaranteed investment return or cash profit is generated by clicking or rating hotels.</p>
 </section>
 
 <!-- SUPPORT -->
@@ -410,9 +268,7 @@ input,select,textarea {
   <h2>Trip Booking Customer Service</h2>
   <p class="muted">Customer Care Team</p>
   <div id="chatBox" class="panel" style="min-height:140px"></div>
-  <button class="primary full" onclick="sendGreeting()">
-   Contact Now
-  </button>
+  <button class="primary full" onclick="sendGreeting()">Contact Now</button>
   <div style="display:flex;gap:8px;margin-top:12px">
    <input id="chatInput" placeholder="Write a message">
    <button class="primary" onclick="sendMessage()">Send</button>
@@ -430,17 +286,12 @@ input,select,textarea {
 <section id="deposit" class="page">
  <div class="panel form">
   <h2>Deposit Request</h2>
-  <p class="notice">
-   Demo request only. No real money is transferred.
-   A secure payment provider and backend are required.
-  </p>
+  <p class="notice">Demo request only. No real money is transferred. Use a verified payment provider for production.</p>
   <label>Amount (USD)</label>
   <input type="number" id="depositAmount" min="1">
   <label>Payment Reference</label>
   <input id="paymentReference">
-  <button class="primary full" onclick="submitMoneyRequest('Deposit')">
-   Submit Deposit Request
-  </button>
+  <button class="primary full" onclick="submitMoneyRequest('Deposit')">Submit Deposit Request</button>
  </div>
 </section>
 
@@ -452,9 +303,7 @@ input,select,textarea {
   <input type="number" id="withdrawAmount" min="1">
   <label>Payment Account</label>
   <input id="withdrawAccount">
-  <button class="primary full" onclick="submitMoneyRequest('Withdrawal')">
-   Submit Withdrawal Request
-  </button>
+  <button class="primary full" onclick="submitMoneyRequest('Withdrawal')">Submit Withdrawal Request</button>
  </div>
 </section>
 
@@ -471,34 +320,29 @@ input,select,textarea {
   <input type="date" id="bookingIn">
   <label>Check Out</label>
   <input type="date" id="bookingOut">
-  <button class="primary full" onclick="submitBooking()">
-   Submit Booking
-  </button>
+  <button class="primary full" onclick="submitBooking()">Submit Booking</button>
  </div>
 </section>
 
 <!-- ADMIN -->
 <section id="admin" class="page">
  <h2>Admin Management Dashboard</h2>
- <p class="notice">
-  Prototype only. Production admin access must be
-  authenticated and authorized by the backend.
- </p>
-
- <div class="admin-layout">
+ <p class="notice">Staff dashboard. Production user management and financial approvals require a secured backend.</p>
+ <div class="stats">
+  <div class="stat">Registered Users<strong id="adminUserCount">0</strong></div>
+  <div class="stat">Booking Records<strong id="adminBookingCount">0</strong></div>
+  <div class="stat">Pending Requests<strong id="adminPendingCount">0</strong></div>
+ </div>
+ <div class="admin-layout section">
   <div class="panel">
    <h3>Registered Customers</h3>
    <div id="adminUsers" class="user-list"></div>
   </div>
-
   <div class="panel">
-   <div id="adminDetails">Select a customer.</div>
+   <div id="adminDetails">Select a customer from the list.</div>
    <hr>
    <h3>Reward Policy</h3>
-   <p class="muted">
-    Configure transparent loyalty points for verified
-    bookings. Do not manually fabricate profits.
-   </p>
+   <p class="muted">Configure transparent loyalty points for verified bookings.</p>
    <label>Management Mode</label>
    <select id="adminMode">
     <option>Automatic Policy</option>
@@ -507,85 +351,65 @@ input,select,textarea {
    <label>Points Per Verified Booking</label>
    <input type="number" id="rewardPoints" value="10">
    <button class="primary" onclick="savePolicy()">Save Policy</button>
+   <hr>
+   <h3>Money Requests</h3>
+   <div id="adminRequests"></div>
   </div>
  </div>
 </section>
 
 </main>
 
-<!-- BOTTOM NAVIGATION -->
+<!-- NAVIGATION -->
 <nav class="bottom">
- <button class="active" data-page="home" onclick="showPage('home')">
-  <span>⌂</span>Home
- </button>
- <button data-page="tasks" onclick="showPage('tasks')">
-  <span>▣</span>Tasks
- </button>
- <button data-page="support" onclick="showPage('support')">
-  <span>✉</span>Support
- </button>
- <button data-page="history" onclick="showPage('history')">
-  <span>▤</span>History
- </button>
- <button data-page="profile" onclick="showPage('profile')">
-  <span>♙</span>Profile
- </button>
+ <button class="active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+ <button data-page="tasks" onclick="showPage('tasks')"><span>▣</span>Tasks</button>
+ <button data-page="support" onclick="showPage('support')"><span>✉</span>Support</button>
+ <button data-page="history" onclick="showPage('history')"><span>▤</span>History</button>
+ <button data-page="profile" onclick="showPage('profile')"><span>♙</span>Profile</button>
 </nav>
 
-<!-- REGISTER / LOGIN MODAL -->
+<!-- ACCOUNT MODAL -->
 <div class="modal" id="authModal">
  <div class="dialog">
   <button class="close" onclick="closeModal('authModal')">✕</button>
   <h2>Account Access</h2>
-
-  <label>Full Name</label>
+  <label>Full Name (Sign Up)</label>
   <input id="regName">
-
   <label>Phone / Email</label>
   <input id="regContact">
-
   <label>Password</label>
   <input id="regPassword" type="password">
-
   <label>Location</label>
   <input id="regLocation">
-
   <label>Invite Code</label>
   <input id="regInvite">
-
   <div class="actions">
    <button class="primary" onclick="registerUser()">Sign Up</button>
    <button class="soft" onclick="loginUser()">Log In</button>
   </div>
-
   <p id="authMessage" class="muted"></p>
  </div>
 </div>
 
-<!-- SECRET STAFF MODAL -->
+<!-- STAFF MODAL -->
 <div class="modal" id="staffModal">
  <div class="dialog">
   <button class="close" onclick="closeModal('staffModal')">✕</button>
   <h2>Staff Access</h2>
   <p class="muted">Administrator / Customer Service</p>
-
   <label>Staff Phone</label>
-  <input id="staffPhone">
-
+  <input id="staffPhone" type="tel" placeholder="Staff phone number">
   <label>Password</label>
-  <input id="staffPassword" type="password">
-
+  <input id="staffPassword" type="password" placeholder="Staff password">
   <button class="primary full" onclick="staffLogin()">Sign In</button>
-
-  <p id="staffMessage" class="muted"></p>
+  <p id="staffMessage" class="muted" aria-live="polite"></p>
  </div>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-
-/* HOTEL DIRECTORY */
-const hotels = [
+/* HOTEL DATA */
+const hotels=[
  {id:1,name:"The Shoreline Retreat",country:"Thailand",city:"Phuket",price:185,stars:5,img:"https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900"},
  {id:2,name:"Marina Bay Grand",country:"Singapore",city:"Singapore",price:220,stars:5,img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
  {id:3,name:"Kyoto Garden Stay",country:"Japan",city:"Kyoto",price:160,stars:4,img:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900"},
@@ -597,35 +421,32 @@ const hotels = [
  {id:9,name:"Barcelona Central",country:"Spain",city:"Barcelona",price:175,stars:4,img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"}
 ];
 
-/* TRANSLATIONS */
-const translations = {
- en:{
-  hero:"Discover Your Next Extraordinary Stay",
-  subtitle:"Explore premium hotels around the world."
- },
- my:{
-  hero:"သင့်အတွက် ထူးခြားတဲ့ ခရီးစဉ်ကို စတင်လိုက်ပါ",
-  subtitle:"ကမ္ဘာတစ်ဝန်းရှိ ဟိုတယ်များကို ရှာဖွေလိုက်ပါ။"
- },
- zh:{
-  hero:"发现下一段非凡旅程",
-  subtitle:"探索世界各地的优质酒店。"
- },
- es:{
-  hero:"Descubre tu próxima estancia extraordinaria",
-  subtitle:"Explora hoteles de todo el mundo."
- }
+const $=id=>document.getElementById(id);
+
+const translations={
+ en:{hero:"Discover Your Next Extraordinary Stay",subtitle:"Explore premium hotels around the world."},
+ my:{hero:"သင့်အတွက် ထူးခြားတဲ့ ခရီးစဉ်ကို စတင်လိုက်ပါ",subtitle:"ကမ္ဘာတစ်ဝန်းရှိ ဟိုတယ်များကို ရှာဖွေလိုက်ပါ။"},
+ zh:{hero:"发现下一段非凡旅程",subtitle:"探索世界各地的优质酒店。"},
+ es:{hero:"Descubre tu próxima estancia extraordinaria",subtitle:"Explora hoteles de todo el mundo."}
 };
 
-let language = localStorage.getItem("tp_language") || "my";
-let darkMode = localStorage.getItem("tp_dark") === "true";
-let users = JSON.parse(localStorage.getItem("tp_users") || "[]");
-let currentUser = JSON.parse(localStorage.getItem("tp_current") || "null");
-let records = JSON.parse(localStorage.getItem("tp_records") || "[]");
-let requests = JSON.parse(localStorage.getItem("tp_requests") || "[]");
-let selectedHotel = null;
-let selectedCountry = "All";
-let logoClicks = [];
+let language=localStorage.getItem("tp_language")||"my";
+let darkMode=localStorage.getItem("tp_dark")==="true";
+let users=JSON.parse(localStorage.getItem("tp_users")||"[]");
+let currentUser=JSON.parse(localStorage.getItem("tp_current")||"null");
+let records=JSON.parse(localStorage.getItem("tp_records")||"[]");
+let requests=JSON.parse(localStorage.getItem("tp_requests")||"[]");
+let selectedHotel=null;
+let selectedCountry="All";
+let logoClicks=[];
+let activeAdminUser=null;
+
+/* STAFF DEMO LOGIN
+   IMPORTANT: This is not secure production authentication.
+   Anyone who can read the public source can see these credentials.
+*/
+const STAFF_PHONE="09775191427";
+const STAFF_PASSWORD="12344321";
 
 /* STORAGE */
 function saveData(){
@@ -634,21 +455,30 @@ function saveData(){
  localStorage.setItem("tp_records",JSON.stringify(records));
  localStorage.setItem("tp_requests",JSON.stringify(requests));
 }
-
-function showPage(id){
- document.querySelectorAll(".page").forEach(p=>{
-  p.classList.toggle("active",p.id===id);
- });
- document.querySelectorAll(".bottom button").forEach(b=>{
-  b.classList.toggle("active",b.dataset.page===id);
- });
- if(id==="profile") updateProfile();
- if(id==="tasks") renderTasks();
- if(id==="history") renderHistory();
- if(id==="admin") renderAdmin();
- window.scrollTo(0,0);
+function syncCurrentUser(){
+ if(!currentUser)return;
+ const i=users.findIndex(u=>u.id===currentUser.id);
+ if(i>=0)users[i]=currentUser;
+ saveData();
 }
 
+/* NAVIGATION - GUESTS CAN VIEW ALL PAGES */
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+ document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ if(id==="profile")updateProfile();
+ if(id==="tasks")renderTasks();
+ if(id==="history")renderHistory();
+ if(id==="admin"){
+  if(sessionStorage.getItem("tp_staff_login")!=="true"){
+   alert("Staff login is required to open the Admin Dashboard.");
+   openModal("staffModal");
+   return;
+  }
+  renderAdmin();
+ }
+ window.scrollTo({top:0,behavior:"smooth"});
+}
 function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
 
@@ -657,7 +487,7 @@ function changeLanguage(value){
  language=value;
  localStorage.setItem("tp_language",value);
  document.querySelectorAll("[data-t]").forEach(el=>{
-  el.textContent=translations[value][el.dataset.t];
+  el.textContent=translations[value][el.dataset.t]||el.textContent;
  });
 }
 
@@ -669,10 +499,9 @@ function toggleTheme(){
  $("themeBtn").textContent=darkMode?"☀":"☾";
 }
 
-/* HOTEL DISPLAY */
+/* HOTEL LIST */
 function hotelCard(h){
- return `
- <article class="hotel">
+ return `<article class="hotel">
   <img src="${h.img}" alt="${h.name}" loading="lazy">
   <div class="hotel-body">
    <div class="stars">★ ${h.stars}.0 · ${h.city}, ${h.country}</div>
@@ -685,33 +514,20 @@ function hotelCard(h){
   </div>
  </article>`;
 }
-
 function renderHotels(){
  const query=($("hotelSearch").value||"").toLowerCase();
-
- $("featuredHotels").innerHTML=
- hotels.slice(0,6).map(hotelCard).join("");
-
+ $("featuredHotels").innerHTML=hotels.slice(0,6).map(hotelCard).join("");
  const countries=["All",...new Set(hotels.map(h=>h.country))];
-
- $("countryTabs").innerHTML=countries.map(c=>`
-  <button class="${selectedCountry===c?'active':''}"
-   onclick="filterCountry('${c}')">${c}</button>
- `).join("");
-
+ $("countryTabs").innerHTML=countries.map(c=>
+  `<button class="${selectedCountry===c?'active':''}" onclick="filterCountry('${c}')">${c}</button>`
+ ).join("");
  const filtered=hotels.filter(h=>
   (selectedCountry==="All"||h.country===selectedCountry)&&
   (h.name+" "+h.country+" "+h.city).toLowerCase().includes(query)
  );
-
- $("hotelList").innerHTML=filtered.map(hotelCard).join("")
- || "<p>No hotels found.</p>";
+ $("hotelList").innerHTML=filtered.map(hotelCard).join("")||'<div class="empty">No hotels found.</div>';
 }
-
-function filterCountry(country){
- selectedCountry=country;
- renderHotels();
-}
+function filterCountry(c){selectedCountry=c;renderHotels()}
 
 /* REGISTRATION */
 function registerUser(){
@@ -719,64 +535,47 @@ function registerUser(){
  const contact=$("regContact").value.trim();
  const password=$("regPassword").value;
  const location=$("regLocation").value.trim();
-
  if(!name||!contact||password.length<8){
-  $("authMessage").textContent="Please complete all required fields. Password must be 8+ characters.";
+  $("authMessage").textContent="Please enter your name, contact and a password of at least 8 characters.";
   return;
  }
-
  if(users.some(u=>u.contact===contact)){
-  $("authMessage").textContent="This account already exists.";
+  $("authMessage").textContent="Account already exists. Please log in.";
   return;
  }
-
  const user={
-  id:"TP"+Date.now(),
-  name,
-  contact,
-  location,
+  id:"TP"+Date.now(),name,contact,location,
   invite:"INV"+Math.random().toString(36).slice(2,8).toUpperCase(),
-  balance:0,
-  progress:0,
-  day:new Date().toDateString()
+  balance:0,progress:0,day:new Date().toDateString()
  };
-
  users.push(user);
  currentUser=user;
  saveData();
  closeModal("authModal");
- updateProfile();
  showPage("profile");
 }
-
-/* LOGIN DEMO */
 function loginUser(){
  const contact=$("regContact").value.trim();
- const u=users.find(x=>x.contact===contact);
-
- if(!u){
+ const user=users.find(u=>u.contact===contact);
+ if(!user){
   $("authMessage").textContent="Account not found. Please sign up first.";
   return;
  }
-
- currentUser=u;
+ currentUser=user;
  saveData();
  closeModal("authModal");
  showPage("profile");
 }
-
-/* USER SESSION */
 function requireLogin(){
  if(!currentUser){
-  alert("Please log in first.");
+  alert("Please create an account or log in to submit this request. You can continue browsing as a guest.");
   openModal("authModal");
   return false;
  }
-
  if(currentUser.day!==new Date().toDateString()){
   currentUser.day=new Date().toDateString();
   currentUser.progress=0;
-  saveData();
+  syncCurrentUser();
  }
  return true;
 }
@@ -784,274 +583,279 @@ function requireLogin(){
 /* PROFILE */
 function updateProfile(){
  $("profileName").textContent=currentUser?.name||"Guest User";
-
  $("profileInfo").textContent=currentUser
- ? `User ID: ${currentUser.id} | Invite Code: ${currentUser.invite}`
- : "User ID: — | Invite Code: —";
-
+  ?`User ID: ${currentUser.id} | Invite Code: ${currentUser.invite}`
+  :"Browsing as Guest · No account required";
  $("wallet").textContent="$"+(currentUser?.balance||0).toFixed(2);
  $("profileProgress").textContent=(currentUser?.progress||0)+"/30";
-
- $("bookingCount").textContent=
- records.filter(r=>r.userId===currentUser?.id&&r.type==="Booking").length;
+ $("bookingCount").textContent=records.filter(r=>r.userId===currentUser?.id&&r.type==="Booking").length;
+ $("profileHint").textContent=currentUser
+  ?"Your account information is stored in this browser demo."
+  :"You can view this page without an account. Log in only when submitting personal requests.";
 }
 
 /* HOTEL BOOKING */
 function bookHotel(id){
- if(!requireLogin()) return;
-
  selectedHotel=hotels.find(h=>h.id===id);
- $("selectedHotel").textContent=
- selectedHotel.name+" · $"+selectedHotel.price+" per night";
-
+ if(!selectedHotel)return;
+ $("selectedHotel").textContent=selectedHotel.name+" · $"+selectedHotel.price+" per night";
  showPage("booking");
 }
-
 function submitBooking(){
- if(!requireLogin()) return;
-
+ if(!requireLogin())return;
  const guest=$("guestName").value.trim();
  const contact=$("guestContact").value.trim();
- const checkin=$("bookingIn").value;
- const checkout=$("bookingOut").value;
-
- if(!guest||!contact||!checkin||!checkout||checkout<=checkin){
+ const ci=$("bookingIn").value;
+ const co=$("bookingOut").value;
+ if(!selectedHotel||!guest||!contact||!ci||!co||co<=ci){
   alert("Please complete valid booking information.");
   return;
  }
-
  records.unshift({
-  id:Date.now(),
-  userId:currentUser.id,
-  type:"Booking",
-  name:selectedHotel.name,
-  date:new Date().toLocaleString(),
-  status:"REQUESTED"
+  id:Date.now(),userId:currentUser.id,type:"Booking",
+  name:selectedHotel.name,date:new Date().toLocaleString(),
+  status:"REQUESTED",checkIn:ci,checkOut:co
  });
-
  saveData();
- alert("Booking request submitted. Final availability and price require hotel confirmation.");
+ alert("Booking request submitted. Availability and final price require confirmation.");
  showPage("history");
 }
 
-/* 30 DAILY REVIEW ACTIVITY */
+/* DAILY HOTEL REVIEW TRACKER */
 function renderTasks(){
  const count=currentUser?.progress||0;
-
  $("progressText").textContent=count+" / 30";
  $("progressBar").style.width=(count/30*100)+"%";
-
  if(count>=30){
   $("taskStatus").textContent="Daily activity target completed.";
   $("taskContent").innerHTML="<h2>30 / 30 Completed</h2>";
   return;
  }
-
  const hotel=hotels[count%hotels.length];
-
  $("taskStatus").textContent="Complete genuine hotel review activities.";
-
  $("taskContent").innerHTML=`
-  <div>
-   <img src="${hotel.img}" style="width:100%;max-height:260px;object-fit:cover;border-radius:10px">
-   <h2>${hotel.name}</h2>
-   <p>${hotel.city}, ${hotel.country}</p>
-   <p class="stars">★ ${hotel.stars}</p>
-   <label>Your Rating</label>
-   <select id="reviewRating">
-    <option value="5">5 Stars</option>
-    <option value="4">4 Stars</option>
-    <option value="3">3 Stars</option>
-    <option value="2">2 Stars</option>
-    <option value="1">1 Star</option>
-   </select>
-   <label>Honest Review</label>
-   <textarea id="reviewText" rows="4"></textarea>
-   <button class="primary full" onclick="submitReview(${hotel.id})">
-    Submit Review
-   </button>
-  </div>`;
+  <img src="${hotel.img}" style="width:100%;max-height:260px;object-fit:cover;border-radius:10px">
+  <h2>${hotel.name}</h2>
+  <p>${hotel.city}, ${hotel.country}</p>
+  <p class="stars">★ ${hotel.stars}</p>
+  <label>Your Rating</label>
+  <select id="reviewRating">
+   <option value="5">5 Stars</option>
+   <option value="4">4 Stars</option>
+   <option value="3">3 Stars</option>
+   <option value="2">2 Stars</option>
+   <option value="1">1 Star</option>
+  </select>
+  <label>Honest Review</label>
+  <textarea id="reviewText" rows="4"></textarea>
+  <button class="primary full" onclick="submitReview(${hotel.id})">Submit Review</button>`;
 }
-
 function submitReview(id){
- if(!requireLogin()) return;
-
- const text=$("reviewText").value.trim();
-
- if(text.length<10){
+ if(!requireLogin())return;
+ const review=$("reviewText").value.trim();
+ if(review.length<10){
   alert("Please write a review with at least 10 characters.");
   return;
  }
-
  const hotel=hotels.find(h=>h.id===id);
-
  records.unshift({
-  id:Date.now(),
-  userId:currentUser.id,
-  type:"Hotel Review",
-  name:hotel.name,
-  rating:$("reviewRating").value,
-  review:text,
-  date:new Date().toLocaleString(),
-  status:"SUBMITTED"
+  id:Date.now(),userId:currentUser.id,type:"Hotel Review",
+  name:hotel.name,rating:$("reviewRating").value,
+  review,date:new Date().toLocaleString(),status:"SUBMITTED"
  });
-
- currentUser.progress=Math.min(30,currentUser.progress+1);
-
- saveData();
+ currentUser.progress=Math.min(30,(currentUser.progress||0)+1);
+ syncCurrentUser();
  updateProfile();
  renderTasks();
-
- alert("Review submitted successfully. No guaranteed cash profit is generated.");
+ alert("Review submitted successfully.");
 }
 
-/* DEPOSIT & WITHDRAWAL REQUEST */
+/* DEPOSIT / WITHDRAW REQUESTS */
 function submitMoneyRequest(type){
- if(!requireLogin()) return;
-
- const amount=Number(
-  type==="Deposit"?$("depositAmount").value:$("withdrawAmount").value
- );
-
- if(amount<=0){
+ if(!requireLogin())return;
+ const amount=Number(type==="Deposit"?$("depositAmount").value:$("withdrawAmount").value);
+ if(!Number.isFinite(amount)||amount<=0){
   alert("Enter a valid amount.");
   return;
  }
-
+ const reference=type==="Deposit"?$("paymentReference").value.trim():$("withdrawAccount").value.trim();
+ if(!reference){
+  alert("Please provide the payment reference or account.");
+  return;
+ }
  requests.unshift({
-  id:Date.now(),
-  userId:currentUser.id,
-  type,
-  amount,
-  status:"PENDING",
-  date:new Date().toLocaleString()
+  id:Date.now(),userId:currentUser.id,type,amount,reference,
+  status:"PENDING",date:new Date().toLocaleString()
  });
-
  saveData();
- alert(type+" request recorded for review. No money was transferred.");
+ alert(type+" request recorded for admin review. No money was transferred.");
  showPage("history");
 }
 
 /* HISTORY */
 function renderHistory(){
  const own=records.filter(r=>r.userId===currentUser?.id);
-
  const money=requests.filter(r=>r.userId===currentUser?.id);
-
- $("historyContent").innerHTML=
- [...own,...money].map(r=>`
+ const all=[...own,...money];
+ $("historyContent").innerHTML=all.map(r=>`
   <div class="row">
-   <b>${r.type}: ${r.name||("$"+r.amount)}</b>
-   <p class="muted">${r.date||""} · ${r.status}</p>
+   <b>${escapeHTML(r.type)}: ${escapeHTML(r.name||("$"+r.amount))}</b>
+   <p class="muted">${escapeHTML(r.date||"")} · <span class="status">${escapeHTML(r.status)}</span></p>
   </div>
- `).join("")||"No records yet.";
+ `).join("")||'<div class="empty">No records yet. Guests can browse this page without signing in.</div>';
 }
 
 /* CUSTOMER SERVICE */
 function sendGreeting(){
- $("chatBox").innerHTML+=`
-  <div class="row">
-   <b>Trip Booking Customer Service</b>
-   <p>မင်္ဂလာပါရှင်၊ Trip Booking မှာ ကြိုဆိုပါသည်၊ ဘာကူညီပေးရမလဲရှင်။</p>
-  </div>`;
+ if($("chatBox").dataset.greeted==="true")return;
+ $("chatBox").dataset.greeted="true";
+ const row=document.createElement("div");
+ row.className="row";
+ const b=document.createElement("b");
+ b.textContent="Trip Booking Customer Service";
+ const p=document.createElement("p");
+ p.textContent="မင်္ဂလာပါရှင်၊ Trip Booking မှာ ကြိုဆိုပါသည်၊ ဘာကူညီပေးရမလဲရှင်။";
+ row.append(b,p);
+ $("chatBox").append(row);
 }
-
 function sendMessage(){
  const message=$("chatInput").value.trim();
  if(!message)return;
-
  const row=document.createElement("div");
  row.className="row";
-
  const b=document.createElement("b");
- b.textContent="You";
-
+ b.textContent="Guest";
  const p=document.createElement("p");
  p.textContent=message;
-
  row.append(b,p);
  $("chatBox").append(row);
  $("chatInput").value="";
 }
 
-/* SECRET 7-CLICK LOGO */
+/* LOGO 7-TAP STAFF ACCESS */
 function logoTap(){
  const now=Date.now();
-
  logoClicks=logoClicks.filter(t=>now-t<4000);
  logoClicks.push(now);
-
  if(logoClicks.length>=7){
   logoClicks=[];
+  $("staffMessage").textContent="";
   openModal("staffModal");
  }
 }
 
-/* STAFF AUTH PLACEHOLDER */
+/* STAFF LOGIN - DEMO */
 function staffLogin(){
- $("staffMessage").textContent=
- "Secure staff login requires a server-side authentication endpoint. This demo does not authenticate staff.";
+ const phone=$("staffPhone").value.trim();
+ const password=$("staffPassword").value;
+ if(phone===STAFF_PHONE&&password===STAFF_PASSWORD){
+  sessionStorage.setItem("tp_staff_login","true");
+  $("staffMessage").textContent="Login successful.";
+  closeModal("staffModal");
+  showPage("admin");
+  renderAdmin();
+ }else{
+  $("staffMessage").textContent="Incorrect phone number or password. Please try again.";
+ }
 }
 
-/* ADMIN USER LIST */
+/* ADMIN DASHBOARD */
 function renderAdmin(){
+ if(sessionStorage.getItem("tp_staff_login")!=="true")return;
+ $("adminUserCount").textContent=users.length;
+ $("adminBookingCount").textContent=records.filter(r=>r.type==="Booking").length;
+ $("adminPendingCount").textContent=requests.filter(r=>r.status==="PENDING").length;
  $("adminUsers").innerHTML=users.map(u=>`
   <div class="user-item" onclick="showAdminUser('${u.id}')">
    <b>${escapeHTML(u.name)}</b><br>
    <small>${escapeHTML(u.contact)}</small>
-  </div>
- `).join("")||"No registered customers in this browser.";
+  </div>`).join("")||'<div class="empty">No registered customers.</div>';
+ $("adminRequests").innerHTML=requests.map(r=>`
+  <div class="row">
+   <b>${escapeHTML(r.type)} · $${Number(r.amount).toFixed(2)}</b>
+   <p class="muted">${escapeHTML(r.status)} · ${escapeHTML(r.date)}</p>
+   ${r.status==="PENDING"?`
+    <button class="primary" onclick="reviewRequest(${r.id},'REVIEWED')">Mark Reviewed</button>
+    <button class="soft" onclick="reviewRequest(${r.id},'REJECTED')">Reject</button>`:""}
+  </div>`).join("")||"No requests.";
 }
-
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
-}
-
 function showAdminUser(id){
  const u=users.find(x=>x.id===id);
  if(!u)return;
-
+ activeAdminUser=id;
  const activity=records.filter(r=>r.userId===id);
-
  $("adminDetails").innerHTML=`
   <h2>${escapeHTML(u.name)}</h2>
   <p>${escapeHTML(u.contact)}</p>
   <p>Location: ${escapeHTML(u.location||"—")}</p>
   <p>User ID: ${escapeHTML(u.id)}</p>
   <p>Invite Code: ${escapeHTML(u.invite)}</p>
-  <p>Wallet Balance: $${Number(u.balance).toFixed(2)}</p>
-  <h3>Activity History</h3>
-  ${activity.map(r=>`
-   <div class="row">${escapeHTML(r.type)} · ${escapeHTML(r.name)}</div>
-  `).join("")}
- `;
+  <p>Wallet Balance: $${Number(u.balance||0).toFixed(2)}</p>
+  <h3>Booking & Activity History</h3>
+  ${activity.map(r=>`<div class="row">${escapeHTML(r.type)} · ${escapeHTML(r.name||"")} · ${escapeHTML(r.status)}</div>`).join("")||"No activity yet."}`;
 }
-
+function reviewRequest(id,status){
+ if(sessionStorage.getItem("tp_staff_login")!=="true")return;
+ const r=requests.find(x=>x.id===id);
+ if(!r)return;
+ r.status=status;
+ saveData();
+ renderAdmin();
+}
 function savePolicy(){
- alert("Demo policy saved locally. Production reward policies must be stored and validated on the server.");
+ if(sessionStorage.getItem("tp_staff_login")!=="true")return;
+ alert("Demo policy saved. Production rules must be stored and validated on the server.");
 }
 
-/* INITIALIZE */
+/* SAFE TEXT */
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+/* SIX PROMO SLIDES */
+let bannerIndex=0;
+const bannerImages=[
+ "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1500",
+ "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1500",
+ "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=1500",
+ "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1500",
+ "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1500",
+ "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=1500"
+];
+function nextBanner(){
+ bannerIndex=(bannerIndex+1)%bannerImages.length;
+ $("heroBanner").style.backgroundImage=
+ `linear-gradient(90deg,#071B35E8,#071B3530),url("${bannerImages[bannerIndex]}")`;
+}
+
+/* STARTUP */
 document.addEventListener("DOMContentLoaded",()=>{
  document.body.classList.toggle("dark",darkMode);
  $("themeBtn").textContent=darkMode?"☀":"☾";
-
  $("language").value=language;
-
  document.querySelectorAll("[data-t]").forEach(el=>{
   el.textContent=translations[language][el.dataset.t];
  });
-
+ $("heroBanner").style.backgroundImage=
+ `linear-gradient(90deg,#071B35E8,#071B3530),url("${bannerImages[0]}")`;
  $("hotelSearch").addEventListener("input",renderHotels);
-
  renderHotels();
  updateProfile();
  renderTasks();
  renderHistory();
+ setInterval(nextBanner,5000);
 });
 
+/* SPLASH: WELCOME FIRST, THEN MAIN PLATFORM */
+window.addEventListener("load",()=>{
+ const splash=$("splashScreen");
+ setTimeout(()=>{
+  splash.classList.add("hide");
+  setTimeout(()=>splash.remove(),850);
+ },2500);
+});
 </script>
 </body>
 </html>
