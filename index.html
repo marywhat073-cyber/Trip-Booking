@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#00a8a8">
 
-<!-- OpenGraph Meta Tags for Rich Link Preview (Amazon style) -->
+<!-- OpenGraph Meta Tags for Rich Link Preview -->
 <meta property="og:title" content="Trip Booking - International Hotel Booking Platform">
 <meta property="og:description" content="Explore luxury tropical resorts and international hotels around the world. Enjoy seamless booking and rewarding tasks.">
 <meta property="og:image" content="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900">
@@ -66,6 +66,34 @@ input,select,textarea{
 input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
+/* Splash Intro Screen Styles */
+#splashScreen{
+ position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
+ background:linear-gradient(135deg,rgba(0,128,128,0.9),rgba(0,64,64,0.85)),
+ url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;color:white;
+}
+
+@keyframes slideInRight {
+ 0% { transform: translateX(100vw); opacity: 0; }
+ 100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes zoomInCenter {
+ 0% { transform: scale(0.1); opacity: 0; }
+ 100% { transform: scale(1); opacity: 1; }
+}
+
+.splash-title-wrapper{
+ display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:10px;
+ animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.splash-icon{width:65px;height:65px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+.splash-title{font-size:clamp(26px,4.5vw,42px);margin:0;font-weight:800}
+.splash-desc{
+ font-size:clamp(16px,2vw,22px);opacity:0.95;margin-top:10px;margin-bottom:25px;
+ animation: zoomInCenter 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
  z-index:30;padding:8px 16px;
@@ -83,33 +111,15 @@ header{
 .page{display:none}
 .page.active{display:block}
 
-/* Hero Animations */
-@keyframes slideInRight {
- 0% { transform: translateX(100vw); opacity: 0; }
- 100% { transform: translateX(0); opacity: 1; }
-}
-@keyframes zoomInCenter {
- 0% { transform: scale(0.2); opacity: 0; }
- 100% { transform: scale(1); opacity: 1; }
-}
-
 .hero{
- min-height:280px;border-radius:14px;overflow:hidden;
+ min-height:260px;border-radius:14px;overflow:hidden;
  background:linear-gradient(135deg,rgba(0,128,128,0.85),rgba(0,64,64,0.6)),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px;color:white;
  box-shadow:var(--shadow);
 }
-.hero-title-wrapper{
- display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;
- animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-.hero-icon{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid white;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
-.hero h1{font-size:clamp(22px,3.5vw,36px);margin:0}
-.hero p{
- max-width:520px;line-height:1.5;font-size:15px;opacity:0.95;margin-top:6px;
- animation: zoomInCenter 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+.hero h1{font-size:clamp(22px,3.5vw,36px);margin:0 0 6px}
+.hero p{max-width:520px;line-height:1.5;font-size:15px;opacity:0.95;margin:0}
 
 .section-title{
  display:flex;justify-content:space-between;align-items:center;
@@ -249,6 +259,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
+<!-- SPLASH INTRO SCREEN (Before entering platform) -->
+<div id="splashScreen">
+ <div class="splash-title-wrapper">
+  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
+  <h1 class="splash-title">Welcome to Trip Booking</h1>
+ </div>
+ <div class="splash-desc">International Hotel Booking Platform</div>
+ <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.3)" onclick="enterPlatform()">Enter Platform ➔</button>
+</div>
+
 <header>
  <div class="logo-container" id="logoContainer">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
@@ -274,10 +294,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="hero">
-  <div class="hero-title-wrapper">
-   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="hero-icon" alt="Icon">
-   <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-  </div>
+  <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
   <p data-i18n="heroDesc">International Hotel Booking Platform</p>
   <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
  </div>
@@ -518,7 +535,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
     <div class="chat-header"><span id="activeChatClientName">Client Chat</span></div>
     <div class="chat-messages" id="staffMessages"></div>
     <div class="chat-footer">
-     <button class="btn-light" onclick="appendStaffChar('😊')">😊</button>
+     <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
      <input id="staffInput" type="text" placeholder="Type reply as CS..." style="flex:1">
      <button class="btn" onclick="sendStaffMessage()">➤</button>
     </div>
@@ -616,13 +633,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v19",
- current:"tb_current_v19",
- theme:"tb_theme_v19",
- activity:"tb_activity_v19",
- finance:"tb_finance_v10",
- lang:"tb_lang_v8",
- staffCreds:"tb_staff_creds_v7"
+ users:"tb_users_v20",
+ current:"tb_current_v20",
+ theme:"tb_theme_v20",
+ activity:"tb_activity_v20",
+ finance:"tb_finance_v11",
+ lang:"tb_lang_v9",
+ staffCreds:"tb_staff_creds_v8"
 };
 
 const TRANSLATIONS = {
@@ -879,6 +896,10 @@ let logoTimer = null;
 let activeOrderTask = null;
 let isTableEditing = false;
 let staffCreds = readObj(KEYS.staffCreds, {admin:"12344321", cs:"12344321"});
+
+function enterPlatform() {
+ $("splashScreen").classList.add("hidden");
+}
 
 function toggleTheme() {
  const isDark = document.body.classList.toggle("dark");
