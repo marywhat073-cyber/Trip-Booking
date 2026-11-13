@@ -3,31 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#00a8a8">
+
+<!-- OpenGraph Meta Tags for Rich Link Preview (Amazon style) -->
+<meta property="og:title" content="Trip Booking - International Hotel Booking Platform">
+<meta property="og:description" content="Explore luxury tropical resorts and international hotels around the world. Enjoy seamless booking and rewarding tasks.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900">
+<meta property="og:url" content="https://yourdomain.com">
+<meta name="twitter:card" content="summary_large_image">
+
 <title>Trip Booking | International Hotel Booking Platform</title>
 
 <style>
 :root{
- --fb-bg:#f0f2f5;
+ --fb-bg:#e6f8f8;
  --fb-card:#ffffff;
- --fb-text:#050505;
- --fb-muted:#65676b;
- --fb-border:#dadde1;
- --fb-primary:#1877f2;
- --fb-primary-hover:#166fe5;
- --fb-success:#42b72a;
- --fb-danger:#fa383e;
- --shadow:0 1px 2px rgba(0,0,0,0.1);
+ --fb-text:#0b3c3c;
+ --fb-muted:#557a7a;
+ --fb-border:#b2d8d8;
+ --fb-primary:#008080;
+ --fb-primary-hover:#006666;
+ --fb-success:#00b386;
+ --fb-danger:#ff4d4d;
+ --shadow:0 4px 12px rgba(0,128,128,0.15);
 }
 body.dark{
- --fb-bg:#18191a;
- --fb-card:#242526;
- --fb-text:#e4e6eb;
- --fb-muted:#b0b3b8;
- --fb-border:#393a3b;
- --fb-primary:#2d88ff;
- --fb-primary-hover:#1a77f2;
- --shadow:0 1px 2px rgba(0,0,0,0.5);
+ --fb-bg:#071a1a;
+ --fb-card:#0f2b2b;
+ --fb-text:#e0f2f2;
+ --fb-muted:#80b3b3;
+ --fb-border:#1a4d4d;
+ --fb-primary:#00b3b3;
+ --fb-primary-hover:#008080;
+ --shadow:0 4px 12px rgba(0,0,0,0.6);
 }
 
 *{box-sizing:border-box}
@@ -55,7 +63,7 @@ input,select,textarea{
  border-radius:6px;background:var(--fb-card);color:var(--fb-text);
  outline:none;
 }
-input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(24,119,242,0.2)}
+input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
 header{
@@ -64,8 +72,10 @@ header{
  display:flex;align-items:center;justify-content:space-between;
  gap:12px;box-shadow:var(--shadow);
 }
-.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;cursor:pointer;color:var(--fb-primary);user-select:none}
-.logo span{color:#e41e3f}
+.logo-container{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--fb-primary)}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--fb-primary)}
+.logo span{color:#00b3b3}
 .header-actions{display:flex;gap:8px;align-items:center}
 .header-actions select{width:auto;background:var(--fb-bg);color:var(--fb-text);border-color:var(--fb-border)}
 
@@ -78,24 +88,27 @@ header{
  0% { transform: translateX(100vw); opacity: 0; }
  100% { transform: translateX(0); opacity: 1; }
 }
-@keyframes fadeInUp {
- 0% { transform: translateY(30px); opacity: 0; }
- 100% { transform: translateY(0); opacity: 1; }
+@keyframes zoomInCenter {
+ 0% { transform: scale(0.2); opacity: 0; }
+ 100% { transform: scale(1); opacity: 1; }
 }
 
 .hero{
- min-height:260px;border-radius:12px;overflow:hidden;
- background:linear-gradient(90deg,#000000aa,#00000033),
+ min-height:280px;border-radius:14px;overflow:hidden;
+ background:linear-gradient(135deg,rgba(0,128,128,0.85),rgba(0,64,64,0.6)),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
- display:flex;align-items:center;padding:30px;color:white;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px;color:white;
+ box-shadow:var(--shadow);
 }
-.hero h1{
- font-size:clamp(24px,4vw,38px);margin:0 0 8px;
- animation: slideInRight 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+.hero-title-wrapper{
+ display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;
+ animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
+.hero-icon{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid white;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
+.hero h1{font-size:clamp(22px,3.5vw,36px);margin:0}
 .hero p{
- max-width:480px;line-height:1.5;font-size:14px;
- animation: fadeInUp 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+ max-width:520px;line-height:1.5;font-size:15px;opacity:0.95;margin-top:6px;
+ animation: zoomInCenter 1.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
 .section-title{
@@ -124,7 +137,7 @@ header{
 .card-body h3{margin:6px 0;font-size:15px}
 .price{font-size:18px;font-weight:700;color:var(--fb-primary)}
 .tag{
- display:inline-block;background:rgba(24,119,242,0.1);color:var(--fb-primary);
+ display:inline-block;background:rgba(0,128,128,0.12);color:var(--fb-primary);
  padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;
 }
 
@@ -140,7 +153,7 @@ header{
  background:var(--fb-card);border-top:1px solid var(--fb-border);
  display:grid;grid-template-columns:repeat(5,1fr);
  padding:6px 2px max(6px,env(safe-area-inset-bottom));
- box-shadow:0 -1px 3px rgba(0,0,0,0.05);
+ box-shadow:0 -2px 6px rgba(0,0,0,0.08);
 }
 .bottom-nav button{
  background:none;border:0;color:var(--fb-muted);
@@ -175,7 +188,7 @@ header{
 }
 .vip-card.active-vip{
  border:2px solid var(--fb-primary);
- background:rgba(24,119,242,0.05);
+ background:rgba(0,128,128,0.08);
 }
 
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
@@ -184,15 +197,15 @@ header{
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
 @keyframes pulseBtn {
- 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0.6); }
- 50% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(24,119,242, 0); }
- 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(24,119,242, 0); }
+ 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,128,128, 0.6); }
+ 50% { transform: scale(1.03); box-shadow: 0 0 0 12px rgba(0,128,128, 0); }
+ 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,128,128, 0); }
 }
 .pulsing-btn {
  background: var(--fb-primary); color: white;
  padding: 14px 22px; border-radius: 30px; font-size: 15px; font-weight: 700;
  border: 0; cursor: pointer; animation: pulseBtn 1.5s infinite;
- display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(24,119,242,0.3);
+ display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,128,128,0.3);
 }
 
 @keyframes scanning {
@@ -201,19 +214,19 @@ header{
  100% { background-position: 0% 50%; }
 }
 .matching-overlay {
- background: linear-gradient(270deg, #1877f2, #42b72a, #2d88ff);
+ background: linear-gradient(270deg, #008080, #00b386, #004d4d);
  background-size: 200% 200%;
  animation: scanning 2s ease infinite;
  color: white; padding: 30px; border-radius: 12px; text-align: center;
- font-weight: 700; font-size: 16px; box-shadow: 0 8px 24px rgba(24,119,242,0.3);
+ font-weight: 700; font-size: 16px; box-shadow: 0 8px 24px rgba(0,128,128,0.3);
 }
 
 footer{
- background:#242526;color:#b0b3b8;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #393a3b;
+ background:#071a1a;color:#80b3b3;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #1a4d4d;
 }
 .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
-.footer-grid h4{color:#e4e6eb;margin-bottom:12px;font-size:15px}
-.footer-grid a{display:block;color:#b0b3b8;text-decoration:none;margin-bottom:6px}
+.footer-grid h4{color:#e0f2f2;margin-bottom:12px;font-size:15px}
+.footer-grid a{display:block;color:#80b3b3;text-decoration:none;margin-bottom:6px}
 .footer-grid a:hover{color:white;text-decoration:underline}
 .app-btn{
  display:inline-flex;align-items:center;gap:8px;background:var(--fb-primary);color:white;
@@ -228,8 +241,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .online{color:var(--fb-success)}
 .offline{color:var(--fb-danger)}
 
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .close{background:none;border:0;font-size:18px;cursor:pointer;color:var(--fb-muted)}
 </style>
@@ -237,7 +250,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <body>
 
 <header>
- <div class="logo" id="logo">TRIP <span>BOOKING</span></div>
+ <div class="logo-container" id="logoContainer">
+  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
+  <div class="logo">TRIP <span>BOOKING</span></div>
+ </div>
  <div class="header-actions">
   <select id="language" aria-label="Language" onchange="changeLanguage(this.value)">
    <option value="en">English</option>
@@ -258,12 +274,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="hero">
-  <div>
-   <span class="tag" data-i18n="heroTag">INTERNATIONAL TRAVEL</span>
+  <div class="hero-title-wrapper">
+   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="hero-icon" alt="Icon">
    <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-   <p data-i18n="heroDesc">International Hotel Booking Platform</p>
-   <button class="btn" style="margin-top:12px" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
   </div>
+  <p data-i18n="heroDesc">International Hotel Booking Platform</p>
+  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
  </div>
 
  <div class="section-title">
@@ -353,11 +369,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <span id="orderProgress" style="display:block;height:100%;width:0;background:var(--fb-primary);transition:width .3s"></span>
   </div>
 
-  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(66,183,42,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)" data-i18n="taskCompleteMsg">
+  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(0,179,134,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)" data-i18n="taskCompleteMsg">
    🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆
   </div>
 
-  <div id="specialTaskAlert" class="hidden" style="background:rgba(250,56,62,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600" data-i18n="specialTaskMsg">
+  <div id="specialTaskAlert" class="hidden" style="background:rgba(255,77,77,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600" data-i18n="specialTaskMsg">
    ⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.
   </div>
 
@@ -546,7 +562,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- CUSTOM CELEBRATION / SUCCESS MODAL (Replaces alert popup) -->
+<!-- SUCCESS MODAL -->
 <div class="modal hidden" id="successModal">
  <div class="modal-box" style="text-align:center;padding:24px">
   <div style="font-size:42px;margin-bottom:10px">🎉</div>
@@ -556,7 +572,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- MODALS -->
+<!-- AUTH MODAL -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -575,6 +591,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
+<!-- STAFF MODAL -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -599,18 +616,18 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v18",
- current:"tb_current_v18",
- theme:"tb_theme_v18",
- activity:"tb_activity_v18",
- finance:"tb_finance_v9",
- lang:"tb_lang_v7",
- staffCreds:"tb_staff_creds_v6"
+ users:"tb_users_v19",
+ current:"tb_current_v19",
+ theme:"tb_theme_v19",
+ activity:"tb_activity_v19",
+ finance:"tb_finance_v10",
+ lang:"tb_lang_v8",
+ staffCreds:"tb_staff_creds_v7"
 };
 
 const TRANSLATIONS = {
  en: {
-  heroTag: "INTERNATIONAL TRAVEL",
+  heroTag: "TROPICAL ISLAND ESCAPE",
   heroTitle: "Welcome to Trip Booking",
   heroDesc: "International Hotel Booking Platform",
   exploreBtn: "Explore Hotels",
@@ -673,7 +690,7 @@ const TRANSLATIONS = {
   upgradeVipBtn: "🚀 Upgrade VIP"
  },
  my: {
-  heroTag: "နိုင်ငံတကာ ခရီးသွားလုပ်ငန်း",
+  heroTag: "အပူပိုင်းကျွန်း သဘာဝခရီးစဉ်",
   heroTitle: "Welcome to Trip Booking",
   heroDesc: "International Hotel Booking Platform",
   exploreBtn: "ဟိုတယ်များ ကြည့်ရန်",
@@ -736,7 +753,7 @@ const TRANSLATIONS = {
   upgradeVipBtn: "🚀 VIP တိုးမြှင့်ရန်"
  },
  zh: {
-  heroTag: "国际旅游",
+  heroTag: "热带岛屿度假",
   heroTitle: "Welcome to Trip Booking",
   heroDesc: "International Hotel Booking Platform",
   exploreBtn: "探索酒店",
@@ -880,7 +897,7 @@ window.addEventListener("load",()=>{
  initApp();
 });
 
-$("logo").addEventListener("click",()=>{
+$("logoContainer").addEventListener("click",()=>{
  logoClickCount++;
  clearTimeout(logoTimer);
  if(logoClickCount >= 10) {
@@ -1246,7 +1263,6 @@ function confirmSubmitBooking(profit, price) {
  updateUI();
  renderBooking();
 
- // SHOW SUCCESS MODAL (Replaces alert popup)
  $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
  $("successModal").classList.remove("hidden");
 }
@@ -1544,7 +1560,7 @@ function sendStaffMessage() {
  selectCSUser(u.id);
 }
 
-function appendStaffChar(char) { $("staffInput").value += char; }
+function appendSupportChar(char) { $("staffInput").value += char; }
 
 function installMobileApp() {
  alert("Trip Booking App package downloaded and added to your phone screen shortcut!");
