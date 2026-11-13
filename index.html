@@ -66,7 +66,7 @@ input,select,textarea{
 input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
-/* Splash Intro Screen Styles (Using requested background image)[cite: 30] */
+/* Splash Intro Screen Styles */
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
  background:linear-gradient(135deg,rgba(0,0,0,0.4),rgba(0,0,0,0.5)),
@@ -254,14 +254,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .offline{color:var(--fb-danger)}
 
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal-box{background:var(--fb-card);color:var(--fb-text);padding:20px;border-radius:10px;width:min(400px,90%);box-shadow:0 8px 24px rgba(0,0,0,0.25)}
+.modal-box{background:var(--fb-card);color:var(--fb-text);padding:24px;border-radius:12px;width:min(400px,90%);box-shadow:0 8px 24px rgba(0,0,0,0.25);text-align:center}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .close{background:none;border:0;font-size:18px;cursor:pointer;color:var(--fb-muted)}
 </style>
 </head>
 <body>
 
-<!-- SPLASH INTRO SCREEN (Auto redirects after 4 seconds) -->
+<!-- SPLASH INTRO SCREEN -->
 <div id="splashScreen">
  <div class="splash-title-wrapper">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
@@ -575,15 +575,25 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <nav class="bottom-nav">
  <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
- <button onclick="showPage('supportPage',this)"><span class="nav-icon">💬</span><span data-i18n="navSupport">Support</span></button>
+ <button onclick="showPage('supportPage',this)"><span class="nav-icon">📱</span><span data-i18n="navSupport">Support</span></button>
  <button class="booking-nav" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
  <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
+<!-- CUSTOM CENTRALIZED NOTIFICATION MODAL (Replaces ALL browser alerts) -->
+<div class="modal hidden" id="customAlertModal">
+ <div class="modal-box">
+  <div style="font-size:38px;margin-bottom:10px">💡</div>
+  <h3 id="customAlertTitle" style="margin-bottom:8px;color:var(--fb-primary)">Notification</h3>
+  <p id="customAlertText" class="muted" style="font-size:15px;margin-bottom:18px"></p>
+  <button class="btn btn-block" onclick="closeModal('customAlertModal')" style="padding:10px">OK</button>
+ </div>
+</div>
+
 <!-- SUCCESS MODAL -->
 <div class="modal hidden" id="successModal">
- <div class="modal-box" style="text-align:center;padding:24px">
+ <div class="modal-box">
   <div style="font-size:42px;margin-bottom:10px">🎉</div>
   <h2 style="color:var(--fb-success);margin-bottom:8px">Booking Confirmed!</h2>
   <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
@@ -593,7 +603,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- AUTH MODAL -->
 <div class="modal hidden" id="authModal">
- <div class="modal-box">
+ <div class="modal-box" style="text-align:left">
   <div class="modal-head">
    <h2 id="authTitle" data-i18n="loginBtn">Login</h2>
    <button class="close" onclick="closeModal('authModal')">✕</button>
@@ -604,15 +614,15 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
   <label data-i18n="identityLabel">Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
   <label data-i18n="passwordLabel">Password</label><input id="authPassword" type="password" placeholder="Min 6 characters">
-  <p id="authMessage" class="muted" style="color:var(--fb-danger)"></p>
+  <p id="authMessage" class="muted" style="color:var(--fb-danger);margin-top:6px"></p>
   <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
-  <p style="text-align:center"><a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a></p>
+  <p style="text-align:center;margin-top:10px"><a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a></p>
  </div>
 </div>
 
 <!-- STAFF MODAL -->
 <div class="modal hidden" id="staffModal">
- <div class="modal-box">
+ <div class="modal-box" style="text-align:left">
   <div class="modal-head">
    <h2>Staff & Admin Portal</h2>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
@@ -635,13 +645,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v21",
- current:"tb_current_v21",
- theme:"tb_theme_v21",
- activity:"tb_activity_v21",
- finance:"tb_finance_v12",
- lang:"tb_lang_v10",
- staffCreds:"tb_staff_creds_v9"
+ users:"tb_users_v22",
+ current:"tb_current_v22",
+ theme:"tb_theme_v22",
+ activity:"tb_activity_v22",
+ finance:"tb_finance_v13",
+ lang:"tb_lang_v11",
+ staffCreds:"tb_staff_creds_v10"
 };
 
 const TRANSLATIONS = {
@@ -753,7 +763,7 @@ const TRANSLATIONS = {
   vipTiersHead: "VIP အဖွဲ့ဝင်အဆင့်များနှင့် အကန့်အသတ်များ",
   vipTiersDesc: "VIP အဆင့်မြင့်လေလေ နေ့စဉ်တာဝန်ကန့်အသတ်၊ အမြတ်နှုန်းနှင့် ငွေထုတ်ယူနိုင်မှု ပမာဏ များပြားလေလေ ဖြစ်သည်။",
   refProgramHead: "မိတ်ဆက်ပရိုဂရမ် (Referral)",
-  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB) ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုកင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
+  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB) ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုကင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
   copyInviteBtn: "ဖိတ်ခေါ်လင့်ခ် ကူးယူရန်",
   logoutBtn: "အကောင့်ထွက်ရန်",
   quickLinks: "အမြန်လင့်ခ်များ",
@@ -838,6 +848,12 @@ const TRANSLATIONS = {
 
 let currentLang = localStorage.getItem(KEYS.lang) || "en";
 
+function showCustomAlert(text, title="Notification") {
+ $("customAlertTitle").textContent = title;
+ $("customAlertText").innerHTML = text;
+ $("customAlertModal").classList.remove("hidden");
+}
+
 function changeLanguage(lang) {
  currentLang = lang;
  localStorage.setItem(KEYS.lang, lang);
@@ -870,10 +886,13 @@ const vipTiers = [
  {level:"LV5", name:"VIP 5", limit:50, profitRate:0.025, minBal:10000, maxWithdraw:100000}
 ];
 
+// Exact 5 review options with star rating options as requested
 const reviewOptions = [
- {text:"Excellent service and beautiful room. Good review"},
- {text:"Very comfortable and highly recommended. Good review"},
- {text:"Wonderful hotel experience. Good review"}
+ {text:"⭐ Excellent service and luxurious room experience. Highly recommended!", stars:5},
+ {text:"⭐⭐⭐⭐ Very comfortable bed and great hospitality.", stars:4},
+ {text:"⭐⭐⭐ Good hotel location and clean facilities.", stars:3},
+ {text:"⭐⭐ Satisfactory stay, pleasant staff.", stars:2},
+ {text:"⭐ Standard room, acceptable service.", stars:1}
 ];
 
 const read = key => {
@@ -903,7 +922,6 @@ function enterPlatform() {
  $("splashScreen").classList.add("hidden");
 }
 
-// Auto redirect after 4 seconds
 setTimeout(() => {
  const splash = $("splashScreen");
  if(splash && !splash.classList.contains("hidden")) {
@@ -1111,14 +1129,14 @@ function upgradeVip(level) {
  if(!currentUser) return;
  const tier = getVipObj(level);
  if(currentUser.balance < tier.minBal) {
-  alert("Insufficient balance to upgrade to " + tier.name);
+  showCustomAlert("Insufficient balance to upgrade to " + tier.name);
   return;
  }
  currentUser.vipLevel = level;
  write(KEYS.users, users);
  updateUI();
  renderVipTiers();
- alert("Successfully upgraded to " + tier.name + "!");
+ showCustomAlert("Successfully upgraded to " + tier.name + "!");
 }
 
 function renderHotels() {
@@ -1221,10 +1239,11 @@ function renderBooking() {
       <div><span class="muted" style="font-size:11px">Expected Commission</span><br><strong style="font-size:16px;color:var(--fb-success)">+$${profit.toFixed(2)}</strong></div>
      </div>
      <div style="margin:12px 0">
-      <label style="margin-bottom:6px">Select Guest Review Experience:</label>
+      <label style="margin-bottom:6px">Select Guest Review & Star Rating (Choose one of 5):</label>
       ${reviewOptions.map((r, i) => `
        <label style="display:flex;gap:8px;align-items:center;margin:6px 0;cursor:pointer;background:var(--fb-bg);padding:8px;border-radius:6px">
-        <input type="radio" name="rev" ${i===0?'checked':''}> <span style="font-size:13px">${r.text}</span>
+        <input type="radio" name="rev" value="${i}" ${i===0?'checked':''}> 
+        <span style="font-size:13px">${r.text}</span>
        </label>
       `).join("")}
      </div>
@@ -1240,7 +1259,10 @@ function renderBooking() {
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  const maxCount = getVipLimit(currentUser.vipLevel);
- if((currentUser.orders || 0) >= maxCount) { alert("Completed all daily orders!"); return; }
+ if((currentUser.orders || 0) >= maxCount) { 
+  showCustomAlert("Completed all daily orders!"); 
+  return; 
+ }
  
  $("bookingHotelArea").innerHTML = `
   <div class="matching-overlay">
@@ -1267,7 +1289,7 @@ function confirmSubmitBooking(profit, price) {
   write(KEYS.users, users);
   updateUI();
   renderBooking();
-  alert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
+  showCustomAlert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
   return;
  }
 
@@ -1294,7 +1316,7 @@ function confirmSubmitBooking(profit, price) {
  updateUI();
  renderBooking();
 
- $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ឌါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
+ $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
  $("successModal").classList.remove("hidden");
 }
 
@@ -1431,7 +1453,7 @@ function saveStaffCredentials() {
  staffCreds.admin = $("adminPassInput").value.trim() || "12344321";
  staffCreds.cs = $("csPassInput").value.trim() || "12344321";
  write(KEYS.staffCreds, staffCreds);
- alert("Staff passwords updated successfully!");
+ showCustomAlert("Staff passwords updated successfully!");
 }
 
 function renderAdminTable() {
@@ -1453,7 +1475,7 @@ function renderAdminTable() {
     Neg: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:50px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
     Prof: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:50px" value="${u.profitBox||30}">` : (u.profitBox||30)}
    </td>
-   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="alert('User ID: ${u.id}\\nPassword: ${u.password}\\nInvite Code: ${u.inviteCode}')">View</button></td>
+   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="showCustomAlert('User ID: ${u.id}<br>Password: ${u.password}<br>Invite Code: ${u.inviteCode}', 'User Credentials')">View</button></td>
   </tr>
  `).join("");
 }
@@ -1506,7 +1528,7 @@ function saveTableEditMode() {
  write(KEYS.users, users);
  renderAdminTable();
  updateUI();
- alert("User accounts and balances updated successfully and synced instantly!");
+ showCustomAlert("User accounts and balances updated successfully and synced instantly!");
 }
 
 function renderAdminFinance() {
@@ -1547,7 +1569,7 @@ function processFinance(reqId, status) {
      if(!u.transactions) u.transactions = [];
      u.transactions.unshift({date:new Date().toLocaleString(), type:"Withdrawal", amount:req.amount, status:"Approved"});
     } else {
-     alert("User balance insufficient for approval.");
+     showCustomAlert("User balance insufficient for approval.");
      req.status = 'Pending';
     }
    }
@@ -1581,7 +1603,7 @@ function selectCSUser(id) {
 }
 
 function sendStaffMessage() {
- if(!selectedUserId) { alert("Select a client first."); return; }
+ if(!selectedUserId) { showCustomAlert("Select a client first."); return; }
  const u = users.find(x => x.id === selectedUserId);
  const txt = $("staffInput").value.trim();
  if(!txt) return;
@@ -1594,12 +1616,12 @@ function sendStaffMessage() {
 function appendSupportChar(char) { $("staffInput").value += char; }
 
 function installMobileApp() {
- alert("Trip Booking App package downloaded and added to your phone screen shortcut!");
+ showCustomAlert("Trip Booking App package downloaded and added to your phone screen shortcut!");
 }
 
 function copyInviteLink() {
  navigator.clipboard.writeText($("inviteLink").value);
- alert("Invitation link copied!");
+ showCustomAlert("Invitation link copied!");
 }
 
 function renderTicker() {
@@ -1607,4 +1629,4 @@ function renderTicker() {
 }
 </script>
 </body>
-</html>
+</html> 
