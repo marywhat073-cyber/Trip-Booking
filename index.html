@@ -66,12 +66,13 @@ input,select,textarea{
 input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
-/* Splash Intro Screen Styles */
+/* Splash Intro Screen Styles (Using requested background image)[cite: 30] */
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
- background:linear-gradient(135deg,rgba(0,128,128,0.9),rgba(0,64,64,0.85)),
+ background:linear-gradient(135deg,rgba(0,0,0,0.4),rgba(0,0,0,0.5)),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;color:white;
+ transition: opacity 0.6s ease;
 }
 
 @keyframes slideInRight {
@@ -84,13 +85,14 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 }
 
 .splash-title-wrapper{
- display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:10px;
+ display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px;
  animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
-.splash-icon{width:65px;height:65px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
-.splash-title{font-size:clamp(26px,4.5vw,42px);margin:0;font-weight:800}
+.splash-icon{width:65px;height:65px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 4px 15px rgba(0,0,0,0.4)}
+.splash-title{font-size:clamp(24px,4.5vw,40px);margin:0;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,0.6)}
 .splash-desc{
- font-size:clamp(16px,2vw,22px);opacity:0.95;margin-top:10px;margin-bottom:25px;
+ font-size:clamp(16px,2.2vw,22px);opacity:0.95;margin-top:10px;margin-bottom:25px;font-weight:600;
+ text-shadow:0 2px 4px rgba(0,0,0,0.6);
  animation: zoomInCenter 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
@@ -259,14 +261,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- SPLASH INTRO SCREEN (Before entering platform) -->
+<!-- SPLASH INTRO SCREEN (Auto redirects after 4 seconds) -->
 <div id="splashScreen">
  <div class="splash-title-wrapper">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
   <h1 class="splash-title">Welcome to Trip Booking</h1>
  </div>
  <div class="splash-desc">International Hotel Booking Platform</div>
- <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.3)" onclick="enterPlatform()">Enter Platform ➔</button>
+ <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.4)" onclick="enterPlatform()">Enter Platform ➔</button>
 </div>
 
 <header>
@@ -633,13 +635,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v20",
- current:"tb_current_v20",
- theme:"tb_theme_v20",
- activity:"tb_activity_v20",
- finance:"tb_finance_v11",
- lang:"tb_lang_v9",
- staffCreds:"tb_staff_creds_v8"
+ users:"tb_users_v21",
+ current:"tb_current_v21",
+ theme:"tb_theme_v21",
+ activity:"tb_activity_v21",
+ finance:"tb_finance_v12",
+ lang:"tb_lang_v10",
+ staffCreds:"tb_staff_creds_v9"
 };
 
 const TRANSLATIONS = {
@@ -751,7 +753,7 @@ const TRANSLATIONS = {
   vipTiersHead: "VIP အဖွဲ့ဝင်အဆင့်များနှင့် အကန့်အသတ်များ",
   vipTiersDesc: "VIP အဆင့်မြင့်လေလေ နေ့စဉ်တာဝန်ကန့်အသတ်၊ အမြတ်နှုန်းနှင့် ငွေထုတ်ယူနိုင်မှု ပမာဏ များပြားလေလေ ဖြစ်သည်။",
   refProgramHead: "မိတ်ဆက်ပရိုဂရမ် (Referral)",
-  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB) ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုကင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
+  refProgramDesc: "သင့်ဖိတ်ခေါ်ကုဒ် (ဂဏန်း ၄ လုံး + စာလုံး ၂ လုံး, ဥပမာ 1234AB) ကို မျှဝေပါ။ သင့်သူငယ်ချင်း ဘိုកင်တာဝန်ပြီးမြောက်တိုင်း <b>၁၀% ကော်မရှင်</b> အလိုအလျောက် ရရှိမည်!",
   copyInviteBtn: "ဖိတ်ခေါ်လင့်ခ် ကူးယူရန်",
   logoutBtn: "အကောင့်ထွက်ရန်",
   quickLinks: "အမြန်လင့်ခ်များ",
@@ -900,6 +902,14 @@ let staffCreds = readObj(KEYS.staffCreds, {admin:"12344321", cs:"12344321"});
 function enterPlatform() {
  $("splashScreen").classList.add("hidden");
 }
+
+// Auto redirect after 4 seconds
+setTimeout(() => {
+ const splash = $("splashScreen");
+ if(splash && !splash.classList.contains("hidden")) {
+  splash.classList.add("hidden");
+ }
+}, 4000);
 
 function toggleTheme() {
  const isDark = document.body.classList.toggle("dark");
@@ -1284,7 +1294,7 @@ function confirmSubmitBooking(profit, price) {
  updateUI();
  renderBooking();
 
- $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
+ $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ឌါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
  $("successModal").classList.remove("hidden");
 }
 
