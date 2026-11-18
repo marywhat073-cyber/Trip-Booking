@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#00a8a8">
+<meta name="theme-color" content="#008080">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trip Booking">
 
-<!-- OpenGraph Meta Tags for Rich Link Preview -->
+<!-- OpenGraph Meta Tags -->
 <meta property="og:title" content="Trip Booking - International Hotel Booking Platform">
 <meta property="og:description" content="Explore luxury tropical resorts and international hotels around the world. Enjoy seamless booking and rewarding tasks.">
 <meta property="og:image" content="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900">
-<meta property="og:url" content="https://yourdomain.com">
-<meta name="twitter:card" content="summary_large_image">
 
 <title>Trip Booking | International Hotel Booking Platform</title>
 
@@ -266,26 +267,21 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div id="splashScreen">
  <div class="splash-title-wrapper">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
-  <h1 class="splash-title" data-i18n="splashTitle">Welcome to Trip Booking</h1>
+  <h1 class="splash-title">Welcome to Trip Booking</h1>
  </div>
- <div class="splash-desc" data-i18n="splashDesc">International Hotel Booking Platform</div>
- <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.4)" onclick="enterPlatform()" data-i18n="enterPlatformBtn">Enter Platform ➔</button>
+ <div class="splash-desc">International Hotel Booking Platform</div>
+ <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.4)" onclick="enterPlatform()">Enter Platform ➔</button>
 </div>
 
 <header>
- <div class="logo-container" id="logoContainer" onclick="showPage('homePage')">
+ <div class="logo-container" onclick="showPage('homePage')">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
   <div class="logo">TRIP <span>BOOKING</span></div>
  </div>
  <div class="header-actions">
-  <select id="language" aria-label="Language" onchange="changeLanguage(this.value)">
-   <option value="en">English</option>
-   <option value="my">မြန်မာ</option>
-   <option value="zh">中文</option>
-  </select>
   <button class="btn-light" id="themeToggle" onclick="toggleTheme()">🌙</button>
-  <button class="btn btn-success hidden" id="exclusiveAdminBtn" onclick="openStaffModalFromAccount('admin')" data-i18n="adminBtn">Admin</button>
-  <button class="btn btn-success hidden" id="exclusiveCsBtn" onclick="openStaffModalFromAccount('cs')" data-i18n="csBtn">CS</button>
+  <button class="btn btn-success hidden" id="exclusiveAdminBtn" onclick="openStaffModalFromAccount('admin')">Admin</button>
+  <button class="btn btn-success hidden" id="exclusiveCsBtn" onclick="openStaffModalFromAccount('cs')">CS</button>
   <button class="btn" id="headerAuth" onclick="openAuth('login')">Login</button>
  </div>
 </header>
@@ -295,34 +291,34 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <!-- HOME -->
 <section class="page active" id="homePage">
  <div class="activity-ticker" id="activityTicker">
-  <span>🔔 <span data-i18n="liveTicker">Live</span>:</span> <div id="tickerText" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Loading live activity feed...</div>
+  <span>🔔 <span>Live</span>:</span> <div id="tickerText" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Loading live activity feed...</div>
  </div>
 
  <div class="hero">
-  <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-  <p data-i18n="heroDesc">International Hotel Booking Platform</p>
+  <h1>Welcome to Trip Booking</h1>
+  <p>International Hotel Booking Platform</p>
   <div style="margin-top:6px;font-size:13px;background:rgba(0,0,0,0.3);padding:4px 10px;border-radius:20px;display:inline-block">1 USD = 4,500 MMK</div>
-  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
+  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})">Explore Hotels</button>
  </div>
 
  <div class="section-title">
-  <h2 data-i18n="featHotels">Featured Hotels</h2>
-  <span class="muted" data-i18n="topDest">Top destinations</span>
+  <h2>Featured Hotels</h2>
+  <span class="muted">Top destinations</span>
  </div>
  <div class="hotel-grid" id="featuredHotels"></div>
 
  <div class="section-title" id="hotelDirectory">
-  <h2 data-i18n="hotelDir">Hotel Directory (Global Hotels)</h2>
+  <h2>Hotel Directory (Global Hotels)</h2>
   <div class="filter-bar">
-   <input id="hotelSearch" placeholder="Search hotel or country" data-i18n-placeholder="searchPlaceholder" oninput="renderHotels()">
+   <input id="hotelSearch" placeholder="Search hotel or country" oninput="renderHotels()">
    <select id="starFilter" onchange="renderHotels()">
-    <option value="all" data-i18n="allStars">All Stars ⭐</option>
+    <option value="all">All Stars ⭐</option>
     <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
     <option value="4">4 Stars ⭐⭐⭐⭐</option>
     <option value="3">3 Stars ⭐⭐⭐</option>
    </select>
    <select id="priceFilter" onchange="renderHotels()">
-    <option value="all" data-i18n="allPrices">All Prices 💰</option>
+    <option value="all">All Prices 💰</option>
     <option value="under150">Under $150</option>
     <option value="150to300">$150 - $300</option>
     <option value="over300">Over $300</option>
@@ -334,14 +330,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- SUPPORT -->
 <section class="page" id="supportPage">
- <div class="section-title"><h2 data-i18n="csCenter">Customer Service Center</h2></div>
+ <div class="section-title"><h2>Customer Service Center</h2></div>
  <div class="chat-window" style="max-width:900px;margin:0 auto">
   <div class="chat-header">
    <div style="display:flex;align-items:center;gap:10px">
     <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120" style="width:40px;height:40px;border-radius:50%;object-fit:cover" alt="CS Agent">
     <div>
      <div style="font-size:15px">Trip Booking Service (Online)</div>
-     <div class="muted" style="font-size:11px" data-i18n="csHelp24">We are here to help you 24/7</div>
+     <div class="muted" style="font-size:11px">We are here to help you 24/7</div>
     </div>
    </div>
    <div>🔊 ✕</div>
@@ -349,7 +345,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="chat-messages" id="supportMessages" style="height:450px"></div>
   <div class="chat-footer">
    <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-   <input id="supportInput" type="text" placeholder="Type your message here..." data-i18n-placeholder="typeMsg" style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
+   <input id="supportInput" type="text" placeholder="Type your message here..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
@@ -357,16 +353,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- HISTORY -->
 <section class="page" id="historyPage">
- <div class="section-title"><h2 data-i18n="histTitle">Booking & Transaction History</h2></div>
+ <div class="section-title"><h2>Booking & Transaction History</h2></div>
  <div class="panel">
-  <h3 data-i18n="transTitle">Transactions & Referral Bonuses</h3>
+  <h3>Transactions & Referral Bonuses</h3>
   <div class="table-wrap">
    <table>
-    <thead><tr><th data-i18n="thDate">Date</th><th data-i18n="thType">Type</th><th data-i18n="thAmount">Amount</th><th data-i18n="thStatus">Status</th></tr></thead>
+    <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
     <tbody id="historyRows"></tbody>
    </table>
   </div>
-  <h3 style="margin-top:20px" data-i18n="bookingRec">Booking Records</h3>
+  <h3 style="margin-top:20px">Booking Records</h3>
   <div id="bookingHistory"></div>
  </div>
 </section>
@@ -374,17 +370,17 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <!-- BOOKING TASK CENTER -->
 <section class="page" id="bookingPage">
  <div class="section-title">
-  <h2 data-i18n="taskCenter">Booking Task Center</h2>
+  <h2>Booking Task Center</h2>
  </div>
  <div class="panel">
   <div class="stats">
-   <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
+   <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
+   <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
+   <div class="stat-box"><span>Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
    <div class="stat-box">
-     <span data-i18n="dailyLimit">Daily Task Limit 📊</span>
+     <span>Daily Task Limit 📊</span>
      <strong id="orderCircle">0/30</strong>
-     <button class="glowing-btn" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get order</button>
+     <button class="glowing-btn" onclick="triggerGetOrder()">Get order</button>
    </div>
   </div>
 
@@ -392,11 +388,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <span id="orderProgress" style="display:block;height:100%;width:0;background:var(--fb-primary);transition:width .3s"></span>
   </div>
 
-  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(0,179,134,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)" data-i18n="taskCompleteMsg">
+  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(0,179,134,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)">
    🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆
   </div>
 
-  <div id="specialTaskAlert" class="hidden" style="background:rgba(255,77,77,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600" data-i18n="specialTaskMsg">
+  <div id="specialTaskAlert" class="hidden" style="background:rgba(255,77,77,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600">
    ⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.
   </div>
 
@@ -406,14 +402,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- PROFILE -->
 <section class="page" id="profilePage">
- <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
+ <div class="section-title"><h2>My Profile</h2></div>
 
  <div class="panel" id="guestAuthActions">
   <div style="text-align:center;padding:20px">
-   <h2 data-i18n="welcomeTrip">Welcome To Trip Booking</h2>
-   <p class="muted" data-i18n="loginPrompt">Please login or register to manage your account.</p>
-   <button class="btn btn-block" onclick="openAuth('register')" style="margin-top:14px" data-i18n="createAcc">Create Account</button>
-   <button class="btn btn-light btn-block" onclick="openAuth('login')" style="margin-top:8px" data-i18n="loginBtn">Login</button>
+   <h2>Welcome To Trip Booking</h2>
+   <p class="muted">Please login or register to manage your account.</p>
+   <button class="btn btn-block" onclick="openAuth('register')" style="margin-top:14px">Create Account</button>
+   <button class="btn btn-light btn-block" onclick="openAuth('login')" style="margin-top:8px">Login</button>
   </div>
  </div>
 
@@ -427,25 +423,25 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div class="stats" style="margin-top:14px">
-   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="vipLevelTitle">VIP Level</span><strong id="vipLevel" style="color:var(--fb-primary)">LV1</strong></div>
-   <div class="stat-box"><span data-i18n="completedBookings">Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
-   <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="refBonus">Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="invitedFriends">Invited Friends</span><strong id="invitedCount">0</strong></div>
-   <div class="stat-box"><span data-i18n="inviteCodeTitle">Invite Code</span><strong id="inviteCode">-</strong></div>
+   <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span>VIP Level</span><strong id="vipLevel" style="color:var(--fb-primary)">LV1</strong></div>
+   <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
+   <div class="stat-box" style="border-top-color:var(--fb-success)"><span>Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
+   <div class="stat-box"><span>Invited Friends</span><strong id="invitedCount">0</strong></div>
+   <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
   </div>
 
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3 data-i18n="vipTiersHead">VIP Membership Levels & Limits</h3>
-   <p class="muted small" data-i18n="vipTiersDesc">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
+   <h3>VIP Membership Levels & Limits</h3>
+   <p class="muted small">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
    <div class="vip-grid" id="vipTiersDisplay"></div>
   </div>
 
   <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3 data-i18n="refProgramHead">Invitation & Referral Program</h3>
-   <p class="muted small" data-i18n="refProgramDesc">Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
+   <h3>Invitation & Referral Program</h3>
+   <p class="muted small">Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
    <input id="inviteLink" readonly style="margin:8px 0">
-   <button class="btn btn-block" onclick="copyInviteLink()" data-i18n="copyInviteBtn">Copy Invitation Link</button>
+   <button class="btn btn-block" onclick="copyInviteLink()">Copy Invitation Link</button>
   </div>
 
   <div style="display:flex;gap:10px;margin-top:14px">
@@ -453,7 +449,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="btn btn-danger" style="flex:1" onclick="redirectToCS('withdraw')">🏦 Withdraw (CS)</button>
   </div>
 
-  <button class="btn btn-danger btn-block" style="margin-top:10px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
+  <button class="btn btn-danger btn-block" style="margin-top:10px" onclick="logout()">Log Out</button>
  </div>
 </section>
 
@@ -464,7 +460,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <h2 id="staffRoleTitle">Staff Management Center</h2>
    <span class="tag" id="staffRoleBadge">ROLE</span>
   </div>
-  <button class="btn btn-light" onclick="staffLogout()" data-i18n="exitStaff">Exit Staff</button>
+  <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
  </div>
 
  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="staffNavTabs">
@@ -610,19 +606,19 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div>
    <h4>Trip Booking</h4>
    <p>International Hotel Booking & Travel Platform.</p>
-   <div class="app-btn" onclick="installMobileApp()">
+   <div class="app-btn" onclick="triggerInstallApp()">
     📱 Install Phone App
    </div>
   </div>
   <div>
-   <h4 data-i18n="quickLinks">Quick Links</h4>
+   <h4>Quick Links</h4>
    <a href="#" onclick="showPage('homePage')">Home</a>
    <a href="#" onclick="showPage('supportPage')">Customer Support</a>
    <a href="#" onclick="showPage('bookingPage')">Booking Tasks</a>
    <a href="#" onclick="showPage('profilePage')">My Profile</a>
   </div>
   <div>
-   <h4 data-i18n="contactInfo">Contact Information</h4>
+   <h4>Contact Information</h4>
    <p>Address: 12101 Dry Valley Road North, Seattle</p>
    <p>Telephone: 1-855-266-9299</p>
    <p>Email: cs-reply@tripbooking.com</p>
@@ -631,11 +627,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </footer>
 
 <nav class="bottom-nav">
- <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
- <button onclick="showPage('supportPage',this)"><span class="nav-icon">📱</span><span data-i18n="navSupport">Support</span></button>
- <button class="booking-nav" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
- <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
- <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
+ <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span>Home</span></button>
+ <button onclick="showPage('supportPage',this)"><span class="nav-icon">📱</span><span>Support</span></button>
+ <button class="booking-nav" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span>Get Order</span></button>
+ <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span>History</span></button>
+ <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span>Profile</span></button>
 </nav>
 
 <!-- MODALS -->
@@ -654,6 +650,41 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <h2 style="color:var(--fb-success);margin-bottom:8px">Booking Confirmed!</h2>
   <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
   <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px;background:var(--fb-success);color:white">Awesome, Continue</button>
+ </div>
+</div>
+
+<!-- PLAY STORE / PWA INSTALL SIMULATOR MODAL -->
+<div class="modal hidden" id="pwaInstallModal">
+ <div class="modal-box" style="text-align:center">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;text-align:left">
+   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" style="width:55px;height:55px;border-radius:12px;object-fit:cover">
+   <div>
+    <h3 style="margin:0">Trip Booking App</h3>
+    <p class="muted small" style="margin:2px 0 0">Official Travel & Hotel Booking Platform</p>
+    <div class="small" style="color:var(--fb-success);margin-top:2px">★ 4.8 · 10M+ Downloads · Rated for 3+</div>
+   </div>
+  </div>
+  
+  <div id="installProgressArea" style="margin:20px 0">
+   <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+    <span id="installStatusText">Installing Trip Booking...</span>
+    <strong id="installPercent">0%</strong>
+   </div>
+   <div style="height:10px;background:var(--fb-border);border-radius:5px;overflow:hidden">
+    <div id="installProgressBar" style="height:100%;width:0%;background:var(--fb-success);transition:width 0.1s linear"></div>
+   </div>
+  </div>
+
+  <div id="installCompleteArea" class="hidden" style="margin:16px 0">
+   <div style="font-size:32px;margin-bottom:6px">🎉</div>
+   <h4 style="margin:0 0 6px;color:var(--fb-success)">App Installed Successfully!</h4>
+   <p class="muted small">Trip Booking has been added to your phone home screen.</p>
+  </div>
+
+  <div id="installButtons" class="hidden" style="display:flex;gap:10px;margin-top:16px">
+   <button class="btn-light btn" style="flex:1" onclick="closeModal('pwaInstallModal')">Close (Browser)</button>
+   <button class="btn btn-success" style="flex:1" onclick="openStandaloneApp()">Open App</button>
+  </div>
  </div>
 </div>
 
@@ -737,7 +768,6 @@ const KEYS = {
  theme: "tb_theme_v30",
  activity: "tb_activity_v30",
  finance: "tb_finance_v20",
- lang: "tb_lang_v20",
  staffCreds: "tb_staff_creds_v20",
  hotels: "tb_hotels_v20",
  vipConfig: "tb_vip_config_v20"
@@ -827,7 +857,60 @@ function showPage(pageId, btnEl) {
  if(pageId === 'profilePage') renderProfile();
 }
 
-// Auth Logic & Duplicate Prevention
+// Play Store / App Installation Simulator
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+ e.preventDefault();
+ deferredPrompt = e;
+});
+
+function triggerInstallApp() {
+ $('installProgressArea').classList.remove('hidden');
+ $('installCompleteArea').classList.add('hidden');
+ $('installButtons').classList.add('hidden');
+ $('installProgressBar').style.width = '0%';
+ $('installPercent').textContent = '0%';
+ $('installStatusText').textContent = 'Downloading Trip Booking (48.5 MB)...';
+ $('pwaInstallModal').classList.remove('hidden');
+
+ // Native PWA install prompt if available
+ if (deferredPrompt) {
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+   if (choiceResult.outcome === 'accepted') {
+    console.log('User accepted the install prompt');
+   }
+   deferredPrompt = null;
+  });
+ }
+
+ let progress = 0;
+ const interval = setInterval(() => {
+  progress += Math.floor(Math.random() * 12) + 5;
+  if(progress >= 100) {
+   progress = 100;
+   clearInterval(interval);
+   $('installStatusText').textContent = 'Installation Complete!';
+   $('installProgressBar').style.width = '100%';
+   $('installPercent').textContent = '100%';
+   $('installProgressArea').classList.add('hidden');
+   $('installCompleteArea').classList.remove('hidden');
+   $('installButtons').classList.remove('hidden');
+  } else {
+   $('installProgressBar').style.width = progress + '%';
+   $('installPercent').textContent = progress + '%';
+   if(progress > 60) $('installStatusText').textContent = 'Installing Trip Booking app...';
+  }
+ }, 150);
+}
+
+function openStandaloneApp() {
+ closeModal('pwaInstallModal');
+ // Enter App Mode (simulated immersive app experience)
+ document.body.style.transform = 'scale(1)';
+ showAlert('Trip Booking App opened in immersive mode! Enjoy seamless booking experience.');
+}
+
 function openAuth(mode) {
  db.authMode = mode;
  $('authTitle').textContent = mode === 'login' ? 'Login' : 'Create Account';
@@ -854,7 +937,6 @@ function submitAuth() {
   const name = $('regName').value.trim() || 'User';
   const invite = $('regInvite').value.trim();
   
-  // Check duplicate phone/email across all users
   const exists = db.users.find(u => u.identity.toLowerCase() === identity.toLowerCase());
   if(exists) {
    $('authMessage').textContent = 'This phone number or email is already registered! Please log in instead.';
@@ -864,7 +946,6 @@ function submitAuth() {
   const newId = String(Math.floor(100000 + Math.random() * 900000));
   const inviteCode = String(Math.floor(1000 + Math.random() * 9000)) + String.fromCharCode(65+Math.floor(Math.random()*26)) + String.fromCharCode(65+Math.floor(Math.random()*26));
   
-  let refBonusEarned = 0;
   if(invite) {
    const referrer = db.users.find(u => u.inviteCode === invite);
    if(referrer) {
@@ -902,7 +983,6 @@ function submitAuth() {
   checkExclusiveStaffAccess();
   showPage('profilePage');
  } else {
-  // Login
   if(identity === '09775191427' && password === 'Mary1245@') {
    closeModal('authModal');
    openStaffModalFromAccount('admin');
@@ -983,7 +1063,7 @@ function switchStaffTab(tab) {
   if(el) el.classList.add('hidden');
  });
  
- if(tab === 'adminUsers') $('adminWorkspace').classList.remove('hidden');
+ if(tab === 'adminUsers') { $('adminWorkspace').classList.remove('hidden'); renderAdminTable(); }
  if(tab === 'adminHotels') { $('adminHotelsWorkspace').classList.remove('hidden'); renderAdminHotels(); }
  if(tab === 'adminVipConfig') { $('adminVipConfigWorkspace').classList.remove('hidden'); renderAdminVipConfig(); }
  if(tab === 'adminFinance') { $('adminFinanceWorkspace').classList.remove('hidden'); renderAdminFinance(); }
@@ -998,7 +1078,6 @@ function switchStaffTab(tab) {
  }
 }
 
-// Render Hotels Directory
 function renderHotels() {
  const query = ($('hotelSearch') ? $('hotelSearch').value : '').toLowerCase();
  const star = $('starFilter').value;
@@ -1053,7 +1132,6 @@ function bookHotel(price, name) {
  showPage('bookingPage');
 }
 
-// Booking Tasks with VIP Rules & Custom Admin Profit/Negative
 let adminTableEditMode = false;
 
 function renderBookingTasks() {
@@ -1114,7 +1192,6 @@ function executeTask(price, name) {
  const user = db.current;
  const vip = db.vipConfig[user.vip] || db.vipConfig['LV1'];
  
- // Exact calculation: price * rate
  let rate = user.profitBoxCustom !== null ? user.profitBoxCustom : vip.rate;
  let comm = price * (rate / 100);
 
@@ -1137,7 +1214,6 @@ function executeTask(price, name) {
   date: new Date().toLocaleString()
  });
 
- // Referral commission to inviter if exists
  if(user.invitedBy && user.invitedBy !== '-') {
   const referrer = db.users.find(u => u.inviteCode === user.invitedBy);
   if(referrer) {
@@ -1160,7 +1236,6 @@ function executeTask(price, name) {
  renderBookingTasks();
 }
 
-// Profile & VIP Tiers
 function renderProfile() {
  if(!db.current) {
   $('guestAuthActions').classList.remove('hidden');
@@ -1210,7 +1285,6 @@ function redirectToCS(type) {
  sendAutomaticCSMessage(msg);
 }
 
-// History
 function renderHistory() {
  if(!db.current) {
   $('historyRows').innerHTML = '<tr><td colspan="4" style="text-align:center">Please login first.</td></tr>';
@@ -1230,7 +1304,6 @@ function renderHistory() {
  `).join('') : '<p class="muted">No booking records yet.</p>';
 }
 
-// Admin Users Management & Editing
 function renderAdminTable() {
  const tbody = $('adminTableRows');
  tbody.innerHTML = db.users.map((u, index) => {
@@ -1301,7 +1374,7 @@ function saveTableEditMode() {
   u.name = $('ed_name_' + index).value;
   u.vip = $('ed_vip_' + index).value;
   u.wallet = parseFloat($('ed_wal_' + index).value) || 0;
-  u.negativeBalance = parseFloat($('ed_neg_'  + index).value) || 0;
+  u.negativeBalance = parseFloat($('ed_neg_' + index).value) || 0;
   u.profitBoxCustom = parseFloat($('ed_pro_' + index).value);
   u.ordersCompleted = parseInt($('ed_ord_' + index).value) || 0;
  });
@@ -1367,7 +1440,6 @@ function openUserDetailModal(index) {
  $('adminUserDetailModal').classList.remove('hidden');
 }
 
-// Hotel Management
 function renderAdminHotels() {
  $('adminHotelTableRows').innerHTML = db.hotels.map((h, i) => `
   <tr>
@@ -1439,7 +1511,6 @@ function deleteHotel(i) {
  }
 }
 
-// VIP Config Control
 function renderAdminVipConfig() {
  $('adminVipTableRows').innerHTML = Object.keys(db.vipConfig).map(k => {
   const v = db.vipConfig[k];
@@ -1463,7 +1534,6 @@ function saveVipConfig(k) {
  showAlert('VIP Tier ' + k + ' updated.');
 }
 
-// Finance Requests
 function renderAdminFinance() {
  $('adminFinanceRows').innerHTML = db.finance.length ? db.finance.map((f, i) => `
   <tr>
@@ -1501,7 +1571,6 @@ function saveStaffCredentials() {
  showAlert('Staff passwords updated successfully!');
 }
 
-// Customer Service Chat Support
 function renderStaffClientList() {
  const q = ($('csSearch') ? $('csSearch').value : '').toLowerCase();
  const filtered = db.users.filter(u => u.name.toLowerCase().includes(q) || u.id.includes(q));
@@ -1545,7 +1614,7 @@ function renderStaffMessages() {
 function sendSupportMessage() {
  const text = $('supportInput').value.trim();
  if(!text) return;
- $('supportInput').value = '';
+ $('supportInput').value = ';';
  
  if(!db.current) {
   showAlert('Please login first to chat with support.');
@@ -1589,11 +1658,6 @@ function appendSupportChar(char) {
  if(activeInput) activeInput.value += char;
 }
 
-function installMobileApp() {
- showAlert('Trip Booking App is ready for installation. Add to Home Screen from your browser menu.');
-}
-
-// Initialization on load
 window.addEventListener('DOMContentLoaded', () => {
  if (localStorage.getItem(KEYS.theme) === 'dark') {
   document.body.classList.add('dark');
