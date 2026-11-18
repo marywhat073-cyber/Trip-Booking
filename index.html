@@ -61,7 +61,7 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
  background:linear-gradient(135deg,rgba(7,26,26,0.95),rgba(15,43,43,0.9)),
- url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ url("https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600") center/cover;
  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:white;
  overflow:hidden;
 }
@@ -95,6 +95,7 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
  animation: pulseButton 1.5s infinite;
  transition: 0.3s;
+ z-index: 10000;
 }
 .go-trip-btn:hover {
  background: #ffffff;
@@ -149,7 +150,7 @@ header{
 .hero{
  min-height:230px;border-radius:14px;overflow:hidden;
  background:linear-gradient(135deg,rgba(0,102,204,0.85),rgba(0,40,80,0.6)),
- url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ url("https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600") center/cover;
  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;color:white;
  box-shadow:var(--shadow);
 }
@@ -230,7 +231,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <option value="en">English</option>
   </select>
   <button class="btn-light" id="themeToggle" onclick="toggleTheme()">🌙</button>
-  <button class="btn" id="headerAuthBtn" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
+  <button class="btn" id="headerAuthBtn" onclick="openAuth('login')">Login</button>
  </div>
 </header>
 
@@ -245,13 +246,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="hero">
-  <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-  <p data-i18n="heroDesc">International Hotel Booking Platform</p>
-  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')" data-i18n="startTaskBtn">Start Booking Tasks</button>
+  <h1>Welcome to Trip Booking</h1>
+  <p>International Hotel Booking Platform</p>
+  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')">Start Booking Tasks</button>
  </div>
 
  <div class="section-title">
-  <h2 data-i18n="hotelDir">နိုင်ငံတကာ ဟိုတယ်များ (277+ Hotels)</h2>
+  <h2>နိုင်ငံတကာ ဟိုတယ်များ (277+ Hotels)</h2>
   <input id="hotelSearch" placeholder="Search hotel or country..." style="max-width:220px" oninput="renderHotels()">
  </div>
  <div class="hotel-grid" id="hotelGrid"></div>
@@ -259,7 +260,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- CUSTOMER SERVICE PAGE -->
 <section class="page" id="supportPage">
- <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
+ <div class="section-title"><h2>Trip Booking Service</h2></div>
  <div class="chat-window" style="max-width:850px;margin:0 auto">
   <div class="chat-header" style="background:var(--fb-primary)">
    <span>🎧 Trip Booking Service (24/7 Online)</span>
@@ -288,16 +289,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- BOOKING TASK CENTER -->
 <section class="page" id="bookingPage">
- <div class="section-title"><h2 data-i18n="taskCenter">Booking Task Center</h2></div>
+ <div class="section-title"><h2>Booking Task Center</h2></div>
  <div class="panel">
   <div class="stats">
-   <div class="stat-box"><span data-i18n="accBal">Account Balance</span><strong id="taskWallet">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="taskComm">Task Commission</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="totalProfit">Total Profit</span><strong id="taskTotalProfit">$0.00</strong></div>
+   <div class="stat-box"><span>Account Balance</span><strong id="taskWallet">$0.00</strong></div>
+   <div class="stat-box"><span>Task Commission</span><strong id="taskProfit">$0.00</strong></div>
+   <div class="stat-box"><span>Total Profit</span><strong id="taskTotalProfit">$0.00</strong></div>
    <div class="stat-box">
-    <span data-i18n="dailyLimit">Daily Orders</span>
+    <span>Daily Orders</span>
     <strong id="orderCircle">0/30</strong>
-    <button class="btn btn-success btn-block" style="margin-top:8px" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get Order</button>
+    <button class="btn btn-success btn-block" style="margin-top:8px" onclick="triggerGetOrder()">Get Order</button>
    </div>
   </div>
   <div id="bookingHotelArea" style="margin-top:16px"></div>
@@ -306,17 +307,17 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- TRANSACTION HISTORY PAGE -->
 <section class="page" id="historyPage">
- <div class="section-title"><h2 data-i18n="histTitle">Transaction & Booking History</h2></div>
+ <div class="section-title"><h2>Transaction & Booking History</h2></div>
  <div class="panel">
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th data-i18n="thDate">Date</th>
-      <th data-i18n="thType">Type</th>
+      <th>Date</th>
+      <th>Type</th>
       <th>Details</th>
-      <th data-i18n="thAmount">Amount</th>
-      <th data-i18n="thStatus">Status</th>
+      <th>Amount</th>
+      <th>Status</th>
      </tr>
     </thead>
     <tbody id="historyRows"></tbody>
@@ -327,14 +328,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- PROFILE PAGE -->
 <section class="page" id="profilePage">
- <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
+ <div class="section-title"><h2>My Profile</h2></div>
 
  <div class="panel" id="guestAuthBox" style="text-align:center;padding:24px">
-  <h3 data-i18n="welcomeTrip">Welcome to Trip Booking</h3>
-  <p class="muted" data-i18n="loginPrompt">Login or create a new account to start earning commissions.</p>
+  <h3>Welcome to Trip Booking</h3>
+  <p class="muted">Login or create a new account to start earning commissions.</p>
   <div style="display:flex;gap:10px;max-width:340px;margin:16px auto 0">
-   <button class="btn" style="flex:1" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
-   <button class="btn btn-success" style="flex:1" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
+   <button class="btn" style="flex:1" onclick="openAuth('login')">Login</button>
+   <button class="btn btn-success" style="flex:1" onclick="openAuth('register')">Register</button>
   </div>
  </div>
 
@@ -354,21 +355,21 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div class="stats">
-   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="completedBookings">Completed Orders</span><strong id="profileOrders">0/30</strong></div>
-   <div class="stat-box"><span data-i18n="inviteCodeTitle">Referral Code</span><strong id="inviteCode" style="color:#00b3b3">TP0000</strong></div>
-   <div class="stat-box"><span data-i18n="refBonus">Referral Earned</span><strong id="referralEarned">$0.00</strong></div>
+   <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span>Completed Orders</span><strong id="profileOrders">0/30</strong></div>
+   <div class="stat-box"><span>Referral Code</span><strong id="inviteCode" style="color:#00b3b3">TP0000</strong></div>
+   <div class="stat-box"><span>Referral Earned</span><strong id="referralEarned">$0.00</strong></div>
   </div>
 
   <div style="display:flex;gap:10px;margin:14px 0">
-   <button class="btn btn-success" style="flex:1" onclick="handleDepositRequest()" data-i18n="depositBtn">💳 Deposit</button>
-   <button class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">🏦 Withdraw</button>
+   <button class="btn btn-success" style="flex:1" onclick="handleDepositRequest()">💳 Deposit</button>
+   <button class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()">🏦 Withdraw</button>
   </div>
 
-  <h3 style="margin-top:20px" data-i18n="vipTiersHead">VIP Levels & Limits</h3>
+  <h3 style="margin-top:20px">VIP Levels & Limits</h3>
   <div class="vip-grid" id="vipTiersDisplay"></div>
 
-  <button class="btn btn-danger btn-block" style="margin-top:20px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
+  <button class="btn btn-danger btn-block" style="margin-top:20px" onclick="logout()">Log Out</button>
  </div>
 </section>
 
@@ -420,11 +421,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </main>
 
 <nav class="bottom-nav">
- <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
- <button onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span data-i18n="navSupport">Service</span></button>
- <button onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
- <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
- <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
+ <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span>Home</span></button>
+ <button onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span>Service</span></button>
+ <button onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span>Get Order</span></button>
+ <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span>History</span></button>
+ <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span>Profile</span></button>
 </nav>
 
 <!-- AUTH MODAL -->
@@ -535,9 +536,14 @@ function handleLogoClick() {
 function closeSplashAndEnter() {
  const splash = $("splashScreen");
  if(splash) {
-  splash.style.transition = "opacity 0.5s ease";
+  splash.style.transition = "opacity 0.4s ease";
   splash.style.opacity = "0";
-  setTimeout(() => splash.remove(), 500);
+  setTimeout(() => {
+   splash.remove();
+   showPage('homePage');
+  }, 400);
+ } else {
+  showPage('homePage');
  }
 }
 
