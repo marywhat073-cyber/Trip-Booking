@@ -70,38 +70,6 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
 }
 
-#cinematicIntro{
- position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
- background:linear-gradient(135deg,rgba(0,38,38,0.94),rgba(0,95,95,0.9)),
- url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
- display:flex;flex-direction:column;align-items:center;justify-content:center;
- overflow:hidden;color:white;padding:20px;
- transition:opacity 0.7s ease, visibility 0.7s ease;
-}
-#cinematicIntro.fade-out{opacity:0;visibility:hidden;pointer-events:none;}
-.intro-top-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;}
-.intro-logo{
- width:74px;height:74px;border-radius:50%;object-fit:cover;
- border:3px solid #00ffcc;box-shadow:0 0 25px rgba(0,255,204,0.5);
- opacity:0;transform:translateX(-110vw);
- animation:logoFromLeft 1.1s cubic-bezier(0.22,1,0.36,1) forwards;
-}
-@keyframes logoFromLeft{to{opacity:1;transform:translateX(0);}}
-.intro-welcome{
- font-size:clamp(22px,4.5vw,36px);font-weight:800;margin:0;
- text-shadow:0 4px 15px rgba(0,0,0,0.5);
- opacity:0;transform:translateX(110vw);
- animation:textFromRight 1.1s cubic-bezier(0.22,1,0.36,1) forwards;
-}
-@keyframes textFromRight{to{opacity:1;transform:translateX(0);}}
-.intro-scatter-wrap{
- display:flex;flex-wrap:wrap;justify-content:center;gap:2px;
- font-size:clamp(15px,3vw,22px);font-weight:600;color:#b2ffff;
- letter-spacing:1px;min-height:32px;
-}
-.scatter-char{display:inline-block;opacity:0;transition:transform 1.1s cubic-bezier(0.16,1,0.3,1), opacity 0.9s ease;}
-.scatter-char.gathered{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)!important;}
-
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
  z-index:30;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
@@ -197,14 +165,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<div id="cinematicIntro">
- <div class="intro-top-row">
-  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="intro-logo" alt="Logo">
-  <h1 class="intro-welcome">Welcome to Trip Booking</h1>
- </div>
- <div class="intro-scatter-wrap" id="scatterSubtitle"></div>
-</div>
-
 <header>
  <div class="logo-container" onclick="showPage('homePage', document.querySelectorAll('.bottom-nav button')[0])">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
@@ -232,8 +192,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="hero">
-  <h1>Welcome to Trip Booking</h1>
-  <p>International Trip Booking Platform</p>
+  <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
+  <p data-i18n="heroSub">International Trip Booking Platform</p>
   <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')" data-i18n="startTaskBtn">Start Booking Tasks</button>
  </div>
 
@@ -243,7 +203,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
  <div class="hotel-grid" id="hotelGrid"></div>
  <div style="text-align:center;margin-top:18px" id="loadMoreHotelsWrap">
-  <button class="btn btn-light" onclick="showAllHotels()">Show All 238 Hotels</button>
+  <button class="btn btn-light" onclick="showAllHotels()" data-i18n="showAllHotelsBtn">Show All 238 Hotels</button>
  </div>
 </section>
 
@@ -251,7 +211,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
  <div class="chat-window" style="max-width:850px;margin:0 auto">
   <div class="chat-header">
-   <span>🎧 Trip Booking Service (24/7 Online)</span>
+   <span data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</span>
    <span class="small">● Active</span>
   </div>
   <div class="chat-messages" id="supportMessages"></div>
@@ -263,7 +223,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div class="chat-footer">
-   <input id="supportInput" type="text" placeholder="Type a message..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
+   <input id="supportInput" type="text" placeholder="Type a message..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()" data-i18n-ph="typeMsgPh">
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
@@ -295,7 +255,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
      <tr>
       <th data-i18n="thDate">Date</th>
       <th data-i18n="thType">Type</th>
-      <th>Details</th>
+      <th data-i18n="thDetails">Details</th>
       <th data-i18n="thAmount">Amount (USD / MMK)</th>
       <th data-i18n="thStatus">Status</th>
      </tr>
@@ -338,7 +298,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="stats">
    <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00 (0 MMK)</strong></div>
    <div class="stat-box"><span data-i18n="completedBookings">Completed Orders</span><strong id="profileOrders">0/30</strong></div>
-   <div class="stat-box"><span data-i18n="inviteCodeTitle">Referral Code</span><strong id="inviteCode" style="color:var(--fb-primary)">TP0000</strong></div>
+   <div class="stat-box"><span data-i18n="inviteCodeTitle">Referral Code</span><strong id="inviteCode" style="color:var(--fb-primary)">TP2323</strong></div>
    <div class="stat-box"><span data-i18n="refBonus">Referral Earned</span><strong id="referralEarned">$0.00 (0 MMK)</strong></div>
   </div>
 
@@ -361,23 +321,23 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="sync-badge"><span class="sync-dot"></span> Live Cross-Device Sync Active (<span id="totalUsersBadge">0</span> Users)</div>
   </div>
   <div style="display:flex;gap:8px">
-   <button class="btn btn-success" onclick="forceSyncNow()">🔄 REFRESH</button>
-   <button class="btn btn-danger" onclick="logout()">Logout</button>
+   <button class="btn btn-success" onclick="forceSyncNow()" data-i18n="refreshBtn">🔄 REFRESH</button>
+   <button class="btn btn-danger" onclick="logout()" data-i18n="logoutBtn">Logout</button>
   </div>
  </div>
 
  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-  <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 USERS & VIP CONTROL (<span id="tabUsersCount">0</span>)</button>
-  <button class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')">🏨 HOTELS & RATES</button>
-  <button class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')">💬 TRIP BOOKING SERVICE CHAT</button>
+  <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')" data-i18n="tabUsers">👥 USERS & VIP CONTROL (<span id="tabUsersCount">0</span>)</button>
+  <button class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')" data-i18n="tabHotels">🏨 HOTELS & RATES</button>
+  <button class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')" data-i18n="tabCs">💬 TRIP BOOKING SERVICE CHAT</button>
  </div>
 
  <div id="adminUsersTab" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-   <h3>All Registered Users (Real-Time)</h3>
+   <h3 data-i18n="allUsersHead">All Registered Users (Real-Time)</h3>
    <div style="display:flex;gap:8px">
     <input id="adminUserSearch" placeholder="Search name, phone, email..." style="width:220px" oninput="renderAdminUsers()">
-    <button class="btn btn-success" onclick="saveAllUsersAdmin()">💾 Save All Changes</button>
+    <button class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">💾 Save All Changes</button>
    </div>
   </div>
   <div class="table-wrap">
@@ -385,16 +345,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
     <thead>
      <tr>
       <th>ID</th>
-      <th>Name</th>
-      <th>Phone / Email</th>
-      <th>Password</th>
-      <th>Referral</th>
-      <th>VIP Tier</th>
-      <th>Balance ($)</th>
+      <th data-i18n="thName">Name</th>
+      <th data-i18n="thPhoneEmail">Phone / Email</th>
+      <th data-i18n="thPass">Password</th>
+      <th data-i18n="thRef">Referral</th>
+      <th data-i18n="thVip">VIP Tier</th>
+      <th data-i18n="thBal">Balance ($)</th>
       <th>Neg ($)</th>
       <th>Profit Box ($)</th>
-      <th>Orders</th>
-      <th>Reset</th>
+      <th data-i18n="thOrders">Orders</th>
+      <th data-i18n="thReset">Reset</th>
      </tr>
     </thead>
     <tbody id="adminUsersRows"></tbody>
@@ -404,40 +364,40 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
  <div id="adminHotelsTab" class="panel hidden">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>Hotels & VIP Commission Rates</h3>
+   <h3 data-i18n="hotelsRatesHead">Hotels & VIP Commission Rates</h3>
    <div>
-    <button class="btn btn-success" onclick="openAddHotelModal()">+ Add Hotel</button>
-    <button class="btn" onclick="saveHotelsAndVipsAdmin()">💾 Save Rates & Hotels</button>
+    <button class="btn btn-success" onclick="openAddHotelModal()" data-i18n="addHotelBtn">+ Add Hotel</button>
+    <button class="btn" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">💾 Save Rates & Hotels</button>
    </div>
   </div>
-  <h4>VIP Tier Limits & Profit Rates</h4>
+  <h4 data-i18n="vipLimitsHead">VIP Tier Limits & Profit Rates</h4>
   <div class="table-wrap" style="margin-bottom:20px">
    <table>
     <thead>
      <tr>
-      <th>Level</th>
-      <th>Name</th>
-      <th>Daily Limit</th>
-      <th>Profit Rate (%)</th>
-      <th>Min Balance ($)</th>
-      <th>Max Balance / Withdraw Limit ($)</th>
+      <th data-i18n="thLevel">Level</th>
+      <th data-i18n="thName">Name</th>
+      <th data-i18n="thDailyLimit">Daily Limit</th>
+      <th data-i18n="thProfitRate">Profit Rate (%)</th>
+      <th data-i18n="thMinBal">Min Balance ($)</th>
+      <th data-i18n="thMaxLimit">Max Balance / Withdraw Limit ($)</th>
      </tr>
     </thead>
     <tbody id="adminVipRows"></tbody>
    </table>
   </div>
 
-  <h4>Hotel Directory & Prices</h4>
+  <h4 data-i18n="hotelDirPricesHead">Hotel Directory & Prices</h4>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
       <th>ID</th>
-      <th>Hotel Name</th>
-      <th>Country</th>
-      <th>Stars</th>
-      <th>Price ($)</th>
-      <th>Action</th>
+      <th data-i18n="thHotelName">Hotel Name</th>
+      <th data-i18n="thCountry">Country</th>
+      <th data-i18n="thStars">Stars</th>
+      <th data-i18n="thPrice">Price ($)</th>
+      <th data-i18n="thAction">Action</th>
      </tr>
     </thead>
     <tbody id="adminHotelsRows"></tbody>
@@ -447,15 +407,15 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
  <div id="adminCsTab" class="panel hidden" style="display:grid;grid-template-columns:250px 1fr;gap:14px">
   <div style="border-right:1px solid var(--fb-border);padding-right:10px;max-height:420px;overflow-y:auto">
-   <h4>All Registered Users</h4>
+   <h4 data-i18n="regUsersChatHead">All Registered Users</h4>
    <input id="csClientSearch" placeholder="Search user..." style="margin-bottom:8px;padding:6px 8px" oninput="renderCsClientList()">
    <div id="csClientList"></div>
   </div>
   <div>
-   <div class="chat-header"><span id="csActiveUserTitle">Select a user to chat</span></div>
+   <div class="chat-header"><span id="csActiveUserTitle" data-i18n="selectUserChat">Select a user to chat</span></div>
    <div class="chat-messages" id="adminChatMessages" style="height:310px"></div>
    <div class="chat-footer">
-    <input id="adminChatInput" placeholder="Reply as Trip Booking Service..." style="flex:1" onkeypress="if(event.key==='Enter') sendAdminChatReply()">
+    <input id="adminChatInput" placeholder="Reply as Trip Booking Service..." style="flex:1" onkeypress="if(event.key==='Enter') sendAdminChatReply()" data-i18n-ph="replyCsPh">
     <button class="btn" onclick="sendAdminChatReply()">➤</button>
    </div>
   </div>
@@ -475,21 +435,21 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h3 id="authTitle">Login</h3>
+   <h3 id="authTitle" data-i18n="loginModalTitle">Login</h3>
    <button class="close" onclick="closeModal('authModal')">✕</button>
   </div>
   <div id="regExtraFields" class="hidden">
    <label data-i18n="fullNameLabel">Full Name</label>
    <input id="regName" placeholder="Enter your full name">
-   <label>Referral Code (Optional, e.g. TP2323)</label>
+   <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
    <input id="regRefInput" placeholder="TP2323" value="TP2323">
   </div>
   <label data-i18n="identityLabel">Phone Number or Email (Unique)</label>
-  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com" value="09775191427">
+  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
   
   <label data-i18n="passwordLabel">Password</label>
   <div class="pass-wrap">
-   <input id="authPassword" type="password" placeholder="Enter password" value="12344321">
+   <input id="authPassword" type="password" placeholder="Enter password">
    <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
   </div>
 
@@ -504,22 +464,22 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div class="modal hidden" id="addHotelModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h3>Add New Hotel</h3>
+   <h3 data-i18n="addHotelModalHead">Add New Hotel</h3>
    <button class="close" onclick="closeModal('addHotelModal')">✕</button>
   </div>
-  <label>Hotel Name</label><input id="newHName">
-  <label>Country</label><input id="newHCountry">
-  <label>Price ($)</label><input id="newHPrice" type="number">
-  <label>Stars</label><input id="newHStars" type="number" value="5" min="1" max="5">
-  <button class="btn btn-success btn-block" style="margin-top:12px" onclick="addHotelToSupabase()">Save Hotel</button>
+  <label data-i18n="hotelNameLabel">Hotel Name</label><input id="newHName">
+  <label data-i18n="countryLabel">Country</label><input id="newHCountry">
+  <label data-i18n="priceLabel">Price ($)</label><input id="newHPrice" type="number">
+  <label data-i18n="starsLabel">Stars</label><input id="newHStars" type="number" value="5" min="1" max="5">
+  <button class="btn btn-success btn-block" style="margin-top:12px" onclick="addHotelToSupabase()" data-i18n="saveHotelBtn">Save Hotel</button>
  </div>
 </div>
 
 <div class="modal hidden" id="alertModal">
  <div class="modal-box" style="text-align:center">
-  <h3 id="alertTitle" style="color:var(--fb-primary)">Notification</h3>
+  <h3 id="alertTitle" style="color:var(--fb-primary)" data-i18n="alertTitleDefault">Notification</h3>
   <p id="alertBody" style="margin:14px 0"></p>
-  <button class="btn btn-block" onclick="closeModal('alertModal')">OK</button>
+  <button class="btn btn-block" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
  </div>
 </div>
 
@@ -537,39 +497,6 @@ function formatUsdWithMmk(usdVal) {
  const num = Number(usdVal) || 0;
  const mmk = Math.round(num * MMK_PER_USD).toLocaleString();
  return `$${num.toFixed(2)} (${mmk} MMK)`;
-}
-
-function playCinematicIntro() {
- const subtitleText = "International Trip Booking Platform";
- const container = $("scatterSubtitle");
- if(!container) return;
- container.innerHTML = "";
-
- const chars = subtitleText.split("").map(ch => {
-  const span = document.createElement("span");
-  span.className = "scatter-char";
-  span.innerHTML = ch === " " ? "&nbsp;" : ch;
-  const rx = (Math.random() - 0.5) * window.innerWidth * 1.3;
-  const ry = (Math.random() - 0.5) * window.innerHeight * 1.3;
-  const rot = (Math.random() - 0.5) * 360;
-  span.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.4)`;
-  container.appendChild(span);
-  return span;
- });
-
- setTimeout(() => {
-  chars.forEach((span, idx) => {
-   setTimeout(() => { span.classList.add("gathered"); }, idx * 22);
-  });
- }, 950);
-
- setTimeout(() => {
-  const intro = $("cinematicIntro");
-  if(intro) {
-   intro.classList.add("fade-out");
-   setTimeout(() => { intro.classList.add("hidden"); }, 750);
-  }
- }, 3300);
 }
 
 const VERIFIED_HOTEL_IMAGES = [
@@ -626,6 +553,186 @@ function build238Hotels() {
   list.push({ id: idStr, name: `${p} ${c} ${s} #${i}`, country: c, price: price, stars: stars, image: img });
  }
  return list;
+}
+
+let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
+let defaultHotelsList = build238Hotels();
+let allHotels = defaultHotelsList;
+let visibleHotelsLimit = 48;
+let allVipTiers = [
+ { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.0050, min_bal: 0, max_withdraw: 1000 },
+ { level: "LV2", name: "VIP 2", daily_limit: 35, profit_rate: 0.0080, min_bal: 500, max_withdraw: 5000 },
+ { level: "LV3", name: "VIP 3", daily_limit: 40, profit_rate: 0.0120, min_bal: 2000, max_withdraw: 20000 },
+ { level: "LV4", name: "VIP 4", daily_limit: 45, profit_rate: 0.0180, min_bal: 5000, max_withdraw: 50000 },
+ { level: "LV5", name: "VIP 5", daily_limit: 50, profit_rate: 0.0250, min_bal: 10000, max_withdraw: 100000 }
+];
+let currentUser = null;
+let authMode = "login";
+let activeTask = null;
+let selectedCsUserId = null;
+
+const I18N = {
+ my: {
+  loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
+  accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
+  dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
+  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
+  myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်အသစ်ဖွင့်မည်",
+  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
+  inviteCodeTitle: "မိတ်ဆက်ကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
+  withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
+  logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
+  navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
+  fullNameLabel: "အမည်ပြည့်စုံ", identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
+  passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
+  heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
+  showAllHotelsBtn: "ဟိုတယ် ၂၃၈ ခုလုံး ပြရန်", csHeader: "🎧 Trip Booking Service (24/7 Online)",
+  typeMsgPh: "စာရိုက်ရန်...", refreshBtn: "🔄 REFRESH", logoutBtn: "ထွက်ရန်",
+  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  allUsersHead: "မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)", saveChangesBtn: "💾 ပြောင်းလဲမှုများ သိမ်းမည်",
+  thName: "အမည်", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "မိတ်ဆက်",
+  thVip: "VIP အဆင့်", thBal: "လက်ကျန် ($)", thOrders: "အော်ဒါ", thReset: "အစပြန်ရန်",
+  hotelsRatesHead: "ဟိုတယ်များနှင့် VIP ကော်မရှင်နှုန်းထားများ", addHotelBtn: "+ ဟိုတယ်အသစ်ထည့်ရန်",
+  saveRatesBtn: "💾 နှုန်းထားများသိမ်းမည်", vipLimitsHead: "VIP အဆင့် ကန့်သတ်ချက်များနှင့် အမြတ်နှုန်းထားများ",
+  thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်ချက်", thProfitRate: "အမြတ်နှုန်း (%)",
+  thMinBal: "အနည်းဆုံးလက်ကျန် ($)", thMaxLimit: "အများဆုံးလက်ကျန် / ထုတ်ယူခွင့် ($)",
+  hotelDirPricesHead: "ဟိုတယ်စာရင်းနှင့် ဈေးနှုန်းများ", thHotelName: "ဟိုတယ်အမည်", thCountry: "နိုင်ငံ",
+  thStars: "ကြယ်ပွင့်", thPrice: "ဈေးနှုန်း ($)", thAction: "လုပ်ဆောင်ချက်", regUsersChatHead: "အသုံးပြုသူများ",
+  selectUserChat: "ချတ်လုပ်ရန် အသုံးပြုသူကို ရွေးပါ", replyCsPh: "Trip Booking Service အဖြစ် စာပြန်ရန်...",
+  loginModalTitle: "အကောင့်ဝင်ရန်", refCodeLabel: "မိတ်ဆက်ကုဒ် (ဥပမာ - TP2323)", addHotelModalHead: "ဟိုတယ်အသစ်ထည့်ရန်",
+  hotelNameLabel: "ဟိုတယ်အမည်", countryLabel: "နိုင်ငံ", priceLabel: "ဈေးနှုန်း ($)", starsLabel: "ကြယ်ပွင့်",
+  saveHotelBtn: "ဟိုတယ်သိမ်းမည်", alertTitleDefault: "အသိပေးချက်", okBtn: "OK"
+ },
+ en: {
+  loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
+  accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
+  dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
+  thDate: "Date", thType: "Type", thDetails: "Details", thAmount: "Amount (USD / MMK)", thStatus: "Status",
+  myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "Login or register a new account to start.", createAcc: "Register",
+  walletBal: "Wallet Balance", completedBookings: "Completed Orders",
+  inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
+  withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
+  logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
+  navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
+  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email",
+  passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register",
+  heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
+  showAllHotelsBtn: "Show All 238 Hotels", csHeader: "🎧 Trip Booking Service (24/7 Online)",
+  typeMsgPh: "Type a message...", refreshBtn: "🔄 REFRESH", logoutBtn: "Logout",
+  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  allUsersHead: "All Registered Users (Real-Time)", saveChangesBtn: "💾 Save All Changes",
+  thName: "Name", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "Referral",
+  thVip: "VIP Tier", thBal: "Balance ($)", thOrders: "Orders", thReset: "Reset",
+  hotelsRatesHead: "Hotels & VIP Commission Rates", addHotelBtn: "+ Add Hotel",
+  saveRatesBtn: "💾 Save Rates & Hotels", vipLimitsHead: "VIP Tier Limits & Profit Rates",
+  thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate (%)",
+  thMinBal: "Min Balance ($)", thMaxLimit: "Max Balance / Withdraw Limit ($)",
+  hotelDirPricesHead: "Hotel Directory & Prices", thHotelName: "Hotel Name", thCountry: "Country",
+  thStars: "Stars", thPrice: "Price ($)", thAction: "Action", regUsersChatHead: "All Registered Users",
+  selectUserChat: "Select a user to chat", replyCsPh: "Reply as Trip Booking Service...",
+  loginModalTitle: "Login", refCodeLabel: "Referral Code (Optional, e.g. TP2323)", addHotelModalHead: "Add New Hotel",
+  hotelNameLabel: "Hotel Name", countryLabel: "Country", priceLabel: "Price ($)", starsLabel: "Stars",
+  saveHotelBtn: "Save Hotel", alertTitleDefault: "Notification", okBtn: "OK"
+ },
+ th: {
+  loginBtn: "เข้าสู่ระบบ", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  csCenter: "Trip Booking Service", taskCenter: "ศูนย์งานการจอง",
+  accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่น", totalProfit: "กำไรทั้งหมด",
+  dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับออเดอร์", histTitle: "ประวัติการทำรายการและการจอง",
+  thDate: "วันที่", thType: "ประเภท", thDetails: "รายละเอียด", thAmount: "จำนวนเงิน", thStatus: "สถานะ",
+  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "กรุณาเข้าสู่ระบบหรือสมัครสมาชิกใหม่", createAcc: "สมัครสมาชิก",
+  walletBal: "ยอดเงินในกระเป๋า", completedBookings: "ออเดอร์ที่เสร็จสิ้น",
+  inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
+  withdrawBtn: "🏦 ถอนเงิน", vipTiersHead: "ระดับ VIP และขีดจำกัด",
+  logoutBtn: "ออกจากระบบ", navHome: "หน้าแรก", navSupport: "บริการ",
+  navBooking: "รับออเดอร์", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
+  fullNameLabel: "ชื่อ-นามสกุล", identityLabel: "เบอร์โทรศัพท์ หรือ อีเมล",
+  passwordLabel: "รหัสผ่าน", continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
+  heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
+  showAllHotelsBtn: "แสดงโรงแรมทั้งหมด 238 แห่ง", csHeader: "🎧 Trip Booking Service (24/7 Online)",
+  typeMsgPh: "พิมพ์ข้อความ...", refreshBtn: "🔄 REFRESH", logoutBtn: "ออกจากระบบ",
+  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  allUsersHead: "ผู้ใช้ที่ลงทะเบียนทั้งหมด (Real-Time)", saveChangesBtn: "💾 บันทึกการเปลี่ยนแปลง",
+  thName: "ชื่อ", thPhoneEmail: "เบอร์โทร / อีเมล", thPass: "รหัสผ่าน", thRef: "แนะนำ",
+  thVip: "ระดับ VIP", thBal: "ยอดเงิน ($)", thOrders: "ออเดอร์", thReset: "รีเซ็ต",
+  hotelsRatesHead: "โรงแรมและอัตราคอมมิชชั่น VIP", addHotelBtn: "+ เพิ่มโรงแรม",
+  saveRatesBtn: "💾 บันทึกอัตราและโรงแรม", vipLimitsHead: "ขีดจำกัดระดับ VIP และอัตรากำไร",
+  thLevel: "ระดับ", thDailyLimit: "ขีดจำกัดรายวัน", thProfitRate: "อัตรากำไร (%)",
+  thMinBal: "ยอดขั้นต่ำ ($)", thMaxLimit: "ยอดสูงสุด / ขีดจำกัดการถอน ($)",
+  hotelDirPricesHead: "รายชื่อโรงแรมและราคา", thHotelName: "ชื่อโรงแรม", thCountry: "ประเทศ",
+  thStars: "ดาว", thPrice: "ราคา ($)", thAction: "การดำเนินการ", regUsersChatHead: "ผู้ใช้ทั้งหมด",
+  selectUserChat: "เลือกผู้ใช้เพื่อแชท", replyCsPh: "ตอบกลับในฐานะ Trip Booking Service...",
+  loginModalTitle: "เข้าสู่ระบบ", refCodeLabel: "รหัสแนะนำ (เช่น TP2323)", addHotelModalHead: "เพิ่มโรงแรมใหม่",
+  hotelNameLabel: "ชื่อโรงแรม", countryLabel: "ประเทศ", priceLabel: "ราคา ($)", starsLabel: "ดาว",
+  saveHotelBtn: "บันทึกโรงแรม", alertTitleDefault: "การแจ้งเตือน", okBtn: "ตกลง"
+ },
+ zh: {
+  loginBtn: "登录", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  csCenter: "Trip Booking Service", taskCenter: "预订任务中心",
+  accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
+  dailyLimit: "每日订单", getOrderBtn: "立即接单", histTitle: "交易与预订记录",
+  thDate: "日期", thType: "类型", thDetails: "详情", thAmount: "金额", thStatus: "状态",
+  myProfile: "我的资料", welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "请登录或注册新账户。", createAcc: "注册",
+  walletBal: "钱包余额", completedBookings: "已完成订单",
+  inviteCodeTitle: "推荐码", refBonus: "推荐收益", depositBtn: "💳 充值",
+  withdrawBtn: "🏦 提现", vipTiersHead: "VIP 等级与限额",
+  logoutBtn: "退出登录", navHome: "首页", navSupport: "客服",
+  navBooking: "接单", navHistory: "记录", navProfile: "我的",
+  fullNameLabel: "全名", identityLabel: "手机号或邮箱",
+  passwordLabel: "密码", continueBtn: "继续", switchAuth: "切换 登录 / 注册",
+  heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
+  showAllHotelsBtn: "显示全部 238 家酒店", csHeader: "🎧 Trip Booking Service (24/7 Online)",
+  typeMsgPh: "输入消息...", refreshBtn: "🔄 REFRESH", logoutBtn: "退出登录",
+  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  allUsersHead: "所有注册用户 (实时)", saveChangesBtn: "💾 保存所有更改",
+  thName: "姓名", thPhoneEmail: "电话 / 邮箱", thPass: "密码", thRef: "推荐码",
+  thVip: "VIP 等级", thBal: "余额 ($)", thOrders: "订单", thReset: "重置",
+  hotelsRatesHead: "酒店与VIP佣金率", addHotelBtn: "+ 添加酒店",
+  saveRatesBtn: "💾 保存费率与酒店", vipLimitsHead: "VIP等级限额与利润率",
+  thLevel: "等级", thDailyLimit: "每日限额", thProfitRate: "利润率 (%)",
+  thMinBal: "最低余额 ($)", thMaxLimit: "最高余额 / 提现限额 ($)",
+  hotelDirPricesHead: "酒店目录与价格", thHotelName: "酒店名称", thCountry: "国家",
+  thStars: "星级", thPrice: "价格 ($)", thAction: "操作", regUsersChatHead: "所有注册用户",
+  selectUserChat: "选择用户进行聊天", replyCsPh: "以 Trip Booking Service 身份回复...",
+  loginModalTitle: "登录", refCodeLabel: "推荐码 (可选，例如 TP2323)", addHotelModalHead: "添加新酒店",
+  hotelNameLabel: "酒店名称", countryLabel: "国家", priceLabel: "价格 ($)", starsLabel: "星级",
+  saveHotelBtn: "保存酒店", alertTitleDefault: "通知", okBtn: "确定"
+ }
+};
+
+let currentLang = localStorage.getItem("tb_lang_sync") || "my";
+
+function changeLanguage(lang) {
+ currentLang = lang;
+ localStorage.setItem("tb_lang_sync", lang);
+ $("language").value = lang;
+ document.querySelectorAll("[data-i18n]").forEach(el => {
+  const k = el.getAttribute("data-i18n");
+  if(I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
+ });
+ document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+  const k = el.getAttribute("data-i18n-ph");
+  if(I18N[lang] && I18N[lang][k]) el.placeholder = I18N[lang][k];
+ });
+ renderAllViews();
+}
+
+let baseRates = { usd: 4500.00, thb: 132.50, cny: 625.80 };
+function startLiveRates() {
+ setInterval(() => {
+  const u = (baseRates.usd + (Math.random() - 0.5) * 4).toFixed(2);
+  const t = (baseRates.thb + (Math.random() - 0.5) * 0.4).toFixed(2);
+  const c = (baseRates.cny + (Math.random() - 0.5) * 1.2).toFixed(2);
+  ["rateUsd", "pRateUsd"].forEach(id => { if($(id)) $(id).textContent = u; });
+  ["rateThb", "pRateThb"].forEach(id => { if($(id)) $(id).textContent = t; });
+  ["rateCny", "pRateCny"].forEach(id => { if($(id)) $(id).textContent = c; });
+ }, 3500);
 }
 
 let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
@@ -710,14 +817,39 @@ async function forceSyncNow() {
 }
 
 async function initSupabaseData() {
- renderAllViews();
  await forceSyncNow();
+
+ // Ensure Admin exists
+ const adminIdent = "09775191427";
+ if(!allUsers.some(u => u.identity === adminIdent)) {
+  const adminUser = {
+   id: "999999",
+   name: "Admin Master",
+   identity: adminIdent,
+   password: "12344321",
+   referral_code: "TP2323",
+   invited_by: "-",
+   invited_count: 0,
+   balance: 9999.00,
+   commission: 0.00,
+   total_profit: 0.00,
+   referral_earned: 0.00,
+   orders: 0,
+   vip_level: "LV5",
+   neg_dollar: 0.00,
+   profit_box: 0.00
+  };
+  allUsers.unshift(adminUser);
+  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
+  try { await sb.from('users').upsert([adminUser]); } catch(e) {}
+ }
 
  const savedUserId = localStorage.getItem("tb_session_uid");
  if(savedUserId) {
   const found = allUsers.find(u => u.id === savedUserId);
   if(found) currentUser = found;
  }
+ changeLanguage(currentLang);
  renderAllViews();
 
  try {
@@ -744,7 +876,7 @@ function openAuth(mode) {
  authMode = mode;
  $("authModal").classList.remove("hidden");
  $("regExtraFields").classList.toggle("hidden", mode === "login");
- $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginBtn : I18N[currentLang].createAcc;
+ $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginModalTitle : I18N[currentLang].createAcc;
  $("authError").textContent = "";
  if(mode === "register") {
   $("regRefInput").value = "TP2323";
@@ -778,15 +910,8 @@ async function submitAuth() {
  }
 
  if(authMode === "register") {
-  let existing = [];
-  try {
-   const res = await sb.from('users').select('id').eq('identity', identity);
-   existing = res.data || [];
-  } catch(e) {
-   existing = allUsers.filter(u => u.identity === identity);
-  }
-
-  if(existing.length > 0 || allUsers.some(u => u.identity === identity)) {
+  let existing = allUsers.filter(u => u.identity === identity);
+  if(existing.length > 0) {
    err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
    return;
   }
@@ -844,7 +969,32 @@ async function submitAuth() {
   return;
  }
 
+ // Login mode
  let user = allUsers.find(u => u.identity === identity && u.password === password);
+ if(!user) {
+  if(identity === "09775191427" && password === "12344321") {
+   user = {
+    id: "999999",
+    name: "Admin Master",
+    identity: "09775191427",
+    password: "12344321",
+    referral_code: "TP2323",
+    invited_by: "-",
+    invited_count: 0,
+    balance: 9999.00,
+    commission: 0.00,
+    total_profit: 0.00,
+    referral_earned: 0.00,
+    orders: 0,
+    vip_level: "LV5",
+    neg_dollar: 0.00,
+    profit_box: 0.00
+   };
+   allUsers.unshift(user);
+   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
+  }
+ }
+
  if(!user) {
   try {
    const { data } = await sb.from('users').select('*').eq('identity', identity).eq('password', password).maybeSingle();
@@ -1313,19 +1463,8 @@ async function renderHistoryTable() {
  `).join("") || `<tr><td colspan="5" style="text-align:center">No records found.</td></tr>`;
 }
 
-const I18N = {
- my: { loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" },
- en: { loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" },
- th: { loginBtn: "เข้าสู่ระบบ", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" },
- zh: { loginBtn: "登录", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" }
-};
-
-let currentLang = "my";
-function changeLanguage(lang) {
- currentLang = lang;
-}
-
 function renderAllViews() {
+ changeLanguage(currentLang);
  renderHotels();
  renderBookingArea();
  renderAdminUsers();
@@ -1366,14 +1505,13 @@ function renderAllViews() {
   renderHistoryTable();
  } else {
   $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.add("hidden");
+  $("guestAuthBox").classList.remove("hidden");
   $("memberProfileBox").classList.add("hidden");
  }
 }
 
 window.addEventListener("load", () => {
  setupPWAManifest();
- playCinematicIntro();
  initSupabaseData();
 });
 
