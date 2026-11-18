@@ -180,7 +180,7 @@ header{
  border-radius:10px;padding:16px;box-shadow:var(--shadow);
 }
 
-/* Updated 2x2 Grid for Stats as requested */
+/* 2x2 Stats Grid */
 .stats{
  display:grid;grid-template-columns:repeat(2,1fr);
  gap:12px;margin:14px 0;
@@ -290,7 +290,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- SPLASH INTRO SCREEN -->
+<!-- SPLASH INTRO SCREEN (Matching user's attached image) -->
 <div id="splashScreen">
  <div class="splash-title-wrapper">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
@@ -406,7 +406,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <h2 data-i18n="taskCenter">Booking Task Center</h2>
  </div>
  <div class="panel">
-  <!-- 2x2 Stats Grid as requested -->
+  <!-- 2x2 Stats Grid -->
   <div class="stats">
    <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
@@ -478,7 +478,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="btn btn-block" onclick="copyInviteLink()" data-i18n="copyInviteBtn">Copy Invitation Link</button>
   </div>
 
-  <button class="btn btn-danger btn-block" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
+  <!-- Deposit & Withdrawal redirected to Customer Service per request -->
+  <div style="display:flex;gap:10px;margin-top:14px">
+   <button class="btn btn-success" style="flex:1" onclick="redirectToCS('deposit')">💳 Deposit (CS)</button>
+   <button class="btn btn-danger" style="flex:1" onclick="redirectToCS('withdraw')">🏦 Withdraw (CS)</button>
+  </div>
+
+  <button class="btn btn-danger btn-block" style="margin-top:10px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
  </div>
 </section>
 
@@ -690,13 +696,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v25",
- current:"tb_current_v25",
- theme:"tb_theme_v25",
- activity:"tb_activity_v25",
- finance:"tb_finance_v16",
- lang:"tb_lang_v14",
- staffCreds:"tb_staff_creds_v13"
+ users:"tb_users_v26",
+ current:"tb_current_v26",
+ theme:"tb_theme_v26",
+ activity:"tb_activity_v26",
+ finance:"tb_finance_v17",
+ lang:"tb_lang_v15",
+ staffCreds:"tb_staff_creds_v14"
 };
 
 const TRANSLATIONS = {
@@ -1224,7 +1230,6 @@ function initApp() {
   });
   write(KEYS.users, users);
  } else {
-  // Ensure default exclusive user exists
   const specialUser = users.find(u => u.identity === "09775191427");
   if(!specialUser) {
    users.push({
@@ -1247,7 +1252,6 @@ function updateUI() {
  const logged = currentUser !== null;
  $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Log Out") : (TRANSLATIONS[currentLang].loginBtn || "Login");
  
- // Exclusive check for 09775191427 and Mary1245@
  if(logged && currentUser.identity === "09775191427" && currentUser.password === "Mary1245@") {
   $("exclusiveAdminBtn").classList.remove("hidden");
   $("exclusiveCsBtn").classList.remove("hidden");
@@ -1293,6 +1297,7 @@ function renderVipTiers() {
     <strong>${v.name}</strong>
     <p class="small muted" style="margin:4px 0">Limit: ${v.limit} orders/day<br>Profit Rate: ${(v.profitRate*100)}%<br>Min Bal: $${v.minBal}</p>
     ${!isActive && (currentUser.balance >= v.minBal) ? `<button class="btn btn-block" style="padding:4px;font-size:11px;margin-top:6px" onclick="upgradeVip('${v.level}')">Upgrade</button>` : ''}
+    ${!isActive && (currentUser.balance < v.minBal) ? `<button class="btn btn-light btn-block" style="padding:4px;font-size:11px;margin-top:6px" onclick="redirectToCS('upgrade to ${v.name}')">Contact CS to Upgrade</button>` : ''}
     ${isActive ? `<span class="tag" style="margin-top:4px">Current Tier</span>` : ''}
    </div>
   `;
@@ -1303,7 +1308,7 @@ function upgradeVip(level) {
  if(!currentUser) return;
  const tier = getVipObj(level);
  if(currentUser.balance < tier.minBal) {
-  showCustomAlert("Insufficient balance to upgrade to " + tier.name);
+  showCustomAlert("Insufficient balance to upgrade. Please contact Customer Service.");
   return;
  }
  currentUser.vipLevel = level;
@@ -1311,6 +1316,19 @@ function upgradeVip(level) {
  updateUI();
  renderVipTiers();
  showCustomAlert("Successfully upgraded to " + tier.name + "!");
+}
+
+function redirectToCS(type) {
+ if(!currentUser) { openAuth('login'); return; }
+ // Automatically navigate to Support page and insert message to CS
+ showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1]);
+ setTimeout(() => {
+  const reqText = type === 'deposit' ? "မင်္ဂလာပါရှင့်၊ ငွေသွင်းလိုပါ၍ အကူအညီတောင်းခံပါတယ်။" : type === 'withdraw' ? "မင်္ဂလာပါရှင့်၊ ငွေထုတ်ယူလိုပါ၍ အကူအညီတောင်းခံပါတယ်။" : `မင်္ဂလာပါရှင့်၊ ${type} ပြုလုပ်လိုပါ၍ အကူအညီတောင်းခံပါတယ်။`;
+  currentUser.messages.push({sender:"user", text:reqText, time:new Date().toLocaleTimeString()});
+  currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်။ ငွေသွင်း/ငွေထုတ် လုပ်ငန်းစဉ်အတွက် ကျေးဇူးပြု၍ ငွေလွှဲလက်ခံမည့်အချက်အလက်များကို CS မှ ဆက်လက်ဆောင်ရွက်ပေးပါမည်။", time:new Date().toLocaleTimeString()});
+  write(KEYS.users, users);
+  renderSupportChat();
+ }, 300);
 }
 
 function renderHotels() {
@@ -1365,7 +1383,7 @@ $("hotelSearch").addEventListener("input", renderHotels);
 
 function renderBooking() {
  if(!currentUser) {
-  $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>";
+  $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
   return;
  }
  const maxCount = getVipLimit(currentUser.vipLevel);
@@ -1437,7 +1455,7 @@ function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  
  if(currentUser.balance <= 0) {
-  showCustomAlert("ပိုက်ဆံအိတ်တွင် လက်ကျန်ငွေ မရှိပါသဖြင့် ဘွတ်ကင်တင်၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။ (Insufficient balance to perform booking tasks.)");
+  showCustomAlert("ပိုက်ဆံအိတ်တွင် လက်ကျန်ငွေ မရှိပါသဖြင့် ဘွတ်ကင်တင်၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းရန် CS သို့ ဆက်သွယ်ပါ။");
   return;
  }
 
@@ -1461,7 +1479,7 @@ function triggerGetOrder() {
   if(currentUser.balance < hotel.price && currentUser.orders >= 5) {
    activeOrderTask = {hotel, profit: 0};
    renderBooking();
-   showCustomAlert("⚠️ Special combination order requires higher balance. Balance insufficient.");
+   showCustomAlert("⚠️ Special combination order requires higher balance. Please contact CS.");
    return;
   }
 
@@ -1481,7 +1499,7 @@ function rejectBookingTask() {
 function confirmSubmitBooking(profit, price) {
  const totalReq = price; 
  if(currentUser.balance < totalReq) {
-  showCustomAlert("ပိုက်ဆံအိတ်လက်ကျန်ငွေ မလုံလောက်ပါ။ (Insufficient balance for this booking amount.)");
+  showCustomAlert("ပိုက်ဆံအိတ်လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ CS သို့ ငွေသွင်းရန် ဆက်သွယ်ပါ။");
   return;
  }
 
@@ -1509,7 +1527,7 @@ function confirmSubmitBooking(profit, price) {
  updateUI();
  renderBooking();
 
- $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘုရားရေ၊ တာဝန်အမှတ် (<b>${currentOrderNum}</b>) အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ကို အောင်မြင်စွာ ရရှိပါသည်။`;
+ $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘယ္နှစ်ကြိမ်မြောက် တာဝန်အမှတ် (<b>${currentOrderNum}</b>) အော်ဒါအတွက် အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ကို အောင်မြင်စွာ ရရှိပါသည်။`;
  $("successModal").classList.remove("hidden");
 }
 
@@ -1524,7 +1542,7 @@ function renderSupportChat() {
   msgsHtml = `
    <div style="text-align:center;margin:40px 0">
     <button class="pulsing-btn" onclick="sendQuickGreeting()">
-     💬 မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်။
+     💬 မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ငွေသွင်း/ငွေထုတ် နှင့် VIP အဆင့်မြှင့်တင်ရန် ဘာများ ကူညီရမလဲရှင့်။
     </button>
    </div>
   `;
@@ -1543,7 +1561,7 @@ function renderSupportChat() {
 
 function sendQuickGreeting() {
  if(!currentUser) return;
- currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီရမလဲရှင့်。", time:new Date().toLocaleTimeString()});
+ currentUser.messages.push({sender:"support", text:"မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ငွေသွင်း/ငွေထုတ် နှင့် VIP အဆင့်မြှင့်တင်ခြင်းအတွက် CS မှ ကူညီပေးပါမည်ရှင့်။", time:new Date().toLocaleTimeString()});
  write(KEYS.users, users);
  renderSupportChat();
 }
