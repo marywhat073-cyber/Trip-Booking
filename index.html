@@ -361,7 +361,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="sync-badge"><span class="sync-dot"></span> Live Cross-Device Sync Active (<span id="totalUsersBadge">0</span> Users)</div>
   </div>
   <div style="display:flex;gap:8px">
-   <button class="btn btn-success" onclick="forceSyncNow()">🔄 REFRESH (အကောင့်တိုးမတိုး စစ်ရန်)</button>
+   <button class="btn btn-success" onclick="forceSyncNow()">🔄 REFRESH</button>
    <button class="btn btn-danger" onclick="logout()">Logout</button>
   </div>
  </div>
@@ -485,11 +485,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <input id="regRefInput" placeholder="TP2323" value="TP2323">
   </div>
   <label data-i18n="identityLabel">Phone Number or Email (Unique)</label>
-  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
+  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com" value="09775191427">
   
   <label data-i18n="passwordLabel">Password</label>
   <div class="pass-wrap">
-   <input id="authPassword" type="password" placeholder="Enter password">
+   <input id="authPassword" type="password" placeholder="Enter password" value="12344321">
    <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
   </div>
 
@@ -542,6 +542,7 @@ function formatUsdWithMmk(usdVal) {
 function playCinematicIntro() {
  const subtitleText = "International Trip Booking Platform";
  const container = $("scatterSubtitle");
+ if(!container) return;
  container.innerHTML = "";
 
  const chars = subtitleText.split("").map(ch => {
@@ -563,8 +564,11 @@ function playCinematicIntro() {
  }, 950);
 
  setTimeout(() => {
-  $("cinematicIntro").classList.add("fade-out");
-  setTimeout(() => { $("cinematicIntro").classList.add("hidden"); }, 750);
+  const intro = $("cinematicIntro");
+  if(intro) {
+   intro.classList.add("fade-out");
+   setTimeout(() => { intro.classList.add("hidden"); }, 750);
+  }
  }, 3300);
 }
 
@@ -733,7 +737,7 @@ async function initSupabaseData() {
   if(selectedCsUserId && !$("adminCsTab").classList.contains("hidden")) {
    loadAdminChatMessages(selectedCsUserId);
   }
- }, 5000);
+ }, 10000);
 }
 
 function openAuth(mode) {
