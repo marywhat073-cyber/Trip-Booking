@@ -4,16 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#008080">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Trip Booking">
-
-<!-- OpenGraph Meta Tags -->
-<meta property="og:title" content="Trip Booking - International Hotel Booking Platform">
-<meta property="og:description" content="Explore luxury tropical resorts and international hotels around the world. Enjoy seamless booking and rewarding tasks.">
-<meta property="og:image" content="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900">
-
 <title>Trip Booking | International Hotel Booking Platform</title>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Dynamic PWA Manifest Setup -->
+<link rel="manifest" id="pwaManifest">
 
 <style>
 :root{
@@ -47,7 +44,7 @@ body{
  color:var(--fb-text);
 }
 button,input,select,textarea{font:inherit}
-button{cursor:pointer;border-radius:6px;border:0;font-weight:600;padding:8px 12px}
+button{cursor:pointer;border-radius:6px;border:0;font-weight:600;padding:8px 12px;transition:0.2s}
 .hidden{display:none!important}
 .muted{color:var(--fb-muted);font-size:13px}
 .small{font-size:12px}
@@ -64,213 +61,132 @@ input,select,textarea{
  border-radius:6px;background:var(--fb-card);color:var(--fb-text);
  outline:none;
 }
-input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
+input:focus,select:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
-.password-wrapper{position:relative;}
-.password-toggle{position:absolute;right:10px;top:38px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--fb-muted);}
+/* Password Eye Wrapper */
+.pass-wrap{position:relative;display:flex;align-items:center}
+.pass-wrap input{padding-right:40px}
+.eye-btn{
+ position:absolute;right:8px;background:none;border:0;
+ color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
+}
 
-/* Splash Intro Screen Styles */
+/* 0% to 100% Splash & PWA Screen */
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
- background:linear-gradient(135deg,rgba(0,0,0,0.4),rgba(0,0,0,0.5)),
+ background:linear-gradient(135deg,rgba(0,40,40,0.85),rgba(0,100,100,0.8)),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
- display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;color:white;
- transition: opacity 0.6s ease;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:white;
 }
-
-@keyframes slideInRight {
- 0% { transform: translateX(100vw); opacity: 0; }
- 100% { transform: translateX(0); opacity: 1; }
-}
-@keyframes zoomInCenter {
- 0% { transform: scale(0.1); opacity: 0; }
- 100% { transform: scale(1); opacity: 1; }
-}
-
-.splash-title-wrapper{
- display:flex;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:12px;
- animation: slideInRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-.splash-icon{width:65px;height:65px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:0 4px 15px rgba(0,0,0,0.4)}
-.splash-title{font-size:clamp(24px,4.5vw,40px);margin:0;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,0.6)}
-.splash-desc{
- font-size:clamp(16px,2.2vw,22px);opacity:0.95;margin-top:10px;margin-bottom:25px;font-weight:600;
- text-shadow:0 2px 4px rgba(0,0,0,0.6);
- animation: zoomInCenter 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+.splash-icon{width:80px;height:80px;border-radius:20px;object-fit:cover;border:3px solid white;box-shadow:0 8px 20px rgba(0,0,0,0.4);margin-bottom:14px}
+.progress-container{width:min(320px,85%);height:12px;background:rgba(255,255,255,0.25);border-radius:10px;overflow:hidden;margin:16px 0 8px}
+.progress-fill{height:100%;width:0%;background:#00ffcc;transition:width 0.1s linear}
+.splash-actions{display:flex;gap:14px;margin-top:20px}
 
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
- z-index:30;padding:8px 16px;
- display:flex;align-items:center;justify-content:space-between;
- gap:12px;box-shadow:var(--shadow);
+ z-index:30;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
+ gap:10px;box-shadow:var(--shadow);
 }
-.logo-container{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.logo-container{display:flex;align-items:center;gap:8px;cursor:pointer}
 .logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--fb-primary)}
-.logo{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--fb-primary)}
+.logo{font-size:20px;font-weight:800;color:var(--fb-primary)}
 .logo span{color:#00b3b3}
-.header-actions{display:flex;gap:8px;align-items:center}
-.header-actions select{width:auto;background:var(--fb-bg);color:var(--fb-text);border-color:var(--fb-border)}
+.header-actions{display:flex;gap:6px;align-items:center}
+.header-actions select{width:auto;padding:6px 8px;background:var(--fb-bg);font-size:13px}
 
-.container{width:min(1150px,94%);margin:20px auto 90px}
+.container{width:min(1150px,94%);margin:18px auto 90px}
 .page{display:none}
 .page.active{display:block}
 
+/* Live Exchange Rates Bar */
+.rates-bar{
+ background:var(--fb-card);border:1px solid var(--fb-border);border-radius:10px;
+ padding:10px 14px;margin-bottom:16px;display:grid;grid-template-columns:repeat(3,1fr);
+ gap:10px;text-align:center;box-shadow:var(--shadow);
+}
+.rate-item{background:var(--fb-bg);padding:8px;border-radius:8px;border:1px solid var(--fb-border)}
+.rate-item span{font-size:11px;color:var(--fb-muted);font-weight:700;display:block}
+.rate-item strong{font-size:14px;color:var(--fb-primary)}
+
 .hero{
- min-height:260px;border-radius:14px;overflow:hidden;
+ min-height:230px;border-radius:14px;overflow:hidden;
  background:linear-gradient(135deg,rgba(0,128,128,0.85),rgba(0,64,64,0.6)),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
- display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px;color:white;
+ display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;color:white;
  box-shadow:var(--shadow);
 }
-.hero h1{font-size:clamp(22px,3.5vw,36px);margin:0 0 6px}
-.hero p{max-width:520px;line-height:1.5;font-size:15px;opacity:0.95;margin:0}
 
-.section-title{
- display:flex;justify-content:space-between;align-items:center;
- gap:10px;margin:24px 0 12px;flex-wrap:wrap;
-}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 12px;flex-wrap:wrap}
 .section-title h2{font-size:18px;margin:0}
 
-.filter-bar{
- display:flex;gap:8px;flex-wrap:wrap;align-items:center;
-}
-.filter-bar input, .filter-bar select{
- width:auto;min-width:140px;padding:8px 10px;font-size:13px;
-}
-
-.hotel-grid{
- display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
- gap:14px;
-}
-.card{
- background:var(--fb-card);border:1px solid var(--fb-border);
- border-radius:10px;overflow:hidden;box-shadow:var(--shadow);
-}
-.hotel-img{width:100%;height:150px;object-fit:cover;display:block}
+.hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:var(--fb-card);border:1px solid var(--fb-border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.hotel-img{width:100%;height:145px;object-fit:cover;display:block}
 .card-body{padding:12px}
-.card-body h3{margin:6px 0;font-size:15px}
 .price{font-size:18px;font-weight:700;color:var(--fb-primary)}
-.tag{
- display:inline-block;background:rgba(0,128,128,0.12);color:var(--fb-primary);
- padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;
-}
-
-.activity-ticker{
- background:var(--fb-card);border:1px solid var(--fb-border);border-radius:8px;
- padding:10px 14px;margin-bottom:16px;font-size:13px;display:flex;align-items:center;gap:10px;
- box-shadow:var(--shadow);overflow:hidden;white-space:nowrap;
-}
-.activity-ticker span{color:var(--fb-primary);font-weight:700}
+.tag{display:inline-block;background:rgba(0,128,128,0.12);color:var(--fb-primary);padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600}
 
 .bottom-nav{
- position:fixed;bottom:0;left:0;right:0;z-index:25;
- background:var(--fb-card);border-top:1px solid var(--fb-border);
- display:grid;grid-template-columns:repeat(5,1fr);
+ position:fixed;bottom:0;left:0;right:0;z-index:25;background:var(--fb-card);
+ border-top:1px solid var(--fb-border);display:grid;grid-template-columns:repeat(5,1fr);
  padding:6px 2px max(6px,env(safe-area-inset-bottom));
- box-shadow:0 -2px 6px rgba(0,0,0,0.08);
 }
-.bottom-nav button{
- background:none;border:0;color:var(--fb-muted);
- display:flex;flex-direction:column;align-items:center;
- gap:2px;font-size:11px;padding:4px 1px;border-radius:8px;
-}
+.bottom-nav button{background:none;border:0;color:var(--fb-muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;padding:4px}
 .bottom-nav button.active{color:var(--fb-primary);font-weight:700}
 .bottom-nav .nav-icon{font-size:20px}
 
-.panel{
- background:var(--fb-card);border:1px solid var(--fb-border);
- border-radius:10px;padding:16px;box-shadow:var(--shadow);
-}
-
-.stats{
- display:grid;grid-template-columns:repeat(2,1fr);
- gap:12px;margin:14px 0;
-}
-.stat-box{
- background:var(--fb-bg);border:1px solid var(--fb-border);
- border-top:3px solid var(--fb-primary);border-radius:8px;padding:12px;
-}
+.panel{background:var(--fb-card);border:1px solid var(--fb-border);border-radius:10px;padding:16px;box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}
+.stat-box{background:var(--fb-bg);border:1px solid var(--fb-border);border-top:3px solid var(--fb-primary);border-radius:8px;padding:12px}
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
-.stat-box strong{display:block;font-size:19px;margin-top:6px;color:var(--fb-text)}
+.stat-box strong{display:block;font-size:18px;margin-top:6px}
 
-@keyframes glowingOrderBtn {
- 0% { box-shadow: 0 0 5px #00b386, 0 0 10px #00b386, 0 0 15px #008080; }
- 50% { box-shadow: 0 0 15px #00ffff, 0 0 25px #00b386, 0 0 35px #008080; }
- 100% { box-shadow: 0 0 5px #00b386, 0 0 10px #00b386, 0 0 15px #008080; }
-}
-.glowing-btn {
- background: var(--fb-success); color: white; font-weight: 700;
- animation: glowingOrderBtn 2s infinite; border-radius: 8px; width: 100%; padding: 10px; margin-top: 10px;
-}
+.vip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px}
+.vip-card{background:var(--fb-bg);border:1px solid var(--fb-border);border-radius:8px;padding:12px}
+.vip-card.active-vip{border:2px solid var(--fb-primary);background:rgba(0,128,128,0.08)}
 
-@keyframes borderGlow {
- 0% { border-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; }
- 33% { border-color: #00b386; box-shadow: 0 0 15px #00b386; }
- 66% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
- 100% { border-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; }
+/* CS Chat & Quick Reply Chips */
+.chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card)}
+.chat-header{background:var(--fb-primary);color:white;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
+.chat-messages{height:360px;overflow:auto;padding:14px;background:var(--fb-bg)}
+.quick-chips{display:flex;gap:8px;padding:8px 10px;background:var(--fb-card);border-top:1px solid var(--fb-border);overflow-x:auto}
+.chip-btn{
+ background:rgba(0,128,128,0.12);color:var(--fb-primary);border:1px solid var(--fb-primary);
+ border-radius:20px;padding:6px 12px;font-size:12px;white-space:nowrap;
 }
-.celebration-box {
- border: 3px solid #00b386;
- animation: borderGlow 2.5s infinite;
- background: var(--fb-card);
- border-radius: 12px;
- padding: 20px;
- text-align: center;
-}
-
-.vip-grid{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
- gap:12px;margin-top:12px;
-}
-.vip-card{
- background:var(--fb-bg);border:1px solid var(--fb-border);
- border-radius:8px;padding:12px;position:relative;
-}
-.vip-card.active-vip{
- border:2px solid var(--fb-primary);
- background:rgba(0,128,128,0.08);
-}
-
-.chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card);box-shadow:var(--shadow)}
-.chat-header{background:var(--fb-card);border-bottom:1px solid var(--fb-border);color:var(--fb-text);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
-.chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
-.chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
-
-footer{
- background:#071a1a;color:#80b3b3;padding:30px 4% 80px;margin-top:30px;font-size:13px;border-top:1px solid #1a4d4d;
-}
-.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
-.footer-grid h4{color:#e0f2f2;margin-bottom:12px;font-size:15px}
-.footer-grid a{display:block;color:#80b3b3;text-decoration:none;margin-bottom:6px}
-.footer-grid a:hover{color:white;text-decoration:underline}
-.app-btn{
- display:inline-flex;align-items:center;gap:8px;background:var(--fb-primary);color:white;
- padding:8px 16px;border-radius:20px;font-weight:600;cursor:pointer;margin-top:8px;
-}
+.chip-btn:hover{background:var(--fb-primary);color:white}
+.chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px}
 
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);white-space:nowrap}
 th{color:var(--fb-muted);background:var(--fb-bg)}
 
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal-box{background:var(--fb-card);color:var(--fb-text);padding:24px;border-radius:12px;width:min(450px,90%);box-shadow:0 8px 24px rgba(0,0,0,0.25);text-align:center}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.close{background:none;border:0;font-size:18px;cursor:pointer;color:var(--fb-muted)}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.65);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal-box{background:var(--fb-card);color:var(--fb-text);padding:22px;border-radius:12px;width:min(420px,92%);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.close{background:none;border:0;font-size:18px;color:var(--fb-muted)}
 </style>
 </head>
 <body>
 
-<!-- SPLASH INTRO SCREEN -->
+<!-- 0% to 100% LOADING & PWA INSTALL SCREEN -->
 <div id="splashScreen">
- <div class="splash-title-wrapper">
-  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
-  <h1 class="splash-title">Welcome to Trip Booking</h1>
+ <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="splash-icon" alt="Trip Booking">
+ <h1 style="margin:0;font-size:28px" data-i18n="splashTitle">Trip Booking</h1>
+ <p style="margin:6px 0 0;opacity:0.9" data-i18n="splashDesc">International Hotel Booking Platform</p>
+ 
+ <div class="progress-container">
+  <div class="progress-fill" id="splashProgressBar"></div>
  </div>
- <div class="splash-desc">International Hotel Booking Platform</div>
- <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.4)" onclick="enterPlatform()">Enter Platform ➔</button>
+ <div id="splashPercent" style="font-weight:800;font-size:18px">0%</div>
+
+ <div class="splash-actions hidden" id="splashActions">
+  <button class="btn btn-light" style="padding:10px 26px;border-radius:25px" onclick="closeSplash()" data-i18n="closeBtn">Close</button>
+  <button class="btn btn-success" style="padding:10px 26px;border-radius:25px" onclick="openAndInstallPWA()" data-i18n="openBtn">Open</button>
+ </div>
 </div>
 
 <header>
@@ -279,321 +195,252 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div class="logo">TRIP <span>BOOKING</span></div>
  </div>
  <div class="header-actions">
+  <select id="language" onchange="changeLanguage(this.value)">
+   <option value="my">မြန်မာ</option>
+   <option value="en">English</option>
+   <option value="th">ไทย</option>
+   <option value="zh">中文</option>
+  </select>
   <button class="btn-light" id="themeToggle" onclick="toggleTheme()">🌙</button>
-  <button class="btn btn-success hidden" id="exclusiveAdminBtn" onclick="openStaffModalFromAccount('admin')">Admin</button>
-  <button class="btn btn-success hidden" id="exclusiveCsBtn" onclick="openStaffModalFromAccount('cs')">CS</button>
-  <button class="btn" id="headerAuth" onclick="openAuth('login')">Login</button>
+  <button class="btn btn-success hidden" id="exclusiveAdminBtn" onclick="openStaffModal()">Admin</button>
+  <button class="btn" id="headerAuthBtn" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
  </div>
 </header>
 
 <main class="container">
 
-<!-- HOME -->
+<!-- HOME PAGE -->
 <section class="page active" id="homePage">
- <div class="activity-ticker" id="activityTicker">
-  <span>🔔 <span>Live</span>:</span> <div id="tickerText" style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">Loading live activity feed...</div>
+ <!-- Live Official Exchange Rates -->
+ <div class="rates-bar" id="homeRatesBar">
+  <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="rateUsd">4,510.00</strong></div>
+  <div class="rate-item"><span>🇹🇭 1 THB ➔ MMK</span><strong id="rateThb">132.50</strong></div>
+  <div class="rate-item"><span>🇨🇳 1 CNY ➔ MMK</span><strong id="rateCny">625.80</strong></div>
  </div>
 
  <div class="hero">
-  <h1>Welcome to Trip Booking</h1>
-  <p>International Hotel Booking Platform</p>
-  <div style="margin-top:6px;font-size:13px;background:rgba(0,0,0,0.3);padding:4px 10px;border-radius:20px;display:inline-block">1 USD = 4,500 MMK</div>
-  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})">Explore Hotels</button>
+  <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
+  <p data-i18n="heroDesc">International Hotel Booking Platform</p>
+  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')" data-i18n="startTaskBtn">Start Booking Tasks</button>
  </div>
 
  <div class="section-title">
-  <h2>Featured Hotels</h2>
-  <span class="muted">Top destinations</span>
+  <h2 data-i18n="hotelDir">International Hotels</h2>
+  <input id="hotelSearch" placeholder="Search hotel or country..." style="max-width:220px" oninput="renderHotels()">
  </div>
- <div class="hotel-grid" id="featuredHotels"></div>
-
- <div class="section-title" id="hotelDirectory">
-  <h2>Hotel Directory (Global Hotels)</h2>
-  <div class="filter-bar">
-   <input id="hotelSearch" placeholder="Search hotel or country" oninput="renderHotels()">
-   <select id="starFilter" onchange="renderHotels()">
-    <option value="all">All Stars ⭐</option>
-    <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
-    <option value="4">4 Stars ⭐⭐⭐⭐</option>
-    <option value="3">3 Stars ⭐⭐⭐</option>
-   </select>
-   <select id="priceFilter" onchange="renderHotels()">
-    <option value="all">All Prices 💰</option>
-    <option value="under150">Under $150</option>
-    <option value="150to300">$150 - $300</option>
-    <option value="over300">Over $300</option>
-   </select>
-  </div>
- </div>
- <div id="countryHotels"></div>
+ <div class="hotel-grid" id="hotelGrid"></div>
 </section>
 
-<!-- SUPPORT -->
+<!-- CUSTOMER SERVICE PAGE -->
 <section class="page" id="supportPage">
- <div class="section-title"><h2>Customer Service Center</h2></div>
- <div class="chat-window" style="max-width:900px;margin:0 auto">
+ <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
+ <div class="chat-window" style="max-width:850px;margin:0 auto">
   <div class="chat-header">
-   <div style="display:flex;align-items:center;gap:10px">
-    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120" style="width:40px;height:40px;border-radius:50%;object-fit:cover" alt="CS Agent">
-    <div>
-     <div style="font-size:15px">Trip Booking Service (Online)</div>
-     <div class="muted" style="font-size:11px">We are here to help you 24/7</div>
-    </div>
-   </div>
-   <div>🔊 ✕</div>
+   <span>🎧 Trip Booking Service (24/7 Online)</span>
+   <span class="small">● Active</span>
   </div>
-  <div class="chat-messages" id="supportMessages" style="height:450px"></div>
+  <div class="chat-messages" id="supportMessages"></div>
+  
+  <!-- Quick Reply Suggestion Buttons -->
+  <div class="quick-chips">
+   <button class="chip-btn" onclick="sendQuickSuggestion('ငွေထုတ်ချင်ပါသည်')">💸 ငွေထုတ်ချင်ပါသည်</button>
+   <button class="chip-btn" onclick="sendQuickSuggestion('VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်')">💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်</button>
+   <button class="chip-btn" onclick="sendQuickSuggestion('ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ')">💳 ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ</button>
+  </div>
+
   <div class="chat-footer">
-   <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-   <input id="supportInput" type="text" placeholder="Type your message here..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
+   <input id="supportInput" type="text" placeholder="Type a message..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
    <button class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
 </section>
 
-<!-- HISTORY -->
-<section class="page" id="historyPage">
- <div class="section-title"><h2>Booking & Transaction History</h2></div>
+<!-- BOOKING TASK CENTER -->
+<section class="page" id="bookingPage">
+ <div class="section-title"><h2 data-i18n="taskCenter">Booking Task Center</h2></div>
  <div class="panel">
-  <h3>Transactions & Referral Bonuses</h3>
+  <div class="stats">
+   <div class="stat-box"><span data-i18n="accBal">Account Balance</span><strong id="taskWallet">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="taskComm">Task Commission</span><strong id="taskProfit">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="totalProfit">Total Profit</span><strong id="taskTotalProfit">$0.00</strong></div>
+   <div class="stat-box">
+    <span data-i18n="dailyLimit">Daily Orders</span>
+    <strong id="orderCircle">0/30</strong>
+    <button class="btn btn-success btn-block" style="margin-top:8px" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get Order</button>
+   </div>
+  </div>
+  <div id="bookingHotelArea" style="margin-top:16px"></div>
+ </div>
+</section>
+
+<!-- TRANSACTION HISTORY PAGE -->
+<section class="page" id="historyPage">
+ <div class="section-title"><h2 data-i18n="histTitle">Transaction & Booking History</h2></div>
+ <div class="panel">
   <div class="table-wrap">
    <table>
-    <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+    <thead>
+     <tr>
+      <th data-i18n="thDate">Date</th>
+      <th data-i18n="thType">Type</th>
+      <th>Details</th>
+      <th data-i18n="thAmount">Amount</th>
+      <th data-i18n="thStatus">Status</th>
+     </tr>
+    </thead>
     <tbody id="historyRows"></tbody>
    </table>
   </div>
-  <h3 style="margin-top:20px">Booking Records</h3>
-  <div id="bookingHistory"></div>
  </div>
 </section>
 
-<!-- BOOKING TASK CENTER -->
-<section class="page" id="bookingPage">
- <div class="section-title">
-  <h2>Booking Task Center</h2>
- </div>
- <div class="panel">
-  <div class="stats">
-   <div class="stat-box"><span>Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
-   <div class="stat-box"><span>Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span>Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
-   <div class="stat-box">
-     <span>Daily Task Limit 📊</span>
-     <strong id="orderCircle">0/30</strong>
-     <button class="glowing-btn" onclick="triggerGetOrder()">Get order</button>
-   </div>
-  </div>
-
-  <div style="margin:16px 0;height:8px;background:var(--fb-border);border-radius:4px;overflow:hidden">
-   <span id="orderProgress" style="display:block;height:100%;width:0;background:var(--fb-primary);transition:width .3s"></span>
-  </div>
-
-  <div id="celebrationBanner" class="hidden" style="text-align:center;padding:16px;background:rgba(0,179,134,0.15);border:1px solid var(--fb-success);border-radius:8px;margin:12px 0;font-weight:700;color:var(--fb-success)">
-   🎉 Congratulations! All daily orders for your VIP tier are completed! 🎆
-  </div>
-
-  <div id="specialTaskAlert" class="hidden" style="background:rgba(255,77,77,0.1);border:1px solid var(--fb-danger);color:var(--fb-danger);padding:14px;border-radius:8px;margin-bottom:14px;font-weight:600">
-   ⚠️ Special Combination Order Detected! Insufficient balance. Please contact Customer Service or deposit funds to proceed.
-  </div>
-
-  <div id="bookingHotelArea" style="margin-top:20px"></div>
- </div>
-</section>
-
-<!-- PROFILE -->
+<!-- PROFILE PAGE -->
 <section class="page" id="profilePage">
- <div class="section-title"><h2>My Profile</h2></div>
+ <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
 
- <div class="panel" id="guestAuthActions">
-  <div style="text-align:center;padding:20px">
-   <h2>Welcome To Trip Booking</h2>
-   <p class="muted">Please login or register to manage your account.</p>
-   <button class="btn btn-block" onclick="openAuth('register')" style="margin-top:14px">Create Account</button>
-   <button class="btn btn-light btn-block" onclick="openAuth('login')" style="margin-top:8px">Login</button>
+ <!-- Shown only when logged out -->
+ <div class="panel" id="guestAuthBox" style="text-align:center;padding:24px">
+  <h3 data-i18n="welcomeTrip">Welcome to Trip Booking</h3>
+  <p class="muted" data-i18n="loginPrompt">Login or create a new account to start earning commissions.</p>
+  <div style="display:flex;gap:10px;max-width:340px;margin:16px auto 0">
+   <button class="btn" style="flex:1" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
+   <button class="btn btn-success" style="flex:1" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
   </div>
  </div>
 
- <div class="panel hidden" id="memberProfile">
-  <div style="display:flex;align-items:center;gap:14px">
-   <img id="profileImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160" alt="Profile" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid var(--fb-primary)">
+ <!-- Shown when logged in -->
+ <div class="panel hidden" id="memberProfileBox">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
    <div>
     <h3 id="profileName" style="margin:0">User</h3>
-    <p class="muted" id="profileId" style="margin:4px 0 0">User ID</p>
+    <p class="muted" id="profileIdentity" style="margin:4px 0 0">ID: -</p>
    </div>
+   <span class="tag" id="profileVipBadge" style="font-size:14px;padding:6px 12px">LV1</span>
   </div>
 
-  <div class="stats" style="margin-top:14px">
-   <div class="stat-box"><span>Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
-   <div class="stat-box"><span>VIP Level</span><strong id="vipLevel" style="color:var(--fb-primary)">LV1</strong></div>
-   <div class="stat-box"><span>Completed Bookings</span><strong id="profileOrders">0/30</strong></div>
-   <div class="stat-box" style="border-top-color:var(--fb-success)"><span>Referral Bonus (10%)</span><strong id="referralEarned">$0.00</strong></div>
-   <div class="stat-box"><span>Invited Friends</span><strong id="invitedCount">0</strong></div>
-   <div class="stat-box"><span>Invite Code</span><strong id="inviteCode">-</strong></div>
+  <!-- Live Exchange Rates on Profile -->
+  <div class="rates-bar" style="margin-top:14px">
+   <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="pRateUsd">4,510.00</strong></div>
+   <div class="rate-item"><span>🇹🇭 1 THB ➔ MMK</span><strong id="pRateThb">132.50</strong></div>
+   <div class="rate-item"><span>🇨🇳 1 CNY ➔ MMK</span><strong id="pRateCny">625.80</strong></div>
   </div>
 
-  <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3>VIP Membership Levels & Limits</h3>
-   <p class="muted small">Higher VIP levels unlock higher daily task limits, boosted profit rates, and increased withdrawal caps.</p>
-   <div class="vip-grid" id="vipTiersDisplay"></div>
+  <div class="stats">
+   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="completedBookings">Completed Orders</span><strong id="profileOrders">0/30</strong></div>
+   <div class="stat-box"><span data-i18n="inviteCodeTitle">Referral Code</span><strong id="inviteCode" style="color:var(--fb-primary)">TP0000</strong></div>
+   <div class="stat-box"><span data-i18n="refBonus">Referral Earned</span><strong id="referralEarned">$0.00</strong></div>
   </div>
 
-  <div class="panel" style="background:var(--fb-bg);margin:14px 0">
-   <h3>Invitation & Referral Program</h3>
-   <p class="muted small">Share your invite code (4 digits + 2 letters, e.g. 1234AB). Earn <b>10% commission</b> automatically every time your invited friend completes a booking task!</p>
-   <input id="inviteLink" readonly style="margin:8px 0">
-   <button class="btn btn-block" onclick="copyInviteLink()">Copy Invitation Link</button>
+  <div style="display:flex;gap:10px;margin:14px 0">
+   <button class="btn btn-success" style="flex:1" onclick="handleDepositRequest()" data-i18n="depositBtn">💳 Deposit</button>
+   <button class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">🏦 Withdraw</button>
   </div>
 
-  <div style="display:flex;gap:10px;margin-top:14px">
-   <button class="btn btn-success" style="flex:1" onclick="redirectToCS('deposit')">💳 Deposit (CS)</button>
-   <button class="btn btn-danger" style="flex:1" onclick="redirectToCS('withdraw')">🏦 Withdraw (CS)</button>
-  </div>
+  <h3 style="margin-top:20px" data-i18n="vipTiersHead">VIP Levels & Limits</h3>
+  <div class="vip-grid" id="vipTiersDisplay"></div>
 
-  <button class="btn btn-danger btn-block" style="margin-top:10px" onclick="logout()">Log Out</button>
+  <button class="btn btn-danger btn-block" style="margin-top:20px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
  </div>
 </section>
 
-<!-- STAFF PAGE -->
+<!-- ADMIN & CS STAFF PANEL -->
 <section class="page" id="staffPage">
  <div class="section-title">
-  <div>
-   <h2 id="staffRoleTitle">Staff Management Center</h2>
-   <span class="tag" id="staffRoleBadge">ROLE</span>
-  </div>
-  <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
+  <h2>🛡️ Admin & Trip Booking Service Control</h2>
+  <button class="btn btn-light" onclick="showPage('homePage')">Exit Panel</button>
  </div>
 
- <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="staffNavTabs">
-  <button class="btn admin-only" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS & VIP MANAGEMENT</button>
-  <button class="btn btn-light admin-only" id="adminHotelsBtn" onclick="switchStaffTab('adminHotels')">HOTELS & RATES</button>
-  <button class="btn btn-light admin-only" id="adminVipConfigBtn" onclick="switchStaffTab('adminVipConfig')">VIP CONFIG</button>
-  <button class="btn btn-light admin-only" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
-  <button class="btn btn-light admin-only" id="adminSettingsBtn" onclick="switchStaffTab('adminSettings')">STAFF ACCOUNTS</button>
-  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
+ <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+  <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 USERS & VIP CONTROL</button>
+  <button class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')">🏨 HOTELS & RATES</button>
+  <button class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')">💬 TRIP BOOKING SERVICE CHAT</button>
  </div>
 
- <div id="adminWorkspace" class="panel admin-only">
+ <!-- USERS & VIP CONTROL TAB -->
+ <div id="adminUsersTab" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>User Accounts, VIP Levels & Booking Rules Control</h3>
-   <div>
-    <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit</button>
-    <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save</button>
-   </div>
+   <h3>Real-Time User Management</h3>
+   <button class="btn btn-success" onclick="saveAllUsersAdmin()">💾 Save All Changes</button>
   </div>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th>User ID</th>
+      <th>ID</th>
+      <th>Name</th>
       <th>Phone / Email</th>
       <th>Password</th>
-      <th>Full Name</th>
-      <th>VIP Level</th>
-      <th>Wallet ($)</th>
-      <th>Invite Code</th>
-      <th>Invited By</th>
-      <th>Task Settings</th>
-      <th>Actions</th>
+      <th>Referral</th>
+      <th>VIP Tier</th>
+      <th>Balance ($)</th>
+      <th>Neg ($)</th>
+      <th>Profit Box ($)</th>
+      <th>Orders</th>
+      <th>Reset</th>
      </tr>
     </thead>
-    <tbody id="adminTableRows"></tbody>
+    <tbody id="adminUsersRows"></tbody>
    </table>
   </div>
  </div>
 
- <div id="adminHotelsWorkspace" class="panel hidden admin-only">
+ <!-- HOTELS & RATES TAB -->
+ <div id="adminHotelsTab" class="panel hidden">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>Hotel Directory Control</h3>
-   <button class="btn btn-success" onclick="openAddHotelModal()">+ Add New Hotel</button>
+   <h3>Hotels & VIP Commission Rates</h3>
+   <div>
+    <button class="btn btn-success" onclick="openAddHotelModal()">+ Add Hotel</button>
+    <button class="btn" onclick="saveHotelsAndVipsAdmin()">💾 Save Rates & Hotels</button>
+   </div>
   </div>
+  <h4>VIP Tier Limits & Profit Rates</h4>
+  <div class="table-wrap" style="margin-bottom:20px">
+   <table>
+    <thead>
+     <tr>
+      <th>Level</th>
+      <th>Name</th>
+      <th>Daily Limit</th>
+      <th>Profit Rate (%)</th>
+      <th>Min Balance ($)</th>
+      <th>Max Balance / Withdraw Limit ($)</th>
+     </tr>
+    </thead>
+    <tbody id="adminVipRows"></tbody>
+   </table>
+  </div>
+
+  <h4>Hotel Directory & Prices</h4>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th>Image</th>
+      <th>ID</th>
       <th>Hotel Name</th>
       <th>Country</th>
       <th>Stars</th>
       <th>Price ($)</th>
-      <th>Actions</th>
+      <th>Action</th>
      </tr>
     </thead>
-    <tbody id="adminHotelTableRows"></tbody>
+    <tbody id="adminHotelsRows"></tbody>
    </table>
   </div>
  </div>
 
- <div id="adminVipConfigWorkspace" class="panel hidden admin-only">
-  <h3>VIP Tiers Configuration (VIP 1 to VIP 5)</h3>
-  <div class="table-wrap" style="margin-top:12px">
-   <table>
-    <thead>
-     <tr>
-      <th>VIP Level</th>
-      <th>Daily Limit</th>
-      <th>Profit Rate (%)</th>
-      <th>Min Balance ($)</th>
-      <th>Actions</th>
-     </tr>
-    </thead>
-    <tbody id="adminVipTableRows"></tbody>
-   </table>
+ <!-- CS CHAT TAB -->
+ <div id="adminCsTab" class="panel hidden" style="display:grid;grid-template-columns:240px 1fr;gap:14px">
+  <div style="border-right:1px solid var(--fb-border);padding-right:10px">
+   <h4>Registered Users</h4>
+   <div id="csClientList"></div>
   </div>
- </div>
-
- <div id="adminFinanceWorkspace" class="panel hidden admin-only">
-  <h3>Pending Deposit & Withdrawal Requests</h3>
-  <div class="table-wrap" style="margin-top:12px">
-   <table>
-    <thead>
-     <tr>
-      <th>Request ID</th>
-      <th>User Name (ID)</th>
-      <th>Type</th>
-      <th>Amount ($)</th>
-      <th>Note</th>
-      <th>Date</th>
-      <th>Status</th>
-      <th>Actions</th>
-     </tr>
-    </thead>
-    <tbody id="adminFinanceRows"></tbody>
-   </table>
-  </div>
- </div>
-
- <div id="adminSettingsWorkspace" class="panel hidden admin-only">
-  <h3>Staff & Role Access Credentials</h3>
-  <div style="max-width:400px;margin-top:14px">
-   <label>Super Admin Password</label>
-   <div class="password-wrapper">
-     <input id="adminPassInput" type="password">
-     <button type="button" class="password-toggle" onclick="togglePasswordVisibility('adminPassInput', this)">👁️</button>
-   </div>
-   <label>Customer Service Agent Password</label>
-   <div class="password-wrapper">
-     <input id="csPassInput" type="password">
-     <button type="button" class="password-toggle" onclick="togglePasswordVisibility('csPassInput', this)">👁️</button>
-   </div>
-   <button class="btn btn-success" style="margin-top:12px" onclick="saveStaffCredentials()">Update Passwords</button>
-  </div>
- </div>
-
- <div id="csWorkspace" class="panel hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
-  <aside class="staff-sidebar panel" style="padding:10px">
-   <h3>Client Chats</h3>
-   <input id="csSearch" placeholder="Search clients..." style="margin:8px 0" oninput="renderStaffClientList()">
-   <div id="csUserList"></div>
-  </aside>
-  <div class="staff-main panel" style="padding:0;overflow:hidden">
-   <div class="chat-window" style="border:0">
-    <div class="chat-header"><span id="activeChatClientName">Client Chat</span></div>
-    <div class="chat-messages" id="staffMessages"></div>
-    <div class="chat-footer">
-     <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-     <input id="staffInput" type="text" placeholder="Type reply as CS..." style="flex:1" onkeypress="if(event.key==='Enter') sendStaffMessage()">
-     <button class="btn" onclick="sendStaffMessage()">➤</button>
-    </div>
+  <div>
+   <div class="chat-header"><span id="csActiveUserTitle">Select a user to chat</span></div>
+   <div class="chat-messages" id="adminChatMessages" style="height:300px"></div>
+   <div class="chat-footer">
+    <input id="adminChatInput" placeholder="Reply as Trip Booking Service..." style="flex:1" onkeypress="if(event.key==='Enter') sendAdminChatReply()">
+    <button class="btn" onclick="sendAdminChatReply()">➤</button>
    </div>
   </div>
  </div>
@@ -601,1070 +448,925 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 </main>
 
-<footer>
- <div class="container footer-grid" style="margin:0 auto">
-  <div>
-   <h4>Trip Booking</h4>
-   <p>International Hotel Booking & Travel Platform.</p>
-   <div class="app-btn" onclick="triggerInstallApp()">
-    📱 Install Phone App
-   </div>
-  </div>
-  <div>
-   <h4>Quick Links</h4>
-   <a href="#" onclick="showPage('homePage')">Home</a>
-   <a href="#" onclick="showPage('supportPage')">Customer Support</a>
-   <a href="#" onclick="showPage('bookingPage')">Booking Tasks</a>
-   <a href="#" onclick="showPage('profilePage')">My Profile</a>
-  </div>
-  <div>
-   <h4>Contact Information</h4>
-   <p>Address: 12101 Dry Valley Road North, Seattle</p>
-   <p>Telephone: 1-855-266-9299</p>
-   <p>Email: cs-reply@tripbooking.com</p>
-  </div>
- </div>
-</footer>
-
 <nav class="bottom-nav">
- <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span>Home</span></button>
- <button onclick="showPage('supportPage',this)"><span class="nav-icon">📱</span><span>Support</span></button>
- <button class="booking-nav" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span>Get Order</span></button>
- <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span>History</span></button>
- <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span>Profile</span></button>
+ <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
+ <button onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span data-i18n="navSupport">Service</span></button>
+ <button onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
+ <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
+ <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- MODALS -->
-<div class="modal hidden" id="customAlertModal">
- <div class="modal-box">
-  <div style="font-size:38px;margin-bottom:10px">💡</div>
-  <h3 id="customAlertTitle" style="margin-bottom:8px;color:var(--fb-primary)">Notification</h3>
-  <p id="customAlertText" class="muted" style="font-size:15px;margin-bottom:18px"></p>
-  <button class="btn btn-block" onclick="closeModal('customAlertModal')" style="padding:10px">OK</button>
- </div>
-</div>
-
-<div class="modal hidden" id="successModal">
- <div class="modal-box celebration-box">
-  <div style="font-size:42px;margin-bottom:10px">🎉</div>
-  <h2 style="color:var(--fb-success);margin-bottom:8px">Booking Confirmed!</h2>
-  <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
-  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px;background:var(--fb-success);color:white">Awesome, Continue</button>
- </div>
-</div>
-
-<!-- PLAY STORE / PWA INSTALL SIMULATOR MODAL -->
-<div class="modal hidden" id="pwaInstallModal">
- <div class="modal-box" style="text-align:center">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;text-align:left">
-   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" style="width:55px;height:55px;border-radius:12px;object-fit:cover">
-   <div>
-    <h3 style="margin:0">Trip Booking App</h3>
-    <p class="muted small" style="margin:2px 0 0">Official Travel & Hotel Booking Platform</p>
-    <div class="small" style="color:var(--fb-success);margin-top:2px">★ 4.8 · 10M+ Downloads · Rated for 3+</div>
-   </div>
-  </div>
-  
-  <div id="installProgressArea" style="margin:20px 0">
-   <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
-    <span id="installStatusText">Installing Trip Booking...</span>
-    <strong id="installPercent">0%</strong>
-   </div>
-   <div style="height:10px;background:var(--fb-border);border-radius:5px;overflow:hidden">
-    <div id="installProgressBar" style="height:100%;width:0%;background:var(--fb-success);transition:width 0.1s linear"></div>
-   </div>
-  </div>
-
-  <div id="installCompleteArea" class="hidden" style="margin:16px 0">
-   <div style="font-size:32px;margin-bottom:6px">🎉</div>
-   <h4 style="margin:0 0 6px;color:var(--fb-success)">App Installed Successfully!</h4>
-   <p class="muted small">Trip Booking has been added to your phone home screen.</p>
-  </div>
-
-  <div id="installButtons" class="hidden" style="display:flex;gap:10px;margin-top:16px">
-   <button class="btn-light btn" style="flex:1" onclick="closeModal('pwaInstallModal')">Close (Browser)</button>
-   <button class="btn btn-success" style="flex:1" onclick="openStandaloneApp()">Open App</button>
-  </div>
- </div>
-</div>
-
+<!-- AUTH MODAL (With Show/Hide Password Eye Icon) -->
 <div class="modal hidden" id="authModal">
- <div class="modal-box" style="text-align:left">
+ <div class="modal-box">
   <div class="modal-head">
-   <h2 id="authTitle">Login</h2>
+   <h3 id="authTitle">Login</h3>
    <button class="close" onclick="closeModal('authModal')">✕</button>
   </div>
-  <div id="registerFields" class="hidden">
-   <label>Full Name</label><input id="regName" placeholder="Enter your full name">
-   <label>Invite Code (4 digits + 2 letters, e.g. 1234AB)</label><input id="regInvite" placeholder="e.g. 1234AB">
+  <div id="regExtraFields" class="hidden">
+   <label data-i18n="fullNameLabel">Full Name</label>
+   <input id="regName" placeholder="Enter your full name">
+   <label>Referral Code (Optional, e.g. TP1234)</label>
+   <input id="regRefInput" placeholder="TPXXXX">
   </div>
-  <label>Phone Number or Email</label><input id="authIdentity" placeholder="Enter phone or email">
-  <label>Password</label>
-  <div class="password-wrapper">
-    <input id="authPassword" type="password" placeholder="Min 6 characters">
-    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('authPassword', this)">👁️</button>
+  <label data-i18n="identityLabel">Phone Number or Email (Unique)</label>
+  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
+  
+  <label data-i18n="passwordLabel">Password</label>
+  <div class="pass-wrap">
+   <input id="authPassword" type="password" placeholder="Enter password">
+   <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
   </div>
-  <p id="authMessage" class="muted" style="color:var(--fb-danger);margin-top:6px"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="submitAuth()">Continue</button>
-  <p style="text-align:center;margin-top:10px"><a href="#" onclick="toggleAuthMode();return false">Switch Login / Register</a></p>
+
+  <p id="authError" style="color:var(--fb-danger);font-size:13px;margin:8px 0"></p>
+  <button class="btn btn-block" style="margin-top:10px" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
+  <p style="text-align:center;margin-top:12px;font-size:13px">
+   <a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a>
+  </p>
  </div>
 </div>
 
+<!-- ADMIN SECONDARY PASSWORD MODAL (12344321) -->
 <div class="modal hidden" id="staffModal">
- <div class="modal-box" style="text-align:left">
+ <div class="modal-box">
   <div class="modal-head">
-   <h2>Staff & Admin Portal</h2>
+   <h3>🔐 Admin Security Verification</h3>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
   </div>
-  <label>Select Role</label>
-  <select id="staffRoleSelect">
-   <option value="admin">Super Admin (Full Control)</option>
-   <option value="cs">Customer Service Agent (Chat Support)</option>
-  </select>
-  <label>Access Password</label>
-  <div class="password-wrapper">
-    <input id="staffPassword" type="password" placeholder="Enter password (default 12344321)">
-    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('staffPassword', this)">👁️</button>
+  <label>Enter Secondary Admin Password</label>
+  <div class="pass-wrap">
+   <input id="staffSecPass" type="password" placeholder="Enter 12344321">
+   <button type="button" class="eye-btn" onclick="togglePassVisibility('staffSecPass', this)">👁️</button>
   </div>
-  <p id="staffMessage" class="muted" style="margin-top:6px;color:var(--fb-danger)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
+  <p id="staffError" style="color:var(--fb-danger);font-size:13px;margin:8px 0"></p>
+  <button class="btn btn-success btn-block" style="margin-top:10px" onclick="verifyAdminAccess()">Access Admin Panel</button>
  </div>
 </div>
 
-<div class="modal hidden" id="adminUserDetailModal">
- <div class="modal-box" style="text-align:left;width:min(550px,95%);max-height:85vh;overflow-y:auto">
+<!-- ADD HOTEL MODAL -->
+<div class="modal hidden" id="addHotelModal">
+ <div class="modal-box">
   <div class="modal-head">
-   <h3>User Account Breakdown & History</h3>
-   <button class="close" onclick="closeModal('adminUserDetailModal')">✕</button>
+   <h3>Add New Hotel</h3>
+   <button class="close" onclick="closeModal('addHotelModal')">✕</button>
   </div>
-  <div id="adminUserDetailContent"></div>
+  <label>Hotel Name</label><input id="newHName">
+  <label>Country</label><input id="newHCountry">
+  <label>Price ($)</label><input id="newHPrice" type="number">
+  <label>Stars</label><input id="newHStars" type="number" value="5" min="1" max="5">
+  <button class="btn btn-success btn-block" style="margin-top:12px" onclick="addHotelToSupabase()">Save Hotel</button>
  </div>
 </div>
 
-<div class="modal hidden" id="hotelModal">
- <div class="modal-box" style="text-align:left">
-  <div class="modal-head">
-   <h3 id="hotelModalTitle">Add New Hotel</h3>
-   <button class="close" onclick="closeModal('hotelModal')">✕</button>
-  </div>
-  <input type="hidden" id="hotelEditIndex" value="-1">
-  <label>Hotel Name</label><input id="modalHotelName" placeholder="Hotel Name">
-  <label>Country / Location</label><input id="modalHotelCountry" placeholder="Country">
-  <label>Star Rating (3 to 5)</label><input id="modalHotelStars" type="number" min="3" max="5" value="5">
-  <label>Price ($)</label><input id="modalHotelPrice" type="number" value="150">
-  <label>Image URL</label><input id="modalHotelImg" placeholder="https://images.unsplash.com/...">
-  <button class="btn btn-block" style="margin-top:14px" onclick="saveHotelModal()">Save Hotel</button>
+<!-- NOTIFICATION MODAL -->
+<div class="modal hidden" id="alertModal">
+ <div class="modal-box" style="text-align:center">
+  <h3 id="alertTitle" style="color:var(--fb-primary)">Notification</h3>
+  <p id="alertBody" style="margin:14px 0"></p>
+  <button class="btn btn-block" onclick="closeModal('alertModal')">OK</button>
  </div>
 </div>
 
 <script>
 "use strict";
 
+/* ==========================================================================
+   1. SUPABASE CONFIGURATION (Using Provided Credentials)
+   ========================================================================== */
+const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODczMTksImV4cCI6MjExMDU2MzMxOX0.LPEZeEpknBxDKCLNPhv41TSCjxPuAo83Zca_laJlFb8";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 const $ = id => document.getElementById(id);
 
-const KEYS = {
- users: "tb_users_v30",
- current: "tb_current_v30",
- theme: "tb_theme_v30",
- activity: "tb_activity_v30",
- finance: "tb_finance_v20",
- staffCreds: "tb_staff_creds_v20",
- hotels: "tb_hotels_v20",
- vipConfig: "tb_vip_config_v20"
-};
-
-let db = {
- users: JSON.parse(localStorage.getItem(KEYS.users) || '[]'),
- current: JSON.parse(localStorage.getItem(KEYS.current) || 'null'),
- staffCreds: JSON.parse(localStorage.getItem(KEYS.staffCreds) || '{"admin":"12344321","cs":"12344321"}'),
- hotels: JSON.parse(localStorage.getItem(KEYS.hotels) || JSON.stringify([
-  {name: "Marina Bay Sands", country: "Singapore", stars: 5, price: 320, img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"},
-  {name: "Burj Al Arab", country: "UAE", stars: 5, price: 450, img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=900"},
-  {name: "Ritz Paris", country: "France", stars: 5, price: 380, img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=900"},
-  {name: "Plaza Hotel", country: "USA", stars: 5, price: 290, img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=900"},
-  {name: "Tropical Paradise Resort", country: "Thailand", stars: 4, price: 140, img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=900"},
-  {name: "Alpine Lodge", country: "Switzerland", stars: 4, price: 210, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900"},
-  {name: "Kyoto Traditional Inn", country: "Japan", stars: 3, price: 110, img: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=900"},
-  {name: "Santorini Cliff Resort", country: "Greece", stars: 5, price: 340, img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=900"}
-])),
- vipConfig: JSON.parse(localStorage.getItem(KEYS.vipConfig) || JSON.stringify({
-  "LV1": { limit: 30, rate: 0.5, minBal: 0 },
-  "LV2": { limit: 35, rate: 0.8, minBal: 500 },
-  "LV3": { limit: 40, rate: 1.2, minBal: 2000 },
-  "LV4": { limit: 45, rate: 1.8, minBal: 5000 },
-  "LV5": { limit: 50, rate: 2.5, minBal: 10000 }
-})),
- finance: JSON.parse(localStorage.getItem(KEYS.finance) || '[]'),
- activity: JSON.parse(localStorage.getItem(KEYS.activity) || '[]'),
- activeStaffRole: null,
- activeChatUserId: null,
- authMode: 'login'
-};
-
-function saveDb() {
- localStorage.setItem(KEYS.users, JSON.stringify(db.users));
- localStorage.setItem(KEYS.current, JSON.stringify(db.current));
- localStorage.setItem(KEYS.staffCreds, JSON.stringify(db.staffCreds));
- localStorage.setItem(KEYS.hotels, JSON.stringify(db.hotels));
- localStorage.setItem(KEYS.vipConfig, JSON.stringify(db.vipConfig));
- localStorage.setItem(KEYS.finance, JSON.stringify(db.finance));
- localStorage.setItem(KEYS.activity, JSON.stringify(db.activity));
-}
-
-function showAlert(text, title="Notification") {
- $('customAlertTitle').textContent = title;
- $('customAlertText').textContent = text;
- $('customAlertModal').classList.remove('hidden');
-}
-
-function closeModal(id) {
- $(id).classList.add('hidden');
-}
-
-function togglePasswordVisibility(inputId, btn) {
- const input = $(inputId);
- if (input.type === 'password') {
-  input.type = 'text';
-  btn.textContent = '🙈';
- } else {
-  input.type = 'password';
-  btn.textContent = '👁️';
- }
-}
-
-function enterPlatform() {
- $('splashScreen').style.opacity = '0';
- setTimeout(() => $('splashScreen').style.display = 'none', 600);
-}
-
-function toggleTheme() {
- document.body.classList.toggle('dark');
- localStorage.setItem(KEYS.theme, document.body.classList.contains('dark') ? 'dark' : 'light');
- $('themeToggle').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-}
-
-function showPage(pageId, btnEl) {
- document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
- $(pageId).classList.add('active');
- if(btnEl) {
-  document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
-  btnEl.classList.add('active');
- }
- window.scrollTo({top:0, behavior:'smooth'});
- if(pageId === 'homePage') renderHotels();
- if(pageId === 'bookingPage') renderBookingTasks();
- if(pageId === 'historyPage') renderHistory();
- if(pageId === 'profilePage') renderProfile();
-}
-
-// Play Store / App Installation Simulator
+/* ==========================================================================
+   2. PWA MANIFEST & 0% - 100% LOADING EXPERIENCE
+   ========================================================================== */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
  e.preventDefault();
  deferredPrompt = e;
 });
 
-function triggerInstallApp() {
- $('installProgressArea').classList.remove('hidden');
- $('installCompleteArea').classList.add('hidden');
- $('installButtons').classList.add('hidden');
- $('installProgressBar').style.width = '0%';
- $('installPercent').textContent = '0%';
- $('installStatusText').textContent = 'Downloading Trip Booking (48.5 MB)...';
- $('pwaInstallModal').classList.remove('hidden');
+function setupPWAManifest() {
+ const manifest = {
+  name: "Trip Booking",
+  short_name: "Trip Booking",
+  start_url: window.location.href,
+  display: "standalone",
+  background_color: "#008080",
+  theme_color: "#008080",
+  icons: [{
+   src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=192",
+   sizes: "192x192",
+   type: "image/png"
+  }]
+ };
+ const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+ $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
+}
 
- // Native PWA install prompt if available
- if (deferredPrompt) {
+function runSplashLoader() {
+ let pct = 0;
+ const interval = setInterval(() => {
+  pct += 4;
+  if(pct >= 100) {
+   pct = 100;
+   clearInterval(interval);
+   $("splashActions").classList.remove("hidden");
+  }
+  $("splashProgressBar").style.width = pct + "%";
+  $("splashPercent").textContent = pct + "%";
+ }, 60);
+}
+
+function closeSplash() {
+ $("splashScreen").classList.add("hidden");
+}
+
+async function openAndInstallPWA() {
+ $("splashScreen").classList.add("hidden");
+ if(deferredPrompt) {
   deferredPrompt.prompt();
-  deferredPrompt.userChoice.then((choiceResult) => {
-   if (choiceResult.outcome === 'accepted') {
-    console.log('User accepted the install prompt');
-   }
-   deferredPrompt = null;
-  });
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+ } else {
+  showAlert("To install 'Trip Booking' on your Home Screen: Tap your browser menu (⋮ or Share) and select 'Add to Home Screen'.", "Install Trip Booking App");
+ }
+}
+
+/* ==========================================================================
+   3. MULTI-LANGUAGE (MY, EN, TH, ZH) & LIVE EXCHANGE RATES
+   ========================================================================== */
+const I18N = {
+ my: {
+  splashTitle: "Trip Booking", splashDesc: "နိုင်ငံတကာ ဟိုတယ် ဘိုကင်ပလက်ဖောင်း",
+  closeBtn: "ပိတ်မည် (Close)", openBtn: "ဖွင့်မည် (Open)", loginBtn: "အကောင့်ဝင်ရန်",
+  heroTitle: "Trip Booking မှ ကြိုဆိုပါတယ်", heroDesc: "နိုင်ငံတကာ ဟိုတယ် ဘိုကင်ပလက်ဖောင်း",
+  startTaskBtn: "ဘိုကင်တာဝန် စတင်မည်", hotelDir: "နိုင်ငံတကာ ဟိုတယ်များ",
+  csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
+  accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
+  dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုកင်မှတ်တမ်း",
+  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thAmount: "ပမာဏ", thStatus: "အခြေအနေ",
+  myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Trip Booking မှ ကြိုဆိုပါတယ်",
+  loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်အသစ်ဖွင့်မည်",
+  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
+  inviteCodeTitle: "မိတ်ဆက်ကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
+  withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
+  logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
+  navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
+  fullNameLabel: "အမည်ပြည့်စုံ", identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
+  passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်"
+ },
+ en: {
+  splashTitle: "Trip Booking", splashDesc: "International Hotel Booking Platform",
+  closeBtn: "Close", openBtn: "Open", loginBtn: "Login",
+  heroTitle: "Welcome to Trip Booking", heroDesc: "International Hotel Booking Platform",
+  startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
+  accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
+  dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
+  thDate: "Date", thType: "Type", thAmount: "Amount", thStatus: "Status",
+  myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "Login or register a new account to start.", createAcc: "Register",
+  walletBal: "Wallet Balance", completedBookings: "Completed Orders",
+  inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
+  withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
+  logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
+  navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
+  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email",
+  passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register"
+ },
+ th: {
+  splashTitle: "Trip Booking", splashDesc: "แพลตฟอร์มจองโรงแรมนานาชาติ",
+  closeBtn: "ปิด", openBtn: "เปิด", loginBtn: "เข้าสู่ระบบ",
+  heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroDesc: "แพลตฟอร์มจองโรงแรมนานาชาติ",
+  startTaskBtn: "เริ่มงานการจอง", hotelDir: "โรงแรมนานาชาติ",
+  csCenter: "Trip Booking Service", taskCenter: "ศูนย์งานการจอง",
+  accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่น", totalProfit: "กำไรทั้งหมด",
+  dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับออเดอร์", histTitle: "ประวัติการทำรายการและการจอง",
+  thDate: "วันที่", thType: "ประเภท", thAmount: "จำนวนเงิน", thStatus: "สถานะ",
+  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
+  loginPrompt: "กรุณาเข้าสู่ระบบหรือสมัครสมาชิกใหม่", createAcc: "สมัครสมาชิก",
+  walletBal: "ยอดเงินในกระเป๋า", completedBookings: "ออเดอร์ที่เสร็จสิ้น",
+  inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
+  withdrawBtn: "🏦 ถอนเงิน", vipTiersHead: "ระดับ VIP และขีดจำกัด",
+  logoutBtn: "ออกจากระบบ", navHome: "หน้าแรก", navSupport: "บริการ",
+  navBooking: "รับออเดอร์", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
+  fullNameLabel: "ชื่อ-นามสกุล", identityLabel: "เบอร์โทรศัพท์ หรือ อีเมล",
+  passwordLabel: "รหัสผ่าน", continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก"
+ },
+ zh: {
+  splashTitle: "Trip Booking", splashDesc: "国际酒店预订平台",
+  closeBtn: "关闭", openBtn: "打开", loginBtn: "登录",
+  heroTitle: "欢迎来到 Trip Booking", heroDesc: "国际酒店预订平台",
+  startTaskBtn: "开始预订任务", hotelDir: "国际酒店目录",
+  csCenter: "Trip Booking Service", taskCenter: "预订任务中心",
+  accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
+  dailyLimit: "每日订单", getOrderBtn: "立即接单", histTitle: "交易与预订记录",
+  thDate: "日期", thType: "类型", thAmount: "金额", thStatus: "状态",
+  myProfile: "我的资料", welcomeTrip: "欢迎来到 Trip Booking",
+  loginPrompt: "请登录或注册新账户。", createAcc: "注册",
+  walletBal: "钱包余额", completedBookings: "已完成订单",
+  inviteCodeTitle: "推荐码", refBonus: "推荐收益", depositBtn: "💳 充值",
+  withdrawBtn: "🏦 提现", vipTiersHead: "VIP 等级与限额",
+  logoutBtn: "退出登录", navHome: "首页", navSupport: "客服",
+  navBooking: "接单", navHistory: "记录", navProfile: "我的",
+  fullNameLabel: "全名", identityLabel: "手机号或邮箱",
+  passwordLabel: "密码", continueBtn: "继续", switchAuth: "切换 登录 / 注册"
+ }
+};
+
+let currentLang = localStorage.getItem("tb_lang_sync") || "my";
+
+function changeLanguage(lang) {
+ currentLang = lang;
+ localStorage.setItem("tb_lang_sync", lang);
+ $("language").value = lang;
+ document.querySelectorAll("[data-i18n]").forEach(el => {
+  const k = el.getAttribute("data-i18n");
+  if(I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
+ });
+ renderAllViews();
+}
+
+// Live Exchange Rates Simulation (USD, THB, CNY -> MMK)
+let baseRates = { usd: 4510.00, thb: 132.50, cny: 625.80 };
+function startLiveRates() {
+ setInterval(() => {
+  const deltaU = (Math.random() - 0.5) * 4;
+  const deltaT = (Math.random() - 0.5) * 0.4;
+  const deltaC = (Math.random() - 0.5) * 1.2;
+  const u = (baseRates.usd + deltaU).toFixed(2);
+  const t = (baseRates.thb + deltaT).toFixed(2);
+  const c = (baseRates.cny + deltaC).toFixed(2);
+  ["rateUsd", "pRateUsd"].forEach(id => { if($(id)) $(id).textContent = u; });
+  ["rateThb", "pRateThb"].forEach(id => { if($(id)) $(id).textContent = t; });
+  ["rateCny", "pRateCny"].forEach(id => { if($(id)) $(id).textContent = c; });
+ }, 3500);
+}
+
+/* ==========================================================================
+   4. STATE & REAL-TIME SUPABASE SYNCHRONIZATION
+   ========================================================================== */
+let allUsers = [];
+let allHotels = [];
+let allVipTiers = [];
+let currentUser = null;
+let authMode = "login";
+let activeTask = null;
+let selectedCsUserId = null;
+
+function showAlert(msg, title="Notification") {
+ $("alertTitle").textContent = title;
+ $("alertBody").innerHTML = msg;
+ $("alertModal").classList.remove("hidden");
+}
+
+function closeModal(id) { $(id).classList.add("hidden"); }
+
+function togglePassVisibility(inputId, btn) {
+ const inp = $(inputId);
+ if(inp.type === "password") {
+  inp.type = "text";
+  btn.textContent = "🙈";
+ } else {
+  inp.type = "password";
+  btn.textContent = "👁️";
+ }
+}
+
+function toggleTheme() {
+ document.body.classList.toggle("dark");
+}
+
+function showPage(pageId, navBtn) {
+ document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+ $(pageId).classList.add("active");
+ if(navBtn) {
+  document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
+  navBtn.classList.add("active");
+ }
+ renderAllViews();
+}
+
+async function initSupabaseData() {
+ // Load VIP Tiers
+ const { data: vips } = await sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true });
+ if(vips) allVipTiers = vips;
+
+ // Load Hotels
+ const { data: hts } = await sb.from('hotels').select('*');
+ if(hts) allHotels = hts;
+
+ // Load Users
+ const { data: usrs } = await sb.from('users').select('*').order('created_at', { ascending: false });
+ if(usrs) allUsers = usrs;
+
+ // Ensure Admin account 09775191427 exists in Supabase
+ const adminExists = allUsers.find(u => u.identity === "09775191427");
+ if(!adminExists) {
+  await sb.from('users').insert([{
+   id: "100001",
+   name: "Super Admin",
+   identity: "09775191427",
+   password: "Mary1245@",
+   referral_code: "TP0001",
+   balance: 0,
+   vip_level: "LV5"
+  }]);
  }
 
- let progress = 0;
- const interval = setInterval(() => {
-  progress += Math.floor(Math.random() * 12) + 5;
-  if(progress >= 100) {
-   progress = 100;
-   clearInterval(interval);
-   $('installStatusText').textContent = 'Installation Complete!';
-   $('installProgressBar').style.width = '100%';
-   $('installPercent').textContent = '100%';
-   $('installProgressArea').classList.add('hidden');
-   $('installCompleteArea').classList.remove('hidden');
-   $('installButtons').classList.remove('hidden');
-  } else {
-   $('installProgressBar').style.width = progress + '%';
-   $('installPercent').textContent = progress + '%';
-   if(progress > 60) $('installStatusText').textContent = 'Installing Trip Booking app...';
-  }
- }, 150);
+ // Restore Persistent Session
+ const savedUserId = localStorage.getItem("tb_session_uid");
+ if(savedUserId) {
+  const found = allUsers.find(u => u.id === savedUserId);
+  if(found) currentUser = found;
+ }
+
+ renderAllViews();
+
+ // Subscribe to Real-Time Database Changes across all devices
+ sb.channel('realtime-platform')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, async () => {
+   const { data } = await sb.from('users').select('*').order('created_at', { ascending: false });
+   if(data) {
+    allUsers = data;
+    if(currentUser) {
+     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
+    }
+    renderAllViews();
+   }
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'hotels' }, async () => {
+   const { data } = await sb.from('hotels').select('*');
+   if(data) { allHotels = data; renderAllViews(); }
+  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'vip_tiers' }, async () => {
+   const { data } = await sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true });
+   if(data) { allVipTiers = data; renderAllViews(); }
+  })
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
+   if(currentUser) loadUserMessages(currentUser.id);
+   if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+  })
+  .subscribe();
 }
 
-function openStandaloneApp() {
- closeModal('pwaInstallModal');
- // Enter App Mode (simulated immersive app experience)
- document.body.style.transform = 'scale(1)';
- showAlert('Trip Booking App opened in immersive mode! Enjoy seamless booking experience.');
-}
-
+/* ==========================================================================
+   5. AUTHENTICATION, UNIQUE CONSTRAINTS & TPXXXX REFERRAL CODE
+   ========================================================================== */
 function openAuth(mode) {
- db.authMode = mode;
- $('authTitle').textContent = mode === 'login' ? 'Login' : 'Create Account';
- $('registerFields').classList.toggle('hidden', mode === 'login');
- $('authMessage').textContent = '';
- $('authIdentity').value = '';
- $('authPassword').value = '';
- $('authModal').classList.remove('hidden');
+ authMode = mode;
+ $("authModal").classList.remove("hidden");
+ $("regExtraFields").classList.toggle("hidden", mode === "login");
+ $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginBtn : I18N[currentLang].createAcc;
+ $("authError").textContent = "";
 }
 
 function toggleAuthMode() {
- openAuth(db.authMode === 'login' ? 'register' : 'login');
+ openAuth(authMode === "login" ? "register" : "login");
 }
 
-function submitAuth() {
- const identity = $('authIdentity').value.trim();
- const password = $('authPassword').value;
- if(!identity || !password) {
-  $('authMessage').textContent = 'Please fill in all fields.';
+function generateUniqueTPCode() {
+ let code;
+ do {
+  const num = Math.floor(1000 + Math.random() * 9000);
+  code = "TP" + num;
+ } while (allUsers.some(u => u.referral_code === code));
+ return code;
+}
+
+async function submitAuth() {
+ const identity = $("authIdentity").value.trim().toLowerCase();
+ const password = $("authPassword").value;
+ const err = $("authError");
+ err.textContent = "";
+
+ if(!identity || password.length < 6) {
+  err.textContent = "Please enter valid phone/email and password (min 6 chars).";
   return;
  }
 
- if(db.authMode === 'register') {
-  const name = $('regName').value.trim() || 'User';
-  const invite = $('regInvite').value.trim();
-  
-  const exists = db.users.find(u => u.identity.toLowerCase() === identity.toLowerCase());
-  if(exists) {
-   $('authMessage').textContent = 'This phone number or email is already registered! Please log in instead.';
+ if(authMode === "register") {
+  // Check strict uniqueness in Supabase
+  const { data: existing } = await sb.from('users').select('id').eq('identity', identity);
+  if(existing && existing.length > 0) {
+   err.textContent = "This phone number or email is already registered!";
    return;
   }
 
-  const newId = String(Math.floor(100000 + Math.random() * 900000));
-  const inviteCode = String(Math.floor(1000 + Math.random() * 9000)) + String.fromCharCode(65+Math.floor(Math.random()*26)) + String.fromCharCode(65+Math.floor(Math.random()*26));
-  
-  if(invite) {
-   const referrer = db.users.find(u => u.inviteCode === invite);
-   if(referrer) {
-    referrer.invitedCount = (referrer.invitedCount || 0) + 1;
+  const name = $("regName").value.trim() || "Member";
+  const refInput = $("regRefInput").value.trim().toUpperCase();
+  let invitedBy = "-";
+
+  if(refInput) {
+   const { data: refOwner } = await sb.from('users').select('*').eq('referral_code', refInput).single();
+   if(refOwner) {
+    invitedBy = refOwner.id;
+    await sb.from('users').update({ invited_count: (refOwner.invited_count || 0) + 1 }).eq('id', refOwner.id);
    }
   }
 
+  const newId = String(Math.floor(100000 + Math.random() * 900000));
+  const newCode = generateUniqueTPCode();
+
   const newUser = {
    id: newId,
-   identity: identity,
-   password: password,
-   name: name,
-   vip: 'LV1',
-   wallet: 100.0,
-   profit: 0.0,
-   totalProfit: 0.0,
-   ordersCompleted: 0,
-   negativeBalance: 0,
-   profitBoxCustom: null,
-   customOrderLimit: null,
-   inviteCode: inviteCode,
-   invitedBy: invite || '-',
-   invitedCount: 0,
-   referralEarned: 0,
-   history: [],
-   bookings: [],
-   chats: []
+   name,
+   identity,
+   password,
+   referral_code: newCode,
+   invited_by: invitedBy,
+   balance: 0.00,
+   vip_level: "LV1",
+   orders: 0
   };
 
-  db.users.push(newUser);
-  db.current = newUser;
-  saveDb();
-  closeModal('authModal');
-  showAlert('Account created successfully!');
-  checkExclusiveStaffAccess();
-  showPage('profilePage');
- } else {
-  if(identity === '09775191427' && password === 'Mary1245@') {
-   closeModal('authModal');
-   openStaffModalFromAccount('admin');
+  const { error } = await sb.from('users').insert([newUser]);
+  if(error) {
+   err.textContent = error.message;
    return;
   }
-  const user = db.users.find(u => u.identity.toLowerCase() === identity.toLowerCase() && u.password === password);
-  if(!user) {
-   $('authMessage').textContent = 'Invalid credentials or account does not exist.';
-   return;
-  }
-  db.current = user;
-  saveDb();
-  closeModal('authModal');
-  checkExclusiveStaffAccess();
-  showAlert('Welcome back, ' + user.name + '!');
-  showPage('profilePage');
+
+  currentUser = newUser;
+  localStorage.setItem("tb_session_uid", newUser.id);
+  closeModal("authModal");
+  showAlert(`Registration successful! Your Referral Code is <b>${newCode}</b>.`);
+  renderAllViews();
+  return;
  }
+
+ // Login flow
+ const { data: user, error } = await sb.from('users')
+  .select('*')
+  .eq('identity', identity)
+  .eq('password', password)
+  .single();
+
+ if(error || !user) {
+  err.textContent = "Invalid phone/email or password.";
+  return;
+ }
+
+ currentUser = user;
+ localStorage.setItem("tb_session_uid", user.id);
+ closeModal("authModal");
+ renderAllViews();
+ showPage("profilePage");
 }
 
 function logout() {
- db.current = null;
- saveDb();
- checkExclusiveStaffAccess();
- showPage('homePage');
- showAlert('Logged out successfully.');
+ currentUser = null;
+ localStorage.removeItem("tb_session_uid");
+ $("exclusiveAdminBtn").classList.add("hidden");
+ renderAllViews();
+ showPage("homePage");
 }
 
-function checkExclusiveStaffAccess() {
- const isSpecial = db.current && db.current.identity === '09775191427' && db.current.password === 'Mary1245@';
- $('exclusiveAdminBtn').classList.toggle('hidden', !isSpecial);
- $('exclusiveCsBtn').classList.toggle('hidden', !isSpecial);
+/* ==========================================================================
+   6. VIP TIERS, COMMISSION & WITHDRAWAL LIMIT BLOCKING
+   ========================================================================== */
+function getVipInfo(level) {
+ return allVipTiers.find(v => v.level === level) || { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.005, min_bal: 0, max_withdraw: 1000 };
 }
 
-function openStaffModalFromAccount(role) {
- $('staffRoleSelect').value = role;
- $('staffPassword').value = '';
- $('staffMessage').textContent = '';
- $('staffModal').classList.remove('hidden');
-}
-
-function staffLogin() {
- const role = $('staffRoleSelect').value;
- const pass = $('staffPassword').value;
- const correctPass = db.staffCreds[role] || '12344321';
- if(pass !== correctPass) {
-  $('staffMessage').textContent = 'Incorrect staff password!';
-  return;
- }
- closeModal('staffModal');
- db.activeStaffRole = role;
- showStaffPage();
-}
-
-function staffLogout() {
- db.activeStaffRole = null;
- showPage('homePage');
-}
-
-function showStaffPage() {
- document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
- $('staffPage').classList.add('active');
- const role = db.activeStaffRole;
- $('staffRoleTitle').textContent = role === 'admin' ? 'Super Admin Management Center' : 'Customer Service Support Center';
- $('staffRoleBadge').textContent = role.toUpperCase();
- 
- document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', role !== 'admin'));
- 
- if(role === 'admin') {
-  switchStaffTab('adminUsers');
- } else {
-  switchStaffTab('support');
- }
-}
-
-function switchStaffTab(tab) {
- ['adminWorkspace','adminHotelsWorkspace','adminVipConfigWorkspace','adminFinanceWorkspace','adminSettingsWorkspace','csWorkspace'].forEach(id => {
-  const el = $(id);
-  if(el) el.classList.add('hidden');
- });
- 
- if(tab === 'adminUsers') { $('adminWorkspace').classList.remove('hidden'); renderAdminTable(); }
- if(tab === 'adminHotels') { $('adminHotelsWorkspace').classList.remove('hidden'); renderAdminHotels(); }
- if(tab === 'adminVipConfig') { $('adminVipConfigWorkspace').classList.remove('hidden'); renderAdminVipConfig(); }
- if(tab === 'adminFinance') { $('adminFinanceWorkspace').classList.remove('hidden'); renderAdminFinance(); }
- if(tab === 'adminSettings') {
-  $('adminSettingsWorkspace').classList.remove('hidden');
-  $('adminPassInput').value = db.staffCreds.admin;
-  $('csPassInput').value = db.staffCreds.cs;
- }
- if(tab === 'support') {
-  $('csWorkspace').classList.remove('hidden');
-  renderStaffClientList();
- }
-}
-
-function renderHotels() {
- const query = ($('hotelSearch') ? $('hotelSearch').value : '').toLowerCase();
- const star = $('starFilter').value;
- const price = $('priceFilter').value;
-
- const feat = db.hotels.slice(0, 4);
- $('featuredHotels').innerHTML = feat.map(h => `
-  <div class="card">
-   <img src="${h.img}" class="hotel-img" alt="${h.name}">
-   <div class="card-body">
-    <span class="tag">${h.country}</span>
-    <h3>${h.name}</h3>
-    <div style="color:orange;font-size:12px;margin:2px 0">${'⭐'.repeat(h.stars)}</div>
-    <div class="price">$${h.price} / night</div>
-   </div>
-  </div>
- `).join('');
-
- const filtered = db.hotels.filter(h => {
-  const matchQ = h.name.toLowerCase().includes(query) || h.country.toLowerCase().includes(query);
-  const matchStar = star === 'all' || h.stars == star;
-  let matchPrice = true;
-  if(price === 'under150') matchPrice = h.price < 150;
-  if(price === '150to300') matchPrice = h.price >= 150 && h.price <= 300;
-  if(price === 'over300') matchPrice = h.price > 300;
-  return matchQ && matchStar && matchPrice;
- });
-
- $('countryHotels').innerHTML = `
-  <div class="hotel-grid" style="margin-top:12px">
-   ${filtered.map(h => `
-    <div class="card">
-     <img src="${h.img}" class="hotel-img" alt="${h.name}">
-     <div class="card-body">
-      <span class="tag">${h.country}</span>
-      <h3>${h.name}</h3>
-      <div style="color:orange;font-size:12px;margin:2px 0">${'⭐'.repeat(h.stars)}</div>
-      <div class="price">$${h.price} / night</div>
-      <button class="btn btn-block" style="margin-top:8px" onclick="bookHotel(${h.price}, '${h.name}')">Book Now</button>
-     </div>
-    </div>
-   `).join('')}
-  </div>
- `;
-}
-
-function bookHotel(price, name) {
- if(!db.current) {
-  openAuth('login');
-  return;
- }
- showPage('bookingPage');
-}
-
-let adminTableEditMode = false;
-
-function renderBookingTasks() {
- if(!db.current) {
-  $('bookingHotelArea').innerHTML = '<p class="muted" style="text-align:center">Please login to access task center.</p>';
-  return;
- }
- const user = db.current;
- const vip = db.vipConfig[user.vip] || db.vipConfig['LV1'];
- const limit = user.customOrderLimit !== null ? user.customOrderLimit : vip.limit;
- 
- $('taskWallet').textContent = '$' + user.wallet.toFixed(2);
- $('taskProfit').textContent = '$' + user.profit.toFixed(2);
- $('taskTotalProfit').textContent = '$' + user.totalProfit.toFixed(2);
- $('orderCircle').textContent = user.ordersCompleted + '/' + limit;
- 
- const pct = Math.min(100, (user.ordersCompleted / limit) * 100);
- $('orderProgress').style.width = pct + '%';
- 
- $('celebrationBanner').classList.toggle('hidden', user.ordersCompleted < limit);
- $('specialTaskAlert').classList.toggle('hidden', user.negativeBalance >= 0);
-
- if(user.negativeBalance < 0) {
-  $('bookingHotelArea').innerHTML = `
-   <div style="background:rgba(255,77,77,0.1);border:1px solid var(--fb-danger);padding:20px;border-radius:8px;text-align:center">
-    <h3 style="color:var(--fb-danger)">Special Combination Order Active</h3>
-    <p>Required deposit to unlock balance shortfall: <strong>$${Math.abs(user.negativeBalance).toFixed(2)}</strong></p>
-    <button class="btn btn-success" onclick="redirectToCS('deposit')">Contact Trip Booking Service to Deposit</button>
-   </div>
-  `;
+async function triggerGetOrder() {
+ if(!currentUser) { openAuth('login'); return; }
+ if(Number(currentUser.balance) <= 0) {
+  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါသဖြင့် အော်ဒါယူ၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။");
   return;
  }
 
- if(user.ordersCompleted >= limit) {
-  $('bookingHotelArea').innerHTML = '<div style="text-align:center;padding:20px" class="muted">All daily orders completed. Come back tomorrow or reset order via admin.</div>';
+ const vip = getVipInfo(currentUser.vip_level);
+ if(currentUser.orders >= vip.daily_limit) {
+  showAlert("🎉 ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
   return;
  }
 
- const hotel = db.hotels[user.ordersCompleted % db.hotels.length];
- $('bookingHotelArea').innerHTML = `
-  <div class="card" style="max-width:400px;margin:0 auto">
-   <img src="${hotel.img}" class="hotel-img" alt="${hotel.name}">
-   <div class="card-body">
-    <span class="tag">${hotel.country}</span>
-    <h3>${hotel.name}</h3>
-    <div class="price">$${hotel.price}</div>
-    <button class="glowing-btn" onclick="executeTask(${hotel.price}, '${hotel.name}')">Submit Booking Task</button>
-   </div>
-  </div>
- `;
+ const hotel = allHotels[currentUser.orders % allHotels.length];
+ // Precise Commission: Hotel Price * VIP Commission Rate + Optional Admin Profit Box
+ const commission = (Number(hotel.price) * Number(vip.profit_rate)) + (Number(currentUser.profit_box) || 0);
+ activeTask = { hotel, commission };
+ renderBookingArea();
 }
 
-function triggerGetOrder() {
- renderBookingTasks();
-}
+async function submitCurrentOrder() {
+ if(!currentUser || !activeTask) return;
+ const { hotel, commission } = activeTask;
 
-function executeTask(price, name) {
- const user = db.current;
- const vip = db.vipConfig[user.vip] || db.vipConfig['LV1'];
- 
- let rate = user.profitBoxCustom !== null ? user.profitBoxCustom : vip.rate;
- let comm = price * (rate / 100);
-
- user.wallet += comm;
- user.profit += comm;
- user.totalProfit += comm;
- user.ordersCompleted += 1;
-
- user.history.unshift({
-  date: new Date().toLocaleDateString(),
-  type: 'Booking Commission (' + name + ')',
-  amount: '+$' + comm.toFixed(2),
-  status: 'Completed'
- });
-
- user.bookings.push({
-  hotel: name,
-  price: price,
-  commission: comm,
-  date: new Date().toLocaleString()
- });
-
- if(user.invitedBy && user.invitedBy !== '-') {
-  const referrer = db.users.find(u => u.inviteCode === user.invitedBy);
-  if(referrer) {
-   const refComm = comm * 0.10;
-   referrer.wallet += refComm;
-   referrer.referralEarned = (referrer.referralEarned || 0) + refComm;
-   referrer.history.unshift({
-    date: new Date().toLocaleDateString(),
-    type: 'Referral Bonus (10% from ' + user.name + ')',
-    amount: '+$' + refComm.toFixed(2),
-    status: 'Completed'
-   });
-  }
- }
-
- saveDb();
- 
- $('successModalText').textContent = 'Earned +$' + comm.toFixed(2) + ' commission for booking ' + name;
- $('successModal').classList.remove('hidden');
- renderBookingTasks();
-}
-
-function renderProfile() {
- if(!db.current) {
-  $('guestAuthActions').classList.remove('hidden');
-  $('memberProfile').classList.add('hidden');
+ if(Number(currentUser.balance) < Number(hotel.price)) {
+  showAlert("⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ။ Trip Booking Service သို့ ဆက်သွယ်၍ ငွေဖြည့်သွင်းပါ။");
   return;
  }
- $('guestAuthActions').classList.add('hidden');
- $('memberProfile').classList.remove('hidden');
 
- const u = db.current;
- $('profileName').textContent = u.name;
- $('profileId').textContent = 'ID: ' + u.id;
- $('walletBalance').textContent = '$' + u.wallet.toFixed(2);
- $('vipLevel').textContent = u.vip;
- const vip = db.vipConfig[u.vip] || db.vipConfig['LV1'];
- const limit = u.customOrderLimit !== null ? u.customOrderLimit : vip.limit;
- $('profileOrders').textContent = u.ordersCompleted + '/' + limit;
- $('referralEarned').textContent = '$' + (u.referralEarned || 0).toFixed(2);
- $('invitedCount').textContent = u.invitedCount || 0;
- $('inviteCode').textContent = u.inviteCode;
- $('inviteLink').value = window.location.origin + '?invite=' + u.inviteCode;
+ const newBalance = Number(currentUser.balance) + commission;
+ const newComm = Number(currentUser.commission || 0) + commission;
+ const newTotalProfit = Number(currentUser.total_profit || 0) + commission;
+ const newOrders = Number(currentUser.orders || 0) + 1;
 
- $('vipTiersDisplay').innerHTML = Object.keys(db.vipConfig).map(k => {
-  const v = db.vipConfig[k];
-  const isActive = u.vip === k;
-  return `
-   <div class="vip-card ${isActive ? 'active-vip' : ''}">
-    <strong>${k}</strong>
-    <div class="small muted">Limit: ${v.limit} orders/day</div>
-    <div class="small muted">Profit Rate: ${v.rate}%</div>
-    <div class="small muted">Min Bal: $${v.minBal}</div>
-    ${isActive ? '<span class="tag" style="margin-top:6px">Current Tier</span>' : ''}
-   </div>
-  `;
- }).join('');
+ await sb.from('users').update({
+  balance: newBalance,
+  commission: newComm,
+  total_profit: newTotalProfit,
+  orders: newOrders
+ }).eq('id', currentUser.id);
+
+ await sb.from('transactions').insert([{
+  user_id: currentUser.id,
+  type: 'Booking Profit',
+  hotel_name: hotel.name,
+  order_price: hotel.price,
+  amount: commission,
+  status: 'Approved'
+ }]);
+
+ activeTask = null;
+ showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+$${commission.toFixed(2)}</b> ရရှိပါသည်။`);
 }
 
-function copyInviteLink() {
- $('inviteLink').select();
- document.execCommand('copy');
- showAlert('Invitation link copied to clipboard!');
-}
+function handleWithdrawRequest() {
+ if(!currentUser) return;
+ const vip = getVipInfo(currentUser.vip_level);
+ const bal = Number(currentUser.balance);
 
-function redirectToCS(type) {
+ // Strict VIP Limit Check: If balance exceeds tier limit, block all withdrawals
+ if(bal > Number(vip.max_withdraw)) {
+  showAlert(`⛔ <b>ငွေထုတ်ယူမှု ယာယီပိတ်ပင်ထားပါသည်!</b><br><br>လက်ရှိ ${vip.name} အဆင့်၏ အများဆုံး ကန့်သတ်ချက်မှာ <b>$${vip.max_withdraw}</b> ဖြစ်သော်လည်း သင့်အကောင့်လက်ကျန်ငွေမှာ <b>$${bal.toFixed(2)}</b> ဖြစ်နေပါသည်။<br><br>ငွေထုတ်ယူနိုင်ရန် VIP အဆင့်မြှင့်တင်ဖို့ <b>Trip Booking Service</b> သို့ ဆက်သွယ်ပါ။`, "VIP Limit Exceeded");
+  return;
+ }
+
  showPage('supportPage');
- const msg = type === 'deposit' ? 'Hello Trip Booking Service, I would like to deposit funds into my account.' : 'Hello Trip Booking Service, I would like to request a withdrawal.';
- sendAutomaticCSMessage(msg);
+ sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: $${bal.toFixed(2)})`);
 }
 
-function renderHistory() {
- if(!db.current) {
-  $('historyRows').innerHTML = '<tr><td colspan="4" style="text-align:center">Please login first.</td></tr>';
-  $('bookingHistory').innerHTML = '';
-  return;
- }
- const u = db.current;
- $('historyRows').innerHTML = u.history.length ? u.history.map(h => `
-  <tr><td>${h.date}</td><td>${h.type}</td><td style="color:var(--fb-success)">${h.amount}</td><td><span class="tag">${h.status}</span></td></tr>
- `).join('') : '<tr><td colspan="4" style="text-align:center">No transactions yet.</td></tr>';
-
- $('bookingHistory').innerHTML = u.bookings.length ? u.bookings.map(b => `
-  <div class="card" style="margin-bottom:8px;padding:10px">
-   <strong>${b.hotel}</strong> - $${b.price} | Earned: <span style="color:var(--fb-success)">+$${b.commission.toFixed(2)}</span>
-   <div class="muted small">${b.date}</div>
-  </div>
- `).join('') : '<p class="muted">No booking records yet.</p>';
+function handleDepositRequest() {
+ if(!currentUser) return;
+ showPage('supportPage');
+ sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
 }
 
-function renderAdminTable() {
- const tbody = $('adminTableRows');
- tbody.innerHTML = db.users.map((u, index) => {
-  const vip = db.vipConfig[u.vip] || db.vipConfig['LV1'];
-  const limit = u.customOrderLimit !== null ? u.customOrderLimit : vip.limit;
-  if(adminTableEditMode) {
-   return `
-    <tr>
-     <td>${u.id}</td>
-     <td><input id="ed_id_${index}" value="${u.identity}" style="width:110px"></td>
-     <td><input id="ed_pw_${index}" value="${u.password}" style="width:90px"></td>
-     <td><input id="ed_name_${index}" value="${u.name}" style="width:100px"></td>
-     <td>
-      <select id="ed_vip_${index}">
-       ${Object.keys(db.vipConfig).map(k => `<option value="${k}" ${u.vip===k?'selected':''}>${k}</option>`).join('')}
-      </select>
-     </td>
-     <td><input id="ed_wal_${index}" type="number" value="${u.wallet}" style="width:80px"></td>
-     <td>${u.inviteCode}</td>
-     <td>${u.invitedBy}</td>
-     <td>
-      <div class="small">Neg. Bal: <input id="ed_neg_${index}" type="number" value="${u.negativeBalance}" style="width:60px"></div>
-      <div class="small">Profit%: <input id="ed_pro_${index}" type="number" step="0.1" value="${u.profitBoxCustom !== null ? u.profitBoxCustom : vip.rate}" style="width:60px"></div>
-      <div class="small">Orders: <input id="ed_ord_${index}" type="number" value="${u.ordersCompleted}" style="width:50px"> / ${limit}</div>
-     </td>
-     <td>
-      <button class="btn btn-success small" onclick="saveSingleUser(${index})">Save</button>
-      <button class="btn btn-danger small" onclick="deleteUser(${index})">Del</button>
-     </td>
-    </tr>
-   `;
-  } else {
-   return `
-    <tr>
-     <td>${u.id}</td>
-     <td>${u.identity}</td>
-     <td>******</td>
-     <td>${u.name}</td>
-     <td><span class="tag">${u.vip}</span></td>
-     <td>$${u.wallet.toFixed(2)}</td>
-     <td>${u.inviteCode}</td>
-     <td>${u.invitedBy}</td>
-     <td>
-      <div class="small">Neg Bal: <strong style="color:${u.negativeBalance<0?'var(--fb-danger)':'inherit'}">$${u.negativeBalance}</strong></div>
-      <div class="small">Orders: ${u.ordersCompleted}/${limit}</div>
-     </td>
-     <td>
-      <button class="btn small" onclick="openUserDetailModal(${index})">Details</button>
-      <button class="btn btn-danger small" onclick="resetUserOrder(${index})">Reset Order</button>
-     </td>
-    </tr>
-   `;
-  }
- }).join('');
+/* ==========================================================================
+   7. CS CHAT & QUICK SUGGESTION BUTTONS ("Trip Booking Service")
+   ========================================================================== */
+async function sendQuickSuggestion(text) {
+ if(!currentUser) { openAuth('login'); return; }
+ await sb.from('messages').insert([{
+  user_id: currentUser.id,
+  sender: 'user',
+  text: text
+ }]);
+ loadUserMessages(currentUser.id);
 }
 
-function toggleTableEditMode() {
- adminTableEditMode = !adminTableEditMode;
- $('tableEditBtn').classList.toggle('hidden', adminTableEditMode);
- $('tableSaveBtn').classList.toggle('hidden', !adminTableEditMode);
- renderAdminTable();
-}
-
-function saveTableEditMode() {
- db.users.forEach((u, index) => {
-  u.identity = $('ed_id_' + index).value;
-  u.password = $('ed_pw_' + index).value;
-  u.name = $('ed_name_' + index).value;
-  u.vip = $('ed_vip_' + index).value;
-  u.wallet = parseFloat($('ed_wal_' + index).value) || 0;
-  u.negativeBalance = parseFloat($('ed_neg_' + index).value) || 0;
-  u.profitBoxCustom = parseFloat($('ed_pro_' + index).value);
-  u.ordersCompleted = parseInt($('ed_ord_' + index).value) || 0;
- });
- adminTableEditMode = false;
- $('tableEditBtn').classList.remove('hidden');
- $('tableSaveBtn').classList.add('hidden');
- saveDb();
- renderAdminTable();
- showAlert('User accounts updated successfully!');
-}
-
-function saveSingleUser(index) {
- const u = db.users[index];
- u.identity = $('ed_id_' + index).value;
- u.password = $('ed_pw_' + index).value;
- u.name = $('ed_name_' + index).value;
- u.vip = $('ed_vip_' + index).value;
- u.wallet = parseFloat($('ed_wal_' + index).value) || 0;
- u.negativeBalance = parseFloat($('ed_neg_' + index).value) || 0;
- u.profitBoxCustom = parseFloat($('ed_pro_' + index).value);
- u.ordersCompleted = parseInt($('ed_ord_' + index).value) || 0;
- saveDb();
- showAlert('User ' + u.name + ' updated.');
- renderAdminTable();
-}
-
-function deleteUser(index) {
- if(confirm('Are you sure you want to delete this user?')) {
-  db.users.splice(index, 1);
-  saveDb();
-  renderAdminTable();
- }
-}
-
-function resetUserOrder(index) {
- db.users[index].ordersCompleted = 0;
- db.users[index].negativeBalance = 0;
- saveDb();
- renderAdminTable();
- showAlert('User orders reset to 0.');
-}
-
-function openUserDetailModal(index) {
- const u = db.users[index];
- $('adminUserDetailContent').innerHTML = `
-  <h4>${u.name} (ID: ${u.id})</h4>
-  <p><strong>Phone/Email:</strong> ${u.identity}</p>
-  <p><strong>Wallet:</strong> $${u.wallet.toFixed(2)}</p>
-  <p><strong>VIP Level:</strong> ${u.vip}</p>
-  <p><strong>Completed Bookings:</strong> ${u.ordersCompleted}</p>
-  <p><strong>Total Profit:</strong> $${u.totalProfit.toFixed(2)}</p>
-  <p><strong>Invite Code:</strong> ${u.inviteCode} (Invited By: ${u.invitedBy})</p>
-  <h5>Transaction History</h5>
-  <div class="table-wrap">
-   <table>
-    <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
-    <tbody>
-     ${u.history.map(h => `<tr><td>${h.date}</td><td>${h.type}</td><td>${h.amount}</td><td>${h.status}</td></tr>`).join('')}
-    </tbody>
-   </table>
-  </div>
- `;
- $('adminUserDetailModal').classList.remove('hidden');
-}
-
-function renderAdminHotels() {
- $('adminHotelTableRows').innerHTML = db.hotels.map((h, i) => `
-  <tr>
-   <td><img src="${h.img}" style="width:40px;height:30px;object-fit:cover;border-radius:4px"></td>
-   <td>${h.name}</td>
-   <td>${h.country}</td>
-   <td>${'⭐'.repeat(h.stars)}</td>
-   <td>$${h.price}</td>
-   <td>
-    <button class="btn small" onclick="openEditHotelModal(${i})">Edit</button>
-    <button class="btn btn-danger small" onclick="deleteHotel(${i})">Delete</button>
-   </td>
-  </tr>
- `).join('');
-}
-
-function openAddHotelModal() {
- $('hotelModalTitle').textContent = 'Add New Hotel';
- $('hotelEditIndex').value = '-1';
- $('modalHotelName').value = '';
- $('modalHotelCountry').value = '';
- $('modalHotelStars').value = '5';
- $('modalHotelPrice').value = '150';
- $('modalHotelImg').value = '';
- $('hotelModal').classList.remove('hidden');
-}
-
-function openEditHotelModal(i) {
- const h = db.hotels[i];
- $('hotelModalTitle').textContent = 'Edit Hotel';
- $('hotelEditIndex').value = i;
- $('modalHotelName').value = h.name;
- $('modalHotelCountry').value = h.country;
- $('modalHotelStars').value = h.stars;
- $('modalHotelPrice').value = h.price;
- $('modalHotelImg').value = h.img;
- $('hotelModal').classList.remove('hidden');
-}
-
-function saveHotelModal() {
- const idx = parseInt($('hotelEditIndex').value);
- const name = $('modalHotelName').value.trim();
- const country = $('modalHotelCountry').value.trim();
- const stars = parseInt($('modalHotelStars').value) || 5;
- const price = parseFloat($('modalHotelPrice').value) || 100;
- const img = $('modalHotelImg').value.trim() || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900';
-
- if(!name || !country) {
-  showAlert('Please provide hotel name and country.');
-  return;
- }
-
- if(idx === -1) {
-  db.hotels.push({name, country, stars, price, img});
- } else {
-  db.hotels[idx] = {name, country, stars, price, img};
- }
- saveDb();
- closeModal('hotelModal');
- renderAdminHotels();
- showAlert('Hotel saved successfully!');
-}
-
-function deleteHotel(i) {
- if(confirm('Delete this hotel?')) {
-  db.hotels.splice(i, 1);
-  saveDb();
-  renderAdminHotels();
- }
-}
-
-function renderAdminVipConfig() {
- $('adminVipTableRows').innerHTML = Object.keys(db.vipConfig).map(k => {
-  const v = db.vipConfig[k];
-  return `
-   <tr>
-    <td><strong>${k}</strong></td>
-    <td><input id="vip_lim_${k}" type="number" value="${v.limit}" style="width:80px"></td>
-    <td><input id="vip_rat_${k}" type="number" step="0.1" value="${v.rate}" style="width:80px"></td>
-    <td><input id="vip_bal_${k}" type="number" value="${v.minBal}" style="width:100px"></td>
-    <td><button class="btn btn-success small" onclick="saveVipConfig('${k}')">Save</button></td>
-   </tr>
-  `;
- }).join('');
-}
-
-function saveVipConfig(k) {
- db.vipConfig[k].limit = parseInt($('vip_lim_' + k).value) || 30;
- db.vipConfig[k].rate = parseFloat($('vip_rat_' + k).value) || 0.5;
- db.vipConfig[k].minBal = parseFloat($('vip_bal_' + k).value) || 0;
- saveDb();
- showAlert('VIP Tier ' + k + ' updated.');
-}
-
-function renderAdminFinance() {
- $('adminFinanceRows').innerHTML = db.finance.length ? db.finance.map((f, i) => `
-  <tr>
-   <td>${f.id}</td>
-   <td>${f.userName} (${f.userId})</td>
-   <td><span class="tag">${f.type}</span></td>
-   <td>$${f.amount}</td>
-   <td>${f.note}</td>
-   <td>${f.date}</td>
-   <td>${f.status}</td>
-   <td>
-    ${f.status === 'Pending' ? `<button class="btn btn-success small" onclick="approveFinance(${i})">Approve</button>` : ''}
-   </td>
-  </tr>
- `).join('') : '<tr><td colspan="8" style="text-align:center">No finance requests.</td></tr>';
-}
-
-function approveFinance(i) {
- db.finance[i].status = 'Approved';
- const f = db.finance[i];
- const u = db.users.find(us => us.id === f.userId);
- if(u) {
-  if(f.type === 'Deposit') u.wallet += f.amount;
-  if(f.type === 'Withdrawal') u.wallet -= f.amount;
- }
- saveDb();
- renderAdminFinance();
- showAlert('Request approved.');
-}
-
-function saveStaffCredentials() {
- db.staffCreds.admin = $('adminPassInput').value;
- db.staffCreds.cs = $('csPassInput').value;
- saveDb();
- showAlert('Staff passwords updated successfully!');
-}
-
-function renderStaffClientList() {
- const q = ($('csSearch') ? $('csSearch').value : '').toLowerCase();
- const filtered = db.users.filter(u => u.name.toLowerCase().includes(q) || u.id.includes(q));
- 
- $('csUserList').innerHTML = filtered.map(u => `
-  <div class="card" style="padding:8px;margin-bottom:6px;cursor:pointer" onclick="selectClientChat('${u.id}')">
-   <strong>${u.name}</strong>
-   <div class="small muted">ID: ${u.id}</div>
-  </div>
- `).join('');
-}
-
-function selectClientChat(userId) {
- db.activeChatUserId = userId;
- const u = db.users.find(us => us.id === userId);
- $('activeChatClientName').textContent = u ? 'Chat with ' + u.name : 'Client Chat';
- renderStaffMessages();
-}
-
-function renderStaffMessages() {
- if(!db.activeChatUserId) return;
- const u = db.users.find(us => us.id === db.activeChatUserId);
- if(!u) return;
- 
- const html = u.chats.map(c => `
-  <div style="margin-bottom:10px;text-align:${c.sender === 'cs' ? 'right' : 'left'}">
-   <div style="display:inline-block;padding:8px 12px;border-radius:8px;background:${c.sender === 'cs' ? 'var(--fb-primary)' : 'var(--fb-border)'};color:${c.sender === 'cs' ? 'white' : 'var(--fb-text)'}">
-    ${c.text}
-   </div>
-   <div class="small muted" style="font-size:10px;margin-top:2px">${c.time}</div>
-  </div>
- `).join('');
- 
- const el = db.activeStaffRole ? $('staffMessages') : $('supportMessages');
- if(el) {
-  el.innerHTML = html || '<p class="muted" style="text-align:center">No messages yet. Send a message to start conversation.</p>';
-  el.scrollTop = el.scrollHeight;
- }
-}
-
-function sendSupportMessage() {
- const text = $('supportInput').value.trim();
+async function sendSupportMessage() {
+ if(!currentUser) { openAuth('login'); return; }
+ const inp = $("supportInput");
+ const text = inp.value.trim();
  if(!text) return;
- $('supportInput').value = ';';
- 
- if(!db.current) {
-  showAlert('Please login first to chat with support.');
-  openAuth('login');
+ inp.value = "";
+ await sb.from('messages').insert([{
+  user_id: currentUser.id,
+  sender: 'user',
+  text: text
+ }]);
+ loadUserMessages(currentUser.id);
+}
+
+async function loadUserMessages(userId) {
+ const { data } = await sb.from('messages').select('*').eq('user_id', userId).order('created_at', { ascending: true });
+ const box = $("supportMessages");
+ if(!box) return;
+ box.innerHTML = (data || []).map(m => `
+  <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
+   background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};
+   color:${m.sender==='user'?'white':'var(--fb-text)'};
+   margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
+   <div style="font-size:10px;opacity:0.8;font-weight:700">${m.sender==='user' ? currentUser.name : 'Trip Booking Service'}</div>
+   <div>${m.text}</div>
+  </div>
+ `).join("");
+ box.scrollTop = box.scrollHeight;
+}
+
+/* ==========================================================================
+   8. ADMIN PANEL (09775191427 / Mary1245@ -> 12344321)
+   ========================================================================== */
+function openStaffModal() {
+ $("staffSecPass").value = "";
+ $("staffError").textContent = "";
+ $("staffModal").classList.remove("hidden");
+}
+
+function verifyAdminAccess() {
+ if($("staffSecPass").value === "12344321") {
+  closeModal("staffModal");
+  showPage("staffPage");
+  switchAdminTab("users");
+ } else {
+  $("staffError").textContent = "Incorrect secondary admin password!";
+ }
+}
+
+function switchAdminTab(tab) {
+ ["adminUsersTab", "adminHotelsTab", "adminCsTab"].forEach(id => $(id).classList.add("hidden"));
+ ["tabUsersBtn", "tabHotelsBtn", "tabCsBtn"].forEach(id => $(id).className = "btn btn-light");
+
+ if(tab === "users") {
+  $("adminUsersTab").classList.remove("hidden");
+  $("tabUsersBtn").className = "btn";
+  renderAdminUsers();
+ } else if(tab === "hotels") {
+  $("adminHotelsTab").classList.remove("hidden");
+  $("tabHotelsBtn").className = "btn";
+  renderAdminHotelsAndVips();
+ } else if(tab === "cs") {
+  $("adminCsTab").classList.remove("hidden");
+  $("tabCsBtn").className = "btn";
+  renderCsClientList();
+ }
+}
+
+function renderAdminUsers() {
+ $("adminUsersRows").innerHTML = allUsers.map((u, i) => `
+  <tr>
+   <td>${u.id}</td>
+   <td><input id="adm_name_${i}" value="${u.name}" style="width:110px"></td>
+   <td><input id="adm_ident_${i}" value="${u.identity}" style="width:140px"></td>
+   <td><input id="adm_pass_${i}" value="${u.password}" style="width:100px"></td>
+   <td><input id="adm_ref_${i}" value="${u.referral_code}" style="width:85px"></td>
+   <td>
+    <select id="adm_vip_${i}" style="width:85px">
+     ${allVipTiers.map(v => `<option value="${v.level}" ${v.level===u.vip_level?'selected':''}>${v.name}</option>`).join("")}
+    </select>
+   </td>
+   <td><input id="adm_bal_${i}" type="number" step="0.01" value="${u.balance}" style="width:95px"></td>
+   <td><input id="adm_neg_${i}" type="number" step="0.01" value="${u.neg_dollar || 0}" style="width:75px"></td>
+   <td><input id="adm_pbox_${i}" type="number" step="0.01" value="${u.profit_box || 0}" style="width:75px"></td>
+   <td><input id="adm_ord_${i}" type="number" value="${u.orders || 0}" style="width:65px"></td>
+   <td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetSingleUserOrder('${u.id}')">Reset (0)</button></td>
+  </tr>
+ `).join("");
+}
+
+async function saveAllUsersAdmin() {
+ for(let i = 0; i < allUsers.length; i++) {
+  const u = allUsers[i];
+  const newBal = Number($(`adm_bal_${i}`).value);
+  const diff = newBal - Number(u.balance);
+
+  await sb.from('users').update({
+   name: $(`adm_name_${i}`).value,
+   identity: $(`adm_ident_${i}`).value,
+   password: $(`adm_pass_${i}`).value,
+   referral_code: $(`adm_ref_${i}`).value,
+   vip_level: $(`adm_vip_${i}`).value,
+   balance: newBal,
+   neg_dollar: Number($(`adm_neg_${i}`).value),
+   profit_box: Number($(`adm_pbox_${i}`).value),
+   orders: Number($(`adm_ord_${i}`).value)
+  }).eq('id', u.id);
+
+  // If external funds were added by admin, record in transaction history
+  if(diff !== 0) {
+   await sb.from('transactions').insert([{
+    user_id: u.id,
+    type: diff > 0 ? 'Deposit (Top-up)' : 'Deduction',
+    details: 'Admin Balance Adjustment',
+    amount: Math.abs(diff),
+    status: 'Approved'
+   }]);
+  }
+ }
+ showAlert("✅ All user updates saved and synced in real-time!");
+}
+
+async function resetSingleUserOrder(uid) {
+ await sb.from('users').update({ orders: 0 }).eq('id', uid);
+ showAlert("User orders reset to 0.");
+}
+
+function renderAdminHotelsAndVips() {
+ $("adminVipRows").innerHTML = allVipTiers.map((v, i) => `
+  <tr>
+   <td><b>${v.level}</b></td>
+   <td><input id="vip_n_${i}" value="${v.name}" style="width:90px"></td>
+   <td><input id="vip_l_${i}" type="number" value="${v.daily_limit}" style="width:80px"></td>
+   <td><input id="vip_r_${i}" type="number" step="0.01" value="${(v.profit_rate*100).toFixed(2)}" style="width:80px"> %</td>
+   <td><input id="vip_m_${i}" type="number" value="${v.min_bal}" style="width:100px"></td>
+   <td><input id="vip_w_${i}" type="number" value="${v.max_withdraw}" style="width:110px"></td>
+  </tr>
+ `).join("");
+
+ $("adminHotelsRows").innerHTML = allHotels.map((h, i) => `
+  <tr>
+   <td>${h.id}</td>
+   <td><input id="ht_n_${i}" value="${h.name}"></td>
+   <td><input id="ht_c_${i}" value="${h.country}" style="width:110px"></td>
+   <td><input id="ht_s_${i}" type="number" value="${h.stars}" style="width:60px"></td>
+   <td><input id="ht_p_${i}" type="number" value="${h.price}" style="width:90px"></td>
+   <td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteHotel('${h.id}')">Delete</button></td>
+  </tr>
+ `).join("");
+}
+
+async function saveHotelsAndVipsAdmin() {
+ for(let i = 0; i < allVipTiers.length; i++) {
+  const v = allVipTiers[i];
+  await sb.from('vip_tiers').update({
+   name: $(`vip_n_${i}`).value,
+   daily_limit: Number($(`vip_l_${i}`).value),
+   profit_rate: Number($(`vip_r_${i}`).value) / 100,
+   min_bal: Number($(`vip_m_${i}`).value),
+   max_withdraw: Number($(`vip_w_${i}`).value)
+  }).eq('level', v.level);
+ }
+
+ for(let i = 0; i < allHotels.length; i++) {
+  const h = allHotels[i];
+  await sb.from('hotels').update({
+   name: $(`ht_n_${i}`).value,
+   country: $(`ht_c_${i}`).value,
+   stars: Number($(`ht_s_${i}`).value),
+   price: Number($(`ht_p_${i}`).value)
+  }).eq('id', h.id);
+ }
+ showAlert("✅ VIP Tiers & Hotel Prices updated in Supabase!");
+}
+
+function openAddHotelModal() { $("addHotelModal").classList.remove("hidden"); }
+
+async function addHotelToSupabase() {
+ const name = $("newHName").value.trim();
+ const country = $("newHCountry").value.trim();
+ const price = Number($("newHPrice").value);
+ const stars = Number($("newHStars").value);
+ if(!name || !country || price <= 0) return;
+
+ const id = "H" + Math.floor(100 + Math.random() * 900);
+ await sb.from('hotels').insert([{
+  id, name, country, price, stars,
+  image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"
+ }]);
+ closeModal("addHotelModal");
+}
+
+async function deleteHotel(id) {
+ await sb.from('hotels').delete().eq('id', id);
+}
+
+/* Admin CS Reply Panel */
+function renderCsClientList() {
+ $("csClientList").innerHTML = allUsers.map(u => `
+  <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer" onclick="selectCsClient('${u.id}')">
+   <b>${u.name}</b><div class="small muted">${u.identity} · $${Number(u.balance).toFixed(2)}</div>
+  </div>
+ `).join("");
+}
+
+function selectCsClient(uid) {
+ selectedCsUserId = uid;
+ const u = allUsers.find(x => x.id === uid);
+ $("csActiveUserTitle").textContent = `Chat with ${u.name} (${u.identity})`;
+ loadAdminChatMessages(uid);
+}
+
+async function loadAdminChatMessages(uid) {
+ const { data } = await sb.from('messages').select('*').eq('user_id', uid).order('created_at', { ascending: true });
+ $("adminChatMessages").innerHTML = (data || []).map(m => `
+  <div style="margin:6px 0;padding:8px 12px;border-radius:8px;max-width:80%;
+   background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};
+   color:${m.sender==='support'?'white':'var(--fb-text)'};
+   margin-left:${m.sender==='support'?'auto':'0'}">
+   <div style="font-size:10px;opacity:0.8">Trip Booking Service</div>
+   <div>${m.text}</div>
+  </div>
+ `).join("");
+}
+
+async function sendAdminChatReply() {
+ if(!selectedCsUserId) return;
+ const inp = $("adminChatInput");
+ const text = inp.value.trim();
+ if(!text) return;
+ inp.value = "";
+ await sb.from('messages').insert([{
+  user_id: selectedCsUserId,
+  sender: 'support',
+  text: text
+ }]);
+ loadAdminChatMessages(selectedCsUserId);
+}
+
+/* ==========================================================================
+   9. UI RENDERING
+   ========================================================================== */
+function renderHotels() {
+ const q = ($("hotelSearch")?.value || "").toLowerCase();
+ const filtered = allHotels.filter(h => h.name.toLowerCase().includes(q) || h.country.toLowerCase().includes(q));
+ $("hotelGrid").innerHTML = filtered.map(h => `
+  <div class="card">
+   <img class="hotel-img" src="${h.image}" alt="${h.name}">
+   <div class="card-body">
+    <span class="tag">${h.country} · ${"★".repeat(h.stars)}</span>
+    <h3 style="margin:6px 0">${h.name}</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+     <span class="price">$${Number(h.price).toFixed(2)}</span>
+     <button class="btn" style="padding:4px 10px;font-size:12px" onclick="showPage('bookingPage')">Book</button>
+    </div>
+   </div>
+  </div>
+ `).join("");
+}
+
+function renderBookingArea() {
+ if(!currentUser) {
+  $("bookingHotelArea").innerHTML = `<p class="muted" style="text-align:center">Please login to access tasks.</p>`;
   return;
  }
- 
- db.current.chats.push({ sender: 'user', text: text, time: new Date().toLocaleTimeString() });
- saveDb();
- renderStaffMessages();
- 
- setTimeout(() => {
-  db.current.chats.push({ sender: 'cs', text: 'Thank you for reaching out to Trip Booking Service. Our agent will assist you shortly.', time: new Date().toLocaleTimeString() });
-  saveDb();
-  renderStaffMessages();
- }, 1000);
-}
+ const vip = getVipInfo(currentUser.vip_level);
+ $("taskWallet").textContent = "$" + Number(currentUser.balance).toFixed(2);
+ $("taskProfit").textContent = "$" + Number(currentUser.commission || 0).toFixed(2);
+ $("taskTotalProfit").textContent = "$" + Number(currentUser.total_profit || 0).toFixed(2);
+ $("orderCircle").textContent = `${currentUser.orders}/${vip.daily_limit}`;
 
-function sendAutomaticCSMessage(text) {
- if(!db.current) return;
- db.current.chats.push({ sender: 'user', text: text, time: new Date().toLocaleTimeString() });
- saveDb();
- renderStaffMessages();
-}
-
-function sendStaffMessage() {
- const text = $('staffInput').value.trim();
- if(!text || !db.activeChatUserId) return;
- $('staffInput').value = '';
- 
- const u = db.users.find(us => us.id === db.activeChatUserId);
- if(u) {
-  u.chats.push({ sender: 'cs', text: text, time: new Date().toLocaleTimeString() });
-  saveDb();
-  renderStaffMessages();
+ if(activeTask) {
+  $("bookingHotelArea").innerHTML = `
+   <div class="card" style="max-width:500px;margin:0 auto;border:2px solid var(--fb-primary)">
+    <img class="hotel-img" src="${activeTask.hotel.image}" style="height:180px">
+    <div class="card-body">
+     <h3>${activeTask.hotel.name} (${activeTask.hotel.country})</h3>
+     <p>Order Amount: <b>$${Number(activeTask.hotel.price).toFixed(2)}</b> | Commission: <b style="color:var(--fb-success)">+$${activeTask.commission.toFixed(2)}</b></p>
+     <button class="btn btn-success btn-block" onclick="submitCurrentOrder()">Submit Order Now</button>
+    </div>
+   </div>
+  `;
+ } else {
+  $("bookingHotelArea").innerHTML = "";
  }
 }
 
-function appendSupportChar(char) {
- const activeInput = db.activeStaffRole ? $('staffInput') : $('supportInput');
- if(activeInput) activeInput.value += char;
+async function renderHistoryTable() {
+ if(!currentUser) return;
+ const { data } = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+ $("historyRows").innerHTML = (data || []).map(t => `
+  <tr>
+   <td>${new Date(t.created_at).toLocaleString()}</td>
+   <td><b>${t.type}</b></td>
+   <td>${t.hotel_name || '-'}</td>
+   <td style="color:${t.type.includes('Deduction')?'var(--fb-danger)':'var(--fb-success)'}">$${Number(t.amount).toFixed(2)}</td>
+   <td>${t.status}</td>
+  </tr>
+ `).join("") || `<tr><td colspan="5" style="text-align:center">No records found.</td></tr>`;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
- if (localStorage.getItem(KEYS.theme) === 'dark') {
-  document.body.classList.add('dark');
-  $('themeToggle').textContent = '☀️';
- }
+function renderAllViews() {
  renderHotels();
- checkExclusiveStaffAccess();
+ renderBookingArea();
+
+ if(currentUser) {
+  $("headerAuthBtn").classList.add("hidden");
+  $("guestAuthBox").classList.add("hidden");
+  $("memberProfileBox").classList.remove("hidden");
+
+  if(currentUser.identity === "09775191427" && currentUser.password === "Mary1245@") {
+   $("exclusiveAdminBtn").classList.remove("hidden");
+  } else {
+   $("exclusiveAdminBtn").classList.add("hidden");
+  }
+
+  const vip = getVipInfo(currentUser.vip_level);
+  $("profileName").textContent = currentUser.name;
+  $("profileIdentity").textContent = `${currentUser.identity} · ID: ${currentUser.id}`;
+  $("profileVipBadge").textContent = vip.name;
+  $("walletBalance").textContent = "$" + Number(currentUser.balance).toFixed(2);
+  $("profileOrders").textContent = `${currentUser.orders}/${vip.daily_limit}`;
+  $("inviteCode").textContent = currentUser.referral_code;
+  $("referralEarned").textContent = "$" + Number(currentUser.referral_earned || 0).toFixed(2);
+
+  $("vipTiersDisplay").innerHTML = allVipTiers.map(v => `
+   <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
+    <strong>${v.name}</strong>
+    <p class="small muted">Daily Limit: ${v.daily_limit} orders<br>Rate: ${(v.profit_rate*100).toFixed(2)}%<br>Max Limit: $${v.max_withdraw}</p>
+   </div>
+  `).join("");
+
+  loadUserMessages(currentUser.id);
+  renderHistoryTable();
+ } else {
+  $("headerAuthBtn").classList.remove("hidden");
+  $("guestAuthBox").classList.remove("hidden");
+  $("memberProfileBox").classList.add("hidden");
+  $("exclusiveAdminBtn").classList.add("hidden");
+ }
+}
+
+window.addEventListener("load", () => {
+ setupPWAManifest();
+ runSplashLoader();
+ startLiveRates();
+ changeLanguage(currentLang);
+ initSupabaseData();
 });
 </script>
 </body>
