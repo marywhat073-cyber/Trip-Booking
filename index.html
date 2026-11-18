@@ -206,7 +206,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </div>
 
 <header>
- <div class="logo-container" id="secretLogoTrigger" onclick="handleSecretLogoTap()">
+ <div class="logo-container" onclick="showPage('homePage', document.querySelectorAll('.bottom-nav button')[0])">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
   <div class="logo">TRIP <span>BOOKING</span></div>
  </div>
@@ -362,7 +362,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
   <div style="display:flex;gap:8px">
    <button class="btn btn-success" onclick="forceSyncNow()">🔄 REFRESH (အကောင့်တိုးမတိုး စစ်ရန်)</button>
-   <button class="btn btn-danger" onclick="exitAdminPanel()">Exit Admin</button>
+   <button class="btn btn-danger" onclick="logout()">Logout</button>
   </div>
  </div>
 
@@ -376,7 +376,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
    <h3>All Registered Users (Real-Time)</h3>
    <div style="display:flex;gap:8px">
-    <input id="adminUserSearch" placeholder="Search name, phone, email, TP code..." style="width:220px" oninput="renderAdminUsers()">
+    <input id="adminUserSearch" placeholder="Search name, phone, email..." style="width:220px" oninput="renderAdminUsers()">
     <button class="btn btn-success" onclick="saveAllUsersAdmin()">💾 Save All Changes</button>
    </div>
   </div>
@@ -464,7 +464,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 </main>
 
-<nav class="bottom-nav">
+<nav class="bottom-nav" id="bottomNav">
  <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
  <button onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span data-i18n="navSupport">Service</span></button>
  <button onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
@@ -481,8 +481,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div id="regExtraFields" class="hidden">
    <label data-i18n="fullNameLabel">Full Name</label>
    <input id="regName" placeholder="Enter your full name">
-   <label>Referral Code (Optional, e.g. TP1234)</label>
-   <input id="regRefInput" placeholder="TPXXXX">
+   <label>Referral Code (Optional, e.g. TP2323)</label>
+   <input id="regRefInput" placeholder="TP2323" value="TP2323">
   </div>
   <label data-i18n="identityLabel">Phone Number or Email (Unique)</label>
   <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
@@ -498,26 +498,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <p style="text-align:center;margin-top:12px;font-size:13px">
    <a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a>
   </p>
- </div>
-</div>
-
-<div class="modal hidden" id="secretStaffModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3>🔐 Staff & Admin Verification</h3>
-   <button class="close" onclick="closeModal('secretStaffModal')">✕</button>
-  </div>
-  <label>Admin Phone or Email</label>
-  <input id="secretAdminId" placeholder="09775191427 or jupiterwhat8@gmail.com">
-  
-  <label>Access Password</label>
-  <div class="pass-wrap">
-   <input id="secretAdminPass" type="password" placeholder="Enter password">
-   <button type="button" class="eye-btn" onclick="togglePassVisibility('secretAdminPass', this)">👁️</button>
-  </div>
-  
-  <p id="secretStaffError" style="color:var(--fb-danger);font-size:13px;margin:8px 0"></p>
-  <button class="btn btn-success btn-block" style="margin-top:10px" onclick="verifySecretStaffLogin()">Enter Admin & Service Center</button>
  </div>
 </div>
 
@@ -644,163 +624,6 @@ function build238Hotels() {
  return list;
 }
 
-let logoTapCount = 0;
-let logoTapTimer = null;
-let isAdminAuthenticated = sessionStorage.getItem("tb_admin_unlocked") === "true";
-
-function handleSecretLogoTap() {
- logoTapCount++;
- clearTimeout(logoTapTimer);
- logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 3000);
-
- if(logoTapCount >= 10) {
-  logoTapCount = 0;
-  if(isAdminAuthenticated) {
-   openAdminWorkspace();
-  } else {
-   $("secretAdminId").value = "";
-   $("secretAdminPass").value = "";
-   $("secretStaffError").textContent = "";
-   $("secretStaffModal").classList.remove("hidden");
-  }
- } else if(logoTapCount === 1) {
-  showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
- }
-}
-
-function verifySecretStaffLogin() {
- const idInput = $("secretAdminId").value.trim().toLowerCase();
- const passInput = $("secretAdminPass").value.trim();
-
- const validIds = ["09775191427", "jupiterwhat8@gmail.com", "jupiterwhat8@gmail"];
- if(validIds.includes(idInput) && passInput === "12344321") {
-  isAdminAuthenticated = true;
-  sessionStorage.setItem("tb_admin_unlocked", "true");
-  closeModal("secretStaffModal");
-  openAdminWorkspace();
- } else {
-  $("secretStaffError").textContent = "Invalid Admin ID or Password!";
- }
-}
-
-function openAdminWorkspace() {
- showPage("staffPage");
- switchAdminTab("users");
- forceSyncNow();
-}
-
-function exitAdminPanel() {
- isAdminAuthenticated = false;
- sessionStorage.removeItem("tb_admin_unlocked");
- showPage("homePage", document.querySelectorAll('.bottom-nav button')[0]);
-}
-
-function setupPWAManifest() {
- const manifest = {
-  name: "Trip Booking",
-  short_name: "Trip Booking",
-  start_url: window.location.href,
-  display: "standalone",
-  background_color: "#008080",
-  theme_color: "#008080",
-  icons: [{ src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=192", sizes: "192x192", type: "image/png" }]
- };
- const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
- $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
-}
-
-const I18N = {
- my: {
-  loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
-  accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
-  dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
-  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
-  myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်အသစ်ဖွင့်မည်",
-  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
-  inviteCodeTitle: "မိတ်ဆက်ကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
-  withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
-  logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
-  navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
-  fullNameLabel: "အမည်ပြည့်စုံ", identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
-  passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်"
- },
- en: {
-  loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
-  accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
-  dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
-  thDate: "Date", thType: "Type", thAmount: "Amount (USD / MMK)", thStatus: "Status",
-  myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "Login or register a new account to start.", createAcc: "Register",
-  walletBal: "Wallet Balance", completedBookings: "Completed Orders",
-  inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
-  withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
-  logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
-  navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
-  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email",
-  passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register"
- },
- th: {
-  loginBtn: "เข้าสู่ระบบ", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "ศูนย์งานการจอง",
-  accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่น", totalProfit: "กำไรทั้งหมด",
-  dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับออเดอร์", histTitle: "ประวัติการทำรายการและการจอง",
-  thDate: "วันที่", thType: "ประเภท", thAmount: "จำนวนเงิน", thStatus: "สถานะ",
-  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "กรุณาเข้าสู่ระบบหรือสมัครสมาชิกใหม่", createAcc: "สมัครสมาชิก",
-  walletBal: "ยอดเงินในกระเป๋า", completedBookings: "ออเดอร์ที่เสร็จสิ้น",
-  inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
-  withdrawBtn: "🏦 ถอนเงิน", vipTiersHead: "ระดับ VIP และขีดจำกัด",
-  logoutBtn: "ออกจากระบบ", navHome: "หน้าแรก", navSupport: "บริการ",
-  navBooking: "รับออเดอร์", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
-  fullNameLabel: "ชื่อ-นามสกุล", identityLabel: "เบอร์โทรศัพท์ หรือ อีเมล",
-  passwordLabel: "รหัสผ่าน", continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก"
- },
- zh: {
-  loginBtn: "登录", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "预订任务中心",
-  accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
-  dailyLimit: "每日订单", getOrderBtn: "立即接单", histTitle: "交易与预订记录",
-  thDate: "日期", thType: "类型", thAmount: "金额", thStatus: "状态",
-  myProfile: "我的资料", welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "请登录或注册新账户。", createAcc: "注册",
-  walletBal: "钱包余额", completedBookings: "已完成订单",
-  inviteCodeTitle: "推荐码", refBonus: "推荐收益", depositBtn: "💳 充值",
-  withdrawBtn: "🏦 提现", vipTiersHead: "VIP 等级与限额",
-  logoutBtn: "退出登录", navHome: "首页", navSupport: "客服",
-  navBooking: "接单", navHistory: "记录", navProfile: "我的",
-  fullNameLabel: "全名", identityLabel: "手机号或邮箱",
-  passwordLabel: "密码", continueBtn: "继续", switchAuth: "切换 登录 / 注册"
- }
-};
-
-let currentLang = localStorage.getItem("tb_lang_sync") || "my";
-
-function changeLanguage(lang) {
- currentLang = lang;
- localStorage.setItem("tb_lang_sync", lang);
- $("language").value = lang;
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const k = el.getAttribute("data-i18n");
-  if(I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
- });
- renderAllViews();
-}
-
-let baseRates = { usd: 4500.00, thb: 132.50, cny: 625.80 };
-function startLiveRates() {
- setInterval(() => {
-  const u = (baseRates.usd + (Math.random() - 0.5) * 4).toFixed(2);
-  const t = (baseRates.thb + (Math.random() - 0.5) * 0.4).toFixed(2);
-  const c = (baseRates.cny + (Math.random() - 0.5) * 1.2).toFixed(2);
-  ["rateUsd", "pRateUsd"].forEach(id => { if($(id)) $(id).textContent = u; });
-  ["rateThb", "pRateThb"].forEach(id => { if($(id)) $(id).textContent = t; });
-  ["rateCny", "pRateCny"].forEach(id => { if($(id)) $(id).textContent = c; });
- }, 3500);
-}
-
 let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
 let defaultHotelsList = build238Hotels();
 let allHotels = defaultHotelsList;
@@ -816,6 +639,12 @@ let currentUser = null;
 let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
+
+function isAdminUser(user) {
+ if(!user) return false;
+ const ident = (user.identity || "").trim().toLowerCase();
+ return ident === "09775191427" || ident === "jupiterwhat8@gmail.com";
+}
 
 function showAlert(msg, title="Notification") {
  $("alertTitle").textContent = title;
@@ -834,6 +663,10 @@ function togglePassVisibility(inputId, btn) {
 function toggleTheme() { document.body.classList.toggle("dark"); }
 
 function showPage(pageId, navBtn) {
+ if(pageId === "staffPage" && !isAdminUser(currentUser)) {
+  showAlert("ဤစာမျက်နှာသည် Admin အတွက်သာ ဖြစ်ပါသည်။");
+  return;
+ }
  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
  $(pageId).classList.add("active");
  if(navBtn) {
@@ -866,10 +699,8 @@ async function forceSyncNow() {
     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
    }
   }
-  showAlert("✅ Database မှ အချက်အလက်များကို အောင်မြင်စွာ ဆွဲထုတ်ပြီးပါပြီ။", "Sync Success");
  } catch(e) {
   allHotels = defaultHotelsList;
-  showAlert("⚠️ Database ချိတ်ဆက်မှု အချက်အလက် ရယူရာတွင် အခက်အခဲရှိသဖြင့် ဒေသတွင်း အချက်အလက်များကို အသုံးပြုနေပါသည်။", "Sync Warning");
  }
  renderAllViews();
 }
@@ -911,6 +742,9 @@ function openAuth(mode) {
  $("regExtraFields").classList.toggle("hidden", mode === "login");
  $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginBtn : I18N[currentLang].createAcc;
  $("authError").textContent = "";
+ if(mode === "register") {
+  $("regRefInput").value = "TP2323";
+ }
 }
 
 function toggleAuthMode() { openAuth(authMode === "login" ? "register" : "login"); }
@@ -954,16 +788,14 @@ async function submitAuth() {
   }
 
   const name = $("regName").value.trim() || "Member";
-  const refInput = $("regRefInput").value.trim().toUpperCase();
+  const refInput = $("regRefInput").value.trim().toUpperCase() || "TP2323";
   let invitedBy = "-";
 
-  if(refInput) {
-   const refOwner = allUsers.find(u => u.referral_code === refInput);
-   if(refOwner) {
-    invitedBy = refOwner.id;
-    refOwner.invited_count = (refOwner.invited_count || 0) + 1;
-    await sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id).catch(()=>{});
-   }
+  const refOwner = allUsers.find(u => u.referral_code === refInput);
+  if(refOwner) {
+   invitedBy = refOwner.id;
+   refOwner.invited_count = (refOwner.invited_count || 0) + 1;
+   await sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id).catch(()=>{});
   }
 
   const newId = String(Math.floor(100000 + Math.random() * 900000));
@@ -991,17 +823,20 @@ async function submitAuth() {
   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
 
   try {
-   const dbRes = await sb.from('users').insert([newUser]);
-   if(dbRes.error) {
-    showAlert("⚠️ Database သို့ ထည့်သွင်းရာတွင် အချက်အလက် ကန့်သတ်ချက် တိုက်ဆိုင်မှုရှိသော်လည်း Local တွင် အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
-   }
+   await sb.from('users').insert([newUser]);
   } catch(e) {}
 
   currentUser = newUser;
   localStorage.setItem("tb_session_uid", newUser.id);
   closeModal("authModal");
   await forceSyncNow();
-  showAlert(`အကောင့်အသစ် ဖွင့်လှစ်ခြင်း အောင်မြင်ပါသည်။ သင့်ကိုယ်ပိုင် Referral Code မှာ <b>${newCode}</b> ဖြစ်ပါသည်။`);
+
+  if(isAdminUser(currentUser)) {
+   showPage("staffPage");
+  } else {
+   showPage("profilePage");
+  }
+  showAlert(`အကောင့်အသစ် ဖွင့်လှစ်ခြင်း အောင်မြင်ပါသည်။`);
   return;
  }
 
@@ -1022,7 +857,12 @@ async function submitAuth() {
  localStorage.setItem("tb_session_uid", user.id);
  closeModal("authModal");
  renderAllViews();
- showPage("profilePage");
+
+ if(isAdminUser(currentUser)) {
+  showPage("staffPage");
+ } else {
+  showPage("profilePage");
+ }
 }
 
 function logout() {
@@ -1100,7 +940,7 @@ function handleWithdrawRequest() {
  const bal = Number(currentUser.balance);
 
  if(bal > Number(vip.max_withdraw)) {
-  showAlert(`⛔ <b>ငွေထုတ်ယူမှု ယာယီပိတ်ပင်ထားပါသည်!</b><br><br>လက်ရှိ ${vip.name} အဆင့်၏ အများဆုံး ကန့်သတ်ချက်မှာ <b>${formatUsdWithMmk(vip.max_withdraw)}</b> ဖြစ်သော်လည်း သင့်အကောင့်လက်ကျန်ငွေမှာ <b>${formatUsdWithMmk(bal)}</b> ဖြစ်နေပါသည်။<br><br>ငွေထုတ်ယူနိုင်ရန် VIP အဆင့်မြှင့်တင်ဖို့ <b>Trip Booking Service</b> သို့ ဆက်သွယ်ပါ။`, "VIP Limit Exceeded");
+  showAlert(`⛔ <b>ငွေထုတ်ယူမှု ယာယီပိတ်ပင်ထားပါသည်!</b><br><br>လက်ရှိ ${vip.name} အဆင့်၏ အများဆုံး ကန့်သတ်ချက်မှာ <b>${formatUsdWithMmk(vip.max_withdraw)}</b> ဖြစ်သော်လည်း သင့်အကောင့်လက်ကျန်ငွေမှာ <b>${formatUsdWithMmk(bal)}</b> ဖြစ်နေပါသည်။`, "VIP Limit Exceeded");
   return;
  }
 
@@ -1230,16 +1070,6 @@ async function saveAllUsersAdmin() {
     balance: u.balance, neg_dollar: u.neg_dollar,
     profit_box: u.profit_box, orders: u.orders
    }).eq('id', u.id);
-
-   if(diff !== 0) {
-    await sb.from('transactions').insert([{
-     user_id: u.id,
-     type: diff > 0 ? 'Deposit (Top-up)' : 'Deduction',
-     hotel_name: 'Admin Balance Adjustment',
-     amount: Math.abs(diff),
-     status: 'Approved'
-    }]);
-   }
   } catch(e) {}
  }
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
@@ -1479,11 +1309,33 @@ async function renderHistoryTable() {
  `).join("") || `<tr><td colspan="5" style="text-align:center">No records found.</td></tr>`;
 }
 
+const I18N = {
+ my: { loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" },
+ en: { loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" },
+ th: { loginBtn: "เข้าสู่ระบบ", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" },
+ zh: { loginBtn: "登录", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels", csCenter: "Trip Booking Service" }
+};
+
+let currentLang = "my";
+function changeLanguage(lang) {
+ currentLang = lang;
+}
+
 function renderAllViews() {
  renderHotels();
  renderBookingArea();
  renderAdminUsers();
  renderCsClientList();
+
+ const isAdm = isAdminUser(currentUser);
+ if(isAdm) {
+  $("bottomNav").classList.add("hidden");
+  if(!$("staffPage").classList.contains("active")) {
+   showPage("staffPage");
+  }
+ } else {
+  $("bottomNav").classList.remove("hidden");
+ }
 
  if(currentUser) {
   $("headerAuthBtn").classList.add("hidden");
@@ -1518,10 +1370,22 @@ function renderAllViews() {
 window.addEventListener("load", () => {
  setupPWAManifest();
  playCinematicIntro();
- startLiveRates();
- changeLanguage(currentLang);
  initSupabaseData();
 });
+
+function setupPWAManifest() {
+ const manifest = {
+  name: "Trip Booking",
+  short_name: "Trip Booking",
+  start_url: window.location.href,
+  display: "standalone",
+  background_color: "#008080",
+  theme_color: "#008080",
+  icons: [{ src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=192", sizes: "192x192", type: "image/png" }]
+ };
+ const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+ $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
+}
 </script>
 </body>
 </html>
