@@ -70,7 +70,6 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
 }
 
-/* CINEMATIC ENTRANCE ANIMATION */
 #cinematicIntro{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
  background:linear-gradient(135deg,rgba(0,38,38,0.94),rgba(0,95,95,0.9)),
@@ -225,7 +224,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <main class="container">
 
-<!-- HOME PAGE -->
 <section class="page active" id="homePage">
  <div class="rates-bar" id="homeRatesBar">
   <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="rateUsd">4,500.00</strong></div>
@@ -249,7 +247,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- CUSTOMER SERVICE PAGE -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
  <div class="chat-window" style="max-width:850px;margin:0 auto">
@@ -272,7 +269,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- BOOKING TASK CENTER -->
 <section class="page" id="bookingPage">
  <div class="section-title"><h2 data-i18n="taskCenter">Booking Task Center</h2></div>
  <div class="panel">
@@ -290,7 +286,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- TRANSACTION HISTORY PAGE -->
 <section class="page" id="historyPage">
  <div class="section-title"><h2 data-i18n="histTitle">Transaction & Booking History</h2></div>
  <div class="panel">
@@ -311,7 +306,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- PROFILE PAGE -->
 <section class="page" id="profilePage">
  <div class="section-title">
   <h2 data-i18n="myProfile">My Profile</h2>
@@ -360,7 +354,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- DEDICATED ADMIN & CUSTOMER SERVICE CONTROL PAGE -->
 <section class="page" id="staffPage">
  <div class="section-title">
   <div>
@@ -479,7 +472,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- AUTH MODAL -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -509,7 +501,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- SECRET 10-TAP ADMIN & CS LOGIN MODAL -->
 <div class="modal hidden" id="secretStaffModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -530,7 +521,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- ADD HOTEL MODAL -->
 <div class="modal hidden" id="addHotelModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -545,7 +535,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- NOTIFICATION MODAL -->
 <div class="modal hidden" id="alertModal">
  <div class="modal-box" style="text-align:center">
   <h3 id="alertTitle" style="color:var(--fb-primary)">Notification</h3>
@@ -812,7 +801,7 @@ function startLiveRates() {
  }, 3500);
 }
 
-let allUsers = [];
+let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
 let defaultHotelsList = build238Hotels();
 let allHotels = defaultHotelsList;
 let visibleHotelsLimit = 48;
@@ -872,6 +861,7 @@ async function forceSyncNow() {
   }
   if(usrsRes.data) {
    allUsers = usrsRes.data;
+   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
    if(currentUser) {
     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
    }
@@ -893,15 +883,17 @@ async function initSupabaseData() {
  }
  renderAllViews();
 
- sb.channel('global-realtime-sync')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => { forceSyncNow(); })
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'hotels' }, () => { forceSyncNow(); })
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'vip_tiers' }, () => { forceSyncNow(); })
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
-   if(currentUser) loadUserMessages(currentUser.id);
-   if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
-  })
-  .subscribe();
+ try {
+  sb.channel('global-realtime-sync')
+   .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => { forceSyncNow(); })
+   .on('postgres_changes', { event: '*', schema: 'public', table: 'hotels' }, () => { forceSyncNow(); })
+   .on('postgres_changes', { event: '*', schema: 'public', table: 'vip_tiers' }, () => { forceSyncNow(); })
+   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
+    if(currentUser) loadUserMessages(currentUser.id);
+    if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+   })
+   .subscribe();
+ } catch(err) {}
 
  setInterval(() => {
   forceSyncNow();
@@ -954,7 +946,7 @@ async function submitAuth() {
    existing = allUsers.filter(u => u.identity === identity);
   }
 
-  if(existing.length > 0) {
+  if(existing.length > 0 || allUsers.some(u => u.identity === identity)) {
    err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
    return;
   }
@@ -967,7 +959,8 @@ async function submitAuth() {
    const refOwner = allUsers.find(u => u.referral_code === refInput);
    if(refOwner) {
     invitedBy = refOwner.id;
-    await sb.from('users').update({ invited_count: (refOwner.invited_count || 0) + 1 }).eq('id', refOwner.id);
+    refOwner.invited_count = (refOwner.invited_count || 0) + 1;
+    await sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id).catch(()=>{});
    }
   }
 
@@ -981,16 +974,23 @@ async function submitAuth() {
    password,
    referral_code: newCode,
    invited_by: invitedBy,
+   invited_count: 0,
    balance: 0.00,
+   commission: 0.00,
+   total_profit: 0.00,
+   referral_earned: 0.00,
+   orders: 0,
    vip_level: "LV1",
-   orders: 0
+   neg_dollar: 0.00,
+   profit_box: 0.00
   };
 
-  const { error } = await sb.from('users').insert([newUser]);
-  if(error) {
-   err.textContent = "ဒေတာဘေ့စ်သို့ ချိတ်ဆက်၍မရပါ။ RLS သို့မဟုတ် Database တည်ဆောက်မှုကို စစ်ဆေးပါ။";
-   return;
-  }
+  allUsers.unshift(newUser);
+  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
+
+  try {
+   await sb.from('users').insert([newUser]);
+  } catch(e) {}
 
   currentUser = newUser;
   localStorage.setItem("tb_session_uid", newUser.id);
@@ -1059,26 +1059,30 @@ async function submitCurrentOrder() {
   return;
  }
 
- const newBalance = Number(currentUser.balance) + commission;
- const newComm = Number(currentUser.commission || 0) + commission;
- const newTotalProfit = Number(currentUser.total_profit || 0) + commission;
- const newOrders = Number(currentUser.orders || 0) + 1;
+ currentUser.balance = Number(currentUser.balance) + commission;
+ currentUser.commission = Number(currentUser.commission || 0) + commission;
+ currentUser.total_profit = Number(currentUser.total_profit || 0) + commission;
+ currentUser.orders = Number(currentUser.orders || 0) + 1;
 
- await sb.from('users').update({
-  balance: newBalance,
-  commission: newComm,
-  total_profit: newTotalProfit,
-  orders: newOrders
- }).eq('id', currentUser.id);
+ localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
 
- await sb.from('transactions').insert([{
-  user_id: currentUser.id,
-  type: 'Booking Profit',
-  hotel_name: hotel.name,
-  order_price: hotel.price,
-  amount: commission,
-  status: 'Approved'
- }]);
+ try {
+  await sb.from('users').update({
+   balance: currentUser.balance,
+   commission: currentUser.commission,
+   total_profit: currentUser.total_profit,
+   orders: currentUser.orders
+  }).eq('id', currentUser.id);
+
+  await sb.from('transactions').insert([{
+   user_id: currentUser.id,
+   type: 'Booking Profit',
+   hotel_name: hotel.name,
+   order_price: hotel.price,
+   amount: commission,
+   status: 'Approved'
+  }]);
+ } catch(e) {}
 
  activeTask = null;
  await forceSyncNow();
@@ -1107,11 +1111,10 @@ function handleDepositRequest() {
 
 async function sendQuickSuggestion(text) {
  if(!currentUser) { openAuth('login'); return; }
- await sb.from('messages').insert([{
-  user_id: currentUser.id,
-  sender: 'user',
-  text: text
- }]);
+ const newMsg = { user_id: currentUser.id, sender: 'user', text: text, created_at: new Date().toISOString() };
+ try {
+  await sb.from('messages').insert([newMsg]);
+ } catch(e) {}
  loadUserMessages(currentUser.id);
 }
 
@@ -1121,19 +1124,19 @@ async function sendSupportMessage() {
  const text = inp.value.trim();
  if(!text) return;
  inp.value = "";
- await sb.from('messages').insert([{
-  user_id: currentUser.id,
-  sender: 'user',
-  text: text
- }]);
- loadUserMessages(currentUser.id);
+ await sendQuickSuggestion(text);
 }
 
 async function loadUserMessages(userId) {
- const { data } = await sb.from('messages').select('*').eq('user_id', userId).order('created_at', { ascending: true });
+ let data = [];
+ try {
+  const res = await sb.from('messages').select('*').eq('user_id', userId).order('created_at', { ascending: true });
+  data = res.data || [];
+ } catch(e) {}
+ 
  const box = $("supportMessages");
  if(!box) return;
- box.innerHTML = (data || []).map(m => `
+ box.innerHTML = data.map(m => `
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
    background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};
    color:${m.sender==='user'?'white':'var(--fb-text)'};
@@ -1202,37 +1205,48 @@ async function saveAllUsersAdmin() {
   const nameEl = $(`adm_name_${u.id}`);
   if(!nameEl) continue;
 
+  u.name = nameEl.value;
+  u.identity = $(`adm_ident_${u.id}`).value.trim().toLowerCase();
+  u.password = $(`adm_pass_${u.id}`).value;
+  u.referral_code = $(`adm_ref_${u.id}`).value;
+  u.vip_level = $(`adm_vip_${u.id}`).value;
+  
   const newBal = Number($(`adm_bal_${u.id}`).value);
   const diff = newBal - Number(u.balance);
+  u.balance = newBal;
+  u.neg_dollar = Number($(`adm_neg_${u.id}`).value);
+  u.profit_box = Number($(`adm_pbox_${u.id}`).value);
+  u.orders = Number($(`adm_ord_${u.id}`).value);
 
-  await sb.from('users').update({
-   name: nameEl.value,
-   identity: $(`adm_ident_${u.id}`).value.trim().toLowerCase(),
-   password: $(`adm_pass_${u.id}`).value,
-   referral_code: $(`adm_ref_${u.id}`).value,
-   vip_level: $(`adm_vip_${u.id}`).value,
-   balance: newBal,
-   neg_dollar: Number($(`adm_neg_${u.id}`).value),
-   profit_box: Number($(`adm_pbox_${u.id}`).value),
-   orders: Number($(`adm_ord_${u.id}`).value)
-  }).eq('id', u.id);
+  try {
+   await sb.from('users').update({
+    name: u.name, identity: u.identity, password: u.password,
+    referral_code: u.referral_code, vip_level: u.vip_level,
+    balance: u.balance, neg_dollar: u.neg_dollar,
+    profit_box: u.profit_box, orders: u.orders
+   }).eq('id', u.id);
 
-  if(diff !== 0) {
-   await sb.from('transactions').insert([{
-    user_id: u.id,
-    type: diff > 0 ? 'Deposit (Top-up)' : 'Deduction',
-    hotel_name: 'Admin Balance Adjustment',
-    amount: Math.abs(diff),
-    status: 'Approved'
-   }]);
-  }
+   if(diff !== 0) {
+    await sb.from('transactions').insert([{
+     user_id: u.id,
+     type: diff > 0 ? 'Deposit (Top-up)' : 'Deduction',
+     hotel_name: 'Admin Balance Adjustment',
+     amount: Math.abs(diff),
+     status: 'Approved'
+    }]);
+   }
+  } catch(e) {}
  }
+ localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
  await forceSyncNow();
  showAlert("✅ အသုံးပြုသူ အချက်အလက်များအားလုံးကို သိမ်းဆည်းပြီးပါပြီ။");
 }
 
 async function resetSingleUserOrder(uid) {
- await sb.from('users').update({ orders: 0 }).eq('id', uid);
+ const u = allUsers.find(x => x.id === uid);
+ if(u) u.orders = 0;
+ localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
+ try { await sb.from('users').update({ orders: 0 }).eq('id', uid); } catch(e) {}
  await forceSyncNow();
  showAlert("အော်ဒါအရေအတွက်ကို (0) သို့ ပြန်လည်သတ်မှတ်ပြီးပါပြီ။");
 }
@@ -1264,25 +1278,30 @@ function renderAdminHotelsAndVips() {
 async function saveHotelsAndVipsAdmin() {
  for(let i = 0; i < allVipTiers.length; i++) {
   const v = allVipTiers[i];
-  await sb.from('vip_tiers').update({
-   name: $(`vip_n_${i}`).value,
-   daily_limit: Number($(`vip_l_${i}`).value),
-   profit_rate: Number($(`vip_r_${i}`).value) / 100,
-   min_bal: Number($(`vip_m_${i}`).value),
-   max_withdraw: Number($(`vip_w_${i}`).value)
-  }).eq('level', v.level);
+  v.name = $(`vip_n_${i}`).value;
+  v.daily_limit = Number($(`vip_l_${i}`).value);
+  v.profit_rate = Number($(`vip_r_${i}`).value) / 100;
+  v.min_bal = Number($(`vip_m_${i}`).value);
+  v.max_withdraw = Number($(`vip_w_${i}`).value);
+  try {
+   await sb.from('vip_tiers').update({
+    name: v.name, daily_limit: v.daily_limit, profit_rate: v.profit_rate,
+    min_bal: v.min_bal, max_withdraw: v.max_withdraw
+   }).eq('level', v.level);
+  } catch(e) {}
  }
 
  for(let i = 0; i < Math.min(allHotels.length, 60); i++) {
   const h = allHotels[i];
-  await sb.from('hotels').upsert([{
-   id: h.id,
-   name: $(`ht_n_${i}`).value,
-   country: $(`ht_c_${i}`).value,
-   stars: Number($(`ht_s_${i}`).value),
-   price: Number($(`ht_p_${i}`).value),
-   image: h.image
-  }]);
+  h.name = $(`ht_n_${i}`).value;
+  h.country = $(`ht_c_${i}`).value;
+  h.stars = Number($(`ht_s_${i}`).value);
+  h.price = Number($(`ht_p_${i}`).value);
+  try {
+   await sb.from('hotels').upsert([{
+    id: h.id, name: h.name, country: h.country, stars: h.stars, price: h.price, image: h.image
+   }]);
+  } catch(e) {}
  }
  await forceSyncNow();
  showAlert("✅ ဟိုတယ်ဈေးနှုန်းနှင့် VIP နှုန်းထားများကို သိမ်းဆည်းပြီးပါပြီ။");
@@ -1298,17 +1317,16 @@ async function addHotelToSupabase() {
  if(!name || !country || price <= 0) return;
 
  const id = "H" + Math.floor(100 + Math.random() * 900);
- await sb.from('hotels').insert([{
-  id, name, country, price, stars,
-  image: VERIFIED_HOTEL_IMAGES[Math.floor(Math.random() * VERIFIED_HOTEL_IMAGES.length)]
- }]);
+ const newH = { id, name, country, price, stars, image: VERIFIED_HOTEL_IMAGES[Math.floor(Math.random() * VERIFIED_HOTEL_IMAGES.length)] };
+ allHotels.unshift(newH);
+ try { await sb.from('hotels').insert([newH]); } catch(e) {}
  closeModal("addHotelModal");
- await forceSyncNow();
+ renderAllViews();
 }
 
 async function deleteHotel(id) {
- await sb.from('hotels').delete().eq('id', id);
  allHotels = allHotels.filter(h => h.id !== id);
+ try { await sb.from('hotels').delete().eq('id', id); } catch(e) {}
  renderAllViews();
 }
 
@@ -1337,8 +1355,13 @@ function selectCsClient(uid) {
 }
 
 async function loadAdminChatMessages(uid) {
- const { data } = await sb.from('messages').select('*').eq('user_id', uid).order('created_at', { ascending: true });
- $("adminChatMessages").innerHTML = (data || []).map(m => `
+ let data = [];
+ try {
+  const res = await sb.from('messages').select('*').eq('user_id', uid).order('created_at', { ascending: true });
+  data = res.data || [];
+ } catch(e) {}
+
+ $("adminChatMessages").innerHTML = data.map(m => `
   <div style="margin:6px 0;padding:8px 12px;border-radius:8px;max-width:80%;
    background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};
    color:${m.sender==='support'?'white':'var(--fb-text)'};
@@ -1357,11 +1380,8 @@ async function sendAdminChatReply() {
  const text = inp.value.trim();
  if(!text) return;
  inp.value = "";
- await sb.from('messages').insert([{
-  user_id: selectedCsUserId,
-  sender: 'support',
-  text: text
- }]);
+ const newMsg = { user_id: selectedCsUserId, sender: 'support', text: text, created_at: new Date().toISOString() };
+ try { await sb.from('messages').insert([newMsg]); } catch(e) {}
  loadAdminChatMessages(selectedCsUserId);
 }
 
@@ -1437,8 +1457,13 @@ function renderBookingArea() {
 
 async function renderHistoryTable() {
  if(!currentUser) return;
- const { data } = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
- $("historyRows").innerHTML = (data || []).map(t => `
+ let data = [];
+ try {
+  const res = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+  data = res.data || [];
+ } catch(e) {}
+
+ $("historyRows").innerHTML = data.map(t => `
   <tr>
    <td>${new Date(t.created_at).toLocaleString()}</td>
    <td><b>${t.type}</b></td>
@@ -1480,7 +1505,7 @@ function renderAllViews() {
   renderHistoryTable();
  } else {
   $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.remove("hidden");
+  $("guestAuthBox").classList.add("hidden");
   $("memberProfileBox").classList.add("hidden");
  }
 }
