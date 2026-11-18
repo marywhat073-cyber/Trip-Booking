@@ -57,32 +57,43 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
 }
 
-/* Splash Screen Animation */
+/* Professional Splash Screen Animation */
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
- background:linear-gradient(135deg,rgba(0,40,40,0.9),rgba(0,100,100,0.85)),
- url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ background:linear-gradient(135deg,rgba(7,26,26,0.95),rgba(15,43,43,0.9)),
+ url("https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600") center/cover;
  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:white;
  overflow:hidden;
 }
+.splash-logo {
+ width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid white;
+ box-shadow: 0 8px 25px rgba(0,0,0,0.5); margin-bottom: 20px;
+ animation: pulseLogo 1.5s infinite alternate;
+}
 .splash-title {
- font-size: 28px; font-weight: 800; margin: 0 0 10px;
+ font-size: 32px; font-weight: 900; margin: 0 0 12px; color: #fff;
  position: relative;
  animation: slideFromRight 1s ease-out forwards;
+ text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 .splash-desc {
- font-size: 16px; opacity: 0.9; margin: 0;
+ font-size: 16px; color: #00ffcc; margin: 0; font-weight: 600;
+ letter-spacing: 1px;
  position: relative;
- animation: slideFromAll 1.2s ease-out forwards;
+ animation: scatterZoom 1.2s ease-out forwards;
 }
 
 @keyframes slideFromRight {
- 0% { transform: translateX(100vw); opacity: 0; }
+ 0% { transform: translateX(120vw); opacity: 0; }
  100% { transform: translateX(0); opacity: 1; }
 }
-@keyframes slideFromAll {
- 0% { transform: scale(0.5); opacity: 0; }
- 100% { transform: scale(1); opacity: 1; }
+@keyframes scatterZoom {
+ 0% { transform: scale(0.2); opacity: 0; letter-spacing: 10px; }
+ 100% { transform: scale(1); opacity: 1; letter-spacing: 1px; }
+}
+@keyframes pulseLogo {
+ 0% { transform: scale(1); }
+ 100% { transform: scale(1.08); }
 }
 
 header{
@@ -113,7 +124,7 @@ header{
 .hero{
  min-height:230px;border-radius:14px;overflow:hidden;
  background:linear-gradient(135deg,rgba(0,102,204,0.85),rgba(0,40,80,0.6)),
- url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ url("https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600") center/cover;
  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;color:white;
  box-shadow:var(--shadow);
 }
@@ -153,9 +164,15 @@ header{
  border-radius:20px;padding:6px 12px;font-size:12px;white-space:nowrap;
 }
 .chip-btn:hover{background:var(--fb-primary);color:white}
-.chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
-.chat-tool-btn{background:none;border:0;color:var(--fb-muted);font-size:18px;cursor:pointer;padding:4px}
-.chat-tool-btn:hover{color:var(--fb-primary)}
+.chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:10px;align-items:center}
+
+/* Professional Photo or Video Upload Button Style */
+.photo-video-btn {
+ display: flex; align-items: center; gap: 6px; background: rgba(0,102,204,0.15);
+ border: 1px solid var(--fb-primary); color: #3399ff; padding: 6px 12px;
+ border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.photo-video-btn:hover { background: var(--fb-primary); color: white; }
 
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -170,8 +187,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- SPLASH SCREEN ANIMATION -->
+<!-- PROFESSIONAL SPLASH SCREEN ANIMATION -->
 <div id="splashScreen">
+ <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="splash-logo" alt="Logo">
  <h1 class="splash-title">Welcome to Trip Hotel Booking</h1>
  <p class="splash-desc">International Hotel Booking Platform</p>
 </div>
@@ -208,13 +226,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="section-title">
-  <h2 data-i18n="hotelDir">နိုင်ငံတကာ ဟိုတယ်များ</h2>
+  <h2 data-i18n="hotelDir">နိုင်ငံတကာ ဟိုတယ်များ (277+ Hotels)</h2>
   <input id="hotelSearch" placeholder="Search hotel or country..." style="max-width:220px" oninput="renderHotels()">
  </div>
  <div class="hotel-grid" id="hotelGrid"></div>
 </section>
 
-<!-- CUSTOMER SERVICE PAGE (File upload support) -->
+<!-- CUSTOMER SERVICE PAGE (With Photo or Video Button) -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
  <div class="chat-window" style="max-width:850px;margin:0 auto">
@@ -232,9 +250,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
   <div class="chat-footer">
    <input type="file" id="chatFileInput" class="hidden" accept="image/*,video/*" onchange="handleFileSelected(event)">
-   <button class="chat-tool-btn" onclick="$('chatFileInput').click()" title="Upload Image/Video">📷</button>
+   <button class="photo-video-btn" onclick="$('chatFileInput').click()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    Photo or video
+   </button>
    <button class="chat-tool-btn" onclick="insertEmote('😊')" title="Emoji">😊</button>
-   <button class="chat-tool-btn" onclick="insertEmote('🔥')" title="Fire">🔥</button>
    <input id="supportInput" type="text" placeholder="Type a message..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
    <button class="btn" onclick="sendSupportMessage()" style="background:var(--fb-primary)">➤</button>
   </div>
@@ -431,6 +451,15 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
+<!-- NOTIFICATION MODAL -->
+<div class="modal hidden" id="alertModal">
+ <div class="modal-box" style="text-align:center">
+  <h3 id="alertTitle" style="color:var(--fb-primary)">Notification</h3>
+  <p id="alertBody" style="margin:14px 0"></p>
+  <button class="btn btn-block" onclick="closeModal('alertModal')" style="background:var(--fb-primary)">OK</button>
+ </div>
+</div>
+
 <script>
 "use strict";
 
@@ -441,17 +470,20 @@ const $ = id => document.getElementById(id);
 
 let allUsers = [];
 let allHotels = [];
+const regions = ["Asia (Singapore/Japan)", "Europe (France/UK)", "America (USA/Canada)", "Middle East (UAE)"];
+const hotelNames = ["Marina Bay Sands", "The Ritz-Carlton", "Burj Al Arab", "The Plaza", "Claridge's", "Hôtel de Crillon", "Mandarin Oriental", "Four Seasons", "Waldorf Astoria", "Raffles"];
+
 for(let i=1; i<=277; i++) {
  allHotels.push({
   id: "H" + i,
-  name: i % 2 === 0 ? "Grand Luxury Resort & Spa #" + i : "International Palace Hotel #" + i,
-  country: i % 3 === 0 ? "Asia (Japan/Singapore)" : (i % 3 === 1 ? "Europe (France/UK)" : "America (USA)"),
-  price: 150 + (i * 7) % 700,
+  name: hotelNames[i % hotelNames.length] + " #" + i,
+  country: regions[i % regions.length],
+  price: 180 + (i * 13) % 850,
   stars: 5,
   image: i % 2 === 0 ? "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900" : "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900",
-  rating: "4.9/5",
-  reviews: (1000 + i * 15) + " reviews",
-  viewers: (500 + i * 5) + " viewing"
+  rating: (4.7 + (i % 3) * 0.1).toFixed(1) + "/5",
+  reviews: (2000 + i * 25) + " reviews",
+  viewers: (400 + i * 8) + " viewing"
  });
 }
 
@@ -856,11 +888,11 @@ window.addEventListener("load", () => {
  setTimeout(() => {
   const splash = $("splashScreen");
   if(splash) {
-   splash.style.transition = "opacity 0.5s ease";
+   splash.style.transition = "opacity 0.6s ease";
    splash.style.opacity = "0";
-   setTimeout(() => splash.remove(), 500);
+   setTimeout(() => splash.remove(), 600);
   }
- }, 3000);
+ }, 3200);
 
  initSupabaseData();
 });
