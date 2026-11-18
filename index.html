@@ -1259,106 +1259,98 @@ async function sendAdminChatReply() {
 }
 
 /* ==========================================================================
-   9. UI RENDERING
+   ADMIN SAVE & REAL-TIME INITIALIZATION
    ========================================================================== */
-function renderHotels() {
- const q = ($("hotelSearch")?.value || "").toLowerCase();
- const filtered = allHotels.filter(h => h.name.toLowerCase().includes(q) || h.country.toLowerCase().includes(q));
- $("hotelGrid").innerHTML = filtered.map(h => `
-  <div class="card">
-   <img class="hotel-img" src="${h.image}" alt="${h.name}">
-   <div class="card-body">
-    <span class="tag">${h.country} · ${"★".repeat(h.stars)}</span>
-    <h3 style="margin:6px 0">${h.name}</h3>
-    <div style="display:flex;justify-content:space-between;align-items:center">
-     <span class="price">$${Number(h.price).toFixed(2)}</span>
-     <button class="btn" style="padding:4px 10px;font-size:12px" onclick="showPage('bookingPage')">Book</button>
-    </div>
-   </div>
-  </div>
- `).join("");
+
+// Admin Panel မှ ပြင်ဆင်ထားသော ယူဆာဒေတာများကို Supabase သို့ သိမ်းဆည်းခြင်း
+async function saveAllUsersAdmin() {
+    const rows = document.querySelectorAll("#adminUsersRows tr");
+    let successCount = 0;
+
+    for (const row of rows) {
+        // Table ထဲက input တွေရဲ့ ID တွေကို ယူပြီး Data အသစ်တွေ စုဆောင်းမယ်
+        const nameInput = row.querySelector("input[id^='adm_name_']");
+        const passInput = row.querySelector("input[id^='adm_pass_']");
+        const refInput = row.querySelector("input[id^='adm_ref_']");
+        const vipInput = row.querySelector("input[id^='adm_vip_']");
+        const balInput = row.querySelector("input[id^='adm_bal_']");
+        const negInput = row.querySelector("input[id^='adm_neg_']");
+        const pboxInput = row.querySelector("input[id^='adm_pbox_']");
+
+        if (nameInput) {
+            const userId = nameInput.id.replace("adm_name_", "");
+            const updatedData = {
+                name: nameInput.value,
+                password: passInput.value,
+                referral_code: refInput.value,
+                vip_level: parseInt(vipInput.value) || 1,
+                balance: parseFloat(balInput.value) || 0,
+                negative_balance: parseFloat(negInput.value) || 0,
+                profit_box: parseFloat(pboxInput.value) || 0
+            };
+
+            const { error } = await sb.from("users").update(updatedData).eq("id", userId);
+            if (!error) successCount++;
+        }
+    }
+
+    alert("Admin အချက်အလက်များ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ! (" + successCount + " users updated)");
+    fetchAdminUsers();
 }
 
-function renderBookingArea() {
- if(!currentUser) {
-  $("bookingHotelArea").innerHTML = `<p class="muted" style="text-align:center">Please login to access tasks.</p>`;
-  return;
- }
- const vip = getVipInfo(currentUser.vip_level);
- $("taskWallet").textContent = "$" + Number(currentUser.balance).toFixed(2);
- $("taskProfit").textContent = "$" + Number(currentUser.commission || 0).toFixed(2);
- $("taskTotalProfit").textContent = "$" + Number(currentUser.total_profit || 0).toFixed(2);
- $("orderCircle").textContent = `${currentUser.orders}/${vip.daily_limit}`;
-
- if(activeTask) {
-  $("bookingHotelArea").innerHTML = `
-   <div class="card" style="max-width:500px;margin:0 auto;border:2px solid var(--fb-primary)">
-    <img class="hotel-img" src="${activeTask.hotel.image}" style="height:180px">
-    <div class="card-body">
-     <h3>${activeTask.hotel.name} (${activeTask.hotel.country})</h3>
-     <p>Order Amount: <b>$${Number(activeTask.hotel.price).toFixed(2)}</b> | Commission: <b style="color:var(--fb-success)">+$${activeTask.commission.toFixed(2)}</b></p>
-     <button class="btn btn-success btn-block" onclick="submitCurrentOrder()">Submit Order Now</button>
-    </div>
-   </div>
-  `;
- } else {
-  $("bookingHotelArea").innerHTML = "";
- }
+// ယူဆာအော်ဒါအရေအတွက်ကို Reset လုပ်ရန် (0 သို့ ပြန်ပြောင်းရန်)
+async function resetUserOrders(userId) {
+    const { error } = await sb.from("users").update({ orders: 0 }).eq("id", userId);
+    if (error) {
+        alert("Reset လုပ်ရာတွင် အမှားအယွင်းရှိပါသည်: " + error.message);
+    } else {
+        alert("အော်ဒါအရေအတွက်ကို (0) သို့ အောင်မြင်စွာ Reset လုပ်ပြီးပါပြီ။");
+        fetchAdminUsers();
+    }
 }
 
-async function renderHistoryTable() {
- if(!currentUser) return;
- const { data } = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
- $("historyRows").innerHTML = (data || []).map(t => `
-  <tr>
-   <td>${new Date(t.created_at).toLocaleString()}</td>
-   <td><b>${t.type}</b></td>
-   <td>${t.hotel_name || '-'}</td>
-   <td style="color:${t.type.includes('Deduction')?'var(--fb-danger)':'var(--fb-success)'}">$${Number(t.amount).toFixed(2)}</td>
-   <td>${t.status}</td>
-  </tr>
- `).join("") || `<tr><td colspan="5" style="text-align:center">No records found.</td></tr>`;
+// Supabase Real-Time Admin Sync Function
+async function fetchAdminUsers() {
+    const { data, error } = await sb.from('users').select('*').order('created_at', { ascending: false });
+    if (error) {
+        console.error('Error fetching users for admin:', error.message);
+        return;
+    }
+    renderAdminUsersTable(data);
 }
 
-function renderAllViews() {
- renderHotels();
- renderBookingArea();
+function renderAdminUsersTable(users) {
+    const tbody = $("adminUsersRows");
+    if (!tbody) return;
 
- if(currentUser) {
-  $("headerAuthBtn").classList.add("hidden");
-  $("guestAuthBox").classList.add("hidden");
-  $("memberProfileBox").classList.remove("hidden");
+    tbody.innerHTML = "";
+    users.forEach((user, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td><input type="text" value="${user.name || ''}" id="adm_name_${user.id}"></td>
+            <td>${user.identity || user.phone || user.email || '-'}</td>
+            <td><input type="text" value="${user.password || ''}" id="adm_pass_${user.id}"></td>
+            <td><input type="text" value="${user.referral_code || ''}" id="adm_ref_${user.id}"></td>
+            <td><input type="number" value="${user.vip_level || 1}" style="width:60px" id="adm_vip_${user.id}"></td>
+            <td><input type="number" value="${user.balance || 0}" style="width:80px" id="adm_bal_${user.id}"></td>
+            <td><input type="number" value="${user.negative_balance || 0}" style="width:80px" id="adm_neg_${user.id}"></td>
+            <td><input type="number" value="${user.profit_box || 0}" style="width:80px" id="adm_pbox_${user.id}"></td>
+            <td><strong>${user.orders || 0}/30</strong></td>
+            <td><button class="btn btn-danger" onclick="resetUserOrders('${user.id}')">Reset</button></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
 
-  if(currentUser.identity === "09775191427" && currentUser.password === "Mary1245@") {
-   $("exclusiveAdminBtn").classList.remove("hidden");
-  } else {
-   $("exclusiveAdminBtn").classList.add("hidden");
-  }
-
-  const vip = getVipInfo(currentUser.vip_level);
-  $("profileName").textContent = currentUser.name;
-  $("profileIdentity").textContent = `${currentUser.identity} · ID: ${currentUser.id}`;
-  $("profileVipBadge").textContent = vip.name;
-  $("walletBalance").textContent = "$" + Number(currentUser.balance).toFixed(2);
-  $("profileOrders").textContent = `${currentUser.orders}/${vip.daily_limit}`;
-  $("inviteCode").textContent = currentUser.referral_code;
-  $("referralEarned").textContent = "$" + Number(currentUser.referral_earned || 0).toFixed(2);
-
-  $("vipTiersDisplay").innerHTML = allVipTiers.map(v => `
-   <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
-    <strong>${v.name}</strong>
-    <p class="small muted">Daily Limit: ${v.daily_limit} orders<br>Rate: ${(v.profit_rate*100).toFixed(2)}%<br>Max Limit: $${v.max_withdraw}</p>
-   </div>
-  `).join("");
-
-  loadUserMessages(currentUser.id);
-  renderHistoryTable();
- } else {
-  $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.remove("hidden");
-  $("memberProfileBox").classList.add("hidden");
-  $("exclusiveAdminBtn").classList.add("hidden");
- }
+function initRealtimeAdminSync() {
+    sb.channel('public:users')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, payload => {
+          console.log('Real-time change detected:', payload);
+          fetchAdminUsers();
+          if(typeof renderAllViews === 'function') renderAllViews();
+      })
+      .subscribe();
 }
 
 window.addEventListener("load", () => {
@@ -1367,6 +1359,8 @@ window.addEventListener("load", () => {
  startLiveRates();
  changeLanguage(currentLang);
  initSupabaseData();
+ fetchAdminUsers();
+ initRealtimeAdminSync();
 });
 </script>
 </body>
