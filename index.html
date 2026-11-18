@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#008080">
-<title>Trip Booking | International Hotel Booking Platform</title>
+<title>Trip Booking | International Trip Booking Platform</title>
 
 <!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Dynamic PWA Manifest Setup -->
 <link rel="manifest" id="pwaManifest">
 
 <style>
@@ -23,6 +21,7 @@
  --fb-primary-hover:#006666;
  --fb-success:#00b386;
  --fb-danger:#ff4d4d;
+ --star-gold:#ffb400;
  --shadow:0 4px 12px rgba(0,128,128,0.15);
 }
 body.dark{
@@ -64,7 +63,6 @@ input,select,textarea{
 input:focus,select:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
-/* Password Eye Wrapper */
 .pass-wrap{position:relative;display:flex;align-items:center}
 .pass-wrap input{padding-right:40px}
 .eye-btn{
@@ -72,17 +70,63 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
 }
 
-/* 0% to 100% Splash & PWA Screen */
-#splashScreen{
+/* ==========================================================================
+   CINEMATIC ENTRANCE ANIMATION SCREEN
+   ========================================================================== */
+#cinematicIntro{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
- background:linear-gradient(135deg,rgba(0,40,40,0.88),rgba(0,100,100,0.82)),
+ background:linear-gradient(135deg,rgba(0,38,38,0.94),rgba(0,95,95,0.9)),
  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
- display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:white;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ overflow:hidden;color:white;padding:20px;
+ transition:opacity 0.7s ease, visibility 0.7s ease;
 }
-.splash-icon{width:80px;height:80px;border-radius:20px;object-fit:cover;border:3px solid white;box-shadow:0 8px 20px rgba(0,0,0,0.4);margin-bottom:14px}
-.progress-container{width:min(320px,85%);height:12px;background:rgba(255,255,255,0.25);border-radius:10px;overflow:hidden;margin:16px 0 8px}
-.progress-fill{height:100%;width:0%;background:#00ffcc;transition:width 0.08s linear}
-.splash-actions{display:flex;gap:14px;margin-top:20px}
+#cinematicIntro.fade-out{
+ opacity:0;
+ visibility:hidden;
+ pointer-events:none;
+}
+.intro-top-row{
+ display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+ margin-bottom:14px;
+}
+/* Logo slides from Left to Center */
+.intro-logo{
+ width:74px;height:74px;border-radius:50%;object-fit:cover;
+ border:3px solid #00ffcc;box-shadow:0 0 25px rgba(0,255,204,0.5);
+ opacity:0;
+ transform:translateX(-110vw);
+ animation:logoFromLeft 1.1s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes logoFromLeft{
+ to{opacity:1;transform:translateX(0);}
+}
+/* "Welcome to Trip Booking" slides from Right to Center */
+.intro-welcome{
+ font-size:clamp(22px,4.5vw,36px);font-weight:800;margin:0;
+ text-shadow:0 4px 15px rgba(0,0,0,0.5);
+ opacity:0;
+ transform:translateX(110vw);
+ animation:textFromRight 1.1s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes textFromRight{
+ to{opacity:1;transform:translateX(0);}
+}
+/* Scattered letters gathering under Welcome text */
+.intro-scatter-wrap{
+ display:flex;flex-wrap:wrap;justify-content:center;gap:2px;
+ font-size:clamp(15px,3vw,22px);font-weight:600;color:#b2ffff;
+ letter-spacing:1px;min-height:32px;
+}
+.scatter-char{
+ display:inline-block;
+ opacity:0;
+ transition:transform 1.1s cubic-bezier(0.16,1,0.3,1), opacity 0.9s ease;
+}
+.scatter-char.gathered{
+ opacity:1;
+ transform:translate(0,0) rotate(0deg) scale(1) !important;
+}
 
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
@@ -96,7 +140,7 @@ header{
 .header-actions{display:flex;gap:6px;align-items:center}
 .header-actions select{width:auto;padding:6px 8px;background:var(--fb-bg);font-size:13px}
 
-.container{width:min(1150px,94%);margin:18px auto 90px}
+.container{width:min(1200px,94%);margin:18px auto 90px}
 .page{display:none}
 .page.active{display:block}
 
@@ -121,12 +165,14 @@ header{
 .section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 12px;flex-wrap:wrap}
 .section-title h2{font-size:18px;margin:0}
 
-.hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-.card{background:var(--fb-card);border:1px solid var(--fb-border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
-.hotel-img{width:100%;height:145px;object-fit:cover;display:block}
-.card-body{padding:12px}
-.price{font-size:18px;font-weight:700;color:var(--fb-primary)}
-.tag{display:inline-block;background:rgba(0,128,128,0.12);color:var(--fb-primary);padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.hotel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:14px}
+.card{background:var(--fb-card);border:1px solid var(--fb-border);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.hotel-img{width:100%;height:150px;object-fit:cover;display:block;background:#cfeaea}
+.card-body{padding:12px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.price{font-size:15px;font-weight:700;color:var(--fb-primary)}
+.mmk-sub{font-size:12px;color:var(--fb-muted);font-weight:600;display:block}
+.tag{display:inline-flex;align-items:center;gap:4px;background:rgba(0,128,128,0.12);color:var(--fb-primary);padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.gold-stars{color:var(--star-gold);font-size:13px;letter-spacing:1px;text-shadow:0 1px 1px rgba(0,0,0,0.2)}
 
 .bottom-nav{
  position:fixed;bottom:0;left:0;right:0;z-index:25;background:var(--fb-card);
@@ -141,9 +187,9 @@ header{
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}
 .stat-box{background:var(--fb-bg);border:1px solid var(--fb-border);border-top:3px solid var(--fb-primary);border-radius:8px;padding:12px}
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
-.stat-box strong{display:block;font-size:18px;margin-top:6px}
+.stat-box strong{display:block;font-size:16px;margin-top:6px}
 
-.vip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px}
+.vip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
 .vip-card{background:var(--fb-bg);border:1px solid var(--fb-border);border-radius:8px;padding:12px}
 .vip-card.active-vip{border:2px solid var(--fb-primary);background:rgba(0,128,128,0.08)}
 
@@ -169,7 +215,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .close{background:none;border:0;font-size:18px;color:var(--fb-muted)}
 
-/* Live Sync Pulse Indicator */
 .sync-badge{
  display:inline-flex;align-items:center;gap:6px;background:rgba(0,179,134,0.15);
  color:var(--fb-success);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;
@@ -180,21 +225,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- 0% to 100% LOADING & PWA INSTALL SCREEN -->
-<div id="splashScreen">
- <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="splash-icon" alt="Trip Booking">
- <h1 style="margin:0;font-size:28px">Trip Booking</h1>
- <p style="margin:6px 0 0;opacity:0.9">International Hotel Booking Platform</p>
- 
- <div class="progress-container">
-  <div class="progress-fill" id="splashProgressBar"></div>
+<!-- CINEMATIC ENTRANCE ANIMATION -->
+<div id="cinematicIntro">
+ <div class="intro-top-row">
+  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="intro-logo" alt="Trip Booking Logo">
+  <h1 class="intro-welcome">Welcome to Trip Booking</h1>
  </div>
- <div id="splashPercent" style="font-weight:800;font-size:18px">0%</div>
-
- <div class="splash-actions hidden" id="splashActions">
-  <button class="btn btn-light" style="padding:10px 26px;border-radius:25px" onclick="closeSplash()">Close</button>
-  <button class="btn btn-success" style="padding:10px 26px;border-radius:25px" onclick="openAndInstallPWA()">Open</button>
- </div>
+ <div class="intro-scatter-wrap" id="scatterSubtitle"></div>
 </div>
 
 <header>
@@ -221,22 +258,25 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <section class="page active" id="homePage">
  <!-- Live Official Exchange Rates -->
  <div class="rates-bar" id="homeRatesBar">
-  <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="rateUsd">4,510.00</strong></div>
+  <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="rateUsd">4,500.00</strong></div>
   <div class="rate-item"><span>🇹🇭 1 THB ➔ MMK</span><strong id="rateThb">132.50</strong></div>
   <div class="rate-item"><span>🇨🇳 1 CNY ➔ MMK</span><strong id="rateCny">625.80</strong></div>
  </div>
 
  <div class="hero">
   <h1>Welcome to Trip Booking</h1>
-  <p>International Hotel Booking Platform</p>
+  <p>International Trip Booking Platform</p>
   <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')" data-i18n="startTaskBtn">Start Booking Tasks</button>
  </div>
 
  <div class="section-title">
-  <h2 data-i18n="hotelDir">International Hotels</h2>
-  <input id="hotelSearch" placeholder="Search hotel or country..." style="max-width:220px" oninput="renderHotels()">
+  <h2><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
+  <input id="hotelSearch" placeholder="Search hotel, country, or stars..." style="max-width:240px" oninput="renderHotels()">
  </div>
  <div class="hotel-grid" id="hotelGrid"></div>
+ <div style="text-align:center;margin-top:18px" id="loadMoreHotelsWrap">
+  <button class="btn btn-light" onclick="showAllHotels()">Show All 238 Hotels</button>
+ </div>
 </section>
 
 <!-- CUSTOMER SERVICE PAGE -->
@@ -249,7 +289,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
   <div class="chat-messages" id="supportMessages"></div>
   
-  <!-- Quick Reply Suggestion Buttons -->
   <div class="quick-chips">
    <button class="chip-btn" onclick="sendQuickSuggestion('ငွေထုတ်ချင်ပါသည်')">💸 ငွေထုတ်ချင်ပါသည်</button>
    <button class="chip-btn" onclick="sendQuickSuggestion('VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်')">💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်</button>
@@ -268,9 +307,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="section-title"><h2 data-i18n="taskCenter">Booking Task Center</h2></div>
  <div class="panel">
   <div class="stats">
-   <div class="stat-box"><span data-i18n="accBal">Account Balance</span><strong id="taskWallet">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="taskComm">Task Commission</span><strong id="taskProfit">$0.00</strong></div>
-   <div class="stat-box"><span data-i18n="totalProfit">Total Profit</span><strong id="taskTotalProfit">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="accBal">Account Balance</span><strong id="taskWallet">$0.00 (0 MMK)</strong></div>
+   <div class="stat-box"><span data-i18n="taskComm">Task Commission</span><strong id="taskProfit">$0.00 (0 MMK)</strong></div>
+   <div class="stat-box"><span data-i18n="totalProfit">Total Profit</span><strong id="taskTotalProfit">$0.00 (0 MMK)</strong></div>
    <div class="stat-box">
     <span data-i18n="dailyLimit">Daily Orders</span>
     <strong id="orderCircle">0/30</strong>
@@ -292,7 +331,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th data-i18n="thDate">Date</th>
       <th data-i18n="thType">Type</th>
       <th>Details</th>
-      <th data-i18n="thAmount">Amount</th>
+      <th data-i18n="thAmount">Amount (USD / MMK)</th>
       <th data-i18n="thStatus">Status</th>
      </tr>
     </thead>
@@ -302,7 +341,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </section>
 
-<!-- PROFILE PAGE -->
+<!-- PROFILE PAGE (Clean, without bottom-right PWA button) -->
 <section class="page" id="profilePage">
  <div class="section-title">
   <h2 data-i18n="myProfile">My Profile</h2>
@@ -330,16 +369,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
   <!-- Live Exchange Rates on Profile -->
   <div class="rates-bar" style="margin-top:14px">
-   <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="pRateUsd">4,510.00</strong></div>
+   <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="pRateUsd">4,500.00</strong></div>
    <div class="rate-item"><span>🇹🇭 1 THB ➔ MMK</span><strong id="pRateThb">132.50</strong></div>
    <div class="rate-item"><span>🇨🇳 1 CNY ➔ MMK</span><strong id="pRateCny">625.80</strong></div>
   </div>
 
   <div class="stats">
-   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00 (0 MMK)</strong></div>
    <div class="stat-box"><span data-i18n="completedBookings">Completed Orders</span><strong id="profileOrders">0/30</strong></div>
    <div class="stat-box"><span data-i18n="inviteCodeTitle">Referral Code</span><strong id="inviteCode" style="color:var(--fb-primary)">TP0000</strong></div>
-   <div class="stat-box"><span data-i18n="refBonus">Referral Earned</span><strong id="referralEarned">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="refBonus">Referral Earned</span><strong id="referralEarned">$0.00 (0 MMK)</strong></div>
   </div>
 
   <div style="display:flex;gap:10px;margin:14px 0">
@@ -476,7 +515,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- AUTH MODAL (With Show/Hide Password Eye Icon) -->
+<!-- AUTH MODAL -->
 <div class="modal hidden" id="authModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -560,6 +599,129 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const $ = id => document.getElementById(id);
 
+/* ==========================================================================
+   USD TO MMK UNIVERSAL HELPER (1 USD = 4,500 MMK)
+   ========================================================================== */
+const MMK_PER_USD = 4500;
+function formatUsdWithMmk(usdVal) {
+ const num = Number(usdVal) || 0;
+ const mmk = Math.round(num * MMK_PER_USD).toLocaleString();
+ return `$${num.toFixed(2)} (${mmk} MMK)`;
+}
+
+/* ==========================================================================
+   CINEMATIC ENTRANCE ANIMATION
+   - Logo moves Left -> Center
+   - "Welcome to Trip Booking" moves Right -> Center
+   - "International Trip Booking Platform" letters gather from random angles
+   - Auto-fades into Main Page
+   ========================================================================== */
+function playCinematicIntro() {
+ const subtitleText = "International Trip Booking Platform";
+ const container = $("scatterSubtitle");
+ container.innerHTML = "";
+
+ const chars = subtitleText.split("").map(ch => {
+  const span = document.createElement("span");
+  span.className = "scatter-char";
+  span.innerHTML = ch === " " ? "&nbsp;" : ch;
+  const rx = (Math.random() - 0.5) * window.innerWidth * 1.3;
+  const ry = (Math.random() - 0.5) * window.innerHeight * 1.3;
+  const rot = (Math.random() - 0.5) * 360;
+  span.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.4)`;
+  container.appendChild(span);
+  return span;
+ });
+
+ // Gather letters after Logo and Welcome text meet in the center
+ setTimeout(() => {
+  chars.forEach((span, idx) => {
+   setTimeout(() => {
+    span.classList.add("gathered");
+   }, idx * 22);
+  });
+ }, 950);
+
+ // Auto disappear and reveal Main Home Page
+ setTimeout(() => {
+  $("cinematicIntro").classList.add("fade-out");
+  setTimeout(() => {
+   $("cinematicIntro").classList.add("hidden");
+  }, 750);
+ }, 3300);
+}
+
+/* ==========================================================================
+   238 INTERNATIONAL HOTELS GENERATOR (Licensed Unsplash Photos + Varied Gold Stars)
+   ========================================================================== */
+const VERIFIED_HOTEL_IMAGES = [
+ "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1522798514-97ceb8c4f1c8?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1560624052-449f5ddf0c31?w=800&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1573052905904-34ad8c27f0cc?w=800&auto=format&fit=crop"
+];
+
+function build238Hotels() {
+ const base6 = [
+  { id: "H001", name: "Marina Bay Sands", country: "Singapore", price: 420, stars: 5, image: VERIFIED_HOTEL_IMAGES[0] },
+  { id: "H002", name: "The Ritz-Carlton Tokyo", country: "Japan", price: 280, stars: 4, image: VERIFIED_HOTEL_IMAGES[1] },
+  { id: "H003", name: "Bali Luxury Resort", country: "Indonesia", price: 160, stars: 5, image: VERIFIED_HOTEL_IMAGES[2] },
+  { id: "H004", name: "Swiss Alpine Hotel", country: "Switzerland", price: 310, stars: 3, image: VERIFIED_HOTEL_IMAGES[3] },
+  { id: "H005", name: "Burj Al Arab Jumeirah", country: "UAE", price: 650, stars: 5, image: VERIFIED_HOTEL_IMAGES[4] },
+  { id: "H006", name: "Hotel Plaza Athenee", country: "France", price: 390, stars: 4, image: VERIFIED_HOTEL_IMAGES[5] }
+ ];
+
+ const prefixes = ["Grand", "Royal", "Imperial", "Emerald", "Golden", "Oceanic", "Crown", "Majestic", "Paradise", "Starlight", "Horizon", "Crystal", "Silk Road", "Sapphire", "Lotus", "Aurora"];
+ const suffixes = ["Palace Hotel", "Resort & Spa", "Suites", "Boutique Hotel", "Grand Villa", "Executive Hotel", "Lagoon Resort", "Sky Tower Hotel", "Heritage Inn", "Bayfront Hotel"];
+ const countries = ["Thailand", "Singapore", "Japan", "South Korea", "Malaysia", "Vietnam", "France", "Italy", "Switzerland", "UK", "USA", "Maldives", "UAE", "Australia", "Canada", "Spain", "Greece", "Turkey"];
+
+ const list = [...base6];
+ // Generate 232 additional unique hotels -> Total 238 hotels
+ for(let i = 1; i <= 232; i++) {
+  const p = prefixes[i % prefixes.length];
+  const s = suffixes[(i * 3) % suffixes.length];
+  const c = countries[(i * 7) % countries.length];
+  // Varied star ratings (1 to 5 stars, never all identical)
+  const stars = ((i * 3 + 1) % 5) + 1;
+  const price = 85 + ((i * 29) % 540);
+  const img = VERIFIED_HOTEL_IMAGES[i % VERIFIED_HOTEL_IMAGES.length];
+  const idStr = "H" + String(i + 6).padStart(3, "0");
+
+  list.push({
+   id: idStr,
+   name: `${p} ${c} ${s} #${i}`,
+   country: c,
+   price: price,
+   stars: stars,
+   image: img
+  });
+ }
+ return list;
+}
+
+/* ==========================================================================
+   SECRET 10-TAP LOGO ACCESS
+   ========================================================================== */
 let logoTapCount = 0;
 let logoTapTimer = null;
 let isAdminAuthenticated = sessionStorage.getItem("tb_admin_unlocked") === "true";
@@ -611,12 +773,6 @@ function exitAdminPanel() {
  showPage("homePage", document.querySelectorAll('.bottom-nav button')[0]);
 }
 
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', (e) => {
- e.preventDefault();
- deferredPrompt = e;
-});
-
 function setupPWAManifest() {
  const manifest = {
   name: "Trip Booking",
@@ -635,43 +791,14 @@ function setupPWAManifest() {
  $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
 }
 
-function runSplashLoader() {
- let pct = 0;
- const interval = setInterval(() => {
-  pct += 5;
-  if(pct >= 100) {
-   pct = 100;
-   clearInterval(interval);
-   $("splashActions").classList.remove("hidden");
-  }
-  $("splashProgressBar").style.width = pct + "%";
-  $("splashPercent").textContent = pct + "%";
- }, 40);
-}
-
-function closeSplash() {
- $("splashScreen").classList.add("hidden");
-}
-
-async function openAndInstallPWA() {
- $("splashScreen").classList.add("hidden");
- if(deferredPrompt) {
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
- } else {
-  showAlert("ဖုန်း Home Screen ပေါ်တွင် 'Trip Booking' အက်ပ်အဖြစ် ထည့်သွင်းရန် Browser Menu (⋮ သို့မဟုတ် Share) ကိုနှိပ်ပြီး 'Add to Home Screen' ကို ရွေးချယ်ပါ။", "Install Trip Booking App");
- }
-}
-
 const I18N = {
  my: {
   loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
-  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thAmount: "ပမာဏ", thStatus: "အခြေအနေ",
-  myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Trip Booking မှ ကြိုဆိုပါတယ်",
+  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
+  myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်အသစ်ဖွင့်မည်",
   walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
   inviteCodeTitle: "မိတ်ဆက်ကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
@@ -686,7 +813,7 @@ const I18N = {
   csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
   dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
-  thDate: "Date", thType: "Type", thAmount: "Amount", thStatus: "Status",
+  thDate: "Date", thType: "Type", thAmount: "Amount (USD / MMK)", thStatus: "Status",
   myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "Login or register a new account to start.", createAcc: "Register",
   walletBal: "Wallet Balance", completedBookings: "Completed Orders",
@@ -703,7 +830,7 @@ const I18N = {
   accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่น", totalProfit: "กำไรทั้งหมด",
   dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับออเดอร์", histTitle: "ประวัติการทำรายการและการจอง",
   thDate: "วันที่", thType: "ประเภท", thAmount: "จำนวนเงิน", thStatus: "สถานะ",
-  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
+  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "กรุณาเข้าสู่ระบบหรือสมัครสมาชิกใหม่", createAcc: "สมัครสมาชิก",
   walletBal: "ยอดเงินในกระเป๋า", completedBookings: "ออเดอร์ที่เสร็จสิ้น",
   inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
@@ -719,7 +846,7 @@ const I18N = {
   accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
   dailyLimit: "每日订单", getOrderBtn: "立即接单", histTitle: "交易与预订记录",
   thDate: "日期", thType: "类型", thAmount: "金额", thStatus: "状态",
-  myProfile: "我的资料", welcomeTrip: "欢迎来到 Trip Booking",
+  myProfile: "我的资料", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "请登录或注册新账户。", createAcc: "注册",
   walletBal: "钱包余额", completedBookings: "已完成订单",
   inviteCodeTitle: "推荐码", refBonus: "推荐收益", depositBtn: "💳 充值",
@@ -744,7 +871,7 @@ function changeLanguage(lang) {
  renderAllViews();
 }
 
-let baseRates = { usd: 4510.00, thb: 132.50, cny: 625.80 };
+let baseRates = { usd: 4500.00, thb: 132.50, cny: 625.80 };
 function startLiveRates() {
  setInterval(() => {
   const u = (baseRates.usd + (Math.random() - 0.5) * 4).toFixed(2);
@@ -756,18 +883,9 @@ function startLiveRates() {
  }, 3500);
 }
 
-// Default robust hotel list so they always display instantly
-let defaultHotels = [
- { id: "H01", name: "Marina Bay Sands", country: "Singapore", price: 420, stars: 5, image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900" },
- { id: "H02", name: "The Ritz-Carlton", country: "Japan", price: 280, stars: 5, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900" },
- { id: "H03", name: "Bali Luxury Resort", country: "Indonesia", price: 160, stars: 5, image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900" },
- { id: "H04", name: "Swiss Alpine Hotel", country: "Switzerland", price: 310, stars: 5, image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900" },
- { id: "H05", name: "Burj Al Arab", country: "UAE", price: 650, stars: 5, image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900" },
- { id: "H06", name: "Plaza Athenee", country: "France", price: 390, stars: 5, image: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=900" }
-];
-
 let allUsers = [];
-let allHotels = defaultHotels;
+let allHotels = build238Hotels();
+let visibleHotelsLimit = 48; // Renders first 48 fast, click button for all 238
 let allVipTiers = [
  { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.0050, min_bal: 0, max_withdraw: 1000 },
  { level: "LV2", name: "VIP 2", daily_limit: 35, profit_rate: 0.0080, min_bal: 500, max_withdraw: 5000 },
@@ -815,7 +933,12 @@ async function forceSyncNow() {
   ]);
 
   if(vipsRes.data && vipsRes.data.length > 0) allVipTiers = vipsRes.data;
-  if(htsRes.data && htsRes.data.length > 0) allHotels = htsRes.data;
+  if(htsRes.data && htsRes.data.length > 0) {
+   // Merge Supabase custom hotels with the 238 catalog
+   const dbIds = new Set(htsRes.data.map(x => x.id));
+   const remaining = build238Hotels().filter(x => !dbIds.has(x.id));
+   allHotels = [...htsRes.data, ...remaining];
+  }
   if(usrsRes.data) {
    allUsers = usrsRes.data;
    if(currentUser) {
@@ -1012,7 +1135,7 @@ async function submitCurrentOrder() {
 
  activeTask = null;
  await forceSyncNow();
- showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+$${commission.toFixed(2)}</b> ရရှိပါသည်။`);
+ showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+${formatUsdWithMmk(commission)}</b> ရရှိပါသည်။`);
 }
 
 function handleWithdrawRequest() {
@@ -1021,12 +1144,12 @@ function handleWithdrawRequest() {
  const bal = Number(currentUser.balance);
 
  if(bal > Number(vip.max_withdraw)) {
-  showAlert(`⛔ <b>ငွေထုတ်ယူမှု ယာယီပိတ်ပင်ထားပါသည်!</b><br><br>လက်ရှိ ${vip.name} အဆင့်၏ အများဆုံး ကန့်သတ်ချက်မှာ <b>$${vip.max_withdraw}</b> ဖြစ်သော်လည်း သင့်အကောင့်လက်ကျန်ငွေမှာ <b>$${bal.toFixed(2)}</b> ဖြစ်နေပါသည်။<br><br>ငွေထုတ်ယူနိုင်ရန် VIP အဆင့်မြှင့်တင်ဖို့ <b>Trip Booking Service</b> သို့ ဆက်သွယ်ပါ။`, "VIP Limit Exceeded");
+  showAlert(`⛔ <b>ငွေထုတ်ယူမှု ယာယီပိတ်ပင်ထားပါသည်!</b><br><br>လက်ရှိ ${vip.name} အဆင့်၏ အများဆုံး ကန့်သတ်ချက်မှာ <b>${formatUsdWithMmk(vip.max_withdraw)}</b> ဖြစ်သော်လည်း သင့်အကောင့်လက်ကျန်ငွေမှာ <b>${formatUsdWithMmk(bal)}</b> ဖြစ်နေပါသည်။<br><br>ငွေထုတ်ယူနိုင်ရန် VIP အဆင့်မြှင့်တင်ဖို့ <b>Trip Booking Service</b> သို့ ဆက်သွယ်ပါ။`, "VIP Limit Exceeded");
   return;
  }
 
  showPage('supportPage');
- sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: $${bal.toFixed(2)})`);
+ sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: ${formatUsdWithMmk(bal)})`);
 }
 
 function handleDepositRequest() {
@@ -1179,7 +1302,7 @@ function renderAdminHotelsAndVips() {
   </tr>
  `).join("");
 
- $("adminHotelsRows").innerHTML = allHotels.map((h, i) => `
+ $("adminHotelsRows").innerHTML = allHotels.slice(0, 60).map((h, i) => `
   <tr>
    <td>${h.id}</td>
    <td><input id="ht_n_${i}" value="${h.name}"></td>
@@ -1203,14 +1326,16 @@ async function saveHotelsAndVipsAdmin() {
   }).eq('level', v.level);
  }
 
- for(let i = 0; i < allHotels.length; i++) {
+ for(let i = 0; i < Math.min(allHotels.length, 60); i++) {
   const h = allHotels[i];
-  await sb.from('hotels').update({
+  await sb.from('hotels').upsert([{
+   id: h.id,
    name: $(`ht_n_${i}`).value,
    country: $(`ht_c_${i}`).value,
    stars: Number($(`ht_s_${i}`).value),
-   price: Number($(`ht_p_${i}`).value)
-  }).eq('id', h.id);
+   price: Number($(`ht_p_${i}`).value),
+   image: h.image
+  }]);
  }
  await forceSyncNow();
  showAlert("✅ ဟိုတယ်ဈေးနှုန်းနှင့် VIP နှုန်းထားများကို သိမ်းဆည်းပြီးပါပြီ။");
@@ -1228,7 +1353,7 @@ async function addHotelToSupabase() {
  const id = "H" + Math.floor(100 + Math.random() * 900);
  await sb.from('hotels').insert([{
   id, name, country, price, stars,
-  image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900"
+  image: VERIFIED_HOTEL_IMAGES[Math.floor(Math.random() * VERIFIED_HOTEL_IMAGES.length)]
  }]);
  closeModal("addHotelModal");
  await forceSyncNow();
@@ -1236,7 +1361,8 @@ async function addHotelToSupabase() {
 
 async function deleteHotel(id) {
  await sb.from('hotels').delete().eq('id', id);
- await forceSyncNow();
+ allHotels = allHotels.filter(h => h.id !== id);
+ renderAllViews();
 }
 
 function renderCsClientList() {
@@ -1249,7 +1375,7 @@ function renderCsClientList() {
  $("csClientList").innerHTML = filtered.map(u => `
   <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer;background:${selectedCsUserId===u.id?'rgba(0,128,128,0.12)':'transparent'}" onclick="selectCsClient('${u.id}')">
    <b>${u.name}</b> <span class="tag">${u.vip_level}</span>
-   <div class="small muted">${u.identity} · $${Number(u.balance).toFixed(2)}</div>
+   <div class="small muted">${u.identity} · ${formatUsdWithMmk(u.balance)}</div>
   </div>
  `).join("");
 }
@@ -1292,22 +1418,44 @@ async function sendAdminChatReply() {
  loadAdminChatMessages(selectedCsUserId);
 }
 
+function showAllHotels() {
+ visibleHotelsLimit = allHotels.length;
+ renderHotels();
+}
+
 function renderHotels() {
  const q = ($("hotelSearch")?.value || "").toLowerCase();
- const filtered = allHotels.filter(h => h.name.toLowerCase().includes(q) || h.country.toLowerCase().includes(q));
- $("hotelGrid").innerHTML = filtered.map(h => `
+ const filtered = allHotels.filter(h =>
+  h.name.toLowerCase().includes(q) ||
+  h.country.toLowerCase().includes(q) ||
+  String(h.stars).includes(q)
+ );
+ $("hotelCountBadge").textContent = filtered.length;
+
+ const listToRender = q ? filtered : filtered.slice(0, visibleHotelsLimit);
+ $("loadMoreHotelsWrap").classList.toggle("hidden", listToRender.length >= filtered.length);
+
+ $("hotelGrid").innerHTML = listToRender.map(h => {
+  const starCount = Math.max(1, Math.min(5, Number(h.stars) || 3));
+  const mmkAmt = Math.round(Number(h.price) * MMK_PER_USD).toLocaleString();
+  return `
   <div class="card">
-   <img class="hotel-img" src="${h.image}" alt="${h.name}">
+   <img class="hotel-img" src="${h.image}" loading="lazy" alt="${h.name}">
    <div class="card-body">
-    <span class="tag">${h.country} · ${"★".repeat(h.stars)}</span>
-    <h3 style="margin:6px 0">${h.name}</h3>
-    <div style="display:flex;justify-content:space-between;align-items:center">
-     <span class="price">$${Number(h.price).toFixed(2)}</span>
-     <button class="btn" style="padding:4px 10px;font-size:12px" onclick="showPage('bookingPage')">Book</button>
+    <div>
+     <span class="tag">${h.country} · <span class="gold-stars">${"★".repeat(starCount)}</span></span>
+     <h3 style="margin:6px 0;font-size:15px">${h.name}</h3>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px">
+     <div>
+      <span class="price">$${Number(h.price).toFixed(2)}</span>
+      <span class="mmk-sub">(${mmkAmt} MMK)</span>
+     </div>
+     <button class="btn" style="padding:5px 12px;font-size:12px" onclick="showPage('bookingPage')">Book</button>
     </div>
    </div>
   </div>
- `).join("");
+ `}).join("");
 }
 
 function renderBookingArea() {
@@ -1316,9 +1464,9 @@ function renderBookingArea() {
   return;
  }
  const vip = getVipInfo(currentUser.vip_level);
- $("taskWallet").textContent = "$" + Number(currentUser.balance).toFixed(2);
- $("taskProfit").textContent = "$" + Number(currentUser.commission || 0).toFixed(2);
- $("taskTotalProfit").textContent = "$" + Number(currentUser.total_profit || 0).toFixed(2);
+ $("taskWallet").textContent = formatUsdWithMmk(currentUser.balance);
+ $("taskProfit").textContent = formatUsdWithMmk(currentUser.commission || 0);
+ $("taskTotalProfit").textContent = formatUsdWithMmk(currentUser.total_profit || 0);
  $("orderCircle").textContent = `${currentUser.orders}/${vip.daily_limit}`;
 
  if(activeTask) {
@@ -1326,8 +1474,8 @@ function renderBookingArea() {
    <div class="card" style="max-width:500px;margin:0 auto;border:2px solid var(--fb-primary)">
     <img class="hotel-img" src="${activeTask.hotel.image}" style="height:180px">
     <div class="card-body">
-     <h3>${activeTask.hotel.name} (${activeTask.hotel.country})</h3>
-     <p>Order Amount: <b>$${Number(activeTask.hotel.price).toFixed(2)}</b> | Commission: <b style="color:var(--fb-success)">+$${activeTask.commission.toFixed(2)}</b></p>
+     <h3>${activeTask.hotel.name} (${activeTask.hotel.country}) <span class="gold-stars">${"★".repeat(activeTask.hotel.stars || 5)}</span></h3>
+     <p>Order Amount: <b>${formatUsdWithMmk(activeTask.hotel.price)}</b><br>Commission: <b style="color:var(--fb-success)">+${formatUsdWithMmk(activeTask.commission)}</b></p>
      <button class="btn btn-success btn-block" onclick="submitCurrentOrder()">Submit Order Now</button>
     </div>
    </div>
@@ -1345,7 +1493,7 @@ async function renderHistoryTable() {
    <td>${new Date(t.created_at).toLocaleString()}</td>
    <td><b>${t.type}</b></td>
    <td>${t.hotel_name || '-'}</td>
-   <td style="color:${t.type.includes('Deduction')?'var(--fb-danger)':'var(--fb-success)'}">$${Number(t.amount).toFixed(2)}</td>
+   <td style="color:${t.type.includes('Deduction')?'var(--fb-danger)':'var(--fb-success)'};font-weight:700">${formatUsdWithMmk(t.amount)}</td>
    <td>${t.status}</td>
   </tr>
  `).join("") || `<tr><td colspan="5" style="text-align:center">No records found.</td></tr>`;
@@ -1366,15 +1514,15 @@ function renderAllViews() {
   $("profileName").textContent = currentUser.name;
   $("profileIdentity").textContent = `${currentUser.identity} · ID: ${currentUser.id}`;
   $("profileVipBadge").textContent = vip.name;
-  $("walletBalance").textContent = "$" + Number(currentUser.balance).toFixed(2);
+  $("walletBalance").textContent = formatUsdWithMmk(currentUser.balance);
   $("profileOrders").textContent = `${currentUser.orders}/${vip.daily_limit}`;
   $("inviteCode").textContent = currentUser.referral_code;
-  $("referralEarned").textContent = "$" + Number(currentUser.referral_earned || 0).toFixed(2);
+  $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned || 0);
 
   $("vipTiersDisplay").innerHTML = allVipTiers.map(v => `
    <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
     <strong>${v.name}</strong>
-    <p class="small muted">Daily Limit: ${v.daily_limit} orders<br>Rate: ${(v.profit_rate*100).toFixed(2)}%<br>Max Limit: $${v.max_withdraw}</p>
+    <p class="small muted">Daily Limit: ${v.daily_limit} orders<br>Rate: ${(v.profit_rate*100).toFixed(2)}%<br>Max Limit: ${formatUsdWithMmk(v.max_withdraw)}</p>
    </div>
   `).join("");
 
@@ -1389,7 +1537,7 @@ function renderAllViews() {
 
 window.addEventListener("load", () => {
  setupPWAManifest();
- runSplashLoader();
+ playCinematicIntro();
  startLiveRates();
  changeLanguage(currentLang);
  initSupabaseData();
