@@ -851,7 +851,8 @@ function startLiveRates() {
 }
 
 let allUsers = [];
-let allHotels = build238Hotels();
+let defaultHotelsList = build238Hotels();
+let allHotels = defaultHotelsList; // Always initialize immediately with all 238 hotels
 let visibleHotelsLimit = 48;
 let allVipTiers = [
  { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.0050, min_bal: 0, max_withdraw: 1000 },
@@ -902,8 +903,10 @@ async function forceSyncNow() {
   if(vipsRes.data && vipsRes.data.length > 0) allVipTiers = vipsRes.data;
   if(htsRes.data && htsRes.data.length > 0) {
    const dbIds = new Set(htsRes.data.map(x => x.id));
-   const remaining = build238Hotels().filter(x => !dbIds.has(x.id));
+   const remaining = defaultHotelsList.filter(x => !dbIds.has(x.id));
    allHotels = [...htsRes.data, ...remaining];
+  } else {
+   allHotels = defaultHotelsList;
   }
   if(usrsRes.data) {
    allUsers = usrsRes.data;
@@ -911,11 +914,14 @@ async function forceSyncNow() {
     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
    }
   }
- } catch(e) {}
+ } catch(e) {
+  allHotels = defaultHotelsList;
+ }
  renderAllViews();
 }
 
 async function initSupabaseData() {
+ renderAllViews(); // Render instantly with local hotels
  await forceSyncNow();
 
  const savedUserId = localStorage.getItem("tb_session_uid");
@@ -962,9 +968,6 @@ function generateUniqueTPCode() {
  return code;
 }
 
-/* ==========================================================================
-   ROBUST AUTHENTICATION & ERROR HANDLING (Fixed API Key & Validation issues)
-   ========================================================================== */
 async function submitAuth() {
  const identity = $("authIdentity").value.trim().toLowerCase();
  const password = $("authPassword").value;
@@ -981,7 +984,6 @@ async function submitAuth() {
  }
 
  if(authMode === "register") {
-  // Check if identity already exists locally or in DB
   let existing = [];
   try {
    const res = await sb.from('users').select('id').eq('identity', identity);
@@ -1024,7 +1026,6 @@ async function submitAuth() {
 
   const { error } = await sb.from('users').insert([newUser]);
   if(error) {
-   // Fallback local registration if network/API key blocks
    allUsers.push(newUser);
   }
 
@@ -1036,7 +1037,6 @@ async function submitAuth() {
   return;
  }
 
- // Login Mode
  let user = allUsers.find(u => u.identity === identity && u.password === password);
  if(!user) {
   try {
@@ -1410,29 +1410,32 @@ function showAllHotels() {
 function renderHotels() {
  const q = ($("hotelSearch")?.value || "").toLowerCase();
  const filtered = allHotels.filter(h =>
-  h.name.toLowerCase().includes(q) ||
-  h.country.toLowerCase().includes(q) ||
-  String(h.stars).includes(q)
+  (h.name || "").toLowerCase().includes(q) ||
+  (h.country || "").toLowerCase().includes(q) ||
+  String(h.stars || "").includes(q)
  );
- $("hotelCountBadge").textContent = filtered.length;
+ if($("hotelCountBadge")) $("hotelCountBadge").textContent = filtered.length;
 
  const listToRender = q ? filtered : filtered.slice(0, visibleHotelsLimit);
- $("loadMoreHotelsWrap").classList.toggle("hidden", listToRender.length >= filtered.length);
+ if($("loadMoreHotelsWrap")) $("loadMoreHotelsWrap").classList.toggle("hidden", listToRender.length >= filtered.length);
 
- $("hotelGrid").innerHTML = listToRender.map(h => {
+ const gridEl = $("hotelGrid");
+ if(!gridEl) return;
+
+ gridEl.innerHTML = listToRender.map(h => {
   const starCount = Math.max(1, Math.min(5, Number(h.stars) || 3));
-  const mmkAmt = Math.round(Number(h.price) * MMK_PER_USD).toLocaleString();
+  const mmkAmt = Math.round(Number(h.price || 100) * MMK_PER_USD).toLocaleString();
   return `
   <div class="card">
-   <img class="hotel-img" src="${h.image}" loading="lazy" alt="${h.name}">
+   <img class="hotel-img" src="${h.image || VERIFIED_HOTEL_IMAGES[0]}" loading="lazy" alt="${h.name}">
    <div class="card-body">
     <div>
-     <span class="tag">${h.country} · <span class="gold-stars">${"★".repeat(starCount)}</span></span>
+     <span class="tag">${h.country || 'International'} · <span class="gold-stars">${"★".repeat(starCount)}</span></span>
      <h3 style="margin:6px 0;font-size:15px">${h.name}</h3>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:8px">
      <div>
-      <span class="price">$${Number(h.price).toFixed(2)}</span>
+      <span class="price">$${Number(h.price || 100).toFixed(2)}</span>
       <span class="mmk-sub">(${mmkAmt} MMK)</span>
      </div>
      <button class="btn" style="padding:5px 12px;font-size:12px" onclick="showPage('bookingPage')">Book</button>
