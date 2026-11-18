@@ -306,10 +306,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <section class="page" id="profilePage">
  <div class="section-title">
   <h2 data-i18n="myProfile">My Profile</h2>
-  <!-- Phone PWA App Install Button on Profile Top/Right -->
-  <button class="btn btn-success" onclick="openAndInstallPWA()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:6px 12px">
-   📱 Install App
-  </button>
  </div>
 
  <!-- Shown only when logged out -->
@@ -559,7 +555,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 "use strict";
 
 const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODczMTksImV4cCI6MjExMDU2MzMxOX0.LPEZeEpknBxDKCLNPhv41TSCjxPuAo83Zca_laJlFb8";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5NDk4NzMxOSwiZXhwIjoyMTEwNTYzMzE5fQ.ysY6-UcNHatfmmb6OG0bxJAJirBj-G8lqj7JgTINvAQ2";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const $ = id => document.getElementById(id);
@@ -650,7 +646,7 @@ function runSplashLoader() {
   }
   $("splashProgressBar").style.width = pct + "%";
   $("splashPercent").textContent = pct + "%";
- }, 50);
+ }, 40);
 }
 
 function closeSplash() {
@@ -680,7 +676,7 @@ const I18N = {
   walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
   inviteCodeTitle: "မိတ်ဆက်ကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
   withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
-  logoutBtn: "အကောင့်ထွက်မည်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
+  logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
   navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
   fullNameLabel: "အမည်ပြည့်စုံ", identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
   passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်"
@@ -760,9 +756,25 @@ function startLiveRates() {
  }, 3500);
 }
 
+// Default robust hotel list so they always display instantly
+let defaultHotels = [
+ { id: "H01", name: "Marina Bay Sands", country: "Singapore", price: 420, stars: 5, image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900" },
+ { id: "H02", name: "The Ritz-Carlton", country: "Japan", price: 280, stars: 5, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=900" },
+ { id: "H03", name: "Bali Luxury Resort", country: "Indonesia", price: 160, stars: 5, image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900" },
+ { id: "H04", name: "Swiss Alpine Hotel", country: "Switzerland", price: 310, stars: 5, image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=900" },
+ { id: "H05", name: "Burj Al Arab", country: "UAE", price: 650, stars: 5, image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900" },
+ { id: "H06", name: "Plaza Athenee", country: "France", price: 390, stars: 5, image: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=900" }
+];
+
 let allUsers = [];
-let allHotels = [];
-let allVipTiers = [];
+let allHotels = defaultHotels;
+let allVipTiers = [
+ { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.0050, min_bal: 0, max_withdraw: 1000 },
+ { level: "LV2", name: "VIP 2", daily_limit: 35, profit_rate: 0.0080, min_bal: 500, max_withdraw: 5000 },
+ { level: "LV3", name: "VIP 3", daily_limit: 40, profit_rate: 0.0120, min_bal: 2000, max_withdraw: 20000 },
+ { level: "LV4", name: "VIP 4", daily_limit: 45, profit_rate: 0.0180, min_bal: 5000, max_withdraw: 50000 },
+ { level: "LV5", name: "VIP 5", daily_limit: 50, profit_rate: 0.0250, min_bal: 10000, max_withdraw: 100000 }
+];
 let currentUser = null;
 let authMode = "login";
 let activeTask = null;
@@ -794,57 +806,27 @@ function showPage(pageId, navBtn) {
  renderAllViews();
 }
 
-async function migrateLegacyLocalUsers() {
- const legacyKeys = ["tb_users_v28", "tb_users_v27", "tb_users"];
- for(const k of legacyKeys) {
-  try {
-   const raw = localStorage.getItem(k);
-   if(!raw) continue;
-   const oldList = JSON.parse(raw);
-   if(Array.isArray(oldList)) {
-    for(const u of oldList) {
-     if(!u.identity) continue;
-     const ident = u.identity.trim().toLowerCase();
-     const exists = allUsers.some(x => x.identity === ident);
-     if(!exists) {
-      await sb.from('users').insert([{
-       id: u.id || String(Math.floor(100000 + Math.random() * 900000)),
-       name: u.name || "Member",
-       identity: ident,
-       password: u.password || "123456",
-       referral_code: generateUniqueTPCode(),
-       balance: Number(u.balance || 0),
-       vip_level: u.vipLevel || "LV1",
-       orders: Number(u.orders || 0)
-      }]);
-     }
-    }
-   }
-  } catch(e) {}
- }
-}
-
 async function forceSyncNow() {
- const [vipsRes, htsRes, usrsRes] = await Promise.all([
-  sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true }),
-  sb.from('hotels').select('*'),
-  sb.from('users').select('*').order('created_at', { ascending: false })
- ]);
+ try {
+  const [vipsRes, htsRes, usrsRes] = await Promise.all([
+   sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true }),
+   sb.from('hotels').select('*'),
+   sb.from('users').select('*').order('created_at', { ascending: false })
+  ]);
 
- if(vipsRes.data) allVipTiers = vipsRes.data;
- if(htsRes.data) allHotels = htsRes.data;
- if(usrsRes.data) {
-  allUsers = usrsRes.data;
-  if(currentUser) {
-   currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
+  if(vipsRes.data && vipsRes.data.length > 0) allVipTiers = vipsRes.data;
+  if(htsRes.data && htsRes.data.length > 0) allHotels = htsRes.data;
+  if(usrsRes.data) {
+   allUsers = usrsRes.data;
+   if(currentUser) {
+    currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
+   }
   }
- }
+ } catch(e) {}
  renderAllViews();
 }
 
 async function initSupabaseData() {
- await forceSyncNow();
- await migrateLegacyLocalUsers();
  await forceSyncNow();
 
  const savedUserId = localStorage.getItem("tb_session_uid");
@@ -1400,7 +1382,7 @@ function renderAllViews() {
   renderHistoryTable();
  } else {
   $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.add("hidden");
+  $("guestAuthBox").classList.remove("hidden");
   $("memberProfileBox").classList.add("hidden");
  }
 }
