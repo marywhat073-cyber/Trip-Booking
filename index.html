@@ -361,7 +361,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="sync-badge"><span class="sync-dot"></span> Live Cross-Device Sync Active (<span id="totalUsersBadge">0</span> Users)</div>
   </div>
   <div style="display:flex;gap:8px">
-   <button class="btn btn-light" onclick="forceSyncNow()">🔄 Refresh Sync</button>
+   <button class="btn btn-success" onclick="forceSyncNow()">🔄 REFRESH (အကောင့်တိုးမတိုး စစ်ရန်)</button>
    <button class="btn btn-danger" onclick="exitAdminPanel()">Exit Admin</button>
   </div>
  </div>
@@ -866,8 +866,10 @@ async function forceSyncNow() {
     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
    }
   }
+  showAlert("✅ Database မှ အချက်အလက်များကို အောင်မြင်စွာ ဆွဲထုတ်ပြီးပါပြီ။", "Sync Success");
  } catch(e) {
   allHotels = defaultHotelsList;
+  showAlert("⚠️ Database ချိတ်ဆက်မှု အချက်အလက် ရယူရာတွင် အခက်အခဲရှိသဖြင့် ဒေသတွင်း အချက်အလက်များကို အသုံးပြုနေပါသည်။", "Sync Warning");
  }
  renderAllViews();
 }
@@ -900,7 +902,7 @@ async function initSupabaseData() {
   if(selectedCsUserId && !$("adminCsTab").classList.contains("hidden")) {
    loadAdminChatMessages(selectedCsUserId);
   }
- }, 3000);
+ }, 5000);
 }
 
 function openAuth(mode) {
@@ -989,7 +991,10 @@ async function submitAuth() {
   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
 
   try {
-   await sb.from('users').insert([newUser]);
+   const dbRes = await sb.from('users').insert([newUser]);
+   if(dbRes.error) {
+    showAlert("⚠️ Database သို့ ထည့်သွင်းရာတွင် အချက်အလက် ကန့်သတ်ချက် တိုက်ဆိုင်မှုရှိသော်လည်း Local တွင် အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။");
+   }
   } catch(e) {}
 
   currentUser = newUser;
