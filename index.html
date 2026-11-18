@@ -6,10 +6,6 @@
 <meta name="theme-color" content="#008080">
 <title>Trip Booking | International Hotel Booking Platform</title>
 
-<!-- Supabase JS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="manifest" id="pwaManifest">
-
 <style>
 :root{
  --fb-bg:#071a1a;
@@ -45,7 +41,7 @@ button{cursor:pointer;border-radius:6px;border:0;font-weight:600;padding:8px 12p
 input,select,textarea{
  width:100%;padding:10px 12px;border:1px solid var(--fb-border);
  border-radius:6px;background:var(--fb-card);color:var(--fb-text);
- outline:none;
+ outline:none;box-sizing:border-box;
 }
 input:focus,select:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,102,204,0.3)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
@@ -57,7 +53,7 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
 }
 
-/* Splash Screen Animation & Go To Trip Booking Button */
+/* Splash Screen */
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
  background:linear-gradient(135deg,#071a1a,#0f2b2b);
@@ -70,16 +66,13 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  animation: pulseLogo 1.5s infinite alternate;
 }
 .splash-title {
- font-size: 32px; font-weight: 900; margin: 0 0 10px; color: #fff;
+ font-size: 30px; font-weight: 900; margin: 0 0 10px; color: #fff;
  animation: slideFromRight 0.8s ease-out forwards;
- text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 .splash-desc {
- font-size: 16px; color: #00ffcc; margin: 0 0 20px; font-weight: 600;
- letter-spacing: 1px;
+ font-size: 15px; color: #00ffcc; margin: 0 0 20px; font-weight: 600;
  animation: scatterZoom 1s ease-out forwards;
 }
-
 .go-trip-btn {
  background: transparent;
  color: #ffffff;
@@ -92,31 +85,17 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  margin-top: 15px;
  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
  animation: pulseButton 1.5s infinite;
- transition: 0.3s;
 }
-.go-trip-btn:hover {
- background: #ffffff;
- color: #071a1a;
- transform: scale(1.05);
-}
+.go-trip-btn:hover { background: #ffffff; color: #071a1a; }
 
 @keyframes pulseButton {
  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
  70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
-@keyframes slideFromRight {
- 0% { transform: translateX(100vw); opacity: 0; }
- 100% { transform: translateX(0); opacity: 1; }
-}
-@keyframes scatterZoom {
- 0% { transform: scale(0.2); opacity: 0; letter-spacing: 8px; }
- 100% { transform: scale(1); opacity: 1; letter-spacing: 1px; }
-}
-@keyframes pulseLogo {
- 0% { transform: scale(1); }
- 100% { transform: scale(1.08); }
-}
+@keyframes slideFromRight { 0% { transform: translateX(100vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+@keyframes scatterZoom { 0% { transform: scale(0.2); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes pulseLogo { 0% { transform: scale(1); } 100% { transform: scale(1.08); } }
 
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
@@ -144,7 +123,7 @@ header{
 .rate-item strong{font-size:14px;color:#00b3b3}
 
 .hero{
- min-height:230px;border-radius:14px;overflow:hidden;
+ min-height:220px;border-radius:14px;overflow:hidden;
  background:linear-gradient(135deg,rgba(0,102,204,0.85),rgba(0,40,80,0.6)),
  url("https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600") center/cover;
  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;color:white;
@@ -176,7 +155,7 @@ header{
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
 .stat-box strong{display:block;font-size:18px;margin-top:6px}
 
-/* Blue CS Chat Window */
+/* CS Chat Window */
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card)}
 .chat-header{background:var(--fb-primary);color:white;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
 .chat-messages{height:340px;overflow:auto;padding:14px;background:var(--fb-bg)}
@@ -194,6 +173,10 @@ header{
  border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
 }
 .photo-video-btn:hover { background: var(--fb-primary); color: white; }
+
+.vip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:10px}
+.vip-card{background:var(--fb-bg);border:1px solid var(--fb-border);border-radius:8px;padding:12px}
+.vip-card.active-vip{border:2px solid var(--fb-primary)}
 
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -383,14 +366,14 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
  <div id="adminUsersTab" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>Real-Time User Management</h3>
+   <h3>User Management</h3>
    <button class="btn btn-success" onclick="saveAllUsersAdmin()">💾 Save All Changes</button>
   </div>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th>ID</th><th>Name</th><th>Phone/Email</th><th>Password</th><th>Referral</th><th>VIP</th><th>Balance</th><th>Orders</th><th>Reset</th>
+      <th>ID</th><th>Name</th><th>Phone/Email</th><th>Password</th><th>Referral</th><th>VIP</th><th>Balance ($)</th><th>Orders</th><th>Reset</th>
      </tr>
     </thead>
     <tbody id="adminUsersRows"></tbody>
@@ -440,9 +423,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <label>Phone Number or Email</label>
   <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
   
-  <label>Password</label>
+  <label>Password (6 to 8 digits/chars)</label>
   <div class="pass-wrap">
-   <input id="authPassword" type="password" placeholder="Enter password">
+   <input id="authPassword" type="password" placeholder="Enter password (6-8 chars)">
    <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
   </div>
 
@@ -485,12 +468,21 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <script>
 "use strict";
 
-const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODczMTksImV4cCI6MjExMDU2MzMxOX0.LPEZeEpknBxDKCLNPhv41TSCjxPuAo83Zca_laJlFb8";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = id => document.getElementById(id);
 
-let allUsers = [];
+// Local Storage Database (No External API Key Needed - Zero Errors!)
+let allUsers = JSON.parse(localStorage.getItem("tb_users") || "[]");
+let allMessages = JSON.parse(localStorage.getItem("tb_messages") || "[]");
+let allTransactions = JSON.parse(localStorage.getItem("tb_transactions") || "[]");
+
+const defaultVipTiers = [
+ { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.005, max_withdraw: 1000 },
+ { level: "LV2", name: "VIP 2", daily_limit: 40, profit_rate: 0.008, max_withdraw: 3000 },
+ { level: "LV3", name: "VIP 3", daily_limit: 50, profit_rate: 0.012, max_withdraw: 10000 },
+ { level: "LV4", name: "VIP 4", daily_limit: 60, profit_rate: 0.015, max_withdraw: 30000 },
+ { level: "LV5", name: "VIP 5", daily_limit: 80, profit_rate: 0.020, max_withdraw: 100000 }
+];
+
 let allHotels = [];
 const regions = ["Asia (Singapore/Japan)", "Europe (France/UK)", "America (USA/Canada)", "Middle East (UAE)"];
 const hotelNames = ["Marina Bay Sands", "The Ritz-Carlton", "Burj Al Arab", "The Plaza", "Claridge's", "Hôtel de Crillon", "Mandarin Oriental", "Four Seasons", "Waldorf Astoria", "Raffles"];
@@ -509,13 +501,33 @@ for(let i=1; i<=277; i++) {
  });
 }
 
-let allVipTiers = [];
 let currentUser = null;
 let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
 let logoTapCount = 0;
 let logoTapTimer = null;
+
+function saveData() {
+ localStorage.setItem("tb_users", JSON.stringify(allUsers));
+ localStorage.setItem("tb_messages", JSON.stringify(allMessages));
+ localStorage.setItem("tb_transactions", JSON.stringify(allTransactions));
+}
+
+function initPlatformData() {
+ if(!allUsers.some(u => u.identity === "09775191427")) {
+  allUsers.push({
+   id: "100001", name: "Super Admin", identity: "09775191427", password: "12344321",
+   referral_code: "TP0001", balance: 1000.00, commission: 0, total_profit: 0, vip_level: "LV5", orders: 0
+  });
+  saveData();
+ }
+ const savedUid = localStorage.getItem("tb_session_uid");
+ if(savedUid) {
+  currentUser = allUsers.find(u => u.id === savedUid) || null;
+ }
+ renderAllViews();
+}
 
 function handleLogoClick() {
  logoTapCount++;
@@ -529,7 +541,6 @@ function handleLogoClick() {
  showPage('homePage');
 }
 
-// Completely remove Splash Screen when clicking Go To Trip Booking
 function enterPlatform() {
  const splash = $("splashScreen");
  if(splash) {
@@ -565,44 +576,6 @@ function showPage(pageId, navBtn) {
  renderAllViews();
 }
 
-async function initSupabaseData() {
- const { data: vips } = await sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true });
- if(vips) allVipTiers = vips;
-
- const { data: usrs } = await sb.from('users').select('*').order('created_at', { ascending: false });
- if(usrs) allUsers = usrs;
-
- const adminExists = allUsers.find(u => u.identity === "09775191427" || u.identity === "jupiterwhat8@gmail.com");
- if(!adminExists) {
-  await sb.from('users').insert([{
-   id: "100001", name: "Super Admin", identity: "09775191427", password: "12344321", referral_code: "TP0001", balance: 0, vip_level: "LV5"
-  }]);
- }
-
- const savedUserId = localStorage.getItem("tb_session_uid");
- if(savedUserId) {
-  const found = allUsers.find(u => u.id === savedUserId);
-  if(found) currentUser = found;
- }
-
- renderAllViews();
-
- sb.channel('realtime-platform')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, async () => {
-   const { data } = await sb.from('users').select('*').order('created_at', { ascending: false });
-   if(data) {
-    allUsers = data;
-    if(currentUser) currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
-    renderAllViews();
-   }
-  })
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
-   if(currentUser) loadUserMessages(currentUser.id);
-   if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
-  })
-  .subscribe();
-}
-
 function openAuth(mode) {
  authMode = mode;
  $("authModal")?.classList.remove("hidden");
@@ -613,45 +586,56 @@ function openAuth(mode) {
 
 function toggleAuthMode() { openAuth(authMode === "login" ? "register" : "login"); }
 
-async function submitAuth() {
+function submitAuth() {
  const identity = $("authIdentity").value.trim().toLowerCase();
- const password = $("authPassword").value;
+ const password = $("authPassword").value.trim();
  const err = $("authError");
  err.textContent = "";
 
- if(!identity || password.length < 6) {
-  err.textContent = "Please enter valid phone/email and password (min 6 chars).";
+ if(!identity) {
+  err.textContent = "ကျေးဇူးပြု၍ ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ် ထည့်ပါ။";
+  return;
+ }
+ if(password.length < 6) {
+  err.textContent = "စကားဝှက် အနည်းဆုံး ၆ လုံး (သို့မဟုတ် ၈ လုံး) ထည့်သွင်းပါ။";
   return;
  }
 
  if(authMode === "register") {
-  const { data: existing } = await sb.from('users').select('id').eq('identity', identity);
-  if(existing && existing.length > 0) {
-   err.textContent = "This phone number or email is already registered!";
+  if(allUsers.some(u => u.identity === identity)) {
+   err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
    return;
   }
   const name = $("regName").value.trim() || "Member";
   const newId = String(Math.floor(100000 + Math.random() * 900000));
   const newCode = "TP" + Math.floor(1000 + Math.random() * 9000);
-  const newUser = { id: newId, name, identity, password, referral_code: newCode, balance: 0.00, vip_level: "LV1", orders: 0 };
+  const newUser = {
+   id: newId, name, identity, password, referral_code: newCode,
+   balance: 0.00, commission: 0.00, total_profit: 0.00, vip_level: "LV1", orders: 0
+  };
 
-  const { error } = await sb.from('users').insert([newUser]);
-  if(error) { err.textContent = error.message; return; }
-
+  allUsers.push(newUser);
+  saveData();
   currentUser = newUser;
   localStorage.setItem("tb_session_uid", newUser.id);
   closeModal("authModal");
+  showAlert(`အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်။ သင့်မိတ်ဆက်ကုဒ်မှာ <b>${newCode}</b> ဖြစ်ပါသည်။`);
   renderAllViews();
   return;
  }
 
- const { data: user, error } = await sb.from('users').select('*').eq('identity', identity).eq('password', password).single();
- if(error || !user) { err.textContent = "Invalid phone/email or password."; return; }
+ // Login
+ const user = allUsers.find(u => u.identity === identity && u.password === password);
+ if(!user) {
+  err.textContent = "ဖုန်းနံပါတ်/အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။";
+  return;
+ }
 
  currentUser = user;
  localStorage.setItem("tb_session_uid", user.id);
  closeModal("authModal");
  renderAllViews();
+ showPage("profilePage");
 }
 
 function logout() {
@@ -662,37 +646,47 @@ function logout() {
 }
 
 function getVipInfo(level) {
- return allVipTiers.find(v => v.level === level) || { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.005, min_bal: 0, max_withdraw: 1000 };
+ return defaultVipTiers.find(v => v.level === level) || defaultVipTiers[0];
 }
 
-async function triggerGetOrder() {
+function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  if(Number(currentUser.balance) <= 0) {
-  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။");
+  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ Trip Booking Service သို့ ဆက်သွယ်ပြီး ငွေသွင်းပါ။");
   return;
  }
  const vip = getVipInfo(currentUser.vip_level);
  if(currentUser.orders >= vip.daily_limit) {
-  showAlert("ယနေ့အတွက် အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
+  showAlert("ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
   return;
  }
  const hotel = allHotels[currentUser.orders % allHotels.length];
- const commission = (Number(hotel.price) * Number(vip.profit_rate)) + (Number(currentUser.profit_box) || 0);
+ const commission = Number(hotel.price) * Number(vip.profit_rate);
  activeTask = { hotel, commission };
  renderBookingArea();
 }
 
-async function submitCurrentOrder() {
+function submitCurrentOrder() {
  if(!currentUser || !activeTask) return;
  const { hotel, commission } = activeTask;
- const newBalance = Number(currentUser.balance) + commission;
- const newComm = Number(currentUser.commission || 0) + commission;
- const newTotalProfit = Number(currentUser.total_profit || 0) + commission;
- const newOrders = Number(currentUser.orders || 0) + 1;
+ currentUser.balance = Number(currentUser.balance) + commission;
+ currentUser.commission = Number(currentUser.commission || 0) + commission;
+ currentUser.total_profit = Number(currentUser.total_profit || 0) + commission;
+ currentUser.orders = Number(currentUser.orders || 0) + 1;
 
- await sb.from('users').update({ balance: newBalance, commission: newComm, total_profit: newTotalProfit, orders: newOrders }).eq('id', currentUser.id);
+ allTransactions.unshift({
+  user_id: currentUser.id,
+  date: new Date().toLocaleString(),
+  type: "Booking Profit",
+  details: "Hotel: " + hotel.name,
+  amount: commission,
+  status: "Approved"
+ });
+
+ saveData();
  activeTask = null;
- showAlert(`အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် +$${commission.toFixed(2)} ရရှိပါသည်။`);
+ showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+$${commission.toFixed(2)}</b> ရရှိပါသည်။`);
+ renderAllViews();
 }
 
 function handleWithdrawRequest() {
@@ -707,19 +701,21 @@ function handleDepositRequest() {
  sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
 }
 
-async function sendQuickSuggestion(text) {
+function sendQuickSuggestion(text) {
  if(!currentUser) { openAuth('login'); return; }
- await sb.from('messages').insert([{ user_id: currentUser.id, sender: 'user', text: text }]);
+ allMessages.push({ user_id: currentUser.id, sender: 'user', text: text, time: new Date().toLocaleTimeString() });
+ saveData();
  loadUserMessages(currentUser.id);
 }
 
-async function sendSupportMessage() {
+function sendSupportMessage() {
  if(!currentUser) { openAuth('login'); return; }
  const inp = $("supportInput");
  const text = inp.value.trim();
  if(!text) return;
  inp.value = "";
- await sb.from('messages').insert([{ user_id: currentUser.id, sender: 'user', text: text }]);
+ allMessages.push({ user_id: currentUser.id, sender: 'user', text: text, time: new Date().toLocaleTimeString() });
+ saveData();
  loadUserMessages(currentUser.id);
 }
 
@@ -732,20 +728,21 @@ function handleFileSelected(event) {
  const file = event.target.files[0];
  if(!file || !currentUser) return;
  const reader = new FileReader();
- reader.onload = async function(e) {
+ reader.onload = function(e) {
   const fileUrl = e.target.result;
   const content = file.type.startsWith('video') ? `<video src="${fileUrl}" controls style="max-width:100%;border-radius:6px"></video>` : `<img src="${fileUrl}" style="max-width:100%;border-radius:6px">`;
-  await sb.from('messages').insert([{ user_id: currentUser.id, sender: 'user', text: content }]);
+  allMessages.push({ user_id: currentUser.id, sender: 'user', text: content, time: new Date().toLocaleTimeString() });
+  saveData();
   loadUserMessages(currentUser.id);
  };
  reader.readAsDataURL(file);
 }
 
-async function loadUserMessages(userId) {
- const { data } = await sb.from('messages').select('*').eq('user_id', userId).order('created_at', { ascending: true });
+function loadUserMessages(userId) {
+ const msgs = allMessages.filter(m => m.user_id === userId);
  const box = $("supportMessages");
  if(!box) return;
- box.innerHTML = (data || []).map(m => `
+ box.innerHTML = msgs.map(m => `
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
    background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};
    color:${m.sender==='user'?'white':'var(--fb-text)'};
@@ -757,7 +754,11 @@ async function loadUserMessages(userId) {
  box.scrollTop = box.scrollHeight;
 }
 
+// Admin Panel
 function openStaffModal() {
+ $("staffIdentity").value = "";
+ $("staffSecPass").value = "";
+ $("staffError").textContent = "";
  $("staffModal")?.classList.remove("hidden");
 }
 
@@ -767,54 +768,59 @@ function verifyAdminAccess() {
  if((ident === "09775191427" || ident === "jupiterwhat8@gmail.com") && pass === "12344321") {
   closeModal("staffModal");
   showPage("staffPage");
-  fetchAdminUsers();
+  switchAdminTab("users");
  } else {
-  $("staffError").textContent = "Incorrect admin ID or password!";
+  $("staffError").textContent = "Admin ID သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။";
  }
 }
 
-async function fetchAdminUsers() {
- const { data } = await sb.from('users').select('*').order('created_at', { ascending: false });
- if(data) { allUsers = data; renderAdminUsersTable(data); renderCsClientList(); }
+function switchAdminTab(tab) {
+ $("adminUsersTab").classList.toggle("hidden", tab !== "users");
+ $("adminCsTab").classList.toggle("hidden", tab !== "cs");
+ $("tabUsersBtn").className = tab === "users" ? "btn" : "btn btn-light";
+ $("tabCsBtn").className = tab === "cs" ? "btn" : "btn btn-light";
+ if(tab === "users") renderAdminUsersTable();
+ if(tab === "cs") renderCsClientList();
 }
 
-function renderAdminUsersTable(users) {
+function renderAdminUsersTable() {
  const tbody = $("adminUsersRows");
  if (!tbody) return;
- tbody.innerHTML = users.map((u, index) => `
+ tbody.innerHTML = allUsers.map((u, index) => `
   <tr>
    <td>${index + 1}</td>
-   <td><input id="adm_name_${u.id}" value="${u.name || ''}"></td>
+   <td><input id="adm_name_${u.id}" value="${u.name || ''}" style="width:100px"></td>
    <td>${u.identity || '-'}</td>
-   <td><input id="adm_pass_${u.id}" value="${u.password || ''}"></td>
-   <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}"></td>
-   <td><input id="adm_vip_${u.id}" value="${u.vip_level || 'LV1'}"></td>
-   <td><input id="adm_bal_${u.id}" type="number" value="${u.balance || 0}"></td>
+   <td><input id="adm_pass_${u.id}" value="${u.password || ''}" style="width:90px"></td>
+   <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}" style="width:80px"></td>
+   <td><input id="adm_vip_${u.id}" value="${u.vip_level || 'LV1'}" style="width:60px"></td>
+   <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${u.balance || 0}" style="width:90px"></td>
    <td><strong>${u.orders || 0}/30</strong></td>
-   <td><button class="btn btn-danger" onclick="resetUserOrders('${u.id}')">Reset</button></td>
+   <td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">Reset</button></td>
   </tr>
  `).join("");
 }
 
-async function saveAllUsersAdmin() {
- for(let u of allUsers) {
+function saveAllUsersAdmin() {
+ allUsers.forEach(u => {
   const nameInput = $(`adm_name_${u.id}`);
-  if(!nameInput) continue;
-  await sb.from('users').update({
-   name: nameInput.value,
-   password: $(`adm_pass_${u.id}`).value,
-   referral_code: $(`adm_ref_${u.id}`).value,
-   vip_level: $(`adm_vip_${u.id}`).value,
-   balance: Number($(`adm_bal_${u.id}`).value)
-  }).eq('id', u.id);
- }
- showAlert("Saved successfully!");
- fetchAdminUsers();
+  if(nameInput) {
+   u.name = nameInput.value;
+   u.password = $(`adm_pass_${u.id}`).value;
+   u.referral_code = $(`adm_ref_${u.id}`).value;
+   u.vip_level = $(`adm_vip_${u.id}`).value;
+   u.balance = Number($(`adm_bal_${u.id}`).value);
+  }
+ });
+ saveData();
+ if(currentUser) currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
+ showAlert("✅ အသုံးပြုသူ အချက်အလက်များကို သိမ်းဆည်းပြီးပါပြီ။");
+ renderAllViews();
 }
 
-async function resetUserOrders(userId) {
- await sb.from("users").update({ orders: 0 }).eq("id", userId);
- fetchAdminUsers();
+function resetUserOrders(userId) {
+ const u = allUsers.find(x => x.id === userId);
+ if(u) { u.orders = 0; saveData(); renderAdminUsersTable(); }
 }
 
 function renderCsClientList() {
@@ -822,7 +828,7 @@ function renderCsClientList() {
  if(!cList) return;
  cList.innerHTML = allUsers.map(u => `
   <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer" onclick="selectCsClient('${u.id}')">
-   <b>${u.name || 'User'}</b><div class="small muted">${u.identity || '-'}</div>
+   <b>${u.name || 'User'}</b><div class="small muted">${u.identity || '-'} · $${Number(u.balance || 0).toFixed(2)}</div>
   </div>
  `).join("");
 }
@@ -836,24 +842,27 @@ function selectCsClient(uid) {
  }
 }
 
-async function loadAdminChatMessages(uid) {
- const { data } = await sb.from('messages').select('*').eq('user_id', uid).order('created_at', { ascending: true });
+function loadAdminChatMessages(uid) {
+ const msgs = allMessages.filter(m => m.user_id === uid);
  const box = $("adminChatMessages");
  if(!box) return;
- box.innerHTML = (data || []).map(m => `
-  <div style="margin:6px 0;padding:8px;border-radius:8px;max-width:80%;background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};color:white;margin-left:${m.sender==='support'?'auto':'0'}">
+ box.innerHTML = msgs.map(m => `
+  <div style="margin:6px 0;padding:8px 12px;border-radius:8px;max-width:80%;background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};color:white;margin-left:${m.sender==='support'?'auto':'0'}">
+   <div style="font-size:10px;opacity:0.8">${m.sender==='support'?'Trip Booking Service':'User'}</div>
    <div>${m.text}</div>
   </div>
  `).join("");
+ box.scrollTop = box.scrollHeight;
 }
 
-async function sendAdminChatReply() {
+function sendAdminChatReply() {
  if(!selectedCsUserId) return;
  const inp = $("adminChatInput");
  const text = inp.value.trim();
  if(!text) return;
  inp.value = "";
- await sb.from('messages').insert([{ user_id: selectedCsUserId, sender: 'support', text: text }]);
+ allMessages.push({ user_id: selectedCsUserId, sender: 'support', text: text, time: new Date().toLocaleTimeString() });
+ saveData();
  loadAdminChatMessages(selectedCsUserId);
 }
 
@@ -882,7 +891,7 @@ function renderBookingArea() {
  const area = $("bookingHotelArea");
  if(!area) return;
  if(!activeTask) {
-  area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> to match a hotel task.</p>`;
+  area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> to match an international hotel task.</p>`;
   return;
  }
  const { hotel, commission } = activeTask;
@@ -896,9 +905,39 @@ function renderBookingArea() {
  `;
 }
 
+function renderHistory() {
+ if(!currentUser) return;
+ const list = allTransactions.filter(t => t.user_id === currentUser.id);
+ const tbody = $("historyRows");
+ if(!tbody) return;
+ tbody.innerHTML = list.map(t => `
+  <tr>
+   <td>${t.date}</td>
+   <td><span class="tag">${t.type}</span></td>
+   <td>${t.details}</td>
+   <td><strong style="color:var(--fb-primary)">+$${Number(t.amount).toFixed(2)}</strong></td>
+   <td><span style="color:var(--fb-success)">${t.status}</span></td>
+  </tr>
+ `).join("");
+}
+
+function renderVipGrid() {
+ const disp = $("vipTiersDisplay");
+ if(!disp || !currentUser) return;
+ disp.innerHTML = defaultVipTiers.map(v => `
+  <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
+   <h4 style="margin:0 0 6px">${v.name} (${v.level})</h4>
+   <p class="small" style="margin:2px 0">Daily Orders: ${v.daily_limit}</p>
+   <p class="small" style="margin:2px 0">Profit Rate: ${(v.profit_rate * 100).toFixed(1)}%</p>
+   <p class="small" style="margin:2px 0">Max Limit: $${v.max_withdraw}</p>
+  </div>
+ `).join("");
+}
+
 function renderAllViews() {
  renderHotels();
  renderBookingArea();
+ renderVipGrid();
  if(currentUser) {
   $("headerAuthBtn")?.classList.add("hidden");
   $("guestAuthBox")?.classList.add("hidden");
@@ -908,9 +947,13 @@ function renderAllViews() {
   $("profileVipBadge").textContent = currentUser.vip_level || 'LV1';
   $("walletBalance").textContent = `$${Number(currentUser.balance || 0).toFixed(2)}`;
   $("taskWallet").textContent = `$${Number(currentUser.balance || 0).toFixed(2)}`;
+  $("taskProfit").textContent = `$${Number(currentUser.commission || 0).toFixed(2)}`;
+  $("taskTotalProfit").textContent = `$${Number(currentUser.total_profit || 0).toFixed(2)}`;
   $("profileOrders").textContent = `${currentUser.orders || 0}/30`;
   $("orderCircle").textContent = `${currentUser.orders || 0}/30`;
+  $("inviteCode").textContent = currentUser.referral_code || 'TP0000';
   loadUserMessages(currentUser.id);
+  renderHistory();
  } else {
   $("headerAuthBtn")?.classList.remove("hidden");
   $("guestAuthBox")?.classList.remove("hidden");
@@ -919,7 +962,7 @@ function renderAllViews() {
 }
 
 window.addEventListener("load", () => {
- initSupabaseData();
+ initPlatformData();
 });
 </script>
 </body>
