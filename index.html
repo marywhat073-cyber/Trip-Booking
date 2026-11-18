@@ -60,8 +60,7 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 /* Splash Screen Animation & Go To Trip Booking Button */
 #splashScreen{
  position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
- background:linear-gradient(135deg,rgba(7,26,26,0.95),rgba(15,43,43,0.9)),
- url("https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600") center/cover;
+ background:linear-gradient(135deg,#071a1a,#0f2b2b);
  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:white;
  overflow:hidden;
 }
@@ -72,21 +71,20 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 }
 .splash-title {
  font-size: 32px; font-weight: 900; margin: 0 0 10px; color: #fff;
- animation: slideFromRight 1s ease-out forwards;
+ animation: slideFromRight 0.8s ease-out forwards;
  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 .splash-desc {
  font-size: 16px; color: #00ffcc; margin: 0 0 20px; font-weight: 600;
  letter-spacing: 1px;
- animation: scatterZoom 1.2s ease-out forwards;
+ animation: scatterZoom 1s ease-out forwards;
 }
 
-/* Pulse Animation Button for Go To Trip Booking */
 .go-trip-btn {
  background: transparent;
  color: #ffffff;
  border: 2px solid #ffffff;
- padding: 12px 28px;
+ padding: 12px 32px;
  font-size: 16px;
  font-weight: 700;
  border-radius: 30px;
@@ -95,7 +93,6 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
  animation: pulseButton 1.5s infinite;
  transition: 0.3s;
- z-index: 10000;
 }
 .go-trip-btn:hover {
  background: #ffffff;
@@ -108,13 +105,12 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
-
 @keyframes slideFromRight {
- 0% { transform: translateX(120vw); opacity: 0; }
+ 0% { transform: translateX(100vw); opacity: 0; }
  100% { transform: translateX(0); opacity: 1; }
 }
 @keyframes scatterZoom {
- 0% { transform: scale(0.2); opacity: 0; letter-spacing: 10px; }
+ 0% { transform: scale(0.2); opacity: 0; letter-spacing: 8px; }
  100% { transform: scale(1); opacity: 1; letter-spacing: 1px; }
 }
 @keyframes pulseLogo {
@@ -212,12 +208,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
-<!-- PROFESSIONAL SPLASH SCREEN WITH GO TO TRIP BOOKING BUTTON -->
+<!-- SPLASH SCREEN -->
 <div id="splashScreen">
  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="splash-logo" alt="Logo">
  <h1 class="splash-title">Welcome to Trip Hotel Booking</h1>
  <p class="splash-desc">International Hotel Booking Platform</p>
- <button class="go-trip-btn" onclick="closeSplashAndEnter()">Go To Trip Booking</button>
+ <button type="button" class="go-trip-btn" onclick="enterPlatform()">Go To Trip Booking</button>
 </div>
 
 <header>
@@ -533,24 +529,20 @@ function handleLogoClick() {
  showPage('homePage');
 }
 
-function closeSplashAndEnter() {
+// Completely remove Splash Screen when clicking Go To Trip Booking
+function enterPlatform() {
  const splash = $("splashScreen");
  if(splash) {
-  splash.style.transition = "opacity 0.4s ease";
-  splash.style.opacity = "0";
-  setTimeout(() => {
-   splash.remove();
-   showPage('homePage');
-  }, 400);
- } else {
-  showPage('homePage');
+  splash.style.display = "none";
+  splash.remove();
  }
+ showPage('homePage');
 }
 
 function showAlert(msg, title="Notification") {
- $("alertTitle")?.textContent = title;
- $("alertBody")?.innerHTML = msg;
- $("alertModal")?.classList.remove("hidden");
+ $("alertTitle").textContent = title;
+ $("alertBody").innerHTML = msg;
+ $("alertModal").classList.remove("hidden");
 }
 
 function closeModal(id) { $(id)?.classList.add("hidden"); }
@@ -908,6 +900,7 @@ function renderAllViews() {
  renderHotels();
  renderBookingArea();
  if(currentUser) {
+  $("headerAuthBtn")?.classList.add("hidden");
   $("guestAuthBox")?.classList.add("hidden");
   $("memberProfileBox")?.classList.remove("hidden");
   $("profileName").textContent = currentUser.name;
@@ -919,6 +912,7 @@ function renderAllViews() {
   $("orderCircle").textContent = `${currentUser.orders || 0}/30`;
   loadUserMessages(currentUser.id);
  } else {
+  $("headerAuthBtn")?.classList.remove("hidden");
   $("guestAuthBox")?.classList.remove("hidden");
   $("memberProfileBox")?.classList.add("hidden");
  }
