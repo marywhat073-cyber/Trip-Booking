@@ -183,8 +183,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <!-- 0% to 100% LOADING & PWA INSTALL SCREEN -->
 <div id="splashScreen">
  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=160" class="splash-icon" alt="Trip Booking">
- <h1 style="margin:0;font-size:28px" data-i18n="splashTitle">Trip Booking</h1>
- <p style="margin:6px 0 0;opacity:0.9" data-i18n="splashDesc">International Hotel Booking Platform</p>
+ <h1 style="margin:0;font-size:28px">Trip Booking</h1>
+ <p style="margin:6px 0 0;opacity:0.9">International Hotel Booking Platform</p>
  
  <div class="progress-container">
   <div class="progress-fill" id="splashProgressBar"></div>
@@ -192,8 +192,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div id="splashPercent" style="font-weight:800;font-size:18px">0%</div>
 
  <div class="splash-actions hidden" id="splashActions">
-  <button class="btn btn-light" style="padding:10px 26px;border-radius:25px" onclick="closeSplash()" data-i18n="closeBtn">Close</button>
-  <button class="btn btn-success" style="padding:10px 26px;border-radius:25px" onclick="openAndInstallPWA()" data-i18n="openBtn">Open</button>
+  <button class="btn btn-light" style="padding:10px 26px;border-radius:25px" onclick="closeSplash()">Close</button>
+  <button class="btn btn-success" style="padding:10px 26px;border-radius:25px" onclick="openAndInstallPWA()">Open</button>
  </div>
 </div>
 
@@ -227,8 +227,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="hero">
-  <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-  <p data-i18n="heroDesc">International Hotel Booking Platform</p>
+  <h1>Welcome to Trip Booking</h1>
+  <p>International Hotel Booking Platform</p>
   <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')" data-i18n="startTaskBtn">Start Booking Tasks</button>
  </div>
 
@@ -304,7 +304,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 <!-- PROFILE PAGE -->
 <section class="page" id="profilePage">
- <div class="section-title"><h2 data-i18n="myProfile">My Profile</h2></div>
+ <div class="section-title">
+  <h2 data-i18n="myProfile">My Profile</h2>
+  <!-- Phone PWA App Install Button on Profile Top/Right -->
+  <button class="btn btn-success" onclick="openAndInstallPWA()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:6px 12px">
+   📱 Install App
+  </button>
+ </div>
 
  <!-- Shown only when logged out -->
  <div class="panel" id="guestAuthBox" style="text-align:center;padding:24px">
@@ -552,18 +558,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <script>
 "use strict";
 
-/* ==========================================================================
-   1. SUPABASE CLOUD CONFIGURATION
-   ========================================================================== */
 const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODczMTksImV4cCI6MjExMDU2MzMxOX0.LPEZeEpknBxDKCLNPhv41TSCjxPuAo83Zca_laJlFb8";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const $ = id => document.getElementById(id);
 
-/* ==========================================================================
-   2. SECRET 10-TAP LOGO ACCESS FOR ADMIN & CUSTOMER SERVICE
-   ========================================================================== */
 let logoTapCount = 0;
 let logoTapTimer = null;
 let isAdminAuthenticated = sessionStorage.getItem("tb_admin_unlocked") === "true";
@@ -615,9 +615,6 @@ function exitAdminPanel() {
  showPage("homePage", document.querySelectorAll('.bottom-nav button')[0]);
 }
 
-/* ==========================================================================
-   3. PWA MANIFEST & 0% - 100% LOADING EXPERIENCE
-   ========================================================================== */
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', (e) => {
  e.preventDefault();
@@ -671,15 +668,9 @@ async function openAndInstallPWA() {
  }
 }
 
-/* ==========================================================================
-   4. MULTI-LANGUAGE (MY, EN, TH, ZH) & LIVE EXCHANGE RATES
-   ========================================================================== */
 const I18N = {
  my: {
-  splashTitle: "Trip Booking", splashDesc: "နိုင်ငံတကာ ဟိုတယ် ဘိုကင်ပလက်ဖောင်း",
-  closeBtn: "ပိတ်မည် (Close)", openBtn: "ဖွင့်မည် (Open)", loginBtn: "အကောင့်ဝင်ရန်",
-  heroTitle: "Trip Booking မှ ကြိုဆိုပါတယ်", heroDesc: "နိုင်ငံတကာ ဟိုတယ် ဘိုကင်ပလက်ဖောင်း",
-  startTaskBtn: "ဘိုကင်တာဝန် စတင်မည်", hotelDir: "နိုင်ငံတကာ ဟိုတယ်များ",
+  loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
@@ -695,10 +686,7 @@ const I18N = {
   passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်"
  },
  en: {
-  splashTitle: "Trip Booking", splashDesc: "International Hotel Booking Platform",
-  closeBtn: "Close", openBtn: "Open", loginBtn: "Login",
-  heroTitle: "Welcome to Trip Booking", heroDesc: "International Hotel Booking Platform",
-  startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
   dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
@@ -714,10 +702,7 @@ const I18N = {
   passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register"
  },
  th: {
-  splashTitle: "Trip Booking", splashDesc: "แพลตฟอร์มจองโรงแรมนานาชาติ",
-  closeBtn: "ปิด", openBtn: "เปิด", loginBtn: "เข้าสู่ระบบ",
-  heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroDesc: "แพลตฟอร์มจองโรงแรมนานาชาติ",
-  startTaskBtn: "เริ่มงานการจอง", hotelDir: "โรงแรมนานาชาติ",
+  loginBtn: "เข้าสู่ระบบ", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   csCenter: "Trip Booking Service", taskCenter: "ศูนย์งานการจอง",
   accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่น", totalProfit: "กำไรทั้งหมด",
   dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับออเดอร์", histTitle: "ประวัติการทำรายการและการจอง",
@@ -733,10 +718,7 @@ const I18N = {
   passwordLabel: "รหัสผ่าน", continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก"
  },
  zh: {
-  splashTitle: "Trip Booking", splashDesc: "国际酒店预订平台",
-  closeBtn: "关闭", openBtn: "打开", loginBtn: "登录",
-  heroTitle: "欢迎来到 Trip Booking", heroDesc: "国际酒店预订平台",
-  startTaskBtn: "开始预订任务", hotelDir: "国际酒店目录",
+  loginBtn: "登录", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   csCenter: "Trip Booking Service", taskCenter: "预订任务中心",
   accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
   dailyLimit: "每日订单", getOrderBtn: "立即接单", histTitle: "交易与预订记录",
@@ -778,9 +760,6 @@ function startLiveRates() {
  }, 3500);
 }
 
-/* ==========================================================================
-   5. CROSS-DEVICE REAL-TIME SUPABASE SYNC & LEGACY ACCOUNT MIGRATION
-   ========================================================================== */
 let allUsers = [];
 let allHotels = [];
 let allVipTiers = [];
@@ -815,7 +794,6 @@ function showPage(pageId, navBtn) {
  renderAllViews();
 }
 
-// Migrate any old local storage users into Supabase Cloud automatically
 async function migrateLegacyLocalUsers() {
  const legacyKeys = ["tb_users_v28", "tb_users_v27", "tb_users"];
  for(const k of legacyKeys) {
@@ -869,7 +847,6 @@ async function initSupabaseData() {
  await migrateLegacyLocalUsers();
  await forceSyncNow();
 
- // Restore Persistent Session
  const savedUserId = localStorage.getItem("tb_session_uid");
  if(savedUserId) {
   const found = allUsers.find(u => u.id === savedUserId);
@@ -877,24 +854,16 @@ async function initSupabaseData() {
  }
  renderAllViews();
 
- // 1. Instant WebSocket Real-time Listener
  sb.channel('global-realtime-sync')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
-   forceSyncNow();
-  })
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'hotels' }, () => {
-   forceSyncNow();
-  })
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'vip_tiers' }, () => {
-   forceSyncNow();
-  })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => { forceSyncNow(); })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'hotels' }, () => { forceSyncNow(); })
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'vip_tiers' }, () => { forceSyncNow(); })
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
    if(currentUser) loadUserMessages(currentUser.id);
    if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
   })
   .subscribe();
 
- // 2. Backup Auto-Polling every 4 seconds (guarantees Admin sees friend's new account even on unstable mobile networks)
  setInterval(() => {
   forceSyncNow();
   if(selectedCsUserId && !$("adminCsTab").classList.contains("hidden")) {
@@ -903,9 +872,6 @@ async function initSupabaseData() {
  }, 4000);
 }
 
-/* ==========================================================================
-   6. AUTHENTICATION, UNIQUE CONSTRAINTS & TPXXXX REFERRAL CODE
-   ========================================================================== */
 function openAuth(mode) {
  authMode = mode;
  $("authModal").classList.remove("hidden");
@@ -937,7 +903,6 @@ async function submitAuth() {
  }
 
  if(authMode === "register") {
-  // Check strict uniqueness in Supabase
   const { data: existing } = await sb.from('users').select('id').eq('identity', identity);
   if(existing && existing.length > 0) {
    err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
@@ -985,7 +950,6 @@ async function submitAuth() {
   return;
  }
 
- // Login flow
  const { data: user, error } = await sb.from('users')
   .select('*')
   .eq('identity', identity)
@@ -1011,9 +975,6 @@ function logout() {
  showPage("homePage");
 }
 
-/* ==========================================================================
-   7. VIP TIERS, COMMISSION & WITHDRAWAL LIMIT BLOCKING
-   ========================================================================== */
 function getVipInfo(level) {
  return allVipTiers.find(v => v.level === level) || { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.005, min_bal: 0, max_withdraw: 1000 };
 }
@@ -1092,9 +1053,6 @@ function handleDepositRequest() {
  sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
 }
 
-/* ==========================================================================
-   8. CS CHAT & QUICK SUGGESTION BUTTONS ("Trip Booking Service")
-   ========================================================================== */
 async function sendQuickSuggestion(text) {
  if(!currentUser) { openAuth('login'); return; }
  await sb.from('messages').insert([{
@@ -1135,9 +1093,6 @@ async function loadUserMessages(userId) {
  box.scrollTop = box.scrollHeight;
 }
 
-/* ==========================================================================
-   9. ADMIN & CS PANEL RENDERING & MANAGEMENT
-   ========================================================================== */
 function switchAdminTab(tab) {
  ["adminUsersTab", "adminHotelsTab", "adminCsTab"].forEach(id => $(id).classList.add("hidden"));
  ["tabUsersBtn", "tabHotelsBtn", "tabCsBtn"].forEach(id => $(id).className = "btn btn-light");
@@ -1302,7 +1257,6 @@ async function deleteHotel(id) {
  await forceSyncNow();
 }
 
-/* Admin CS Reply Panel */
 function renderCsClientList() {
  const q = ($("csClientSearch")?.value || "").toLowerCase();
  const filtered = allUsers.filter(u =>
@@ -1356,9 +1310,6 @@ async function sendAdminChatReply() {
  loadAdminChatMessages(selectedCsUserId);
 }
 
-/* ==========================================================================
-   10. GENERAL UI RENDERING
-   ========================================================================== */
 function renderHotels() {
  const q = ($("hotelSearch")?.value || "").toLowerCase();
  const filtered = allHotels.filter(h => h.name.toLowerCase().includes(q) || h.country.toLowerCase().includes(q));
@@ -1449,7 +1400,7 @@ function renderAllViews() {
   renderHistoryTable();
  } else {
   $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.remove("hidden");
+  $("guestAuthBox").classList.add("hidden");
   $("memberProfileBox").classList.add("hidden");
  }
 }
