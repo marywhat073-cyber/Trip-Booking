@@ -8,8 +8,6 @@
 
 <!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Dynamic PWA Manifest Setup -->
 <link rel="manifest" id="pwaManifest">
 
 <style>
@@ -57,6 +55,34 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 .eye-btn{
  position:absolute;right:8px;background:none;border:0;
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
+}
+
+/* Splash Screen Animation */
+#splashScreen{
+ position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
+ background:linear-gradient(135deg,rgba(0,40,40,0.9),rgba(0,100,100,0.85)),
+ url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600") center/cover;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:white;
+ overflow:hidden;
+}
+.splash-title {
+ font-size: 28px; font-weight: 800; margin: 0 0 10px;
+ position: relative;
+ animation: slideFromRight 1s ease-out forwards;
+}
+.splash-desc {
+ font-size: 16px; opacity: 0.9; margin: 0;
+ position: relative;
+ animation: slideFromAll 1.2s ease-out forwards;
+}
+
+@keyframes slideFromRight {
+ 0% { transform: translateX(100vw); opacity: 0; }
+ 100% { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideFromAll {
+ 0% { transform: scale(0.5); opacity: 0; }
+ 100% { transform: scale(1); opacity: 1; }
 }
 
 header{
@@ -128,7 +154,6 @@ header{
 }
 .chip-btn:hover{background:var(--fb-primary);color:white}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
-.chat-toolbar{display:flex;gap:6px;align-items:center}
 .chat-tool-btn{background:none;border:0;color:var(--fb-muted);font-size:18px;cursor:pointer;padding:4px}
 .chat-tool-btn:hover{color:var(--fb-primary)}
 
@@ -145,6 +170,12 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
+<!-- SPLASH SCREEN ANIMATION -->
+<div id="splashScreen">
+ <h1 class="splash-title">Welcome to Trip Hotel Booking</h1>
+ <p class="splash-desc">International Hotel Booking Platform</p>
+</div>
+
 <header>
  <div class="logo-container" onclick="handleLogoClick()">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
@@ -154,8 +185,6 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <select id="language" onchange="changeLanguage(this.value)">
    <option value="my">မြန်မာ</option>
    <option value="en">English</option>
-   <option value="th">ไทย</option>
-   <option value="zh">中文</option>
   </select>
   <button class="btn-light" id="themeToggle" onclick="toggleTheme()">🌙</button>
   <button class="btn" id="headerAuthBtn" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
@@ -185,7 +214,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="hotel-grid" id="hotelGrid"></div>
 </section>
 
-<!-- CUSTOMER SERVICE PAGE (Blue CS Chat with Image, Video & Emote) -->
+<!-- CUSTOMER SERVICE PAGE (File upload support) -->
 <section class="page" id="supportPage">
  <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
  <div class="chat-window" style="max-width:850px;margin:0 auto">
@@ -202,10 +231,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div class="chat-footer">
-   <button class="chat-tool-btn" onclick="triggerFileUpload('image')" title="Send Image">📷</button>
-   <button class="chat-tool-btn" onclick="triggerFileUpload('video')" title="Send Video">🎥</button>
-   <button class="chat-tool-btn" onclick="insertEmote('😊')" title="Insert Emoji">😊</button>
-   <button class="chat-tool-btn" onclick="insertEmote('🔥')" title="Fire Emoji">🔥</button>
+   <input type="file" id="chatFileInput" class="hidden" accept="image/*,video/*" onchange="handleFileSelected(event)">
+   <button class="chat-tool-btn" onclick="$('chatFileInput').click()" title="Upload Image/Video">📷</button>
+   <button class="chat-tool-btn" onclick="insertEmote('😊')" title="Emoji">😊</button>
+   <button class="chat-tool-btn" onclick="insertEmote('🔥')" title="Fire">🔥</button>
    <input id="supportInput" type="text" placeholder="Type a message..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()">
    <button class="btn" onclick="sendSupportMessage()" style="background:var(--fb-primary)">➤</button>
   </div>
@@ -307,76 +336,22 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
   <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 USERS & VIP CONTROL</button>
-  <button class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')">🏨 HOTELS & RATES</button>
   <button class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')">💬 TRIP BOOKING SERVICE CHAT</button>
  </div>
 
  <div id="adminUsersTab" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>Real-Time User Management (All Users)</h3>
+   <h3>Real-Time User Management</h3>
    <button class="btn btn-success" onclick="saveAllUsersAdmin()">💾 Save All Changes</button>
   </div>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Phone / Email</th>
-      <th>Password</th>
-      <th>Referral</th>
-      <th>VIP Tier</th>
-      <th>Balance ($)</th>
-      <th>Neg ($)</th>
-      <th>Profit Box ($)</th>
-      <th>Orders</th>
-      <th>Reset</th>
+      <th>ID</th><th>Name</th><th>Phone/Email</th><th>Password</th><th>Referral</th><th>VIP</th><th>Balance</th><th>Orders</th><th>Reset</th>
      </tr>
     </thead>
     <tbody id="adminUsersRows"></tbody>
-   </table>
-  </div>
- </div>
-
- <div id="adminHotelsTab" class="panel hidden">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>Hotels & VIP Commission Rates</h3>
-   <div>
-    <button class="btn btn-success" onclick="openAddHotelModal()">+ Add Hotel</button>
-    <button class="btn" onclick="saveHotelsAndVipsAdmin()">💾 Save Rates & Hotels</button>
-   </div>
-  </div>
-  <h4>VIP Tier Limits & Profit Rates</h4>
-  <div class="table-wrap" style="margin-bottom:20px">
-   <table>
-    <thead>
-     <tr>
-      <th>Level</th>
-      <th>Name</th>
-      <th>Daily Limit</th>
-      <th>Profit Rate (%)</th>
-      <th>Min Balance ($)</th>
-      <th>Max Balance / Withdraw Limit ($)</th>
-     </tr>
-    </thead>
-    <tbody id="adminVipRows"></tbody>
-   </table>
-  </div>
-
-  <h4>Hotel Directory & Prices</h4>
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th>ID</th>
-      <th>Hotel Name</th>
-      <th>Country</th>
-      <th>Stars</th>
-      <th>Price ($)</th>
-      <th>Action</th>
-     </tr>
-    </thead>
-    <tbody id="adminHotelsRows"></tbody>
    </table>
   </div>
  </div>
@@ -415,68 +390,44 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <button class="close" onclick="closeModal('authModal')">✕</button>
   </div>
   <div id="regExtraFields" class="hidden">
-   <label data-i18n="fullNameLabel">Full Name</label>
+   <label>Full Name</label>
    <input id="regName" placeholder="Enter your full name">
    <label>Referral Code (Optional)</label>
    <input id="regRefInput" placeholder="TPXXXX">
   </div>
-  <label data-i18n="identityLabel">Phone Number or Email</label>
+  <label>Phone Number or Email</label>
   <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
   
-  <label data-i18n="passwordLabel">Password</label>
+  <label>Password</label>
   <div class="pass-wrap">
    <input id="authPassword" type="password" placeholder="Enter password">
    <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
   </div>
 
   <p id="authError" style="color:var(--fb-danger);font-size:13px;margin:8px 0"></p>
-  <button class="btn btn-block" style="margin-top:10px;background:var(--fb-primary)" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
+  <button class="btn btn-block" style="margin-top:10px;background:var(--fb-primary)" onclick="submitAuth()">Continue</button>
   <p style="text-align:center;margin-top:12px;font-size:13px">
-   <a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a>
+   <a href="#" onclick="toggleAuthMode();return false">Switch Login / Register</a>
   </p>
  </div>
 </div>
 
-<!-- SECRET ADMIN / CS LOGIN MODAL -->
+<!-- SECRET ADMIN LOGIN MODAL -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h3>🔐 Admin & CS Portal Security</h3>
+   <h3>🔐 Admin Security Portal</h3>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
   </div>
-  <label>Admin Phone or Email (09775191427 / jupiterwhat8@gmail.com)</label>
+  <label>Admin ID / Email</label>
   <input id="staffIdentity" placeholder="09775191427 or jupiterwhat8@gmail.com">
-  <label>Security Password (12344321)</label>
+  <label>Security Password</label>
   <div class="pass-wrap">
    <input id="staffSecPass" type="password" placeholder="Enter 12344321">
    <button type="button" class="eye-btn" onclick="togglePassVisibility('staffSecPass', this)">👁️</button>
   </div>
   <p id="staffError" style="color:var(--fb-danger);font-size:13px;margin:8px 0"></p>
-  <button class="btn btn-success btn-block" style="margin-top:10px;background:var(--fb-primary)" onclick="verifyAdminAccess()">Access Admin & CS Panel</button>
- </div>
-</div>
-
-<!-- ADD HOTEL MODAL -->
-<div class="modal hidden" id="addHotelModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3>Add New Hotel</h3>
-   <button class="close" onclick="closeModal('addHotelModal')">✕</button>
-  </div>
-  <label>Hotel Name</label><input id="newHName">
-  <label>Country</label><input id="newHCountry">
-  <label>Price ($)</label><input id="newHPrice" type="number">
-  <label>Stars</label><input id="newHStars" type="number" value="5" min="1" max="5">
-  <button class="btn btn-success btn-block" style="margin-top:12px;background:var(--fb-primary)" onclick="addHotelToSupabase()">Save Hotel</button>
- </div>
-</div>
-
-<!-- NOTIFICATION MODAL -->
-<div class="modal hidden" id="alertModal">
- <div class="modal-box" style="text-align:center">
-  <h3 id="alertTitle" style="color:var(--fb-primary)">Notification</h3>
-  <p id="alertBody" style="margin:14px 0"></p>
-  <button class="btn btn-block" onclick="closeModal('alertModal')" style="background:var(--fb-primary)">OK</button>
+  <button class="btn btn-success btn-block" style="margin-top:10px;background:var(--fb-primary)" onclick="verifyAdminAccess()">Access Panel</button>
  </div>
 </div>
 
@@ -486,86 +437,29 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODczMTksImV4cCI6MjExMDU2MzMxOX0.LPEZeEpknBxDKCLNPhv41TSCjxPuAo83Zca_laJlFb8";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 const $ = id => document.getElementById(id);
 
-const I18N = {
- my: {
-  loginBtn: "အကောင့်ဝင်ရန်", heroTitle: "Trip Booking မှ ကြိုဆိုပါတယ်", heroDesc: "နိုင်ငံတကာ ဟိုတယ် ဘိုကင်ပလက်ဖောင်း",
-  startTaskBtn: "ဘိုကင်တာဝန် စတင်မည်", hotelDir: "နိုင်ငံတကာ ဟိုတယ်များ",
-  csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
-  accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
-  dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
-  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thAmount: "ပမာဏ", thStatus: "အခြေအနေ",
-  myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Trip Booking မှ ကြိုဆိုပါတယ်",
-  loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်အသစ်ဖွင့်မည်",
-  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
-  inviteCodeTitle: "မိတ်ဆက်ကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
-  withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
-  logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
-  navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
-  fullNameLabel: "အမည်ပြည့်စုံ", identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
-  passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်"
- },
- en: {
-  loginBtn: "Login", heroTitle: "Welcome to Trip Booking", heroDesc: "International Hotel Booking Platform",
-  startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
-  accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
-  dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
-  thDate: "Date", thType: "Type", thAmount: "Amount", thStatus: "Status",
-  myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "Login or register a new account to start.", createAcc: "Register",
-  walletBal: "Wallet Balance", completedBookings: "Completed Orders",
-  inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
-  withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
-  logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
-  navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
-  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email",
-  passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register"
- }
-};
-
-let currentLang = localStorage.getItem("tb_lang_sync") || "my";
-
-function changeLanguage(lang) {
- currentLang = lang;
- localStorage.setItem("tb_lang_sync", lang);
- $("language").value = lang;
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const k = el.getAttribute("data-i18n");
-  if(I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
- });
- renderAllViews();
-}
-
-let baseRates = { usd: 4510.00, thb: 132.50, cny: 625.80 };
-function startLiveRates() {
- setInterval(() => {
-  const u = (baseRates.usd + (Math.random() - 0.5) * 4).toFixed(2);
-  const t = (baseRates.thb + (Math.random() - 0.5) * 0.4).toFixed(2);
-  const c = (baseRates.cny + (Math.random() - 0.5) * 1.2).toFixed(2);
-  ["rateUsd", "pRateUsd"].forEach(id => { if($(id)) $(id).textContent = u; });
-  ["rateThb", "pRateThb"].forEach(id => { if($(id)) $(id).textContent = t; });
-  ["rateCny", "pRateCny"].forEach(id => { if($(id)) $(id).textContent = c; });
- }, 3500);
-}
-
 let allUsers = [];
-let allHotels = [
- { id: "H101", name: "Marina Bay Sands", country: "Singapore (Asia)", price: 380, stars: 5, image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900", rating: "4.9/5", reviews: "12,450 reviews", viewers: "1,420 viewing" },
- { id: "H102", name: "The Ritz-Carlton, Tokyo", country: "Japan (Asia)", price: 520, stars: 5, image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900", rating: "4.8/5", reviews: "9,820 reviews", viewers: "980 viewing" },
- { id: "H103", name: "Burj Al Arab Jumeirah", country: "UAE (Middle East)", price: 850, stars: 5, image: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=900", rating: "4.9/5", reviews: "15,100 reviews", viewers: "2,150 viewing" },
- { id: "H104", name: "The Plaza Hotel, New York", country: "USA (America)", price: 650, stars: 5, image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=900", rating: "4.7/5", reviews: "8,340 reviews", viewers: "1,100 viewing" },
- { id: "H105", name: "Claridge's, London", country: "UK (Europe)", price: 590, stars: 5, image: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=900", rating: "4.8/5", reviews: "7,620 reviews", viewers: "890 viewing" },
- { id: "H106", name: "Hôtel de Crillon, Paris", country: "France (Europe)", price: 720, stars: 5, image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900", rating: "4.9/5", reviews: "10,900 reviews", viewers: "1,340 viewing" }
-];
+let allHotels = [];
+for(let i=1; i<=277; i++) {
+ allHotels.push({
+  id: "H" + i,
+  name: i % 2 === 0 ? "Grand Luxury Resort & Spa #" + i : "International Palace Hotel #" + i,
+  country: i % 3 === 0 ? "Asia (Japan/Singapore)" : (i % 3 === 1 ? "Europe (France/UK)" : "America (USA)"),
+  price: 150 + (i * 7) % 700,
+  stars: 5,
+  image: i % 2 === 0 ? "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900" : "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=900",
+  rating: "4.9/5",
+  reviews: (1000 + i * 15) + " reviews",
+  viewers: (500 + i * 5) + " viewing"
+ });
+}
+
 let allVipTiers = [];
 let currentUser = null;
 let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
-
 let logoTapCount = 0;
 let logoTapTimer = null;
 
@@ -582,12 +476,12 @@ function handleLogoClick() {
 }
 
 function showAlert(msg, title="Notification") {
- $("alertTitle").textContent = title;
- $("alertBody").innerHTML = msg;
- $("alertModal").classList.remove("hidden");
+ $("alertTitle")?.textContent = title;
+ $("alertBody")?.innerHTML = msg;
+ $("alertModal")?.classList.remove("hidden");
 }
 
-function closeModal(id) { $(id).classList.add("hidden"); }
+function closeModal(id) { $(id)?.classList.add("hidden"); }
 
 function togglePassVisibility(inputId, btn) {
  const inp = $(inputId);
@@ -599,7 +493,7 @@ function toggleTheme() { document.body.classList.toggle("dark"); }
 
 function showPage(pageId, navBtn) {
  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
- $(pageId).classList.add("active");
+ $(pageId)?.classList.add("active");
  if(navBtn) {
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
   navBtn.classList.add("active");
@@ -610,9 +504,6 @@ function showPage(pageId, navBtn) {
 async function initSupabaseData() {
  const { data: vips } = await sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true });
  if(vips) allVipTiers = vips;
-
- const { data: hts } = await sb.from('hotels').select('*');
- if(hts && hts.length > 0) allHotels = hts;
 
  const { data: usrs } = await sb.from('users').select('*').order('created_at', { ascending: false });
  if(usrs) allUsers = usrs;
@@ -650,21 +541,13 @@ async function initSupabaseData() {
 
 function openAuth(mode) {
  authMode = mode;
- $("authModal").classList.remove("hidden");
- $("regExtraFields").classList.toggle("hidden", mode === "login");
- $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginBtn : I18N[currentLang].createAcc;
+ $("authModal")?.classList.remove("hidden");
+ $("regExtraFields")?.classList.toggle("hidden", mode === "login");
+ $("authTitle").textContent = mode === "login" ? "Login" : "Register";
  $("authError").textContent = "";
 }
 
 function toggleAuthMode() { openAuth(authMode === "login" ? "register" : "login"); }
-
-function generateUniqueTPCode() {
- let code;
- do {
-  code = "TP" + Math.floor(1000 + Math.random() * 9000);
- } while (allUsers.some(u => u.referral_code === code));
- return code;
-}
 
 async function submitAuth() {
  const identity = $("authIdentity").value.trim().toLowerCase();
@@ -683,22 +566,10 @@ async function submitAuth() {
    err.textContent = "This phone number or email is already registered!";
    return;
   }
-
   const name = $("regName").value.trim() || "Member";
-  const refInput = $("regRefInput").value.trim().toUpperCase();
-  let invitedBy = "-";
-
-  if(refInput) {
-   const { data: refOwner } = await sb.from('users').select('*').eq('referral_code', refInput).single();
-   if(refOwner) {
-    invitedBy = refOwner.id;
-    await sb.from('users').update({ invited_count: (refOwner.invited_count || 0) + 1 }).eq('id', refOwner.id);
-   }
-  }
-
   const newId = String(Math.floor(100000 + Math.random() * 900000));
-  const newCode = generateUniqueTPCode();
-  const newUser = { id: newId, name, identity, password, referral_code: newCode, invited_by: invitedBy, balance: 0.00, vip_level: "LV1", orders: 0 };
+  const newCode = "TP" + Math.floor(1000 + Math.random() * 9000);
+  const newUser = { id: newId, name, identity, password, referral_code: newCode, balance: 0.00, vip_level: "LV1", orders: 0 };
 
   const { error } = await sb.from('users').insert([newUser]);
   if(error) { err.textContent = error.message; return; }
@@ -706,7 +577,6 @@ async function submitAuth() {
   currentUser = newUser;
   localStorage.setItem("tb_session_uid", newUser.id);
   closeModal("authModal");
-  showAlert(`Registration successful! Your Referral Code is <b>${newCode}</b>.`);
   renderAllViews();
   return;
  }
@@ -718,7 +588,6 @@ async function submitAuth() {
  localStorage.setItem("tb_session_uid", user.id);
  closeModal("authModal");
  renderAllViews();
- showPage("profilePage");
 }
 
 function logout() {
@@ -735,16 +604,14 @@ function getVipInfo(level) {
 async function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  if(Number(currentUser.balance) <= 0) {
-  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါသဖြင့် အော်ဒါယူ၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။");
+  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။");
   return;
  }
-
  const vip = getVipInfo(currentUser.vip_level);
  if(currentUser.orders >= vip.daily_limit) {
-  showAlert("🎉 ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
+  showAlert("ယနေ့အတွက် အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
   return;
  }
-
  const hotel = allHotels[currentUser.orders % allHotels.length];
  const commission = (Number(hotel.price) * Number(vip.profit_rate)) + (Number(currentUser.profit_box) || 0);
  activeTask = { hotel, commission };
@@ -754,34 +621,20 @@ async function triggerGetOrder() {
 async function submitCurrentOrder() {
  if(!currentUser || !activeTask) return;
  const { hotel, commission } = activeTask;
-
- if(Number(currentUser.balance) < Number(hotel.price)) {
-  showAlert("⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ။ Trip Booking Service သို့ ဆက်သွယ်၍ ငွေဖြည့်သွင်းပါ။");
-  return;
- }
-
  const newBalance = Number(currentUser.balance) + commission;
  const newComm = Number(currentUser.commission || 0) + commission;
  const newTotalProfit = Number(currentUser.total_profit || 0) + commission;
  const newOrders = Number(currentUser.orders || 0) + 1;
 
  await sb.from('users').update({ balance: newBalance, commission: newComm, total_profit: newTotalProfit, orders: newOrders }).eq('id', currentUser.id);
- await sb.from('transactions').insert([{ user_id: currentUser.id, type: 'Booking Profit', hotel_name: hotel.name, order_price: hotel.price, amount: commission, status: 'Approved' }]);
-
  activeTask = null;
- showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+$${commission.toFixed(2)}</b> ရရှိပါသည်။`);
+ showAlert(`အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် +$${commission.toFixed(2)} ရရှိပါသည်။`);
 }
 
 function handleWithdrawRequest() {
  if(!currentUser) return;
- const vip = getVipInfo(currentUser.vip_level);
- const bal = Number(currentUser.balance);
- if(bal > Number(vip.max_withdraw)) {
-  showAlert(`⛔ <b>ငွေထုတ်ယူမှု ယာယီပိတ်ပင်ထားပါသည်!</b><br><br>လက်ရှိ ${vip.name} အဆင့်၏ အများဆုံး ကန့်သတ်ချက်မှာ <b>$${vip.max_withdraw}</b> ဖြစ်သော်လည်း သင့်အကောင့်လက်ကျန်ငွေမှာ <b>$${bal.toFixed(2)}</b> ဖြစ်နေပါသည်။`, "VIP Limit Exceeded");
-  return;
- }
  showPage('supportPage');
- sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: $${bal.toFixed(2)})`);
+ sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: $${Number(currentUser.balance).toFixed(2)})`);
 }
 
 function handleDepositRequest() {
@@ -790,7 +643,6 @@ function handleDepositRequest() {
  sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
 }
 
-/* Chat functionality with Images, Videos & Emotes */
 async function sendQuickSuggestion(text) {
  if(!currentUser) { openAuth('login'); return; }
  await sb.from('messages').insert([{ user_id: currentUser.id, sender: 'user', text: text }]);
@@ -809,16 +661,20 @@ async function sendSupportMessage() {
 
 function insertEmote(emote) {
  const inp = $("supportInput");
- inp.value += emote;
- inp.focus();
+ if(inp) { inp.value += emote; inp.focus(); }
 }
 
-function triggerFileUpload(type) {
- const url = prompt(type === 'image' ? "Enter image URL:" : "Enter video URL:");
- if(url) {
-  const content = type === 'image' ? `<img src="${url}" style="max-width:100%;border-radius:6px;margin-top:4px">` : `<video src="${url}" controls style="max-width:100%;border-radius:6px;margin-top:4px"></video>`;
-  sendQuickSuggestion(content);
- }
+function handleFileSelected(event) {
+ const file = event.target.files[0];
+ if(!file || !currentUser) return;
+ const reader = new FileReader();
+ reader.onload = async function(e) {
+  const fileUrl = e.target.result;
+  const content = file.type.startsWith('video') ? `<video src="${fileUrl}" controls style="max-width:100%;border-radius:6px"></video>` : `<img src="${fileUrl}" style="max-width:100%;border-radius:6px">`;
+  await sb.from('messages').insert([{ user_id: currentUser.id, sender: 'user', text: content }]);
+  loadUserMessages(currentUser.id);
+ };
+ reader.readAsDataURL(file);
 }
 
 async function loadUserMessages(userId) {
@@ -829,7 +685,7 @@ async function loadUserMessages(userId) {
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
    background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};
    color:${m.sender==='user'?'white':'var(--fb-text)'};
-   margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
+   margin-left:${m.sender==='user'?'auto':'0'}">
    <div style="font-size:10px;opacity:0.8;font-weight:700">${m.sender==='user' ? currentUser.name : 'Trip Booking Service'}</div>
    <div>${m.text}</div>
   </div>
@@ -838,10 +694,7 @@ async function loadUserMessages(userId) {
 }
 
 function openStaffModal() {
- $("staffIdentity").value = "";
- $("staffSecPass").value = "";
- $("staffError").textContent = "";
- $("staffModal").classList.remove("hidden");
+ $("staffModal")?.classList.remove("hidden");
 }
 
 function verifyAdminAccess() {
@@ -850,20 +703,10 @@ function verifyAdminAccess() {
  if((ident === "09775191427" || ident === "jupiterwhat8@gmail.com") && pass === "12344321") {
   closeModal("staffModal");
   showPage("staffPage");
-  switchAdminTab("users");
   fetchAdminUsers();
  } else {
   $("staffError").textContent = "Incorrect admin ID or password!";
  }
-}
-
-function switchAdminTab(tab) {
- ["adminUsersTab", "adminHotelsTab", "adminCsTab"].forEach(id => $(id).classList.add("hidden"));
- ["tabUsersBtn", "tabHotelsBtn", "tabCsBtn"].forEach(id => $(id).className = "btn btn-light");
-
- if(tab === "users") { $("adminUsersTab").classList.remove("hidden"); $("tabUsersBtn").className = "btn"; fetchAdminUsers(); }
- else if(tab === "hotels") { $("adminHotelsTab").classList.remove("hidden"); $("tabHotelsBtn").className = "btn"; renderAdminHotelsAndVips(); }
- else if(tab === "cs") { $("adminCsTab").classList.remove("hidden"); $("tabCsBtn").className = "btn"; renderCsClientList(); }
 }
 
 async function fetchAdminUsers() {
@@ -877,23 +720,20 @@ function renderAdminUsersTable(users) {
  tbody.innerHTML = users.map((u, index) => `
   <tr>
    <td>${index + 1}</td>
-   <td><input id="adm_name_${u.id}" value="${u.name || ''}" style="width:110px"></td>
+   <td><input id="adm_name_${u.id}" value="${u.name || ''}"></td>
    <td>${u.identity || '-'}</td>
-   <td><input id="adm_pass_${u.id}" value="${u.password || ''}" style="width:100px"></td>
-   <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}" style="width:85px"></td>
-   <td><input id="adm_vip_${u.id}" value="${u.vip_level || 'LV1'}" style="width:65px"></td>
-   <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${u.balance || 0}" style="width:95px"></td>
-   <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${u.negative_balance || 0}" style="width:75px"></td>
-   <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${u.profit_box || 0}" style="width:75px"></td>
-   <td><input id="adm_ord_${u.id}" type="number" value="${u.orders || 0}" style="width:65px"></td>
-   <td><button class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">Reset</button></td>
+   <td><input id="adm_pass_${u.id}" value="${u.password || ''}"></td>
+   <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}"></td>
+   <td><input id="adm_vip_${u.id}" value="${u.vip_level || 'LV1'}"></td>
+   <td><input id="adm_bal_${u.id}" type="number" value="${u.balance || 0}"></td>
+   <td><strong>${u.orders || 0}/30</strong></td>
+   <td><button class="btn btn-danger" onclick="resetUserOrders('${u.id}')">Reset</button></td>
   </tr>
  `).join("");
 }
 
 async function saveAllUsersAdmin() {
- for(let i = 0; i < allUsers.length; i++) {
-  const u = allUsers[i];
+ for(let u of allUsers) {
   const nameInput = $(`adm_name_${u.id}`);
   if(!nameInput) continue;
   await sb.from('users').update({
@@ -901,33 +741,24 @@ async function saveAllUsersAdmin() {
    password: $(`adm_pass_${u.id}`).value,
    referral_code: $(`adm_ref_${u.id}`).value,
    vip_level: $(`adm_vip_${u.id}`).value,
-   balance: Number($(`adm_bal_${u.id}`).value),
-   negative_balance: Number($(`adm_neg_${u.id}`).value),
-   profit_box: Number($(`adm_pbox_${u.id}`).value),
-   orders: Number($(`adm_ord_${u.id}`).value)
+   balance: Number($(`adm_bal_${u.id}`).value)
   }).eq('id', u.id);
  }
- showAlert("✅ All user updates saved and synced!");
+ showAlert("Saved successfully!");
  fetchAdminUsers();
 }
 
 async function resetUserOrders(userId) {
  await sb.from("users").update({ orders: 0 }).eq("id", userId);
- showAlert("User orders reset to 0.");
  fetchAdminUsers();
 }
-
-function renderAdminHotelsAndVips() {}
-function saveHotelsAndVipsAdmin() {}
-function openAddHotelModal() { $("addHotelModal").classList.remove("hidden"); }
-function addHotelToSupabase() { closeModal("addHotelModal"); }
 
 function renderCsClientList() {
  const cList = $("csClientList");
  if(!cList) return;
  cList.innerHTML = allUsers.map(u => `
   <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer" onclick="selectCsClient('${u.id}')">
-   <b>${u.name || 'User'}</b><div class="small muted">${u.identity || '-'} · $${Number(u.balance || 0).toFixed(2)}</div>
+   <b>${u.name || 'User'}</b><div class="small muted">${u.identity || '-'}</div>
   </div>
  `).join("");
 }
@@ -936,7 +767,7 @@ function selectCsClient(uid) {
  selectedCsUserId = uid;
  const u = allUsers.find(x => x.id === uid);
  if(u) {
-  $("csActiveUserTitle").textContent = `Chat with ${u.name || 'User'} (${u.identity || '-'})`;
+  $("csActiveUserTitle").textContent = `Chat with ${u.name || 'User'}`;
   loadAdminChatMessages(uid);
  }
 }
@@ -946,15 +777,10 @@ async function loadAdminChatMessages(uid) {
  const box = $("adminChatMessages");
  if(!box) return;
  box.innerHTML = (data || []).map(m => `
-  <div style="margin:6px 0;padding:8px 12px;border-radius:8px;max-width:80%;
-   background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};
-   color:${m.sender==='support'?'white':'var(--fb-text)'};
-   margin-left:${m.sender==='support'?'auto':'0'}">
-   <div style="font-size:10px;opacity:0.8">Trip Booking Service</div>
+  <div style="margin:6px 0;padding:8px;border-radius:8px;max-width:80%;background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};color:white;margin-left:${m.sender==='support'?'auto':'0'}">
    <div>${m.text}</div>
   </div>
  `).join("");
- box.scrollTop = box.scrollHeight;
 }
 
 async function sendAdminChatReply() {
@@ -972,7 +798,7 @@ function renderHotels() {
  const grid = $("hotelGrid");
  if(!grid) return;
  const filtered = allHotels.filter(h => h.name.toLowerCase().includes(q) || h.country.toLowerCase().includes(q));
- grid.innerHTML = filtered.map(h => `
+ grid.innerHTML = filtered.slice(0, 30).map(h => `
   <div class="card">
    <img src="${h.image}" class="hotel-img" alt="Hotel">
    <div class="card-body">
@@ -980,9 +806,9 @@ function renderHotels() {
     <h4 style="margin:6px 0 4px">${h.name}</h4>
     <div style="display:flex;justify-content:space-between;align-items:center">
      <span class="price">$${Number(h.price).toFixed(2)}</span>
-     <span>⭐ ${h.rating || '4.8/5'}</span>
+     <span>⭐ ${h.rating}</span>
     </div>
-    <div style="font-size:11px;color:var(--fb-muted);margin-top:4px">${h.reviews || '10k+ reviews'} • 🔥 ${h.viewers || '1k+ viewing'}</div>
+    <div style="font-size:11px;color:var(--fb-muted);margin-top:4px">${h.reviews} • 🔥 ${h.viewers}</div>
    </div>
   </div>
  `).join("");
@@ -992,7 +818,7 @@ function renderBookingArea() {
  const area = $("bookingHotelArea");
  if(!area) return;
  if(!activeTask) {
-  area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> above to match an international hotel booking task.</p>`;
+  area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> to match a hotel task.</p>`;
   return;
  }
  const { hotel, commission } = activeTask;
@@ -1000,70 +826,42 @@ function renderBookingArea() {
   <div class="panel" style="background:var(--fb-bg);border:2px dashed var(--fb-primary)">
    <h4 style="margin-top:0">🏨 Matched Order: ${hotel.name} (${hotel.country})</h4>
    <p>Order Price: <b>$${Number(hotel.price).toFixed(2)}</b></p>
-   <p>Estimated Commission: <b style="color:var(--fb-success)">+$${commission.toFixed(2)}</b></p>
+   <p>Commission: <b style="color:var(--fb-success)">+$${commission.toFixed(2)}</b></p>
    <button class="btn btn-success" style="background:var(--fb-primary)" onclick="submitCurrentOrder()">Submit & Receive Commission</button>
   </div>
  `;
 }
 
-async function renderHistory() {
- if(!currentUser) return;
- const { data } = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
- const tbody = $("historyRows");
- if(!tbody) return;
- tbody.innerHTML = (data || []).map(t => `
-  <tr>
-   <td>${new Date(t.created_at).toLocaleString()}</td>
-   <td><span class="tag">${t.type}</span></td>
-   <td>${t.hotel_name ? 'Hotel: ' + t.hotel_name : (t.details || '-')}</td>
-   <td><strong style="color:var(--fb-primary)">$${Number(t.amount).toFixed(2)}</strong></td>
-   <td><span style="color:var(--fb-success)">${t.status}</span></td>
-  </tr>
- `).join("");
-}
-
-function renderVipGrid() {
- const disp = $("vipTiersDisplay");
- if(!disp || !currentUser) return;
- disp.innerHTML = allVipTiers.map(v => `
-  <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
-   <h4>${v.name} (${v.level})</h4>
-   <p class="small">Daily Orders: ${v.daily_limit}</p>
-   <p class="small">Profit Rate: ${(v.profit_rate * 100).toFixed(1)}%</p>
-   <p class="small">Max Balance/Withdraw: $${v.max_withdraw}</p>
-  </div>
- `).join("");
-}
-
 function renderAllViews() {
  renderHotels();
  renderBookingArea();
- renderVipGrid();
  if(currentUser) {
-  $("guestAuthBox").classList.add("hidden");
-  $("memberProfileBox").classList.remove("hidden");
+  $("guestAuthBox")?.classList.add("hidden");
+  $("memberProfileBox")?.classList.remove("hidden");
   $("profileName").textContent = currentUser.name;
   $("profileIdentity").textContent = `ID: ${currentUser.id} | ${currentUser.identity}`;
-  $("profileVipBadge").textContent = currentUser.vip_level;
+  $("profileVipBadge").textContent = currentUser.vip_level || 'LV1';
   $("walletBalance").textContent = `$${Number(currentUser.balance || 0).toFixed(2)}`;
   $("taskWallet").textContent = `$${Number(currentUser.balance || 0).toFixed(2)}`;
-  $("taskProfit").textContent = `$${Number(currentUser.commission || 0).toFixed(2)}`;
-  $("taskTotalProfit").textContent = `$${Number(currentUser.total_profit || 0).toFixed(2)}`;
   $("profileOrders").textContent = `${currentUser.orders || 0}/30`;
   $("orderCircle").textContent = `${currentUser.orders || 0}/30`;
-  $("inviteCode").textContent = currentUser.referral_code || 'TP0000';
-  $("referralEarned").textContent = `$${Number(currentUser.referral_earned || 0).toFixed(2)}`;
   loadUserMessages(currentUser.id);
-  renderHistory();
  } else {
-  $("guestAuthBox").classList.remove("hidden");
-  $("memberProfileBox").classList.add("hidden");
+  $("guestAuthBox")?.classList.remove("hidden");
+  $("memberProfileBox")?.classList.add("hidden");
  }
 }
 
 window.addEventListener("load", () => {
- startLiveRates();
- changeLanguage(currentLang);
+ setTimeout(() => {
+  const splash = $("splashScreen");
+  if(splash) {
+   splash.style.transition = "opacity 0.5s ease";
+   splash.style.opacity = "0";
+   setTimeout(() => splash.remove(), 500);
+  }
+ }, 3000);
+
  initSupabaseData();
 });
 </script>
