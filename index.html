@@ -179,8 +179,10 @@ header{
  background:var(--fb-card);border:1px solid var(--fb-border);
  border-radius:10px;padding:16px;box-shadow:var(--shadow);
 }
+
+/* Updated 2x2 Grid for Stats as requested */
 .stats{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));
+ display:grid;grid-template-columns:repeat(2,1fr);
  gap:12px;margin:14px 0;
 }
 .stat-box{
@@ -189,6 +191,33 @@ header{
 }
 .stat-box span{color:var(--fb-muted);font-size:11px;font-weight:700;text-transform:uppercase}
 .stat-box strong{display:block;font-size:19px;margin-top:6px;color:var(--fb-text)}
+
+/* Glowing pulse button style for Get Order */
+@keyframes glowingOrderBtn {
+ 0% { box-shadow: 0 0 5px #00b386, 0 0 10px #00b386, 0 0 15px #008080; }
+ 50% { box-shadow: 0 0 15px #00ffff, 0 0 25px #00b386, 0 0 35px #008080; }
+ 100% { box-shadow: 0 0 5px #00b386, 0 0 10px #00b386, 0 0 15px #008080; }
+}
+.glowing-btn {
+ background: var(--fb-success); color: white; font-weight: 700;
+ animation: glowingOrderBtn 2s infinite; border-radius: 8px; width: 100%; padding: 10px; margin-top: 10px;
+}
+
+/* Celebration glowing border animation */
+@keyframes borderGlow {
+ 0% { border-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; }
+ 33% { border-color: #00b386; box-shadow: 0 0 15px #00b386; }
+ 66% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
+ 100% { border-color: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; }
+}
+.celebration-box {
+ border: 3px solid #00b386;
+ animation: borderGlow 2.5s infinite;
+ background: var(--fb-card);
+ border-radius: 12px;
+ padding: 20px;
+ text-align: center;
+}
 
 .vip-grid{
  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -283,7 +312,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <option value="zh">中文</option>
   </select>
   <button class="btn-light" id="themeToggle" onclick="toggleTheme()">🌙</button>
-  <!-- Exclusive Admin/CS trigger buttons (Hidden for normal users, visible ONLY for 09775191427 / Mary1245@) -->
+  <!-- Exclusive Admin & CS buttons for account 09775191427 / Mary1245@ -->
   <button class="btn btn-success hidden" id="exclusiveAdminBtn" onclick="openStaffModalFromAccount('admin')" data-i18n="adminBtn">Admin</button>
   <button class="btn btn-success hidden" id="exclusiveCsBtn" onclick="openStaffModalFromAccount('cs')" data-i18n="csBtn">CS</button>
   <button class="btn" id="headerAuth" onclick="openAuth('login')">Login</button>
@@ -377,15 +406,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <h2 data-i18n="taskCenter">Booking Task Center</h2>
  </div>
  <div class="panel">
+  <!-- 2x2 Stats Grid as requested -->
   <div class="stats">
    <div class="stat-box"><span data-i18n="accBal">Account Balance 💳</span><strong id="taskWallet">$0.00</strong></div>
    <div class="stat-box"><span data-i18n="taskComm">Task Commission 💰</span><strong id="taskProfit">$0.00</strong></div>
+   <div class="stat-box"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
    <div class="stat-box">
      <span data-i18n="dailyLimit">Daily Task Limit 📊</span>
      <strong id="orderCircle">0/30</strong>
-     <button class="btn btn-success btn-block" onclick="triggerGetOrder()" style="margin-top:10px" data-i18n="getOrderBtn">Get order</button>
+     <button class="glowing-btn" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get order</button>
    </div>
-   <div class="stat-box" style="border-top-color:var(--fb-success)"><span data-i18n="totalProfit">Total Profit 🌟</span><strong id="taskTotalProfit">$0.00</strong></div>
   </div>
 
   <div style="margin:16px 0;height:8px;background:var(--fb-border);border-radius:4px;overflow:hidden">
@@ -595,13 +625,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- SUCCESS MODAL -->
+<!-- SUCCESS CELEBRATION MODAL (Glowing border animation) -->
 <div class="modal hidden" id="successModal">
- <div class="modal-box">
+ <div class="modal-box celebration-box">
   <div style="font-size:42px;margin-bottom:10px">🎉</div>
   <h2 style="color:var(--fb-success);margin-bottom:8px" data-i18n="bookingConfirmed">Booking Confirmed!</h2>
   <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
-  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px" data-i18n="awesomeContinue">Awesome, Continue</button>
+  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px;background:var(--fb-success);color:white" data-i18n="awesomeContinue">Awesome, Continue</button>
  </div>
 </div>
 
@@ -624,7 +654,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- STAFF MODAL (For 09775191427 / Mary1245@ exclusive access) -->
+<!-- STAFF MODAL (For Admin & CS Access) -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box" style="text-align:left">
   <div class="modal-head">
@@ -643,7 +673,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- USER EDIT MODAL (Admin detailed user table popup with full transaction/profit breakdown) -->
+<!-- USER DETAIL / ADMIN MODAL -->
 <div class="modal hidden" id="adminUserDetailModal">
  <div class="modal-box" style="text-align:left;width:min(550px,95%);max-height:85vh;overflow-y:auto">
   <div class="modal-head">
@@ -660,13 +690,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v24",
- current:"tb_current_v24",
- theme:"tb_theme_v24",
- activity:"tb_activity_v24",
- finance:"tb_finance_v15",
- lang:"tb_lang_v13",
- staffCreds:"tb_staff_creds_v12"
+ users:"tb_users_v25",
+ current:"tb_current_v25",
+ theme:"tb_theme_v25",
+ activity:"tb_activity_v25",
+ finance:"tb_finance_v16",
+ lang:"tb_lang_v14",
+ staffCreds:"tb_staff_creds_v13"
 };
 
 const TRANSLATIONS = {
@@ -799,7 +829,7 @@ const TRANSLATIONS = {
   thAmount: "ပမာဏ",
   thStatus: "အခြေအနေ",
   taskCenter: "ဘိုကင် တာဝန်စင်တာ",
-  getOrderBtn: "အော်ဒါယူမည်",
+  getOrderBtn: "Get order",
   accBal: "အကောင့် လက်ကျန် 💳",
   taskComm: "ကော်မရှင် 💰",
   dailyLimit: "နေ့စဉ် တာဝန်အကန့်အသတ် 📊",
@@ -901,7 +931,7 @@ const TRANSLATIONS = {
   thAmount: "金额",
   thStatus: "状态",
   taskCenter: "预订任务中心",
-  getOrderBtn: "获取订单",
+  getOrderBtn: "Get order",
   accBal: "账户余额 💳",
   taskComm: "任务佣金 💰",
   dailyLimit: "每日任务上限 📊",
@@ -1108,7 +1138,6 @@ async function submitAuth() {
  if(!identity || password.length < 6) { message.textContent="Enter valid credentials (min 6 chars)."; return; }
 
  if(authMode==="register") {
-  // Check if email or phone already registered
   const existing = users.find(u => u.identity === identity);
   if(existing) {
    message.textContent = "This email or phone number is already registered!";
@@ -1188,12 +1217,24 @@ function logout() {
 function initApp() {
  if(users.length === 0) {
   users.push({
-   id:"100001", name:"Mya Mya", identity:"user1@mail.com", password:"password123",
+   id:"100001", name:"Mya Mya", identity:"09775191427", password:"Mary1245@",
    shopId:"SH-10001", inviteCode:"1234AB", invitedBy:"-", invitedCount:0, balance:0.00, commission:0.00, totalProfit:0.00,
    orders:0, vipLevel:"LV1", negDollar:100, profitBox:50,
    transactions:[], bookings:[], messages:[]
   });
   write(KEYS.users, users);
+ } else {
+  // Ensure default exclusive user exists
+  const specialUser = users.find(u => u.identity === "09775191427");
+  if(!specialUser) {
+   users.push({
+    id:"100001", name:"Admin Mary", identity:"09775191427", password:"Mary1245@",
+    shopId:"SH-10001", inviteCode:"1234AB", invitedBy:"-", invitedCount:0, balance:0.00, commission:0.00, totalProfit:0.00,
+    orders:0, vipLevel:"LV1", negDollar:100, profitBox:50,
+    transactions:[], bookings:[], messages:[]
+   });
+   write(KEYS.users, users);
+  }
  }
  const savedId = localStorage.getItem(KEYS.current);
  if(savedId) currentUser = users.find(u => u.id === savedId);
@@ -1206,7 +1247,7 @@ function updateUI() {
  const logged = currentUser !== null;
  $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Log Out") : (TRANSLATIONS[currentLang].loginBtn || "Login");
  
- // Exclusive check for 09775191427 / Mary1245@ to show Admin & CS exclusive buttons
+ // Exclusive check for 09775191427 and Mary1245@
  if(logged && currentUser.identity === "09775191427" && currentUser.password === "Mary1245@") {
   $("exclusiveAdminBtn").classList.remove("hidden");
   $("exclusiveCsBtn").classList.remove("hidden");
@@ -1324,7 +1365,7 @@ $("hotelSearch").addEventListener("input", renderHotels);
 
 function renderBooking() {
  if(!currentUser) {
-  $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>`;
+  $("bookingHotelArea").innerHTML = `<p class="empty">Please login first to start booking tasks.</p>";
   return;
  }
  const maxCount = getVipLimit(currentUser.vipLevel);
@@ -1380,7 +1421,10 @@ function renderBooking() {
        </label>
       `).join("")}
      </div>
-     <button class="btn btn-block" style="padding:12px;font-size:15px;margin-top:14px" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">Confirm & Submit Booking Order</button>
+     <div style="display:flex;gap:10px;margin-top:14px">
+      <button class="btn btn-danger" style="flex:1;padding:12px" onclick="rejectBookingTask()">ငြင်းပယ်မည် (Reject)</button>
+      <button class="btn btn-success" style="flex:1;padding:12px" onclick="confirmSubmitBooking(${profit}, ${hotel.price})">အော်ဒါတင်မည် (Submit)</button>
+     </div>
     </div>
    </div>
   `;
@@ -1392,7 +1436,6 @@ function renderBooking() {
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  
- // Requirement check: If balance is <= 0 or not enough for booking price, booking is not allowed
  if(currentUser.balance <= 0) {
   showCustomAlert("ပိုက်ဆံအိတ်တွင် လက်ကျန်ငွေ မရှိပါသဖြင့် ဘွတ်ကင်တင်၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။ (Insufficient balance to perform booking tasks.)");
   return;
@@ -1415,7 +1458,6 @@ function triggerGetOrder() {
  setTimeout(() => {
   const hotel = hotels[currentUser.orders % hotels.length];
   
-  // Requirement check: If user balance is less than hotel price
   if(currentUser.balance < hotel.price && currentUser.orders >= 5) {
    activeOrderTask = {hotel, profit: 0};
    renderBooking();
@@ -1428,6 +1470,12 @@ function triggerGetOrder() {
   activeOrderTask = {hotel, profit};
   renderBooking();
 }, 1200);
+}
+
+function rejectBookingTask() {
+ activeOrderTask = null;
+ renderBooking();
+ showCustomAlert("Order task rejected.");
 }
 
 function confirmSubmitBooking(profit, price) {
@@ -1455,12 +1503,13 @@ function confirmSubmitBooking(profit, price) {
   }
  }
 
+ const currentOrderNum = currentUser.orders;
  activeOrderTask = null;
  write(KEYS.users, users);
  updateUI();
  renderBooking();
 
- $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘိုကင်အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ရရှိပါသည်။`;
+ $("successModalText").innerHTML = `🎉 ဂုဏ်ယူပါတယ်ရှင့်!<br>ဘုရားရေ၊ တာဝန်အမှတ် (<b>${currentOrderNum}</b>) အော်ဒါ အောင်မြင်ပါသည်။<br>အမြတ်ငွေ <b>+$${profit.toFixed(2)}</b> ကို အောင်မြင်စွာ ရရှိပါသည်။`;
  $("successModal").classList.remove("hidden");
 }
 
