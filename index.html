@@ -265,10 +265,10 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div id="splashScreen">
  <div class="splash-title-wrapper">
   <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="splash-icon" alt="Icon">
-  <h1 class="splash-title">Welcome to Trip Booking</h1>
+  <h1 class="splash-title" data-i18n="splashTitle">Welcome to Trip Booking</h1>
  </div>
- <div class="splash-desc">International Hotel Booking Platform</div>
- <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.4)" onclick="enterPlatform()">Enter Platform ➔</button>
+ <div class="splash-desc" data-i18n="splashDesc">International Hotel Booking Platform</div>
+ <button class="btn" style="background:white;color:var(--fb-primary);padding:12px 30px;font-size:16px;font-weight:700;border-radius:30px;box-shadow:0 4px 15px rgba(0,0,0,0.4)" onclick="enterPlatform()" data-i18n="enterPlatformBtn">Enter Platform ➔</button>
 </div>
 
 <header>
@@ -283,6 +283,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <option value="zh">中文</option>
   </select>
   <button class="btn-light" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <!-- Exclusive Admin/CS trigger buttons (Hidden for normal users, visible ONLY for 09775191427 / Mary1245@) -->
+  <button class="btn btn-success hidden" id="exclusiveAdminBtn" onclick="openStaffModalFromAccount('admin')" data-i18n="adminBtn">Admin</button>
+  <button class="btn btn-success hidden" id="exclusiveCsBtn" onclick="openStaffModalFromAccount('cs')" data-i18n="csBtn">CS</button>
   <button class="btn" id="headerAuth" onclick="openAuth('login')">Login</button>
  </div>
 </header>
@@ -298,6 +301,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="hero">
   <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
   <p data-i18n="heroDesc">International Hotel Booking Platform</p>
+  <div style="margin-top:6px;font-size:13px;background:rgba(0,0,0,0.3);padding:4px 10px;border-radius:20px;display:inline-block">1 USD = 4,500 MMK</div>
   <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="document.getElementById('hotelDirectory').scrollIntoView({behavior:'smooth'})" data-i18n="exploreBtn">Explore Hotels</button>
  </div>
 
@@ -455,38 +459,38 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <h2 id="staffRoleTitle">Staff Management Center</h2>
    <span class="tag" id="staffRoleBadge">ROLE</span>
   </div>
-  <button class="btn btn-light" onclick="staffLogout()">Exit Staff</button>
+  <button class="btn btn-light" onclick="staffLogout()" data-i18n="exitStaff">Exit Staff</button>
  </div>
 
  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="staffNavTabs">
-  <button class="btn admin-only" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')">USERS & VIP MANAGEMENT</button>
-  <button class="btn btn-light admin-only" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')">DEPOSIT / WITHDRAWAL</button>
-  <button class="btn btn-light admin-only" id="adminSettingsBtn" onclick="switchStaffTab('adminSettings')">STAFF ACCOUNTS</button>
-  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')">CUSTOMER SERVICE</button>
+  <button class="btn admin-only" id="adminUsersBtn" onclick="switchStaffTab('adminUsers')" data-i18n="tabUsers">USERS & VIP MANAGEMENT</button>
+  <button class="btn btn-light admin-only" id="adminFinanceBtn" onclick="switchStaffTab('adminFinance')" data-i18n="tabFinance">DEPOSIT / WITHDRAWAL</button>
+  <button class="btn btn-light admin-only" id="adminSettingsBtn" onclick="switchStaffTab('adminSettings')" data-i18n="tabSettings">STAFF ACCOUNTS</button>
+  <button class="btn btn-light" id="csTabBtn" onclick="switchStaffTab('support')" data-i18n="tabCs">CUSTOMER SERVICE</button>
  </div>
 
  <div id="adminWorkspace" class="panel admin-only">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h3>User Accounts, VIP Levels & Booking Rules Control</h3>
+   <h3 data-i18n="adminTableHead">User Accounts, VIP Levels & Booking Rules Control</h3>
    <div>
-    <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()">✏️ Edit</button>
-    <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()">💾 Save</button>
+    <button class="btn" id="tableEditBtn" onclick="toggleTableEditMode()" data-i18n="editBtn">✏️ Edit</button>
+    <button class="btn btn-success hidden" id="tableSaveBtn" onclick="saveTableEditMode()" data-i18n="saveBtn">💾 Save</button>
    </div>
   </div>
   <div class="table-wrap">
    <table>
     <thead>
      <tr>
-      <th>User ID (6-digit)</th>
-      <th>Phone / Email</th>
-      <th>Password</th>
-      <th>Full Name</th>
-      <th>VIP Level</th>
-      <th>Wallet Balance ($)</th>
-      <th>Invite Code (4d+2l)</th>
-      <th>Invited By</th>
-      <th>Task Settings (Neg $, Base Profit $)</th>
-      <th>Actions</th>
+      <th data-i18n="thUserId">User ID (6-digit)</th>
+      <th data-i18n="thPhoneEmail">Phone / Email</th>
+      <th data-i18n="thPassword">Password</th>
+      <th data-i18n="thFullName">Full Name</th>
+      <th data-i18n="thVip">VIP Level</th>
+      <th data-i18n="thWallet">Wallet Balance ($)</th>
+      <th data-i18n="thInvite">Invite Code</th>
+      <th data-i18n="thInvBy">Invited By</th>
+      <th data-i18n="thTaskSettings">Task Settings</th>
+      <th data-i18n="thActions">Actions</th>
      </tr>
     </thead>
     <tbody id="adminTableRows"></tbody>
@@ -495,7 +499,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div id="adminFinanceWorkspace" class="panel hidden admin-only">
-  <h3>Pending Deposit & Withdrawal Requests</h3>
+  <h3 data-i18n="finReqHead">Pending Deposit & Withdrawal Requests</h3>
   <div class="table-wrap" style="margin-top:12px">
    <table>
     <thead>
@@ -516,20 +520,20 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div id="adminSettingsWorkspace" class="panel hidden admin-only">
-  <h3>Staff & Role Access Credentials</h3>
+  <h3 data-i18n="staffCredHead">Staff & Role Access Credentials</h3>
   <div style="max-width:400px;margin-top:14px">
-   <label>Super Admin Password</label>
+   <label data-i18n="adminPassLbl">Super Admin Password</label>
    <input id="adminPassInput" type="text">
-   <label>Customer Service Agent Password</label>
+   <label data-i18n="csPassLbl">Customer Service Agent Password</label>
    <input id="csPassInput" type="text">
-   <button class="btn btn-success" style="margin-top:12px" onclick="saveStaffCredentials()">Update Passwords</button>
+   <button class="btn btn-success" style="margin-top:12px" onclick="saveStaffCredentials()" data-i18n="updatePassBtn">Update Passwords</button>
   </div>
  </div>
 
  <div id="csWorkspace" class="panel hidden" style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px">
   <aside class="staff-sidebar panel" style="padding:10px">
-   <h3>Client Chats</h3>
-   <input id="csSearch" placeholder="Search clients..." style="margin:8px 0" oninput="renderStaffClientList()">
+   <h3 data-i18n="clientChats">Client Chats</h3>
+   <input id="csSearch" placeholder="Search clients..." data-i18n-placeholder="searchClients" style="margin:8px 0" oninput="renderStaffClientList()">
    <div id="csUserList"></div>
   </aside>
   <div class="staff-main panel" style="padding:0;overflow:hidden">
@@ -538,7 +542,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
     <div class="chat-messages" id="staffMessages"></div>
     <div class="chat-footer">
      <button class="btn-light" onclick="appendSupportChar('😊')">😊</button>
-     <input id="staffInput" type="text" placeholder="Type reply as CS..." style="flex:1">
+     <input id="staffInput" type="text" placeholder="Type reply as CS..." data-i18n-placeholder="typeReply" style="flex:1">
      <button class="btn" onclick="sendStaffMessage()">➤</button>
     </div>
    </div>
@@ -581,7 +585,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
-<!-- CUSTOM CENTRALIZED NOTIFICATION MODAL (Replaces ALL browser alerts) -->
+<!-- CUSTOM CENTRALIZED NOTIFICATION MODAL -->
 <div class="modal hidden" id="customAlertModal">
  <div class="modal-box">
   <div style="font-size:38px;margin-bottom:10px">💡</div>
@@ -595,9 +599,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div class="modal hidden" id="successModal">
  <div class="modal-box">
   <div style="font-size:42px;margin-bottom:10px">🎉</div>
-  <h2 style="color:var(--fb-success);margin-bottom:8px">Booking Confirmed!</h2>
+  <h2 style="color:var(--fb-success);margin-bottom:8px" data-i18n="bookingConfirmed">Booking Confirmed!</h2>
   <p id="successModalText" class="muted" style="font-size:15px;margin-bottom:16px">Earned +$0.00</p>
-  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px">Awesome, Continue</button>
+  <button class="btn btn-block" onclick="closeModal('successModal')" style="padding:10px" data-i18n="awesomeContinue">Awesome, Continue</button>
  </div>
 </div>
 
@@ -620,22 +624,33 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
-<!-- STAFF MODAL -->
+<!-- STAFF MODAL (For 09775191427 / Mary1245@ exclusive access) -->
 <div class="modal hidden" id="staffModal">
  <div class="modal-box" style="text-align:left">
   <div class="modal-head">
-   <h2>Staff & Admin Portal</h2>
+   <h2 data-i18n="staffPortalTitle">Staff & Admin Portal</h2>
    <button class="close" onclick="closeModal('staffModal')">✕</button>
   </div>
-  <label>Select Role</label>
+  <label data-i18n="selectRole">Select Role</label>
   <select id="staffRoleSelect">
-   <option value="admin">Super Admin (Full Control)</option>
-   <option value="cs">Customer Service Agent (Chat Support)</option>
+   <option value="admin" data-i18n="roleAdmin">Super Admin (Full Control)</option>
+   <option value="cs" data-i18n="roleCs">Customer Service Agent (Chat Support)</option>
   </select>
-  <label>Access Password</label>
+  <label data-i18n="accessPassword">Access Password</label>
   <input id="staffPassword" type="password" placeholder="Enter password (default 12344321)">
   <p id="staffMessage" class="muted" style="margin-top:6px;color:var(--fb-danger)"></p>
-  <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()">Sign In</button>
+  <button class="btn btn-block" style="margin-top:12px" onclick="staffLogin()" data-i18n="signInBtn">Sign In</button>
+ </div>
+</div>
+
+<!-- USER EDIT MODAL (Admin detailed user table popup with full transaction/profit breakdown) -->
+<div class="modal hidden" id="adminUserDetailModal">
+ <div class="modal-box" style="text-align:left;width:min(550px,95%);max-height:85vh;overflow-y:auto">
+  <div class="modal-head">
+   <h3>User Account Breakdown & History</h3>
+   <button class="close" onclick="closeModal('adminUserDetailModal')">✕</button>
+  </div>
+  <div id="adminUserDetailContent"></div>
  </div>
 </div>
 
@@ -645,17 +660,20 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 const $ = id => document.getElementById(id);
 
 const KEYS = {
- users:"tb_users_v22",
- current:"tb_current_v22",
- theme:"tb_theme_v22",
- activity:"tb_activity_v22",
- finance:"tb_finance_v13",
- lang:"tb_lang_v11",
- staffCreds:"tb_staff_creds_v10"
+ users:"tb_users_v24",
+ current:"tb_current_v24",
+ theme:"tb_theme_v24",
+ activity:"tb_activity_v24",
+ finance:"tb_finance_v15",
+ lang:"tb_lang_v13",
+ staffCreds:"tb_staff_creds_v12"
 };
 
 const TRANSLATIONS = {
  en: {
+  splashTitle: "Welcome to Trip Booking",
+  splashDesc: "International Hotel Booking Platform",
+  enterPlatformBtn: "Enter Platform ➔",
   heroTag: "TROPICAL ISLAND ESCAPE",
   heroTitle: "Welcome to Trip Booking",
   heroDesc: "International Hotel Booking Platform",
@@ -716,9 +734,48 @@ const TRANSLATIONS = {
   passwordLabel: "Password",
   continueBtn: "Continue",
   switchAuth: "Switch Login / Register",
-  upgradeVipBtn: "🚀 Upgrade VIP"
+  upgradeVipBtn: "🚀 Upgrade VIP",
+  adminBtn: "Admin",
+  csBtn: "CS",
+  exitStaff: "Exit Staff",
+  tabUsers: "USERS & VIP MANAGEMENT",
+  tabFinance: "DEPOSIT / WITHDRAWAL",
+  tabSettings: "STAFF ACCOUNTS",
+  tabCs: "CUSTOMER SERVICE",
+  adminTableHead: "User Accounts, VIP Levels & Booking Rules Control",
+  editBtn: "✏️ Edit",
+  saveBtn: "💾 Save",
+  thUserId: "User ID (6-digit)",
+  thPhoneEmail: "Phone / Email",
+  thPassword: "Password",
+  thFullName: "Full Name",
+  thVip: "VIP Level",
+  thWallet: "Wallet Balance ($)",
+  thInvite: "Invite Code",
+  thInvBy: "Invited By",
+  thTaskSettings: "Task Settings",
+  thActions: "Actions",
+  finReqHead: "Pending Deposit & Withdrawal Requests",
+  staffCredHead: "Staff & Role Access Credentials",
+  adminPassLbl: "Super Admin Password",
+  csPassLbl: "Customer Service Agent Password",
+  updatePassBtn: "Update Passwords",
+  clientChats: "Client Chats",
+  searchClients: "Search clients...",
+  typeReply: "Type reply as CS...",
+  bookingConfirmed: "Booking Confirmed!",
+  awesomeContinue: "Awesome, Continue",
+  staffPortalTitle: "Staff & Admin Portal",
+  selectRole: "Select Role",
+  roleAdmin: "Super Admin (Full Control)",
+  roleCs: "Customer Service Agent (Chat Support)",
+  accessPassword: "Access Password",
+  signInBtn: "Sign In"
  },
  my: {
+  splashTitle: "Trip Booking သို့ ကြိုဆိုပါတယ်",
+  splashDesc: "နိုင်ငံတကာ ဟိုတယ် ဘိုကင်ပလက်ဖောင်း",
+  enterPlatformBtn: "ပလက်ဖောင်းသို့ ဝင်မည် ➔",
   heroTag: "အပူပိုင်းကျွန်း သဘာဝခရီးစဉ်",
   heroTitle: "Welcome to Trip Booking",
   heroDesc: "International Hotel Booking Platform",
@@ -779,9 +836,48 @@ const TRANSLATIONS = {
   passwordLabel: "စကားဝှက်",
   continueBtn: "ဆက်လုပ်ရန်",
   switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
-  upgradeVipBtn: "🚀 VIP တိုးမြှင့်ရန်"
+  upgradeVipBtn: "🚀 VIP တိုးမြှင့်ရန်",
+  adminBtn: "Admin",
+  csBtn: "CS",
+  exitStaff: "ဝန်ဆောင်မှုမှ ထွက်ရန်",
+  tabUsers: "အသုံးပြုသူများနှင့် VIP စီမံခန့်ခွဲမှု",
+  tabFinance: "ငွေသွင်း / ငွေထုတ်",
+  tabSettings: "ဝန်ထမ်း အကောင့်များ",
+  tabCs: "ဖောက်သည် ဝန်ဆောင်မှု",
+  adminTableHead: "အသုံးပြုသူ အကောင့်များနှင့် ဘိုကင်စည်းမျဉ်းများ ထိန်းချုပ်ရန်",
+  editBtn: "✏️ ပြင်ဆင်ရန်",
+  saveBtn: "💾 သိမ်းဆည်းရန်",
+  thUserId: "အသုံးပြုသူ ID (ဂဏန်း ၆ လုံး)",
+  thPhoneEmail: "ဖုန်း / အီးမေးလ်",
+  thPassword: "စကားဝှက်",
+  thFullName: "အမည်ပြည့်စုံ",
+  thVip: "VIP အဆင့်",
+  thWallet: "ပိုက်ဆံအိတ် လက်ကျန် ($)",
+  thInvite: "ဖိတ်ခေါ်ကုဒ်",
+  thInvBy: "ဖိတ်ခေါ်သူ",
+  thTaskSettings: "တာဝန် ဆက်တင်များ",
+  thActions: "လုပ်ဆောင်ချက်များ",
+  finReqHead: "စောင့်ဆိုင်းဆဲ ငွေသွင်း/ငွေထုတ် တောင်းဆိုချက်များ",
+  staffCredHead: "ဝန်ထမ်း အဝင်စကားဝှက်များ",
+  adminPassLbl: "စူပါအေဂျင် အဓိကစကားဝှက်",
+  csPassLbl: "ဖောက်သည်ဝန်ဆောင်မှု အဓိကစကားဝှက်",
+  updatePassBtn: "စကားဝှက် အသစ်ပြောင်းမည်",
+  clientChats: "ဖောက်သည် ချတ်များ",
+  searchClients: "ဖောက်သည် ရှာရန်...",
+  typeReply: "CS အနေဖြင့် ပြန်ကြားရန် ရိုက်ပါ...",
+  bookingConfirmed: "ဘိုကင် အတည်ပြုပြီးပါပြီ!",
+  awesomeContinue: "ကောင်းပါပြီ ဆက်လုပ်ရန်",
+  staffPortalTitle: "ဝန်ထမ်းနှင့် အေဂျင် အချက်အချာ",
+  selectRole: "အခန်းကဏ္ဍ ရွေးချယ်ပါ",
+  roleAdmin: "စူပါ အေဂျင် (အပြည့်အဝ ထိန်းချုပ်ခွင့်)",
+  roleCs: "ဖောက်သည် ဝန်ဆောင်မှု ကိုယ်စားလှယ် (ချတ်ပံ့ပိုးမှု)",
+  accessPassword: "ဝင်ရောက်ရန် စကားဝှက်",
+  signInBtn: "အကောင့်ဝင်မည်"
  },
  zh: {
+  splashTitle: "欢迎来到 Trip Booking",
+  splashDesc: "国际酒店预订平台",
+  enterPlatformBtn: "进入平台 ➔",
   heroTag: "热带岛屿度假",
   heroTitle: "Welcome to Trip Booking",
   heroDesc: "International Hotel Booking Platform",
@@ -842,7 +938,43 @@ const TRANSLATIONS = {
   passwordLabel: "密码",
   continueBtn: "继续",
   switchAuth: "切换 登录 / 注册",
-  upgradeVipBtn: "🚀 升级 VIP"
+  upgradeVipBtn: "🚀 升级 VIP",
+  adminBtn: "Admin",
+  csBtn: "CS",
+  exitStaff: "退出员工端",
+  tabUsers: "用户与 VIP 管理",
+  tabFinance: "充值 / 提现",
+  tabSettings: "员工账户",
+  tabCs: "客户服务",
+  adminTableHead: "用户账户、VIP等级与预订规则控制",
+  editBtn: "✏️ 编辑",
+  saveBtn: "💾 保存",
+  thUserId: "用户 ID (6位)",
+  thPhoneEmail: "手机/邮箱",
+  thPassword: "密码",
+  thFullName: "全名",
+  thVip: "VIP 等级",
+  thWallet: "钱包余额 ($)",
+  thInvite: "邀请码",
+  thInvBy: "邀请人",
+  thTaskSettings: "任务设置",
+  thActions: "操作",
+  finReqHead: "待处理的充值与提现请求",
+  staffCredHead: "员工与角色访问凭据",
+  adminPassLbl: "超级管理员密码",
+  csPassLbl: "客服代理密码",
+  updatePassBtn: "更新密码",
+  clientChats: "客户聊天",
+  searchClients: "搜索客户...",
+  typeReply: "输入客服回复...",
+  bookingConfirmed: "预订已确认！",
+  awesomeContinue: "太棒了，继续",
+  staffPortalTitle: "员工与管理后台",
+  selectRole: "选择角色",
+  roleAdmin: "超级管理员 (完全控制)",
+  roleCs: "客服代表 (聊天支持)",
+  accessPassword: "访问密码",
+  signInBtn: "登录"
  }
 };
 
@@ -886,7 +1018,6 @@ const vipTiers = [
  {level:"LV5", name:"VIP 5", limit:50, profitRate:0.025, minBal:10000, maxWithdraw:100000}
 ];
 
-// Exact 5 review options with star rating options as requested
 const reviewOptions = [
  {text:"⭐ Excellent service and luxurious room experience. Highly recommended!", stars:5},
  {text:"⭐⭐⭐⭐ Very comfortable bed and great hospitality.", stars:4},
@@ -912,8 +1043,6 @@ let financeReqs = read(KEYS.finance);
 let currentUser = null;
 let selectedUserId = null;
 let authMode = "login";
-let logoClickCount = 0;
-let logoTimer = null;
 let activeOrderTask = null;
 let isTableEditing = false;
 let staffCreds = readObj(KEYS.staffCreds, {admin:"12344321", cs:"12344321"});
@@ -944,19 +1073,6 @@ window.addEventListener("load",()=>{
  $("language").value = currentLang;
  changeLanguage(currentLang);
  initApp();
-});
-
-$("logoContainer").addEventListener("click",()=>{
- logoClickCount++;
- clearTimeout(logoTimer);
- if(logoClickCount >= 10) {
-  logoClickCount = 0;
-  $("staffModal").classList.remove("hidden");
-  $("staffPassword").value = "";
-  $("staffMessage").textContent = "";
- } else {
-  logoTimer = setTimeout(()=> logoClickCount = 0, 3000);
- }
 });
 
 function closeModal(id) { $(id).classList.add("hidden"); }
@@ -992,6 +1108,13 @@ async function submitAuth() {
  if(!identity || password.length < 6) { message.textContent="Enter valid credentials (min 6 chars)."; return; }
 
  if(authMode==="register") {
+  // Check if email or phone already registered
+  const existing = users.find(u => u.identity === identity);
+  if(existing) {
+   message.textContent = "This email or phone number is already registered!";
+   return;
+  }
+
   const name = $("regName").value.trim() || "User";
   const rawInvite = $("regInvite").value.trim();
   
@@ -1082,6 +1205,16 @@ function initApp() {
 function updateUI() {
  const logged = currentUser !== null;
  $("headerAuth").textContent = logged ? (TRANSLATIONS[currentLang].logoutBtn || "Log Out") : (TRANSLATIONS[currentLang].loginBtn || "Login");
+ 
+ // Exclusive check for 09775191427 / Mary1245@ to show Admin & CS exclusive buttons
+ if(logged && currentUser.identity === "09775191427" && currentUser.password === "Mary1245@") {
+  $("exclusiveAdminBtn").classList.remove("hidden");
+  $("exclusiveCsBtn").classList.remove("hidden");
+ } else {
+  $("exclusiveAdminBtn").classList.add("hidden");
+  $("exclusiveCsBtn").classList.add("hidden");
+ }
+
  if(logged) {
   $("guestAuthActions").classList.add("hidden");
   $("memberProfile").classList.remove("hidden");
@@ -1258,6 +1391,13 @@ function renderBooking() {
 
 function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
+ 
+ // Requirement check: If balance is <= 0 or not enough for booking price, booking is not allowed
+ if(currentUser.balance <= 0) {
+  showCustomAlert("ပိုက်ဆံအိတ်တွင် လက်ကျန်ငွေ မရှိပါသဖြင့် ဘွတ်ကင်တင်၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။ (Insufficient balance to perform booking tasks.)");
+  return;
+ }
+
  const maxCount = getVipLimit(currentUser.vipLevel);
  if((currentUser.orders || 0) >= maxCount) { 
   showCustomAlert("Completed all daily orders!"); 
@@ -1274,6 +1414,15 @@ function triggerGetOrder() {
 
  setTimeout(() => {
   const hotel = hotels[currentUser.orders % hotels.length];
+  
+  // Requirement check: If user balance is less than hotel price
+  if(currentUser.balance < hotel.price && currentUser.orders >= 5) {
+   activeOrderTask = {hotel, profit: 0};
+   renderBooking();
+   showCustomAlert("⚠️ Special combination order requires higher balance. Balance insufficient.");
+   return;
+  }
+
   const tier = getVipObj(currentUser.vipLevel);
   const profit = (hotel.price * tier.profitRate) + (currentUser.profitBox || 30);
   activeOrderTask = {hotel, profit};
@@ -1283,13 +1432,8 @@ function triggerGetOrder() {
 
 function confirmSubmitBooking(profit, price) {
  const totalReq = price; 
- if(currentUser.balance < totalReq && currentUser.orders >= 5) {
-  currentUser.balance -= price;
-  $("specialTaskAlert").classList.remove("hidden");
-  write(KEYS.users, users);
-  updateUI();
-  renderBooking();
-  showCustomAlert("Special combination order triggered! Balance is negative. Please contact Customer Service.");
+ if(currentUser.balance < totalReq) {
+  showCustomAlert("ပိုက်ဆံအိတ်လက်ကျန်ငွေ မလုံလောက်ပါ။ (Insufficient balance for this booking amount.)");
   return;
  }
 
@@ -1380,6 +1524,13 @@ function renderHistory() {
  $("bookingHistory").innerHTML = (currentUser.bookings||[]).map(b => `
   <div class="panel" style="margin:6px 0"><b>${b.name}</b><p class="muted">${b.date} · Price: $${b.price} · Profit: +$${b.profit.toFixed(2)}</p></div>
  `).join("") || `<p class="empty">No bookings.</p>`;
+}
+
+function openStaffModalFromAccount(role) {
+ $("staffRoleSelect").value = role;
+ $("staffPassword").value = "";
+ $("staffMessage").textContent = "";
+ $("staffModal").classList.remove("hidden");
 }
 
 function staffLogin() {
@@ -1475,9 +1626,65 @@ function renderAdminTable() {
     Neg: ${isTableEditing ? `<input id="ed_neg_${idx}" style="width:50px" value="${u.negDollar||0}">` : (u.negDollar||0)} | 
     Prof: ${isTableEditing ? `<input id="ed_prof_${idx}" style="width:50px" value="${u.profitBox||30}">` : (u.profitBox||30)}
    </td>
-   <td><button class="btn" style="padding:4px 8px;font-size:11px" onclick="showCustomAlert('User ID: ${u.id}<br>Password: ${u.password}<br>Invite Code: ${u.inviteCode}', 'User Credentials')">View</button></td>
+   <td>
+    <button class="btn" style="padding:4px 8px;font-size:11px" onclick="openAdminUserDetail('${u.id}')">📊 Table & Edit</button>
+    <button class="btn btn-success" style="padding:4px 8px;font-size:11px;margin-left:4px" onclick="resetUserOrders('${u.id}')">🔄 Reset Order</button>
+   </td>
   </tr>
  `).join("");
+}
+
+function resetUserOrders(userId) {
+ const u = users.find(x => x.id === userId);
+ if(!u) return;
+ u.orders = 0;
+ write(KEYS.users, users);
+ renderAdminTable();
+ updateUI();
+ showCustomAlert(`User ${u.name} (${u.id}) orders reset to 0 successfully!`);
+}
+
+function openAdminUserDetail(userId) {
+ const u = users.find(x => x.id === userId);
+ if(!u) return;
+
+ const totalBookingsCount = (u.bookings || []).length;
+ const totalEarnedProfit = (u.bookings || []).reduce((acc, b) => acc + (b.profit || 0), 0);
+ const totalDeducted = (u.transactions || []).filter(t => t.type.includes("Deduction")).reduce((acc, t) => acc + t.amount, 0);
+
+ $("adminUserDetailContent").innerHTML = `
+  <div style="background:var(--fb-bg);padding:12px;border-radius:8px;margin-bottom:12px">
+   <h4>User: ${u.name} (ID: ${u.id})</h4>
+   <p class="muted" style="margin:2px 0">Email/Phone: ${u.identity}</p>
+   <p class="muted" style="margin:2px 0">Current Balance: <b>$${(u.balance||0).toFixed(2)}</b></p>
+   <p class="muted" style="margin:2px 0">Orders Completed: <b>${u.orders || 0} / ${getVipLimit(u.vipLevel)}</b></p>
+  </div>
+  
+  <h4 style="margin:10px 0 6px">Detailed Financial & Task Summary Table</h4>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Metric</th>
+      <th>Value</th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr><td>Total Completed Bookings</td><td><b>${totalBookingsCount}</b></td></tr>
+     <tr><td>Total Commission Earned</td><td style="color:var(--fb-success)">+$${totalEarnedProfit.toFixed(2)}</td></tr>
+     <tr><td>Total Deductions / Negative Adjusted</td><td style="color:var(--fb-danger)">-$${totalDeducted.toFixed(2)}</td></tr>
+     <tr><td>Current Wallet Balance</td><td><b>$${(u.balance||0).toFixed(2)}</b></td></tr>
+    </tbody>
+   </table>
+  </div>
+
+  <h4 style="margin:16px 0 6px">Recent Bookings & Transactions</h4>
+  <div style="max-height:180px;overflow-y:auto;background:var(--fb-bg);padding:8px;border-radius:6px">
+   ${(u.bookings||[]).map(b => `<div style="font-size:12px;border-bottom:1px solid var(--fb-border);padding:4px 0">🏨 ${b.name} - Price: $${b.price} | Profit: +$${b.profit.toFixed(2)} (${b.date})</div>`).join("") || '<p class="muted">No bookings yet.</p>'}
+  </div>
+  <button class="btn btn-block" style="margin-top:14px" onclick="closeModal('adminUserDetailModal')">Close</button>
+ `;
+ $("adminUserDetailModal").classList.remove("hidden");
 }
 
 function toggleTableEditMode() {
@@ -1629,4 +1836,4 @@ function renderTicker() {
 }
 </script>
 </body>
-</html> 
+</html>
