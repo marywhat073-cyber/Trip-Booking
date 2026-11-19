@@ -138,7 +138,7 @@ header{
 .chat-window{border:1px solid var(--fb-border);border-radius:8px;overflow:hidden;background:var(--fb-card)}
 .chat-header{background:var(--fb-primary);color:white;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font-weight:700}
 .chat-messages{height:360px;overflow:auto;padding:14px;background:var(--fb-bg)}
-.quick-chips{display:flex;gap:8px;padding:8px 10px;background:var(--fb-card);border-top:1px solid var(--fb-border);overflow-x:auto}
+.quick-chips{display:flex;flex-wrap:wrap;gap:8px;padding:8px 10px;background:var(--fb-card);border-top:1px solid var(--fb-border);max-height:110px;overflow-y:auto}
 .chip-btn{
  background:rgba(0,128,128,0.12);color:var(--fb-primary);border:1px solid var(--fb-primary);
  border-radius:20px;padding:6px 12px;font-size:12px;white-space:nowrap;
@@ -227,7 +227,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
  <div class="section-title">
   <h2><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
-  <input id="hotelSearch" placeholder="Search hotel, country, or stars..." style="max-width:240px" oninput="renderHotels()">
+  <input id="hotelSearch" placeholder="Search hotel, country, or stars..." style="max-width:240px" oninput="renderHotels()" data-i18n-ph="hotelSearchPh">
  </div>
  <div class="hotel-grid" id="hotelGrid"></div>
  <div style="text-align:center;margin-top:18px" id="loadMoreHotelsWrap">
@@ -240,21 +240,27 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="chat-window" style="max-width:850px;margin:0 auto">
   <div class="chat-header">
    <span data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</span>
-   <span class="small">● Active</span>
+   <span class="small" data-i18n="csActiveBadge">● Active</span>
   </div>
   <div class="chat-messages" id="supportMessages"></div>
 
-  <div class="quick-chips">
-   <button class="chip-btn" onclick="sendQuickSuggestion('ငွေထုတ်ချင်ပါသည်')">💸 ငွေထုတ်ချင်ပါသည်</button>
-   <button class="chip-btn" onclick="sendQuickSuggestion('VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်')">💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်</button>
-   <button class="chip-btn" onclick="sendQuickSuggestion('ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ')">💳 ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ</button>
+  <div class="quick-chips" id="quickChipsBox">
+   <button type="button" class="chip-btn" data-chip-key="chipWithdraw" onclick="sendQuickChipByKey('chipWithdraw')">💸 ငွေထုတ်ချင်ပါသည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chipVipDeposit" onclick="sendQuickChipByKey('chipVipDeposit')">💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chipAccountNo" onclick="sendQuickChipByKey('chipAccountNo')">💳 ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ</button>
+   <button type="button" class="chip-btn" data-chip-key="chipNegFix" onclick="sendQuickChipByKey('chipNegFix')">⚠️ အနှုတ်လက်ကျန် ဖြေရှင်းလိုပါသည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chipOrderIssue" onclick="sendQuickChipByKey('chipOrderIssue')">📦 အော်ဒါပြဿနာ ဖြေရှင်းပေးပါ</button>
+   <button type="button" class="chip-btn" data-chip-key="chipReferral" onclick="sendQuickChipByKey('chipReferral')">🎁 ဖိတ်ကြားကုဒ် / မိတ်ဆက်အမြတ် မေးမြန်းလိုပါသည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chipVipUpgrade" onclick="sendQuickChipByKey('chipVipUpgrade')">⬆️ VIP အဆင့် တိုးမြှင့်လိုပါသည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chipWithdrawStatus" onclick="sendQuickChipByKey('chipWithdrawStatus')">🕒 ငွေထုတ်ကြန့်ကြာမှု အခြေအနေ သိလိုပါသည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chipSlipPhoto" onclick="sendQuickChipByKey('chipSlipPhoto')">📸 ငွေလွှဲပြေစာ ပို့ပါမည်</button>
   </div>
 
   <div class="chat-footer">
    <input type="file" id="userChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
-   <button type="button" class="btn-light" onclick="$('userChatPhotoInput').click()" title="Send Photo">📷</button>
+   <button type="button" class="btn-light" onclick="$('userChatPhotoInput').click()" data-i18n-title="sendPhotoTitle" title="Send Photo">📷</button>
    <input id="supportInput" type="text" placeholder="Type a message..." style="flex:1" onkeypress="if(event.key==='Enter') sendSupportMessage()" data-i18n-ph="typeMsgPh">
-   <button class="btn" onclick="sendSupportMessage()">➤</button>
+   <button type="button" class="btn" onclick="sendSupportMessage()">➤</button>
   </div>
  </div>
 </section>
@@ -269,7 +275,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="stat-box">
     <span data-i18n="dailyLimit">Daily Orders</span>
     <strong id="orderCircle">0/30</strong>
-    <button class="btn btn-success btn-block" style="margin-top:8px" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get Order</button>
+    <button type="button" class="btn btn-success btn-block" style="margin-top:8px" onclick="triggerGetOrder()" data-i18n="getOrderBtn">Get Order</button>
    </div>
   </div>
   <div id="bookingHotelArea" style="margin-top:16px"></div>
@@ -305,8 +311,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <h3 data-i18n="welcomeTrip">Welcome to Trip Booking</h3>
   <p class="muted" data-i18n="loginPrompt">Login or create a new account to start earning commissions.</p>
   <div style="display:flex;gap:10px;max-width:340px;margin:16px auto 0">
-   <button class="btn" style="flex:1" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
-   <button class="btn btn-success" style="flex:1" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
+   <button type="button" class="btn" style="flex:1" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
+   <button type="button" class="btn btn-success" style="flex:1" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
   </div>
  </div>
 
@@ -333,41 +339,41 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <div style="display:flex;gap:10px;margin:14px 0">
-   <button class="btn btn-success" style="flex:1" onclick="handleDepositRequest()" data-i18n="depositBtn">💳 Deposit</button>
-   <button class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">🏦 Withdraw</button>
+   <button type="button" class="btn btn-success" style="flex:1" onclick="handleDepositRequest()" data-i18n="depositBtn">💳 Deposit</button>
+   <button type="button" class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">🏦 Withdraw</button>
   </div>
 
   <h3 style="margin-top:20px" data-i18n="vipTiersHead">VIP Levels & Limits</h3>
   <div class="vip-grid" id="vipTiersDisplay"></div>
 
-  <button class="btn btn-danger btn-block" style="margin-top:20px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
+  <button type="button" class="btn btn-danger btn-block" style="margin-top:20px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
  </div>
 </section>
 
 <section class="page" id="staffPage">
  <div class="section-title">
   <div>
-   <h2 style="margin-bottom:4px">🛡️ Admin & Trip Booking Service Control</h2>
-   <div class="sync-badge"><span class="sync-dot"></span> <span id="syncStatusText">Live Cross-Device Sync</span> (<span id="totalUsersBadge">0</span> Users)</div>
+   <h2 style="margin-bottom:4px" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
+   <div class="sync-badge"><span class="sync-dot"></span> <span id="syncStatusText">Live Cross-Device Sync</span> (<span id="totalUsersBadge">0</span> <span data-i18n="usersWord">Users</span>)</div>
   </div>
   <div style="display:flex;gap:8px">
-   <button class="btn btn-success" onclick="forceSyncNow()" data-i18n="refreshBtn">🔄 REFRESH</button>
-   <button class="btn btn-danger" onclick="logout()" data-i18n="logoutBtn">Logout</button>
+   <button type="button" class="btn btn-success" onclick="forceSyncNow()" data-i18n="refreshBtn">🔄 REFRESH</button>
+   <button type="button" class="btn btn-danger" onclick="logout()" data-i18n="logoutBtn">Logout</button>
   </div>
  </div>
 
  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-  <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 USERS & VIP CONTROL (<span id="tabUsersCount">0</span>)</button>
-  <button class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')" data-i18n="tabHotels">🏨 HOTELS & RATES</button>
-  <button class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')" data-i18n="tabCs">💬 TRIP BOOKING SERVICE CHAT</button>
+  <button type="button" class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 <span data-i18n="tabUsers">USERS & VIP CONTROL</span> (<span id="tabUsersCount">0</span>)</button>
+  <button type="button" class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')" data-i18n="tabHotels">🏨 HOTELS & RATES</button>
+  <button type="button" class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')" data-i18n="tabCs">💬 TRIP BOOKING SERVICE CHAT</button>
  </div>
 
  <div id="adminUsersTab" class="panel">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
    <h3 data-i18n="allUsersHead">All Registered Users (Real-Time)</h3>
    <div style="display:flex;gap:8px">
-    <input id="adminUserSearch" placeholder="Search name, phone, email, TP2323..." style="width:240px" oninput="renderAdminUsers()">
-    <button class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">💾 Save All Changes</button>
+    <input id="adminUserSearch" placeholder="Search name, phone, email, TP2323..." style="width:240px" oninput="renderAdminUsers()" data-i18n-ph="adminUserSearchPh">
+    <button type="button" class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">💾 Save All Changes</button>
    </div>
   </div>
   <div class="table-wrap">
@@ -379,13 +385,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th data-i18n="thPhoneEmail">Phone / Email</th>
       <th data-i18n="thPass">Password</th>
       <th data-i18n="thRef">My Code</th>
-      <th>Invited By</th>
+      <th data-i18n="thInvitedBy">Invited By</th>
       <th data-i18n="thVip">VIP Tier</th>
       <th data-i18n="thBal">Balance ($)</th>
-      <th>Neg ($)</th>
-      <th>Profit Box ($)</th>
+      <th data-i18n="thNeg">Neg ($)</th>
+      <th data-i18n="thProfitBox">Profit Box ($)</th>
       <th data-i18n="thOrders">Orders</th>
-      <th>Order Rules (10+)</th>
+      <th data-i18n="thOrderRules">Order Rules (10+)</th>
       <th data-i18n="thReset">Reset</th>
      </tr>
     </thead>
@@ -398,8 +404,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
    <h3 data-i18n="hotelsRatesHead">Hotels & VIP Commission Rates</h3>
    <div>
-    <button class="btn btn-success" onclick="openAddHotelModal()" data-i18n="addHotelBtn">+ Add Hotel</button>
-    <button class="btn" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">💾 Save Rates & Hotels</button>
+    <button type="button" class="btn btn-success" onclick="openAddHotelModal()" data-i18n="addHotelBtn">+ Add Hotel</button>
+    <button type="button" class="btn" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">💾 Save Rates & Hotels</button>
    </div>
   </div>
   <h4 data-i18n="vipLimitsHead">VIP Tier Limits & Profit Rates</h4>
@@ -440,7 +446,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div id="adminCsTab" class="panel hidden admin-cs-grid">
   <div style="border-right:1px solid var(--fb-border);padding-right:10px;max-height:420px;overflow-y:auto">
    <h4 data-i18n="regUsersChatHead">All Registered Users</h4>
-   <input id="csClientSearch" placeholder="Search user..." style="margin-bottom:8px;padding:6px 8px" oninput="renderCsClientList()">
+   <input id="csClientSearch" placeholder="Search user..." style="margin-bottom:8px;padding:6px 8px" oninput="renderCsClientList()" data-i18n-ph="csClientSearchPh">
    <div id="csClientList"></div>
   </div>
   <div>
@@ -448,7 +454,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="chat-messages" id="adminChatMessages" style="height:310px"></div>
    <div class="chat-footer">
     <input type="file" id="adminChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
-    <button type="button" class="btn btn-success" onclick="$('adminChatPhotoInput').click()" title="Send Photo">📷 ဓာတ်ပုံပို့မည်</button>
+    <button type="button" class="btn btn-success" onclick="$('adminChatPhotoInput').click()" data-i18n="sendPhotoBtn">📷 ဓာတ်ပုံပို့မည်</button>
     <input id="adminChatInput" placeholder="Reply as Trip Booking Service..." style="flex:1" onkeypress="if(event.key==='Enter') sendAdminChatReply()" data-i18n-ph="replyCsPh">
     <button type="button" class="btn" onclick="sendAdminChatReply()">➤</button>
    </div>
@@ -459,11 +465,11 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </main>
 
 <nav class="bottom-nav" id="bottomNav">
- <button class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
- <button onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span data-i18n="navSupport">Service</span></button>
- <button onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
- <button onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
- <button onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
+ <button type="button" class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
+ <button type="button" onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span data-i18n="navSupport">Service</span></button>
+ <button type="button" onclick="showPage('bookingPage',this)"><span class="nav-icon">➕</span><span data-i18n="navBooking">Get Order</span></button>
+ <button type="button" onclick="showPage('historyPage',this)"><span class="nav-icon">📊</span><span data-i18n="navHistory">History</span></button>
+ <button type="button" onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
 <div class="modal hidden" id="authModal">
@@ -474,16 +480,16 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
   <div id="regExtraFields" class="hidden">
    <label data-i18n="fullNameLabel">Full Name</label>
-   <input id="regName" placeholder="Enter your full name">
+   <input id="regName" placeholder="Enter your full name" data-i18n-ph="fullNamePh">
    <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
    <input id="regRefInput" placeholder="TP2323" value="TP2323">
   </div>
   <label data-i18n="identityLabel">Phone Number or Email</label>
-  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
+  <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com" data-i18n-ph="identityPh">
 
   <label data-i18n="passwordLabel">Password</label>
   <div class="pass-wrap">
-   <input id="authPassword" type="password" placeholder="Enter password">
+   <input id="authPassword" type="password" placeholder="Enter password" data-i18n-ph="passwordPh">
    <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
   </div>
 
@@ -512,33 +518,33 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div class="modal hidden" id="orderRuleModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h3>🎯 Order Rules (10+ Custom Triggers)</h3>
+   <h3 data-i18n="ruleModalTitle">🎯 Order Rules (10+ Custom Triggers)</h3>
    <button type="button" class="close" onclick="closeModal('orderRuleModal')">✕</button>
   </div>
   <p class="muted" id="ruleUserInfo" style="margin:0 0 10px">User: -</p>
 
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
    <div>
-    <label style="margin-top:0">အော်ဒါအကြိမ်ရေ</label>
+    <label style="margin-top:0" data-i18n="ruleOrderLabel">အော်ဒါအကြိမ်ရေ</label>
     <input id="ruleTargetOrder" type="number" min="1" placeholder="e.g. 5">
    </div>
    <div>
-    <label style="margin-top:0">အနှုတ်ဒေါ်လာ ($)</label>
+    <label style="margin-top:0" data-i18n="ruleNegLabel">အနှုတ်ဒေါ်လာ ($)</label>
     <input id="ruleNegAmount" type="number" step="0.01" placeholder="e.g. 800">
    </div>
    <div>
-    <label style="margin-top:0">အမြတ်ဒေါ်လာ ($)</label>
+    <label style="margin-top:0" data-i18n="ruleProfitLabel">အမြတ်ဒေါ်လာ ($)</label>
     <input id="ruleProfitAmount" type="number" step="0.01" placeholder="e.g. 700">
    </div>
   </div>
 
-  <button type="button" class="btn btn-success btn-block" style="margin-top:12px" onclick="addOrderRuleToList()">➕ Rule စာရင်းထဲ ထည့်မည်</button>
+  <button type="button" class="btn btn-success btn-block" style="margin-top:12px" onclick="addOrderRuleToList()" data-i18n="addRuleBtn">➕ Rule စာရင်းထဲ ထည့်မည်</button>
 
   <div id="orderRuleListBox" style="margin-top:12px"></div>
 
   <div style="display:flex;gap:8px;margin-top:14px">
-   <button type="button" class="btn btn-block" onclick="saveAllOrderRulesAdmin()">💾 Rules အားလုံး သိမ်းမည်</button>
-   <button type="button" class="btn btn-danger" onclick="clearAllOrderRulesAdmin()">🗑️ အကုန်ဖျက်</button>
+   <button type="button" class="btn btn-block" onclick="saveAllOrderRulesAdmin()" data-i18n="saveRulesBtn">💾 Rules အားလုံး သိမ်းမည်</button>
+   <button type="button" class="btn btn-danger" onclick="clearAllOrderRulesAdmin()" data-i18n="clearRulesBtn">🗑️ အကုန်ဖျက်</button>
   </div>
  </div>
 </div>
@@ -552,7 +558,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </div>
 
 <div class="lightbox-modal hidden" id="imageLightbox" onclick="closeImageLightbox()">
- <button type="button" class="btn btn-danger" style="align-self:flex-end;margin-bottom:10px" onclick="closeImageLightbox()">✕ ပိတ်မည်</button>
+ <button type="button" class="btn btn-danger" style="align-self:flex-end;margin-bottom:10px" onclick="closeImageLightbox()" data-i18n="closeLightboxBtn">✕ ပိတ်မည်</button>
  <img id="lightboxImgEl" class="lightbox-img" src="" alt="Full View" onclick="event.stopPropagation()">
 </div>
 
@@ -586,10 +592,19 @@ try {
 const $ = id => document.getElementById(id);
 const MMK_PER_USD = 4500;
 
+function getCurrentLang() {
+ return $("language")?.value || "my";
+}
+
+function getDict() {
+ return I18N[getCurrentLang()] || I18N.my;
+}
+
 function formatUsdWithMmk(usdVal) {
  const num = Number(usdVal) || 0;
  const mmk = Math.round(num * MMK_PER_USD).toLocaleString();
- return `$${num.toFixed(2)} (${mmk} MMK)`;
+ const mmkWord = getDict().mmkUnit || "MMK";
+ return `$${num.toFixed(2)} (${mmk} ${mmkWord})`;
 }
 
 function openImageLightbox(src) {
@@ -644,8 +659,21 @@ function build238Hotels() {
 
 const I18N = {
  my: {
+  mmkUnit: "MMK",
   loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "ဘိုကင် တာဝန်စင်တာ",
+  hotelSearchPh: "ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်ပွင့် ရှာရန်...",
+  csCenter: "Trip Booking Service", csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● အသုံးပြုနေသည်",
+  chipWithdraw: "💸 ငွေထုတ်ချင်ပါသည်",
+  chipVipDeposit: "💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်",
+  chipAccountNo: "💳 ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ",
+  chipNegFix: "⚠️ အနှုတ်လက်ကျန် ဖြေရှင်းလိုပါသည်",
+  chipOrderIssue: "📦 အော်ဒါပြဿနာ ဖြေရှင်းပေးပါ",
+  chipReferral: "🎁 ဖိတ်ကြားကုဒ် / မိတ်ဆက်အမြတ် မေးမြန်းလိုပါသည်",
+  chipVipUpgrade: "⬆️ VIP အဆင့် တိုးမြှင့်လိုပါသည်",
+  chipWithdrawStatus: "🕒 ငွေထုတ်ကြန့်ကြာမှု အခြေအနေ သိလိုပါသည်",
+  chipSlipPhoto: "📸 ငွေလွှဲပြေစာ ပို့ပါမည်",
+  sendPhotoTitle: "ဓာတ်ပုံပို့မည်", sendPhotoBtn: "📷 ဓာတ်ပုံပို့မည်",
+  taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
   thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
@@ -656,95 +684,203 @@ const I18N = {
   withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
   logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
   navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
-  fullNameLabel: "အမည်ပြည့်စုံ", identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်",
-  passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
+  fullNameLabel: "အမည်ပြည့်စုံ", fullNamePh: "သင့်အမည်ပြည့်စုံ ထည့်ပါ",
+  identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်", identityPh: "09xxxxxxxxx သို့မဟုတ် email@example.com",
+  passwordLabel: "စကားဝှက်", passwordPh: "စကားဝှက် ထည့်ပါ",
+  continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
-  showAllHotelsBtn: "ဟိုတယ် ၂၃၈ ခုလုံး ပြရန်", csHeader: "🎧 Trip Booking Service (24/7 Online)",
+  showAllHotelsBtn: "ဟိုတယ် ၂၃၈ ခုလုံး ပြရန်",
   typeMsgPh: "စာရိုက်ရန်...", refreshBtn: "🔄 REFRESH",
-  tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
-  allUsersHead: "မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)", saveChangesBtn: "💾 ပြောင်းလဲမှုများ သိမ်းမည်",
+  adminPanelTitle: "🛡️ Admin & Trip Booking Service Control", usersWord: "အသုံးပြုသူများ",
+  tabUsers: "USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  allUsersHead: "မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)", adminUserSearchPh: "အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်...",
+  saveChangesBtn: "💾 ပြောင်းလဲမှုများ သိမ်းမည်",
   thName: "အမည်", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "ဖိတ်ကြားကုဒ်",
-  thVip: "VIP အဆင့်", thBal: "လက်ကျန် ($)", thOrders: "အော်ဒါ", thReset: "အစပြန်ရန်",
+  thInvitedBy: "ဖိတ်ခေါ်သူ", thVip: "VIP အဆင့်", thBal: "လက်ကျန် ($)", thNeg: "အနှုတ် ($)", thProfitBox: "အမြတ်ဘောက်စ် ($)",
+  thOrders: "အော်ဒါ", thOrderRules: "အော်ဒါစည်းမျဉ်းများ (၁၀+)", thReset: "အစပြန်ရန်",
   hotelsRatesHead: "ဟိုတယ်များနှင့် VIP ကော်မရှင်နှုန်းထားများ", addHotelBtn: "+ ဟိုတယ်အသစ်ထည့်ရန်",
   saveRatesBtn: "💾 နှုန်းထားများသိမ်းမည်", vipLimitsHead: "VIP အဆင့် ကန့်သတ်ချက်များနှင့် အမြတ်နှုန်းထားများ",
   thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်ချက်", thProfitRate: "အမြတ်နှုန်း (%)",
   thMinBal: "အနည်းဆုံးလက်ကျန် ($)", thMaxLimit: "အများဆုံးလက်ကျန် / ထုတ်ယူခွင့် ($)",
   hotelDirPricesHead: "ဟိုတယ်စာရင်းနှင့် ဈေးနှုန်းများ", thHotelName: "ဟိုတယ်အမည်", thCountry: "နိုင်ငံ",
   thStars: "ကြယ်ပွင့်", thPrice: "ဈေးနှုန်း ($)", thAction: "လုပ်ဆောင်ချက်", regUsersChatHead: "အသုံးပြုသူများ",
+  csClientSearchPh: "အသုံးပြုသူ ရှာရန်...",
   selectUserChat: "ချတ်လုပ်ရန် အသုံးပြုသူကို ရွေးပါ", replyCsPh: "Trip Booking Service အဖြစ် စာပြန်ရန်...",
   loginModalTitle: "အကောင့်ဝင်ရန်", refCodeLabel: "ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)", addHotelModalHead: "ဟိုတယ်အသစ်ထည့်ရန်",
   hotelNameLabel: "ဟိုတယ်အမည်", countryLabel: "နိုင်ငံ", priceLabel: "ဈေးနှုန်း ($)", starsLabel: "ကြယ်ပွင့်",
-  saveHotelBtn: "ဟိုတယ်သိမ်းမည်", alertTitleDefault: "အသိပေးချက်", okBtn: "OK"
+  saveHotelBtn: "ဟိုတယ်သိမ်းမည်", alertTitleDefault: "အသိပေးချက်", okBtn: "OK",
+  ruleModalTitle: "🎯 Order Rules (10+ Custom Triggers)", ruleOrderLabel: "အော်ဒါအကြိမ်ရေ",
+  ruleNegLabel: "အနှုတ်ဒေါ်လာ ($)", ruleProfitLabel: "အမြတ်ဒေါ်လာ ($)",
+  addRuleBtn: "➕ Rule စာရင်းထဲ ထည့်မည်", saveRulesBtn: "💾 Rules အားလုံး သိမ်းမည်", clearRulesBtn: "🗑️ အကုန်ဖျက်",
+  closeLightboxBtn: "✕ ပိတ်မည်",
+  negLockedTitle: "⚠️ အနှုတ်လက်ကျန် ရှိနေပါသည်",
+  negLockedDesc: "သင့်အကောင့်တွင် အနှုတ်ဒေါ်လာ <b>-{neg}</b> ရှိနေပါသည်။",
+  negContactCsMsg: "အော်ဒါဖြေရှင်းရန်အတွက် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။",
+  contactCsBtn: "💬 ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်မည်",
+  clickGetOrderHint: "ဘိုကင်တာဝန်ရယူရန် <b>အော်ဒါယူမည်</b> ကို နှိပ်ပါ။",
+  orderPriceLabel: "အော်ဒါတန်ဖိုး", commissionLabel: "ကော်မရှင်", submitOrderBtn: "အော်ဒါတင်ပြီး ကော်မရှင်ရယူမည်",
+  dailyOrdersLabel: "နေ့စဉ်အော်ဒါ", profitRateLabel: "အမြတ်နှုန်း", maxLimitLabel: "အများဆုံးကန့်သတ်ချက်",
+  youLabel: "သင်", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (သင်)", userSenderLabel: "အသုံးပြုသူ",
+  noRuleText: "Rule မရှိပါ", moreRulesText: "+{n} ထပ်မံ", resetBtn: "Reset", rulesBtn: "Rules",
+  deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 ဓာတ်ပုံပို့ပေးထားပါသည်", photoSentUserText: "📷 ဓာတ်ပုံ",
+  depositQuickText: "VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်",
+  withdrawQuickText: "ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: {bal})",
+  txBookingProfit: "ဘိုကင်အမြတ်", txApproved: "အတည်ပြုပြီး"
  },
  en: {
+  mmkUnit: "MMK",
   loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
-  csCenter: "Trip Booking Service", taskCenter: "Booking Task Center",
+  hotelSearchPh: "Search hotel, country, or stars...",
+  csCenter: "Trip Booking Service", csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● Active",
+  chipWithdraw: "💸 I want to withdraw",
+  chipVipDeposit: "💎 I want to deposit funds for VIP",
+  chipAccountNo: "💳 Please provide deposit account number",
+  chipNegFix: "⚠️ I need help resolving negative balance",
+  chipOrderIssue: "📦 Please help resolve an order issue",
+  chipReferral: "🎁 Inquiry about referral code & bonus",
+  chipVipUpgrade: "⬆️ I want to upgrade VIP level",
+  chipWithdrawStatus: "🕒 Checking withdrawal status",
+  chipSlipPhoto: "📸 I will send payment slip photo",
+  sendPhotoTitle: "Send Photo", sendPhotoBtn: "📷 Send Photo",
+  taskCenter: "Booking Task Center",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
   dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
   thDate: "Date", thType: "Type", thDetails: "Details", thAmount: "Amount (USD / MMK)", thStatus: "Status",
   myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "Login or register a new account to start.", createAcc: "Register",
+  loginPrompt: "Login or register a new account to start earning commissions.", createAcc: "Register",
   walletBal: "Wallet Balance", completedBookings: "Completed Orders",
   inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
   withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
   logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
   navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
-  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email",
-  passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register",
+  fullNameLabel: "Full Name", fullNamePh: "Enter your full name",
+  identityLabel: "Phone Number or Email", identityPh: "09xxxxxxxxx or email@example.com",
+  passwordLabel: "Password", passwordPh: "Enter password",
+  continueBtn: "Continue", switchAuth: "Switch Login / Register",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
-  showAllHotelsBtn: "Show All 238 Hotels", csHeader: "🎧 Trip Booking Service (24/7 Online)",
+  showAllHotelsBtn: "Show All 238 Hotels",
   typeMsgPh: "Type a message...", refreshBtn: "🔄 REFRESH",
-  tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
-  allUsersHead: "All Registered Users (Real-Time)", saveChangesBtn: "💾 Save All Changes",
+  adminPanelTitle: "🛡️ Admin & Trip Booking Service Control", usersWord: "Users",
+  tabUsers: "USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  allUsersHead: "All Registered Users (Real-Time)", adminUserSearchPh: "Search name, phone, email, TP2323...",
+  saveChangesBtn: "💾 Save All Changes",
   thName: "Name", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "My Code",
-  thVip: "VIP Tier", thBal: "Balance ($)", thOrders: "Orders", thReset: "Reset",
+  thInvitedBy: "Invited By", thVip: "VIP Tier", thBal: "Balance ($)", thNeg: "Neg ($)", thProfitBox: "Profit Box ($)",
+  thOrders: "Orders", thOrderRules: "Order Rules (10+)", thReset: "Reset",
   hotelsRatesHead: "Hotels & VIP Commission Rates", addHotelBtn: "+ Add Hotel",
   saveRatesBtn: "💾 Save Rates & Hotels", vipLimitsHead: "VIP Tier Limits & Profit Rates",
   thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate (%)",
   thMinBal: "Min Balance ($)", thMaxLimit: "Max Balance / Withdraw Limit ($)",
   hotelDirPricesHead: "Hotel Directory & Prices", thHotelName: "Hotel Name", thCountry: "Country",
   thStars: "Stars", thPrice: "Price ($)", thAction: "Action", regUsersChatHead: "All Registered Users",
+  csClientSearchPh: "Search user...",
   selectUserChat: "Select a user to chat", replyCsPh: "Reply as Trip Booking Service...",
   loginModalTitle: "Login", refCodeLabel: "Referral Code (Optional, e.g. TP2323)", addHotelModalHead: "Add New Hotel",
   hotelNameLabel: "Hotel Name", countryLabel: "Country", priceLabel: "Price ($)", starsLabel: "Stars",
-  saveHotelBtn: "Save Hotel", alertTitleDefault: "Notification", okBtn: "OK"
+  saveHotelBtn: "Save Hotel", alertTitleDefault: "Notification", okBtn: "OK",
+  ruleModalTitle: "🎯 Order Rules (10+ Custom Triggers)", ruleOrderLabel: "Order #",
+  ruleNegLabel: "Negative ($)", ruleProfitLabel: "Profit ($)",
+  addRuleBtn: "➕ Add to Rule List", saveRulesBtn: "💾 Save All Rules", clearRulesBtn: "🗑️ Clear All",
+  closeLightboxBtn: "✕ Close",
+  negLockedTitle: "⚠️ Negative Balance Notice",
+  negLockedDesc: "Your account has a negative balance of <b>-{neg}</b>.",
+  negContactCsMsg: "Please contact Customer Service to resolve the order.",
+  contactCsBtn: "💬 Contact Customer Service",
+  clickGetOrderHint: "Click <b>Get Order</b> to match a hotel booking task.",
+  orderPriceLabel: "Order Price", commissionLabel: "Commission", submitOrderBtn: "Submit & Receive Commission",
+  dailyOrdersLabel: "Daily Orders", profitRateLabel: "Profit Rate", maxLimitLabel: "Max Limit",
+  youLabel: "You", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (You)", userSenderLabel: "User",
+  noRuleText: "No rule", moreRulesText: "+{n} more", resetBtn: "Reset", rulesBtn: "Rules",
+  deleteBtn: "Delete", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
+  depositQuickText: "I want to deposit funds required for VIP",
+  withdrawQuickText: "I want to withdraw (Balance: {bal})",
+  txBookingProfit: "Booking Profit", txApproved: "Approved"
  },
  th: {
+  mmkUnit: "จ๊าต",
   loginBtn: "เข้าสู่ระบบ", startTaskBtn: "เริ่มงานจอง", hotelDir: "โรงแรมนานาชาติ",
-  csCenter: "บริการจองทริป", taskCenter: "ศูนย์ภารกิจการจอง",
+  hotelSearchPh: "ค้นหาโรงแรม ประเทศ หรือดาว...",
+  csCenter: "บริการจองทริป", csHeader: "🎧 บริการจองทริป (ออนไลน์ 24/7)", csActiveBadge: "● ออนไลน์",
+  chipWithdraw: "💸 ต้องการถอนเงิน",
+  chipVipDeposit: "💎 ต้องการเติมเงินสำหรับ VIP",
+  chipAccountNo: "💳 ขอเลขบัญชีสำหรับโอนเงิน",
+  chipNegFix: "⚠️ ขอความช่วยเหลือเรื่องยอดติดลบ",
+  chipOrderIssue: "📦 ขอแก้ไขปัญหาออเดอร์",
+  chipReferral: "🎁 สอบถามรหัสแนะนำและโบนัส",
+  chipVipUpgrade: "⬆️ ต้องการอัปเกรดระดับ VIP",
+  chipWithdrawStatus: "🕒 ตรวจสอบสถานะการถอนเงิน",
+  chipSlipPhoto: "📸 จะส่งรูปสลิปการโอนเงิน",
+  sendPhotoTitle: "ส่งรูปภาพ", sendPhotoBtn: "📷 ส่งรูปภาพ",
+  taskCenter: "ศูนย์ภารกิจการจอง",
   accBal: "ยอดคงเหลือในบัญชี", taskComm: "ค่าคอมมิชชั่นงาน", totalProfit: "กำไรทั้งหมด",
   dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับคำสั่งซื้อ", histTitle: "ประวัติธุรกรรมและการจอง",
   thDate: "วันที่", thType: "ประเภท", thDetails: "รายละเอียด", thAmount: "จำนวนเงิน (USD / MMK)", thStatus: "สถานะ",
   myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
-  loginPrompt: "เข้าสู่ระบบหรือสร้างบัญชีใหม่", createAcc: "สมัครสมาชิก",
+  loginPrompt: "เข้าสู่ระบบหรือสร้างบัญชีใหม่เพื่อเริ่มรับค่าคอมมิชชั่น", createAcc: "สมัครสมาชิก",
   walletBal: "ยอดเงินในกระเป๋า", completedBookings: "คำสั่งซื้อที่สำเร็จ",
   inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
   withdrawBtn: "🏦 ถอนเงิน", vipTiersHead: "ระดับ VIP และขีดจำกัด",
   logoutBtn: "ออกจากระบบ", navHome: "หน้าหลัก", navSupport: "บริการ",
   navBooking: "รับงาน", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
-  fullNameLabel: "ชื่อ-นามสกุล", identityLabel: "เบอร์โทรศัพท์หรืออีเมล",
-  passwordLabel: "รหัสผ่าน", continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
+  fullNameLabel: "ชื่อ-นามสกุล", fullNamePh: "กรอกชื่อ-นามสกุล",
+  identityLabel: "เบอร์โทรศัพท์หรืออีเมล", identityPh: "09xxxxxxxxx หรือ email@example.com",
+  passwordLabel: "รหัสผ่าน", passwordPh: "กรอกรหัสผ่าน",
+  continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
   heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroSub: "แพลตฟอร์มจองทริปนานาชาติ",
-  showAllHotelsBtn: "แสดงโรงแรมทั้งหมด 238 แห่ง", csHeader: "🎧 บริการจองทริป (ออนไลน์ 24/7)",
+  showAllHotelsBtn: "แสดงโรงแรมทั้งหมด 238 แห่ง",
   typeMsgPh: "พิมพ์ข้อความ...", refreshBtn: "🔄 รีเฟรช",
-  tabHotels: "🏨 โรงแรมและเรต", tabCs: "💬 แชทฝ่ายบริการ",
-  allUsersHead: "ผู้ใช้ที่ลงทะเบียนทั้งหมด (เรียลไทม์)", saveChangesBtn: "💾 บันทึกการเปลี่ยนแปลง",
+  adminPanelTitle: "🛡️ แผงควบคุมแอดมินและฝ่ายบริการ", usersWord: "ผู้ใช้",
+  tabUsers: "จัดการผู้ใช้และ VIP", tabHotels: "🏨 โรงแรมและเรต", tabCs: "💬 แชทฝ่ายบริการ",
+  allUsersHead: "ผู้ใช้ที่ลงทะเบียนทั้งหมด (เรียลไทม์)", adminUserSearchPh: "ค้นหาชื่อ เบอร์ อีเมล TP2323...",
+  saveChangesBtn: "💾 บันทึกการเปลี่ยนแปลง",
   thName: "ชื่อ", thPhoneEmail: "โทร / อีเมล", thPass: "รหัสผ่าน", thRef: "รหัสของฉัน",
-  thVip: "ระดับ VIP", thBal: "ยอดเงิน ($)", thOrders: "ออเดอร์", thReset: "รีเซ็ต",
+  thInvitedBy: "ผู้แนะนำ", thVip: "ระดับ VIP", thBal: "ยอดเงิน ($)", thNeg: "ติดลบ ($)", thProfitBox: "กล่องกำไร ($)",
+  thOrders: "ออเดอร์", thOrderRules: "กฎออเดอร์ (10+)", thReset: "รีเซ็ต",
   hotelsRatesHead: "โรงแรมและอัตราค่าคอมมิชชั่น VIP", addHotelBtn: "+ เพิ่มโรงแรม",
   saveRatesBtn: "💾 บันทึกเรตและโรงแรม", vipLimitsHead: "ขีดจำกัด VIP และอัตราผลกำไร",
   thLevel: "ระดับ", thDailyLimit: "จำกัดต่อวัน", thProfitRate: "อัตราผลกำไร (%)",
   thMinBal: "ยอดขั้นต่ำ ($)", thMaxLimit: "ยอดสูงสุด / ถอนสูงสุด ($)",
   hotelDirPricesHead: "รายชื่อโรงแรมและราคา", thHotelName: "ชื่อโรงแรม", thCountry: "ประเทศ",
   thStars: "ดาว", thPrice: "ราคา ($)", thAction: "จัดการ", regUsersChatHead: "ผู้ใช้ทั้งหมด",
+  csClientSearchPh: "ค้นหาผู้ใช้...",
   selectUserChat: "เลือกผู้ใช้เพื่อแชท", replyCsPh: "ตอบกลับในฐานะฝ่ายบริการ...",
   loginModalTitle: "เข้าสู่ระบบ", refCodeLabel: "รหัสแนะนำ (เช่น TP2323)", addHotelModalHead: "เพิ่มโรงแรมใหม่",
   hotelNameLabel: "ชื่อโรงแรม", countryLabel: "ประเทศ", priceLabel: "ราคา ($)", starsLabel: "ดาว",
-  saveHotelBtn: "บันทึกโรงแรม", alertTitleDefault: "แจ้งเตือน", okBtn: "ตกลง"
+  saveHotelBtn: "บันทึกโรงแรม", alertTitleDefault: "แจ้งเตือน", okBtn: "ตกลง",
+  ruleModalTitle: "🎯 กฎออเดอร์ (10+ เงื่อนไข)", ruleOrderLabel: "ลำดับที่",
+  ruleNegLabel: "ยอดติดลบ ($)", ruleProfitLabel: "กำไร ($)",
+  addRuleBtn: "➕ เพิ่มลงรายการกฎ", saveRulesBtn: "💾 บันทึกกฎทั้งหมด", clearRulesBtn: "🗑️ ล้างทั้งหมด",
+  closeLightboxBtn: "✕ ปิด",
+  negLockedTitle: "⚠️ แจ้งเตือนยอดติดลบ",
+  negLockedDesc: "บัญชีของคุณมียอดติดลบ <b>-{neg}</b>",
+  negContactCsMsg: "กรุณาติดต่อฝ่ายบริการลูกค้าเพื่อแก้ไขปัญหาออเดอร์",
+  contactCsBtn: "💬 ติดต่อฝ่ายบริการลูกค้า",
+  clickGetOrderHint: "กด <b>รับคำสั่งซื้อ</b> เพื่อจับคู่งานจองโรงแรม",
+  orderPriceLabel: "ราคาออเดอร์", commissionLabel: "ค่าคอมมิชชั่น", submitOrderBtn: "ส่งงานและรับค่าคอมมิชชั่น",
+  dailyOrdersLabel: "ออเดอร์ต่อวัน", profitRateLabel: "อัตราผลกำไร", maxLimitLabel: "ขีดจำกัดสูงสุด",
+  youLabel: "คุณ", csSenderLabel: "บริการจองทริป", csYouSenderLabel: "บริการจองทริป (คุณ)", userSenderLabel: "ผู้ใช้",
+  noRuleText: "ไม่มีกฎ", moreRulesText: "+{n} เพิ่มเติม", resetBtn: "รีเซ็ต", rulesBtn: "ตั้งกฎ",
+  deleteBtn: "ลบ", photoSentCsText: "📷 ส่งรูปภาพแล้ว", photoSentUserText: "📷 รูปภาพ",
+  depositQuickText: "ต้องการเติมเงินสำหรับระดับ VIP",
+  withdrawQuickText: "ต้องการถอนเงิน (ยอดคงเหลือ: {bal})",
+  txBookingProfit: "กำไรจากการจอง", txApproved: "อนุมัติแล้ว"
  },
  zh: {
+  mmkUnit: "缅币",
   loginBtn: "登录", startTaskBtn: "开始预订任务", hotelDir: "国际酒店",
-  csCenter: "Trip Booking 客服中心", taskCenter: "预订任务中心",
+  hotelSearchPh: "搜索酒店、国家或星级...",
+  csCenter: "Trip Booking 客服中心", csHeader: "🎧 Trip Booking 客服 (24/7 在线)", csActiveBadge: "● 在线",
+  chipWithdraw: "💸 我想提现",
+  chipVipDeposit: "💎 我想充值 VIP 所需金额",
+  chipAccountNo: "💳 请提供充值收款账号",
+  chipNegFix: "⚠️ 需要协助处理负余额",
+  chipOrderIssue: "📦 请协助处理订单问题",
+  chipReferral: "🎁 咨询邀请码与推荐奖励",
+  chipVipUpgrade: "⬆️ 我想升级 VIP 等级",
+  chipWithdrawStatus: "🕒 查询提现处理进度",
+  chipSlipPhoto: "📸 我将发送转账凭证照片",
+  sendPhotoTitle: "发送图片", sendPhotoBtn: "📷 发送图片",
+  taskCenter: "预订任务中心",
   accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
   dailyLimit: "每日订单", getOrderBtn: "抢单", histTitle: "交易与预订记录",
   thDate: "日期", thType: "类型", thDetails: "详情", thAmount: "金额 (USD / MMK)", thStatus: "状态",
@@ -755,25 +891,48 @@ const I18N = {
   withdrawBtn: "🏦 提现", vipTiersHead: "VIP 等级与限制",
   logoutBtn: "退出登录", navHome: "首页", navSupport: "客服",
   navBooking: "抢单", navHistory: "记录", navProfile: "我的",
-  fullNameLabel: "全名", identityLabel: "手机号或邮箱",
-  passwordLabel: "密码", continueBtn: "继续", switchAuth: "切换 登录 / 注册",
+  fullNameLabel: "全名", fullNamePh: "请输入全名",
+  identityLabel: "手机号或邮箱", identityPh: "09xxxxxxxxx 或 email@example.com",
+  passwordLabel: "密码", passwordPh: "请输入密码",
+  continueBtn: "继续", switchAuth: "切换 登录 / 注册",
   heroTitle: "欢迎来到 Trip Booking", heroSub: "国际旅游预订平台",
-  showAllHotelsBtn: "显示全部 238 家酒店", csHeader: "🎧 Trip Booking 客服 (24/7 在线)",
+  showAllHotelsBtn: "显示全部 238 家酒店",
   typeMsgPh: "输入消息...", refreshBtn: "🔄 刷新",
-  tabHotels: "🏨 酒店与费率", tabCs: "💬 客服聊天",
-  allUsersHead: "所有注册用户（实时）", saveChangesBtn: "💾 保存所有更改",
+  adminPanelTitle: "🛡️ 后台管理与客服中心", usersWord: "用户",
+  tabUsers: "用户与 VIP 管理", tabHotels: "🏨 酒店与费率", tabCs: "💬 客服聊天",
+  allUsersHead: "所有注册用户（实时）", adminUserSearchPh: "搜索姓名、手机、邮箱、TP2323...",
+  saveChangesBtn: "💾 保存所有更改",
   thName: "姓名", thPhoneEmail: "手机 / 邮箱", thPass: "密码", thRef: "我的邀请码",
-  thVip: "VIP 等级", thBal: "余额 ($)", thOrders: "订单", thReset: "重置",
+  thInvitedBy: "邀请人", thVip: "VIP 等级", thBal: "余额 ($)", thNeg: "负余额 ($)", thProfitBox: "利润盒 ($)",
+  thOrders: "订单", thOrderRules: "订单规则 (10+)", thReset: "重置",
   hotelsRatesHead: "酒店与 VIP 佣金率", addHotelBtn: "+ 添加酒店",
   saveRatesBtn: "💾 保存费率与酒店", vipLimitsHead: "VIP 等级限制与利润率",
   thLevel: "等级", thDailyLimit: "每日上限", thProfitRate: "利润率 (%)",
   thMinBal: "最低余额 ($)", thMaxLimit: "最高余额 / 提现上限 ($)",
   hotelDirPricesHead: "酒店列表与价格", thHotelName: "酒店名称", thCountry: "国家",
   thStars: "星级", thPrice: "价格 ($)", thAction: "操作", regUsersChatHead: "所有注册用户",
+  csClientSearchPh: "搜索用户...",
   selectUserChat: "选择用户开始聊天", replyCsPh: "以 Trip Booking 客服身份回复...",
   loginModalTitle: "登录", refCodeLabel: "邀请码（可选，如 TP2323）", addHotelModalHead: "添加新酒店",
   hotelNameLabel: "酒店名称", countryLabel: "国家", priceLabel: "价格 ($)", starsLabel: "星级",
-  saveHotelBtn: "保存酒店", alertTitleDefault: "通知", okBtn: "确定"
+  saveHotelBtn: "保存酒店", alertTitleDefault: "通知", okBtn: "确定",
+  ruleModalTitle: "🎯 订单规则 (10+ 自定义触发)", ruleOrderLabel: "第几单",
+  ruleNegLabel: "负余额 ($)", ruleProfitLabel: "利润 ($)",
+  addRuleBtn: "➕ 添加到规则列表", saveRulesBtn: "💾 保存所有规则", clearRulesBtn: "🗑️ 全部清空",
+  closeLightboxBtn: "✕ 关闭",
+  negLockedTitle: "⚠️ 负余额提示",
+  negLockedDesc: "您的账户当前有负余额 <b>-{neg}</b>。",
+  negContactCsMsg: "请联系客服处理订单。",
+  contactCsBtn: "💬 联系客服",
+  clickGetOrderHint: "点击 <b>抢单</b> 匹配酒店预订任务。",
+  orderPriceLabel: "订单价格", commissionLabel: "佣金", submitOrderBtn: "提交并领取佣金",
+  dailyOrdersLabel: "每日订单", profitRateLabel: "利润率", maxLimitLabel: "最高上限",
+  youLabel: "你", csSenderLabel: "Trip Booking 客服", csYouSenderLabel: "Trip Booking 客服（你）", userSenderLabel: "用户",
+  noRuleText: "无规则", moreRulesText: "+{n} 更多", resetBtn: "重置", rulesBtn: "规则",
+  deleteBtn: "删除", photoSentCsText: "📷 已发送图片", photoSentUserText: "📷 图片",
+  depositQuickText: "我想充值 VIP 所需金额",
+  withdrawQuickText: "我想提现（余额：{bal}）",
+  txBookingProfit: "预订利润", txApproved: "已通过"
  }
 };
 
@@ -961,7 +1120,8 @@ function handleLogoClick() {
 }
 
 function showAlert(msg, title) {
- $("alertTitle").textContent = title || I18N[$("language")?.value || "my"].alertTitleDefault;
+ const d = getDict();
+ $("alertTitle").textContent = title || d.alertTitleDefault;
  $("alertBody").innerHTML = msg;
  $("alertModal").classList.remove("hidden");
 }
@@ -978,6 +1138,7 @@ function toggleTheme() { document.body.classList.toggle("dark"); }
 
 function changeLanguage(lang) {
  const dict = I18N[lang] || I18N.my;
+ document.documentElement.lang = lang;
  document.querySelectorAll("[data-i18n]").forEach(el => {
   const key = el.getAttribute("data-i18n");
   if (dict[key]) el.textContent = dict[key];
@@ -986,6 +1147,15 @@ function changeLanguage(lang) {
   const key = el.getAttribute("data-i18n-ph");
   if (dict[key]) el.placeholder = dict[key];
  });
+ document.querySelectorAll("[data-i18n-title]").forEach(el => {
+  const key = el.getAttribute("data-i18n-title");
+  if (dict[key]) el.title = dict[key];
+ });
+ document.querySelectorAll("[data-chip-key]").forEach(btn => {
+  const k = btn.getAttribute("data-chip-key");
+  if (dict[k]) btn.textContent = dict[k];
+ });
+ renderAllViews();
 }
 
 function showPage(pageId, navBtn) {
@@ -1007,8 +1177,8 @@ function openAuth(mode) {
  $("authModal").classList.remove("hidden");
  $("regExtraFields").classList.toggle("hidden", mode === "login");
  $("authTitle").textContent = mode === "login"
-  ? (I18N[$("language").value]?.loginModalTitle || "Login")
-  : (I18N[$("language").value]?.createAcc || "Register");
+  ? getDict().loginModalTitle
+  : getDict().createAcc;
  $("authError").textContent = "";
 }
 
@@ -1161,24 +1331,25 @@ function getVipInfo(level) {
 
 function triggerGetOrder() {
  if (!currentUser) { openAuth('login'); return; }
+ const d = getDict();
 
  const neg = Number(currentUser.negative_balance) || 0;
  if (neg > 0) {
   activeTask = { blockedByNeg: true, negAmount: neg };
   renderBookingArea();
-  showAlert(`⚠️ သင့်အကောင့်တွင် အနှုတ်ဒေါ်လာ <b>-$${neg.toFixed(2)}</b> ရှိနေသဖြင့် ဘိုကင်ဆက်တင်လို့ မရပါ။ ADMIN ဘက်မှ ဖြေရှင်းပေးပြီးမှ ဆက်လက်လုပ်ဆောင်နိုင်ပါမည်။`);
+  showAlert(`${d.negLockedDesc.replace("{neg}", `$${neg.toFixed(2)}`)}<br>${d.negContactCsMsg}`);
   return;
  }
 
  const bal = Number(currentUser.balance) || 0;
  if (bal <= 0) {
-  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ Trip Booking Service ကို ဆက်သွယ်ပါ။");
+  showAlert(d.negContactCsMsg);
   return;
  }
 
  const vip = getVipInfo(currentUser.vip_level);
  if ((Number(currentUser.orders) || 0) >= Number(vip.daily_limit || 30)) {
-  showAlert("ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
+  showAlert(d.negContactCsMsg);
   return;
  }
 
@@ -1206,13 +1377,14 @@ function triggerGetOrder() {
 
 async function submitCurrentOrder() {
  if (!currentUser || !activeTask) return;
+ const d = getDict();
 
  const neg = Number(currentUser.negative_balance) || 0;
  if (neg > 0) {
   activeTask.blockedByNeg = true;
   activeTask.negAmount = neg;
   renderBookingArea();
-  showAlert(`⚠️ အနှုတ်ဒေါ်လာ <b>-$${neg.toFixed(2)}</b> ရှိနေသေးသဖြင့် အော်ဒါကို ဆက်တင်လို့ မရသေးပါ။ ADMIN ဘက်မှ အနှုတ်ဒေါ်လာ ပြောင်းပေးပြီးမှ ဘိုကင်ဆက်တင်နိုင်ပါမည်။`);
+  showAlert(`${d.negLockedDesc.replace("{neg}", `$${neg.toFixed(2)}`)}<br>${d.negContactCsMsg}`);
   return;
  }
 
@@ -1237,20 +1409,29 @@ async function submitCurrentOrder() {
  });
 
  activeTask = null;
- showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+${formatUsdWithMmk(commission)}</b> ရရှိပါသည်။`);
+ showAlert(`${d.commissionLabel}: <b>+${formatUsdWithMmk(commission)}</b>`);
  renderAllViews();
 }
 
 function handleWithdrawRequest() {
  if (!currentUser) { openAuth('login'); return; }
+ const d = getDict();
  showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
- sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: ${formatUsdWithMmk(currentUser.balance)})`);
+ sendQuickSuggestion(d.withdrawQuickText.replace("{bal}", formatUsdWithMmk(currentUser.balance)));
 }
 
 function handleDepositRequest() {
  if (!currentUser) { openAuth('login'); return; }
+ const d = getDict();
  showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
- sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
+ sendQuickSuggestion(d.depositQuickText);
+}
+
+async function sendQuickChipByKey(chipKey) {
+ if (!currentUser) { openAuth('login'); return; }
+ const d = getDict();
+ const text = d[chipKey] || chipKey;
+ await sendQuickSuggestion(text);
 }
 
 async function sendQuickSuggestion(text) {
@@ -1283,7 +1464,7 @@ async function sendSupportMessage() {
 
 async function sendAdminChatReply() {
  if (!selectedCsUserId) {
-  showAlert("ဘယ်ဘက်စာရင်းမှ ချတ်လုပ်မည့် အသုံးပြုသူကို အရင်ရွေးချယ်ပါ။");
+  showAlert(getDict().selectUserChat);
   return;
  }
  const inp = $("adminChatInput");
@@ -1303,9 +1484,10 @@ async function sendAdminChatReply() {
 function handleChatPhotoUpload(event, senderRole) {
  const file = event.target.files[0];
  if (!file) return;
+ const d = getDict();
  if (senderRole === 'user' && !currentUser) { openAuth('login'); return; }
  if (senderRole === 'support' && !selectedCsUserId) {
-  showAlert("ဓာတ်ပုံပို့ရန် အသုံးပြုသူကို အရင်ရွေးချယ်ပါ။");
+  showAlert(d.selectUserChat);
   return;
  }
 
@@ -1315,7 +1497,7 @@ function handleChatPhotoUpload(event, senderRole) {
   await writeMessageToDb({
    user_id: targetUid,
    sender: senderRole,
-   text: senderRole === 'support' ? "📷 ဓာတ်ပုံပို့ပေးထားပါသည်" : "📷 Photo",
+   text: senderRole === 'support' ? d.photoSentCsText : d.photoSentUserText,
    image: e.target.result,
    time: new Date().toLocaleTimeString(),
    created_at: Date.now()
@@ -1328,7 +1510,7 @@ function handleChatPhotoUpload(event, senderRole) {
 function renderMessageBubble(m, isRight, senderLabel) {
  const safeImg = m.image ? String(m.image).replace(/"/g, "&quot;") : "";
  const imgHtml = safeImg
-  ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="openImageLightbox('${safeImg}')" title="နှိပ်ပြီး ကြီးကြည့်ရန်">`
+  ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="openImageLightbox('${safeImg}')">`
   : "";
  return `
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
@@ -1345,10 +1527,11 @@ function renderMessageBubble(m, isRight, senderLabel) {
 function loadUserMessages(userId) {
  const box = $("supportMessages");
  if (!box) return;
+ const d = getDict();
  const uidStr = String(userId);
  const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
  box.innerHTML = msgs.map(m =>
-  renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || 'You') : 'Trip Booking Service')
+  renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || d.youLabel) : d.csSenderLabel)
  ).join("");
  box.scrollTop = box.scrollHeight;
 }
@@ -1371,8 +1554,9 @@ function switchAdminTab(tab) {
 function renderDraftRuleList() {
  const box = $("orderRuleListBox");
  if (!box) return;
+ const d = getDict();
  if (!draftOrderRules.length) {
-  box.innerHTML = `<p class="small muted">Rule မထည့်ရသေးပါ။ အပေါ်ကွက်တွင် အော်ဒါအကြိမ်ရေ၊ အနှုတ်ဒေါ်လာနှင့် အမြတ်ဒေါ်လာ ထည့်ပြီး ထည့်ပါ။</p>`;
+  box.innerHTML = `<p class="small muted">${d.noRuleText}</p>`;
   return;
  }
  box.innerHTML = draftOrderRules
@@ -1380,9 +1564,9 @@ function renderDraftRuleList() {
   .map((r, idx) => `
    <div class="rule-item">
     <div>
-     <strong>Order #${r.target_order}</strong> ·
-     <span style="color:var(--fb-danger)">Neg -$${Number(r.negative_balance).toFixed(2)}</span> ·
-     <span style="color:var(--fb-success)">Profit +$${Number(r.profit_box).toFixed(2)}</span>
+     <strong>#${r.target_order}</strong> ·
+     <span style="color:var(--fb-danger)">-$${Number(r.negative_balance).toFixed(2)}</span> ·
+     <span style="color:var(--fb-success)">+$${Number(r.profit_box).toFixed(2)}</span>
     </div>
     <button type="button" class="btn btn-danger" style="padding:3px 8px;font-size:11px" onclick="removeDraftRule(${idx})">✕</button>
    </div>
@@ -1393,7 +1577,7 @@ function openOrderRuleModal(userId) {
  const u = allUsers.find(x => String(x.id) === String(userId));
  if (!u) return;
  editingRuleUserId = String(u.id);
- $("ruleUserInfo").textContent = `User: ${u.name || 'Member'} (${u.identity || '-'}) · Current Orders: ${u.orders || 0}`;
+ $("ruleUserInfo").textContent = `${u.name || 'Member'} (${u.identity || '-'}) · ${u.orders || 0}`;
  $("ruleTargetOrder").value = "";
  $("ruleNegAmount").value = "";
  $("ruleProfitAmount").value = "";
@@ -1407,10 +1591,7 @@ function addOrderRuleToList() {
  const negAmt = Math.abs(Number($("ruleNegAmount").value) || 0);
  const profitAmt = Number($("ruleProfitAmount").value) || 0;
 
- if (!targetOrder || targetOrder < 1) {
-  showAlert("ဘယ်အော်ဒါအကြိမ်ရေမှာ အလုပ်လုပ်မလဲဆိုတာ မှန်ကန်စွာ ထည့်ပါ (ဥပမာ - 5)။");
-  return;
- }
+ if (!targetOrder || targetOrder < 1) return;
 
  const existingIdx = draftOrderRules.findIndex(r => Number(r.target_order) === targetOrder);
  const item = { target_order: targetOrder, negative_balance: negAmt, profit_box: profitAmt };
@@ -1449,7 +1630,7 @@ async function saveAllOrderRulesAdmin() {
  await writeUserToDb(u);
  closeModal("orderRuleModal");
  renderAdminUsers();
- showAlert(`✅ ${cleaned.length} order rule(s) saved for ${u.name || 'User'}!`);
+ showAlert(getDict().saveChangesBtn);
 }
 
 async function clearAllOrderRulesAdmin() {
@@ -1462,11 +1643,12 @@ async function clearAllOrderRulesAdmin() {
  await writeUserToDb(u);
  closeModal("orderRuleModal");
  renderAdminUsers();
- showAlert("🗑️ All order rules cleared.");
+ showAlert(getDict().clearRulesBtn);
 }
 
 function renderAdminUsers() {
  const q = ($("adminUserSearch")?.value || "").toLowerCase().trim();
+ const d = getDict();
  const filtered = allUsers.filter(u =>
   !q ||
   (u.name || "").toLowerCase().includes(q) ||
@@ -1484,8 +1666,8 @@ function renderAdminUsers() {
   const rules = getUserOrderRules(u);
   const ruleSummary = rules.length
    ? rules.slice(0, 2).map(r => `#${r.target_order}: -$${Number(r.negative_balance || 0)}/+$${Number(r.profit_box || 0)}`).join("<br>") +
-     (rules.length > 2 ? `<br><span class="small muted">+${rules.length - 2} more</span>` : "")
-   : `<span class="small muted">No rule</span>`;
+     (rules.length > 2 ? `<br><span class="small muted">${d.moreRulesText.replace("{n}", rules.length - 2)}</span>` : "")
+   : `<span class="small muted">${d.noRuleText}</span>`;
 
   return `
    <tr>
@@ -1505,10 +1687,10 @@ function renderAdminUsers() {
     <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:85px"></td>
     <td><input id="adm_ord_${u.id}" type="number" min="0" value="${Number(u.orders || 0)}" style="width:65px"></td>
     <td>
-     <button type="button" class="btn btn-light" style="padding:4px 8px;font-size:11px;margin-bottom:4px" onclick="openOrderRuleModal('${u.id}')">🎯 Rules (${rules.length})</button>
+     <button type="button" class="btn btn-light" style="padding:4px 8px;font-size:11px;margin-bottom:4px" onclick="openOrderRuleModal('${u.id}')">🎯 ${d.rulesBtn} (${rules.length})</button>
      <div class="small" style="color:var(--fb-primary);font-weight:600">${ruleSummary}</div>
     </td>
-    <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">Reset</button></td>
+    <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">${d.resetBtn}</button></td>
    </tr>
   `;
  }).join("");
@@ -1527,7 +1709,7 @@ async function saveAllUsersAdmin() {
   u.orders = Math.max(0, Number($(`adm_ord_${u.id}`).value) || 0);
   await writeUserToDb(u);
  }
- showAlert("✅ All user changes saved & synced to user accounts!");
+ showAlert(getDict().saveChangesBtn);
  renderAllViews();
 }
 
@@ -1557,6 +1739,7 @@ function renderAdminVips() {
 function renderAdminHotels() {
  const tbody = $("adminHotelsRows");
  if (!tbody) return;
+ const d = getDict();
  tbody.innerHTML = allHotels.slice(0, 40).map((h, idx) => `
   <tr>
    <td>${h.id}</td>
@@ -1564,7 +1747,7 @@ function renderAdminHotels() {
    <td><input id="htl_cnt_${idx}" value="${h.country}" style="width:110px"></td>
    <td><input id="htl_str_${idx}" type="number" min="1" max="5" value="${h.stars}" style="width:60px"></td>
    <td><input id="htl_prc_${idx}" type="number" value="${h.price}" style="width:80px"></td>
-   <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteHotelItem(${idx})">Delete</button></td>
+   <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteHotelItem(${idx})">${d.deleteBtn}</button></td>
   </tr>
  `).join("");
 }
@@ -1621,7 +1804,7 @@ function saveHotelsAndVipsAdmin() {
   db.ref("vip_tiers").set(allVipTiers);
   db.ref("hotels").set(allHotels);
  }
- showAlert("✅ VIP rates & hotels updated in Firebase!");
+ showAlert(getDict().saveRatesBtn);
  renderAllViews();
 }
 
@@ -1642,7 +1825,7 @@ function selectCsClient(uid) {
  selectedCsUserId = String(uid);
  const u = allUsers.find(x => String(x.id) === String(uid));
  if (u) {
-  $("csActiveUserTitle").textContent = `Chat with ${u.name || 'User'} (${u.identity})`;
+  $("csActiveUserTitle").textContent = `${u.name || 'User'} (${u.identity})`;
   loadAdminChatMessages(uid);
  }
  renderCsClientList();
@@ -1651,10 +1834,11 @@ function selectCsClient(uid) {
 function loadAdminChatMessages(uid) {
  const box = $("adminChatMessages");
  if (!box) return;
+ const d = getDict();
  const uidStr = String(uid);
  const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
  box.innerHTML = msgs.map(m =>
-  renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? 'Trip Booking Service (You)' : 'User')
+  renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? d.csYouSenderLabel : d.userSenderLabel)
  ).join("");
  box.scrollTop = box.scrollHeight;
 }
@@ -1668,6 +1852,7 @@ function renderHotels() {
  const q = ($("hotelSearch")?.value || "").toLowerCase().trim();
  const grid = $("hotelGrid");
  if (!grid) return;
+ const d = getDict();
 
  const filtered = allHotels.filter(h =>
   !q ||
@@ -1691,7 +1876,7 @@ function renderHotels() {
     </div>
     <div style="margin-top:10px">
      <span class="price">$${Number(h.price).toFixed(2)}</span>
-     <span class="mmk-sub">≈ ${Math.round(Number(h.price) * MMK_PER_USD).toLocaleString()} MMK</span>
+     <span class="mmk-sub">≈ ${Math.round(Number(h.price) * MMK_PER_USD).toLocaleString()} ${d.mmkUnit}</span>
     </div>
    </div>
   </div>
@@ -1706,31 +1891,32 @@ function showAllHotels() {
 function renderBookingArea() {
  const area = $("bookingHotelArea");
  if (!area) return;
+ const d = getDict();
 
  const neg = Number(currentUser?.negative_balance) || 0;
  if (currentUser && neg > 0) {
   area.innerHTML = `
    <div class="panel" style="background:rgba(255,77,77,0.08);border:2px solid var(--fb-danger)">
-    <h4 style="margin-top:0;color:var(--fb-danger)">⚠️ Negative Balance Locked (-$${neg.toFixed(2)})</h4>
-    <p style="margin:6px 0">သင့်အကောင့်တွင် အနှုတ်ဒေါ်လာ <b>-$${neg.toFixed(2)}</b> ရှိနေသဖြင့် ဘိုကင်ဆက်တင်လို့ မရပါ။</p>
-    <p class="small muted" style="margin:6px 0 12px">ADMIN ဘက်မှ အနှုတ်ဒေါ်လာ ပြောင်းပေးပြီးမှသာ ဘိုကင်ဆက်လက်တင်နိုင်ပါမည်။</p>
-    <button type="button" class="btn btn-danger" onclick="handleDepositRequest()">💬 Customer Service သို့ ဆက်သွယ်မည်</button>
+    <h4 style="margin-top:0;color:var(--fb-danger)">${d.negLockedTitle} (-$${neg.toFixed(2)})</h4>
+    <p style="margin:6px 0">${d.negLockedDesc.replace("{neg}", `$${neg.toFixed(2)}`)}</p>
+    <p class="small muted" style="margin:6px 0 12px">${d.negContactCsMsg}</p>
+    <button type="button" class="btn btn-danger" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])">${d.contactCsBtn}</button>
    </div>
   `;
   return;
  }
 
  if (!activeTask) {
-  area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> to match a hotel booking task.</p>`;
+  area.innerHTML = `<p class="muted" style="text-align:center">${d.clickGetOrderHint}</p>`;
   return;
  }
  const { hotel, commission } = activeTask;
  area.innerHTML = `
   <div class="panel" style="background:var(--fb-bg);border:2px dashed var(--fb-primary)">
    <h4 style="margin-top:0">🏨 ${hotel.name} (${hotel.country}) ${renderStars(hotel.stars)}</h4>
-   <p>Order Price: <b>${formatUsdWithMmk(hotel.price)}</b></p>
-   <p>Commission: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
-   <button type="button" class="btn btn-success" onclick="submitCurrentOrder()">Submit & Receive Commission</button>
+   <p>${d.orderPriceLabel}: <b>${formatUsdWithMmk(hotel.price)}</b></p>
+   <p>${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
+   <button type="button" class="btn btn-success" onclick="submitCurrentOrder()">${d.submitOrderBtn}</button>
   </div>
  `;
 }
@@ -1739,28 +1925,34 @@ function renderHistory() {
  const tbody = $("historyRows");
  if (!tbody) return;
  if (!currentUser) { tbody.innerHTML = ""; return; }
+ const d = getDict();
  const list = allTransactions.filter(t => String(t.user_id) === String(currentUser.id));
- tbody.innerHTML = list.map(t => `
-  <tr>
-   <td>${t.date}</td>
-   <td><span class="tag">${t.type}</span></td>
-   <td>${t.details}</td>
-   <td><strong style="color:var(--fb-primary)">+${formatUsdWithMmk(t.amount)}</strong></td>
-   <td><span style="color:var(--fb-success)">${t.status}</span></td>
-  </tr>
- `).join("");
+ tbody.innerHTML = list.map(t => {
+  const typeText = t.type === "Booking Profit" ? d.txBookingProfit : t.type;
+  const statusText = t.status === "Approved" ? d.txApproved : t.status;
+  return `
+   <tr>
+    <td>${t.date}</td>
+    <td><span class="tag">${typeText}</span></td>
+    <td>${t.details}</td>
+    <td><strong style="color:var(--fb-primary)">+${formatUsdWithMmk(t.amount)}</strong></td>
+    <td><span style="color:var(--fb-success)">${statusText}</span></td>
+   </tr>
+  `;
+ }).join("");
 }
 
 function renderVipGrid() {
  const disp = $("vipTiersDisplay");
  if (!disp) return;
+ const d = getDict();
  const activeLv = currentUser?.vip_level || "LV1";
  disp.innerHTML = allVipTiers.map(v => `
   <div class="vip-card ${v.level === activeLv ? 'active-vip' : ''}">
    <h4 style="margin:0 0 6px">${v.name} (${v.level})</h4>
-   <p class="small" style="margin:2px 0">Daily Orders: ${v.daily_limit}</p>
-   <p class="small" style="margin:2px 0">Profit Rate: ${(Number(v.profit_rate) * 100).toFixed(2)}%</p>
-   <p class="small" style="margin:2px 0">Max Limit: $${Number(v.max_withdraw).toLocaleString()}</p>
+   <p class="small" style="margin:2px 0">${d.dailyOrdersLabel}: ${v.daily_limit}</p>
+   <p class="small" style="margin:2px 0">${d.profitRateLabel}: ${(Number(v.profit_rate) * 100).toFixed(2)}%</p>
+   <p class="small" style="margin:2px 0">${d.maxLimitLabel}: $${Number(v.max_withdraw).toLocaleString()}</p>
   </div>
  `).join("");
 }
