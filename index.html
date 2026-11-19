@@ -146,7 +146,21 @@ header{
 .chip-btn:hover{background:var(--fb-primary);color:white}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
-.chat-img-msg{max-width:240px;max-height:240px;border-radius:8px;margin-top:6px;display:block;border:1px solid rgba(255,255,255,0.2)}
+.chat-img-msg{
+ max-width:240px;max-height:240px;border-radius:8px;margin-top:6px;
+ display:block;border:1px solid rgba(0,0,0,0.15);cursor:pointer;transition:transform 0.15s;
+}
+.chat-img-msg:hover{transform:scale(1.02)}
+
+.lightbox-modal{
+ position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ z-index:200;padding:16px;
+}
+.lightbox-img{
+ max-width:95vw;max-height:82vh;border-radius:10px;
+ box-shadow:0 10px 30px rgba(0,0,0,0.6);object-fit:contain;
+}
 
 .admin-cs-grid{display:grid;grid-template-columns:260px 1fr;gap:14px}
 @media (max-width:768px){
@@ -159,7 +173,7 @@ th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);whit
 th{color:var(--fb-muted);background:var(--fb-bg)}
 
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.68);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal-box{background:var(--fb-card);color:var(--fb-text);padding:22px;border-radius:12px;width:min(420px,92%);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.modal-box{background:var(--fb-card);color:var(--fb-text);padding:22px;border-radius:12px;width:min(440px,92%);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .close{background:none;border:0;font-size:18px;color:var(--fb-muted)}
 
@@ -365,6 +379,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th>Neg ($)</th>
       <th>Profit Box ($)</th>
       <th data-i18n="thOrders">Orders</th>
+      <th>Order Rule</th>
       <th data-i18n="thReset">Reset</th>
      </tr>
     </thead>
@@ -488,12 +503,40 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 </div>
 
+<div class="modal hidden" id="orderRuleModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3>🎯 Order Count Rule (Neg & Profit)</h3>
+   <button type="button" class="close" onclick="closeModal('orderRuleModal')">✕</button>
+  </div>
+  <p class="muted" id="ruleUserInfo" style="margin:0 0 8px">User: -</p>
+  <label>ဘယ်အော်ဒါအကြိမ်ရေမှာလဲ? (ဥပမာ - 5)</label>
+  <input id="ruleTargetOrder" type="number" min="1" placeholder="e.g. 5">
+
+  <label>အနှုတ်ဒေါ်လာ / Negative Balance ($)</label>
+  <input id="ruleNegAmount" type="number" step="0.01" placeholder="e.g. 100">
+
+  <label>အမြတ်ဒေါ်လာ / Profit Box ($)</label>
+  <input id="ruleProfitAmount" type="number" step="0.01" placeholder="e.g. 50">
+
+  <div style="display:flex;gap:8px;margin-top:14px">
+   <button type="button" class="btn btn-success" style="flex:1" onclick="saveOrderRuleAdmin()">💾 Rule သိမ်းမည်</button>
+   <button type="button" class="btn btn-light" onclick="clearOrderRuleAdmin()">🗑️ ဖျက်မည်</button>
+  </div>
+ </div>
+</div>
+
 <div class="modal hidden" id="alertModal">
  <div class="modal-box" style="text-align:center">
   <h3 id="alertTitle" style="color:var(--fb-primary)" data-i18n="alertTitleDefault">Notification</h3>
   <p id="alertBody" style="margin:14px 0"></p>
   <button type="button" class="btn btn-block" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
  </div>
+</div>
+
+<div class="lightbox-modal hidden" id="imageLightbox" onclick="closeImageLightbox()">
+ <button type="button" class="btn btn-danger" style="align-self:flex-end;margin-bottom:10px" onclick="closeImageLightbox()">✕ ပိတ်မည်</button>
+ <img id="lightboxImgEl" class="lightbox-img" src="" alt="Full View" onclick="event.stopPropagation()">
 </div>
 
 <script>
@@ -530,6 +573,17 @@ function formatUsdWithMmk(usdVal) {
  const num = Number(usdVal) || 0;
  const mmk = Math.round(num * MMK_PER_USD).toLocaleString();
  return `$${num.toFixed(2)} (${mmk} MMK)`;
+}
+
+function openImageLightbox(src) {
+ if (!src) return;
+ $("lightboxImgEl").src = src;
+ $("imageLightbox").classList.remove("hidden");
+}
+
+function closeImageLightbox() {
+ $("imageLightbox").classList.add("hidden");
+ $("lightboxImgEl").src = "";
 }
 
 const VERIFIED_HOTEL_IMAGES = [
@@ -722,6 +776,7 @@ let isAdminSession = false;
 let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
+let editingRuleUserId = null;
 let showAllHotelsFlag = false;
 
 function normalizeIdentity(val) {
@@ -779,7 +834,7 @@ async function syncFirebaseAuthAccount(identity, password, isRegister) {
 }
 
 function writeUserToDb(userObj) {
- if (db) return db.ref("users/" + userObj.id).set(userObj);
+ if (db) return db.ref("users/" + String(userObj.id)).set(userObj);
  return Promise.resolve();
 }
 
@@ -809,15 +864,20 @@ function startRealtimeListeners() {
  db.ref("users").on("value", snap => {
   const val = snap.val() || {};
   allUsers = Object.values(val).sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
-  if (savedUid && !isAdminSession) {
-   currentUser = allUsers.find(u => u.id === savedUid) || currentUser;
+  const activeUid = currentUser?.id || savedUid;
+  if (activeUid && !isAdminSession) {
+   const latest = allUsers.find(u => String(u.id) === String(activeUid));
+   if (latest) {
+    currentUser = latest;
+   }
   }
   renderAllViews();
  });
 
  db.ref("messages").on("value", snap => {
   const val = snap.val() || {};
-  allMessages = Object.values(val).sort((a, b) => (a.created_at || 0) - (b.created_at || 0));
+  allMessages = Object.entries(val).map(([key, m]) => ({ _key: key, ...m }))
+   .sort((a, b) => (a.created_at || 0) - (b.created_at || 0));
   if (currentUser) loadUserMessages(currentUser.id);
   if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
   if (isAdminSession) renderCsClientList();
@@ -917,6 +977,17 @@ function isAdminCredentials(identity, password) {
  return (phoneClean === "09775191427" || idClean === "jupiterwhat8@gmail.com") && password === "12344321";
 }
 
+function identitiesMatch(savedIdentity, inputIdentity) {
+ const a = normalizeIdentity(savedIdentity);
+ const b = normalizeIdentity(inputIdentity);
+ if (!a || !b) return false;
+ if (a === b) return true;
+ if (isPhoneIdentity(a) && isPhoneIdentity(b)) {
+  return canonicalPhone(a) === canonicalPhone(b);
+ }
+ return false;
+}
+
 async function submitAuth() {
  const rawIdentity = $("authIdentity").value.trim();
  const identity = normalizeIdentity(rawIdentity);
@@ -944,13 +1015,7 @@ async function submitAuth() {
  if (authMode === "register") {
   const registeringPhone = isPhoneIdentity(identity) ? canonicalPhone(identity) : null;
 
-  const isDuplicate = allUsers.some(u => {
-   const existingId = normalizeIdentity(u.identity || "");
-   if (registeringPhone) {
-    return isPhoneIdentity(existingId) && canonicalPhone(existingId) === registeringPhone;
-   }
-   return existingId === identity;
-  });
+  const isDuplicate = allUsers.some(u => identitiesMatch(u.identity || "", identity));
 
   if (isDuplicate) {
    err.textContent = registeringPhone
@@ -980,6 +1045,7 @@ async function submitAuth() {
    referral_earned: 0.00,
    vip_level: "LV1",
    orders: 0,
+   order_rule: null,
    created_at: Date.now()
   };
 
@@ -987,7 +1053,7 @@ async function submitAuth() {
    await syncFirebaseAuthAccount(storedIdentity, password, true);
    await writeUserToDb(newUser);
    await writeMessageToDb({
-    user_id: newUser.id,
+    user_id: String(newUser.id),
     sender: "support",
     text: `မင်္ဂလာပါ ${newUser.name} (${newUser.identity}) ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါသည်။`,
     image: "",
@@ -999,14 +1065,14 @@ async function submitAuth() {
    return;
   }
 
-  if (!allUsers.some(u => u.id === newUser.id)) {
+  if (!allUsers.some(u => String(u.id) === String(newUser.id))) {
    allUsers.unshift(newUser);
   }
 
   currentUser = newUser;
   isAdminSession = false;
   localStorage.removeItem("tb_admin_session");
-  localStorage.setItem("tb_session_uid", newUser.id);
+  localStorage.setItem("tb_session_uid", String(newUser.id));
   closeModal("authModal");
   showAlert(`Account created! Your Referral Code: <b>${newCode}</b>`);
   renderAllViews();
@@ -1014,14 +1080,10 @@ async function submitAuth() {
   return;
  }
 
- const loginPhone = isPhoneIdentity(identity) ? canonicalPhone(identity) : null;
- const user = allUsers.find(u => {
-  const existingId = normalizeIdentity(u.identity || "");
-  const idMatch = loginPhone
-   ? (isPhoneIdentity(existingId) && canonicalPhone(existingId) === loginPhone)
-   : existingId === identity;
-  return idMatch && u.password === password;
- });
+ const user = allUsers.find(u =>
+  identitiesMatch(u.identity || "", identity) &&
+  String(u.password || "").trim() === password
+ );
 
  if (!user) {
   err.textContent = "Invalid phone/email or password.";
@@ -1032,7 +1094,7 @@ async function submitAuth() {
  currentUser = user;
  isAdminSession = false;
  localStorage.removeItem("tb_admin_session");
- localStorage.setItem("tb_session_uid", user.id);
+ localStorage.setItem("tb_session_uid", String(user.id));
  closeModal("authModal");
  renderAllViews();
  showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
@@ -1062,13 +1124,26 @@ function triggerGetOrder() {
   return;
  }
  const vip = getVipInfo(currentUser.vip_level);
- if ((currentUser.orders || 0) >= vip.daily_limit) {
+ if ((Number(currentUser.orders) || 0) >= Number(vip.daily_limit || 30)) {
   showAlert("ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
   return;
  }
- const hotel = allHotels[(currentUser.orders || 0) % allHotels.length];
- const commission = (Number(hotel.price) * Number(vip.profit_rate)) + (Number(currentUser.profit_box) || 0);
- activeTask = { hotel, commission };
+ const nextOrderNum = (Number(currentUser.orders) || 0) + 1;
+ const hotel = allHotels[(nextOrderNum - 1) % allHotels.length];
+ const rule = currentUser.order_rule;
+ let extraProfitBox = Number(currentUser.profit_box) || 0;
+
+ if (rule && Number(rule.target_order) === nextOrderNum) {
+  const ruleNeg = Number(rule.negative_balance) || 0;
+  const ruleProfit = Number(rule.profit_box) || 0;
+  currentUser.negative_balance = ruleNeg;
+  currentUser.profit_box = ruleProfit;
+  extraProfitBox = ruleProfit;
+  writeUserToDb(currentUser);
+ }
+
+ const commission = (Number(hotel.price) * Number(vip.profit_rate)) + extraProfitBox;
+ activeTask = { hotel, commission, orderNum: nextOrderNum };
  renderBookingArea();
 }
 
@@ -1084,7 +1159,7 @@ async function submitCurrentOrder() {
 
  await writeUserToDb(currentUser);
  await writeTransactionToDb({
-  user_id: currentUser.id,
+  user_id: String(currentUser.id),
   date: new Date().toLocaleString(),
   type: "Booking Profit",
   details: `Hotel: ${hotel.name} (${hotel.country})`,
@@ -1113,7 +1188,7 @@ function handleDepositRequest() {
 async function sendQuickSuggestion(text) {
  if (!currentUser) { openAuth('login'); return; }
  await writeMessageToDb({
-  user_id: currentUser.id,
+  user_id: String(currentUser.id),
   sender: 'user',
   text: text,
   image: "",
@@ -1129,7 +1204,7 @@ async function sendSupportMessage() {
  if (!text) return;
  inp.value = "";
  await writeMessageToDb({
-  user_id: currentUser.id,
+  user_id: String(currentUser.id),
   sender: 'user',
   text: text,
   image: "",
@@ -1148,7 +1223,7 @@ async function sendAdminChatReply() {
  if (!text) return;
  inp.value = "";
  await writeMessageToDb({
-  user_id: selectedCsUserId,
+  user_id: String(selectedCsUserId),
   sender: 'support',
   text: text,
   image: "",
@@ -1168,7 +1243,7 @@ function handleChatPhotoUpload(event, senderRole) {
 
  const reader = new FileReader();
  reader.onload = async function(e) {
-  const targetUid = senderRole === 'user' ? currentUser.id : selectedCsUserId;
+  const targetUid = String(senderRole === 'user' ? currentUser.id : selectedCsUserId);
   await writeMessageToDb({
    user_id: targetUid,
    sender: senderRole,
@@ -1183,7 +1258,10 @@ function handleChatPhotoUpload(event, senderRole) {
 }
 
 function renderMessageBubble(m, isRight, senderLabel) {
- const imgHtml = m.image ? `<img src="${m.image}" class="chat-img-msg" alt="Attachment">` : "";
+ const safeImg = m.image ? String(m.image).replace(/"/g, "&quot;") : "";
+ const imgHtml = safeImg
+  ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="openImageLightbox('${safeImg}')" title="နှိပ်ပြီး ကြီးကြည့်ရန်">`
+  : "";
  return `
   <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
    background:${isRight ? 'var(--fb-primary)' : 'var(--fb-card)'};
@@ -1199,8 +1277,11 @@ function renderMessageBubble(m, isRight, senderLabel) {
 function loadUserMessages(userId) {
  const box = $("supportMessages");
  if (!box) return;
- const msgs = allMessages.filter(m => m.user_id === userId);
- box.innerHTML = msgs.map(m => renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || 'You') : 'Trip Booking Service')).join("");
+ const uidStr = String(userId);
+ const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
+ box.innerHTML = msgs.map(m =>
+  renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || 'You') : 'Trip Booking Service')
+ ).join("");
  box.scrollTop = box.scrollHeight;
 }
 
@@ -1219,6 +1300,53 @@ function switchAdminTab(tab) {
  if (tab === "cs") renderCsClientList();
 }
 
+function openOrderRuleModal(userId) {
+ const u = allUsers.find(x => String(x.id) === String(userId));
+ if (!u) return;
+ editingRuleUserId = String(u.id);
+ $("ruleUserInfo").textContent = `User: ${u.name || 'Member'} (${u.identity || '-'}) · Current Orders: ${u.orders || 0}`;
+ const rule = u.order_rule || {};
+ $("ruleTargetOrder").value = rule.target_order || "";
+ $("ruleNegAmount").value = rule.negative_balance ?? "";
+ $("ruleProfitAmount").value = rule.profit_box ?? "";
+ $("orderRuleModal").classList.remove("hidden");
+}
+
+async function saveOrderRuleAdmin() {
+ if (!editingRuleUserId) return;
+ const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
+ if (!u) return;
+ const targetOrder = Number($("ruleTargetOrder").value);
+ const negAmt = Number($("ruleNegAmount").value) || 0;
+ const profitAmt = Number($("ruleProfitAmount").value) || 0;
+
+ if (!targetOrder || targetOrder < 1) {
+  showAlert("ဘယ်အော်ဒါအကြိမ်ရေမှာ အလုပ်လုပ်မလဲဆိုတာ မှန်ကန်စွာ ထည့်ပါ (ဥပမာ - 5)။");
+  return;
+ }
+
+ u.order_rule = {
+  target_order: targetOrder,
+  negative_balance: negAmt,
+  profit_box: profitAmt
+ };
+ await writeUserToDb(u);
+ closeModal("orderRuleModal");
+ renderAdminUsers();
+ showAlert(`✅ Order #${targetOrder} rule saved: Neg $${negAmt.toFixed(2)}, Profit $${profitAmt.toFixed(2)}`);
+}
+
+async function clearOrderRuleAdmin() {
+ if (!editingRuleUserId) return;
+ const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
+ if (!u) return;
+ u.order_rule = null;
+ await writeUserToDb(u);
+ closeModal("orderRuleModal");
+ renderAdminUsers();
+ showAlert("🗑️ Order rule cleared.");
+}
+
 function renderAdminUsers() {
  const q = ($("adminUserSearch")?.value || "").toLowerCase().trim();
  const filtered = allUsers.filter(u =>
@@ -1226,7 +1354,7 @@ function renderAdminUsers() {
   (u.name || "").toLowerCase().includes(q) ||
   (u.identity || "").toLowerCase().includes(q) ||
   (u.referral_code || "").toLowerCase().includes(q) ||
-  (u.id || "").toLowerCase().includes(q)
+  String(u.id || "").toLowerCase().includes(q)
  );
 
  $("totalUsersBadge").textContent = allUsers.length;
@@ -1234,26 +1362,36 @@ function renderAdminUsers() {
 
  const tbody = $("adminUsersRows");
  if (!tbody) return;
- tbody.innerHTML = filtered.map((u, idx) => `
-  <tr>
-   <td>${idx + 1}</td>
-   <td><input id="adm_name_${u.id}" value="${u.name || ''}" style="width:110px"></td>
-   <td>${u.identity || '-'}</td>
-   <td><input id="adm_pass_${u.id}" value="${u.password || ''}" style="width:95px"></td>
-   <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}" style="width:85px"></td>
-   <td><span class="tag">${u.invited_by || '-'}</span></td>
-   <td>
-    <select id="adm_vip_${u.id}" style="width:80px;padding:6px">
-     ${["LV1","LV2","LV3","LV4","LV5"].map(lv => `<option value="${lv}" ${u.vip_level===lv?'selected':''}>${lv}</option>`).join("")}
-    </select>
-   </td>
-   <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${Number(u.balance || 0)}" style="width:90px"></td>
-   <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:80px"></td>
-   <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:80px"></td>
-   <td><strong>${u.orders || 0}/30</strong></td>
-   <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">Reset</button></td>
-  </tr>
- `).join("");
+ tbody.innerHTML = filtered.map((u, idx) => {
+  const ruleBadge = u.order_rule && u.order_rule.target_order
+   ? `<div class="small" style="color:var(--fb-primary);font-weight:700">#${u.order_rule.target_order}: -$${Number(u.order_rule.negative_balance || 0)} / +$${Number(u.order_rule.profit_box || 0)}</div>`
+   : `<div class="small muted">No rule</div>`;
+
+  return `
+   <tr>
+    <td>${idx + 1}</td>
+    <td><input id="adm_name_${u.id}" value="${u.name || ''}" style="width:110px"></td>
+    <td>${u.identity || '-'}</td>
+    <td><input id="adm_pass_${u.id}" value="${u.password || ''}" style="width:95px"></td>
+    <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}" style="width:85px"></td>
+    <td><span class="tag">${u.invited_by || '-'}</span></td>
+    <td>
+     <select id="adm_vip_${u.id}" style="width:80px;padding:6px">
+      ${["LV1","LV2","LV3","LV4","LV5"].map(lv => `<option value="${lv}" ${u.vip_level===lv?'selected':''}>${lv}</option>`).join("")}
+     </select>
+    </td>
+    <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${Number(u.balance || 0)}" style="width:90px"></td>
+    <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:80px"></td>
+    <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:80px"></td>
+    <td><input id="adm_ord_${u.id}" type="number" min="0" value="${Number(u.orders || 0)}" style="width:65px"></td>
+    <td>
+     <button type="button" class="btn btn-light" style="padding:4px 8px;font-size:11px" onclick="openOrderRuleModal('${u.id}')">🎯 Rule</button>
+     ${ruleBadge}
+    </td>
+    <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">Reset</button></td>
+   </tr>
+  `;
+ }).join("");
 }
 
 async function saveAllUsersAdmin() {
@@ -1266,14 +1404,15 @@ async function saveAllUsersAdmin() {
   u.balance = Number($(`adm_bal_${u.id}`).value) || 0;
   u.negative_balance = Number($(`adm_neg_${u.id}`).value) || 0;
   u.profit_box = Number($(`adm_pbox_${u.id}`).value) || 0;
+  u.orders = Math.max(0, Number($(`adm_ord_${u.id}`).value) || 0);
   await writeUserToDb(u);
  }
- showAlert("✅ All user changes saved & synced to Firebase!");
+ showAlert("✅ All user changes saved & synced to user accounts!");
  renderAllViews();
 }
 
 async function resetUserOrders(userId) {
- const u = allUsers.find(x => x.id === userId);
+ const u = allUsers.find(x => String(x.id) === String(userId));
  if (!u) return;
  u.orders = 0;
  await writeUserToDb(u);
@@ -1372,7 +1511,7 @@ function renderCsClientList() {
  if (!cList) return;
  const list = allUsers.filter(u => !q || (u.name || "").toLowerCase().includes(q) || (u.identity || "").toLowerCase().includes(q));
  cList.innerHTML = list.map(u => `
-  <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer;background:${selectedCsUserId===u.id?'rgba(0,128,128,0.12)':'transparent'}" onclick="selectCsClient('${u.id}')">
+  <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer;background:${String(selectedCsUserId)===String(u.id)?'rgba(0,128,128,0.12)':'transparent'}" onclick="selectCsClient('${u.id}')">
    <b>${u.name || 'User'}</b>
    <div class="small muted">${u.identity || '-'} · ${formatUsdWithMmk(u.balance || 0)}</div>
   </div>
@@ -1380,8 +1519,8 @@ function renderCsClientList() {
 }
 
 function selectCsClient(uid) {
- selectedCsUserId = uid;
- const u = allUsers.find(x => x.id === uid);
+ selectedCsUserId = String(uid);
+ const u = allUsers.find(x => String(x.id) === String(uid));
  if (u) {
   $("csActiveUserTitle").textContent = `Chat with ${u.name || 'User'} (${u.identity})`;
   loadAdminChatMessages(uid);
@@ -1392,8 +1531,11 @@ function selectCsClient(uid) {
 function loadAdminChatMessages(uid) {
  const box = $("adminChatMessages");
  if (!box) return;
- const msgs = allMessages.filter(m => m.user_id === uid);
- box.innerHTML = msgs.map(m => renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? 'Trip Booking Service (You)' : 'User')).join("");
+ const uidStr = String(uid);
+ const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
+ box.innerHTML = msgs.map(m =>
+  renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? 'Trip Booking Service (You)' : 'User')
+ ).join("");
  box.scrollTop = box.scrollHeight;
 }
 
@@ -1463,7 +1605,7 @@ function renderHistory() {
  const tbody = $("historyRows");
  if (!tbody) return;
  if (!currentUser) { tbody.innerHTML = ""; return; }
- const list = allTransactions.filter(t => t.user_id === currentUser.id);
+ const list = allTransactions.filter(t => String(t.user_id) === String(currentUser.id));
  tbody.innerHTML = list.map(t => `
   <tr>
    <td>${t.date}</td>
