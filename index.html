@@ -194,7 +194,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="hero">
   <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
   <p data-i18n="heroSub">International Trip Booking Platform</p>
-  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage')" data-i18n="startTaskBtn">Start Booking Tasks</button>
+  <button class="btn" style="margin-top:14px;background:white;color:var(--fb-primary)" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">Start Booking Tasks</button>
  </div>
 
  <div class="section-title">
@@ -327,7 +327,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-  <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')" data-i18n="tabUsers">👥 USERS & VIP CONTROL (<span id="tabUsersCount">0</span>)</button>
+  <button class="btn" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 USERS & VIP CONTROL (<span id="tabUsersCount">0</span>)</button>
   <button class="btn btn-light" id="tabHotelsBtn" onclick="switchAdminTab('hotels')" data-i18n="tabHotels">🏨 HOTELS & RATES</button>
   <button class="btn btn-light" id="tabCsBtn" onclick="switchAdminTab('cs')" data-i18n="tabCs">💬 TRIP BOOKING SERVICE CHAT</button>
  </div>
@@ -488,7 +488,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 
 const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5NDk4NzMxOSwiZXhwIjoyMTEwNTYzMzE5fQ.ysY6-UcNHatfmmb6OG0bxJAJirBj-G8lqj7JgTINvAQ2";
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = (window.supabase && window.supabase.createClient)
+ ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+ : null;
 
 const $ = id => document.getElementById(id);
 
@@ -555,22 +557,6 @@ function build238Hotels() {
  return list;
 }
 
-let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
-let defaultHotelsList = build238Hotels();
-let allHotels = defaultHotelsList;
-let visibleHotelsLimit = 48;
-let allVipTiers = [
- { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.0050, min_bal: 0, max_withdraw: 1000 },
- { level: "LV2", name: "VIP 2", daily_limit: 35, profit_rate: 0.0080, min_bal: 500, max_withdraw: 5000 },
- { level: "LV3", name: "VIP 3", daily_limit: 40, profit_rate: 0.0120, min_bal: 2000, max_withdraw: 20000 },
- { level: "LV4", name: "VIP 4", daily_limit: 45, profit_rate: 0.0180, min_bal: 5000, max_withdraw: 50000 },
- { level: "LV5", name: "VIP 5", daily_limit: 50, profit_rate: 0.0250, min_bal: 10000, max_withdraw: 100000 }
-];
-let currentUser = null;
-let authMode = "login";
-let activeTask = null;
-let selectedCsUserId = null;
-
 const I18N = {
  my: {
   loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
@@ -589,8 +575,8 @@ const I18N = {
   passwordLabel: "စကားဝှက်", continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   showAllHotelsBtn: "ဟိုတယ် ၂၃၈ ခုလုံး ပြရန်", csHeader: "🎧 Trip Booking Service (24/7 Online)",
-  typeMsgPh: "စာရိုက်ရန်...", refreshBtn: "🔄 REFRESH", logoutBtn: "ထွက်ရန်",
-  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  typeMsgPh: "စာရိုက်ရန်...", refreshBtn: "🔄 REFRESH",
+  tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
   allUsersHead: "မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)", saveChangesBtn: "💾 ပြောင်းလဲမှုများ သိမ်းမည်",
   thName: "အမည်", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "မိတ်ဆက်",
   thVip: "VIP အဆင့်", thBal: "လက်ကျန် ($)", thOrders: "အော်ဒါ", thReset: "အစပြန်ရန်",
@@ -622,8 +608,8 @@ const I18N = {
   passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   showAllHotelsBtn: "Show All 238 Hotels", csHeader: "🎧 Trip Booking Service (24/7 Online)",
-  typeMsgPh: "Type a message...", refreshBtn: "🔄 REFRESH", logoutBtn: "Logout",
-  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  typeMsgPh: "Type a message...", refreshBtn: "🔄 REFRESH",
+  tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
   allUsersHead: "All Registered Users (Real-Time)", saveChangesBtn: "💾 Save All Changes",
   thName: "Name", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "Referral",
   thVip: "VIP Tier", thBal: "Balance ($)", thOrders: "Orders", thReset: "Reset",
@@ -655,8 +641,8 @@ const I18N = {
   passwordLabel: "รหัสผ่าน", continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   showAllHotelsBtn: "แสดงโรงแรมทั้งหมด 238 แห่ง", csHeader: "🎧 Trip Booking Service (24/7 Online)",
-  typeMsgPh: "พิมพ์ข้อความ...", refreshBtn: "🔄 REFRESH", logoutBtn: "ออกจากระบบ",
-  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  typeMsgPh: "พิมพ์ข้อความ...", refreshBtn: "🔄 REFRESH",
+  tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
   allUsersHead: "ผู้ใช้ที่ลงทะเบียนทั้งหมด (Real-Time)", saveChangesBtn: "💾 บันทึกการเปลี่ยนแปลง",
   thName: "ชื่อ", thPhoneEmail: "เบอร์โทร / อีเมล", thPass: "รหัสผ่าน", thRef: "แนะนำ",
   thVip: "ระดับ VIP", thBal: "ยอดเงิน ($)", thOrders: "ออเดอร์", thReset: "รีเซ็ต",
@@ -688,8 +674,8 @@ const I18N = {
   passwordLabel: "密码", continueBtn: "继续", switchAuth: "切换 登录 / 注册",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   showAllHotelsBtn: "显示全部 238 家酒店", csHeader: "🎧 Trip Booking Service (24/7 Online)",
-  typeMsgPh: "输入消息...", refreshBtn: "🔄 REFRESH", logoutBtn: "退出登录",
-  tabUsers: "👥 USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
+  typeMsgPh: "输入消息...", refreshBtn: "🔄 REFRESH",
+  tabHotels: "🏨 HOTELS & RATES", tabCs: "💬 TRIP BOOKING SERVICE CHAT",
   allUsersHead: "所有注册用户 (实时)", saveChangesBtn: "💾 保存所有更改",
   thName: "姓名", thPhoneEmail: "电话 / 邮箱", thPass: "密码", thRef: "推荐码",
   thVip: "VIP 等级", thBal: "余额 ($)", thOrders: "订单", thReset: "重置",
@@ -707,35 +693,8 @@ const I18N = {
 };
 
 let currentLang = localStorage.getItem("tb_lang_sync") || "my";
-
-function changeLanguage(lang) {
- currentLang = lang;
- localStorage.setItem("tb_lang_sync", lang);
- $("language").value = lang;
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const k = el.getAttribute("data-i18n");
-  if(I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
- });
- document.querySelectorAll("[data-i18n-ph]").forEach(el => {
-  const k = el.getAttribute("data-i18n-ph");
-  if(I18N[lang] && I18N[lang][k]) el.placeholder = I18N[lang][k];
- });
- renderAllViews();
-}
-
-let baseRates = { usd: 4500.00, thb: 132.50, cny: 625.80 };
-function startLiveRates() {
- setInterval(() => {
-  const u = (baseRates.usd + (Math.random() - 0.5) * 4).toFixed(2);
-  const t = (baseRates.thb + (Math.random() - 0.5) * 0.4).toFixed(2);
-  const c = (baseRates.cny + (Math.random() - 0.5) * 1.2).toFixed(2);
-  ["rateUsd", "pRateUsd"].forEach(id => { if($(id)) $(id).textContent = u; });
-  ["rateThb", "pRateThb"].forEach(id => { if($(id)) $(id).textContent = t; });
-  ["rateCny", "pRateCny"].forEach(id => { if($(id)) $(id).textContent = c; });
- }, 3500);
-}
-
 let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
+let localMessages = JSON.parse(localStorage.getItem("tb_local_messages") || "[]");
 let defaultHotelsList = build238Hotels();
 let allHotels = defaultHotelsList;
 let visibleHotelsLimit = 48;
@@ -750,6 +709,25 @@ let currentUser = null;
 let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
+
+function applyLanguageTexts(lang) {
+ currentLang = lang;
+ localStorage.setItem("tb_lang_sync", lang);
+ if($("language")) $("language").value = lang;
+ document.querySelectorAll("[data-i18n]").forEach(el => {
+  const k = el.getAttribute("data-i18n");
+  if(I18N[lang] && I18N[lang][k]) el.textContent = I18N[lang][k];
+ });
+ document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+  const k = el.getAttribute("data-i18n-ph");
+  if(I18N[lang] && I18N[lang][k]) el.placeholder = I18N[lang][k];
+ });
+}
+
+function changeLanguage(lang) {
+ applyLanguageTexts(lang);
+ renderAllViews();
+}
 
 function isAdminUser(user) {
  if(!user) return false;
@@ -788,27 +766,39 @@ function showPage(pageId, navBtn) {
 }
 
 async function forceSyncNow() {
+ if(!sb) {
+  renderAllViews();
+  return;
+ }
  try {
-  const [vipsRes, htsRes, usrsRes] = await Promise.all([
+  const [vipsRes, htsRes, usrsRes, msgsRes] = await Promise.all([
    sb.from('vip_tiers').select('*').order('daily_limit', { ascending: true }),
    sb.from('hotels').select('*'),
-   sb.from('users').select('*').order('created_at', { ascending: false })
+   sb.from('users').select('*').order('created_at', { ascending: false }),
+   sb.from('messages').select('*').order('created_at', { ascending: true })
   ]);
 
-  if(vipsRes.data && vipsRes.data.length > 0) allVipTiers = vipsRes.data;
-  if(htsRes.data && htsRes.data.length > 0) {
+  if(vipsRes && vipsRes.data && vipsRes.data.length > 0) allVipTiers = vipsRes.data;
+  if(htsRes && htsRes.data && htsRes.data.length > 0) {
    const dbIds = new Set(htsRes.data.map(x => x.id));
    const remaining = defaultHotelsList.filter(x => !dbIds.has(x.id));
    allHotels = [...htsRes.data, ...remaining];
   } else {
    allHotels = defaultHotelsList;
   }
-  if(usrsRes.data) {
-   allUsers = usrsRes.data;
+  if(usrsRes && usrsRes.data && usrsRes.data.length > 0) {
+   const mergedMap = new Map();
+   allUsers.forEach(u => mergedMap.set(u.id, u));
+   usrsRes.data.forEach(u => mergedMap.set(u.id, { ...(mergedMap.get(u.id) || {}), ...u }));
+   allUsers = Array.from(mergedMap.values());
    localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
    if(currentUser) {
     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
    }
+  }
+  if(msgsRes && msgsRes.data && msgsRes.data.length > 0) {
+   localMessages = msgsRes.data;
+   localStorage.setItem("tb_local_messages", JSON.stringify(localMessages));
   }
  } catch(e) {
   allHotels = defaultHotelsList;
@@ -816,12 +806,10 @@ async function forceSyncNow() {
  renderAllViews();
 }
 
-async function initSupabaseData() {
- await forceSyncNow();
-
- // Ensure Admin exists
+function ensureAdminAccount() {
  const adminIdent = "09775191427";
- if(!allUsers.some(u => u.identity === adminIdent)) {
+ const existingIdx = allUsers.findIndex(u => (u.identity || "").trim() === adminIdent);
+ if(existingIdx === -1) {
   const adminUser = {
    id: "999999",
    name: "Admin Master",
@@ -841,35 +829,41 @@ async function initSupabaseData() {
   };
   allUsers.unshift(adminUser);
   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
-  try { await sb.from('users').upsert([adminUser]); } catch(e) {}
+  if(sb) sb.from('users').upsert([adminUser]).catch(()=>{});
+ } else {
+  allUsers[existingIdx].password = "12344321";
+  if(!allUsers[existingIdx].referral_code) allUsers[existingIdx].referral_code = "TP2323";
+  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
  }
+}
 
+async function initSupabaseData() {
+ ensureAdminAccount();
  const savedUserId = localStorage.getItem("tb_session_uid");
  if(savedUserId) {
   const found = allUsers.find(u => u.id === savedUserId);
   if(found) currentUser = found;
  }
- changeLanguage(currentLang);
+ applyLanguageTexts(currentLang);
  renderAllViews();
 
+ await forceSyncNow();
+
+ if(!sb) return;
  try {
   sb.channel('global-realtime-sync')
    .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => { forceSyncNow(); })
    .on('postgres_changes', { event: '*', schema: 'public', table: 'hotels' }, () => { forceSyncNow(); })
    .on('postgres_changes', { event: '*', schema: 'public', table: 'vip_tiers' }, () => { forceSyncNow(); })
    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
-    if(currentUser) loadUserMessages(currentUser.id);
-    if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+    forceSyncNow();
    })
    .subscribe();
  } catch(err) {}
 
  setInterval(() => {
   forceSyncNow();
-  if(selectedCsUserId && !$("adminCsTab").classList.contains("hidden")) {
-   loadAdminChatMessages(selectedCsUserId);
-  }
- }, 10000);
+ }, 15000);
 }
 
 function openAuth(mode) {
@@ -910,7 +904,7 @@ async function submitAuth() {
  }
 
  if(authMode === "register") {
-  let existing = allUsers.filter(u => u.identity === identity);
+  const existing = allUsers.filter(u => (u.identity || "").trim().toLowerCase() === identity);
   if(existing.length > 0) {
    err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
    return;
@@ -920,11 +914,11 @@ async function submitAuth() {
   const refInput = $("regRefInput").value.trim().toUpperCase() || "TP2323";
   let invitedBy = "-";
 
-  const refOwner = allUsers.find(u => u.referral_code === refInput);
+  const refOwner = allUsers.find(u => (u.referral_code || "").toUpperCase() === refInput);
   if(refOwner) {
    invitedBy = refOwner.id;
    refOwner.invited_count = (refOwner.invited_count || 0) + 1;
-   await sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id).catch(()=>{});
+   if(sb) sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id).catch(()=>{});
   }
 
   const newId = String(Math.floor(100000 + Math.random() * 900000));
@@ -950,52 +944,26 @@ async function submitAuth() {
 
   allUsers.unshift(newUser);
   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
-
-  try {
-   await sb.from('users').insert([newUser]);
-  } catch(e) {}
+  if(sb) sb.from('users').insert([newUser]).catch(()=>{});
 
   currentUser = newUser;
   localStorage.setItem("tb_session_uid", newUser.id);
   closeModal("authModal");
-  await forceSyncNow();
+  renderAllViews();
 
   if(isAdminUser(currentUser)) {
    showPage("staffPage");
   } else {
    showPage("profilePage");
   }
-  showAlert(`အကောင့်အသစ် ဖွင့်လှစ်ခြင်း အောင်မြင်ပါသည်။`);
+  showAlert("အကောင့်အသစ် ဖွင့်လှစ်ခြင်း အောင်မြင်ပါသည်။");
   return;
  }
 
- // Login mode
- let user = allUsers.find(u => u.identity === identity && u.password === password);
- if(!user) {
-  if(identity === "09775191427" && password === "12344321") {
-   user = {
-    id: "999999",
-    name: "Admin Master",
-    identity: "09775191427",
-    password: "12344321",
-    referral_code: "TP2323",
-    invited_by: "-",
-    invited_count: 0,
-    balance: 9999.00,
-    commission: 0.00,
-    total_profit: 0.00,
-    referral_earned: 0.00,
-    orders: 0,
-    vip_level: "LV5",
-    neg_dollar: 0.00,
-    profit_box: 0.00
-   };
-   allUsers.unshift(user);
-   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
-  }
- }
+ ensureAdminAccount();
+ let user = allUsers.find(u => (u.identity || "").trim().toLowerCase() === identity && String(u.password) === password);
 
- if(!user) {
+ if(!user && sb) {
   try {
    const { data } = await sb.from('users').select('*').eq('identity', identity).eq('password', password).maybeSingle();
    if(data) user = data;
@@ -1023,7 +991,7 @@ function logout() {
  currentUser = null;
  localStorage.removeItem("tb_session_uid");
  renderAllViews();
- showPage("homePage");
+ showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
 
 function getVipInfo(level) {
@@ -1065,26 +1033,28 @@ async function submitCurrentOrder() {
 
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
 
- try {
-  await sb.from('users').update({
-   balance: currentUser.balance,
-   commission: currentUser.commission,
-   total_profit: currentUser.total_profit,
-   orders: currentUser.orders
-  }).eq('id', currentUser.id);
+ if(sb) {
+  try {
+   await sb.from('users').update({
+    balance: currentUser.balance,
+    commission: currentUser.commission,
+    total_profit: currentUser.total_profit,
+    orders: currentUser.orders
+   }).eq('id', currentUser.id);
 
-  await sb.from('transactions').insert([{
-   user_id: currentUser.id,
-   type: 'Booking Profit',
-   hotel_name: hotel.name,
-   order_price: hotel.price,
-   amount: commission,
-   status: 'Approved'
-  }]);
- } catch(e) {}
+   await sb.from('transactions').insert([{
+    user_id: currentUser.id,
+    type: 'Booking Profit',
+    hotel_name: hotel.name,
+    order_price: hotel.price,
+    amount: commission,
+    status: 'Approved'
+   }]);
+  } catch(e) {}
+ }
 
  activeTask = null;
- await forceSyncNow();
+ renderAllViews();
  showAlert(`🎉 အော်ဒါအောင်မြင်ပါသည်။ ကော်မရှင် <b>+${formatUsdWithMmk(commission)}</b> ရရှိပါသည်။`);
 }
 
@@ -1098,22 +1068,32 @@ function handleWithdrawRequest() {
   return;
  }
 
- showPage('supportPage');
+ showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
  sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: ${formatUsdWithMmk(bal)})`);
 }
 
 function handleDepositRequest() {
  if(!currentUser) return;
- showPage('supportPage');
+ showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
  sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
+}
+
+function saveMessageRecord(msgObj) {
+ localMessages.push(msgObj);
+ localStorage.setItem("tb_local_messages", JSON.stringify(localMessages));
+ if(sb) sb.from('messages').insert([msgObj]).catch(()=>{});
 }
 
 async function sendQuickSuggestion(text) {
  if(!currentUser) { openAuth('login'); return; }
- const newMsg = { user_id: currentUser.id, sender: 'user', text: text, created_at: new Date().toISOString() };
- try {
-  await sb.from('messages').insert([newMsg]);
- } catch(e) {}
+ const newMsg = {
+  id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+  user_id: currentUser.id,
+  sender: 'user',
+  text: text,
+  created_at: new Date().toISOString()
+ };
+ saveMessageRecord(newMsg);
  loadUserMessages(currentUser.id);
 }
 
@@ -1126,13 +1106,8 @@ async function sendSupportMessage() {
  await sendQuickSuggestion(text);
 }
 
-async function loadUserMessages(userId) {
- let data = [];
- try {
-  const res = await sb.from('messages').select('*').eq('user_id', userId).order('created_at', { ascending: true });
-  data = res.data || [];
- } catch(e) {}
- 
+function loadUserMessages(userId) {
+ const data = localMessages.filter(m => m.user_id === userId);
  const box = $("supportMessages");
  if(!box) return;
  box.innerHTML = data.map(m => `
@@ -1140,7 +1115,7 @@ async function loadUserMessages(userId) {
    background:${m.sender==='user'?'var(--fb-primary)':'var(--fb-card)'};
    color:${m.sender==='user'?'white':'var(--fb-text)'};
    margin-left:${m.sender==='user'?'auto':'0'};box-shadow:var(--shadow)">
-   <div style="font-size:10px;opacity:0.8;font-weight:700">${m.sender==='user' ? currentUser.name : 'Trip Booking Service'}</div>
+   <div style="font-size:10px;opacity:0.8;font-weight:700">${m.sender==='user' ? (currentUser ? currentUser.name : 'User') : 'Trip Booking Service'}</div>
    <div>${m.text}</div>
   </div>
  `).join("");
@@ -1167,8 +1142,8 @@ function switchAdminTab(tab) {
 }
 
 function renderAdminUsers() {
- $("totalUsersBadge").textContent = allUsers.length;
- $("tabUsersCount").textContent = allUsers.length;
+ if($("totalUsersBadge")) $("totalUsersBadge").textContent = allUsers.length;
+ if($("tabUsersCount")) $("tabUsersCount").textContent = allUsers.length;
 
  const q = ($("adminUserSearch")?.value || "").toLowerCase();
  const filtered = allUsers.filter(u =>
@@ -1178,6 +1153,7 @@ function renderAdminUsers() {
   (u.id || "").includes(q)
  );
 
+ if(!$("adminUsersRows")) return;
  $("adminUsersRows").innerHTML = filtered.map((u) => `
   <tr>
    <td><b>${u.id}</b></td>
@@ -1209,25 +1185,22 @@ async function saveAllUsersAdmin() {
   u.password = $(`adm_pass_${u.id}`).value;
   u.referral_code = $(`adm_ref_${u.id}`).value;
   u.vip_level = $(`adm_vip_${u.id}`).value;
-  
-  const newBal = Number($(`adm_bal_${u.id}`).value);
-  const diff = newBal - Number(u.balance);
-  u.balance = newBal;
+  u.balance = Number($(`adm_bal_${u.id}`).value);
   u.neg_dollar = Number($(`adm_neg_${u.id}`).value);
   u.profit_box = Number($(`adm_pbox_${u.id}`).value);
   u.orders = Number($(`adm_ord_${u.id}`).value);
 
-  try {
-   await sb.from('users').update({
+  if(sb) {
+   sb.from('users').update({
     name: u.name, identity: u.identity, password: u.password,
     referral_code: u.referral_code, vip_level: u.vip_level,
     balance: u.balance, neg_dollar: u.neg_dollar,
     profit_box: u.profit_box, orders: u.orders
-   }).eq('id', u.id);
-  } catch(e) {}
+   }).eq('id', u.id).catch(()=>{});
+  }
  }
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
- await forceSyncNow();
+ renderAllViews();
  showAlert("✅ အသုံးပြုသူ အချက်အလက်များအားလုံးကို သိမ်းဆည်းပြီးပါပြီ။");
 }
 
@@ -1235,8 +1208,8 @@ async function resetSingleUserOrder(uid) {
  const u = allUsers.find(x => x.id === uid);
  if(u) u.orders = 0;
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
- try { await sb.from('users').update({ orders: 0 }).eq('id', uid); } catch(e) {}
- await forceSyncNow();
+ if(sb) sb.from('users').update({ orders: 0 }).eq('id', uid).catch(()=>{});
+ renderAllViews();
  showAlert("အော်ဒါအရေအတွက်ကို (0) သို့ ပြန်လည်သတ်မှတ်ပြီးပါပြီ။");
 }
 
@@ -1272,12 +1245,12 @@ async function saveHotelsAndVipsAdmin() {
   v.profit_rate = Number($(`vip_r_${i}`).value) / 100;
   v.min_bal = Number($(`vip_m_${i}`).value);
   v.max_withdraw = Number($(`vip_w_${i}`).value);
-  try {
-   await sb.from('vip_tiers').update({
+  if(sb) {
+   sb.from('vip_tiers').update({
     name: v.name, daily_limit: v.daily_limit, profit_rate: v.profit_rate,
     min_bal: v.min_bal, max_withdraw: v.max_withdraw
-   }).eq('level', v.level);
-  } catch(e) {}
+   }).eq('level', v.level).catch(()=>{});
+  }
  }
 
  for(let i = 0; i < Math.min(allHotels.length, 60); i++) {
@@ -1286,13 +1259,13 @@ async function saveHotelsAndVipsAdmin() {
   h.country = $(`ht_c_${i}`).value;
   h.stars = Number($(`ht_s_${i}`).value);
   h.price = Number($(`ht_p_${i}`).value);
-  try {
-   await sb.from('hotels').upsert([{
+  if(sb) {
+   sb.from('hotels').upsert([{
     id: h.id, name: h.name, country: h.country, stars: h.stars, price: h.price, image: h.image
-   }]);
-  } catch(e) {}
+   }]).catch(()=>{});
+  }
  }
- await forceSyncNow();
+ renderAllViews();
  showAlert("✅ ဟိုတယ်ဈေးနှုန်းနှင့် VIP နှုန်းထားများကို သိမ်းဆည်းပြီးပါပြီ။");
 }
 
@@ -1308,18 +1281,19 @@ async function addHotelToSupabase() {
  const id = "H" + Math.floor(100 + Math.random() * 900);
  const newH = { id, name, country, price, stars, image: VERIFIED_HOTEL_IMAGES[Math.floor(Math.random() * VERIFIED_HOTEL_IMAGES.length)] };
  allHotels.unshift(newH);
- try { await sb.from('hotels').insert([newH]); } catch(e) {}
+ if(sb) sb.from('hotels').insert([newH]).catch(()=>{});
  closeModal("addHotelModal");
  renderAllViews();
 }
 
 async function deleteHotel(id) {
  allHotels = allHotels.filter(h => h.id !== id);
- try { await sb.from('hotels').delete().eq('id', id); } catch(e) {}
+ if(sb) sb.from('hotels').delete().eq('id', id).catch(()=>{});
  renderAllViews();
 }
 
 function renderCsClientList() {
+ if(!$("csClientList")) return;
  const q = ($("csClientSearch")?.value || "").toLowerCase();
  const filtered = allUsers.filter(u =>
   (u.name || "").toLowerCase().includes(q) ||
@@ -1343,14 +1317,11 @@ function selectCsClient(uid) {
  loadAdminChatMessages(uid);
 }
 
-async function loadAdminChatMessages(uid) {
- let data = [];
- try {
-  const res = await sb.from('messages').select('*').eq('user_id', uid).order('created_at', { ascending: true });
-  data = res.data || [];
- } catch(e) {}
-
- $("adminChatMessages").innerHTML = data.map(m => `
+function loadAdminChatMessages(uid) {
+ const data = localMessages.filter(m => m.user_id === uid);
+ const box = $("adminChatMessages");
+ if(!box) return;
+ box.innerHTML = data.map(m => `
   <div style="margin:6px 0;padding:8px 12px;border-radius:8px;max-width:80%;
    background:${m.sender==='support'?'var(--fb-primary)':'var(--fb-card)'};
    color:${m.sender==='support'?'white':'var(--fb-text)'};
@@ -1359,7 +1330,6 @@ async function loadAdminChatMessages(uid) {
    <div>${m.text}</div>
   </div>
  `).join("");
- const box = $("adminChatMessages");
  box.scrollTop = box.scrollHeight;
 }
 
@@ -1369,8 +1339,14 @@ async function sendAdminChatReply() {
  const text = inp.value.trim();
  if(!text) return;
  inp.value = "";
- const newMsg = { user_id: selectedCsUserId, sender: 'support', text: text, created_at: new Date().toISOString() };
- try { await sb.from('messages').insert([newMsg]); } catch(e) {}
+ const newMsg = {
+  id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+  user_id: selectedCsUserId,
+  sender: 'support',
+  text: text,
+  created_at: new Date().toISOString()
+ };
+ saveMessageRecord(newMsg);
  loadAdminChatMessages(selectedCsUserId);
 }
 
@@ -1410,7 +1386,7 @@ function renderHotels() {
       <span class="price">$${Number(h.price || 100).toFixed(2)}</span>
       <span class="mmk-sub">(${mmkAmt} MMK)</span>
      </div>
-     <button class="btn" style="padding:5px 12px;font-size:12px" onclick="showPage('bookingPage')">Book</button>
+     <button class="btn" style="padding:5px 12px;font-size:12px" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">Book</button>
     </div>
    </div>
   </div>
@@ -1418,8 +1394,9 @@ function renderHotels() {
 }
 
 function renderBookingArea() {
+ if(!$("bookingHotelArea")) return;
  if(!currentUser) {
-  $("bookingHotelArea").innerHTML = `<p class="muted" style="text-align:center">Please login to access tasks.</p>`;
+  $("bookingHotelArea").innerHTML = `<p class="muted" style="text-align:center">${I18N[currentLang].loginPrompt}</p>`;
   return;
  }
  const vip = getVipInfo(currentUser.vip_level);
@@ -1445,12 +1422,18 @@ function renderBookingArea() {
 }
 
 async function renderHistoryTable() {
- if(!currentUser) return;
+ if(!$("historyRows")) return;
+ if(!currentUser) {
+  $("historyRows").innerHTML = `<tr><td colspan="5" style="text-align:center">${I18N[currentLang].loginPrompt}</td></tr>`;
+  return;
+ }
  let data = [];
- try {
-  const res = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-  data = res.data || [];
- } catch(e) {}
+ if(sb) {
+  try {
+   const res = await sb.from('transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+   data = res.data || [];
+  } catch(e) {}
+ }
 
  $("historyRows").innerHTML = data.map(t => `
   <tr>
@@ -1464,11 +1447,12 @@ async function renderHistoryTable() {
 }
 
 function renderAllViews() {
- changeLanguage(currentLang);
+ applyLanguageTexts(currentLang);
  renderHotels();
  renderBookingArea();
  renderAdminUsers();
  renderCsClientList();
+ if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
 
  const isAdm = isAdminUser(currentUser);
  if(isAdm) {
@@ -1507,6 +1491,7 @@ function renderAllViews() {
   $("headerAuthBtn").classList.remove("hidden");
   $("guestAuthBox").classList.remove("hidden");
   $("memberProfileBox").classList.add("hidden");
+  renderHistoryTable();
  }
 }
 
@@ -1526,7 +1511,7 @@ function setupPWAManifest() {
   icons: [{ src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=192", sizes: "192x192", type: "image/png" }]
  };
  const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
- $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
+ if($("pwaManifest")) $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
 }
 </script>
 </body>
