@@ -61,7 +61,7 @@ input,select,textarea{
  border-radius:6px;background:var(--fb-card);color:var(--fb-text);
  outline:none;
 }
-input:focus,select:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
+input:focus,select:focus,textarea:focus{border-color:var(--fb-primary);box-shadow:0 0 0 2px rgba(0,128,128,0.2)}
 label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
 
 .pass-wrap{position:relative;display:flex;align-items:center}
@@ -71,13 +71,48 @@ label{font-size:13px;font-weight:600;display:block;margin:10px 0 4px}
  color:var(--fb-muted);font-size:16px;padding:4px;cursor:pointer;
 }
 
+/* Intro Splash Screen */
+.intro-splash{
+ position:fixed;inset:0;z-index:500;
+ background:radial-gradient(circle at center,#004d4d 0%,#001f1f 100%);
+ color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ overflow:hidden;padding:20px;text-align:center;
+ transition:opacity 0.6s ease;
+}
+.intro-splash.fade-out{opacity:0;pointer-events:none}
+.intro-logo-wrap{
+ margin-bottom:16px;
+ opacity:0;transform:scale(0.3) rotate(-180deg);
+ transition:all 1s cubic-bezier(0.22,1,0.36,1);
+}
+.intro-logo-wrap.assembled{opacity:1;transform:scale(1) rotate(0deg)}
+.intro-title-line{
+ display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+ font-size:clamp(26px,5.5vw,46px);font-weight:900;letter-spacing:1.5px;
+ color:#ffffff;text-shadow:0 4px 18px rgba(0,255,220,0.45);
+}
+.intro-sub-line{
+ display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+ margin-top:8px;font-size:clamp(13px,2.5vw,18px);font-weight:600;
+ letter-spacing:4px;text-transform:uppercase;color:#80ffff;
+}
+.fly-char{
+ display:inline-block;opacity:0;
+ transition:transform 1.1s cubic-bezier(0.16,1,0.3,1),opacity 0.9s ease;
+}
+.fly-char.in{transform:translate(0,0) rotate(0deg) scale(1)!important;opacity:1!important}
+.intro-timer-note{
+ margin-top:26px;font-size:12px;color:rgba(255,255,255,0.7);
+ letter-spacing:1px;
+}
+
 header{
  background:var(--fb-card);color:var(--fb-text);position:sticky;top:0;
  z-index:30;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;
  gap:10px;box-shadow:var(--shadow);
 }
 .logo-container{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-.logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--fb-primary)}
+.logo-svg{width:36px;height:36px;flex-shrink:0}
 .logo{font-size:20px;font-weight:800;color:var(--fb-primary)}
 .logo span{color:#00b3b3}
 .header-actions{display:flex;gap:6px;align-items:center}
@@ -116,9 +151,49 @@ header{
 .tag{display:inline-flex;align-items:center;gap:4px;background:rgba(0,128,128,0.12);color:var(--fb-primary);padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600}
 .gold-stars{color:var(--star-gold);font-size:13px;letter-spacing:1px;text-shadow:0 1px 1px rgba(0,0,0,0.2)}
 
-.onboarding-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:14px}
+.onboarding-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
 .step-card{background:var(--fb-bg);border:1px solid var(--fb-border);border-radius:10px;padding:14px}
 .step-badge{display:inline-block;background:var(--fb-primary);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;margin-bottom:8px}
+
+/* Profile Header & Wiggle Arrows */
+.profile-top-row{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+ padding-bottom:14px;border-bottom:1px solid var(--fb-border);
+}
+.profile-left{display:flex;align-items:center;gap:12px}
+.avatar-wrap{
+ position:relative;width:64px;height:64px;border-radius:50%;overflow:hidden;
+ border:2px solid var(--fb-primary);background:var(--fb-bg);cursor:pointer;flex-shrink:0;
+ display:flex;align-items:center;justify-content:center;
+}
+.avatar-wrap img{width:100%;height:100%;object-fit:cover}
+.avatar-cam-badge{
+ position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.62);
+ color:#fff;font-size:10px;text-align:center;padding:2px 0;font-weight:700;
+}
+.profile-id-sub{font-size:11px;color:var(--fb-muted);margin-top:2px;font-weight:600}
+.profile-quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.p-card-btn{
+ background:var(--fb-bg);border:1px solid var(--fb-border);border-top:3px solid var(--fb-primary);
+ border-radius:10px;padding:12px;cursor:pointer;text-align:left;transition:0.2s;
+}
+.p-card-btn:hover{border-color:var(--fb-primary)}
+.ref-strip{
+ margin-top:12px;background:var(--fb-bg);border:1px dashed var(--fb-primary);
+ border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.action-hint-box{
+ margin-top:16px;background:rgba(0,128,128,0.06);border:1px solid var(--fb-border);
+ border-radius:10px;padding:12px;text-align:center;
+}
+.arrow-wiggle{
+ display:inline-block;color:var(--fb-danger);font-weight:900;
+ animation:arrowWiggle 0.9s infinite ease-in-out;
+}
+@keyframes arrowWiggle{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(4px)}
+}
 
 .progress-wrap{background:var(--fb-bg);border:1px solid var(--fb-border);border-radius:10px;padding:12px;margin-top:14px}
 .progress-track{width:100%;height:10px;background:var(--fb-border);border-radius:999px;overflow:hidden;margin-top:8px}
@@ -158,6 +233,30 @@ header{
 }
 .chip-btn:hover{background:var(--fb-primary);color:white}
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
+
+/* Center Order Booking Modal */
+.star-picker{display:flex;gap:6px;margin:6px 0 10px}
+.star-pick-btn{
+ background:var(--fb-bg);border:1px solid var(--fb-border);color:var(--star-gold);
+ font-size:18px;padding:4px 10px;border-radius:8px;
+}
+.star-pick-btn.selected{background:rgba(255,180,0,0.18);border-color:var(--star-gold)}
+.review-chip-list{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.review-option{
+ text-align:left;background:var(--fb-bg);border:1px solid var(--fb-border);
+ color:var(--fb-text);padding:8px 10px;border-radius:8px;font-size:12px;font-weight:600;
+}
+.review-option.selected{
+ background:rgba(0,128,128,0.14);border:2px solid var(--fb-primary);color:var(--fb-primary);
+}
+.verifying-box{
+ text-align:center;padding:24px 12px;
+}
+.spinner-ring{
+ width:36px;height:36px;border:4px solid var(--fb-border);border-top-color:var(--fb-primary);
+ border-radius:50%;margin:0 auto 12px;animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .chat-img-msg{
  max-width:240px;max-height:240px;border-radius:8px;margin-top:6px;
@@ -210,9 +309,34 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 </head>
 <body>
 
+<!-- Intro Splash Screen -->
+<div class="intro-splash" id="introSplash">
+ <div class="intro-logo-wrap" id="introLogoWrap">
+  <svg width="86" height="86" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <defs>
+    <linearGradient id="tbGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+     <stop offset="0%" stop-color="#00e6cc"/>
+     <stop offset="100%" stop-color="#008080"/>
+    </linearGradient>
+   </defs>
+   <circle cx="50" cy="50" r="46" fill="url(#tbGrad)" stroke="#ffffff" stroke-width="3"/>
+   <circle cx="50" cy="50" r="34" stroke="rgba(255,255,255,0.45)" stroke-width="1.5" stroke-dasharray="4 3"/>
+   <path d="M24 56L74 34L60 72L48 58L24 56Z" fill="#ffffff"/>
+   <path d="M48 58L74 34L54 64L48 58Z" fill="#b2f5ea"/>
+  </svg>
+ </div>
+ <div class="intro-title-line" id="introTitleLine"></div>
+ <div class="intro-sub-line" id="introSubLine"></div>
+ <div class="intro-timer-note" id="introTimerNote">INTERNATIONAL TRIP BOOKING PLATFORM</div>
+</div>
+
 <header>
  <div class="logo-container" onclick="handleLogoClick()">
-  <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=120" class="logo-img" alt="Logo">
+  <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <circle cx="50" cy="50" r="46" fill="#008080" stroke="#00b3b3" stroke-width="4"/>
+   <path d="M24 56L74 34L60 72L48 58L24 56Z" fill="#ffffff"/>
+   <path d="M48 58L74 34L54 64L48 58Z" fill="#99f6e4"/>
+  </svg>
   <div class="logo">TRIP <span>BOOKING</span></div>
  </div>
  <div class="header-actions">
@@ -260,8 +384,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    </div>
    <div>
     <h4 style="margin:0 0 8px" data-i18n="footerFaqTitle">❓ FAQ</h4>
-    <p class="small muted" style="margin:4px 0" data-i18n="footerFaq1">• Deposit window: 25 minutes per request via official service.</p>
-    <p class="small muted" style="margin:4px 0" data-i18n="footerFaq2">• VIP tiers unlock higher daily order quotas and profit rates.</p>
+    <p class="small muted" style="margin:4px 0" data-i18n="footerFaq1">• Deposit window is set to 25 with official service support.</p>
+    <p class="small muted" style="margin:4px 0" data-i18n="footerFaq2">• Higher VIP tiers unlock higher daily order quotas and profit rates.</p>
    </div>
    <div>
     <h4 style="margin:0 0 8px" data-i18n="footerSecurityTitle">🛡️ Security & Assurance</h4>
@@ -349,9 +473,9 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <table>
     <thead>
      <tr>
-      <th data-i18n="thDate">Date</th>
+      <th data-i18n="thDate">Date & Time</th>
       <th data-i18n="thType">Type</th>
-      <th data-i18n="thDetails">Details</th>
+      <th data-i18n="thDetails">Details & Review</th>
       <th data-i18n="thAmount">Amount (USD / MMK)</th>
       <th data-i18n="thStatus">Status</th>
      </tr>
@@ -377,14 +501,23 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  </div>
 
  <div class="panel hidden" id="memberProfileBox">
-  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-   <div>
-    <h3 id="profileName" style="margin:0">User</h3>
-    <p class="muted" id="profileIdentity" style="margin:4px 0 0">ID: -</p>
+  <!-- Top Profile Row: Photo + Name + Small ID + VIP Badge on Side -->
+  <div class="profile-top-row">
+   <div class="profile-left">
+    <input type="file" id="profileAvatarInput" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
+    <div class="avatar-wrap" onclick="$('profileAvatarInput').click()" title="Upload Profile Photo">
+     <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" alt="Avatar">
+     <div class="avatar-cam-badge" data-i18n="uploadPhotoTag">📷 ပုံတင်</div>
+    </div>
+    <div>
+     <h3 id="profileName" style="margin:0">User</h3>
+     <div class="profile-id-sub" id="profileIdentity">ID: -</div>
+    </div>
    </div>
-   <span class="tag" id="profileVipBadge" style="font-size:14px;padding:6px 12px">LV1</span>
+   <span class="tag" id="profileVipBadge" style="font-size:14px;padding:6px 14px">LV1</span>
   </div>
 
+  <!-- VIP Progress Bar -->
   <div class="progress-wrap" id="vipProgressBox">
    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
     <strong class="small" id="vipProgressLabel">VIP Progress</strong>
@@ -396,22 +529,49 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <div class="small muted" id="vipProgressDetail" style="margin-top:6px"></div>
   </div>
 
+  <!-- Balance & Booking History Shortcut -->
+  <div class="profile-quick-grid">
+   <div class="stat-box" style="margin:0">
+    <span data-i18n="walletBal">Wallet Balance</span>
+    <strong id="walletBalance">$0.00 (0 MMK)</strong>
+   </div>
+   <div class="p-card-btn" onclick="showPage('historyPage', document.querySelectorAll('.bottom-nav button')[3])">
+    <span class="muted small" style="font-weight:700;text-transform:uppercase" data-i18n="bookingHistCardTitle">ဘိုကင်မှတ်တမ်း</span>
+    <strong style="display:block;font-size:16px;margin-top:6px;color:var(--fb-primary)" id="profileOrders">0/30 ➔</strong>
+   </div>
+  </div>
+
+  <!-- Referral Code Strip -->
+  <div class="ref-strip">
+   <div>
+    <span class="small muted" style="font-weight:700" data-i18n="inviteCodeTitle">ဖိတ်ကြားကုဒ်</span>:
+    <strong id="inviteCode" style="color:var(--fb-primary);font-size:15px">TP2323</strong>
+    <div class="small muted"><span data-i18n="refBonus">မိတ်ဆက် အမြတ်</span>: <b id="referralEarned">$0.00 (0 MMK)</b></div>
+   </div>
+   <button type="button" class="btn btn-light" style="padding:6px 12px;font-size:12px" onclick="copyInviteCode()" data-i18n="copyCodeBtn">📋 Copy</button>
+  </div>
+
+  <!-- Deposit / Withdraw with Small Hint & Wiggling Arrows -->
+  <div class="action-hint-box">
+   <div class="small" style="font-weight:700;color:var(--fb-primary);margin-bottom:6px">
+    <span class="arrow-wiggle">⬇</span>
+    <span data-i18n="depWdCsHint">ငွေသွင်း၊ ငွေထုတ်အတွက် ကန်စတာမာဆာဗစ်ကို သွားပါ</span>
+    <span class="arrow-wiggle">⬇</span>
+   </div>
+   <div style="display:flex;gap:10px">
+    <button type="button" class="btn btn-success" style="flex:1" onclick="handleDepositRequest()">
+     <span class="arrow-wiggle" style="color:#fff">➤</span> <span data-i18n="depositBtn">💳 ငွေသွင်းမည်</span>
+    </button>
+    <button type="button" class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()">
+     <span class="arrow-wiggle" style="color:#fff">➤</span> <span data-i18n="withdrawBtn">🏦 ငွေထုတ်မည်</span>
+    </button>
+   </div>
+  </div>
+
   <div class="rates-bar" style="margin-top:14px">
    <div class="rate-item"><span>🇺🇸 1 USD ➔ MMK</span><strong id="pRateUsd">4,500.00</strong></div>
    <div class="rate-item"><span>🇹🇭 1 THB ➔ MMK</span><strong id="pRateThb">132.50</strong></div>
    <div class="rate-item"><span>🇨🇳 1 CNY ➔ MMK</span><strong id="pRateCny">625.80</strong></div>
-  </div>
-
-  <div class="stats">
-   <div class="stat-box"><span data-i18n="walletBal">Wallet Balance</span><strong id="walletBalance">$0.00 (0 MMK)</strong></div>
-   <div class="stat-box"><span data-i18n="completedBookings">Completed Orders</span><strong id="profileOrders">0/30</strong></div>
-   <div class="stat-box"><span data-i18n="inviteCodeTitle">Referral Code</span><strong id="inviteCode" style="color:var(--fb-primary)">TP2323</strong></div>
-   <div class="stat-box"><span data-i18n="refBonus">Referral Earned</span><strong id="referralEarned">$0.00 (0 MMK)</strong></div>
-  </div>
-
-  <div style="display:flex;gap:10px;margin:14px 0">
-   <button type="button" class="btn btn-success" style="flex:1" onclick="handleDepositRequest()" data-i18n="depositBtn">💳 Deposit</button>
-   <button type="button" class="btn btn-danger" style="flex:1" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">🏦 Withdraw</button>
   </div>
 
   <h3 style="margin-top:20px" data-i18n="vipTiersHead">VIP Levels & Limits</h3>
@@ -563,6 +723,58 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <button type="button" onclick="showPage('profilePage',this)"><span class="nav-icon">👤</span><span data-i18n="navProfile">Profile</span></button>
 </nav>
 
+<!-- Center Order Booking Modal -->
+<div class="modal hidden" id="centerOrderModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 id="centerOrderTitle" style="margin:0">Hotel Booking</h3>
+   <button type="button" class="close" onclick="closeCenterOrderModal()">✕</button>
+  </div>
+
+  <div id="centerOrderFormBody">
+   <img id="centerOrderImg" src="" alt="Hotel" style="width:100%;height:175px;object-fit:cover;border-radius:8px;margin-bottom:10px">
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+    <div>
+     <strong id="centerOrderHotelName">Hotel</strong>
+     <div class="small muted" id="centerOrderCountry">Country</div>
+    </div>
+    <div style="text-align:right">
+     <div class="price" id="centerOrderPrice">$0.00</div>
+     <div class="small" style="color:var(--fb-success);font-weight:700" id="centerOrderComm">+$0.00</div>
+    </div>
+   </div>
+
+   <label data-i18n="rateHotelLabel">ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်</label>
+   <div class="star-picker" id="centerStarPicker">
+    <button type="button" class="star-pick-btn" data-star="1" onclick="selectOrderStar(1)">★ 1</button>
+    <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">★ 2</button>
+    <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">★ 3</button>
+    <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">★ 4</button>
+    <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">★ 5</button>
+   </div>
+
+   <label data-i18n="chooseReviewLabel">မှတ်ချက် ၅ ခုထဲမှ တစ်ခု ရွေးချယ်ပါ</label>
+   <div class="review-chip-list" id="centerReviewChips"></div>
+
+   <label data-i18n="customReviewLabel">သို့မဟုတ် ကိုယ်တိုင်စိတ်ကြိုက် မှတ်ချက်ရေးပါ</label>
+   <textarea id="centerCustomReviewInput" rows="2" placeholder="မှတ်ချက် ရေးထည့်နိုင်ပါသည်..." oninput="onCustomReviewInput()" data-i18n-ph="customReviewPh"></textarea>
+
+   <p id="centerReviewWarn" style="color:var(--fb-danger);font-size:12px;font-weight:700;margin:8px 0 0"></p>
+
+   <div style="display:flex;gap:10px;margin-top:14px">
+    <button type="button" class="btn btn-light" style="flex:1" onclick="closeCenterOrderModal()" data-i18n="cancelBtn">Cancel</button>
+    <button type="button" class="btn btn-success" style="flex:1" onclick="confirmCenterOrder()" data-i18n="confirmBtn">Confirm</button>
+   </div>
+  </div>
+
+  <div id="centerOrderVerifyingBody" class="verifying-box hidden">
+   <div class="spinner-ring"></div>
+   <h4 style="margin:0;color:var(--fb-primary)" data-i18n="verifyingBookingText">ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...</h4>
+  </div>
+ </div>
+</div>
+
+<!-- Hotel Detail Modal -->
 <div class="modal hidden" id="hotelDetailModal">
  <div class="modal-box">
   <div class="modal-head">
@@ -696,6 +908,60 @@ const $ = id => document.getElementById(id);
 const MMK_PER_USD = 4500;
 let vipDepositAdjustmentPct = 0;
 
+function runIntroSplash() {
+ const splash = $("introSplash");
+ const logoWrap = $("introLogoWrap");
+ const titleLine = $("introTitleLine");
+ const subLine = $("introSubLine");
+ if (!splash || !titleLine || !subLine) return;
+
+ const mainText = "Welcome to Trip Booking";
+ const subText = "International";
+
+ function makeFlyingChars(str, container) {
+  container.innerHTML = "";
+  const spans = [];
+  for (const ch of str) {
+   const sp = document.createElement("span");
+   sp.className = "fly-char";
+   sp.innerHTML = ch === " " ? "&nbsp;" : ch;
+   const rx = (Math.random() - 0.5) * 650;
+   const ry = (Math.random() - 0.5) * 520;
+   const rot = (Math.random() - 0.5) * 240;
+   sp.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.4)`;
+   container.appendChild(sp);
+   spans.push(sp);
+  }
+  return spans;
+ }
+
+ const mainSpans = makeFlyingChars(mainText, titleLine);
+ const subSpans = makeFlyingChars(subText, subLine);
+
+ requestAnimationFrame(() => {
+  setTimeout(() => {
+   if (logoWrap) logoWrap.classList.add("assembled");
+   mainSpans.forEach((s, i) => setTimeout(() => s.classList.add("in"), i * 25));
+   subSpans.forEach((s, i) => setTimeout(() => s.classList.add("in"), 250 + i * 30));
+  }, 80);
+ });
+
+ // After letters assemble (~1.1s), wait 3 seconds then enter Home Page
+ setTimeout(() => {
+  splash.classList.add("fade-out");
+  setTimeout(() => {
+   splash.classList.add("hidden");
+   showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
+  }, 600);
+ }, 4100);
+}
+
+function formatExactTimestamp(dateObj) {
+ const d = dateObj || new Date();
+ const pad = n => String(n).padStart(2, "0");
+ return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
 function playNotificationBeep() {
  try {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -807,15 +1073,17 @@ const I18N = {
   taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
-  thDate: "ရက်စွဲ", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
+  thDate: "ရက်စွဲနှင့် အချိန် (စက္ကန့်အထိ)", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်နှင့် မှတ်ချက်", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
   step1Badge: "အဆင့် (၁)", step1Title: "ငွေဖြည့်သွင်းပါ", step1Desc: "သင့် VIP အဆင့်အလိုက် လိုအပ်သော ငွေပမာဏကို ဖြည့်သွင်းပါ။",
   step2Badge: "အဆင့် (၂)", step2Title: "Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ", step2Desc: "ဟိုတယ်ဘိုကင် တာဝန်များကို ရယူပြီး စနစ်တကျ ဆောင်ရွက်ပါ။",
   step3Badge: "အဆင့် (၃)", step3Title: "ကော်မရှင် ရယူပါ", step3Desc: "ဘိုကင်ပြီးစီးတိုင်း ကော်မရှင်ကို အကောင့်ထဲ ထည့်သွင်းပေးပါမည်။",
   myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်ဖွင့်ရန်",
+  uploadPhotoTag: "📷 ပုံတင်", bookingHistCardTitle: "ဘိုကင်မှတ်တမ်း", copyCodeBtn: "📋 Copy",
+  depWdCsHint: "ငွေသွင်း၊ ငွေထုတ်အတွက် ကန်စတာမာဆာဗစ်ကို သွားပါ",
   vipNextTitle: "နောက် VIP အဆင့်သို့ တက်ရန်", vipMaxReached: "အမြင့်ဆုံး VIP အဆင့်သို့ ရောက်ရှိပြီးပါပြီ",
   vipNeedMoreText: "နောက်အဆင့်တက်ရန် {need} ထပ်လိုပါသည်",
-  walletBal: "ပိုက်ဆံအိတ် လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
+  walletBal: "အကောင့်လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
   inviteCodeTitle: "ဖိတ်ကြားကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
   withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
   logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
@@ -855,7 +1123,21 @@ const I18N = {
   specialOrderAmountLine: "လက်ရှိ အထူးပမာဏ: <b>-{neg}</b>",
   contactCsBtn: "💬 Customer Service ကို ဆက်သွယ်မည်",
   clickGetOrderHint: "ဘိုကင်တာဝန်ရယူရန် <b>အော်ဒါယူမည်</b> ကို နှိပ်ပါ။",
-  orderPriceLabel: "အော်ဒါတန်ဖိုး", commissionLabel: "ကော်မရှင်", submitOrderBtn: "အော်ဒါတင်ပြီး ကော်မရှင်ရယူမည်",
+  orderPriceLabel: "အော်ဒါတန်ဖိုး", commissionLabel: "ကော်မရှင်", submitOrderBtn: "ဘိုကင်ကတ် ပြန်ဖွင့်မည်",
+  rateHotelLabel: "ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်",
+  chooseReviewLabel: "မှတ်ချက် ၅ ခုထဲမှ တစ်ခု ရွေးချယ်ပါ",
+  customReviewLabel: "သို့မဟုတ် ကိုယ်တိုင်စိတ်ကြိုက် မှတ်ချက်ရေးပါ",
+  customReviewPh: "မှတ်ချက် ရေးထည့်နိုင်ပါသည်...",
+  cancelBtn: "Cancel", confirmBtn: "Confirm",
+  verifyingBookingText: "ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...",
+  selectReviewWarnMsg: "ကျေးဇူးပြု၍ မှတ်ချက်တစ်ခု ရွေးချယ်ပေးပါ",
+  reviewsList: [
+   "အခန်းသန့်ရှင်းပြီး ဝန်ဆောင်မှု အရမ်းကောင်းပါတယ်",
+   "Check-in လုပ်ရတာ မြန်ဆန်ပြီး အဆင်ပြေပါတယ်",
+   "View လှပြီး မိသားစုနဲ့ နေဖို့ အရမ်းသင့်တော်ပါတယ်",
+   "တည်နေရာ အချက်အချာကျပြီး အစားအသောက် ကောင်းမွန်ပါတယ်",
+   "နောက်တစ်ကြိမ် ထပ်မံတည်းခိုချင်လောက်အောင် စိတ်ကျေနပ်မှု ရှိပါတယ်"
+  ],
   dailyOrdersLabel: "နေ့စဉ်အော်ဒါ", profitRateLabel: "အမြတ်နှုန်း", maxLimitLabel: "အများဆုံးကန့်သတ်ချက်",
   youLabel: "သင်", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (သင်)", userSenderLabel: "အသုံးပြုသူ",
   noRuleText: "Rule မရှိပါ", moreRulesText: "+{n} ထပ်မံ", resetBtn: "Reset", rulesBtn: "Rules",
@@ -899,15 +1181,17 @@ const I18N = {
   taskCenter: "Booking Task Center",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
   dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
-  thDate: "Date", thType: "Type", thDetails: "Details", thAmount: "Amount (USD / MMK)", thStatus: "Status",
+  thDate: "Date & Time (Exact)", thType: "Type", thDetails: "Details & Review", thAmount: "Amount (USD / MMK)", thStatus: "Status",
   step1Badge: "STEP 1", step1Title: "Deposit Funds", step1Desc: "Top up the required balance for your VIP level.",
   step2Badge: "STEP 2", step2Title: "Tap Get Order & Book", step2Desc: "Claim hotel booking tasks and complete them properly.",
   step3Badge: "STEP 3", step3Title: "Earn Commission", step3Desc: "Receive commission credited after each completed order.",
   myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "Login or register a new account to start earning commissions.", createAcc: "Register",
+  uploadPhotoTag: "📷 Photo", bookingHistCardTitle: "Booking History", copyCodeBtn: "📋 Copy",
+  depWdCsHint: "Go to Customer Service for Deposit & Withdrawal",
   vipNextTitle: "Progress to Next VIP Tier", vipMaxReached: "Reached highest VIP tier",
   vipNeedMoreText: "{need} more needed for next tier",
-  walletBal: "Wallet Balance", completedBookings: "Completed Orders",
+  walletBal: "Account Balance", completedBookings: "Completed Orders",
   inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
   withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
   logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
@@ -947,7 +1231,21 @@ const I18N = {
   specialOrderAmountLine: "Current Special Amount: <b>-{neg}</b>",
   contactCsBtn: "💬 Contact Customer Service",
   clickGetOrderHint: "Click <b>Get Order</b> to match a hotel booking task.",
-  orderPriceLabel: "Order Price", commissionLabel: "Commission", submitOrderBtn: "Submit & Receive Commission",
+  orderPriceLabel: "Order Price", commissionLabel: "Commission", submitOrderBtn: "Reopen Booking Card",
+  rateHotelLabel: "Star Rating",
+  chooseReviewLabel: "Select 1 of 5 Quick Reviews",
+  customReviewLabel: "Or Write Your Own Custom Review",
+  customReviewPh: "Type your booking note...",
+  cancelBtn: "Cancel", confirmBtn: "Confirm",
+  verifyingBookingText: "Verifying booking details...",
+  selectReviewWarnMsg: "Please select a review note",
+  reviewsList: [
+   "Clean room and outstanding hospitality service",
+   "Fast and smooth check-in experience",
+   "Great scenic view and very comfortable for family stay",
+   "Prime location with delicious dining options",
+   "Highly satisfied and would gladly book again"
+  ],
   dailyOrdersLabel: "Daily Orders", profitRateLabel: "Profit Rate", maxLimitLabel: "Max Limit",
   youLabel: "You", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (You)", userSenderLabel: "User",
   noRuleText: "No rule", moreRulesText: "+{n} more", resetBtn: "Reset", rulesBtn: "Rules",
@@ -991,15 +1289,17 @@ const I18N = {
   taskCenter: "ศูนย์ภารกิจการจอง",
   accBal: "ยอดคงเหลือในบัญชี", taskComm: "ค่าคอมมิชชั่นงาน", totalProfit: "กำไรทั้งหมด",
   dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับคำสั่งซื้อ", histTitle: "ประวัติธุรกรรมและการจอง",
-  thDate: "วันที่", thType: "ประเภท", thDetails: "รายละเอียด", thAmount: "จำนวนเงิน (USD / MMK)", thStatus: "สถานะ",
+  thDate: "วันที่และเวลา (วินาที)", thType: "ประเภท", thDetails: "รายละเอียดและรีวิว", thAmount: "จำนวนเงิน (USD / MMK)", thStatus: "สถานะ",
   step1Badge: "ขั้นตอนที่ 1", step1Title: "เติมเงินเข้าสู่ระบบ", step1Desc: "เติมยอดเงินตามที่ระดับ VIP ของคุณกำหนด",
   step2Badge: "ขั้นตอนที่ 2", step2Title: "กดรับงานและจอง", step2Desc: "รับงานจองโรงแรมและดำเนินการตามขั้นตอน",
   step3Badge: "ขั้นตอนที่ 3", step3Title: "รับค่าคอมมิชชั่น", step3Desc: "รับค่าคอมมิชชั่นเข้าบัญชีทันทีเมื่อเสร็จสิ้น",
   myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
   loginPrompt: "เข้าสู่ระบบหรือสร้างบัญชีใหม่เพื่อเริ่มรับค่าคอมมิชชั่น", createAcc: "สมัครสมาชิก",
+  uploadPhotoTag: "📷 รูปโปรไฟล์", bookingHistCardTitle: "ประวัติการจอง", copyCodeBtn: "📋 คัดลอก",
+  depWdCsHint: "ไปที่ฝ่ายบริการลูกค้าสำหรับการฝากและถอนเงิน",
   vipNextTitle: "ความคืบหน้าสู่ระดับ VIP ถัดไป", vipMaxReached: "ถึงระดับ VIP สูงสุดแล้ว",
   vipNeedMoreText: "ต้องการอีก {need} เพื่อเลื่อนระดับ",
-  walletBal: "ยอดเงินในกระเป๋า", completedBookings: "คำสั่งซื้อที่สำเร็จ",
+  walletBal: "ยอดเงินในบัญชี", completedBookings: "คำสั่งซื้อที่สำเร็จ",
   inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
   withdrawBtn: "🏦 ถอนเงิน", vipTiersHead: "ระดับ VIP และขีดจำกัด",
   logoutBtn: "ออกจากระบบ", navHome: "หน้าหลัก", navSupport: "บริการ",
@@ -1039,7 +1339,21 @@ const I18N = {
   specialOrderAmountLine: "ยอดพิเศษปัจจุบัน: <b>-{neg}</b>",
   contactCsBtn: "💬 ติดต่อฝ่ายบริการลูกค้า",
   clickGetOrderHint: "กด <b>รับคำสั่งซื้อ</b> เพื่อจับคู่งานจองโรงแรม",
-  orderPriceLabel: "ราคาออเดอร์", commissionLabel: "ค่าคอมมิชชั่น", submitOrderBtn: "ส่งงานและรับค่าคอมมิชชั่น",
+  orderPriceLabel: "ราคาออเดอร์", commissionLabel: "ค่าคอมมิชชั่น", submitOrderBtn: "เปิดการ์ดการจองอีกครั้ง",
+  rateHotelLabel: "คะแนนดาวโรงแรม",
+  chooseReviewLabel: "เลือกความคิดเห็น 1 จาก 5 รายการ",
+  customReviewLabel: "หรือพิมพ์ความคิดเห็นของคุณเอง",
+  customReviewPh: "พิมพ์หมายเหตุการจอง...",
+  cancelBtn: "Cancel", confirmBtn: "Confirm",
+  verifyingBookingText: "กำลังตรวจสอบข้อมูลการจอง...",
+  selectReviewWarnMsg: "กรุณาเลือกความคิดเห็นก่อนดำเนินการต่อ",
+  reviewsList: [
+   "ห้องพักสะอาดและบริการดีเยี่ยมมาก",
+   "เช็คอินรวดเร็วและสะดวกสบาย",
+   "วิวสวยมาก เหมาะสำหรับการพักผ่อนกับครอบครัว",
+   "ทำเลดีเยี่ยม อาหารอร่อยและครบครัน",
+   "ประทับใจมากและอยากกลับมาพักอีกแน่นอน"
+  ],
   dailyOrdersLabel: "ออเดอร์ต่อวัน", profitRateLabel: "อัตราผลกำไร", maxLimitLabel: "ขีดจำกัดสูงสุด",
   youLabel: "คุณ", csSenderLabel: "บริการจองทริป", csYouSenderLabel: "บริการจองทริป (คุณ)", userSenderLabel: "ผู้ใช้",
   noRuleText: "ไม่มีกฎ", moreRulesText: "+{n} เพิ่มเติม", resetBtn: "รีเซ็ต", rulesBtn: "ตั้งกฎ",
@@ -1083,15 +1397,17 @@ const I18N = {
   taskCenter: "预订任务中心",
   accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
   dailyLimit: "每日订单", getOrderBtn: "抢单", histTitle: "交易与预订记录",
-  thDate: "日期", thType: "类型", thDetails: "详情", thAmount: "金额 (USD / MMK)", thStatus: "状态",
+  thDate: "日期与时间（精确到秒）", thType: "类型", thDetails: "详情与评价", thAmount: "金额 (USD / MMK)", thStatus: "状态",
   step1Badge: "第一步", step1Title: "充值资金", step1Desc: "根据您的 VIP 等级充值所需金额。",
   step2Badge: "第二步", step2Title: "点击抢单并预订", step2Desc: "获取酒店预订任务并按要求完成。",
   step3Badge: "第三步", step3Title: "领取佣金", step3Desc: "每完成一笔订单即可获得相应佣金。",
   myProfile: "我的个人资料", welcomeTrip: "欢迎来到 Trip Booking",
   loginPrompt: "登录或注册新账户以开始赚取佣金。", createAcc: "注册",
+  uploadPhotoTag: "📷 上传头像", bookingHistCardTitle: "预订记录", copyCodeBtn: "📋 复制",
+  depWdCsHint: "充值与提现请前往联系客服",
   vipNextTitle: "升级下一 VIP 等级进度", vipMaxReached: "已达到最高 VIP 等级",
   vipNeedMoreText: "还需 {need} 可升级",
-  walletBal: "钱包余额", completedBookings: "已完成订单",
+  walletBal: "账户余额", completedBookings: "已完成订单",
   inviteCodeTitle: "邀请码", refBonus: "推荐奖励", depositBtn: "💳 充值",
   withdrawBtn: "🏦 提现", vipTiersHead: "VIP 等级与限制",
   logoutBtn: "退出登录", navHome: "首页", navSupport: "客服",
@@ -1131,7 +1447,21 @@ const I18N = {
   specialOrderAmountLine: "当前特殊金额: <b>-{neg}</b>",
   contactCsBtn: "💬 联系客服",
   clickGetOrderHint: "点击 <b>抢单</b> 匹配酒店预订任务。",
-  orderPriceLabel: "订单价格", commissionLabel: "佣金", submitOrderBtn: "提交并领取佣金",
+  orderPriceLabel: "订单价格", commissionLabel: "佣金", submitOrderBtn: "重新打开预订卡片",
+  rateHotelLabel: "酒店星级评分",
+  chooseReviewLabel: "请从以下 5 条评价中选择 1 条",
+  customReviewLabel: "或自行输入自定义评价",
+  customReviewPh: "请输入您的预订备注...",
+  cancelBtn: "Cancel", confirmBtn: "Confirm",
+  verifyingBookingText: "正在核实预订信息...",
+  selectReviewWarnMsg: "请选择一条评价备注",
+  reviewsList: [
+   "房间非常干净，服务态度极好",
+   "办理入住快捷顺畅，体验很棒",
+   "风景优美，非常适合家庭出游入住",
+   "地理位置优越，餐饮美味丰富",
+   "非常满意，下次还会再次预订入住"
+  ],
   dailyOrdersLabel: "每日订单", profitRateLabel: "利润率", maxLimitLabel: "最高上限",
   youLabel: "你", csSenderLabel: "Trip Booking 客服", csYouSenderLabel: "Trip Booking 客服（你）", userSenderLabel: "用户",
   noRuleText: "无规则", moreRulesText: "+{n} 更多", resetBtn: "重置", rulesBtn: "规则",
@@ -1170,7 +1500,11 @@ let draftOrderRules = [];
 let showAllHotelsFlag = false;
 let lastSeenMessageCount = 0;
 
-function getUserOrderRules(userObj) {
+// Center Order Booking State
+let selectedOrderStars = 5;
+let selectedOrderReviewIdx = -1;
+let missingReviewWarnCount = 0;
+ function getUserOrderRules(userObj) {
  if (!userObj) return [];
  if (Array.isArray(userObj.order_rules)) {
   return userObj.order_rules
@@ -1353,7 +1687,8 @@ function startRealtimeListeners() {
   }
  });
 }
- function updateVipDepositAdj(val) {
+
+function updateVipDepositAdj(val) {
  const pct = Number(val) || 0;
  vipDepositAdjustmentPct = pct;
  if ($("vipDepositAdjPreview")) $("vipDepositAdjPreview").textContent = `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
@@ -1413,6 +1748,7 @@ function changeLanguage(lang) {
   const k = btn.getAttribute("data-chip-key");
   if (dict[k]) btn.textContent = dict[k];
  });
+ renderCenterReviewChips();
  renderAllViews();
 }
 
@@ -1505,6 +1841,7 @@ async function submitAuth() {
    name,
    identity: storedIdentity,
    password,
+   avatar: "",
    referral_code: newCode,
    invited_by: invitedBy,
    balance: 0.00,
@@ -1529,7 +1866,7 @@ async function submitAuth() {
     text: `မင်္ဂလာပါ ${newUser.name} (${newUser.identity}) ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါသည်။`,
     image: "",
     read_by_admin: true,
-    time: new Date().toLocaleTimeString(),
+    time: formatExactTimestamp(new Date()),
     created_at: Date.now()
    });
   } catch (dbErr) {
@@ -1546,8 +1883,8 @@ async function submitAuth() {
   localStorage.removeItem("tb_admin_session");
   localStorage.setItem("tb_session_uid", String(newUser.id));
   closeModal("authModal");
-  showAlert(`Account created! Your Referral Code: <b>${newCode}</b>`);
   renderAllViews();
+  // Go straight to Profile Page without extra popup
   showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
   return;
  }
@@ -1569,6 +1906,7 @@ async function submitAuth() {
  localStorage.setItem("tb_session_uid", String(user.id));
  closeModal("authModal");
  renderAllViews();
+ // Go straight to Profile Page without extra popup
  showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
 }
 
@@ -1582,6 +1920,28 @@ async function logout() {
  }
  renderAllViews();
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
+}
+
+function handleProfileAvatarUpload(event) {
+ const file = event.target.files[0];
+ if (!file || !currentUser) return;
+ const reader = new FileReader();
+ reader.onload = async function(e) {
+  currentUser.avatar = e.target.result;
+  await writeUserToDb(currentUser);
+  renderAllViews();
+ };
+ reader.readAsDataURL(file);
+ event.target.value = "";
+}
+
+function copyInviteCode() {
+ if (!currentUser) return;
+ const code = currentUser.referral_code || "TP2323";
+ if (navigator.clipboard && navigator.clipboard.writeText) {
+  navigator.clipboard.writeText(code).catch(() => {});
+ }
+ showAlert(`<b>${code}</b>`);
 }
 
 function getVipInfo(level) {
@@ -1605,6 +1965,81 @@ function openHotelDetail(hotelId) {
   <p style="margin:6px 0;color:var(--fb-success)"><b>${d.hotelEstCommLabel} (${vip.level}):</b> +${formatUsdWithMmk(estComm)}</p>
  `;
  $("hotelDetailModal").classList.remove("hidden");
+}
+
+function selectOrderStar(starCount) {
+ selectedOrderStars = starCount;
+ document.querySelectorAll("#centerStarPicker .star-pick-btn").forEach(btn => {
+  const s = Number(btn.getAttribute("data-star"));
+  btn.classList.toggle("selected", s === starCount);
+ });
+}
+
+function renderCenterReviewChips() {
+ const box = $("centerReviewChips");
+ if (!box) return;
+ const reviews = getDict().reviewsList || [];
+ box.innerHTML = reviews.map((txt, idx) => `
+  <button type="button" class="review-option ${selectedOrderReviewIdx === idx ? 'selected' : ''}" onclick="selectPresetReview(${idx})">
+   ${selectedOrderReviewIdx === idx ? '✔ ' : '○ '}${txt}
+  </button>
+ `).join("");
+}
+
+function selectPresetReview(idx) {
+ selectedOrderReviewIdx = idx;
+ $("centerReviewWarn").textContent = "";
+ renderCenterReviewChips();
+}
+
+function onCustomReviewInput() {
+ const val = $("centerCustomReviewInput").value.trim();
+ if (val) {
+  selectedOrderReviewIdx = -1;
+  $("centerReviewWarn").textContent = "";
+  renderCenterReviewChips();
+ }
+}
+
+function openCenterOrderModal() {
+ if (!activeTask || !activeTask.hotel) return;
+ const d = getDict();
+ const { hotel, commission, orderNum } = activeTask;
+
+ selectedOrderStars = 5;
+ selectedOrderReviewIdx = -1;
+ missingReviewWarnCount = 0;
+
+ $("centerOrderTitle").textContent = `🏨 #${orderNum} · ${hotel.name}`;
+ $("centerOrderImg").src = hotel.image;
+ $("centerOrderHotelName").textContent = hotel.name;
+ $("centerOrderCountry").textContent = `${hotel.country} · ${"★".repeat(Number(hotel.stars) || 5)}`;
+ $("centerOrderPrice").textContent = formatUsdWithMmk(hotel.price);
+ $("centerOrderComm").textContent = `+${formatUsdWithMmk(commission)}`;
+ $("centerCustomReviewInput").value = "";
+ $("centerReviewWarn").textContent = "";
+
+ $("centerOrderFormBody").classList.remove("hidden");
+ $("centerOrderVerifyingBody").classList.add("hidden");
+
+ selectOrderStar(5);
+ renderCenterReviewChips();
+ $("centerOrderModal").classList.remove("hidden");
+}
+
+function closeCenterOrderModal() {
+ $("centerOrderModal").classList.add("hidden");
+ renderBookingArea();
+}
+
+function getSelectedReviewText() {
+ const custom = ($("centerCustomReviewInput")?.value || "").trim();
+ if (custom) return custom;
+ const list = getDict().reviewsList || [];
+ if (selectedOrderReviewIdx >= 0 && list[selectedOrderReviewIdx]) {
+  return list[selectedOrderReviewIdx];
+ }
+ return "";
 }
 
 function triggerGetOrder() {
@@ -1631,6 +2066,12 @@ function triggerGetOrder() {
   return;
  }
 
+ // If an order is already active and not yet submitted, reopen it
+ if (activeTask && activeTask.hotel && !activeTask.blockedByNeg) {
+  openCenterOrderModal();
+  return;
+ }
+
  const nextOrderNum = (Number(currentUser.orders) || 0) + 1;
  const hotel = allHotels[(nextOrderNum - 1) % allHotels.length];
  const rules = getUserOrderRules(currentUser);
@@ -1651,14 +2092,16 @@ function triggerGetOrder() {
  activeTask = { hotel, commission, orderNum: nextOrderNum, ruleNeg, ruleProfit };
  renderBookingArea();
  renderAllViews();
+ openCenterOrderModal();
 }
 
-async function submitCurrentOrder() {
+function confirmCenterOrder() {
  if (!currentUser || !activeTask) return;
  const d = getDict();
 
  const neg = Number(currentUser.negative_balance) || 0;
  if (neg > 0) {
+  closeCenterOrderModal();
   activeTask.blockedByNeg = true;
   activeTask.negAmount = neg;
   renderBookingArea();
@@ -1666,7 +2109,30 @@ async function submitCurrentOrder() {
   return;
  }
 
+ const chosenReview = getSelectedReviewText();
+ if (!chosenReview) {
+  missingReviewWarnCount += 1;
+  const countTag = missingReviewWarnCount <= 3 ? ` (${missingReviewWarnCount}/3)` : "";
+  $("centerReviewWarn").textContent = `⚠️ ${d.selectReviewWarnMsg}${countTag}`;
+  if (missingReviewWarnCount <= 3) {
+   showAlert(`${d.selectReviewWarnMsg}${countTag}`);
+  }
+  return;
+ }
+
+ $("centerOrderFormBody").classList.add("hidden");
+ $("centerOrderVerifyingBody").classList.remove("hidden");
+
+ setTimeout(() => {
+  finalizeOrderSubmission(chosenReview, selectedOrderStars);
+ }, 1000);
+}
+
+async function finalizeOrderSubmission(reviewNote, starRating) {
+ if (!currentUser || !activeTask) return;
+ const d = getDict();
  const { hotel, commission } = activeTask;
+ const exactNow = formatExactTimestamp(new Date());
 
  currentUser.balance = Number(currentUser.balance || 0) + commission;
  currentUser.commission = Number(currentUser.commission || 0) + commission;
@@ -1678,15 +2144,16 @@ async function submitCurrentOrder() {
  await writeUserToDb(currentUser);
  await writeTransactionToDb({
   user_id: String(currentUser.id),
-  date: new Date().toLocaleString(),
+  date: exactNow,
   type: "Booking Profit",
-  details: `Order #${activeTask.orderNum || currentUser.orders} · Hotel: ${hotel.name} (${hotel.country})`,
+  details: `#${activeTask.orderNum || currentUser.orders} · ${hotel.name} (${hotel.country}) · ${"★".repeat(starRating)} · "${reviewNote}"`,
   amount: commission,
   status: "Approved",
   created_at: Date.now()
  });
 
  activeTask = null;
+ $("centerOrderModal").classList.add("hidden");
  showAlert(`${d.commissionLabel}: <b>+${formatUsdWithMmk(commission)}</b>`);
  renderAllViews();
 }
@@ -1720,7 +2187,7 @@ async function sendQuickSuggestion(text) {
   text: text,
   image: "",
   read_by_admin: false,
-  time: new Date().toLocaleTimeString(),
+  time: formatExactTimestamp(new Date()),
   created_at: Date.now()
  });
 }
@@ -1737,7 +2204,7 @@ async function sendSupportMessage() {
   text: text,
   image: "",
   read_by_admin: false,
-  time: new Date().toLocaleTimeString(),
+  time: formatExactTimestamp(new Date()),
   created_at: Date.now()
  });
 }
@@ -1761,7 +2228,7 @@ async function sendAdminCannedReply(cannedKey) {
   text: text,
   image: "",
   read_by_admin: true,
-  time: new Date().toLocaleTimeString(),
+  time: formatExactTimestamp(new Date()),
   created_at: Date.now()
  });
 }
@@ -1781,7 +2248,7 @@ async function sendAdminChatReply() {
   text: text,
   image: "",
   read_by_admin: true,
-  time: new Date().toLocaleTimeString(),
+  time: formatExactTimestamp(new Date()),
   created_at: Date.now()
  });
 }
@@ -1805,7 +2272,7 @@ function handleChatPhotoUpload(event, senderRole) {
    text: senderRole === 'support' ? d.photoSentCsText : d.photoSentUserText,
    image: e.target.result,
    read_by_admin: senderRole === 'support',
-   time: new Date().toLocaleTimeString(),
+   time: formatExactTimestamp(new Date()),
    created_at: Date.now()
   });
  };
@@ -2234,11 +2701,10 @@ function renderBookingArea() {
  }
  const { hotel, commission } = activeTask;
  area.innerHTML = `
-  <div class="panel" style="background:var(--fb-bg);border:2px dashed var(--fb-primary)">
+  <div class="panel" style="background:var(--fb-bg);border:2px dashed var(--fb-primary);text-align:center">
    <h4 style="margin-top:0">🏨 ${hotel.name} (${hotel.country}) ${renderStars(hotel.stars)}</h4>
-   <p>${d.orderPriceLabel}: <b>${formatUsdWithMmk(hotel.price)}</b></p>
-   <p>${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
-   <button type="button" class="btn btn-success" onclick="submitCurrentOrder()">${d.submitOrderBtn}</button>
+   <p>${d.orderPriceLabel}: <b>${formatUsdWithMmk(hotel.price)}</b> · ${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
+   <button type="button" class="btn btn-success" onclick="openCenterOrderModal()">${d.submitOrderBtn}</button>
   </div>
  `;
 }
@@ -2254,9 +2720,9 @@ function renderHistory() {
   const statusText = t.status === "Approved" ? d.txApproved : t.status;
   return `
    <tr>
-    <td>${t.date}</td>
+    <td><strong>${t.date}</strong></td>
     <td><span class="tag">${typeText}</span></td>
-    <td>${t.details}</td>
+    <td style="white-space:normal;min-width:220px">${t.details}</td>
     <td><strong style="color:var(--fb-primary)">+${formatUsdWithMmk(t.amount)}</strong></td>
     <td><span style="color:var(--fb-success)">${statusText}</span></td>
    </tr>
@@ -2328,15 +2794,20 @@ function renderAllViews() {
   $("guestAuthBox").classList.add("hidden");
   $("memberProfileBox").classList.remove("hidden");
   $("profileName").textContent = currentUser.name;
-  $("profileIdentity").textContent = `ID: ${currentUser.id} | ${currentUser.identity}`;
+  $("profileIdentity").textContent = `ID: ${currentUser.id} · ${currentUser.identity}`;
   $("profileVipBadge").textContent = currentUser.vip_level || 'LV1';
+  if (currentUser.avatar) {
+   $("profileAvatarImg").src = currentUser.avatar;
+  }
   $("walletBalance").textContent = formatUsdWithMmk(currentUser.balance || 0);
   $("taskWallet").textContent = formatUsdWithMmk(currentUser.balance || 0);
   $("taskProfit").textContent = formatUsdWithMmk(currentUser.commission || 0);
   $("taskTotalProfit").textContent = formatUsdWithMmk(currentUser.total_profit || 0);
   $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned || 0);
-  $("profileOrders").textContent = `${currentUser.orders || 0}/30`;
-  $("orderCircle").textContent = `${currentUser.orders || 0}/30`;
+  const vip = getVipInfo(currentUser.vip_level);
+  const lim = Number(vip.daily_limit || 30);
+  $("profileOrders").textContent = `${currentUser.orders || 0}/${lim} ➔`;
+  $("orderCircle").textContent = `${currentUser.orders || 0}/${lim}`;
   $("inviteCode").textContent = currentUser.referral_code || 'TP2323';
   loadUserMessages(currentUser.id);
   renderHistory();
@@ -2353,6 +2824,7 @@ function renderAllViews() {
 }
 
 window.addEventListener("load", () => {
+ runIntroSplash();
  changeLanguage($("language").value);
  startRealtimeListeners();
 });
