@@ -318,7 +318,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="section-title">
   <div>
    <h2 style="margin-bottom:4px">🛡️ Admin & Trip Booking Service Control</h2>
-   <div class="sync-badge"><span class="sync-dot"></span> Live Cross-Device Sync Active (<span id="totalUsersBadge">0</span> Users)</div>
+   <div class="sync-badge"><span class="sync-dot"></span> <span id="syncStatusText">Live Cross-Device Sync</span> (<span id="totalUsersBadge">0</span> Users)</div>
   </div>
   <div style="display:flex;gap:8px">
    <button class="btn btn-success" onclick="forceSyncNow()" data-i18n="refreshBtn">🔄 REFRESH</button>
@@ -336,7 +336,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
    <h3 data-i18n="allUsersHead">All Registered Users (Real-Time)</h3>
    <div style="display:flex;gap:8px">
-    <input id="adminUserSearch" placeholder="Search name, phone, email..." style="width:220px" oninput="renderAdminUsers()">
+    <input id="adminUserSearch" placeholder="Search name, phone, email, TP2323..." style="width:240px" oninput="renderAdminUsers()">
     <button class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">💾 Save All Changes</button>
    </div>
   </div>
@@ -348,7 +348,8 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th data-i18n="thName">Name</th>
       <th data-i18n="thPhoneEmail">Phone / Email</th>
       <th data-i18n="thPass">Password</th>
-      <th data-i18n="thRef">Referral</th>
+      <th data-i18n="thRef">My Code</th>
+      <th>Invited By</th>
       <th data-i18n="thVip">VIP Tier</th>
       <th data-i18n="thBal">Balance ($)</th>
       <th>Neg ($)</th>
@@ -436,7 +437,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="modal-box">
   <div class="modal-head">
    <h3 id="authTitle" data-i18n="loginModalTitle">Login</h3>
-   <button class="close" onclick="closeModal('authModal')">✕</button>
+   <button type="button" class="close" onclick="closeModal('authModal')">✕</button>
   </div>
   <div id="regExtraFields" class="hidden">
    <label data-i18n="fullNameLabel">Full Name</label>
@@ -454,7 +455,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
 
   <p id="authError" style="color:var(--fb-danger);font-size:13px;margin:8px 0"></p>
-  <button class="btn btn-block" style="margin-top:10px" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
+  <button type="button" id="authSubmitBtn" class="btn btn-block" style="margin-top:10px" onclick="submitAuth()" data-i18n="continueBtn">Continue</button>
   <p style="text-align:center;margin-top:12px;font-size:13px">
    <a href="#" onclick="toggleAuthMode();return false" data-i18n="switchAuth">Switch Login / Register</a>
   </p>
@@ -465,13 +466,13 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="modal-box">
   <div class="modal-head">
    <h3 data-i18n="addHotelModalHead">Add New Hotel</h3>
-   <button class="close" onclick="closeModal('addHotelModal')">✕</button>
+   <button type="button" class="close" onclick="closeModal('addHotelModal')">✕</button>
   </div>
   <label data-i18n="hotelNameLabel">Hotel Name</label><input id="newHName">
   <label data-i18n="countryLabel">Country</label><input id="newHCountry">
   <label data-i18n="priceLabel">Price ($)</label><input id="newHPrice" type="number">
   <label data-i18n="starsLabel">Stars</label><input id="newHStars" type="number" value="5" min="1" max="5">
-  <button class="btn btn-success btn-block" style="margin-top:12px" onclick="addHotelToSupabase()" data-i18n="saveHotelBtn">Save Hotel</button>
+  <button type="button" class="btn btn-success btn-block" style="margin-top:12px" onclick="addHotelToSupabase()" data-i18n="saveHotelBtn">Save Hotel</button>
  </div>
 </div>
 
@@ -479,18 +480,25 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
  <div class="modal-box" style="text-align:center">
   <h3 id="alertTitle" style="color:var(--fb-primary)" data-i18n="alertTitleDefault">Notification</h3>
   <p id="alertBody" style="margin:14px 0"></p>
-  <button class="btn btn-block" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
+  <button type="button" class="btn btn-block" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
  </div>
 </div>
 
 <script>
 "use strict";
 
+// Supabase Configuration (Replace SUPABASE_ANON_KEY with your exact 'anon public' key from Supabase Dashboard > Project Settings > API)
 const SUPABASE_URL = "https://mailhznyjywrujkuphev.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwahevIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5NDk4NzMxOSwiZXhwIjoyMTEwNTYzMzE5fQ.ysY6-UcNHatfmmb6OG0bxJAJirBj-G8lqj7JgTINvAQ2";
-const sb = (window.supabase && window.supabase.createClient)
- ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
- : null;
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1haWxoem55anl3cnVqa3VwaGV2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ5ODczMTksImV4cCI6MjExMDU2MzMxOX0.LPEZeEpknBxDKCLNPhv41TSCjxPuAo83Zca_laJlFb8";
+
+let sb = null;
+try {
+ if(window.supabase && typeof window.supabase.createClient === "function") {
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+ }
+} catch(e) {
+ sb = null;
+}
 
 const $ = id => document.getElementById(id);
 
@@ -693,8 +701,11 @@ const I18N = {
 };
 
 let currentLang = localStorage.getItem("tb_lang_sync") || "my";
-let allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]");
-let localMessages = JSON.parse(localStorage.getItem("tb_local_messages") || "[]");
+let allUsers = [];
+try { allUsers = JSON.parse(localStorage.getItem("tb_local_users") || "[]"); } catch(e) { allUsers = []; }
+let localMessages = [];
+try { localMessages = JSON.parse(localStorage.getItem("tb_local_messages") || "[]"); } catch(e) { localMessages = []; }
+
 let defaultHotelsList = build238Hotels();
 let allHotels = defaultHotelsList;
 let visibleHotelsLimit = 48;
@@ -736,15 +747,18 @@ function isAdminUser(user) {
 }
 
 function showAlert(msg, title="Notification") {
- $("alertTitle").textContent = title;
- $("alertBody").innerHTML = msg;
- $("alertModal").classList.remove("hidden");
+ if($("alertTitle")) $("alertTitle").textContent = title;
+ if($("alertBody")) $("alertBody").innerHTML = msg;
+ if($("alertModal")) $("alertModal").classList.remove("hidden");
 }
 
-function closeModal(id) { $(id).classList.add("hidden"); }
+function closeModal(id) {
+ if($(id)) $(id).classList.add("hidden");
+}
 
 function togglePassVisibility(inputId, btn) {
  const inp = $(inputId);
+ if(!inp) return;
  if(inp.type === "password") { inp.type = "text"; btn.textContent = "🙈"; }
  else { inp.type = "password"; btn.textContent = "👁️"; }
 }
@@ -757,12 +771,17 @@ function showPage(pageId, navBtn) {
   return;
  }
  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
- $(pageId).classList.add("active");
+ if($(pageId)) $(pageId).classList.add("active");
  if(navBtn) {
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
   navBtn.classList.add("active");
  }
  renderAllViews();
+}
+
+function safeDbCall(promise) {
+ if(!promise || typeof promise.then !== "function") return;
+ promise.then(() => {}).catch(() => {});
 }
 
 async function forceSyncNow() {
@@ -778,15 +797,17 @@ async function forceSyncNow() {
    sb.from('messages').select('*').order('created_at', { ascending: true })
   ]);
 
-  if(vipsRes && vipsRes.data && vipsRes.data.length > 0) allVipTiers = vipsRes.data;
-  if(htsRes && htsRes.data && htsRes.data.length > 0) {
+  if(vipsRes && !vipsRes.error && vipsRes.data && vipsRes.data.length > 0) {
+   allVipTiers = vipsRes.data;
+  }
+  if(htsRes && !htsRes.error && htsRes.data && htsRes.data.length > 0) {
    const dbIds = new Set(htsRes.data.map(x => x.id));
    const remaining = defaultHotelsList.filter(x => !dbIds.has(x.id));
    allHotels = [...htsRes.data, ...remaining];
   } else {
    allHotels = defaultHotelsList;
   }
-  if(usrsRes && usrsRes.data && usrsRes.data.length > 0) {
+  if(usrsRes && !usrsRes.error && usrsRes.data) {
    const mergedMap = new Map();
    allUsers.forEach(u => mergedMap.set(u.id, u));
    usrsRes.data.forEach(u => mergedMap.set(u.id, { ...(mergedMap.get(u.id) || {}), ...u }));
@@ -795,8 +816,11 @@ async function forceSyncNow() {
    if(currentUser) {
     currentUser = allUsers.find(u => u.id === currentUser.id) || currentUser;
    }
+   if($("syncStatusText")) $("syncStatusText").textContent = "Cloud Sync Connected";
+  } else if(usrsRes && usrsRes.error) {
+   if($("syncStatusText")) $("syncStatusText").textContent = "Local Mode (Check Supabase Key)";
   }
-  if(msgsRes && msgsRes.data && msgsRes.data.length > 0) {
+  if(msgsRes && !msgsRes.error && msgsRes.data) {
    localMessages = msgsRes.data;
    localStorage.setItem("tb_local_messages", JSON.stringify(localMessages));
   }
@@ -829,7 +853,7 @@ function ensureAdminAccount() {
   };
   allUsers.unshift(adminUser);
   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
-  if(sb) sb.from('users').upsert([adminUser]).catch(()=>{});
+  if(sb) safeDbCall(sb.from('users').upsert([adminUser]));
  } else {
   allUsers[existingIdx].password = "12344321";
   if(!allUsers[existingIdx].referral_code) allUsers[existingIdx].referral_code = "TP2323";
@@ -863,16 +887,16 @@ async function initSupabaseData() {
 
  setInterval(() => {
   forceSyncNow();
- }, 15000);
+ }, 12000);
 }
 
 function openAuth(mode) {
  authMode = mode;
- $("authModal").classList.remove("hidden");
- $("regExtraFields").classList.toggle("hidden", mode === "login");
- $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginModalTitle : I18N[currentLang].createAcc;
- $("authError").textContent = "";
- if(mode === "register") {
+ if($("authModal")) $("authModal").classList.remove("hidden");
+ if($("regExtraFields")) $("regExtraFields").classList.toggle("hidden", mode === "login");
+ if($("authTitle")) $("authTitle").textContent = mode === "login" ? I18N[currentLang].loginModalTitle : I18N[currentLang].createAcc;
+ if($("authError")) $("authError").textContent = "";
+ if(mode === "register" && $("regRefInput")) {
   $("regRefInput").value = "TP2323";
  }
 }
@@ -889,94 +913,101 @@ function generateUniqueTPCode() {
 }
 
 function submitAuth() {
- const identity = ($("authIdentity").value || "").trim().toLowerCase();
- const password = $("authPassword").value || "";
- const err = $("authError");
- err.textContent = "";
+ try {
+  const identity = ($("authIdentity") ? $("authIdentity").value : "").trim().toLowerCase();
+  const password = ($("authPassword") ? $("authPassword").value : "");
+  const err = $("authError");
+  if(err) err.textContent = "";
 
- if(!identity) {
-  err.textContent = "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ် ထည့်သွင်းရန် လိုအပ်ပါသည်။";
-  return;
- }
- if(!password || password.length < 6) {
-  err.textContent = "စကားဝှက်သည် အနည်းဆုံး ၆ လုံး ရှိရပါမည်။";
-  return;
- }
-
- if(authMode === "register") {
-  const existing = allUsers.filter(u => (u.identity || "").trim().toLowerCase() === identity);
-  if(existing.length > 0) {
-   err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
+  if(!identity) {
+   if(err) err.textContent = "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ် ထည့်သွင်းရန် လိုအပ်ပါသည်။";
+   return;
+  }
+  if(!password || password.length < 6) {
+   if(err) err.textContent = "စကားဝှက်သည် အနည်းဆုံး ၆ လုံး ရှိရပါမည်။";
    return;
   }
 
-  const name = ($("regName").value || "").trim() || "Member";
-  const refInput = (($("regRefInput").value || "").trim().toUpperCase()) || "TP2323";
-  let invitedBy = "-";
+  if(authMode === "register") {
+   const existing = allUsers.filter(u => (u.identity || "").trim().toLowerCase() === identity);
+   if(existing.length > 0) {
+    if(err) err.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
+    return;
+   }
 
-  const refOwner = allUsers.find(u => (u.referral_code || "").toUpperCase() === refInput);
-  if(refOwner) {
-   invitedBy = refOwner.id;
-   refOwner.invited_count = (refOwner.invited_count || 0) + 1;
-   if(sb) sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id).catch(()=>{});
+   const name = ($("regName") ? $("regName").value : "").trim() || "Member";
+   const refInput = (($("regRefInput") ? $("regRefInput").value : "").trim().toUpperCase()) || "TP2323";
+   let invitedBy = refInput;
+
+   const refOwner = allUsers.find(u => (u.referral_code || "").toUpperCase() === refInput);
+   if(refOwner) {
+    invitedBy = `${refInput} (${refOwner.name})`;
+    refOwner.invited_count = (refOwner.invited_count || 0) + 1;
+    if(sb) safeDbCall(sb.from('users').update({ invited_count: refOwner.invited_count }).eq('id', refOwner.id));
+   }
+
+   const newId = String(Math.floor(100000 + Math.random() * 900000));
+   const newCode = generateUniqueTPCode();
+
+   const newUser = {
+    id: newId,
+    name: name,
+    identity: identity,
+    password: password,
+    referral_code: newCode,
+    invited_by: invitedBy,
+    invited_count: 0,
+    balance: 0.00,
+    commission: 0.00,
+    total_profit: 0.00,
+    referral_earned: 0.00,
+    orders: 0,
+    vip_level: "LV1",
+    neg_dollar: 0.00,
+    profit_box: 0.00,
+    created_at: new Date().toISOString()
+   };
+
+   allUsers.unshift(newUser);
+   localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
+   if(sb) safeDbCall(sb.from('users').upsert([newUser]));
+
+   currentUser = newUser;
+   localStorage.setItem("tb_session_uid", newUser.id);
+   closeModal("authModal");
+   renderAllViews();
+
+   if(isAdminUser(currentUser)) {
+    showPage("staffPage");
+   } else {
+    showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
+   }
+   showAlert("အကောင့်အသစ် ဖွင့်လှစ်ခြင်း အောင်မြင်ပါသည်။");
+   return;
   }
 
-  const newId = String(Math.floor(100000 + Math.random() * 900000));
-  const newCode = generateUniqueTPCode();
+  // Login Mode
+  ensureAdminAccount();
+  const user = allUsers.find(u => (u.identity || "").trim().toLowerCase() === identity && String(u.password) === password);
 
-  const newUser = {
-   id: newId,
-   name,
-   identity,
-   password,
-   referral_code: newCode,
-   invited_by: invitedBy,
-   invited_count: 0,
-   balance: 0.00,
-   commission: 0.00,
-   total_profit: 0.00,
-   referral_earned: 0.00,
-   orders: 0,
-   vip_level: "LV1",
-   neg_dollar: 0.00,
-   profit_box: 0.00
-  };
+  if(!user) {
+   if(err) err.textContent = "ဖုန်းနံပါတ် (သို့) အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။";
+   return;
+  }
 
-  allUsers.unshift(newUser);
-  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
-  if(sb) sb.from('users').upsert([newUser]).catch(()=>{});
-
-  currentUser = newUser;
-  localStorage.setItem("tb_session_uid", newUser.id);
+  currentUser = user;
+  localStorage.setItem("tb_session_uid", user.id);
   closeModal("authModal");
   renderAllViews();
 
   if(isAdminUser(currentUser)) {
    showPage("staffPage");
   } else {
-   showPage("profilePage");
+   showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
   }
-  showAlert("အကောင့်အသစ် ဖွင့်လှစ်ခြင်း အောင်မြင်ပါသည်။");
-  return;
- }
-
- ensureAdminAccount();
- const user = allUsers.find(u => (u.identity || "").trim().toLowerCase() === identity && String(u.password) === password);
-
- if(!user) {
-  err.textContent = "ဖုန်းနံပါတ် (သို့) အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။";
-  return;
- }
-
- currentUser = user;
- localStorage.setItem("tb_session_uid", user.id);
- closeModal("authModal");
- renderAllViews();
-
- if(isAdminUser(currentUser)) {
-  showPage("staffPage");
- } else {
-  showPage("profilePage");
+ } catch(ex) {
+  const err = $("authError");
+  if(err) err.textContent = "Error: " + (ex && ex.message ? ex.message : String(ex));
  }
 }
 
@@ -991,7 +1022,7 @@ function getVipInfo(level) {
  return allVipTiers.find(v => v.level === level) || { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.005, min_bal: 0, max_withdraw: 1000 };
 }
 
-async function triggerGetOrder() {
+function triggerGetOrder() {
  if(!currentUser) { openAuth('login'); return; }
  if(Number(currentUser.balance) <= 0) {
   showAlert("လက်ကျန်ငွေ မလုံလောက်ပါသဖြင့် အော်ဒါယူ၍ မရပါ။ ကျေးဇူးပြု၍ ငွေသွင်းပါ။");
@@ -1010,7 +1041,7 @@ async function triggerGetOrder() {
  renderBookingArea();
 }
 
-async function submitCurrentOrder() {
+function submitCurrentOrder() {
  if(!currentUser || !activeTask) return;
  const { hotel, commission } = activeTask;
 
@@ -1027,23 +1058,21 @@ async function submitCurrentOrder() {
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
 
  if(sb) {
-  try {
-   await sb.from('users').update({
-    balance: currentUser.balance,
-    commission: currentUser.commission,
-    total_profit: currentUser.total_profit,
-    orders: currentUser.orders
-   }).eq('id', currentUser.id);
+  safeDbCall(sb.from('users').update({
+   balance: currentUser.balance,
+   commission: currentUser.commission,
+   total_profit: currentUser.total_profit,
+   orders: currentUser.orders
+  }).eq('id', currentUser.id));
 
-   await sb.from('transactions').insert([{
-    user_id: currentUser.id,
-    type: 'Booking Profit',
-    hotel_name: hotel.name,
-    order_price: hotel.price,
-    amount: commission,
-    status: 'Approved'
-   }]);
-  } catch(e) {}
+  safeDbCall(sb.from('transactions').insert([{
+   user_id: currentUser.id,
+   type: 'Booking Profit',
+   hotel_name: hotel.name,
+   order_price: hotel.price,
+   amount: commission,
+   status: 'Approved'
+  }]));
  }
 
  activeTask = null;
@@ -1074,10 +1103,10 @@ function handleDepositRequest() {
 function saveMessageRecord(msgObj) {
  localMessages.push(msgObj);
  localStorage.setItem("tb_local_messages", JSON.stringify(localMessages));
- if(sb) sb.from('messages').insert([msgObj]).catch(()=>{});
+ if(sb) safeDbCall(sb.from('messages').insert([msgObj]));
 }
 
-async function sendQuickSuggestion(text) {
+function sendQuickSuggestion(text) {
  if(!currentUser) { openAuth('login'); return; }
  const newMsg = {
   id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
@@ -1090,13 +1119,13 @@ async function sendQuickSuggestion(text) {
  loadUserMessages(currentUser.id);
 }
 
-async function sendSupportMessage() {
+function sendSupportMessage() {
  if(!currentUser) { openAuth('login'); return; }
  const inp = $("supportInput");
  const text = inp.value.trim();
  if(!text) return;
  inp.value = "";
- await sendQuickSuggestion(text);
+ sendQuickSuggestion(text);
 }
 
 function loadUserMessages(userId) {
@@ -1116,8 +1145,8 @@ function loadUserMessages(userId) {
 }
 
 function switchAdminTab(tab) {
- ["adminUsersTab", "adminHotelsTab", "adminCsTab"].forEach(id => $(id).classList.add("hidden"));
- ["tabUsersBtn", "tabHotelsBtn", "tabCsBtn"].forEach(id => $(id).className = "btn btn-light");
+ ["adminUsersTab", "adminHotelsTab", "adminCsTab"].forEach(id => { if($(id)) $(id).classList.add("hidden"); });
+ ["tabUsersBtn", "tabHotelsBtn", "tabCsBtn"].forEach(id => { if($(id)) $(id).className = "btn btn-light"; });
 
  if(tab === "users") {
   $("adminUsersTab").classList.remove("hidden");
@@ -1143,6 +1172,7 @@ function renderAdminUsers() {
   (u.name || "").toLowerCase().includes(q) ||
   (u.identity || "").toLowerCase().includes(q) ||
   (u.referral_code || "").toLowerCase().includes(q) ||
+  (u.invited_by || "").toLowerCase().includes(q) ||
   (u.id || "").includes(q)
  );
 
@@ -1154,6 +1184,7 @@ function renderAdminUsers() {
    <td><input id="adm_ident_${u.id}" value="${u.identity}" style="width:150px"></td>
    <td><input id="adm_pass_${u.id}" value="${u.password}" style="width:100px"></td>
    <td><input id="adm_ref_${u.id}" value="${u.referral_code}" style="width:85px"></td>
+   <td><span class="tag">${u.invited_by || '-'}</span></td>
    <td>
     <select id="adm_vip_${u.id}" style="width:85px">
      ${allVipTiers.map(v => `<option value="${v.level}" ${v.level===u.vip_level?'selected':''}>${v.name}</option>`).join("")}
@@ -1168,7 +1199,7 @@ function renderAdminUsers() {
  `).join("");
 }
 
-async function saveAllUsersAdmin() {
+function saveAllUsersAdmin() {
  for(const u of allUsers) {
   const nameEl = $(`adm_name_${u.id}`);
   if(!nameEl) continue;
@@ -1184,12 +1215,12 @@ async function saveAllUsersAdmin() {
   u.orders = Number($(`adm_ord_${u.id}`).value);
 
   if(sb) {
-   sb.from('users').update({
+   safeDbCall(sb.from('users').update({
     name: u.name, identity: u.identity, password: u.password,
     referral_code: u.referral_code, vip_level: u.vip_level,
     balance: u.balance, neg_dollar: u.neg_dollar,
     profit_box: u.profit_box, orders: u.orders
-   }).eq('id', u.id).catch(()=>{});
+   }).eq('id', u.id));
   }
  }
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
@@ -1197,11 +1228,11 @@ async function saveAllUsersAdmin() {
  showAlert("✅ အသုံးပြုသူ အချက်အလက်များအားလုံးကို သိမ်းဆည်းပြီးပါပြီ။");
 }
 
-async function resetSingleUserOrder(uid) {
+function resetSingleUserOrder(uid) {
  const u = allUsers.find(x => x.id === uid);
  if(u) u.orders = 0;
  localStorage.setItem("tb_local_users", JSON.stringify(allUsers));
- if(sb) sb.from('users').update({ orders: 0 }).eq('id', uid).catch(()=>{});
+ if(sb) safeDbCall(sb.from('users').update({ orders: 0 }).eq('id', uid));
  renderAllViews();
  showAlert("အော်ဒါအရေအတွက်ကို (0) သို့ ပြန်လည်သတ်မှတ်ပြီးပါပြီ။");
 }
@@ -1230,7 +1261,7 @@ function renderAdminHotelsAndVips() {
  `).join("");
 }
 
-async function saveHotelsAndVipsAdmin() {
+function saveHotelsAndVipsAdmin() {
  for(let i = 0; i < allVipTiers.length; i++) {
   const v = allVipTiers[i];
   v.name = $(`vip_n_${i}`).value;
@@ -1239,10 +1270,10 @@ async function saveHotelsAndVipsAdmin() {
   v.min_bal = Number($(`vip_m_${i}`).value);
   v.max_withdraw = Number($(`vip_w_${i}`).value);
   if(sb) {
-   sb.from('vip_tiers').update({
+   safeDbCall(sb.from('vip_tiers').update({
     name: v.name, daily_limit: v.daily_limit, profit_rate: v.profit_rate,
     min_bal: v.min_bal, max_withdraw: v.max_withdraw
-   }).eq('level', v.level).catch(()=>{});
+   }).eq('level', v.level));
   }
  }
 
@@ -1253,9 +1284,9 @@ async function saveHotelsAndVipsAdmin() {
   h.stars = Number($(`ht_s_${i}`).value);
   h.price = Number($(`ht_p_${i}`).value);
   if(sb) {
-   sb.from('hotels').upsert([{
+   safeDbCall(sb.from('hotels').upsert([{
     id: h.id, name: h.name, country: h.country, stars: h.stars, price: h.price, image: h.image
-   }]).catch(()=>{});
+   }]));
   }
  }
  renderAllViews();
@@ -1264,7 +1295,7 @@ async function saveHotelsAndVipsAdmin() {
 
 function openAddHotelModal() { $("addHotelModal").classList.remove("hidden"); }
 
-async function addHotelToSupabase() {
+function addHotelToSupabase() {
  const name = $("newHName").value.trim();
  const country = $("newHCountry").value.trim();
  const price = Number($("newHPrice").value);
@@ -1274,14 +1305,14 @@ async function addHotelToSupabase() {
  const id = "H" + Math.floor(100 + Math.random() * 900);
  const newH = { id, name, country, price, stars, image: VERIFIED_HOTEL_IMAGES[Math.floor(Math.random() * VERIFIED_HOTEL_IMAGES.length)] };
  allHotels.unshift(newH);
- if(sb) sb.from('hotels').insert([newH]).catch(()=>{});
+ if(sb) safeDbCall(sb.from('hotels').insert([newH]));
  closeModal("addHotelModal");
  renderAllViews();
 }
 
-async function deleteHotel(id) {
+function deleteHotel(id) {
  allHotels = allHotels.filter(h => h.id !== id);
- if(sb) sb.from('hotels').delete().eq('id', id).catch(()=>{});
+ if(sb) safeDbCall(sb.from('hotels').delete().eq('id', id));
  renderAllViews();
 }
 
@@ -1326,7 +1357,7 @@ function loadAdminChatMessages(uid) {
  box.scrollTop = box.scrollHeight;
 }
 
-async function sendAdminChatReply() {
+function sendAdminChatReply() {
  if(!selectedCsUserId) return;
  const inp = $("adminChatInput");
  const text = inp.value.trim();
@@ -1449,41 +1480,43 @@ function renderAllViews() {
 
  const isAdm = isAdminUser(currentUser);
  if(isAdm) {
-  $("bottomNav").classList.add("hidden");
-  if(!$("staffPage").classList.contains("active")) {
+  if($("bottomNav")) $("bottomNav").classList.add("hidden");
+  if($("staffPage") && !$("staffPage").classList.contains("active")) {
    showPage("staffPage");
   }
  } else {
-  $("bottomNav").classList.remove("hidden");
+  if($("bottomNav")) $("bottomNav").classList.remove("hidden");
  }
 
  if(currentUser) {
-  $("headerAuthBtn").classList.add("hidden");
-  $("guestAuthBox").classList.add("hidden");
-  $("memberProfileBox").classList.remove("hidden");
+  if($("headerAuthBtn")) $("headerAuthBtn").classList.add("hidden");
+  if($("guestAuthBox")) $("guestAuthBox").classList.add("hidden");
+  if($("memberProfileBox")) $("memberProfileBox").classList.remove("hidden");
 
   const vip = getVipInfo(currentUser.vip_level);
-  $("profileName").textContent = currentUser.name;
-  $("profileIdentity").textContent = `${currentUser.identity} · ID: ${currentUser.id}`;
-  $("profileVipBadge").textContent = vip.name;
-  $("walletBalance").textContent = formatUsdWithMmk(currentUser.balance);
-  $("profileOrders").textContent = `${currentUser.orders}/${vip.daily_limit}`;
-  $("inviteCode").textContent = currentUser.referral_code;
-  $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned || 0);
+  if($("profileName")) $("profileName").textContent = currentUser.name;
+  if($("profileIdentity")) $("profileIdentity").textContent = `${currentUser.identity} · ID: ${currentUser.id}`;
+  if($("profileVipBadge")) $("profileVipBadge").textContent = vip.name;
+  if($("walletBalance")) $("walletBalance").textContent = formatUsdWithMmk(currentUser.balance);
+  if($("profileOrders")) $("profileOrders").textContent = `${currentUser.orders}/${vip.daily_limit}`;
+  if($("inviteCode")) $("inviteCode").textContent = currentUser.referral_code;
+  if($("referralEarned")) $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned || 0);
 
-  $("vipTiersDisplay").innerHTML = allVipTiers.map(v => `
-   <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
-    <strong>${v.name}</strong>
-    <p class="small muted">Daily Limit: ${v.daily_limit} orders<br>Rate: ${(v.profit_rate*100).toFixed(2)}%<br>Max Limit: ${formatUsdWithMmk(v.max_withdraw)}</p>
-   </div>
-  `).join("");
+  if($("vipTiersDisplay")) {
+   $("vipTiersDisplay").innerHTML = allVipTiers.map(v => `
+    <div class="vip-card ${v.level === currentUser.vip_level ? 'active-vip' : ''}">
+     <strong>${v.name}</strong>
+     <p class="small muted">Daily Limit: ${v.daily_limit} orders<br>Rate: ${(v.profit_rate*100).toFixed(2)}%<br>Max Limit: ${formatUsdWithMmk(v.max_withdraw)}</p>
+    </div>
+   `).join("");
+  }
 
   loadUserMessages(currentUser.id);
   renderHistoryTable();
  } else {
-  $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.remove("hidden");
-  $("memberProfileBox").classList.add("hidden");
+  if($("headerAuthBtn")) $("headerAuthBtn").classList.remove("hidden");
+  if($("guestAuthBox")) $("guestAuthBox").classList.remove("hidden");
+  if($("memberProfileBox")) $("memberProfileBox").classList.add("hidden");
   renderHistoryTable();
  }
 }
@@ -1494,17 +1527,19 @@ window.addEventListener("load", () => {
 });
 
 function setupPWAManifest() {
- const manifest = {
-  name: "Trip Booking",
-  short_name: "Trip Booking",
-  start_url: window.location.href,
-  display: "standalone",
-  background_color: "#008080",
-  theme_color: "#008080",
-  icons: [{ src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=192", sizes: "192x192", type: "image/png" }]
- };
- const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
- if($("pwaManifest")) $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
+ try {
+  const manifest = {
+   name: "Trip Booking",
+   short_name: "Trip Booking",
+   start_url: window.location.href,
+   display: "standalone",
+   background_color: "#008080",
+   theme_color: "#008080",
+   icons: [{ src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=192", sizes: "192x192", type: "image/png" }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+  if($("pwaManifest")) $("pwaManifest").setAttribute('href', URL.createObjectURL(blob));
+ } catch(e) {}
 }
 </script>
 </body>
