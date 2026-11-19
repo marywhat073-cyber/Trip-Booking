@@ -6,8 +6,9 @@
 <meta name="theme-color" content="#008080">
 <title>Trip Booking | International Trip Booking Platform</title>
 
-<!-- Firebase Compat SDK (Real-Time Database) -->
+<!-- Firebase Compat SDK (Real-Time Database & Authentication) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
 <style>
@@ -146,6 +147,11 @@ header{
 .chat-footer{padding:10px;border-top:1px solid var(--fb-border);display:flex;gap:8px;align-items:center}
 
 .chat-img-msg{max-width:240px;max-height:240px;border-radius:8px;margin-top:6px;display:block;border:1px solid rgba(255,255,255,0.2)}
+
+.admin-cs-grid{display:grid;grid-template-columns:260px 1fr;gap:14px}
+@media (max-width:768px){
+ .admin-cs-grid{grid-template-columns:1fr}
+}
 
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -410,7 +416,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
   </div>
  </div>
 
- <div id="adminCsTab" class="panel hidden" style="display:grid;grid-template-columns:250px 1fr;gap:14px">
+ <div id="adminCsTab" class="panel hidden admin-cs-grid">
   <div style="border-right:1px solid var(--fb-border);padding-right:10px;max-height:420px;overflow-y:auto">
    <h4 data-i18n="regUsersChatHead">All Registered Users</h4>
    <input id="csClientSearch" placeholder="Search user..." style="margin-bottom:8px;padding:6px 8px" oninput="renderCsClientList()">
@@ -451,7 +457,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
    <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
    <input id="regRefInput" placeholder="TP2323" value="TP2323">
   </div>
-  <label data-i18n="identityLabel">Phone Number or Email (Unique)</label>
+  <label data-i18n="identityLabel">Phone Number or Email</label>
   <input id="authIdentity" placeholder="09xxxxxxxxx or email@example.com">
 
   <label data-i18n="passwordLabel">Password</label>
@@ -493,7 +499,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <script>
 "use strict";
 
-// Firebase Realtime Database Configuration for Trip Booking
+// Firebase Configuration for Trip Booking
 const FIREBASE_CONFIG = {
  apiKey: "AIzaSyBraoWZdtvS3N0Cq-R2ZwAoCHqvkiIN-xw",
  authDomain: "trip-boooking.firebaseapp.com",
@@ -505,13 +511,16 @@ const FIREBASE_CONFIG = {
 };
 
 let db = null;
+let auth = null;
 try {
- if(window.firebase) {
-  if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+ if (window.firebase) {
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
   db = firebase.database();
+  if (firebase.auth) auth = firebase.auth();
  }
-} catch(e) {
+} catch (e) {
  db = null;
+ auth = null;
 }
 
 const $ = id => document.getElementById(id);
@@ -550,7 +559,7 @@ function build238Hotels() {
  const countries = ["Thailand", "Singapore", "Japan", "South Korea", "Malaysia", "Vietnam", "France", "Italy", "Switzerland", "UK", "USA", "Maldives", "UAE"];
 
  const list = [...base6];
- for(let i = 1; i <= 232; i++) {
+ for (let i = 1; i <= 232; i++) {
   const p = prefixes[i % prefixes.length];
   const s = suffixes[(i * 3) % suffixes.length];
   const c = countries[(i * 7) % countries.length];
@@ -609,7 +618,7 @@ const I18N = {
   withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
   logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
   navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
-  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email (Unique)",
+  fullNameLabel: "Full Name", identityLabel: "Phone Number or Email",
   passwordLabel: "Password", continueBtn: "Continue", switchAuth: "Switch Login / Register",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   showAllHotelsBtn: "Show All 238 Hotels", csHeader: "🎧 Trip Booking Service (24/7 Online)",
@@ -715,27 +724,77 @@ let activeTask = null;
 let selectedCsUserId = null;
 let showAllHotelsFlag = false;
 
+function normalizeIdentity(val) {
+ return String(val || "").trim().toLowerCase().replace(/\s+/g, "");
+}
+
+function isPhoneIdentity(val) {
+ const clean = String(val || "").replace(/[\s\-()]/g, "");
+ return /^(\+?09|09|\+959|9)\d{6,11}$/.test(clean);
+}
+
+function canonicalPhone(val) {
+ let clean = String(val || "").replace(/[\s\-()]/g, "");
+ if (clean.startsWith("+959")) clean = "09" + clean.slice(4);
+ else if (clean.startsWith("9") && !clean.startsWith("09")) clean = "0" + clean;
+ return clean;
+}
+
+function toAuthEmail(identity) {
+ if (identity.includes("@")) return identity;
+ const phoneDigits = canonicalPhone(identity).replace(/\D/g, "");
+ return `u_${phoneDigits}@tripbooking.local`;
+}
+
+async function syncFirebaseAuthAccount(identity, password, isRegister) {
+ if (!auth) return null;
+ const authEmail = toAuthEmail(identity);
+ try {
+  if (isRegister) {
+   const cred = await auth.createUserWithEmailAndPassword(authEmail, password);
+   return cred.user;
+  } else {
+   try {
+    const cred = await auth.signInWithEmailAndPassword(authEmail, password);
+    return cred.user;
+   } catch (signInErr) {
+    // If user exists in DB but not yet in Auth console, register seamlessly so Auth console stays synced
+    if (signInErr && (signInErr.code === "auth/user-not-found" || signInErr.code === "auth/invalid-credential")) {
+     const cred = await auth.createUserWithEmailAndPassword(authEmail, password);
+     return cred.user;
+    }
+    throw signInErr;
+   }
+  }
+ } catch (e) {
+  // Ignore email-already-in-use when phone format varies slightly
+  if (e && e.code === "auth/email-already-in-use") return null;
+  console.warn("Firebase Auth notice:", e && e.message ? e.message : e);
+  return null;
+ }
+}
+
 function writeUserToDb(userObj) {
- if(db) return db.ref("users/" + userObj.id).set(userObj);
+ if (db) return db.ref("users/" + userObj.id).set(userObj);
  return Promise.resolve();
 }
 
 function writeMessageToDb(msgObj) {
- if(db) return db.ref("messages").push(msgObj);
+ if (db) return db.ref("messages").push(msgObj);
  return Promise.resolve();
 }
 
 function writeTransactionToDb(txObj) {
- if(db) return db.ref("transactions").push(txObj);
+ if (db) return db.ref("transactions").push(txObj);
  return Promise.resolve();
 }
 
 function startRealtimeListeners() {
  const savedUid = localStorage.getItem("tb_session_uid");
  const savedAdmin = localStorage.getItem("tb_admin_session") === "1";
- if(savedAdmin) isAdminSession = true;
+ if (savedAdmin) isAdminSession = true;
 
- if(!db) {
+ if (!db) {
   $("syncStatusText").textContent = "Firebase SDK not loaded";
   renderAllViews();
   return;
@@ -745,8 +804,8 @@ function startRealtimeListeners() {
 
  db.ref("users").on("value", snap => {
   const val = snap.val() || {};
-  allUsers = Object.values(val).sort((a,b) => (b.created_at || 0) - (a.created_at || 0));
-  if(savedUid) {
+  allUsers = Object.values(val).sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+  if (savedUid && !isAdminSession) {
    currentUser = allUsers.find(u => u.id === savedUid) || currentUser;
   }
   renderAllViews();
@@ -754,32 +813,33 @@ function startRealtimeListeners() {
 
  db.ref("messages").on("value", snap => {
   const val = snap.val() || {};
-  allMessages = Object.values(val).sort((a,b) => (a.created_at || 0) - (b.created_at || 0));
-  if(currentUser) loadUserMessages(currentUser.id);
-  if(selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+  allMessages = Object.values(val).sort((a, b) => (a.created_at || 0) - (b.created_at || 0));
+  if (currentUser) loadUserMessages(currentUser.id);
+  if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+  if (isAdminSession) renderCsClientList();
  });
 
  db.ref("transactions").on("value", snap => {
   const val = snap.val() || {};
-  allTransactions = Object.values(val).sort((a,b) => (b.created_at || 0) - (a.created_at || 0));
-  if(currentUser) renderHistory();
+  allTransactions = Object.values(val).sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+  if (currentUser) renderHistory();
  });
 
  db.ref("hotels").on("value", snap => {
   const val = snap.val();
-  if(Array.isArray(val) && val.length) {
+  if (Array.isArray(val) && val.length) {
    allHotels = val;
    renderHotels();
-   if(isAdminSession) renderAdminHotels();
+   if (isAdminSession) renderAdminHotels();
   }
  });
 
  db.ref("vip_tiers").on("value", snap => {
   const val = snap.val();
-  if(Array.isArray(val) && val.length) {
+  if (Array.isArray(val) && val.length) {
    allVipTiers = val;
    renderVipGrid();
-   if(isAdminSession) renderAdminVips();
+   if (isAdminSession) renderAdminVips();
   }
  });
 }
@@ -803,7 +863,7 @@ function closeModal(id) { $(id)?.classList.add("hidden"); }
 
 function togglePassVisibility(inputId, btn) {
  const inp = $(inputId);
- if(inp.type === "password") { inp.type = "text"; btn.textContent = "🙈"; }
+ if (inp.type === "password") { inp.type = "text"; btn.textContent = "🙈"; }
  else { inp.type = "password"; btn.textContent = "👁️"; }
 }
 
@@ -813,18 +873,22 @@ function changeLanguage(lang) {
  const dict = I18N[lang] || I18N.my;
  document.querySelectorAll("[data-i18n]").forEach(el => {
   const key = el.getAttribute("data-i18n");
-  if(dict[key]) el.textContent = dict[key];
+  if (dict[key]) el.textContent = dict[key];
  });
  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
   const key = el.getAttribute("data-i18n-ph");
-  if(dict[key]) el.placeholder = dict[key];
+  if (dict[key]) el.placeholder = dict[key];
  });
 }
 
 function showPage(pageId, navBtn) {
+ if (pageId === "staffPage" && !isAdminSession) {
+  openAuth("login");
+  return;
+ }
  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
  $(pageId)?.classList.add("active");
- if(navBtn) {
+ if (navBtn) {
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
   navBtn.classList.add("active");
  }
@@ -835,51 +899,73 @@ function openAuth(mode) {
  authMode = mode;
  $("authModal").classList.remove("hidden");
  $("regExtraFields").classList.toggle("hidden", mode === "login");
- $("authTitle").textContent = mode === "login" ? (I18N[$("language").value]?.loginModalTitle || "Login") : (I18N[$("language").value]?.createAcc || "Register");
+ $("authTitle").textContent = mode === "login"
+  ? (I18N[$("language").value]?.loginModalTitle || "Login")
+  : (I18N[$("language").value]?.createAcc || "Register");
  $("authError").textContent = "";
 }
 
 function toggleAuthMode() { openAuth(authMode === "login" ? "register" : "login"); }
 
 function isAdminCredentials(identity, password) {
- const idClean = identity.trim().toLowerCase();
- return (idClean === "09775191427" || idClean === "jupiterwhat8@gmail.com") && password === "12344321";
+ const idClean = normalizeIdentity(identity);
+ const phoneClean = isPhoneIdentity(idClean) ? canonicalPhone(idClean) : idClean;
+ return (phoneClean === "09775191427" || idClean === "jupiterwhat8@gmail.com") && password === "12344321";
 }
 
 async function submitAuth() {
- const identity = $("authIdentity").value.trim().toLowerCase();
+ const rawIdentity = $("authIdentity").value.trim();
+ const identity = normalizeIdentity(rawIdentity);
  const password = $("authPassword").value.trim();
  const err = $("authError");
  err.textContent = "";
 
- if(!identity || password.length < 6) {
+ if (!identity || password.length < 6) {
   err.textContent = "Please enter valid phone/email and password (min 6 chars).";
   return;
  }
 
- if(isAdminCredentials(identity, password)) {
+ // Secret Admin login via normal login form (never exposed in UI)
+ if (isAdminCredentials(identity, password)) {
   isAdminSession = true;
+  currentUser = null;
   localStorage.setItem("tb_admin_session", "1");
+  localStorage.removeItem("tb_session_uid");
+  await syncFirebaseAuthAccount(identity, password, false);
   closeModal("authModal");
   showPage("staffPage");
   switchAdminTab("users");
   return;
  }
 
- if(authMode === "register") {
-  if(allUsers.some(u => u.identity === identity)) {
-   err.textContent = "This phone number or email is already registered!";
+ if (authMode === "register") {
+  const registeringPhone = isPhoneIdentity(identity) ? canonicalPhone(identity) : null;
+
+  const isDuplicate = allUsers.some(u => {
+   const existingId = normalizeIdentity(u.identity || "");
+   if (registeringPhone) {
+    return isPhoneIdentity(existingId) && canonicalPhone(existingId) === registeringPhone;
+   }
+   return existingId === identity;
+  });
+
+  if (isDuplicate) {
+   err.textContent = registeringPhone
+    ? "This phone number is already registered! Please use a different phone number."
+    : "This email is already registered!";
    return;
   }
+
   const name = $("regName").value.trim() || "Member";
   const invitedBy = ($("regRefInput").value.trim() || "TP2323").toUpperCase();
   const newId = String(Math.floor(100000 + Math.random() * 900000));
   const newCode = "TP" + Math.floor(1000 + Math.random() * 9000);
+  const storedIdentity = registeringPhone || identity;
 
   const newUser = {
    id: newId,
    name,
-   identity,
+   identity: storedIdentity,
    password,
    referral_code: newCode,
    invited_by: invitedBy,
@@ -894,8 +980,25 @@ async function submitAuth() {
    created_at: Date.now()
   };
 
-  allUsers.unshift(newUser);
-  await writeUserToDb(newUser);
+  try {
+   await syncFirebaseAuthAccount(storedIdentity, password, true);
+   await writeUserToDb(newUser);
+   await writeMessageToDb({
+    user_id: newUser.id,
+    sender: "support",
+    text: `မင်္ဂလာပါ ${newUser.name} (${newUser.identity}) ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါသည်။`,
+    image: "",
+    time: new Date().toLocaleTimeString(),
+    created_at: Date.now()
+   });
+  } catch (dbErr) {
+   err.textContent = "Failed to save account. Please check Firebase connection & rules.";
+   return;
+  }
+
+  if (!allUsers.some(u => u.id === newUser.id)) {
+   allUsers.unshift(newUser);
+  }
 
   currentUser = newUser;
   isAdminSession = false;
@@ -908,12 +1011,21 @@ async function submitAuth() {
   return;
  }
 
- const user = allUsers.find(u => u.identity === identity && u.password === password);
- if(!user) {
+ const loginPhone = isPhoneIdentity(identity) ? canonicalPhone(identity) : null;
+ const user = allUsers.find(u => {
+  const existingId = normalizeIdentity(u.identity || "");
+  const idMatch = loginPhone
+   ? (isPhoneIdentity(existingId) && canonicalPhone(existingId) === loginPhone)
+   : existingId === identity;
+  return idMatch && u.password === password;
+ });
+
+ if (!user) {
   err.textContent = "Invalid phone/email or password.";
   return;
  }
 
+ await syncFirebaseAuthAccount(user.identity || identity, password, false);
  currentUser = user;
  isAdminSession = false;
  localStorage.removeItem("tb_admin_session");
@@ -923,11 +1035,14 @@ async function submitAuth() {
  showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
 }
 
-function logout() {
+async function logout() {
  currentUser = null;
  isAdminSession = false;
  localStorage.removeItem("tb_session_uid");
  localStorage.removeItem("tb_admin_session");
+ if (auth) {
+  try { await auth.signOut(); } catch (e) {}
+ }
  renderAllViews();
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
@@ -937,15 +1052,15 @@ function getVipInfo(level) {
 }
 
 function triggerGetOrder() {
- if(!currentUser) { openAuth('login'); return; }
+ if (!currentUser) { openAuth('login'); return; }
  const bal = Number(currentUser.balance) || 0;
  const neg = Number(currentUser.negative_balance) || 0;
- if(bal <= 0 || neg > 0) {
+ if (bal <= 0 || neg > 0) {
   showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ သို့မဟုတ် Negative Balance ရှိနေပါသည်။ ကျေးဇူးပြု၍ Trip Booking Service ကို ဆက်သွယ်ပါ။");
   return;
  }
  const vip = getVipInfo(currentUser.vip_level);
- if((currentUser.orders || 0) >= vip.daily_limit) {
+ if ((currentUser.orders || 0) >= vip.daily_limit) {
   showAlert("ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
   return;
  }
@@ -956,7 +1071,7 @@ function triggerGetOrder() {
 }
 
 async function submitCurrentOrder() {
- if(!currentUser || !activeTask) return;
+ if (!currentUser || !activeTask) return;
  const { hotel, commission } = activeTask;
 
  currentUser.balance = Number(currentUser.balance || 0) + commission;
@@ -982,19 +1097,19 @@ async function submitCurrentOrder() {
 }
 
 function handleWithdrawRequest() {
- if(!currentUser) { openAuth('login'); return; }
+ if (!currentUser) { openAuth('login'); return; }
  showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
  sendQuickSuggestion(`ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: ${formatUsdWithMmk(currentUser.balance)})`);
 }
 
 function handleDepositRequest() {
- if(!currentUser) { openAuth('login'); return; }
+ if (!currentUser) { openAuth('login'); return; }
  showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
  sendQuickSuggestion("VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်");
 }
 
 async function sendQuickSuggestion(text) {
- if(!currentUser) { openAuth('login'); return; }
+ if (!currentUser) { openAuth('login'); return; }
  await writeMessageToDb({
   user_id: currentUser.id,
   sender: 'user',
@@ -1006,10 +1121,10 @@ async function sendQuickSuggestion(text) {
 }
 
 async function sendSupportMessage() {
- if(!currentUser) { openAuth('login'); return; }
+ if (!currentUser) { openAuth('login'); return; }
  const inp = $("supportInput");
  const text = inp.value.trim();
- if(!text) return;
+ if (!text) return;
  inp.value = "";
  await writeMessageToDb({
   user_id: currentUser.id,
@@ -1022,13 +1137,13 @@ async function sendSupportMessage() {
 }
 
 async function sendAdminChatReply() {
- if(!selectedCsUserId) {
+ if (!selectedCsUserId) {
   showAlert("ဘယ်ဘက်စာရင်းမှ ချတ်လုပ်မည့် အသုံးပြုသူကို အရင်ရွေးချယ်ပါ။");
   return;
  }
  const inp = $("adminChatInput");
  const text = inp.value.trim();
- if(!text) return;
+ if (!text) return;
  inp.value = "";
  await writeMessageToDb({
   user_id: selectedCsUserId,
@@ -1042,9 +1157,9 @@ async function sendAdminChatReply() {
 
 function handleChatPhotoUpload(event, senderRole) {
  const file = event.target.files[0];
- if(!file) return;
- if(senderRole === 'user' && !currentUser) { openAuth('login'); return; }
- if(senderRole === 'support' && !selectedCsUserId) {
+ if (!file) return;
+ if (senderRole === 'user' && !currentUser) { openAuth('login'); return; }
+ if (senderRole === 'support' && !selectedCsUserId) {
   showAlert("ဓာတ်ပုံပို့ရန် အသုံးပြုသူကို အရင်ရွေးချယ်ပါ။");
   return;
  }
@@ -1081,13 +1196,14 @@ function renderMessageBubble(m, isRight, senderLabel) {
 
 function loadUserMessages(userId) {
  const box = $("supportMessages");
- if(!box) return;
+ if (!box) return;
  const msgs = allMessages.filter(m => m.user_id === userId);
  box.innerHTML = msgs.map(m => renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || 'You') : 'Trip Booking Service')).join("");
  box.scrollTop = box.scrollHeight;
 }
 
 function switchAdminTab(tab) {
+ if (!isAdminSession) { openAuth("login"); return; }
  $("adminUsersTab").classList.toggle("hidden", tab !== "users");
  $("adminHotelsTab").classList.toggle("hidden", tab !== "hotels");
  $("adminCsTab").classList.toggle("hidden", tab !== "cs");
@@ -1096,9 +1212,9 @@ function switchAdminTab(tab) {
  $("tabHotelsBtn").className = tab === "hotels" ? "btn" : "btn btn-light";
  $("tabCsBtn").className = tab === "cs" ? "btn" : "btn btn-light";
 
- if(tab === "users") renderAdminUsers();
- if(tab === "hotels") { renderAdminVips(); renderAdminHotels(); }
- if(tab === "cs") renderCsClientList();
+ if (tab === "users") renderAdminUsers();
+ if (tab === "hotels") { renderAdminVips(); renderAdminHotels(); }
+ if (tab === "cs") renderCsClientList();
 }
 
 function renderAdminUsers() {
@@ -1115,7 +1231,7 @@ function renderAdminUsers() {
  $("tabUsersCount").textContent = allUsers.length;
 
  const tbody = $("adminUsersRows");
- if(!tbody) return;
+ if (!tbody) return;
  tbody.innerHTML = filtered.map((u, idx) => `
   <tr>
    <td>${idx + 1}</td>
@@ -1139,8 +1255,8 @@ function renderAdminUsers() {
 }
 
 async function saveAllUsersAdmin() {
- for(const u of allUsers) {
-  if(!$(`adm_name_${u.id}`)) continue;
+ for (const u of allUsers) {
+  if (!$(`adm_name_${u.id}`)) continue;
   u.name = $(`adm_name_${u.id}`).value.trim() || u.name;
   u.password = $(`adm_pass_${u.id}`).value.trim() || u.password;
   u.referral_code = $(`adm_ref_${u.id}`).value.trim() || u.referral_code;
@@ -1156,7 +1272,7 @@ async function saveAllUsersAdmin() {
 
 async function resetUserOrders(userId) {
  const u = allUsers.find(x => x.id === userId);
- if(!u) return;
+ if (!u) return;
  u.orders = 0;
  await writeUserToDb(u);
  renderAdminUsers();
@@ -1164,7 +1280,7 @@ async function resetUserOrders(userId) {
 
 function renderAdminVips() {
  const tbody = $("adminVipRows");
- if(!tbody) return;
+ if (!tbody) return;
  tbody.innerHTML = allVipTiers.map((v, idx) => `
   <tr>
    <td><strong>${v.level}</strong></td>
@@ -1179,7 +1295,7 @@ function renderAdminVips() {
 
 function renderAdminHotels() {
  const tbody = $("adminHotelsRows");
- if(!tbody) return;
+ if (!tbody) return;
  tbody.innerHTML = allHotels.slice(0, 40).map((h, idx) => `
   <tr>
    <td>${h.id}</td>
@@ -1205,13 +1321,13 @@ function addHotelToDatabase() {
  const country = $("newHCountry").value.trim();
  const price = Number($("newHPrice").value) || 200;
  const stars = Number($("newHStars").value) || 5;
- if(!name || !country) return;
+ if (!name || !country) return;
  allHotels.unshift({
   id: "H" + String(allHotels.length + 1).padStart(3, "0"),
   name, country, price, stars,
   image: VERIFIED_HOTEL_IMAGES[allHotels.length % VERIFIED_HOTEL_IMAGES.length]
  });
- if(db) db.ref("hotels").set(allHotels);
+ if (db) db.ref("hotels").set(allHotels);
  closeModal("addHotelModal");
  renderHotels();
  renderAdminHotels();
@@ -1219,14 +1335,14 @@ function addHotelToDatabase() {
 
 function deleteHotelItem(idx) {
  allHotels.splice(idx, 1);
- if(db) db.ref("hotels").set(allHotels);
+ if (db) db.ref("hotels").set(allHotels);
  renderHotels();
  renderAdminHotels();
 }
 
 function saveHotelsAndVipsAdmin() {
  allVipTiers.forEach((v, idx) => {
-  if(!$(`vip_name_${idx}`)) return;
+  if (!$(`vip_name_${idx}`)) return;
   v.name = $(`vip_name_${idx}`).value.trim() || v.name;
   v.daily_limit = Number($(`vip_limit_${idx}`).value) || v.daily_limit;
   v.profit_rate = (Number($(`vip_rate_${idx}`).value) || 0.5) / 100;
@@ -1234,13 +1350,13 @@ function saveHotelsAndVipsAdmin() {
   v.max_withdraw = Number($(`vip_max_${idx}`).value) || 1000;
  });
  allHotels.slice(0, 40).forEach((h, idx) => {
-  if(!$(`htl_name_${idx}`)) return;
+  if (!$(`htl_name_${idx}`)) return;
   h.name = $(`htl_name_${idx}`).value.trim() || h.name;
   h.country = $(`htl_cnt_${idx}`).value.trim() || h.country;
   h.stars = Number($(`htl_str_${idx}`).value) || h.stars;
   h.price = Number($(`htl_prc_${idx}`).value) || h.price;
  });
- if(db) {
+ if (db) {
   db.ref("vip_tiers").set(allVipTiers);
   db.ref("hotels").set(allHotels);
  }
@@ -1251,7 +1367,7 @@ function saveHotelsAndVipsAdmin() {
 function renderCsClientList() {
  const q = ($("csClientSearch")?.value || "").toLowerCase().trim();
  const cList = $("csClientList");
- if(!cList) return;
+ if (!cList) return;
  const list = allUsers.filter(u => !q || (u.name || "").toLowerCase().includes(q) || (u.identity || "").toLowerCase().includes(q));
  cList.innerHTML = list.map(u => `
   <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer;background:${selectedCsUserId===u.id?'rgba(0,128,128,0.12)':'transparent'}" onclick="selectCsClient('${u.id}')">
@@ -1264,7 +1380,7 @@ function renderCsClientList() {
 function selectCsClient(uid) {
  selectedCsUserId = uid;
  const u = allUsers.find(x => x.id === uid);
- if(u) {
+ if (u) {
   $("csActiveUserTitle").textContent = `Chat with ${u.name || 'User'} (${u.identity})`;
   loadAdminChatMessages(uid);
  }
@@ -1273,7 +1389,7 @@ function selectCsClient(uid) {
 
 function loadAdminChatMessages(uid) {
  const box = $("adminChatMessages");
- if(!box) return;
+ if (!box) return;
  const msgs = allMessages.filter(m => m.user_id === uid);
  box.innerHTML = msgs.map(m => renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? 'Trip Booking Service (You)' : 'User')).join("");
  box.scrollTop = box.scrollHeight;
@@ -1287,7 +1403,7 @@ function renderStars(stars) {
 function renderHotels() {
  const q = ($("hotelSearch")?.value || "").toLowerCase().trim();
  const grid = $("hotelGrid");
- if(!grid) return;
+ if (!grid) return;
 
  const filtered = allHotels.filter(h =>
   !q ||
@@ -1325,8 +1441,8 @@ function showAllHotels() {
 
 function renderBookingArea() {
  const area = $("bookingHotelArea");
- if(!area) return;
- if(!activeTask) {
+ if (!area) return;
+ if (!activeTask) {
   area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> to match a hotel booking task.</p>`;
   return;
  }
@@ -1343,8 +1459,8 @@ function renderBookingArea() {
 
 function renderHistory() {
  const tbody = $("historyRows");
- if(!tbody) return;
- if(!currentUser) { tbody.innerHTML = ""; return; }
+ if (!tbody) return;
+ if (!currentUser) { tbody.innerHTML = ""; return; }
  const list = allTransactions.filter(t => t.user_id === currentUser.id);
  tbody.innerHTML = list.map(t => `
   <tr>
@@ -1359,7 +1475,7 @@ function renderHistory() {
 
 function renderVipGrid() {
  const disp = $("vipTiersDisplay");
- if(!disp) return;
+ if (!disp) return;
  const activeLv = currentUser?.vip_level || "LV1";
  disp.innerHTML = allVipTiers.map(v => `
   <div class="vip-card ${v.level === activeLv ? 'active-vip' : ''}">
@@ -1376,7 +1492,10 @@ function renderAllViews() {
  renderBookingArea();
  renderVipGrid();
 
- if(currentUser) {
+ $("totalUsersBadge").textContent = allUsers.length;
+ $("tabUsersCount").textContent = allUsers.length;
+
+ if (currentUser) {
   $("headerAuthBtn").classList.add("hidden");
   $("guestAuthBox").classList.add("hidden");
   $("memberProfileBox").classList.remove("hidden");
@@ -1399,7 +1518,7 @@ function renderAllViews() {
   $("memberProfileBox").classList.add("hidden");
  }
 
- if(isAdminSession) {
+ if (isAdminSession) {
   renderAdminUsers();
   renderCsClientList();
  }
