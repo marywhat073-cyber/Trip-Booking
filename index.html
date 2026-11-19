@@ -754,22 +754,26 @@ async function syncFirebaseAuthAccount(identity, password, isRegister) {
    const cred = await auth.createUserWithEmailAndPassword(authEmail, password);
    return cred.user;
   } else {
+   const cred = await auth.signInWithEmailAndPassword(authEmail, password);
+   return cred.user;
+  }
+ } catch (e) {
+  if (isRegister && e && e.code === "auth/email-already-in-use") {
    try {
     const cred = await auth.signInWithEmailAndPassword(authEmail, password);
     return cred.user;
-   } catch (signInErr) {
-    // If user exists in DB but not yet in Auth console, register seamlessly so Auth console stays synced
-    if (signInErr && (signInErr.code === "auth/user-not-found" || signInErr.code === "auth/invalid-credential")) {
-     const cred = await auth.createUserWithEmailAndPassword(authEmail, password);
-     return cred.user;
-    }
-    throw signInErr;
+   } catch (innerErr) {
+    return null;
    }
   }
- } catch (e) {
-  // Ignore email-already-in-use when phone format varies slightly
-  if (e && e.code === "auth/email-already-in-use") return null;
-  console.warn("Firebase Auth notice:", e && e.message ? e.message : e);
+  if (!isRegister && e && (e.code === "auth/user-not-found" || e.code === "auth/invalid-credential")) {
+   try {
+    const cred = await auth.createUserWithEmailAndPassword(authEmail, password);
+    return cred.user;
+   } catch (createErr) {
+    return null;
+   }
+  }
   return null;
  }
 }
@@ -925,7 +929,6 @@ async function submitAuth() {
   return;
  }
 
- // Secret Admin login via normal login form (never exposed in UI)
  if (isAdminCredentials(identity, password)) {
   isAdminSession = true;
   currentUser = null;
@@ -1034,8 +1037,7 @@ async function submitAuth() {
  renderAllViews();
  showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
 }
-
-async function logout() {
+ async function logout() {
  currentUser = null;
  isAdminSession = false;
  localStorage.removeItem("tb_session_uid");
