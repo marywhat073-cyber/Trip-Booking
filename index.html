@@ -173,9 +173,15 @@ th,td{text-align:left;padding:10px;border-bottom:1px solid var(--fb-border);whit
 th{color:var(--fb-muted);background:var(--fb-bg)}
 
 .modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.68);display:flex;align-items:center;justify-content:center;z-index:100}
-.modal-box{background:var(--fb-card);color:var(--fb-text);padding:22px;border-radius:12px;width:min(440px,92%);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.modal-box{background:var(--fb-card);color:var(--fb-text);padding:22px;border-radius:12px;width:min(480px,94%);max-height:88vh;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .close{background:none;border:0;font-size:18px;color:var(--fb-muted)}
+
+.rule-item{
+ display:flex;justify-content:space-between;align-items:center;gap:8px;
+ background:var(--fb-bg);border:1px solid var(--fb-border);border-radius:8px;
+ padding:8px 10px;margin-top:8px;font-size:13px;
+}
 
 .sync-badge{
  display:inline-flex;align-items:center;gap:6px;background:rgba(0,179,134,0.15);
@@ -379,7 +385,7 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
       <th>Neg ($)</th>
       <th>Profit Box ($)</th>
       <th data-i18n="thOrders">Orders</th>
-      <th>Order Rule</th>
+      <th>Order Rules (10+)</th>
       <th data-i18n="thReset">Reset</th>
      </tr>
     </thead>
@@ -506,22 +512,33 @@ th{color:var(--fb-muted);background:var(--fb-bg)}
 <div class="modal hidden" id="orderRuleModal">
  <div class="modal-box">
   <div class="modal-head">
-   <h3>🎯 Order Count Rule (Neg & Profit)</h3>
+   <h3>🎯 Order Rules (10+ Custom Triggers)</h3>
    <button type="button" class="close" onclick="closeModal('orderRuleModal')">✕</button>
   </div>
-  <p class="muted" id="ruleUserInfo" style="margin:0 0 8px">User: -</p>
-  <label>ဘယ်အော်ဒါအကြိမ်ရေမှာလဲ? (ဥပမာ - 5)</label>
-  <input id="ruleTargetOrder" type="number" min="1" placeholder="e.g. 5">
+  <p class="muted" id="ruleUserInfo" style="margin:0 0 10px">User: -</p>
 
-  <label>အနှုတ်ဒေါ်လာ / Negative Balance ($)</label>
-  <input id="ruleNegAmount" type="number" step="0.01" placeholder="e.g. 100">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+   <div>
+    <label style="margin-top:0">အော်ဒါအကြိမ်ရေ</label>
+    <input id="ruleTargetOrder" type="number" min="1" placeholder="e.g. 5">
+   </div>
+   <div>
+    <label style="margin-top:0">အနှုတ်ဒေါ်လာ ($)</label>
+    <input id="ruleNegAmount" type="number" step="0.01" placeholder="e.g. 800">
+   </div>
+   <div>
+    <label style="margin-top:0">အမြတ်ဒေါ်လာ ($)</label>
+    <input id="ruleProfitAmount" type="number" step="0.01" placeholder="e.g. 700">
+   </div>
+  </div>
 
-  <label>အမြတ်ဒေါ်လာ / Profit Box ($)</label>
-  <input id="ruleProfitAmount" type="number" step="0.01" placeholder="e.g. 50">
+  <button type="button" class="btn btn-success btn-block" style="margin-top:12px" onclick="addOrderRuleToList()">➕ Rule စာရင်းထဲ ထည့်မည်</button>
+
+  <div id="orderRuleListBox" style="margin-top:12px"></div>
 
   <div style="display:flex;gap:8px;margin-top:14px">
-   <button type="button" class="btn btn-success" style="flex:1" onclick="saveOrderRuleAdmin()">💾 Rule သိမ်းမည်</button>
-   <button type="button" class="btn btn-light" onclick="clearOrderRuleAdmin()">🗑️ ဖျက်မည်</button>
+   <button type="button" class="btn btn-block" onclick="saveAllOrderRulesAdmin()">💾 Rules အားလုံး သိမ်းမည်</button>
+   <button type="button" class="btn btn-danger" onclick="clearAllOrderRulesAdmin()">🗑️ အကုန်ဖျက်</button>
   </div>
  </div>
 </div>
@@ -777,7 +794,30 @@ let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
 let editingRuleUserId = null;
+let draftOrderRules = [];
 let showAllHotelsFlag = false;
+
+function getUserOrderRules(userObj) {
+ if (!userObj) return [];
+ if (Array.isArray(userObj.order_rules)) {
+  return userObj.order_rules
+   .filter(r => r && Number(r.target_order) > 0)
+   .map(r => ({
+    target_order: Number(r.target_order),
+    negative_balance: Math.abs(Number(r.negative_balance) || 0),
+    profit_box: Number(r.profit_box) || 0
+   }))
+   .sort((a, b) => a.target_order - b.target_order);
+ }
+ if (userObj.order_rule && Number(userObj.order_rule.target_order) > 0) {
+  return [{
+   target_order: Number(userObj.order_rule.target_order),
+   negative_balance: Math.abs(Number(userObj.order_rule.negative_balance) || 0),
+   profit_box: Number(userObj.order_rule.profit_box) || 0
+  }];
+ }
+ return [];
+}
 
 function normalizeIdentity(val) {
  return String(val || "").trim().toLowerCase().replace(/\s+/g, "");
@@ -869,6 +909,9 @@ function startRealtimeListeners() {
    const latest = allUsers.find(u => String(u.id) === String(activeUid));
    if (latest) {
     currentUser = latest;
+    if ((Number(currentUser.negative_balance) || 0) <= 0 && activeTask && activeTask.blockedByNeg) {
+     activeTask = null;
+    }
    }
   }
   renderAllViews();
@@ -1045,6 +1088,7 @@ async function submitAuth() {
    referral_earned: 0.00,
    vip_level: "LV1",
    orders: 0,
+   order_rules: [],
    order_rule: null,
    created_at: Date.now()
   };
@@ -1117,44 +1161,68 @@ function getVipInfo(level) {
 
 function triggerGetOrder() {
  if (!currentUser) { openAuth('login'); return; }
- const bal = Number(currentUser.balance) || 0;
+
  const neg = Number(currentUser.negative_balance) || 0;
- if (bal <= 0 || neg > 0) {
-  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ သို့မဟုတ် Negative Balance ရှိနေပါသည်။ ကျေးဇူးပြု၍ Trip Booking Service ကို ဆက်သွယ်ပါ။");
+ if (neg > 0) {
+  activeTask = { blockedByNeg: true, negAmount: neg };
+  renderBookingArea();
+  showAlert(`⚠️ သင့်အကောင့်တွင် အနှုတ်ဒေါ်လာ <b>-$${neg.toFixed(2)}</b> ရှိနေသဖြင့် ဘိုကင်ဆက်တင်လို့ မရပါ။ ADMIN ဘက်မှ ဖြေရှင်းပေးပြီးမှ ဆက်လက်လုပ်ဆောင်နိုင်ပါမည်။`);
   return;
  }
+
+ const bal = Number(currentUser.balance) || 0;
+ if (bal <= 0) {
+  showAlert("လက်ကျန်ငွေ မလုံလောက်ပါ။ ကျေးဇူးပြု၍ Trip Booking Service ကို ဆက်သွယ်ပါ။");
+  return;
+ }
+
  const vip = getVipInfo(currentUser.vip_level);
  if ((Number(currentUser.orders) || 0) >= Number(vip.daily_limit || 30)) {
   showAlert("ယနေ့အတွက် သတ်မှတ်ထားသော အော်ဒါအရေအတွက် ပြည့်သွားပါပြီ။");
   return;
  }
+
  const nextOrderNum = (Number(currentUser.orders) || 0) + 1;
  const hotel = allHotels[(nextOrderNum - 1) % allHotels.length];
- const rule = currentUser.order_rule;
- let extraProfitBox = Number(currentUser.profit_box) || 0;
+ const rules = getUserOrderRules(currentUser);
+ const matchedRule = rules.find(r => Number(r.target_order) === nextOrderNum);
 
- if (rule && Number(rule.target_order) === nextOrderNum) {
-  const ruleNeg = Number(rule.negative_balance) || 0;
-  const ruleProfit = Number(rule.profit_box) || 0;
+ let ruleNeg = 0;
+ let ruleProfit = Number(currentUser.profit_box) || 0;
+
+ if (matchedRule) {
+  ruleNeg = Math.abs(Number(matchedRule.negative_balance) || 0);
+  ruleProfit = Number(matchedRule.profit_box) || 0;
   currentUser.negative_balance = ruleNeg;
   currentUser.profit_box = ruleProfit;
-  extraProfitBox = ruleProfit;
   writeUserToDb(currentUser);
  }
 
- const commission = (Number(hotel.price) * Number(vip.profit_rate)) + extraProfitBox;
- activeTask = { hotel, commission, orderNum: nextOrderNum };
+ const commission = (Number(hotel.price) * Number(vip.profit_rate)) + ruleProfit;
+ activeTask = { hotel, commission, orderNum: nextOrderNum, ruleNeg, ruleProfit };
  renderBookingArea();
+ renderAllViews();
 }
 
 async function submitCurrentOrder() {
  if (!currentUser || !activeTask) return;
+
+ const neg = Number(currentUser.negative_balance) || 0;
+ if (neg > 0) {
+  activeTask.blockedByNeg = true;
+  activeTask.negAmount = neg;
+  renderBookingArea();
+  showAlert(`⚠️ အနှုတ်ဒေါ်လာ <b>-$${neg.toFixed(2)}</b> ရှိနေသေးသဖြင့် အော်ဒါကို ဆက်တင်လို့ မရသေးပါ။ ADMIN ဘက်မှ အနှုတ်ဒေါ်လာ ပြောင်းပေးပြီးမှ ဘိုကင်ဆက်တင်နိုင်ပါမည်။`);
+  return;
+ }
+
  const { hotel, commission } = activeTask;
 
  currentUser.balance = Number(currentUser.balance || 0) + commission;
  currentUser.commission = Number(currentUser.commission || 0) + commission;
  currentUser.total_profit = Number(currentUser.total_profit || 0) + commission;
  currentUser.profit_box = 0;
+ currentUser.negative_balance = 0;
  currentUser.orders = Number(currentUser.orders || 0) + 1;
 
  await writeUserToDb(currentUser);
@@ -1162,7 +1230,7 @@ async function submitCurrentOrder() {
   user_id: String(currentUser.id),
   date: new Date().toLocaleString(),
   type: "Booking Profit",
-  details: `Hotel: ${hotel.name} (${hotel.country})`,
+  details: `Order #${activeTask.orderNum || currentUser.orders} · Hotel: ${hotel.name} (${hotel.country})`,
   amount: commission,
   status: "Approved",
   created_at: Date.now()
@@ -1300,24 +1368,43 @@ function switchAdminTab(tab) {
  if (tab === "cs") renderCsClientList();
 }
 
+function renderDraftRuleList() {
+ const box = $("orderRuleListBox");
+ if (!box) return;
+ if (!draftOrderRules.length) {
+  box.innerHTML = `<p class="small muted">Rule မထည့်ရသေးပါ။ အပေါ်ကွက်တွင် အော်ဒါအကြိမ်ရေ၊ အနှုတ်ဒေါ်လာနှင့် အမြတ်ဒေါ်လာ ထည့်ပြီး ထည့်ပါ။</p>`;
+  return;
+ }
+ box.innerHTML = draftOrderRules
+  .sort((a, b) => a.target_order - b.target_order)
+  .map((r, idx) => `
+   <div class="rule-item">
+    <div>
+     <strong>Order #${r.target_order}</strong> ·
+     <span style="color:var(--fb-danger)">Neg -$${Number(r.negative_balance).toFixed(2)}</span> ·
+     <span style="color:var(--fb-success)">Profit +$${Number(r.profit_box).toFixed(2)}</span>
+    </div>
+    <button type="button" class="btn btn-danger" style="padding:3px 8px;font-size:11px" onclick="removeDraftRule(${idx})">✕</button>
+   </div>
+  `).join("");
+}
+
 function openOrderRuleModal(userId) {
  const u = allUsers.find(x => String(x.id) === String(userId));
  if (!u) return;
  editingRuleUserId = String(u.id);
  $("ruleUserInfo").textContent = `User: ${u.name || 'Member'} (${u.identity || '-'}) · Current Orders: ${u.orders || 0}`;
- const rule = u.order_rule || {};
- $("ruleTargetOrder").value = rule.target_order || "";
- $("ruleNegAmount").value = rule.negative_balance ?? "";
- $("ruleProfitAmount").value = rule.profit_box ?? "";
+ $("ruleTargetOrder").value = "";
+ $("ruleNegAmount").value = "";
+ $("ruleProfitAmount").value = "";
+ draftOrderRules = getUserOrderRules(u).map(r => ({ ...r }));
+ renderDraftRuleList();
  $("orderRuleModal").classList.remove("hidden");
 }
 
-async function saveOrderRuleAdmin() {
- if (!editingRuleUserId) return;
- const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
- if (!u) return;
+function addOrderRuleToList() {
  const targetOrder = Number($("ruleTargetOrder").value);
- const negAmt = Number($("ruleNegAmount").value) || 0;
+ const negAmt = Math.abs(Number($("ruleNegAmount").value) || 0);
  const profitAmt = Number($("ruleProfitAmount").value) || 0;
 
  if (!targetOrder || targetOrder < 1) {
@@ -1325,26 +1412,57 @@ async function saveOrderRuleAdmin() {
   return;
  }
 
- u.order_rule = {
-  target_order: targetOrder,
-  negative_balance: negAmt,
-  profit_box: profitAmt
- };
- await writeUserToDb(u);
- closeModal("orderRuleModal");
- renderAdminUsers();
- showAlert(`✅ Order #${targetOrder} rule saved: Neg $${negAmt.toFixed(2)}, Profit $${profitAmt.toFixed(2)}`);
+ const existingIdx = draftOrderRules.findIndex(r => Number(r.target_order) === targetOrder);
+ const item = { target_order: targetOrder, negative_balance: negAmt, profit_box: profitAmt };
+ if (existingIdx >= 0) {
+  draftOrderRules[existingIdx] = item;
+ } else {
+  draftOrderRules.push(item);
+ }
+
+ $("ruleTargetOrder").value = "";
+ $("ruleNegAmount").value = "";
+ $("ruleProfitAmount").value = "";
+ renderDraftRuleList();
 }
 
-async function clearOrderRuleAdmin() {
+function removeDraftRule(idx) {
+ draftOrderRules.splice(idx, 1);
+ renderDraftRuleList();
+}
+
+async function saveAllOrderRulesAdmin() {
  if (!editingRuleUserId) return;
  const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
  if (!u) return;
+ const cleaned = draftOrderRules
+  .filter(r => Number(r.target_order) > 0)
+  .map(r => ({
+   target_order: Number(r.target_order),
+   negative_balance: Math.abs(Number(r.negative_balance) || 0),
+   profit_box: Number(r.profit_box) || 0
+  }))
+  .sort((a, b) => a.target_order - b.target_order);
+
+ u.order_rules = cleaned;
+ u.order_rule = cleaned[0] || null;
+ await writeUserToDb(u);
+ closeModal("orderRuleModal");
+ renderAdminUsers();
+ showAlert(`✅ ${cleaned.length} order rule(s) saved for ${u.name || 'User'}!`);
+}
+
+async function clearAllOrderRulesAdmin() {
+ if (!editingRuleUserId) return;
+ const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
+ if (!u) return;
+ draftOrderRules = [];
+ u.order_rules = [];
  u.order_rule = null;
  await writeUserToDb(u);
  closeModal("orderRuleModal");
  renderAdminUsers();
- showAlert("🗑️ Order rule cleared.");
+ showAlert("🗑️ All order rules cleared.");
 }
 
 function renderAdminUsers() {
@@ -1363,9 +1481,11 @@ function renderAdminUsers() {
  const tbody = $("adminUsersRows");
  if (!tbody) return;
  tbody.innerHTML = filtered.map((u, idx) => {
-  const ruleBadge = u.order_rule && u.order_rule.target_order
-   ? `<div class="small" style="color:var(--fb-primary);font-weight:700">#${u.order_rule.target_order}: -$${Number(u.order_rule.negative_balance || 0)} / +$${Number(u.order_rule.profit_box || 0)}</div>`
-   : `<div class="small muted">No rule</div>`;
+  const rules = getUserOrderRules(u);
+  const ruleSummary = rules.length
+   ? rules.slice(0, 2).map(r => `#${r.target_order}: -$${Number(r.negative_balance || 0)}/+$${Number(r.profit_box || 0)}`).join("<br>") +
+     (rules.length > 2 ? `<br><span class="small muted">+${rules.length - 2} more</span>` : "")
+   : `<span class="small muted">No rule</span>`;
 
   return `
    <tr>
@@ -1381,12 +1501,12 @@ function renderAdminUsers() {
      </select>
     </td>
     <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${Number(u.balance || 0)}" style="width:90px"></td>
-    <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:80px"></td>
-    <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:80px"></td>
+    <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:85px"></td>
+    <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:85px"></td>
     <td><input id="adm_ord_${u.id}" type="number" min="0" value="${Number(u.orders || 0)}" style="width:65px"></td>
     <td>
-     <button type="button" class="btn btn-light" style="padding:4px 8px;font-size:11px" onclick="openOrderRuleModal('${u.id}')">🎯 Rule</button>
-     ${ruleBadge}
+     <button type="button" class="btn btn-light" style="padding:4px 8px;font-size:11px;margin-bottom:4px" onclick="openOrderRuleModal('${u.id}')">🎯 Rules (${rules.length})</button>
+     <div class="small" style="color:var(--fb-primary);font-weight:600">${ruleSummary}</div>
     </td>
     <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">Reset</button></td>
    </tr>
@@ -1402,7 +1522,7 @@ async function saveAllUsersAdmin() {
   u.referral_code = $(`adm_ref_${u.id}`).value.trim() || u.referral_code;
   u.vip_level = $(`adm_vip_${u.id}`).value;
   u.balance = Number($(`adm_bal_${u.id}`).value) || 0;
-  u.negative_balance = Number($(`adm_neg_${u.id}`).value) || 0;
+  u.negative_balance = Math.max(0, Math.abs(Number($(`adm_neg_${u.id}`).value) || 0));
   u.profit_box = Number($(`adm_pbox_${u.id}`).value) || 0;
   u.orders = Math.max(0, Number($(`adm_ord_${u.id}`).value) || 0);
   await writeUserToDb(u);
@@ -1586,6 +1706,20 @@ function showAllHotels() {
 function renderBookingArea() {
  const area = $("bookingHotelArea");
  if (!area) return;
+
+ const neg = Number(currentUser?.negative_balance) || 0;
+ if (currentUser && neg > 0) {
+  area.innerHTML = `
+   <div class="panel" style="background:rgba(255,77,77,0.08);border:2px solid var(--fb-danger)">
+    <h4 style="margin-top:0;color:var(--fb-danger)">⚠️ Negative Balance Locked (-$${neg.toFixed(2)})</h4>
+    <p style="margin:6px 0">သင့်အကောင့်တွင် အနှုတ်ဒေါ်လာ <b>-$${neg.toFixed(2)}</b> ရှိနေသဖြင့် ဘိုကင်ဆက်တင်လို့ မရပါ။</p>
+    <p class="small muted" style="margin:6px 0 12px">ADMIN ဘက်မှ အနှုတ်ဒေါ်လာ ပြောင်းပေးပြီးမှသာ ဘိုကင်ဆက်လက်တင်နိုင်ပါမည်။</p>
+    <button type="button" class="btn btn-danger" onclick="handleDepositRequest()">💬 Customer Service သို့ ဆက်သွယ်မည်</button>
+   </div>
+  `;
+  return;
+ }
+
  if (!activeTask) {
   area.innerHTML = `<p class="muted" style="text-align:center">Click <b>Get Order</b> to match a hotel booking task.</p>`;
   return;
