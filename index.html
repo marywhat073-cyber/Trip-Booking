@@ -44,15 +44,15 @@ body {
  transition: background 0.2s, color 0.2s;
 }
 
-/* Fullscreen Intro Splash with Uploaded Mountain Lake Background */
+/* Fullscreen Intro Splash with Logo + Welcome Text Together */
 .intro-splash {
  position: fixed;
  inset: 0;
  z-index: 9999;
  background:
-  linear-gradient(135deg, rgba(5, 22, 34, 0.52), rgba(0, 90, 96, 0.48)),
+  linear-gradient(135deg, rgba(5, 22, 34, 0.68), rgba(0, 76, 92, 0.72)),
   url("image_23542a.jpg") center center / cover no-repeat;
- background-color: #0b3b4c;
+ background-color: #092c3a;
  display: flex;
  flex-direction: column;
  align-items: center;
@@ -60,7 +60,7 @@ body {
  padding: 24px;
  text-align: center;
  overflow: hidden;
- transition: opacity 0.6s ease, visibility 0.6s ease;
+ transition: opacity 0.55s ease, visibility 0.55s ease;
 }
 
 .intro-splash.fade-out {
@@ -69,60 +69,47 @@ body {
  pointer-events: none;
 }
 
-.intro-logo-wrap {
- width: 84px;
- height: 84px;
- border-radius: 22px;
- background: linear-gradient(135deg, #20b2aa, #006666);
- color: #ffffff;
+.intro-stage-box {
  display: flex;
+ flex-direction: column;
  align-items: center;
  justify-content: center;
- font-size: 42px;
- font-weight: 800;
- box-shadow: 0 14px 36px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.28);
- margin-bottom: 18px;
- transform: scale(0.55) rotate(-25deg);
+ gap: 14px;
  opacity: 0;
- transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.65s ease;
+ transform: scale(0.92) translateY(12px);
+ transition: opacity 0.7s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.intro-logo-wrap.assembled {
- transform: scale(1) rotate(0deg);
+.intro-stage-box.show {
  opacity: 1;
+ transform: scale(1) translateY(0);
+}
+
+.intro-logo-img {
+ width: 112px;
+ height: 112px;
+ border-radius: 24px;
+ object-fit: cover;
+ background: #1d4ed8;
+ box-shadow: 0 16px 38px rgba(0,0,0,0.55), 0 0 0 3px rgba(255,255,255,0.28);
 }
 
 .intro-title-line {
- font-size: 32px;
+ font-size: 30px;
  font-weight: 800;
  color: #ffffff;
  letter-spacing: 0.4px;
  line-height: 1.25;
- min-height: 42px;
  text-shadow: 0 4px 18px rgba(0,0,0,0.75);
 }
 
 .intro-sub-line {
- margin-top: 8px;
- font-size: 17px;
+ font-size: 15px;
  font-weight: 700;
- color: #ccfbf1;
+ color: #99f6e4;
  letter-spacing: 2px;
  text-transform: uppercase;
- min-height: 24px;
  text-shadow: 0 2px 12px rgba(0,0,0,0.7);
-}
-
-.fly-char {
- display: inline-block;
- opacity: 0;
- transition: transform 0.85s cubic-bezier(0.18, 0.89, 0.32, 1.15), opacity 0.65s ease;
- will-change: transform, opacity;
-}
-
-.fly-char.in {
- opacity: 1;
- transform: translate(0, 0) rotate(0deg) scale(1);
 }
 
 .fb-header {
@@ -149,18 +136,14 @@ body {
  flex-shrink: 0;
 }
 
-.brand-logo-svg {
- width: 36px;
- height: 36px;
+.brand-logo-img {
+ width: 38px;
+ height: 38px;
  border-radius: 10px;
- background: linear-gradient(135deg, #008080, #20b2aa);
- color: #ffffff;
- display: flex;
- align-items: center;
- justify-content: center;
- font-size: 20px;
- font-weight: 800;
- box-shadow: 0 2px 6px rgba(0,128,128,0.35);
+ object-fit: cover;
+ background: #1d4ed8;
+ box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+ display: block;
 }
 
 .brand-name {
@@ -258,14 +241,15 @@ select.lang-select {
  padding: 20px;
  color: #fff;
  background:
-  linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.72) 100%),
-  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&auto=format&fit=crop") center/cover;
+  linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.75) 100%),
+  url("image_23c8a1.png") center/cover;
+ background-color: #1d4ed8;
  box-shadow: var(--fb-shadow);
  margin-bottom: 16px;
 }
 
-.hero-content h1 { margin: 0 0 6px; font-size: 24px; }
-.hero-content p { margin: 0; font-size: 14px; opacity: 0.95; }
+.hero-content h1 { margin: 0 0 6px; font-size: 24px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.hero-content p { margin: 0; font-size: 14px; opacity: 0.95; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
 .section-title {
  display: flex;
@@ -341,7 +325,6 @@ select.lang-select {
  font-weight: 700;
 }
 
-/* Booking 3-Step Guide */
 .guide-grid {
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -371,7 +354,6 @@ select.lang-select {
 .guide-step h4 { margin: 4px 0 6px; font-size: 15px; }
 .guide-step p { margin: 0; font-size: 13px; color: var(--fb-muted); line-height: 1.45; }
 
-/* Site Footer Info */
 .site-footer-info {
  margin-top: 24px;
  background: var(--fb-card);
@@ -464,25 +446,6 @@ select.lang-select {
 .stat-box span { font-size: 12px; color: var(--fb-muted); display: block; }
 .stat-box strong { font-size: 16px; margin-top: 4px; display: block; }
 
-.vip-grid {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
- gap: 10px;
- margin-top: 10px;
-}
-
-.vip-card {
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 12px;
- background: var(--fb-bg);
-}
-
-.vip-card.active-vip {
- border: 2px solid var(--fb-primary);
- background: rgba(0,128,128,0.08);
-}
-
 .rates-bar {
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -573,36 +536,24 @@ select.lang-select {
  margin-top: 3px;
 }
 
-.progress-wrap {
- margin-top: 14px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 12px;
-}
-
-.progress-track {
- width: 100%;
- height: 10px;
- background: rgba(0,128,128,0.15);
+.vip-level-pill {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ font-size: 13px;
+ font-weight: 800;
+ padding: 6px 14px;
  border-radius: 999px;
- overflow: hidden;
- margin-top: 6px;
-}
-
-.progress-fill {
- height: 100%;
- width: 0%;
- background: linear-gradient(90deg, var(--fb-primary), #20b2aa);
- border-radius: 999px;
- transition: width 0.35s ease;
+ background: rgba(0,128,128,0.14);
+ color: var(--fb-primary);
+ border: 1px solid rgba(0,128,128,0.3);
 }
 
 .profile-quick-grid {
  display: grid;
  grid-template-columns: 1fr 1fr;
  gap: 10px;
- margin-top: 12px;
+ margin-top: 14px;
 }
 
 .p-card-btn {
@@ -653,7 +604,7 @@ select.lang-select {
 .chat-box {
  display: flex;
  flex-direction: column;
- height: 430px;
+ height: 460px;
  border: 1px solid var(--fb-border);
  border-radius: 12px;
  overflow: hidden;
@@ -858,7 +809,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 
 @media (max-width: 768px) {
  .admin-cs-grid { grid-template-columns: 1fr; }
- .intro-title-line { font-size: 25px; }
+ .intro-title-line { font-size: 24px; }
 }
 
 .rule-item {
@@ -974,19 +925,81 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 @keyframes spinRing {
  to { transform: rotate(360deg); }
 }
+
+/* Insufficient Balance Center Frame */
+.low-bal-frame {
+ border: 2px solid var(--fb-danger);
+ border-radius: 14px;
+ background: var(--fb-bg);
+ padding: 18px 14px;
+ text-align: center;
+ box-shadow: 0 8px 24px rgba(255, 77, 77, 0.14);
+}
+
+.low-bal-title {
+ margin: 0 0 8px;
+ font-size: 16px;
+ font-weight: 800;
+ color: var(--fb-danger);
+}
+
+.low-bal-msg {
+ margin: 0 0 16px;
+ font-size: 13px;
+ line-height: 1.55;
+ color: var(--fb-text);
+}
+
+.low-bal-actions {
+ display: flex;
+ gap: 10px;
+}
+
+/* Profit Congratulation Square Box */
+.profit-congrats-box {
+ border: 2px solid var(--fb-success);
+ border-radius: 12px;
+ background: rgba(40, 167, 69, 0.08);
+ padding: 20px 16px;
+ text-align: center;
+ margin: 10px 0 14px;
+}
+
+.profit-congrats-top {
+ font-size: 18px;
+ font-weight: 800;
+ color: var(--fb-success);
+ margin-bottom: 10px;
+}
+
+.profit-congrats-line {
+ font-size: 14px;
+ font-weight: 700;
+ color: var(--fb-text);
+ margin: 4px 0;
+}
+
+.profit-congrats-amt {
+ font-size: 20px;
+ font-weight: 900;
+ color: var(--fb-primary);
+ margin-top: 8px;
+}
 </style>
 </head>
 <body>
- <!-- Intro Splash Screen -->
+ <!-- Intro Splash Screen with Platform Logo & Welcome Text Together -->
 <div class="intro-splash" id="introSplash">
- <div class="intro-logo-wrap" id="introLogoWrap">🔁</div>
- <div class="intro-title-line" id="introTitleLine"></div>
- <div class="intro-sub-line" id="introSubLine"></div>
+ <div class="intro-stage-box" id="introStageBox">
+  <img src="image_23c8a1.png" alt="Trip Booking Logo" class="intro-logo-img" onerror="this.style.display='none'">
+  <div class="intro-title-line" id="introTitleLine">Welcome to Trip Booking</div>
+  <div class="intro-sub-line" id="introSubLine">INTERNATIONAL PLATFORM</div>
+ </div>
 </div>
 
 <header class="fb-header">
  <div class="brand-box" onclick="handleLogoClick()">
-  <div class="brand-logo-svg">🔁</div>
+  <img src="image_23c8a1.png" alt="Logo" class="brand-logo-img" onerror="this.style.display='none'">
   <div>
    <div class="brand-name">Trip Booking</div>
    <div class="brand-sub">INTERNATIONAL</div>
@@ -1031,7 +1044,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
   <div class="guide-step">
    <span class="step-badge" data-i18n="step1Badge">STEP 1</span>
    <h4 data-i18n="step1Title">Deposit Funds</h4>
-   <p data-i18n="step1Desc">Top up the required balance for your VIP level.</p>
+   <p data-i18n="step1Desc">Top up balance to start booking tasks smoothly.</p>
   </div>
   <div class="guide-step">
    <span class="step-badge" data-i18n="step2Badge">STEP 2</span>
@@ -1055,7 +1068,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
    <div class="footer-col">
     <h4 data-i18n="footerFaqTitle">❓ FAQ</h4>
     <p data-i18n="footerFaq1">• Deposit window is set to 25 with official service support.</p>
-    <p data-i18n="footerFaq2">• Higher VIP levels unlock more daily orders and profit rates.</p>
+    <p data-i18n="footerFaq2">• Complete daily booking tasks steadily and contact support anytime.</p>
    </div>
    <div class="footer-col">
     <h4 data-i18n="footerSecurityTitle">🛡️ Security & Assurance</h4>
@@ -1063,7 +1076,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
    </div>
   </div>
   <div class="footer-bottom-bar">
-   <div>🔁 <strong>Trip Booking</strong> — International</div>
+   <div><strong>Trip Booking</strong> — International Platform</div>
    <div class="security-badges">
     <span class="sec-pill" data-i18n="badgeVerified">✔ Verified Platform</span>
     <span class="sec-pill" data-i18n="badge247">🕒 24/7 Service</span>
@@ -1082,16 +1095,11 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
   </div>
   <div class="chat-messages" id="supportMessages"></div>
   <div class="quick-chips" id="userQuickChipsBox">
-   <button type="button" class="chip-btn" data-chip-key="chipDailyOrders" onclick="sendQuickChipByKey('chipDailyOrders')">📊 နေ့စဉ် အော်ဒါအကြိမ်ရေ မေးမြန်းလိုပါသည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chipReferralHow" onclick="sendQuickChipByKey('chipReferralHow')">🎁 Referral ကော်မရှင် ဘယ်လိုရလဲ သိလိုပါသည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chipDeposit25" onclick="sendQuickChipByKey('chipDeposit25')">⏱️ ငွေသွင်းချိန် ၂၅ စည်းမျဉ်း သိလိုပါသည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chipWithdrawRule" onclick="sendQuickChipByKey('chipWithdrawRule')">🏦 ငွေထုတ်အချိန် / စည်းမျဉ်း သိလိုပါသည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chipSpecialOrderFix" onclick="sendQuickChipByKey('chipSpecialOrderFix')">✨ အထူးအော်ဒါ / အနှုတ်လက်ကျန် ဘယ်လိုဖြေရှင်းရမလဲ</button>
-   <button type="button" class="chip-btn" data-chip-key="chipPenalty24h" onclick="sendQuickChipByKey('chipPenalty24h')">⚖️ ၂၄ နာရီအတွင်း မဖြေရှင်းရင် ဒဏ်ကြေးစည်းမျဉ်း</button>
-   <button type="button" class="chip-btn" data-chip-key="chipWithdraw" onclick="sendQuickChipByKey('chipWithdraw')">💸 ငွေထုတ်ချင်ပါသည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chipVipDeposit" onclick="sendQuickChipByKey('chipVipDeposit')">💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chipAccountNo" onclick="sendQuickChipByKey('chipAccountNo')">💳 ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ</button>
-   <button type="button" class="chip-btn" data-chip-key="chipSlipPhoto" onclick="sendQuickChipByKey('chipSlipPhoto')">📸 ငွေလွှဲပြေစာ ပို့ပါမည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chip1Deposit" onclick="sendQuickChipByKey('chip1Deposit')">၁. ငွေသွင်းမည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chip2Withdraw" onclick="sendQuickChipByKey('chip2Withdraw')">၂. ငွေထုတ်မည်</button>
+   <button type="button" class="chip-btn" data-chip-key="chip3AboutOrder" onclick="sendQuickChipByKey('chip3AboutOrder')">၃. အော်ဒါအကြောင်း</button>
+   <button type="button" class="chip-btn" data-chip-key="chip4AboutVip" onclick="sendQuickChipByKey('chip4AboutVip')">၄. VIP ဆိုတာဘာလဲ၊ ဘာအတွက် VIP အတွက်ငွေထည့်ရပါသလဲ</button>
+   <button type="button" class="chip-btn" data-chip-key="chip5AboutPlatform" onclick="sendQuickChipByKey('chip5AboutPlatform')">၅. ပလက်ဖောင်းအကြောင်း</button>
   </div>
   <div class="chat-footer">
    <input type="file" id="userChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
@@ -1169,18 +1177,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
      <div class="profile-id-sub" id="profileIdentity">ID: -</div>
     </div>
    </div>
-   <span class="tag" id="profileVipBadge" style="font-size:14px;padding:6px 14px">LV1</span>
-  </div>
-
-  <div class="progress-wrap" id="vipProgressBox">
-   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-    <strong class="small" id="vipProgressLabel">VIP Progress</strong>
-    <span class="small" style="color:var(--fb-primary);font-weight:700" id="vipProgressPct">0%</span>
-   </div>
-   <div class="progress-track">
-    <div class="progress-fill" id="vipProgressBar"></div>
-   </div>
-   <div class="small muted" id="vipProgressDetail" style="margin-top:6px"></div>
+   <span class="vip-level-pill" id="profileVipBadge">VIP Level 1</span>
   </div>
 
   <div class="profile-quick-grid">
@@ -1206,7 +1203,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
   <div class="action-hint-box">
    <div class="small" style="font-weight:700;color:var(--fb-primary);margin-bottom:6px">
     <span class="arrow-wiggle">⬇</span>
-    <span data-i18n="depWdCsHint">ငွေသွင်း၊ ငွေထုတ်အတွက် ကန်စတာမာဆာဗစ်ကို သွားပါ</span>
+    <span data-i18n="depWdCsHint">ငွေသွင်း၊ ငွေထုတ်အတွက် ကန်စတာမားဆားဗစ်ကို သွားပါ</span>
     <span class="arrow-wiggle">⬇</span>
    </div>
    <div style="display:flex;gap:10px">
@@ -1224,9 +1221,6 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
    <div class="rate-item"><span>🇹🇭 1 THB ➔ MMK</span><strong id="pRateThb">132.50</strong></div>
    <div class="rate-item"><span>🇨🇳 1 CNY ➔ MMK</span><strong id="pRateCny">625.80</strong></div>
   </div>
-
-  <h3 style="margin-top:20px" data-i18n="vipTiersHead">VIP Levels & Limits</h3>
-  <div class="vip-grid" id="vipTiersDisplay"></div>
 
   <button type="button" class="btn btn-danger btn-block" style="margin-top:20px" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
  </div>
@@ -1273,8 +1267,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
       <th data-i18n="thPass">Password</th>
       <th data-i18n="thRef">My Code</th>
       <th data-i18n="thInvitedBy">Invited By</th>
-      <th data-i18n="thVip">VIP Tier</th>
-      <th data-i18n="thCustomVipReq">VIP Req ($)</th>
+      <th data-i18n="thVip">VIP Level</th>
       <th data-i18n="thBal">Balance ($)</th>
       <th data-i18n="thNeg">Neg ($)</th>
       <th data-i18n="thProfitBox">Profit Box ($)</th>
@@ -1290,22 +1283,13 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 
  <div id="adminHotelsTab" class="panel hidden">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-   <h3 data-i18n="hotelsRatesHead">Hotels & VIP Commission Rates</h3>
+   <h3 data-i18n="hotelsRatesHead">Hotels & Commission Rates</h3>
    <div>
     <button type="button" class="btn btn-success" onclick="openAddHotelModal()" data-i18n="addHotelBtn">+ Add Hotel</button>
     <button type="button" class="btn" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">💾 Save Rates & Hotels</button>
    </div>
   </div>
 
-  <div class="stat-box" style="margin-bottom:16px">
-   <span data-i18n="vipDepositAdjLabel">VIP Deposit Rate Adjustment (%) — Increase (+) or Decrease (-)</span>
-   <div style="display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap">
-    <input id="vipDepositAdjPct" type="number" step="0.1" value="0" style="max-width:160px" onchange="updateVipDepositAdj(this.value)">
-    <span class="small muted" id="vipDepositAdjPreview">0.0%</span>
-   </div>
-  </div>
-
-  <h4 data-i18n="vipLimitsHead">VIP Tier Limits & Profit Rates</h4>
   <div class="table-wrap" style="margin-bottom:20px">
    <table>
     <thead>
@@ -1314,8 +1298,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
       <th data-i18n="thName">Name</th>
       <th data-i18n="thDailyLimit">Daily Limit</th>
       <th data-i18n="thProfitRate">Profit Rate (%)</th>
-      <th data-i18n="thMinBal">Min Balance ($)</th>
-      <th data-i18n="thMaxLimit">Max Balance / Withdraw Limit ($)</th>
+      <th data-i18n="thMaxLimit">Max Withdraw Limit ($)</th>
      </tr>
     </thead>
     <tbody id="adminVipRows"></tbody>
@@ -1356,7 +1339,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
     <button type="button" class="chip-btn" onclick="sendAdminCannedReply('wdRule')">🏦 ငွေထုတ်အချိန်/စည်းမျဉ်း</button>
     <button type="button" class="chip-btn" onclick="sendAdminCannedReply('wdDone')">💸 ငွေထုတ်လွှဲပေးပြီး</button>
     <button type="button" class="chip-btn" onclick="sendAdminCannedReply('specialOrder')">✨ အထူးအော်ဒါ/အနှုတ် ဖြေရှင်းပုံ</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('penalty24')">⚖️ ၂၄ နာရီ ဒဏ်ကြေး ($20-$500 / 7d)</button>
+    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('penalty24')">⚖️ ၂၄ နာရီ ဒဏ်ကြေး</button>
    </div>
    <div class="chat-footer">
     <input type="file" id="adminChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
@@ -1369,7 +1352,6 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 </section>
 
 </main>
-
 <nav class="bottom-nav" id="bottomNav">
  <button type="button" class="active" onclick="showPage('homePage',this)"><span class="nav-icon">🏠</span><span data-i18n="navHome">Home</span></button>
  <button type="button" onclick="showPage('supportPage',this)"><span class="nav-icon">🎧</span><span data-i18n="navSupport">Service</span></button>
@@ -1390,6 +1372,30 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
    <button type="button" class="btn btn-light" style="flex:1" onclick="closeModal('editNameModal')" data-i18n="cancelBtn">Cancel</button>
    <button type="button" class="btn btn-success" style="flex:1" onclick="saveProfileNameEdit()" data-i18n="saveChangesBtn">💾 Save</button>
   </div>
+ </div>
+</div>
+
+<div class="modal hidden" id="lowBalanceModal">
+ <div class="modal-box">
+  <div class="low-bal-frame">
+   <h4 class="low-bal-title" data-i18n="lowBalTitle">ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်</h4>
+   <p class="low-bal-msg" data-i18n="lowBalMsg">သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။</p>
+   <div class="low-bal-actions">
+    <button type="button" class="btn btn-light" style="flex:1" onclick="closeModal('lowBalanceModal')" data-i18n="cancelBtn">Cancel</button>
+    <button type="button" class="btn btn-success" style="flex:1" onclick="goToServiceFromLowBalance()" data-i18n="continueBtn">Continue</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="modal hidden" id="profitSuccessModal">
+ <div class="modal-box">
+  <div class="profit-congrats-box">
+   <div class="profit-congrats-top" data-i18n="congratsTop">ဂုဏ်ယူပါတယ်</div>
+   <div class="profit-congrats-line" data-i18n="bookingSuccessLine">ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်</div>
+   <div class="profit-congrats-amt" id="profitSuccessAmountText">၂၄ ဒေါ်လာ အမြတ်ရရှိခဲ့သည်</div>
+  </div>
+  <button type="button" class="btn btn-success btn-block" onclick="closeModal('profitSuccessModal')" data-i18n="okBtn">OK</button>
  </div>
 </div>
 
@@ -1584,43 +1590,15 @@ try {
 
 const $ = id => document.getElementById(id);
 const MMK_PER_USD = 4500;
-let vipDepositAdjustmentPct = 0;
 
 function runIntroSplash() {
  const splash = $("introSplash");
- const logoWrap = $("introLogoWrap");
- const titleLine = $("introTitleLine");
- const subLine = $("introSubLine");
- if (!splash || !titleLine || !subLine) return;
-
- const mainText = "Welcome to Trip Booking";
- const subText = "International";
-
- function makeFlyingChars(str, container) {
-  container.innerHTML = "";
-  const spans = [];
-  for (const ch of str) {
-   const sp = document.createElement("span");
-   sp.className = "fly-char";
-   sp.innerHTML = ch === " " ? "&nbsp;" : ch;
-   const rx = (Math.random() - 0.5) * 650;
-   const ry = (Math.random() - 0.5) * 520;
-   const rot = (Math.random() - 0.5) * 240;
-   sp.style.transform = `translate(${rx}px, ${ry}px) rotate(${rot}deg) scale(0.4)`;
-   container.appendChild(sp);
-   spans.push(sp);
-  }
-  return spans;
- }
-
- const mainSpans = makeFlyingChars(mainText, titleLine);
- const subSpans = makeFlyingChars(subText, subLine);
+ const stageBox = $("introStageBox");
+ if (!splash || !stageBox) return;
 
  requestAnimationFrame(() => {
   setTimeout(() => {
-   if (logoWrap) logoWrap.classList.add("assembled");
-   mainSpans.forEach((s, i) => setTimeout(() => s.classList.add("in"), i * 25));
-   subSpans.forEach((s, i) => setTimeout(() => s.classList.add("in"), 250 + i * 30));
+   stageBox.classList.add("show");
   }, 80);
  });
 
@@ -1628,9 +1606,8 @@ function runIntroSplash() {
   splash.classList.add("fade-out");
   setTimeout(() => {
    splash.classList.add("hidden");
-   showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
-  }, 600);
- }, 4100);
+  }, 550);
+ }, 2600);
 }
 
 function formatExactTimestamp(dateObj) {
@@ -1731,46 +1708,39 @@ const I18N = {
   footerRule2: "• ၂၄ နာရီအတွင်း မဖြေရှင်းပါက ဒဏ်ကြေးအဆင့်ဆင့် သတ်မှတ်ချက်အတိုင်း ဖြစ်ပါသည်။",
   footerFaqTitle: "❓ အမေးများသော မေးခွန်းများ",
   footerFaq1: "• ငွေသွင်းအချိန် ၂၅ သတ်မှတ်ချက်အတွင်း ဝန်ဆောင်မှုနှင့် ချိတ်ဆက်ဆောင်ရွက်ပါ။",
-  footerFaq2: "• VIP အဆင့်မြင့်လေ နေ့စဉ်အော်ဒါနှင့် အမြတ်နှုန်း ပိုမိုရရှိနိုင်ပါသည်။",
+  footerFaq2: "• နေ့စဉ် ဘိုကင်တာဝန်များကို စနစ်တကျ ဆောင်ရွက်နိုင်ပါသည်။",
   footerSecurityTitle: "🛡️ လုံခြုံရေးနှင့် အာမခံချက်",
   footerSecDesc: "အကောင့်မှတ်တမ်းများ လုံခြုံစွာ ထိန်းသိမ်းထားပြီး ၂၄ နာရီ ဝန်ဆောင်မှု ပေးနေပါသည်။",
   badgeVerified: "✔ စစ်ဆေးပြီး ပလက်ဖောင်း", badge247: "🕒 ၂၄/၇ ဝန်ဆောင်မှု", badgeEncrypted: "🔒 လုံခြုံသော စနစ်",
   csCenter: "Trip Booking Service", csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● အသုံးပြုနေသည်",
-  chipDailyOrders: "📊 နေ့စဉ် အော်ဒါအကြိမ်ရေ မေးမြန်းလိုပါသည်",
-  chipReferralHow: "🎁 Referral ကော်မရှင် ဘယ်လိုရလဲ သိလိုပါသည်",
-  chipDeposit25: "⏱️ ငွေသွင်းချိန် ၂၅ စည်းမျဉ်း သိလိုပါသည်",
-  chipWithdrawRule: "🏦 ငွေထုတ်အချိန် / စည်းမျဉ်း သိလိုပါသည်",
-  chipSpecialOrderFix: "✨ အထူးအော်ဒါ / အနှုတ်လက်ကျန် ဘယ်လိုဖြေရှင်းရမလဲ",
-  chipPenalty24h: "⚖️ ၂၄ နာရီအတွင်း မဖြေရှင်းရင် ဒဏ်ကြေးစည်းမျဉ်း",
-  chipWithdraw: "💸 ငွေထုတ်ချင်ပါသည်",
-  chipVipDeposit: "💎 VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်",
-  chipAccountNo: "💳 ငွေသွင်းရန် အကောင့်နံပါတ် ပေးပါ",
-  chipSlipPhoto: "📸 ငွေလွှဲပြေစာ ပို့ပါမည်",
+  chip1Deposit: "၁. ငွေသွင်းမည်",
+  chip2Withdraw: "၂. ငွေထုတ်မည်",
+  chip3AboutOrder: "၃. အော်ဒါအကြောင်း",
+  chip4AboutVip: "၄. VIP ဆိုတာဘာလဲ၊ ဘာအတွက် VIP အတွက်ငွေထည့်ရပါသလဲ",
+  chip5AboutPlatform: "၅. ပလက်ဖောင်းအကြောင်း",
   sendPhotoTitle: "ဓာတ်ပုံပို့မည်", sendPhotoBtn: "📷 ဓာတ်ပုံပို့မည်",
   taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ", getOrderBtn: "အော်ဒါယူမည်", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
   histSearchPh: "ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်...",
   thDate: "ရက်စွဲနှင့် အချိန် (စက္ကန့်အထိ)", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်နှင့် မှတ်ချက်", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
-  step1Badge: "အဆင့် (၁)", step1Title: "ငွေဖြည့်သွင်းပါ", step1Desc: "သင့် VIP အဆင့်အလိုက် လိုအပ်သော ငွေပမာဏကို ဖြည့်သွင်းပါ။",
+  step1Badge: "အဆင့် (၁)", step1Title: "ငွေဖြည့်သွင်းပါ", step1Desc: "ဘိုကင်တာဝန်များ ဆောင်ရွက်ရန် လိုအပ်သော လက်ကျန်ငွေ ဖြည့်သွင်းပါ။",
   step2Badge: "အဆင့် (၂)", step2Title: "Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ", step2Desc: "ဟိုတယ်ဘိုကင် တာဝန်များကို ရယူပြီး စနစ်တကျ ဆောင်ရွက်ပါ။",
   step3Badge: "အဆင့် (၃)", step3Title: "ကော်မရှင် ရယူပါ", step3Desc: "ဘိုကင်ပြီးစီးတိုင်း ကော်မရှင်ကို အကောင့်ထဲ ထည့်သွင်းပေးပါမည်။",
   myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်", welcomeTrip: "Welcome to Trip Booking",
   loginPrompt: "အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။", createAcc: "အကောင့်ဖွင့်ရန်",
   uploadPhotoTag: "📷 ပုံတင်", editNameBtn: "✏️ ပြင်မည်", editNameModalTitle: "အကောင့်အမည် ပြင်ဆင်ရန်",
   bookingHistCardTitle: "ဘိုကင်မှတ်တမ်း", copyCodeBtn: "📋 Copy",
-  depWdCsHint: "ငွေသွင်း၊ ငွေထုတ်အတွက် ကန်စတာမာဆာဗစ်ကို သွားပါ",
-  vipNextTitle: "နောက် VIP အဆင့်သို့ တက်ရန်", vipMaxReached: "အမြင့်ဆုံး VIP အဆင့်သို့ ရောက်ရှိပြီးပါပြီ",
-  vipNeedMoreText: "နောက်အဆင့်တက်ရန် {need} ထပ်လိုပါသည်",
-  walletBal: "အကောင့်လက်ကျန်", completedBookings: "ပြီးစီးသော အော်ဒါများ",
+  depWdCsHint: "ငွေသွင်း၊ ငွေထုတ်အတွက် ကန်စတာမားဆားဗစ်ကို သွားပါ",
+  walletBal: "အကောင့်လက်ကျန်",
   inviteCodeTitle: "ဖိတ်ကြားကုဒ်", refBonus: "မိတ်ဆက် အမြတ်", depositBtn: "💳 ငွေသွင်းမည်",
-  withdrawBtn: "🏦 ငွေထုတ်မည်", vipTiersHead: "VIP အဆင့်များနှင့် ကန့်သတ်ချက်များ",
+  withdrawBtn: "🏦 ငွေထုတ်မည်",
   logoutBtn: "အကောင့်ထွက်ရန်", navHome: "ပင်မ", navSupport: "ဝန်ဆောင်မှု",
   navBooking: "အော်ဒါယူ", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
   fullNameLabel: "အမည်ပြည့်စုံ", fullNamePh: "သင့်အမည်ပြည့်စုံ ထည့်ပါ",
   identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်", identityPh: "09xxxxxxxxx သို့မဟုတ် email@example.com",
   passwordLabel: "စကားဝှက်", passwordPh: "စကားဝှက် ထည့်ပါ",
-  continueBtn: "ဆက်လုပ်မည်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
+  continueBtn: "Continue", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   showAllHotelsBtn: "ဟိုတယ် ၂၃၈ ခုလုံး ပြရန်",
   typeMsgPh: "စာရိုက်ရန်...", refreshBtn: "🔄 REFRESH",
@@ -1778,15 +1748,14 @@ const I18N = {
   tabUsers: "USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCsLabel: "TRIP BOOKING SERVICE CHAT",
   allUsersHead: "မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)", adminUserSearchPh: "အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်...",
   saveChangesBtn: "💾 ပြောင်းလဲမှုများ သိမ်းမည်",
-  vipDepositAdjLabel: "VIP ငွေသွင်း ရာခိုင်နှုန်း ချိန်ညှိချက် (%) — တိုးရန် (+) / လျှော့ရန် (-)",
   thName: "အမည်", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "ဖိတ်ကြားကုဒ်",
-  thInvitedBy: "ဖိတ်ခေါ်သူ", thVip: "VIP အဆင့်", thCustomVipReq: "VIP လိုအပ်ငွေ ($)",
+  thInvitedBy: "ဖိတ်ခေါ်သူ", thVip: "VIP Level",
   thBal: "လက်ကျန် ($)", thNeg: "အနှုတ် ($)", thProfitBox: "အမြတ်ဘောက်စ် ($)",
   thOrders: "အော်ဒါ", thOrderRules: "အော်ဒါစည်းမျဉ်းများ (၁၀+)", thReset: "အစပြန်ရန်",
-  hotelsRatesHead: "ဟိုတယ်များနှင့် VIP ကော်မရှင်နှုန်းထားများ", addHotelBtn: "+ ဟိုတယ်အသစ်ထည့်ရန်",
-  saveRatesBtn: "💾 နှန်းထားများသိမ်းမည်", vipLimitsHead: "VIP အဆင့် ကန့်သတ်ချက်များနှင့် အမြတ်နှုန်းထားများ",
+  hotelsRatesHead: "ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ", addHotelBtn: "+ ဟိုတယ်အသစ်ထည့်ရန်",
+  saveRatesBtn: "💾 နှုန်းထားများသိမ်းမည်",
   thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်ချက်", thProfitRate: "အမြတ်နှုန်း (%)",
-  thMinBal: "အနည်းဆုံးလက်ကျန် ($)", thMaxLimit: "အများဆုံးလက်ကျန် / ထုတ်ယူခွင့် ($)",
+  thMaxLimit: "အများဆုံးထုတ်ယူခွင့် ($)",
   hotelDirPricesHead: "ဟိုတယ်စာရင်းနှင့် ဈေးနှုန်းများ", thHotelName: "ဟိုတယ်အမည်", thCountry: "နိုင်ငံ",
   thStars: "ကြယ်ပွင့်", thPrice: "ဈေးနှုန်း ($)", thAction: "လုပ်ဆောင်ချက်", regUsersChatHead: "အသုံးပြုသူများ",
   csClientSearchPh: "အသုံးပြုသူ ရှာရန်...",
@@ -1798,6 +1767,11 @@ const I18N = {
   ruleNegLabel: "အနှုတ်ဒေါ်လာ ($)", ruleProfitLabel: "အမြတ်ဒေါ်လာ ($)",
   addRuleBtn: "➕ Rule စာရင်းထဲ ထည့်မည်", saveRulesBtn: "💾 Rules အားလုံး သိမ်းမည်", clearRulesBtn: "🗑️ အကုန်ဖျက်",
   closeLightboxBtn: "✕ ပိတ်မည်",
+  lowBalTitle: "ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်",
+  lowBalMsg: "သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။",
+  congratsTop: "ဂုဏ်ယူပါတယ်",
+  bookingSuccessLine: "ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်",
+  profitEarnedTemplate: "{amt} ဒေါ်လာ အမြတ်ရရှိခဲ့သည်",
   specialOrderTitle: "✨ အထူးအော်ဒါ (Lucky/Combo Order)",
   specialOrderDesc: "အထူးအော်ဒါ (Lucky/Combo Order) ကျရောက်နေပါသည် — ဖြေရှင်းပြီးပါက မူလအရင်းနှင့် အပိုကော်မရှင် နှစ်ဆရရှိပါမည်။",
   specialOrderAmountLine: "လက်ရှိ အထူးပမာဏ: <b>-{neg}</b>",
@@ -1819,12 +1793,11 @@ const I18N = {
    "တည်နေရာ အချက်အချာကျပြီး အစားအသောက် ကောင်းမွန်ပါတယ်",
    "နောက်တစ်ကြိမ် ထပ်မံတည်းခိုချင်လောက်အောင် စိတ်ကျေနပ်မှု ရှိပါတယ်"
   ],
-  dailyOrdersLabel: "နေ့စဉ်အော်ဒါ", profitRateLabel: "အမြတ်နှုန်း", maxLimitLabel: "အများဆုံးကန့်သတ်ချက်",
   youLabel: "သင်", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (သင်)", userSenderLabel: "အသုံးပြုသူ",
   noRuleText: "Rule မရှိပါ", moreRulesText: "+{n} ထပ်မံ", resetBtn: "Reset", rulesBtn: "Rules",
   deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 ဓာတ်ပုံပို့ပေးထားပါသည်", photoSentUserText: "📷 ဓာတ်ပုံ",
-  depositQuickText: "VIP အတွက် လိုအပ်သောငွေ ဖြည့်သွင်းလိုပါသည်",
-  withdrawQuickText: "ငွေထုတ်ချင်ပါသည် (လက်ကျန်ငွေ: {bal})",
+  depositQuickText: "ငွေသွင်းမည်",
+  withdrawQuickText: "ငွေထုတ်မည် (လက်ကျန်ငွေ: {bal})",
   txBookingProfit: "ဘိုကင်အမြတ်", txApproved: "အတည်ပြုပြီး",
   hotelRoomTypeLabel: "အခန်းအမျိုးအစား", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
@@ -1832,10 +1805,10 @@ const I18N = {
   cannedWelcome: "👋 မင်္ဂလာပါ ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါတယ်။ ဘာများ ကူညီပေးရမလဲ ခင်ဗျာ။",
   cannedDep25: "⏱️ ငွေသွင်းချိန် ၂၅ သတ်မှတ်ထားပါသည်။ သတ်မှတ်အချိန်အတွင်း လွှဲပြေစာပို့ပြီး ဆက်သွယ်ပေးပါ။",
   cannedDepDone: "✅ လူကြီးမင်း၏ ငွေသွင်းမှုကို စစ်ဆေးအတည်ပြုပြီး အကောင့်ထဲ ထည့်သွင်းပေးပြီးပါပြီ ခင်ဗျာ။",
-  cannedWdRule: "🏦 ငွေထုတ်ယူရန် လက်ရှိအော်ဒါတာဝန်များ ပြီးပြတ်ရန် လိုအပ်ပြီး VIP ကန့်သတ်ချက်အတိုင်း ထုတ်ယူနိုင်ပါသည်။",
+  cannedWdRule: "🏦 ငွေထုတ်ယူရန် လက်ရှိအော်ဒါတာဝန်များ ပြီးပြတ်ရန် လိုအပ်ပါသည်။",
   cannedWdDone: "💸 လူကြီးမင်း၏ ငွေထုတ်ယူမှုကို လွှဲပေးပြီးပါပြီ ခင်ဗျာ။ အကောင့်ထဲ စစ်ဆေးကြည့်နိုင်ပါပြီ။",
   cannedSpecialOrder: "✨ အထူးအော်ဒါ (Lucky/Combo Order) ကျရောက်နေပါသည် — ဖြေရှင်းပြီးပါက မူလအရင်းနှင့် အပိုကော်မရှင် နှစ်ဆရရှိပါမည်။",
-  cannedPenalty24: "⚖️ အော်ဒါကျပြီး ၂၄ နာရီအတွင်း မဖြေရှင်းပါက ဒဏ်ကြေးအဆင့်ဆင့် — ပထမ $20၊ နောက်ထပ် $30 / $50 / $100 / $300 / $500 နှင့် ၇ ရက် ခေတ္တ အကောင့်ပိတ်ပါမည်။"
+  cannedPenalty24: "⚖️ အော်ဒါကျပြီး ၂၄ နာရီအတွင်း မဖြေရှင်းပါက ဒဏ်ကြေးအဆင့်ဆင့် သတ်မှတ်ချက်အတိုင်း ဖြစ်ပါသည်။"
  },
  en: {
   mmkUnit: "MMK",
@@ -1843,31 +1816,26 @@ const I18N = {
   hotelSearchPh: "Search hotel, country, or stars...",
   footerTermsTitle: "📜 Terms & Rules",
   footerRule1: "• Complete assigned booking tasks accurately within time limits.",
-  footerRule2: "• Unresolved orders over 24 hours follow progressive penalty tiers.",
+  footerRule2: "• Unresolved orders over 24 hours follow progressive penalty rules.",
   footerFaqTitle: "❓ FAQ",
   footerFaq1: "• Deposit window is set to 25 with official service support.",
-  footerFaq2: "• Higher VIP levels unlock more daily orders and profit rates.",
+  footerFaq2: "• Complete daily booking tasks steadily and contact support anytime.",
   footerSecurityTitle: "🛡️ Security & Assurance",
   footerSecDesc: "Account records are protected with 24/7 Trip Booking Service support.",
   badgeVerified: "✔ Verified Platform", badge247: "🕒 24/7 Service", badgeEncrypted: "🔒 Secure Sync",
   csCenter: "Trip Booking Service", csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● Active",
-  chipDailyOrders: "📊 Inquiry about daily order count",
-  chipReferralHow: "🎁 How does referral commission work?",
-  chipDeposit25: "⏱️ Deposit time 25 rule inquiry",
-  chipWithdrawRule: "🏦 Withdrawal time & rules inquiry",
-  chipSpecialOrderFix: "✨ How to resolve special order / negative balance?",
-  chipPenalty24h: "⚖️ 24-hour unresolved penalty rules",
-  chipWithdraw: "💸 I want to withdraw",
-  chipVipDeposit: "💎 I want to deposit funds for VIP",
-  chipAccountNo: "💳 Please provide deposit account number",
-  chipSlipPhoto: "📸 I will send payment slip photo",
+  chip1Deposit: "1. Deposit",
+  chip2Withdraw: "2. Withdraw",
+  chip3AboutOrder: "3. About Orders",
+  chip4AboutVip: "4. What is VIP & Why deposit for VIP?",
+  chip5AboutPlatform: "5. About Platform",
   sendPhotoTitle: "Send Photo", sendPhotoBtn: "📷 Send Photo",
   taskCenter: "Booking Task Center",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
   dailyLimit: "Daily Orders", getOrderBtn: "Get Order", histTitle: "Transaction & Booking History",
   histSearchPh: "Search hotel, review, or date...",
   thDate: "Date & Time (Exact)", thType: "Type", thDetails: "Details & Review", thAmount: "Amount (USD / MMK)", thStatus: "Status",
-  step1Badge: "STEP 1", step1Title: "Deposit Funds", step1Desc: "Top up the required balance for your VIP level.",
+  step1Badge: "STEP 1", step1Title: "Deposit Funds", step1Desc: "Top up balance to complete hotel booking tasks smoothly.",
   step2Badge: "STEP 2", step2Title: "Tap Get Order & Book", step2Desc: "Claim hotel booking tasks and complete them properly.",
   step3Badge: "STEP 3", step3Title: "Earn Commission", step3Desc: "Receive commission credited after each completed order.",
   myProfile: "My Profile", welcomeTrip: "Welcome to Trip Booking",
@@ -1875,11 +1843,9 @@ const I18N = {
   uploadPhotoTag: "📷 Photo", editNameBtn: "✏️ Edit", editNameModalTitle: "Edit Profile Name",
   bookingHistCardTitle: "Booking History", copyCodeBtn: "📋 Copy",
   depWdCsHint: "Go to Customer Service for Deposit & Withdrawal",
-  vipNextTitle: "Progress to Next VIP Tier", vipMaxReached: "Reached highest VIP tier",
-  vipNeedMoreText: "{need} more needed for next tier",
-  walletBal: "Account Balance", completedBookings: "Completed Orders",
+  walletBal: "Account Balance",
   inviteCodeTitle: "Referral Code", refBonus: "Referral Earned", depositBtn: "💳 Deposit",
-  withdrawBtn: "🏦 Withdraw", vipTiersHead: "VIP Levels & Limits",
+  withdrawBtn: "🏦 Withdraw",
   logoutBtn: "Log Out", navHome: "Home", navSupport: "Service",
   navBooking: "Get Order", navHistory: "History", navProfile: "Profile",
   fullNameLabel: "Full Name", fullNamePh: "Enter your full name",
@@ -1893,15 +1859,14 @@ const I18N = {
   tabUsers: "USERS & VIP CONTROL", tabHotels: "🏨 HOTELS & RATES", tabCsLabel: "TRIP BOOKING SERVICE CHAT",
   allUsersHead: "All Registered Users (Real-Time)", adminUserSearchPh: "Search name, phone, email, TP2323...",
   saveChangesBtn: "💾 Save All Changes",
-  vipDepositAdjLabel: "VIP Deposit Rate Adjustment (%) — Increase (+) or Decrease (-)",
   thName: "Name", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "My Code",
-  thInvitedBy: "Invited By", thVip: "VIP Tier", thCustomVipReq: "VIP Req ($)",
+  thInvitedBy: "Invited By", thVip: "VIP Level",
   thBal: "Balance ($)", thNeg: "Neg ($)", thProfitBox: "Profit Box ($)",
   thOrders: "Orders", thOrderRules: "Order Rules (10+)", thReset: "Reset",
-  hotelsRatesHead: "Hotels & VIP Commission Rates", addHotelBtn: "+ Add Hotel",
-  saveRatesBtn: "💾 Save Rates & Hotels", vipLimitsHead: "VIP Tier Limits & Profit Rates",
+  hotelsRatesHead: "Hotels & Commission Rates", addHotelBtn: "+ Add Hotel",
+  saveRatesBtn: "💾 Save Rates & Hotels",
   thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate (%)",
-  thMinBal: "Min Balance ($)", thMaxLimit: "Max Balance / Withdraw Limit ($)",
+  thMaxLimit: "Max Withdraw Limit ($)",
   hotelDirPricesHead: "Hotel Directory & Prices", thHotelName: "Hotel Name", thCountry: "Country",
   thStars: "Stars", thPrice: "Price ($)", thAction: "Action", regUsersChatHead: "All Registered Users",
   csClientSearchPh: "Search user...",
@@ -1913,6 +1878,11 @@ const I18N = {
   ruleNegLabel: "Negative ($)", ruleProfitLabel: "Profit ($)",
   addRuleBtn: "➕ Add to Rule List", saveRulesBtn: "💾 Save All Rules", clearRulesBtn: "🗑️ Clear All",
   closeLightboxBtn: "✕ Close",
+  lowBalTitle: "Booking Operation",
+  lowBalMsg: "Insufficient balance in your account. Please contact Customer Service to deposit.",
+  congratsTop: "Congratulations",
+  bookingSuccessLine: "Booking completed successfully",
+  profitEarnedTemplate: "Earned {amt} profit",
   specialOrderTitle: "✨ Special Order (Lucky/Combo Order)",
   specialOrderDesc: "Special Order (Lucky/Combo Order) is active — once resolved, you will receive your original principal plus double extra commission.",
   specialOrderAmountLine: "Current Special Amount: <b>-{neg}</b>",
@@ -1934,11 +1904,10 @@ const I18N = {
    "Prime location with delicious dining options",
    "Highly satisfied and would gladly book again"
   ],
-  dailyOrdersLabel: "Daily Orders", profitRateLabel: "Profit Rate", maxLimitLabel: "Max Limit",
   youLabel: "You", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (You)", userSenderLabel: "User",
   noRuleText: "No rule", moreRulesText: "+{n} more", resetBtn: "Reset", rulesBtn: "Rules",
   deleteBtn: "Delete", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
-  depositQuickText: "I want to deposit funds required for VIP",
+  depositQuickText: "I want to deposit",
   withdrawQuickText: "I want to withdraw (Balance: {bal})",
   txBookingProfit: "Booking Profit", txApproved: "Approved",
   hotelRoomTypeLabel: "Room Type", hotelRoomTypeVal: "Deluxe Suite & Executive King",
@@ -1947,251 +1916,87 @@ const I18N = {
   cannedWelcome: "👋 Hello! Welcome to Trip Booking Service. How may we assist you today?",
   cannedDep25: "⏱️ Deposit window is 25. Please send payment proof within the time limit.",
   cannedDepDone: "✅ Your deposit has been verified and credited to your account balance.",
-  cannedWdRule: "🏦 Please complete active tasks first; withdrawals follow your VIP tier limits.",
+  cannedWdRule: "🏦 Please complete active tasks first before withdrawing.",
   cannedWdDone: "💸 Your withdrawal has been processed and transferred. Please check your account.",
   cannedSpecialOrder: "✨ Special Order (Lucky/Combo Order) is active — once resolved, you receive original principal plus double extra commission.",
-  cannedPenalty24: "⚖️ Unresolved orders within 24 hours incur progressive penalties: $20 first, then $30 / $50 / $100 / $300 / $500, and 7-day temporary account lock."
+  cannedPenalty24: "⚖️ Unresolved orders over 24 hours follow progressive penalty rules."
+ }
+};
+
+I18N.th = {
+ ...I18N.en,
+ mmkUnit: "จ๊าต",
+ loginBtn: "เข้าสู่ระบบ", startTaskBtn: "เริ่มงานจอง", hotelDir: "โรงแรมนานาชาติ",
+ hotelSearchPh: "ค้นหาโรงแรม ประเทศ หรือดาว...",
+ chip1Deposit: "1. ฝากเงิน",
+ chip2Withdraw: "2. ถอนเงิน",
+ chip3AboutOrder: "3. เกี่ยวกับออเดอร์",
+ chip4AboutVip: "4. VIP คืออะไร และทำไมต้องเติมเงินสำหรับ VIP",
+ chip5AboutPlatform: "5. เกี่ยวกับแพลตฟอร์ม",
+ myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
+ createAcc: "สมัครสมาชิก", uploadPhotoTag: "📷 รูปโปรไฟล์", editNameBtn: "✏️ แก้ไข",
+ editNameModalTitle: "แก้ไขชื่อโปรไฟล์", bookingHistCardTitle: "ประวัติการจอง",
+ copyCodeBtn: "📋 คัดลอก", depWdCsHint: "ไปที่ฝ่ายบริการลูกค้าสำหรับการฝากและถอนเงิน",
+ walletBal: "ยอดเงินในบัญชี", inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ",
+ depositBtn: "💳 ฝากเงิน", withdrawBtn: "🏦 ถอนเงิน", logoutBtn: "ออกจากระบบ",
+ navHome: "หน้าหลัก", navSupport: "บริการ", navBooking: "รับงาน", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
+ lowBalTitle: "การทำรายการจอง",
+ lowBalMsg: "ยอดเงินในบัญชีไม่เพียงพอ กรุณาติดต่อฝ่ายบริการลูกค้าเพื่อเติมเงิน",
+ congratsTop: "ขอแสดงความยินดี",
+ bookingSuccessLine: "การจองสำเร็จเรียบร้อยแล้ว",
+ profitEarnedTemplate: "ได้รับกำไร {amt}"
+};
+
+I18N.zh = {
+ ...I18N.en,
+ mmkUnit: "缅币",
+ loginBtn: "登录", startTaskBtn: "开始预订任务", hotelDir: "国际酒店",
+ hotelSearchPh: "搜索酒店、国家或星级...",
+ chip1Deposit: "1. 充值",
+ chip2Withdraw: "2. 提现",
+ chip3AboutOrder: "3. 关于订单",
+ chip4AboutVip: "4. 什么是 VIP 以及为何为 VIP 充值",
+ chip5AboutPlatform: "5. 关于平台",
+ myProfile: "我的个人资料", welcomeTrip: "欢迎来到 Trip Booking",
+ createAcc: "注册", uploadPhotoTag: "📷 上传头像", editNameBtn: "✏️ 修改",
+ editNameModalTitle: "修改账户名称", bookingHistCardTitle: "预订记录",
+ copyCodeBtn: "📋 复制", depWdCsHint: "充值与提现请前往联系客服",
+ walletBal: "账户余额", inviteCodeTitle: "邀请码", refBonus: "推荐奖励",
+ depositBtn: "💳 充值", withdrawBtn: "🏦 提现", logoutBtn: "退出登录",
+ navHome: "首页", navSupport: "客服", navBooking: "抢单", navHistory: "记录", navProfile: "我的",
+ lowBalTitle: "预订操作",
+ lowBalMsg: "您的账户余额不足，请联系客服进行充值。",
+ congratsTop: "恭喜您",
+ bookingSuccessLine: "预订提交成功",
+ profitEarnedTemplate: "获得利润 {amt}"
+};
+
+const QUICK_CHIP_REPLIES = {
+ my: {
+  chip1Deposit: "💳 ငွေသွင်းရန်အတွက် Customer Service နှင့် ချိတ်ဆက်ထားပါသည်။ ငွေလွှဲပြေစာနှင့် လိုအပ်သော အချက်အလက်များကို ဤနေရာတွင် ပို့ပေးနိုင်ပါသည် ခင်ဗျာ။",
+  chip2Withdraw: "🏦 ငွေထုတ်ယူလိုပါက လက်ရှိတာဝန်များ ပြီးပြတ်မှုရှိမရှိ စစ်ဆေးပြီး Customer Service သို့ အသိပေးပို့နိုင်ပါသည် ခင်ဗျာ။",
+  chip3AboutOrder: "🏨 ဟိုတယ်ဘိုကင်အော်ဒါများကို အော်ဒါယူမည်မှတစ်ဆင့် စစ်ဆေးမှတ်ချက်ပေးပြီး ဆောင်ရွက်ရပါသည်။ ပြီးစီးတိုင်း ကော်မရှင်ရရှိပါမည်။",
+  chip4AboutVip: "💎 VIP Level ဆိုသည်မှာ အကောင့်အလိုက် သတ်မှတ်ပေးထားသော အဆင့်ဖြစ်ပြီး ဘိုကင်တာဝန်များ ဆောင်ရွက်ရာတွင် သက်ဆိုင်ရာ လက်ကျန်ငွေနှင့်အတူ အသုံးပြုရပါသည်။",
+  chip5AboutPlatform: "🌐 Trip Booking International Platform သည် နိုင်ငံတကာ ဟိုတယ်ဘိုကင်ဝန်ဆောင်မှုစနစ်ဖြစ်ပြီး ၂၄ နာရီ ဝန်ဆောင်မှုပေးနေပါသည်။"
  },
- th: {
-  mmkUnit: "จ๊าต",
-  loginBtn: "เข้าสู่ระบบ", startTaskBtn: "เริ่มงานจอง", hotelDir: "โรงแรมนานาชาติ",
-  hotelSearchPh: "ค้นหาโรงแรม ประเทศ หรือดาว...",
-  footerTermsTitle: "📜 ข้อกำหนดและกฎเกณฑ์",
-  footerRule1: "• ทำงานจองที่ได้รับมอบหมายให้เสร็จสิ้นตามเวลาที่กำหนด",
-  footerRule2: "• ออเดอร์ที่ไม่เคลียร์ภายใน 24 ชม. จะมีค่าปรับตามลำดับขั้น",
-  footerFaqTitle: "❓ คำถามที่พบบ่อย",
-  footerFaq1: "• กรอบเวลาฝากเงินกำหนดไว้ที่ 25 โปรดติดต่อฝ่ายบริการ",
-  footerFaq2: "• ระดับ VIP สูงขึ้นจะได้รับโควต้าออเดอร์และเรตผลกำไรสูงขึ้น",
-  footerSecurityTitle: "🛡️ ความปลอดภัยและการรับประกัน",
-  footerSecDesc: "ข้อมูลบัญชีได้รับการคุ้มครองพร้อมฝ่ายบริการตลอด 24 ชม.",
-  badgeVerified: "✔ แพลตฟอร์มที่ตรวจสอบแล้ว", badge247: "🕒 บริการ 24/7", badgeEncrypted: "🔒 ระบบปลอดภัย",
-  csCenter: "บริการจองทริป", csHeader: "🎧 บริการจองทริป (ออนไลน์ 24/7)", csActiveBadge: "● ออนไลน์",
-  chipDailyOrders: "📊 สอบถามจำนวนออเดอร์ต่อวัน",
-  chipReferralHow: "🎁 ค่าคอมมิชชั่นแนะนำได้รับอย่างไร",
-  chipDeposit25: "⏱️ สอบถามกฎเวลาฝากเงิน 25",
-  chipWithdrawRule: "🏦 สอบถามเวลาและกฎการถอนเงิน",
-  chipSpecialOrderFix: "✨ วิธีแก้ไขออเดอร์พิเศษ / ยอดติดลบ",
-  chipPenalty24h: "⚖️ กฎค่าปรับหากไม่เคลียร์ภายใน 24 ชม.",
-  chipWithdraw: "💸 ต้องการถอนเงิน",
-  chipVipDeposit: "💎 ต้องการเติมเงินสำหรับ VIP",
-  chipAccountNo: "💳 ขอเลขบัญชีสำหรับโอนเงิน",
-  chipSlipPhoto: "📸 จะส่งรูปสลิปการโอนเงิน",
-  sendPhotoTitle: "ส่งรูปภาพ", sendPhotoBtn: "📷 ส่งรูปภาพ",
-  taskCenter: "ศูนย์ภารกิจการจอง",
-  accBal: "ยอดคงเหลือในบัญชี", taskComm: "ค่าคอมมิชชั่นงาน", totalProfit: "กำไรทั้งหมด",
-  dailyLimit: "คำสั่งซื้อรายวัน", getOrderBtn: "รับคำสั่งซื้อ", histTitle: "ประวัติธุรกรรมและการจอง",
-  histSearchPh: "ค้นหาโรงแรม รีวิว หรือวันที่...",
-  thDate: "วันที่และเวลา (วินาที)", thType: "ประเภท", thDetails: "รายละเอียดและรีวิว", thAmount: "จำนวนเงิน (USD / MMK)", thStatus: "สถานะ",
-  step1Badge: "ขั้นตอนที่ 1", step1Title: "เติมเงินเข้าสู่ระบบ", step1Desc: "เติมยอดเงินตามที่ระดับ VIP ของคุณกำหนด",
-  step2Badge: "ขั้นตอนที่ 2", step2Title: "กดรับงานและจอง", step2Desc: "รับงานจองโรงแรมและดำเนินการตามขั้นตอน",
-  step3Badge: "ขั้นตอนที่ 3", step3Title: "รับค่าคอมมิชชั่น", step3Desc: "รับค่าคอมมิชชั่นเข้าบัญชีทันทีเมื่อเสร็จสิ้น",
-  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
-  loginPrompt: "เข้าสู่ระบบหรือสร้างบัญชีใหม่เพื่อเริ่มรับค่าคอมมิชชั่น", createAcc: "สมัครสมาชิก",
-  uploadPhotoTag: "📷 รูปโปรไฟล์", editNameBtn: "✏️ แก้ไข", editNameModalTitle: "แก้ไขชื่อโปรไฟล์",
-  bookingHistCardTitle: "ประวัติการจอง", copyCodeBtn: "📋 คัดลอก",
-  depWdCsHint: "ไปที่ฝ่ายบริการลูกค้าสำหรับการฝากและถอนเงิน",
-  vipNextTitle: "ความคืบหน้าสู่ระดับ VIP ถัดไป", vipMaxReached: "ถึงระดับ VIP สูงสุดแล้ว",
-  vipNeedMoreText: "ต้องการอีก {need} เพื่อเลื่อนระดับ",
-  walletBal: "ยอดเงินในบัญชี", completedBookings: "คำสั่งซื้อที่สำเร็จ",
-  inviteCodeTitle: "รหัสแนะนำ", refBonus: "รายได้จากการแนะนำ", depositBtn: "💳 ฝากเงิน",
-  withdrawBtn: "🏦 ถอนเงิน", vipTiersHead: "ระดับ VIP และขีดจำกัด",
-  logoutBtn: "ออกจากระบบ", navHome: "หน้าหลัก", navSupport: "บริการ",
-  navBooking: "รับงาน", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
-  fullNameLabel: "ชื่อ-นามสกุล", fullNamePh: "กรอกชื่อ-นามสกุล",
-  identityLabel: "เบอร์โทรศัพท์หรืออีเมล", identityPh: "09xxxxxxxxx หรือ email@example.com",
-  passwordLabel: "รหัสผ่าน", passwordPh: "กรอกรหัสผ่าน",
-  continueBtn: "ดำเนินการต่อ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
-  heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroSub: "แพลตฟอร์มจองทริปนานาชาติ",
-  showAllHotelsBtn: "แสดงโรงแรมทั้งหมด 238 แห่ง",
-  typeMsgPh: "พิมพ์ข้อความ...", refreshBtn: "🔄 รีเฟรช",
-  adminPanelTitle: "🛡️ แผงควบคุมแอดมินและฝ่ายบริการ", usersWord: "ผู้ใช้",
-  tabUsers: "จัดการผู้ใช้และ VIP", tabHotels: "🏨 โรงแรมและเรต", tabCsLabel: "แชทฝ่ายบริการ",
-  allUsersHead: "ผู้ใช้ที่ลงทะเบียนทั้งหมด (เรียลไทม์)", adminUserSearchPh: "ค้นหาชื่อ เบอร์ อีเมล TP2323...",
-  saveChangesBtn: "💾 บันทึกการเปลี่ยนแปลง",
-  vipDepositAdjLabel: "ปรับเปอร์เซ็นต์ยอดฝาก VIP (%) — เพิ่ม (+) / ลด (-)",
-  thName: "ชื่อ", thPhoneEmail: "โทร / อีเมล", thPass: "รหัสผ่าน", thRef: "รหัสของฉัน",
-  thInvitedBy: "ผู้แนะนำ", thVip: "ระดับ VIP", thCustomVipReq: "ยอด VIP เฉพาะ ($)",
-  thBal: "ยอดเงิน ($)", thNeg: "ติดลบ ($)", thProfitBox: "กล่องกำไร ($)",
-  thOrders: "ออเดอร์", thOrderRules: "กฎออเดอร์ (10+)", thReset: "รีเซ็ต",
-  hotelsRatesHead: "โรงแรมและอัตราค่าคอมมิชชั่น VIP", addHotelBtn: "+ เพิ่มโรงแรม",
-  saveRatesBtn: "💾 บันทึกเรตและโรงแรม", vipLimitsHead: "ขีดจำกัด VIP และอัตราผลกำไร",
-  thLevel: "ระดับ", thDailyLimit: "จำกัดต่อวัน", thProfitRate: "อัตราผลกำไร (%)",
-  thMinBal: "ยอดขั้นต่ำ ($)", thMaxLimit: "ยอดสูงสุด / ถอนสูงสุด ($)",
-  hotelDirPricesHead: "รายชื่อโรงแรมและราคา", thHotelName: "ชื่อโรงแรม", thCountry: "ประเทศ",
-  thStars: "ดาว", thPrice: "ราคา ($)", thAction: "จัดการ", regUsersChatHead: "ผู้ใช้ทั้งหมด",
-  csClientSearchPh: "ค้นหาผู้ใช้...",
-  selectUserChat: "เลือกผู้ใช้เพื่อแชท", replyCsPh: "ตอบกลับในฐานะฝ่ายบริการ...",
-  loginModalTitle: "เข้าสู่ระบบ", refCodeLabel: "รหัสแนะนำ (เช่น TP2323)", addHotelModalHead: "เพิ่มโรงแรมใหม่",
-  hotelNameLabel: "ชื่อโรงแรม", countryLabel: "ประเทศ", priceLabel: "ราคา ($)", starsLabel: "ดาว",
-  saveHotelBtn: "บันทึกโรงแรม", alertTitleDefault: "แจ้งเตือน", okBtn: "ตกลง",
-  ruleModalTitle: "🎯 กฎออเดอร์ (10+ เงื่อนไข)", ruleOrderLabel: "ลำดับที่",
-  ruleNegLabel: "ยอดติดลบ ($)", ruleProfitLabel: "กำไร ($)",
-  addRuleBtn: "➕ เพิ่มลงรายการกฎ", saveRulesBtn: "💾 บันทึกกฎทั้งหมด", clearRulesBtn: "🗑️ ล้างทั้งหมด",
-  closeLightboxBtn: "✕ ปิด",
-  specialOrderTitle: "✨ ออเดอร์พิเศษ (Lucky/Combo Order)",
-  specialOrderDesc: "มีออเดอร์พิเศษ (Lucky/Combo Order) — เมื่อแก้ไขเสร็จจะได้รับเงินต้นคืนพร้อมค่าคอมมิชชั่นพิเศษสองเท่า",
-  specialOrderAmountLine: "ยอดพิเศษปัจจุบัน: <b>-{neg}</b>",
-  contactCsBtn: "💬 ติดต่อฝ่ายบริการลูกค้า",
-  clickGetOrderHint: "กด <b>รับคำสั่งซื้อ</b> เพื่อจับคู่งานจองโรงแรม",
-  orderPriceLabel: "ราคาออเดอร์", commissionLabel: "ค่าคอมมิชชั่น", submitOrderBtn: "เปิดการ์ดการจองอีกครั้ง",
-  stayNightsLabel: "จำนวนคืนที่เข้าพัก",
-  rateHotelLabel: "คะแนนดาวโรงแรม",
-  chooseReviewLabel: "เลือกความคิดเห็น 1 จาก 5 รายการ",
-  customReviewLabel: "หรือพิมพ์ความคิดเห็นของคุณเอง",
-  customReviewPh: "พิมพ์หมายเหตุการจอง...",
-  cancelBtn: "Cancel", confirmBtn: "Confirm",
-  verifyingBookingText: "กำลังตรวจสอบข้อมูลการจอง...",
-  selectReviewWarnMsg: "กรุณาเลือกความคิดเห็นก่อนดำเนินการต่อ",
-  reviewsList: [
-   "ห้องพักสะอาดและบริการดีเยี่ยมมาก",
-   "เช็คอินรวดเร็วและสะดวกสบาย",
-   "วิวสวยมาก เหมาะสำหรับการพักผ่อนกับครอบครัว",
-   "ทำเลดีเยี่ยม อาหารอร่อยและครบครัน",
-   "ประทับใจมากและอยากกลับมาพักอีกแน่นอน"
-  ],
-  dailyOrdersLabel: "ออเดอร์ต่อวัน", profitRateLabel: "อัตราผลกำไร", maxLimitLabel: "ขีดจำกัดสูงสุด",
-  youLabel: "คุณ", csSenderLabel: "บริการจองทริป", csYouSenderLabel: "บริการจองทริป (คุณ)", userSenderLabel: "ผู้ใช้",
-  noRuleText: "ไม่มีกฎ", moreRulesText: "+{n} เพิ่มเติม", resetBtn: "รีเซ็ต", rulesBtn: "ตั้งกฎ",
-  deleteBtn: "ลบ", photoSentCsText: "📷 ส่งรูปภาพแล้ว", photoSentUserText: "📷 รูปภาพ",
-  depositQuickText: "ต้องการเติมเงินสำหรับระดับ VIP",
-  withdrawQuickText: "ต้องการถอนเงิน (ยอดคงเหลือ: {bal})",
-  txBookingProfit: "กำไรจากการจอง", txApproved: "อนุมัติแล้ว",
-  hotelRoomTypeLabel: "ประเภทห้องพัก", hotelRoomTypeVal: "Deluxe Suite & Executive King",
-  hotelCheckInLabel: "เช็คอิน / เช็คเอาท์", hotelCheckInVal: "14:00 เช็คอิน / 12:00 เช็คเอาท์",
-  hotelEstCommLabel: "ค่าคอมมิชชั่นโดยประมาณ",
-  cannedWelcome: "👋 สวัสดีครับ ยินดีต้อนรับสู่ Trip Booking Service มีอะไรให้ช่วยเหลือแจ้งได้เลยครับ",
-  cannedDep25: "⏱️ กำหนดเวลาฝากเงินคือ 25 กรุณาส่งหลักฐานการโอนภายในเวลาที่กำหนด",
-  cannedDepDone: "✅ ตรวจสอบยอดฝากเรียบร้อยและเติมเข้าบัญชีของคุณแล้วครับ",
-  cannedWdRule: "🏦 กรุณาทำงานที่ค้างให้เสร็จก่อน การถอนเงินเป็นไปตามเงื่อนไขระดับ VIP",
-  cannedWdDone: "💸 ดำเนินการโอนยอดถอนให้เรียบร้อยแล้วครับ สามารถตรวจสอบยอดได้เลย",
-  cannedSpecialOrder: "✨ มีออเดอร์พิเศษ (Lucky/Combo Order) — เมื่อแก้ไขเสร็จจะได้รับเงินต้นคืนพร้อมค่าคอมมิชชั่นพิเศษสองเท่า",
-  cannedPenalty24: "⚖️ หากไม่เคลียร์ภายใน 24 ชม. จะมีค่าปรับตามลำดับขั้น: ครั้งแรก $20 ตามด้วย $30 / $50 / $100 / $300 / $500 และระงับบัญชีชั่วคราว 7 วัน"
- },
- zh: {
-  mmkUnit: "缅币",
-  loginBtn: "登录", startTaskBtn: "开始预订任务", hotelDir: "国际酒店",
-  hotelSearchPh: "搜索酒店、国家或星级...",
-  footerTermsTitle: "📜 规则与条款",
-  footerRule1: "• 请在规定时间内认真完成分配的预订任务。",
-  footerRule2: "• 超过24小时未处理的订单将按阶梯规则计算罚款。",
-  footerFaqTitle: "❓ 常见问题",
-  footerFaq1: "• 充值时限设定为25，请按提示联系客服办理。",
-  footerFaq2: "• VIP 等级越高，每日订单额度与利润率越高。",
-  footerSecurityTitle: "🛡️ 安全与保障",
-  footerSecDesc: "账户数据安全同步，提供 24/7 Trip Booking 客服支持。",
-  badgeVerified: "✔ 正规平台", badge247: "🕒 24/7 服务", badgeEncrypted: "🔒 安全同步",
-  csCenter: "Trip Booking 客服中心", csHeader: "🎧 Trip Booking 客服 (24/7 在线)", csActiveBadge: "● 在线",
-  chipDailyOrders: "📊 咨询每日订单数量",
-  chipReferralHow: "🎁 推荐佣金是如何计算的？",
-  chipDeposit25: "⏱️ 咨询充值时限 25 规则",
-  chipWithdrawRule: "🏦 咨询提现时间与规则",
-  chipSpecialOrderFix: "✨ 特殊订单 / 负余额如何处理？",
-  chipPenalty24h: "⚖️ 24小时未处理罚款规则",
-  chipWithdraw: "💸 我想提现",
-  chipVipDeposit: "💎 我想充值 VIP 所需金额",
-  chipAccountNo: "💳 请提供充值收款账号",
-  chipSlipPhoto: "📸 我将发送转账凭证照片",
-  sendPhotoTitle: "发送图片", sendPhotoBtn: "📷 发送图片",
-  taskCenter: "预订任务中心",
-  accBal: "账户余额", taskComm: "任务佣金", totalProfit: "总利润",
-  dailyLimit: "每日订单", getOrderBtn: "抢单", histTitle: "交易与预订记录",
-  histSearchPh: "搜索酒店、评价或日期...",
-  thDate: "日期与时间（精确到秒）", thType: "类型", thDetails: "详情与评价", thAmount: "金额 (USD / MMK)", thStatus: "状态",
-  step1Badge: "第一步", step1Title: "充值资金", step1Desc: "根据您的 VIP 等级充值所需金额。",
-  step2Badge: "第二步", step2Title: "点击抢单并预订", step2Desc: "获取酒店预订任务并按要求完成。",
-  step3Badge: "第三步", step3Title: "领取佣金", step3Desc: "每完成一笔订单即可获得相应佣金。",
-  myProfile: "我的个人资料", welcomeTrip: "欢迎来到 Trip Booking",
-  loginPrompt: "登录或注册新账户以开始赚取佣金。", createAcc: "注册",
-  uploadPhotoTag: "📷 上传头像", editNameBtn: "✏️ 修改", editNameModalTitle: "修改账户名称",
-  bookingHistCardTitle: "预订记录", copyCodeBtn: "📋 复制",
-  depWdCsHint: "充值与提现请前往联系客服",
-  vipNextTitle: "升级下一 VIP 等级进度", vipMaxReached: "已达到最高 VIP 等级",
-  vipNeedMoreText: "还需 {need} 可升级",
-  walletBal: "账户余额", completedBookings: "已完成订单",
-  inviteCodeTitle: "邀请码", refBonus: "推荐奖励", depositBtn: "💳 充值",
-  withdrawBtn: "🏦 提现", vipTiersHead: "VIP 等级与限制",
-  logoutBtn: "退出登录", navHome: "首页", navSupport: "客服",
-  navBooking: "抢单", navHistory: "记录", navProfile: "我的",
-  fullNameLabel: "全名", fullNamePh: "请输入全名",
-  identityLabel: "手机号或邮箱", identityPh: "09xxxxxxxxx 或 email@example.com",
-  passwordLabel: "密码", passwordPh: "请输入密码",
-  continueBtn: "继续", switchAuth: "切换 登录 / 注册",
-  heroTitle: "欢迎来到 Trip Booking", heroSub: "国际旅游预订平台",
-  showAllHotelsBtn: "显示全部 238 家酒店",
-  typeMsgPh: "输入消息...", refreshBtn: "🔄 刷新",
-  adminPanelTitle: "🛡️ 后台管理与客服中心", usersWord: "用户",
-  tabUsers: "用户与 VIP 管理", tabHotels: "🏨 酒店与费率", tabCsLabel: "客服聊天",
-  allUsersHead: "所有注册用户（实时）", adminUserSearchPh: "搜索姓名、手机、邮箱、TP2323...",
-  saveChangesBtn: "💾 保存所有更改",
-  vipDepositAdjLabel: "VIP 充值比例调整 (%) — 增加 (+) / 减少 (-)",
-  thName: "姓名", thPhoneEmail: "手机 / 邮箱", thPass: "密码", thRef: "我的邀请码",
-  thInvitedBy: "邀请人", thVip: "VIP 等级", thCustomVipReq: "专属 VIP 金额 ($)",
-  thBal: "余额 ($)", thNeg: "负余额 ($)", thProfitBox: "利润盒 ($)",
-  thOrders: "订单", thOrderRules: "订单规则 (10+)", thReset: "重置",
-  hotelsRatesHead: "酒店与 VIP 佣金率", addHotelBtn: "+ 添加酒店",
-  saveRatesBtn: "💾 保存费率与酒店", vipLimitsHead: "VIP 等级限制与利润率",
-  thLevel: "等级", thDailyLimit: "每日上限", thProfitRate: "利润率 (%)",
-  thMinBal: "最低余额 ($)", thMaxLimit: "最高余额 / 提现上限 ($)",
-  hotelDirPricesHead: "酒店列表与价格", thHotelName: "酒店名称", thCountry: "国家",
-  thStars: "星级", thPrice: "价格 ($)", thAction: "操作", regUsersChatHead: "所有注册用户",
-  csClientSearchPh: "搜索用户...",
-  selectUserChat: "选择用户开始聊天", replyCsPh: "以 Trip Booking 客服身份回复...",
-  loginModalTitle: "登录", refCodeLabel: "邀请码（可选，如 TP2323）", addHotelModalHead: "添加新酒店",
-  hotelNameLabel: "酒店名称", countryLabel: "国家", priceLabel: "价格 ($)", starsLabel: "星级",
-  saveHotelBtn: "保存酒店", alertTitleDefault: "通知", okBtn: "确定",
-  ruleModalTitle: "🎯 订单规则 (10+ 自定义触发)", ruleOrderLabel: "第几单",
-  ruleNegLabel: "负余额 ($)", ruleProfitLabel: "利润 ($)",
-  addRuleBtn: "➕ 添加到规则列表", saveRulesBtn: "💾 保存所有规则", clearRulesBtn: "🗑️ 全部清空",
-  closeLightboxBtn: "✕ 关闭",
-  specialOrderTitle: "✨ 特殊订单 (Lucky/Combo Order)",
-  specialOrderDesc: "当前触发特殊订单 (Lucky/Combo Order) — 处理完成后将返还本金并获得双倍额外佣金。",
-  specialOrderAmountLine: "当前特殊金额: <b>-{neg}</b>",
-  contactCsBtn: "💬 联系客服",
-  clickGetOrderHint: "点击 <b>抢单</b> 匹配酒店预订任务。",
-  orderPriceLabel: "订单价格", commissionLabel: "佣金", submitOrderBtn: "重新打开预订卡片",
-  stayNightsLabel: "入住晚数",
-  rateHotelLabel: "酒店星级评分",
-  chooseReviewLabel: "请从以下 5 条评价中选择 1 条",
-  customReviewLabel: "或自行输入自定义评价",
-  customReviewPh: "请输入您的预订备注...",
-  cancelBtn: "Cancel", confirmBtn: "Confirm",
-  verifyingBookingText: "正在核实预订信息...",
-  selectReviewWarnMsg: "请选择一条评价备注",
-  reviewsList: [
-   "房间非常干净，服务态度极好",
-   "办理入住快捷顺畅，体验很棒",
-   "风景优美，非常适合家庭出游入住",
-   "地理位置优越，餐饮美味丰富",
-   "非常满意，下次还会再次预订入住"
-  ],
-  dailyOrdersLabel: "每日订单", profitRateLabel: "利润率", maxLimitLabel: "最高上限",
-  youLabel: "你", csSenderLabel: "Trip Booking 客服", csYouSenderLabel: "Trip Booking 客服（你）", userSenderLabel: "用户",
-  noRuleText: "无规则", moreRulesText: "+{n} 更多", resetBtn: "重置", rulesBtn: "规则",
-  deleteBtn: "删除", photoSentCsText: "📷 已发送图片", photoSentUserText: "📷 图片",
-  depositQuickText: "我想充值 VIP 所需金额",
-  withdrawQuickText: "我想提现（余额：{bal}）",
-  txBookingProfit: "预订利润", txApproved: "已通过",
-  hotelRoomTypeLabel: "房型", hotelRoomTypeVal: "Deluxe Suite & Executive King",
-  hotelCheckInLabel: "入住 / 退房", hotelCheckInVal: "14:00 入住 / 12:00 退房",
-  hotelEstCommLabel: "预估佣金",
-  cannedWelcome: "👋 您好！欢迎来到 Trip Booking 客服中心，请问有什么可以帮您？",
-  cannedDep25: "⏱️ 充值时限为 25，请在规定时间内发送转账凭证并联系客服。",
-  cannedDepDone: "✅ 您的充值已核实并成功添加到您的账户余额中。",
-  cannedWdRule: "🏦 请先完成当前订单任务，提现按您的 VIP 等级限制执行。",
-  cannedWdDone: "💸 您的提现已处理并转出，请注意查收。",
-  cannedSpecialOrder: "✨ 当前触发特殊订单 (Lucky/Combo Order) — 处理完成后将返还本金并获得双倍额外佣金。",
-  cannedPenalty24: "⚖️ 超过24小时未处理将按阶梯罚款：首次 $20，随后 $30 / $50 / $100 / $300 / $500，并临时封号7天。"
+ en: {
+  chip1Deposit: "💳 You are connected to Customer Service for deposits. Please share your transfer details or receipt here.",
+  chip2Withdraw: "🏦 For withdrawals, please ensure active tasks are completed and notify Customer Service.",
+  chip3AboutOrder: "🏨 Hotel booking orders are reviewed and submitted from Get Order, earning commission upon completion.",
+  chip4AboutVip: "💎 VIP Level is the account tier assigned for booking operations and balance requirements.",
+  chip5AboutPlatform: "🌐 Trip Booking International Platform provides 24/7 hotel booking task support."
  }
 };
 
 let allUsers = [];
 let allHotels = build238Hotels();
 let allVipTiers = [
- { level: "LV1", name: "VIP 1", daily_limit: 30, profit_rate: 0.005, min_bal: 0, max_withdraw: 1000 },
- { level: "LV2", name: "VIP 2", daily_limit: 40, profit_rate: 0.008, min_bal: 100, max_withdraw: 3000 },
- { level: "LV3", name: "VIP 3", daily_limit: 50, profit_rate: 0.012, min_bal: 300, max_withdraw: 10000 },
- { level: "LV4", name: "VIP 4", daily_limit: 60, profit_rate: 0.015, min_bal: 800, max_withdraw: 30000 },
- { level: "LV5", name: "VIP 5", daily_limit: 80, profit_rate: 0.020, min_bal: 2000, max_withdraw: 100000 }
+ { level: "VIP Level 1", name: "VIP Level 1", daily_limit: 30, profit_rate: 0.005, max_withdraw: 1000 },
+ { level: "VIP Level 2", name: "VIP Level 2", daily_limit: 40, profit_rate: 0.008, max_withdraw: 3000 },
+ { level: "VIP Level 3", name: "VIP Level 3", daily_limit: 50, profit_rate: 0.012, max_withdraw: 10000 },
+ { level: "VIP Level 4", name: "VIP Level 4", daily_limit: 60, profit_rate: 0.015, max_withdraw: 30000 },
+ { level: "VIP Level 5", name: "VIP Level 5", daily_limit: 80, profit_rate: 0.020, max_withdraw: 100000 },
+ { level: "VIP Level 6", name: "VIP Level 6", daily_limit: 100, profit_rate: 0.025, max_withdraw: 300000 }
 ];
 let allMessages = [];
 let allTransactions = [];
@@ -2208,6 +2013,13 @@ let lastSeenMessageCount = 0;
 let selectedOrderStars = 5;
 let selectedOrderReviewIdx = -1;
 let missingReviewWarnCount = 0;
+
+function normalizeVipLabel(raw) {
+ const s = String(raw || "").trim();
+ const match = s.match(/([1-6])/);
+ if (match) return `VIP Level ${match[1]}`;
+ return "VIP Level 1";
+}
 
 function getUserOrderRules(userObj) {
  if (!userObj) return [];
@@ -2229,16 +2041,6 @@ function getUserOrderRules(userObj) {
   }];
  }
  return [];
-}
-
-function getEffectiveVipMinBalance(userObj, tierObj) {
- if (userObj && userObj.custom_vip_req !== undefined && userObj.custom_vip_req !== null && String(userObj.custom_vip_req).trim() !== "") {
-  const customVal = Number(userObj.custom_vip_req);
-  if (!Number.isNaN(customVal) && customVal >= 0) {
-   return customVal;
-  }
- }
- return getAdjustedVipMinBalance(tierObj);
 }
 
 function normalizeIdentity(val) {
@@ -2385,37 +2187,9 @@ function startRealtimeListeners() {
   const val = snap.val();
   if (Array.isArray(val) && val.length) {
    allVipTiers = val;
-   renderVipGrid();
-   renderVipProgress();
    if (isAdminSession) renderAdminVips();
   }
  });
-
- db.ref("vip_deposit_adj_pct").on("value", snap => {
-  const pct = Number(snap.val());
-  if (!Number.isNaN(pct)) {
-   vipDepositAdjustmentPct = pct;
-   if ($("vipDepositAdjPct")) $("vipDepositAdjPct").value = pct;
-   if ($("vipDepositAdjPreview")) $("vipDepositAdjPreview").textContent = `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
-   renderVipGrid();
-   renderVipProgress();
-  }
- });
-}
-
-function updateVipDepositAdj(val) {
- const pct = Number(val) || 0;
- vipDepositAdjustmentPct = pct;
- if ($("vipDepositAdjPreview")) $("vipDepositAdjPreview").textContent = `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%`;
- if (db) db.ref("vip_deposit_adj_pct").set(pct);
- renderVipGrid();
- renderVipProgress();
-}
-
-function getAdjustedVipMinBalance(vipObj) {
- const baseMin = Number(vipObj?.min_bal) || 0;
- const factor = 1 + (Number(vipDepositAdjustmentPct) || 0) / 100;
- return Math.max(0, baseMin * factor);
 }
 
 function forceSyncNow() {
@@ -2435,6 +2209,24 @@ function showAlert(msg, title) {
 }
 
 function closeModal(id) { $(id)?.classList.add("hidden"); }
+
+function goToServiceFromLowBalance() {
+ closeModal("lowBalanceModal");
+ showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+ if (currentUser) {
+  sendQuickSuggestion(getDict().depositQuickText);
+ }
+}
+
+function showProfitSuccessModal(commissionUsd) {
+ const d = getDict();
+ const num = Number(commissionUsd) || 0;
+ const amtFormatted = (getCurrentLang() === "my")
+  ? `${Number.isInteger(num) ? num : num.toFixed(2)}`
+  : `$${num.toFixed(2)}`;
+ $("profitSuccessAmountText").textContent = (d.profitEarnedTemplate || "{amt}").replace("{amt}", amtFormatted);
+ $("profitSuccessModal").classList.remove("hidden");
+}
 
 function togglePassVisibility(inputId, btn) {
  const inp = $(inputId);
@@ -2565,8 +2357,7 @@ async function submitAuth() {
    commission: 0.00,
    total_profit: 0.00,
    referral_earned: 0.00,
-   vip_level: "LV1",
-   custom_vip_req: "",
+   vip_level: "VIP Level 1",
    orders: 0,
    order_rules: [],
    order_rule: null,
@@ -2677,14 +2468,15 @@ function copyInviteCode() {
 }
 
 function getVipInfo(level) {
- return allVipTiers.find(v => v.level === level) || allVipTiers[0];
+ const norm = normalizeVipLabel(level);
+ return allVipTiers.find(v => normalizeVipLabel(v.level) === norm) || allVipTiers[0];
 }
 
 function openHotelDetail(hotelId) {
  const h = allHotels.find(x => String(x.id) === String(hotelId));
  if (!h) return;
  const d = getDict();
- const vip = getVipInfo(currentUser?.vip_level || "LV1");
+ const vip = getVipInfo(currentUser?.vip_level || "VIP Level 1");
  const estComm = Number(h.price) * Number(vip.profit_rate || 0.005);
 
  $("detailHotelName").textContent = `${h.name} (${h.country})`;
@@ -2694,7 +2486,7 @@ function openHotelDetail(hotelId) {
   <p style="margin:6px 0"><b>${d.thPrice}:</b> ${formatUsdWithMmk(h.price)}</p>
   <p style="margin:6px 0"><b>${d.hotelRoomTypeLabel}:</b> ${d.hotelRoomTypeVal}</p>
   <p style="margin:6px 0"><b>${d.hotelCheckInLabel}:</b> ${d.hotelCheckInVal}</p>
-  <p style="margin:6px 0;color:var(--fb-success)"><b>${d.hotelEstCommLabel} (${vip.level}):</b> +${formatUsdWithMmk(estComm)}</p>
+  <p style="margin:6px 0;color:var(--fb-success)"><b>${d.hotelEstCommLabel}:</b> +${formatUsdWithMmk(estComm)}</p>
  `;
  $("hotelDetailModal").classList.remove("hidden");
 }
@@ -2789,13 +2581,13 @@ function triggerGetOrder() {
 
  const bal = Number(currentUser.balance) || 0;
  if (bal <= 0) {
-  showAlert(`${d.step1Title}: ${d.step1Desc}`);
+  $("lowBalanceModal").classList.remove("hidden");
   return;
  }
 
  const vip = getVipInfo(currentUser.vip_level);
  if ((Number(currentUser.orders) || 0) >= Number(vip.daily_limit || 30)) {
-  showAlert(d.chipDailyOrders);
+  showAlert(d.chip3AboutOrder);
   return;
  }
 
@@ -2867,7 +2659,6 @@ function confirmCenterOrder() {
 
 async function finalizeOrderSubmission(reviewNote, starRating) {
  if (!currentUser || !activeTask) return;
- const d = getDict();
  const { hotel, commission, stayNights, roomType } = activeTask;
  const exactNow = formatExactTimestamp(new Date());
 
@@ -2891,8 +2682,8 @@ async function finalizeOrderSubmission(reviewNote, starRating) {
 
  activeTask = null;
  $("centerOrderModal").classList.add("hidden");
- showAlert(`${d.commissionLabel}: <b>+${formatUsdWithMmk(commission)}</b>`);
  renderAllViews();
+ showProfitSuccessModal(commission);
 }
 
 function handleWithdrawRequest() {
@@ -2914,6 +2705,21 @@ async function sendQuickChipByKey(chipKey) {
  const d = getDict();
  const text = d[chipKey] || chipKey;
  await sendQuickSuggestion(text);
+ const langKey = getCurrentLang() === "my" ? "my" : "en";
+ const autoReply = (QUICK_CHIP_REPLIES[langKey] && QUICK_CHIP_REPLIES[langKey][chipKey]) || "";
+ if (autoReply) {
+  setTimeout(() => {
+   writeMessageToDb({
+    user_id: String(currentUser.id),
+    sender: "support",
+    text: autoReply,
+    image: "",
+    read_by_admin: true,
+    time: formatExactTimestamp(new Date()),
+    created_at: Date.now() + 250
+   });
+  }, 250);
+ }
 }
 
 async function sendQuickSuggestion(text) {
@@ -3175,6 +2981,8 @@ function renderAdminUsers() {
 
  const tbody = $("adminUsersRows");
  if (!tbody) return;
+ const vipChoices = ["VIP Level 1", "VIP Level 2", "VIP Level 3", "VIP Level 4", "VIP Level 5", "VIP Level 6"];
+
  tbody.innerHTML = filtered.map((u, idx) => {
   const rules = getUserOrderRules(u);
   const ruleSummary = rules.length
@@ -3182,7 +2990,7 @@ function renderAdminUsers() {
      (rules.length > 2 ? `<br><span class="small muted">${d.moreRulesText.replace("{n}", rules.length - 2)}</span>` : "")
    : `<span class="small muted">${d.noRuleText}</span>`;
 
-  const customVipVal = (u.custom_vip_req !== undefined && u.custom_vip_req !== null) ? u.custom_vip_req : "";
+  const curVip = normalizeVipLabel(u.vip_level);
 
   return `
    <tr>
@@ -3193,11 +3001,10 @@ function renderAdminUsers() {
     <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}" style="width:85px"></td>
     <td><span class="tag">${u.invited_by || '-'}</span></td>
     <td>
-     <select id="adm_vip_${u.id}" style="width:80px;padding:6px">
-      ${["LV1","LV2","LV3","LV4","LV5"].map(lv => `<option value="${lv}" ${u.vip_level===lv?'selected':''}>${lv}</option>`).join("")}
+     <select id="adm_vip_${u.id}" style="width:130px;padding:6px">
+      ${vipChoices.map(lv => `<option value="${lv}" ${curVip===lv?'selected':''}>${lv}</option>`).join("")}
      </select>
     </td>
-    <td><input id="adm_vipreq_${u.id}" type="number" step="0.01" placeholder="Auto" value="${customVipVal}" style="width:85px"></td>
     <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${Number(u.balance || 0)}" style="width:90px"></td>
     <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:85px"></td>
     <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:85px"></td>
@@ -3218,9 +3025,7 @@ async function saveAllUsersAdmin() {
   u.name = $(`adm_name_${u.id}`).value.trim() || u.name;
   u.password = $(`adm_pass_${u.id}`).value.trim() || u.password;
   u.referral_code = $(`adm_ref_${u.id}`).value.trim() || u.referral_code;
-  u.vip_level = $(`adm_vip_${u.id}`).value;
-  const rawVipReq = $(`adm_vipreq_${u.id}`) ? $(`adm_vipreq_${u.id}`).value.trim() : "";
-  u.custom_vip_req = rawVipReq === "" ? "" : Math.max(0, Number(rawVipReq) || 0);
+  u.vip_level = normalizeVipLabel($(`adm_vip_${u.id}`).value);
   u.balance = Number($(`adm_bal_${u.id}`).value) || 0;
   u.negative_balance = Math.max(0, Math.abs(Number($(`adm_neg_${u.id}`).value) || 0));
   u.profit_box = Number($(`adm_pbox_${u.id}`).value) || 0;
@@ -3242,15 +3047,12 @@ async function resetUserOrders(userId) {
 function renderAdminVips() {
  const tbody = $("adminVipRows");
  if (!tbody) return;
- if ($("vipDepositAdjPct")) $("vipDepositAdjPct").value = vipDepositAdjustmentPct;
- if ($("vipDepositAdjPreview")) $("vipDepositAdjPreview").textContent = `${vipDepositAdjustmentPct >= 0 ? "+" : ""}${vipDepositAdjustmentPct.toFixed(1)}%`;
  tbody.innerHTML = allVipTiers.map((v, idx) => `
   <tr>
-   <td><strong>${v.level}</strong></td>
-   <td><input id="vip_name_${idx}" value="${v.name}" style="width:90px"></td>
+   <td><strong>${normalizeVipLabel(v.level)}</strong></td>
+   <td><input id="vip_name_${idx}" value="${v.name}" style="width:120px"></td>
    <td><input id="vip_limit_${idx}" type="number" value="${v.daily_limit}" style="width:80px"></td>
    <td><input id="vip_rate_${idx}" type="number" step="0.01" value="${(Number(v.profit_rate)*100).toFixed(2)}" style="width:80px"></td>
-   <td><input id="vip_min_${idx}" type="number" value="${v.min_bal}" style="width:85px"></td>
    <td><input id="vip_max_${idx}" type="number" value="${v.max_withdraw}" style="width:100px"></td>
   </tr>
  `).join("");
@@ -3310,7 +3112,6 @@ function saveHotelsAndVipsAdmin() {
   v.name = $(`vip_name_${idx}`).value.trim() || v.name;
   v.daily_limit = Number($(`vip_limit_${idx}`).value) || v.daily_limit;
   v.profit_rate = (Number($(`vip_rate_${idx}`).value) || 0.5) / 100;
-  v.min_bal = Number($(`vip_min_${idx}`).value) || 0;
   v.max_withdraw = Number($(`vip_max_${idx}`).value) || 1000;
  });
  allHotels.slice(0, 40).forEach((h, idx) => {
@@ -3320,12 +3121,9 @@ function saveHotelsAndVipsAdmin() {
   h.stars = Number($(`htl_str_${idx}`).value) || h.stars;
   h.price = Number($(`htl_prc_${idx}`).value) || h.price;
  });
- const adjPct = Number($("vipDepositAdjPct")?.value) || 0;
- vipDepositAdjustmentPct = adjPct;
  if (db) {
   db.ref("vip_tiers").set(allVipTiers);
   db.ref("hotels").set(allHotels);
-  db.ref("vip_deposit_adj_pct").set(adjPct);
  }
  showAlert(getDict().saveRatesBtn);
  renderAllViews();
@@ -3483,62 +3281,9 @@ function renderHistory() {
  }).join("");
 }
 
-function renderVipProgress() {
- const labelEl = $("vipProgressLabel");
- const pctEl = $("vipProgressPct");
- const barEl = $("vipProgressBar");
- const detEl = $("vipProgressDetail");
- if (!labelEl || !pctEl || !barEl || !detEl) return;
-
- const d = getDict();
- const bal = Number(currentUser?.balance) || 0;
- const curIdx = Math.max(0, allVipTiers.findIndex(v => v.level === (currentUser?.vip_level || "LV1")));
- const nextTier = allVipTiers[curIdx + 1];
-
- if (!nextTier) {
-  labelEl.textContent = `${d.vipNextTitle}: ${d.vipMaxReached}`;
-  pctEl.textContent = "100%";
-  barEl.style.width = "100%";
-  detEl.textContent = formatUsdWithMmk(bal);
-  return;
- }
-
- const targetMin = getEffectiveVipMinBalance(currentUser, nextTier);
- const pct = targetMin <= 0 ? 100 : Math.max(0, Math.min(100, (bal / targetMin) * 100));
- const need = Math.max(0, targetMin - bal);
-
- labelEl.textContent = `${d.vipNextTitle} (${nextTier.level})`;
- pctEl.textContent = `${pct.toFixed(0)}%`;
- barEl.style.width = `${pct.toFixed(1)}%`;
- detEl.textContent = `${formatUsdWithMmk(bal)} / ${formatUsdWithMmk(targetMin)} · ${d.vipNeedMoreText.replace("{need}", formatUsdWithMmk(need))}`;
-}
-
-function renderVipGrid() {
- const disp = $("vipTiersDisplay");
- if (!disp) return;
- const d = getDict();
- const activeLv = currentUser?.vip_level || "LV1";
- disp.innerHTML = allVipTiers.map(v => {
-  const effectiveMin = (v.level === activeLv)
-   ? getEffectiveVipMinBalance(currentUser, v)
-   : getAdjustedVipMinBalance(v);
-  return `
-   <div class="vip-card ${v.level === activeLv ? 'active-vip' : ''}">
-    <h4 style="margin:0 0 6px">${v.name} (${v.level})</h4>
-    <p class="small" style="margin:2px 0">${d.dailyOrdersLabel}: ${v.daily_limit}</p>
-    <p class="small" style="margin:2px 0">${d.profitRateLabel}: ${(Number(v.profit_rate) * 100).toFixed(2)}%</p>
-    <p class="small" style="margin:2px 0">${d.thMinBal}: $${effectiveMin.toFixed(2)}</p>
-    <p class="small" style="margin:2px 0">${d.maxLimitLabel}: $${Number(v.max_withdraw).toLocaleString()}</p>
-   </div>
-  `;
- }).join("");
-}
-
 function renderAllViews() {
  renderHotels();
  renderBookingArea();
- renderVipGrid();
- renderVipProgress();
  updateAdminBadges();
 
  $("totalUsersBadge").textContent = allUsers.length;
@@ -3550,7 +3295,7 @@ function renderAllViews() {
   $("memberProfileBox").classList.remove("hidden");
   $("profileName").textContent = currentUser.name;
   $("profileIdentity").textContent = `ID: ${currentUser.id} · ${currentUser.identity}`;
-  $("profileVipBadge").textContent = currentUser.vip_level || 'LV1';
+  $("profileVipBadge").textContent = normalizeVipLabel(currentUser.vip_level);
   if (currentUser.avatar) {
    $("profileAvatarImg").src = currentUser.avatar;
   }
