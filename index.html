@@ -44,14 +44,14 @@ body {
  transition: background 0.2s, color 0.2s;
 }
 
-/* Fullscreen Intro Splash with Logo + Welcome Text Together */
+/* Fullscreen Intro Splash with Platform Logo + Welcome Text Together */
 .intro-splash {
  position: fixed;
  inset: 0;
  z-index: 9999;
  background:
-  linear-gradient(135deg, rgba(5, 22, 34, 0.68), rgba(0, 76, 92, 0.72)),
-  url("image_23542a.jpg") center center / cover no-repeat;
+  linear-gradient(135deg, rgba(5, 22, 34, 0.72), rgba(0, 76, 92, 0.76)),
+  url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&auto=format&fit=crop") center center / cover no-repeat;
  background-color: #092c3a;
  display: flex;
  flex-direction: column;
@@ -231,25 +231,38 @@ select.lang-select {
 .page { display: none; }
 .page.active { display: block; }
 
+/* Hero Banner with Hotel/Travel Photo Backdrop */
 .hero-banner {
  position: relative;
  border-radius: 14px;
  overflow: hidden;
- min-height: 200px;
+ min-height: 195px;
  display: flex;
  align-items: flex-end;
  padding: 20px;
  color: #fff;
  background:
-  linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.75) 100%),
-  url("image_23c8a1.png") center/cover;
- background-color: #1d4ed8;
+  linear-gradient(180deg, rgba(6, 24, 42, 0.18) 0%, rgba(6, 24, 42, 0.78) 100%),
+  url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&auto=format&fit=crop") center center / cover no-repeat;
+ background-color: #0f3b57;
  box-shadow: var(--fb-shadow);
  margin-bottom: 16px;
 }
 
-.hero-content h1 { margin: 0 0 6px; font-size: 24px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-.hero-content p { margin: 0; font-size: 14px; opacity: 0.95; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.hero-content h1 {
+ margin: 0 0 6px;
+ font-size: 24px;
+ color: #ffffff;
+ text-shadow: 0 2px 10px rgba(0,0,0,0.65);
+}
+
+.hero-content p {
+ margin: 0;
+ font-size: 14px;
+ color: #f1f5f9;
+ opacity: 0.96;
+ text-shadow: 0 2px 8px rgba(0,0,0,0.65);
+}
 
 .section-title {
  display: flex;
@@ -601,10 +614,13 @@ select.lang-select {
  font-weight: 900;
 }
 
+/* Compact & Readable Customer Service Chat Box (No Shortcuts) */
 .chat-box {
  display: flex;
  flex-direction: column;
- height: 460px;
+ height: 370px;
+ max-height: calc(100dvh - 215px);
+ min-height: 270px;
  border: 1px solid var(--fb-border);
  border-radius: 12px;
  overflow: hidden;
@@ -612,54 +628,53 @@ select.lang-select {
 }
 
 .chat-header {
- padding: 10px 14px;
+ padding: 9px 12px;
  background: var(--fb-card);
  border-bottom: 1px solid var(--fb-border);
  font-weight: 700;
+ font-size: 13px;
  display: flex;
  align-items: center;
  justify-content: space-between;
  gap: 8px;
+ flex-shrink: 0;
 }
 
 .chat-messages {
  flex: 1;
- padding: 12px;
+ padding: 10px 12px;
  overflow-y: auto;
+ -webkit-overflow-scrolling: touch;
 }
 
-.quick-chips {
- display: flex;
- flex-wrap: wrap;
- gap: 6px;
- padding: 8px 12px;
- background: var(--fb-card);
- border-top: 1px solid var(--fb-border);
+.chat-bubble {
+ max-width: 84%;
+ padding: 9px 12px;
+ border-radius: 12px;
+ margin: 7px 0;
+ font-size: 14px;
+ line-height: 1.55;
+ word-break: break-word;
+ overflow-wrap: anywhere;
+ border: 1px solid var(--fb-border);
 }
 
-.chip-btn {
- border: 1px solid var(--fb-primary);
- background: rgba(0,128,128,0.08);
- color: var(--fb-primary);
- border-radius: 999px;
- padding: 5px 10px;
+.chat-bubble-meta {
  font-size: 11px;
+ opacity: 0.8;
  font-weight: 700;
- cursor: pointer;
-}
-
-.chip-btn:hover {
- background: var(--fb-primary);
- color: #fff;
+ margin-bottom: 3px;
+ line-height: 1.3;
 }
 
 .chat-footer {
  display: flex;
- gap: 8px;
- padding: 10px;
+ gap: 6px;
+ padding: 8px 10px;
  background: var(--fb-card);
  border-top: 1px solid var(--fb-border);
  align-items: center;
+ flex-shrink: 0;
 }
 
 .chat-img-msg {
@@ -810,6 +825,12 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 @media (max-width: 768px) {
  .admin-cs-grid { grid-template-columns: 1fr; }
  .intro-title-line { font-size: 24px; }
+ .hero-banner { min-height: 175px; padding: 16px; }
+ .hero-content h1 { font-size: 20px; }
+ .chat-box {
+  height: 330px;
+  max-height: calc(100dvh - 205px);
+ }
 }
 
 .rule-item {
@@ -991,7 +1012,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
  <!-- Intro Splash Screen with Platform Logo & Welcome Text Together -->
 <div class="intro-splash" id="introSplash">
  <div class="intro-stage-box" id="introStageBox">
-  <img src="image_23c8a1.png" alt="Trip Booking Logo" class="intro-logo-img" onerror="this.style.display='none'">
+  <img src="image_4cae85.png" alt="Trip Booking Logo" class="intro-logo-img" onerror="this.style.display='none'">
   <div class="intro-title-line" id="introTitleLine">Welcome to Trip Booking</div>
   <div class="intro-sub-line" id="introSubLine">INTERNATIONAL PLATFORM</div>
  </div>
@@ -999,7 +1020,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 
 <header class="fb-header">
  <div class="brand-box" onclick="handleLogoClick()">
-  <img src="image_23c8a1.png" alt="Logo" class="brand-logo-img" onerror="this.style.display='none'">
+  <img src="image_4cae85.png" alt="Logo" class="brand-logo-img" onerror="this.style.display='none'">
   <div>
    <div class="brand-name">Trip Booking</div>
    <div class="brand-sub">INTERNATIONAL</div>
@@ -1094,13 +1115,6 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
    <span class="tag" data-i18n="csActiveBadge">● Active</span>
   </div>
   <div class="chat-messages" id="supportMessages"></div>
-  <div class="quick-chips" id="userQuickChipsBox">
-   <button type="button" class="chip-btn" data-chip-key="chip1Deposit" onclick="sendQuickChipByKey('chip1Deposit')">၁. ငွေသွင်းမည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chip2Withdraw" onclick="sendQuickChipByKey('chip2Withdraw')">၂. ငွေထုတ်မည်</button>
-   <button type="button" class="chip-btn" data-chip-key="chip3AboutOrder" onclick="sendQuickChipByKey('chip3AboutOrder')">၃. အော်ဒါအကြောင်း</button>
-   <button type="button" class="chip-btn" data-chip-key="chip4AboutVip" onclick="sendQuickChipByKey('chip4AboutVip')">၄. VIP ဆိုတာဘာလဲ၊ ဘာအတွက် VIP အတွက်ငွေထည့်ရပါသလဲ</button>
-   <button type="button" class="chip-btn" data-chip-key="chip5AboutPlatform" onclick="sendQuickChipByKey('chip5AboutPlatform')">၅. ပလက်ဖောင်းအကြောင်း</button>
-  </div>
   <div class="chat-footer">
    <input type="file" id="userChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
    <button type="button" class="btn btn-success" onclick="$('userChatPhotoInput').click()" data-i18n-title="sendPhotoTitle" title="ဓာတ်ပုံပို့မည်">📷</button>
@@ -1324,23 +1338,14 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
  </div>
 
  <div id="adminCsTab" class="panel hidden admin-cs-grid">
-  <div style="border-right:1px solid var(--fb-border);padding-right:10px;max-height:420px;overflow-y:auto">
+  <div style="border-right:1px solid var(--fb-border);padding-right:10px;max-height:360px;overflow-y:auto">
    <h4 data-i18n="regUsersChatHead">All Registered Users</h4>
    <input id="csClientSearch" placeholder="Search user..." style="margin-bottom:8px;padding:6px 8px" oninput="renderCsClientList()" data-i18n-ph="csClientSearchPh">
    <div id="csClientList"></div>
   </div>
   <div>
    <div class="chat-header"><span id="csActiveUserTitle" data-i18n="selectUserChat">Select a user to chat</span></div>
-   <div class="chat-messages" id="adminChatMessages" style="height:260px"></div>
-   <div class="quick-chips" id="adminQuickChipsBox">
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('welcome')">👋 ကြိုဆိုပါတယ်</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('dep25')">⏱️ ငွေသွင်းချိန် ၂၅</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('depDone')">✅ ငွေသွင်းအတည်ပြုပြီး</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('wdRule')">🏦 ငွေထုတ်အချိန်/စည်းမျဉ်း</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('wdDone')">💸 ငွေထုတ်လွှဲပေးပြီး</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('specialOrder')">✨ အထူးအော်ဒါ/အနှုတ် ဖြေရှင်းပုံ</button>
-    <button type="button" class="chip-btn" onclick="sendAdminCannedReply('penalty24')">⚖️ ၂၄ နာရီ ဒဏ်ကြေး</button>
-   </div>
+   <div class="chat-messages" id="adminChatMessages" style="height:240px"></div>
    <div class="chat-footer">
     <input type="file" id="adminChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
     <button type="button" class="btn btn-success" onclick="$('adminChatPhotoInput').click()" data-i18n="sendPhotoBtn">📷 ဓာတ်ပုံပို့မည်</button>
@@ -1591,6 +1596,91 @@ try {
 const $ = id => document.getElementById(id);
 const MMK_PER_USD = 4500;
 
+// Principal -> Target Profit Table (USD)
+const PRINCIPAL_PROFIT_TABLE = [
+ { principal: 100, profit: 20 },
+ { principal: 200, profit: 25 },
+ { principal: 300, profit: 30 },
+ { principal: 400, profit: 38 },
+ { principal: 500, profit: 48 },
+ { principal: 600, profit: 57 },
+ { principal: 700, profit: 65 },
+ { principal: 800, profit: 79 },
+ { principal: 900, profit: 94 },
+ { principal: 1000, profit: 130 },
+ { principal: 2000, profit: 180 },
+ { principal: 3000, profit: 147 },
+ { principal: 4000, profit: 379 },
+ { principal: 5000, profit: 576 },
+ { principal: 6000, profit: 795 },
+ { principal: 7000, profit: 845 },
+ { principal: 8000, profit: 899 },
+ { principal: 9000, profit: 965 },
+ { principal: 10000, profit: 1350 }
+];
+
+function getTargetProfitForPrincipal(balanceUsd) {
+ const bal = Math.max(0, Number(balanceUsd) || 0);
+ if (bal <= 0) return 0;
+
+ const table = PRINCIPAL_PROFIT_TABLE;
+ if (bal <= table[0].principal) {
+  return Number(((bal / table[0].principal) * table[0].profit).toFixed(2));
+ }
+
+ for (let i = 0; i < table.length - 1; i++) {
+  const cur = table[i];
+  const nxt = table[i + 1];
+  if (bal <= nxt.principal) {
+   const ratio = (bal - cur.principal) / (nxt.principal - cur.principal);
+   const interp = cur.profit + ratio * (nxt.profit - cur.profit);
+   return Number(interp.toFixed(2));
+  }
+ }
+
+ const last = table[table.length - 1];
+ const perHundred = last.profit / (last.principal / 100);
+ return Number(((bal / 100) * perHundred).toFixed(2));
+}
+
+function getDynamicHotelPrice(orderNum, balanceUsd) {
+ const basePrice = 85 + ((Math.max(1, Number(orderNum) || 1) * 7 + Math.round(Number(balanceUsd) || 0)) % 15);
+ return Number(Math.min(99, Math.max(85, basePrice)).toFixed(2));
+}
+
+function computeOrderCommission(userObj, orderNum, hotelPrice, dailyLimit, luckyProfitBox) {
+ const bal = Math.max(0, Number(userObj?.balance) || 0);
+ const limit = Math.max(1, Number(dailyLimit) || 30);
+ const currentProfit = Math.max(0, Number(userObj?.total_profit ?? userObj?.commission) || 0);
+ const targetProfit = getTargetProfitForPrincipal(bal);
+
+ // Fluctuation in $0.55 - $0.75 range based on hotel price & order number
+ const wave = ((Number(hotelPrice) * 13 + Number(orderNum) * 17) % 21) / 100; // 0.00 to 0.20
+ const baseFluctuation = Number((0.55 + wave).toFixed(2));
+
+ const remainingOrders = Math.max(1, limit - (Number(userObj?.orders) || 0));
+ const remainingTarget = Math.max(0, targetProfit - currentProfit);
+
+ let baseComm = baseFluctuation;
+ if (targetProfit > 0) {
+  if (remainingTarget > 0) {
+   const pacedShare = Number((remainingTarget / remainingOrders).toFixed(2));
+   baseComm = Math.max(0.55, Math.min(remainingTarget, Number(((baseFluctuation + pacedShare) / 2).toFixed(2))));
+  } else {
+   // Auto-adjust balance & profit if needed so target profit is respected
+   baseComm = Number((0.55 + (wave * 0.5)).toFixed(2));
+  }
+ }
+
+ const luckyBonus = Math.max(0, Number(luckyProfitBox) || 0);
+ const totalCommission = Number((baseComm + luckyBonus).toFixed(2));
+ return {
+  baseCommission: baseComm,
+  luckyBonus: luckyBonus,
+  totalCommission: totalCommission
+ };
+}
+
 function runIntroSplash() {
  const splash = $("introSplash");
  const stageBox = $("introStageBox");
@@ -1674,12 +1764,12 @@ const VERIFIED_HOTEL_IMAGES = [
 
 function build238Hotels() {
  const base6 = [
-  { id: "H001", name: "Marina Bay Sands", country: "Singapore", price: 420, stars: 5, image: VERIFIED_HOTEL_IMAGES[0] },
-  { id: "H002", name: "The Ritz-Carlton Tokyo", country: "Japan", price: 280, stars: 4, image: VERIFIED_HOTEL_IMAGES[1] },
-  { id: "H003", name: "Bali Luxury Resort", country: "Indonesia", price: 160, stars: 5, image: VERIFIED_HOTEL_IMAGES[2] },
-  { id: "H004", name: "Swiss Alpine Hotel", country: "Switzerland", price: 310, stars: 3, image: VERIFIED_HOTEL_IMAGES[3] },
-  { id: "H005", name: "Burj Al Arab Jumeirah", country: "UAE", price: 650, stars: 5, image: VERIFIED_HOTEL_IMAGES[4] },
-  { id: "H006", name: "Hotel Plaza Athenee", country: "France", price: 390, stars: 4, image: VERIFIED_HOTEL_IMAGES[5] }
+  { id: "H001", name: "Marina Bay Sands", country: "Singapore", price: 96, stars: 5, image: VERIFIED_HOTEL_IMAGES[0] },
+  { id: "H002", name: "The Ritz-Carlton Tokyo", country: "Japan", price: 92, stars: 4, image: VERIFIED_HOTEL_IMAGES[1] },
+  { id: "H003", name: "Bali Luxury Resort", country: "Indonesia", price: 88, stars: 5, image: VERIFIED_HOTEL_IMAGES[2] },
+  { id: "H004", name: "Swiss Alpine Hotel", country: "Switzerland", price: 94, stars: 3, image: VERIFIED_HOTEL_IMAGES[3] },
+  { id: "H005", name: "Burj Al Arab Jumeirah", country: "UAE", price: 99, stars: 5, image: VERIFIED_HOTEL_IMAGES[4] },
+  { id: "H006", name: "Hotel Plaza Athenee", country: "France", price: 91, stars: 4, image: VERIFIED_HOTEL_IMAGES[5] }
  ];
  const prefixes = ["Grand", "Royal", "Imperial", "Emerald", "Golden", "Oceanic", "Crown", "Majestic", "Paradise", "Starlight"];
  const suffixes = ["Palace Hotel", "Resort & Spa", "Suites", "Boutique Hotel", "Grand Villa", "Executive Hotel", "Lagoon Resort", "Sky Tower Hotel"];
@@ -1691,7 +1781,7 @@ function build238Hotels() {
   const s = suffixes[(i * 3) % suffixes.length];
   const c = countries[(i * 7) % countries.length];
   const stars = ((i * 3 + 1) % 5) + 1;
-  const price = 85 + ((i * 29) % 540);
+  const price = 85 + ((i * 3 + 5) % 15); // $85 - $99
   const img = VERIFIED_HOTEL_IMAGES[i % VERIFIED_HOTEL_IMAGES.length];
   list.push({ id: "H" + String(i + 6).padStart(3, "0"), name: `${p} ${c} ${s} #${i}`, country: c, price, stars, image: img });
  }
@@ -1713,11 +1803,6 @@ const I18N = {
   footerSecDesc: "အကောင့်မှတ်တမ်းများ လုံခြုံစွာ ထိန်းသိမ်းထားပြီး ၂၄ နာရီ ဝန်ဆောင်မှု ပေးနေပါသည်။",
   badgeVerified: "✔ စစ်ဆေးပြီး ပလက်ဖောင်း", badge247: "🕒 ၂၄/၇ ဝန်ဆောင်မှု", badgeEncrypted: "🔒 လုံခြုံသော စနစ်",
   csCenter: "Trip Booking Service", csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● အသုံးပြုနေသည်",
-  chip1Deposit: "၁. ငွေသွင်းမည်",
-  chip2Withdraw: "၂. ငွေထုတ်မည်",
-  chip3AboutOrder: "၃. အော်ဒါအကြောင်း",
-  chip4AboutVip: "၄. VIP ဆိုတာဘာလဲ၊ ဘာအတွက် VIP အတွက်ငွေထည့်ရပါသလဲ",
-  chip5AboutPlatform: "၅. ပလက်ဖောင်းအကြောင်း",
   sendPhotoTitle: "ဓာတ်ပုံပို့မည်", sendPhotoBtn: "📷 ဓာတ်ပုံပို့မည်",
   taskCenter: "ဘိုကင် တာဝန်စင်တာ",
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
@@ -1801,14 +1886,7 @@ const I18N = {
   txBookingProfit: "ဘိုကင်အမြတ်", txApproved: "အတည်ပြုပြီး",
   hotelRoomTypeLabel: "အခန်းအမျိုးအစား", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
-  hotelEstCommLabel: "ခန့်မှန်း ကော်မရှင်",
-  cannedWelcome: "👋 မင်္ဂလာပါ ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါတယ်။ ဘာများ ကူညီပေးရမလဲ ခင်ဗျာ။",
-  cannedDep25: "⏱️ ငွေသွင်းချိန် ၂၅ သတ်မှတ်ထားပါသည်။ သတ်မှတ်အချိန်အတွင်း လွှဲပြေစာပို့ပြီး ဆက်သွယ်ပေးပါ။",
-  cannedDepDone: "✅ လူကြီးမင်း၏ ငွေသွင်းမှုကို စစ်ဆေးအတည်ပြုပြီး အကောင့်ထဲ ထည့်သွင်းပေးပြီးပါပြီ ခင်ဗျာ။",
-  cannedWdRule: "🏦 ငွေထုတ်ယူရန် လက်ရှိအော်ဒါတာဝန်များ ပြီးပြတ်ရန် လိုအပ်ပါသည်။",
-  cannedWdDone: "💸 လူကြီးမင်း၏ ငွေထုတ်ယူမှုကို လွှဲပေးပြီးပါပြီ ခင်ဗျာ။ အကောင့်ထဲ စစ်ဆေးကြည့်နိုင်ပါပြီ။",
-  cannedSpecialOrder: "✨ အထူးအော်ဒါ (Lucky/Combo Order) ကျရောက်နေပါသည် — ဖြေရှင်းပြီးပါက မူလအရင်းနှင့် အပိုကော်မရှင် နှစ်ဆရရှိပါမည်။",
-  cannedPenalty24: "⚖️ အော်ဒါကျပြီး ၂၄ နာရီအတွင်း မဖြေရှင်းပါက ဒဏ်ကြေးအဆင့်ဆင့် သတ်မှတ်ချက်အတိုင်း ဖြစ်ပါသည်။"
+  hotelEstCommLabel: "ခန့်မှန်း ကော်မရှင်"
  },
  en: {
   mmkUnit: "MMK",
@@ -1824,11 +1902,6 @@ const I18N = {
   footerSecDesc: "Account records are protected with 24/7 Trip Booking Service support.",
   badgeVerified: "✔ Verified Platform", badge247: "🕒 24/7 Service", badgeEncrypted: "🔒 Secure Sync",
   csCenter: "Trip Booking Service", csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● Active",
-  chip1Deposit: "1. Deposit",
-  chip2Withdraw: "2. Withdraw",
-  chip3AboutOrder: "3. About Orders",
-  chip4AboutVip: "4. What is VIP & Why deposit for VIP?",
-  chip5AboutPlatform: "5. About Platform",
   sendPhotoTitle: "Send Photo", sendPhotoBtn: "📷 Send Photo",
   taskCenter: "Booking Task Center",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
@@ -1912,14 +1985,7 @@ const I18N = {
   txBookingProfit: "Booking Profit", txApproved: "Approved",
   hotelRoomTypeLabel: "Room Type", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
-  hotelEstCommLabel: "Estimated Commission",
-  cannedWelcome: "👋 Hello! Welcome to Trip Booking Service. How may we assist you today?",
-  cannedDep25: "⏱️ Deposit window is 25. Please send payment proof within the time limit.",
-  cannedDepDone: "✅ Your deposit has been verified and credited to your account balance.",
-  cannedWdRule: "🏦 Please complete active tasks first before withdrawing.",
-  cannedWdDone: "💸 Your withdrawal has been processed and transferred. Please check your account.",
-  cannedSpecialOrder: "✨ Special Order (Lucky/Combo Order) is active — once resolved, you receive original principal plus double extra commission.",
-  cannedPenalty24: "⚖️ Unresolved orders over 24 hours follow progressive penalty rules."
+  hotelEstCommLabel: "Estimated Commission"
  }
 };
 
@@ -1928,11 +1994,6 @@ I18N.th = {
  mmkUnit: "จ๊าต",
  loginBtn: "เข้าสู่ระบบ", startTaskBtn: "เริ่มงานจอง", hotelDir: "โรงแรมนานาชาติ",
  hotelSearchPh: "ค้นหาโรงแรม ประเทศ หรือดาว...",
- chip1Deposit: "1. ฝากเงิน",
- chip2Withdraw: "2. ถอนเงิน",
- chip3AboutOrder: "3. เกี่ยวกับออเดอร์",
- chip4AboutVip: "4. VIP คืออะไร และทำไมต้องเติมเงินสำหรับ VIP",
- chip5AboutPlatform: "5. เกี่ยวกับแพลตฟอร์ม",
  myProfile: "โปรไฟล์ของฉัน", welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking",
  createAcc: "สมัครสมาชิก", uploadPhotoTag: "📷 รูปโปรไฟล์", editNameBtn: "✏️ แก้ไข",
  editNameModalTitle: "แก้ไขชื่อโปรไฟล์", bookingHistCardTitle: "ประวัติการจอง",
@@ -1952,11 +2013,6 @@ I18N.zh = {
  mmkUnit: "缅币",
  loginBtn: "登录", startTaskBtn: "开始预订任务", hotelDir: "国际酒店",
  hotelSearchPh: "搜索酒店、国家或星级...",
- chip1Deposit: "1. 充值",
- chip2Withdraw: "2. 提现",
- chip3AboutOrder: "3. 关于订单",
- chip4AboutVip: "4. 什么是 VIP 以及为何为 VIP 充值",
- chip5AboutPlatform: "5. 关于平台",
  myProfile: "我的个人资料", welcomeTrip: "欢迎来到 Trip Booking",
  createAcc: "注册", uploadPhotoTag: "📷 上传头像", editNameBtn: "✏️ 修改",
  editNameModalTitle: "修改账户名称", bookingHistCardTitle: "预订记录",
@@ -1971,27 +2027,10 @@ I18N.zh = {
  profitEarnedTemplate: "获得利润 {amt}"
 };
 
-const QUICK_CHIP_REPLIES = {
- my: {
-  chip1Deposit: "💳 ငွေသွင်းရန်အတွက် Customer Service နှင့် ချိတ်ဆက်ထားပါသည်။ ငွေလွှဲပြေစာနှင့် လိုအပ်သော အချက်အလက်များကို ဤနေရာတွင် ပို့ပေးနိုင်ပါသည် ခင်ဗျာ။",
-  chip2Withdraw: "🏦 ငွေထုတ်ယူလိုပါက လက်ရှိတာဝန်များ ပြီးပြတ်မှုရှိမရှိ စစ်ဆေးပြီး Customer Service သို့ အသိပေးပို့နိုင်ပါသည် ခင်ဗျာ။",
-  chip3AboutOrder: "🏨 ဟိုတယ်ဘိုကင်အော်ဒါများကို အော်ဒါယူမည်မှတစ်ဆင့် စစ်ဆေးမှတ်ချက်ပေးပြီး ဆောင်ရွက်ရပါသည်။ ပြီးစီးတိုင်း ကော်မရှင်ရရှိပါမည်။",
-  chip4AboutVip: "💎 VIP Level ဆိုသည်မှာ အကောင့်အလိုက် သတ်မှတ်ပေးထားသော အဆင့်ဖြစ်ပြီး ဘိုကင်တာဝန်များ ဆောင်ရွက်ရာတွင် သက်ဆိုင်ရာ လက်ကျန်ငွေနှင့်အတူ အသုံးပြုရပါသည်။",
-  chip5AboutPlatform: "🌐 Trip Booking International Platform သည် နိုင်ငံတကာ ဟိုတယ်ဘိုကင်ဝန်ဆောင်မှုစနစ်ဖြစ်ပြီး ၂၄ နာရီ ဝန်ဆောင်မှုပေးနေပါသည်။"
- },
- en: {
-  chip1Deposit: "💳 You are connected to Customer Service for deposits. Please share your transfer details or receipt here.",
-  chip2Withdraw: "🏦 For withdrawals, please ensure active tasks are completed and notify Customer Service.",
-  chip3AboutOrder: "🏨 Hotel booking orders are reviewed and submitted from Get Order, earning commission upon completion.",
-  chip4AboutVip: "💎 VIP Level is the account tier assigned for booking operations and balance requirements.",
-  chip5AboutPlatform: "🌐 Trip Booking International Platform provides 24/7 hotel booking task support."
- }
-};
-
 let allUsers = [];
 let allHotels = build238Hotels();
 let allVipTiers = [
- { level: "VIP Level 1", name: "VIP Level 1", daily_limit: 30, profit_rate: 0.005, max_withdraw: 1000 },
+ { level: "VIP Level 1", name: "VIP Level 1", daily_limit: 30, profit_rate: 0.0065, max_withdraw: 1000 },
  { level: "VIP Level 2", name: "VIP Level 2", daily_limit: 40, profit_rate: 0.008, max_withdraw: 3000 },
  { level: "VIP Level 3", name: "VIP Level 3", daily_limit: 50, profit_rate: 0.012, max_withdraw: 10000 },
  { level: "VIP Level 4", name: "VIP Level 4", daily_limit: 60, profit_rate: 0.015, max_withdraw: 30000 },
@@ -2213,9 +2252,6 @@ function closeModal(id) { $(id)?.classList.add("hidden"); }
 function goToServiceFromLowBalance() {
  closeModal("lowBalanceModal");
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
- if (currentUser) {
-  sendQuickSuggestion(getDict().depositQuickText);
- }
 }
 
 function showProfitSuccessModal(commissionUsd) {
@@ -2250,10 +2286,6 @@ function changeLanguage(lang) {
  document.querySelectorAll("[data-i18n-title]").forEach(el => {
   const key = el.getAttribute("data-i18n-title");
   if (dict[key]) el.title = dict[key];
- });
- document.querySelectorAll("[data-chip-key]").forEach(btn => {
-  const k = btn.getAttribute("data-chip-key");
-  if (dict[k]) btn.textContent = dict[k];
  });
  renderCenterReviewChips();
  renderAllViews();
@@ -2476,14 +2508,14 @@ function openHotelDetail(hotelId) {
  const h = allHotels.find(x => String(x.id) === String(hotelId));
  if (!h) return;
  const d = getDict();
- const vip = getVipInfo(currentUser?.vip_level || "VIP Level 1");
- const estComm = Number(h.price) * Number(vip.profit_rate || 0.005);
+ const dynPrice = getDynamicHotelPrice(1, currentUser?.balance || 100);
+ const estComm = computeOrderCommission(currentUser || { balance: 100 }, 1, dynPrice, 30, 0).totalCommission;
 
  $("detailHotelName").textContent = `${h.name} (${h.country})`;
  $("detailHotelImg").src = h.image;
  $("detailHotelBody").innerHTML = `
   <div style="margin-bottom:8px">${renderStars(h.stars)}</div>
-  <p style="margin:6px 0"><b>${d.thPrice}:</b> ${formatUsdWithMmk(h.price)}</p>
+  <p style="margin:6px 0"><b>${d.thPrice}:</b> ${formatUsdWithMmk(dynPrice)}</p>
   <p style="margin:6px 0"><b>${d.hotelRoomTypeLabel}:</b> ${d.hotelRoomTypeVal}</p>
   <p style="margin:6px 0"><b>${d.hotelCheckInLabel}:</b> ${d.hotelCheckInVal}</p>
   <p style="margin:6px 0;color:var(--fb-success)"><b>${d.hotelEstCommLabel}:</b> +${formatUsdWithMmk(estComm)}</p>
@@ -2527,7 +2559,7 @@ function onCustomReviewInput() {
 
 function openCenterOrderModal() {
  if (!activeTask || !activeTask.hotel) return;
- const { hotel, commission, orderNum, stayNights, roomType } = activeTask;
+ const { hotel, orderPrice, commission, orderNum, stayNights, roomType } = activeTask;
 
  selectedOrderStars = 5;
  selectedOrderReviewIdx = -1;
@@ -2537,7 +2569,7 @@ function openCenterOrderModal() {
  $("centerOrderImg").src = hotel.image;
  $("centerOrderHotelName").textContent = hotel.name;
  $("centerOrderCountry").textContent = `${hotel.country} · ${"★".repeat(Number(hotel.stars) || 5)}`;
- $("centerOrderPrice").textContent = formatUsdWithMmk(hotel.price);
+ $("centerOrderPrice").textContent = formatUsdWithMmk(orderPrice || hotel.price);
  $("centerOrderComm").textContent = `+${formatUsdWithMmk(commission)}`;
  $("centerOrderNights").textContent = stayNights || "1 Night · 2 Guests";
  $("centerOrderRoomType").textContent = roomType || "Deluxe Suite";
@@ -2586,8 +2618,9 @@ function triggerGetOrder() {
  }
 
  const vip = getVipInfo(currentUser.vip_level);
- if ((Number(currentUser.orders) || 0) >= Number(vip.daily_limit || 30)) {
-  showAlert(d.chip3AboutOrder);
+ const dailyLimit = Number(vip.daily_limit || 30);
+ if ((Number(currentUser.orders) || 0) >= dailyLimit) {
+  showAlert(d.chip3AboutOrder || `${currentUser.orders}/${dailyLimit}`);
   return;
  }
 
@@ -2597,28 +2630,42 @@ function triggerGetOrder() {
  }
 
  const nextOrderNum = (Number(currentUser.orders) || 0) + 1;
- const hotel = allHotels[(nextOrderNum - 1) % allHotels.length];
+ const baseHotel = allHotels[(nextOrderNum - 1) % allHotels.length];
+ const dynamicPrice = getDynamicHotelPrice(nextOrderNum, bal);
+ const hotel = { ...baseHotel, price: dynamicPrice };
+
  const rules = getUserOrderRules(currentUser);
  const matchedRule = rules.find(r => Number(r.target_order) === nextOrderNum);
 
  let ruleNeg = 0;
- let ruleProfit = Number(currentUser.profit_box) || 0;
+ let luckyProfit = Math.max(0, Number(currentUser.profit_box) || 0);
 
  if (matchedRule) {
   ruleNeg = Math.abs(Number(matchedRule.negative_balance) || 0);
-  ruleProfit = Number(matchedRule.profit_box) || 0;
+  luckyProfit = Math.max(0, Number(matchedRule.profit_box) || 0);
   currentUser.negative_balance = ruleNeg;
-  currentUser.profit_box = ruleProfit;
+  currentUser.profit_box = luckyProfit;
   writeUserToDb(currentUser);
  }
 
+ const calc = computeOrderCommission(currentUser, nextOrderNum, dynamicPrice, dailyLimit, luckyProfit);
  const stayOptions = ["1 Night · 2 Guests", "2 Nights · 2 Guests", "3 Nights · Family", "1 Night · Business"];
  const roomOptions = ["Deluxe Suite", "Executive King", "Ocean View Villa", "Premier Double"];
  const stayNights = stayOptions[(nextOrderNum - 1) % stayOptions.length];
  const roomType = roomOptions[(nextOrderNum - 1) % roomOptions.length];
 
- const commission = (Number(hotel.price) * Number(vip.profit_rate)) + ruleProfit;
- activeTask = { hotel, commission, orderNum: nextOrderNum, ruleNeg, ruleProfit, stayNights, roomType };
+ activeTask = {
+  hotel,
+  orderPrice: dynamicPrice,
+  commission: calc.totalCommission,
+  baseCommission: calc.baseCommission,
+  luckyBonus: calc.luckyBonus,
+  orderNum: nextOrderNum,
+  ruleNeg,
+  stayNights,
+  roomType
+ };
+
  renderBookingArea();
  renderAllViews();
  openCenterOrderModal();
@@ -2659,23 +2706,26 @@ function confirmCenterOrder() {
 
 async function finalizeOrderSubmission(reviewNote, starRating) {
  if (!currentUser || !activeTask) return;
- const { hotel, commission, stayNights, roomType } = activeTask;
+ const { hotel, orderPrice, commission, luckyBonus, stayNights, roomType } = activeTask;
  const exactNow = formatExactTimestamp(new Date());
 
- currentUser.balance = Number(currentUser.balance || 0) + commission;
- currentUser.commission = Number(currentUser.commission || 0) + commission;
- currentUser.total_profit = Number(currentUser.total_profit || 0) + commission;
+ const earned = Number(commission) || 0;
+ currentUser.balance = Number((Number(currentUser.balance || 0) + earned).toFixed(2));
+ currentUser.commission = Number((Number(currentUser.commission || 0) + earned).toFixed(2));
+ currentUser.total_profit = Number((Number(currentUser.total_profit || 0) + earned).toFixed(2));
  currentUser.profit_box = 0;
  currentUser.negative_balance = 0;
  currentUser.orders = Number(currentUser.orders || 0) + 1;
+
+ const luckyTag = (Number(luckyBonus) > 0) ? ` [Lucky +$${Number(luckyBonus).toFixed(2)}]` : "";
 
  await writeUserToDb(currentUser);
  await writeTransactionToDb({
   user_id: String(currentUser.id),
   date: exactNow,
   type: "Booking Profit",
-  details: `#${activeTask.orderNum || currentUser.orders} · ${hotel.name} (${hotel.country}) · ${stayNights || '1 Night'} · ${roomType || 'Deluxe Suite'} · ${"★".repeat(starRating)} · "${reviewNote}"`,
-  amount: commission,
+  details: `#${activeTask.orderNum || currentUser.orders} · ${hotel.name} (${hotel.country}) · $${Number(orderPrice || hotel.price).toFixed(2)} · ${stayNights || '1 Night'} · ${roomType || 'Deluxe Suite'} · ${"★".repeat(starRating)} · "${reviewNote}"${luckyTag}`,
+  amount: earned,
   status: "Approved",
   created_at: Date.now()
  });
@@ -2683,7 +2733,7 @@ async function finalizeOrderSubmission(reviewNote, starRating) {
  activeTask = null;
  $("centerOrderModal").classList.add("hidden");
  renderAllViews();
- showProfitSuccessModal(commission);
+ showProfitSuccessModal(earned);
 }
 
 function handleWithdrawRequest() {
@@ -2698,28 +2748,6 @@ function handleDepositRequest() {
  const d = getDict();
  showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
  sendQuickSuggestion(d.depositQuickText);
-}
-
-async function sendQuickChipByKey(chipKey) {
- if (!currentUser) { openAuth('login'); return; }
- const d = getDict();
- const text = d[chipKey] || chipKey;
- await sendQuickSuggestion(text);
- const langKey = getCurrentLang() === "my" ? "my" : "en";
- const autoReply = (QUICK_CHIP_REPLIES[langKey] && QUICK_CHIP_REPLIES[langKey][chipKey]) || "";
- if (autoReply) {
-  setTimeout(() => {
-   writeMessageToDb({
-    user_id: String(currentUser.id),
-    sender: "support",
-    text: autoReply,
-    image: "",
-    read_by_admin: true,
-    time: formatExactTimestamp(new Date()),
-    created_at: Date.now() + 250
-   });
-  }, 250);
- }
 }
 
 async function sendQuickSuggestion(text) {
@@ -2747,33 +2775,6 @@ async function sendSupportMessage() {
   text: text,
   image: "",
   read_by_admin: false,
-  time: formatExactTimestamp(new Date()),
-  created_at: Date.now()
- });
-}
-
-async function sendAdminCannedReply(cannedKey) {
- if (!selectedCsUserId) {
-  showAlert(getDict().selectUserChat);
-  return;
- }
- const map = {
-  welcome: "cannedWelcome",
-  dep25: "cannedDep25",
-  depDone: "cannedDepDone",
-  wdRule: "cannedWdRule",
-  wdDone: "cannedWdDone",
-  specialOrder: "cannedSpecialOrder",
-  penalty24: "cannedPenalty24"
- };
- const text = getDict()[map[cannedKey]];
- if (!text) return;
- await writeMessageToDb({
-  user_id: String(selectedCsUserId),
-  sender: 'support',
-  text: text,
-  image: "",
-  read_by_admin: true,
   time: formatExactTimestamp(new Date()),
   created_at: Date.now()
  });
@@ -2832,11 +2833,12 @@ function renderMessageBubble(m, isRight, senderLabel) {
   ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="openImageLightbox('${safeImg}')">`
   : "";
  return `
-  <div style="max-width:80%;padding:10px 14px;border-radius:12px;margin:8px 0;
+  <div class="chat-bubble" style="
    background:${isRight ? 'var(--fb-primary)' : 'var(--fb-card)'};
-   color:${isRight ? 'white' : 'var(--fb-text)'};
-   margin-left:${isRight ? 'auto' : '0'};border:1px solid var(--fb-border)">
-   <div style="font-size:10px;opacity:0.8;font-weight:700">${senderLabel} · ${m.time || ''}</div>
+   color:${isRight ? '#ffffff' : 'var(--fb-text)'};
+   margin-left:${isRight ? 'auto' : '0'};
+   margin-right:${isRight ? '0' : 'auto'};">
+   <div class="chat-bubble-meta">${senderLabel} · ${m.time || ''}</div>
    <div>${m.text || ''}</div>
    ${imgHtml}
   </div>
@@ -3077,7 +3079,7 @@ function renderAdminHotels() {
 function openAddHotelModal() {
  $("newHName").value = "";
  $("newHCountry").value = "";
- $("newHPrice").value = "250";
+ $("newHPrice").value = "92";
  $("newHStars").value = "5";
  $("addHotelModal").classList.remove("hidden");
 }
@@ -3085,7 +3087,8 @@ function openAddHotelModal() {
 function addHotelToDatabase() {
  const name = $("newHName").value.trim();
  const country = $("newHCountry").value.trim();
- const price = Number($("newHPrice").value) || 200;
+ const rawPrice = Number($("newHPrice").value) || 92;
+ const price = Math.min(99, Math.max(85, rawPrice));
  const stars = Number($("newHStars").value) || 5;
  if (!name || !country) return;
  allHotels.unshift({
@@ -3111,7 +3114,7 @@ function saveHotelsAndVipsAdmin() {
   if (!$(`vip_name_${idx}`)) return;
   v.name = $(`vip_name_${idx}`).value.trim() || v.name;
   v.daily_limit = Number($(`vip_limit_${idx}`).value) || v.daily_limit;
-  v.profit_rate = (Number($(`vip_rate_${idx}`).value) || 0.5) / 100;
+  v.profit_rate = (Number($(`vip_rate_${idx}`).value) || 0.65) / 100;
   v.max_withdraw = Number($(`vip_max_${idx}`).value) || 1000;
  });
  allHotels.slice(0, 40).forEach((h, idx) => {
@@ -3119,7 +3122,8 @@ function saveHotelsAndVipsAdmin() {
   h.name = $(`htl_name_${idx}`).value.trim() || h.name;
   h.country = $(`htl_cnt_${idx}`).value.trim() || h.country;
   h.stars = Number($(`htl_str_${idx}`).value) || h.stars;
-  h.price = Number($(`htl_prc_${idx}`).value) || h.price;
+  const pVal = Number($(`htl_prc_${idx}`).value) || h.price;
+  h.price = Math.min(99, Math.max(85, pVal));
  });
  if (db) {
   db.ref("vip_tiers").set(allVipTiers);
@@ -3197,22 +3201,25 @@ function renderHotels() {
  const visible = (q || showAllHotelsFlag) ? filtered : filtered.slice(0, 24);
  $("loadMoreHotelsWrap").classList.toggle("hidden", q.length > 0 || showAllHotelsFlag || filtered.length <= 24);
 
- grid.innerHTML = visible.map(h => `
-  <div class="card" onclick="openHotelDetail('${h.id}')">
-   <img src="${h.image}" class="hotel-img" alt="${h.name}" loading="lazy">
-   <div class="card-body">
-    <div>
-     <span class="tag">${h.country}</span>
-     <h4 style="margin:6px 0 4px">${h.name}</h4>
-     <div>${renderStars(h.stars)}</div>
-    </div>
-    <div style="margin-top:10px">
-     <span class="price">$${Number(h.price).toFixed(2)}</span>
-     <span class="mmk-sub">≈ ${Math.round(Number(h.price) * MMK_PER_USD).toLocaleString()} ${d.mmkUnit}</span>
+ grid.innerHTML = visible.map((h, i) => {
+  const displayPrice = getDynamicHotelPrice(i + 1, currentUser?.balance || 100);
+  return `
+   <div class="card" onclick="openHotelDetail('${h.id}')">
+    <img src="${h.image}" class="hotel-img" alt="${h.name}" loading="lazy">
+    <div class="card-body">
+     <div>
+      <span class="tag">${h.country}</span>
+      <h4 style="margin:6px 0 4px">${h.name}</h4>
+      <div>${renderStars(h.stars)}</div>
+     </div>
+     <div style="margin-top:10px">
+      <span class="price">$${displayPrice.toFixed(2)}</span>
+      <span class="mmk-sub">≈ ${Math.round(displayPrice * MMK_PER_USD).toLocaleString()} ${d.mmkUnit}</span>
+     </div>
     </div>
    </div>
-  </div>
- `).join("");
+  `;
+ }).join("");
 }
 
 function showAllHotels() {
@@ -3242,11 +3249,11 @@ function renderBookingArea() {
   area.innerHTML = `<p class="muted" style="text-align:center">${d.clickGetOrderHint}</p>`;
   return;
  }
- const { hotel, commission } = activeTask;
+ const { hotel, orderPrice, commission } = activeTask;
  area.innerHTML = `
   <div class="panel" style="background:var(--fb-bg);border:2px dashed var(--fb-primary);text-align:center">
    <h4 style="margin-top:0">🏨 ${hotel.name} (${hotel.country}) ${renderStars(hotel.stars)}</h4>
-   <p>${d.orderPriceLabel}: <b>${formatUsdWithMmk(hotel.price)}</b> · ${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
+   <p>${d.orderPriceLabel}: <b>${formatUsdWithMmk(orderPrice || hotel.price)}</b> · ${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
    <button type="button" class="btn btn-success" onclick="openCenterOrderModal()">${d.submitOrderBtn}</button>
   </div>
  `;
