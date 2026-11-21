@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome to Trip Booking - International</title>
+<title>Trip Booking - International Hotel & Booking Platform</title>
+
+<!-- Firebase Compat SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
 <style>
 :root {
  --fb-bg: #f0f2f5;
@@ -15,14 +18,13 @@
  --fb-muted: #65676b;
  --fb-primary: #1d4ed8;
  --fb-primary-hover: #1e40af;
- --fb-accent: #f59e0b;
- --fb-success: #28a745;
- --fb-danger: #ff4d4d;
- --fb-border: #dddfe2;
- --fb-shadow: 0 2px 8px rgba(0,0,0,0.08);
- --fb-header-h: 60px;
- --icon-clean: #6b7280;
- --icon-clean-active: #1d4ed8;
+ --fb-border: #ccd0d5;
+ --fb-danger: #e41e3f;
+ --fb-success: #2e7d32;
+ --fb-gold: #f59e0b;
+ --shadow-soft: 0 2px 10px rgba(0,0,0,0.06);
+ --shadow-card: 0 4px 16px rgba(15,23,42,0.08);
+ --cs-bg-photo: url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&auto=format&fit=crop");
 }
 
 body.dark {
@@ -30,1815 +32,1350 @@ body.dark {
  --fb-card: #242526;
  --fb-text: #e4e6eb;
  --fb-muted: #b0b3b8;
- --fb-primary: #3b82f6;
- --fb-primary-hover: #2563eb;
- --fb-accent: #fbbf24;
+ --fb-primary: #2d88ff;
+ --fb-primary-hover: #1b6ec2;
  --fb-border: #3a3b3c;
- --fb-shadow: 0 2px 10px rgba(0,0,0,0.35);
- --icon-clean: #9aa2ad;
- --icon-clean-active: #60a5fa;
+ --fb-danger: #f02849;
+ --fb-success: #31a24c;
+ --fb-gold: #fbbf24;
+ --shadow-soft: 0 2px 12px rgba(0,0,0,0.35);
+ --shadow-card: 0 6px 20px rgba(0,0,0,0.45);
 }
 
 * { box-sizing: border-box; }
-
+html { scroll-behavior: smooth; }
 body {
  margin: 0;
- font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+ font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Noto Sans Myanmar", sans-serif;
  background: var(--fb-bg);
  color: var(--fb-text);
- padding-bottom: 76px;
- transition: background 0.2s, color 0.2s;
+ padding-bottom: 78px;
+ transition: background 0.25s ease, color 0.25s ease;
+ overflow-x: hidden;
 }
 
-/* Fullscreen Intro Splash matching Trip Booking Logo */
+.hidden { display: none !important; }
+.small { font-size: 12px; }
+.muted { color: var(--fb-muted); }
+
+/* Registration Success Toast */
+.reg-toast-backdrop {
+ position: fixed;
+ inset: 0;
+ z-index: 4200;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ pointer-events: none;
+ padding: 20px;
+ background: rgba(15, 23, 42, 0.22);
+ opacity: 1;
+ transition: opacity 0.35s ease;
+}
+.reg-toast-backdrop.fade-out { opacity: 0; }
+.reg-toast-card {
+ min-width: 260px;
+ max-width: 90vw;
+ padding: 22px 28px;
+ border-radius: 18px;
+ background: rgba(24, 24, 27, 0.92);
+ color: #ffffff;
+ text-align: center;
+ box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+ border: 1px solid rgba(255, 255, 255, 0.16);
+ backdrop-filter: blur(8px);
+ transform: scale(1);
+ transition: transform 0.35s ease;
+}
+.reg-toast-backdrop.fade-out .reg-toast-card { transform: scale(0.95); }
+.reg-toast-title {
+ font-size: 22px;
+ font-weight: 800;
+ line-height: 1.3;
+ color: #ffffff;
+ margin-bottom: 6px;
+}
+.reg-toast-sub {
+ font-size: 15px;
+ font-weight: 600;
+ line-height: 1.45;
+ color: #e5e7eb;
+}
+
+/* Intro Splash */
 .intro-splash {
  position: fixed;
  inset: 0;
- z-index: 9999;
- background: linear-gradient(160deg, #1e40af 0%, #1d4ed8 55%, #17389e 100%);
+ z-index: 3000;
  display: flex;
- flex-direction: column;
  align-items: center;
  justify-content: center;
  padding: 24px;
- text-align: center;
- overflow: hidden;
+ background: linear-gradient(135deg, #0b1120 0%, #172554 55%, #0f172a 100%);
+ opacity: 1;
  transition: opacity 0.55s ease, visibility 0.55s ease;
 }
-
-.intro-splash.fade-out {
- opacity: 0;
- visibility: hidden;
- pointer-events: none;
-}
-
+.intro-splash.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
 .intro-stage-box {
+ position: relative;
+ width: min(680px, 92vw);
+ min-height: 240px;
+ border-radius: 24px;
+ overflow: hidden;
  display: flex;
  flex-direction: column;
  align-items: center;
  justify-content: center;
- gap: 12px;
+ text-align: center;
+ padding: 34px 26px;
+ background: rgba(15, 23, 42, 0.72);
+ border: 1px solid rgba(255, 255, 255, 0.14);
+ box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
  opacity: 0;
- transform: scale(0.92) translateY(12px);
- transition: opacity 0.7s ease, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+ transform: scale(0.86);
+ transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1), transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-.intro-stage-box.show {
- opacity: 1;
- transform: scale(1) translateY(0);
-}
-
-.intro-logo-img {
- width: 120px;
- height: 120px;
- border-radius: 26px;
- object-fit: cover;
- background: #1d4ed8;
- box-shadow: 0 16px 38px rgba(0,0,0,0.35), 0 0 0 3px rgba(255,255,255,0.22);
-}
-
-.intro-trip-word {
- font-size: 42px;
- font-weight: 900;
- color: #ffffff;
- letter-spacing: -1px;
- line-height: 1;
- display: inline-flex;
- align-items: baseline;
-}
-
-.intro-trip-dot {
- width: 13px;
- height: 13px;
- border-radius: 50%;
- background: #f59e0b;
- display: inline-block;
- margin-left: 3px;
-}
-
-.intro-booking-word {
- font-size: 20px;
+.intro-stage-box.show { opacity: 1; transform: scale(1); }
+.intro-welcome-text {
+ margin: 0;
+ font-size: clamp(26px, 5vw, 44px);
  font-weight: 800;
+ letter-spacing: 0.4px;
+ line-height: 1.25;
  color: #ffffff;
- letter-spacing: 3px;
- text-transform: uppercase;
+}
+.intro-brand-sub {
+ margin-top: 10px;
+ font-size: clamp(14px, 2.4vw, 18px);
+ font-weight: 600;
+ color: #bfdbfe;
+ letter-spacing: 0.8px;
 }
 
-.intro-sub-line {
- font-size: 11px;
- font-weight: 700;
- color: rgba(255,255,255,0.92);
- letter-spacing: 2px;
- text-transform: uppercase;
- border-top: 1px solid #f59e0b;
- padding-top: 6px;
-}
-
-/* Header with Image 1 style divider + icon + label option */
+/* Header */
 .fb-header {
  position: sticky;
  top: 0;
- z-index: 900;
- height: var(--fb-header-h);
+ z-index: 100;
  background: var(--fb-card);
  border-bottom: 1px solid var(--fb-border);
+ padding: 10px 16px;
  display: flex;
  align-items: center;
  justify-content: space-between;
- padding: 0 12px;
- box-shadow: var(--fb-shadow);
- gap: 8px;
-}
-
-.brand-box {
- display: flex;
- align-items: center;
  gap: 10px;
- cursor: pointer;
- user-select: none;
- flex-shrink: 0;
+ flex-wrap: wrap;
+ box-shadow: var(--shadow-soft);
 }
-
-.brand-logo-img {
- width: 40px;
- height: 40px;
- border-radius: 10px;
- object-fit: cover;
- background: #1d4ed8;
- box-shadow: 0 2px 6px rgba(29,78,216,0.25);
- display: block;
-}
-
-.brand-divider-bar {
- width: 2px;
- height: 22px;
- background: var(--fb-border);
- border-radius: 2px;
-}
-
-.brand-name {
- font-weight: 900;
- font-size: 16px;
- color: var(--fb-primary);
- letter-spacing: -0.3px;
- line-height: 1.05;
- display: inline-flex;
- align-items: center;
- gap: 2px;
-}
-
-.brand-dot {
- width: 6px;
- height: 6px;
- border-radius: 50%;
- background: #f59e0b;
- display: inline-block;
-}
-
-.brand-sub {
- font-size: 9.5px;
- font-weight: 800;
- color: var(--fb-muted);
- letter-spacing: 0.6px;
-}
-
-.header-actions {
- display: flex;
- align-items: center;
- gap: 6px;
- flex-wrap: nowrap;
-}
-
-/* Image 1 inspired inline bar / pill item with left vertical bar + icon + label */
-.inline-bar-item {
- display: inline-flex;
- align-items: center;
- gap: 8px;
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--fb-primary); cursor: pointer; }
+.brand-badge {
+ background: linear-gradient(135deg, #1d4ed8, #2563eb);
+ color: #fff;
  padding: 6px 10px;
- border-radius: 8px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- color: var(--fb-text);
+ border-radius: 10px;
  font-size: 13px;
  font-weight: 700;
- cursor: pointer;
- transition: 0.15s;
+ letter-spacing: 0.4px;
 }
-
-.inline-bar-item:hover {
- border-color: var(--fb-primary);
- background: rgba(29,78,216,0.06);
-}
-
-.inline-bar-pipe {
- width: 2px;
- height: 15px;
- background: var(--fb-muted);
- opacity: 0.55;
- border-radius: 2px;
-}
-
-.inline-badge-circle {
- width: 20px;
- height: 20px;
- border-radius: 50%;
- background: #1877F2;
- color: #ffffff;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- font-weight: 900;
- font-size: 12px;
- flex-shrink: 0;
-}
-
-.icon-only-btn {
- border: none;
- background: transparent;
- color: var(--icon-clean);
- border-radius: 10px;
- width: 38px;
- height: 38px;
- padding: 0;
- cursor: pointer;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- transition: color 0.15s, background 0.15s, transform 0.15s;
-}
-
-.icon-only-btn:hover {
- color: var(--icon-clean-active);
- background: rgba(29, 78, 216, 0.1);
-}
-
-.icon-only-btn svg {
- width: 22px;
- height: 22px;
- fill: currentColor;
- display: block;
-}
-
-.action-icon-btn {
- border: none;
- background: transparent;
- color: var(--icon-clean);
- width: 42px;
- height: 42px;
- border-radius: 10px;
- padding: 0;
- cursor: pointer;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- transition: color 0.15s, background 0.15s, transform 0.15s;
-}
-
-.action-icon-btn:hover {
- color: var(--icon-clean-active);
- background: rgba(29, 78, 216, 0.1);
- transform: translateY(-1px);
-}
-
-.action-icon-btn svg {
- width: 24px;
- height: 24px;
- fill: currentColor;
- display: block;
-}
-
-select.lang-select {
+.header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+select, input, textarea {
  border: 1px solid var(--fb-border);
  background: var(--fb-bg);
  color: var(--fb-text);
- border-radius: 999px;
- height: 34px;
- padding: 0 8px;
- font-size: 12px;
- font-weight: 600;
- cursor: pointer;
+ border-radius: 8px;
+ padding: 8px 10px;
+ font-size: 14px;
+ outline: none;
+ font-family: inherit;
 }
+select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 
 .btn {
- background: var(--fb-primary);
- color: #fff;
  border: none;
  border-radius: 8px;
- padding: 9px 14px;
- font-size: 13px;
+ padding: 8px 14px;
+ font-size: 14px;
  font-weight: 600;
  cursor: pointer;
+ transition: 0.15s ease;
  display: inline-flex;
  align-items: center;
  justify-content: center;
  gap: 6px;
- transition: 0.15s;
+ font-family: inherit;
 }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--fb-primary); color: #fff; }
+.btn-primary:hover { background: var(--fb-primary-hover); }
+.btn-secondary { background: var(--fb-bg); color: var(--fb-text); border: 1px solid var(--fb-border); }
+.btn-danger { background: var(--fb-danger); color: #fff; }
+.btn-success { background: var(--fb-success); color: #fff; }
+.btn-gold { background: var(--fb-gold); color: #111827; }
 
-.btn:hover { background: var(--fb-primary-hover); }
-.btn-success { background: var(--fb-success); }
-.btn-success:hover { background: #218838; }
-.btn-danger { background: var(--fb-danger); }
-.btn-danger:hover { background: #e03e3e; }
-.btn-light { background: var(--fb-bg); color: var(--fb-text); border: 1px solid var(--fb-border); }
-.btn-block { width: 100%; }
-
-.container {
- max-width: 1120px;
- margin: 0 auto;
- padding: 14px;
-}
-
+.container { max-width: 1200px; margin: 16px auto; padding: 0 14px; }
 .page { display: none; }
 .page.active { display: block; }
 
-.hero-banner {
- position: relative;
- border-radius: 14px;
- overflow: hidden;
- min-height: 195px;
- display: flex;
- align-items: flex-end;
- padding: 20px;
+.hero {
+ background: linear-gradient(120deg, rgba(15, 23, 42, 0.86), rgba(30, 58, 138, 0.78)),
+             url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1400&auto=format&fit=crop") center/cover no-repeat;
  color: #fff;
- background:
-  linear-gradient(135deg, rgba(15, 23, 42, 0.72), rgba(29, 78, 216, 0.78)),
-  url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&auto=format&fit=crop") center center / cover no-repeat;
- background-color: #1d4ed8;
- box-shadow: var(--fb-shadow);
+ border-radius: 14px;
+ padding: 26px 22px;
  margin-bottom: 16px;
+ box-shadow: var(--shadow-card);
+ border: 1px solid rgba(255,255,255,0.12);
 }
+.hero h1 { margin: 0 0 8px; font-size: 26px; letter-spacing: -0.2px; color: #fff; }
+.hero p { margin: 0 0 14px; color: #e2e8f0; max-width: 700px; line-height: 1.5; }
 
-.hero-content h1 {
- margin: 0 0 6px;
- font-size: 24px;
- color: #ffffff;
- text-shadow: 0 2px 10px rgba(0,0,0,0.55);
-}
-
-.hero-content p {
- margin: 0;
- font-size: 14px;
- color: #eff6ff;
- opacity: 0.96;
-}
-
-.section-title {
- display: flex;
- align-items: center;
- justify-content: space-between;
- margin: 16px 0 10px;
- gap: 10px;
- flex-wrap: wrap;
-}
-
-.section-title h2, .section-title h3 { margin: 0; font-size: 18px; }
-
-.search-input, input, select, textarea {
- width: 100%;
- padding: 10px 12px;
- border-radius: 8px;
- border: 1px solid var(--fb-border);
+.section-card {
  background: var(--fb-card);
- color: var(--fb-text);
- font-size: 14px;
- font-family: inherit;
+ border: 1px solid var(--fb-border);
+ border-radius: 14px;
+ padding: 16px;
+ margin-bottom: 16px;
+ box-shadow: var(--shadow-soft);
 }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.section-title { margin: 0; font-size: 18px; }
 
-.grid-cards {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
- gap: 14px;
-}
-
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 14px; }
 .card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 12px;
  overflow: hidden;
- box-shadow: var(--fb-shadow);
+ box-shadow: var(--shadow-soft);
  display: flex;
  flex-direction: column;
  justify-content: space-between;
- transition: transform 0.15s;
+ transition: transform 0.18s ease, box-shadow 0.18s ease;
  cursor: pointer;
 }
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); }
+.hotel-img { width: 100%; height: 152px; object-fit: cover; background: #cbd5e1; display: block; }
+.card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.price { font-size: 16px; font-weight: 700; color: var(--fb-primary); }
+.mmk-sub { font-size: 12px; color: var(--fb-muted); display: block; margin-top: 2px; }
+.tag { display: inline-block; background: rgba(29, 78, 216, 0.12); color: var(--fb-primary); padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.gold-stars { color: var(--fb-gold); font-size: 14px; letter-spacing: 1px; }
 
-.card:hover { transform: translateY(-2px); }
-
-.hotel-img {
- width: 100%;
- height: 155px;
- object-fit: cover;
- background: #d8dee9;
- display: block;
-}
-
-.card-body { padding: 12px; }
-.tag {
- display: inline-block;
- font-size: 11px;
- font-weight: 700;
- padding: 3px 8px;
- border-radius: 999px;
- background: rgba(29,78,216,0.12);
- color: var(--fb-primary);
-}
-
-.price { font-size: 16px; font-weight: 800; color: var(--fb-primary); }
-.mmk-sub { display: block; font-size: 12px; color: var(--fb-muted); font-weight: 600; margin-top: 2px; }
-.muted { color: var(--fb-muted); }
-.small { font-size: 12px; }
-
-.gold-stars {
- color: #f59e0b;
- font-size: 14px;
- letter-spacing: 1px;
- font-weight: 700;
-}
-
-.guide-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
- gap: 12px;
- margin-top: 14px;
-}
-
-.guide-step {
- background: var(--fb-card);
+/* Step Guide & Footer */
+.guide-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.guide-step-card {
+ background: var(--fb-bg);
  border: 1px solid var(--fb-border);
  border-radius: 12px;
  padding: 14px;
- box-shadow: var(--fb-shadow);
 }
-
-.step-badge {
+.guide-step-badge {
  display: inline-block;
- background: rgba(29,78,216,0.12);
- color: var(--fb-primary);
- font-weight: 800;
  font-size: 11px;
+ font-weight: 700;
  padding: 3px 9px;
  border-radius: 999px;
- margin-bottom: 6px;
+ background: rgba(29, 78, 216, 0.12);
+ color: var(--fb-primary);
+ margin-bottom: 8px;
 }
-
-.guide-step h4 { margin: 4px 0 6px; font-size: 15px; }
-.guide-step p { margin: 0; font-size: 13px; color: var(--fb-muted); line-height: 1.45; }
-
-.site-footer-info {
- margin-top: 24px;
+.platform-footer {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 14px;
- padding: 18px;
- box-shadow: var(--fb-shadow);
+ padding: 18px 16px;
+ margin-top: 16px;
+ box-shadow: var(--shadow-soft);
 }
-
-.footer-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
- gap: 16px;
-}
-
-.footer-col h4 { margin: 0 0 8px; font-size: 15px; color: var(--fb-primary); }
-.footer-col p { margin: 4px 0; font-size: 13px; color: var(--fb-muted); line-height: 1.5; }
-
-.footer-bottom-bar {
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.footer-col h4 { margin: 0 0 8px; font-size: 14px; color: var(--fb-primary); }
+.footer-col p, .footer-col li { font-size: 12.5px; color: var(--fb-muted); line-height: 1.55; margin: 4px 0; }
+.footer-col ul { list-style: none; padding: 0; margin: 0; }
+.footer-bottom {
  margin-top: 14px;
  padding-top: 12px;
  border-top: 1px solid var(--fb-border);
  display: flex;
- flex-wrap: wrap;
- justify-content: space-between;
  align-items: center;
+ justify-content: space-between;
+ flex-wrap: wrap;
  gap: 10px;
  font-size: 12px;
  color: var(--fb-muted);
 }
-
-.security-badges { display: flex; flex-wrap: wrap; gap: 8px; }
-.sec-pill {
- background: rgba(29,78,216,0.1);
- color: var(--fb-primary);
- padding: 4px 10px;
+.trust-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.trust-pill {
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
  border-radius: 999px;
- font-weight: 700;
- font-size: 11px;
+ padding: 4px 10px;
+ font-size: 11.5px;
+ font-weight: 600;
+ color: var(--fb-text);
 }
 
-.panel {
- background: var(--fb-card);
+/* Booking Stats Row Above Booking Button */
+.booking-metrics-row {
+ display: grid;
+ grid-template-columns: repeat(3, minmax(0, 1fr));
+ gap: 10px;
+ width: 100%;
+ max-width: 560px;
+ margin: 14px auto 12px;
+}
+.booking-metric-box {
+ background: var(--fb-bg);
  border: 1px solid var(--fb-border);
  border-radius: 12px;
- padding: 16px;
- box-shadow: var(--fb-shadow);
- margin-bottom: 14px;
-}
-
-.booking-stage {
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: center;
- padding: 26px 14px;
+ padding: 10px 8px;
  text-align: center;
 }
+.booking-metric-label {
+ font-size: 11.5px;
+ color: var(--fb-muted);
+ margin-bottom: 4px;
+ font-weight: 600;
+}
+.booking-metric-val {
+ font-size: 13.5px;
+ font-weight: 800;
+ color: var(--fb-primary);
+ word-break: break-word;
+}
 
+/* Order Progress Circle */
+.order-ring-wrap { display: flex; justify-content: center; margin: 8px 0 6px; }
 .order-circle {
- width: 136px;
- height: 136px;
+ width: 104px;
+ height: 104px;
  border-radius: 50%;
- background: linear-gradient(135deg, #1d4ed8, #3b82f6);
- color: #fff;
+ background: conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg);
  display: flex;
- flex-direction: column;
  align-items: center;
  justify-content: center;
- font-size: 24px;
- font-weight: 800;
- box-shadow: 0 10px 24px rgba(29,78,216,0.3);
- margin-bottom: 14px;
-}
-
-.stats-row {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
- gap: 10px;
- margin-bottom: 14px;
-}
-
-.stat-box {
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 12px;
-}
-
-.stat-box span { font-size: 12px; color: var(--fb-muted); display: block; }
-.stat-box strong { font-size: 16px; margin-top: 4px; display: block; }
-
-.rates-bar {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
- gap: 10px;
- margin: 12px 0;
-}
-
-.rate-item {
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 10px 12px;
- display: flex;
- flex-direction: column;
- gap: 3px;
-}
-
-.rate-item span { font-size: 11px; color: var(--fb-muted); font-weight: 700; }
-.rate-item strong { font-size: 14px; color: var(--fb-primary); }
-
-.profile-top-row {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 12px;
- flex-wrap: wrap;
-}
-
-.profile-left {
- display: flex;
- align-items: center;
- gap: 12px;
-}
-
-.avatar-wrap {
  position: relative;
- width: 68px;
- height: 68px;
- border-radius: 50%;
- cursor: pointer;
- flex-shrink: 0;
 }
-
-.avatar-wrap img {
- width: 68px;
- height: 68px;
+.order-circle::before {
+ content: "";
+ width: 80px;
+ height: 80px;
  border-radius: 50%;
- object-fit: cover;
- border: 2px solid var(--fb-primary);
- display: block;
-}
-
-.avatar-cam-badge {
+ background: var(--fb-card);
  position: absolute;
- bottom: -2px;
- right: -4px;
+}
+.order-circle span { position: relative; z-index: 1; font-weight: 700; font-size: 15px; }
+
+/* Rectangular Get Order Button with 5-Color Calm Rotating Light */
+@property --light-angle {
+ syntax: "<angle>";
+ initial-value: 0deg;
+ inherits: false;
+}
+@keyframes calmLightSpin {
+ to { --light-angle: 360deg; }
+}
+.get-order-light-frame {
+ position: relative;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ padding: 4px;
+ border-radius: 16px;
+ background: conic-gradient(
+  from var(--light-angle),
+  #2563eb 0deg 64deg,
+  #ef4444 72deg 136deg,
+  #facc15 144deg 208deg,
+  #22c55e 216deg 280deg,
+  #ffffff 288deg 352deg,
+  #2563eb 360deg
+ );
+ animation: calmLightSpin 7.5s linear infinite;
+ box-shadow: 0 8px 22px rgba(15, 23, 42, 0.16);
+}
+.get-order-rect-btn {
+ position: relative;
+ z-index: 1;
+ min-width: 196px;
+ height: 54px;
+ padding: 0 28px;
+ border-radius: 12px;
+ border: 1px solid rgba(255, 255, 255, 0.28);
+ background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+ color: #ffffff;
+ font-size: 16px;
+ font-weight: 700;
+ letter-spacing: 0.4px;
+ cursor: pointer;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 8px;
+ transition: transform 0.16s ease, filter 0.16s ease;
+}
+.get-order-rect-btn:hover { filter: brightness(1.06); }
+.get-order-rect-btn:active { transform: scale(0.98); }
+
+/* Action Icon Button */
+.action-icon-btn {
+ width: 44px;
+ height: 44px;
+ border-radius: 12px;
+ border: 1px solid var(--fb-primary);
  background: var(--fb-primary);
  color: #fff;
- font-size: 10px;
- font-weight: 700;
- padding: 2px 6px;
- border-radius: 999px;
- border: 2px solid var(--fb-card);
-}
-
-.name-edit-row {
- display: flex;
- align-items: center;
- gap: 8px;
- flex-wrap: wrap;
-}
-
-.profile-id-sub {
- font-size: 12px;
- color: var(--fb-muted);
- margin-top: 3px;
-}
-
-.vip-level-pill {
- display: inline-flex;
- align-items: center;
- gap: 6px;
- font-size: 13px;
- font-weight: 800;
- padding: 6px 14px;
- border-radius: 999px;
- background: rgba(29,78,216,0.12);
- color: var(--fb-primary);
- border: 1px solid rgba(29,78,216,0.28);
-}
-
-.profile-quick-grid {
- display: grid;
- grid-template-columns: 1fr 1fr;
- gap: 10px;
- margin-top: 14px;
-}
-
-.p-card-btn {
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 12px;
- text-align: left;
- cursor: pointer;
- transition: 0.15s;
-}
-
-.p-card-btn:hover { border-color: var(--fb-primary); }
-
-.ref-strip {
- margin-top: 12px;
- background: var(--fb-bg);
- border: 1px dashed var(--fb-primary);
- border-radius: 10px;
- padding: 10px 12px;
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- flex-wrap: wrap;
-}
-
-.action-hint-box {
- margin-top: 14px;
- background: rgba(29,78,216,0.05);
- border: 1px solid rgba(29,78,216,0.2);
- border-radius: 12px;
- padding: 12px;
-}
-
-/* Profile Bottom Showcase */
-.profile-bottom-showcase {
- margin-top: 16px;
- background: #f5f6f8;
- color: #2b2f36;
- border: 1px solid #e2e5ea;
- border-radius: 14px;
- overflow: hidden;
- box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-.pbs-brand-banner {
- padding: 16px 18px;
- background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
- color: #ffffff;
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 12px;
- flex-wrap: wrap;
-}
-
-.pbs-brand-left {
- display: flex;
- align-items: center;
- gap: 12px;
-}
-
-.pbs-brand-pipe {
- width: 2px;
- height: 28px;
- background: rgba(255,255,255,0.45);
- border-radius: 2px;
-}
-
-.pbs-partners-sec {
- padding: 18px 18px 14px;
- background: #f5f6f8;
- border-bottom: 1px solid #e5e7eb;
-}
-
-.pbs-partners-title {
- font-size: 13px;
- font-weight: 500;
- color: #6b7280;
- margin: 0 0 10px;
-}
-
-.pbs-partners-row {
- display: flex;
- align-items: center;
- flex-wrap: wrap;
- gap: 26px;
-}
-
-.google-wordmark {
- font-family: Product Sans, Arial, sans-serif;
- font-size: 23px;
- font-weight: 700;
- letter-spacing: -0.6px;
- line-height: 1;
- display: inline-flex;
- align-items: center;
-}
-
-.google-wordmark .g1 { color: #4285F4; }
-.google-wordmark .g2 { color: #EA4335; }
-.google-wordmark .g3 { color: #FBBC05; }
-.google-wordmark .g4 { color: #4285F4; }
-.google-wordmark .g5 { color: #34A853; }
-.google-wordmark .g6 { color: #EA4335; }
-
-.tripadvisor-brand {
- display: inline-flex;
- align-items: center;
- gap: 8px;
-}
-
-.tripadvisor-owl-circle {
- width: 32px;
- height: 32px;
- border-radius: 50%;
- background: #34E0A1;
  display: inline-flex;
  align-items: center;
  justify-content: center;
- color: #0b1915;
- flex-shrink: 0;
+ cursor: pointer;
+ transition: 0.15s ease;
 }
+.action-icon-btn:hover { background: var(--fb-primary-hover); transform: translateY(-1px); }
+.action-icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
-.tripadvisor-text {
- font-size: 21px;
- font-weight: 800;
- color: #0d131a;
- letter-spacing: -0.5px;
- line-height: 1;
-}
-
-.pbs-awards-sec {
- padding: 16px 18px;
- background: #f7f8fa;
- border-bottom: 1px solid #e5e7eb;
+/* Profile & VIP */
+.profile-card { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.avatar-wrap { position: relative; width: 84px; height: 84px; }
+.avatar-img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 3px solid var(--fb-primary); background: var(--fb-bg); }
+.avatar-upload-btn {
+ position: absolute;
+ right: -2px;
+ bottom: -2px;
+ width: 30px;
+ height: 30px;
+ border-radius: 50%;
+ background: var(--fb-primary);
+ color: #fff;
+ border: 2px solid var(--fb-card);
  display: flex;
  align-items: center;
- justify-content: space-between;
- flex-wrap: wrap;
- gap: 20px;
+ justify-content: center;
+ cursor: pointer;
+ font-size: 13px;
 }
-
-.award-item {
- display: inline-flex;
- align-items: center;
- gap: 10px;
-}
-
-.if-award-badge {
- background: #e60012;
- color: #ffffff;
- padding: 5px 7px;
+.vip-badge {
  display: inline-flex;
  align-items: center;
  gap: 5px;
- line-height: 1;
- font-weight: 900;
-}
-
-.if-big { font-size: 20px; letter-spacing: -1px; }
-.if-sub-lines {
- font-size: 6.5px;
- font-weight: 800;
- letter-spacing: 0.4px;
- text-transform: uppercase;
- text-align: left;
- line-height: 1.15;
-}
-.if-label-text { font-size: 16px; font-weight: 400; color: #1f2937; }
-
-.good-design-badge { display: inline-flex; align-items: center; gap: 8px; }
-.gd-mark {
- width: 32px;
- height: 32px;
- border-radius: 50%;
- background: #c83228;
- color: #ffffff;
- font-weight: 900;
- font-size: 16px;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- flex-shrink: 0;
-}
-.gd-text {
+ padding: 4px 10px;
+ border-radius: 999px;
  font-size: 12px;
- font-weight: 900;
- color: #1f2937;
- line-height: 1.15;
- text-transform: uppercase;
+ font-weight: 700;
+ background: linear-gradient(135deg, #f59e0b, #d97706);
+ color: #111827;
 }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 10px; margin-top: 12px; }
+.stat-box { background: var(--fb-bg); border: 1px solid var(--fb-border); border-radius: 10px; padding: 12px; }
+.stat-label { font-size: 12px; color: var(--fb-muted); }
+.stat-val { font-size: 17px; font-weight: 700; margin-top: 4px; }
 
-.cc-award-badge { display: inline-flex; align-items: center; gap: 9px; }
-.cc-medallion {
- width: 34px;
- height: 34px;
- border-radius: 50%;
- background: conic-gradient(#ef4444, #f59e0b, #10b981, #3b82f6, #8b5cf6, #ef4444);
- padding: 3px;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- flex-shrink: 0;
-}
-.cc-medallion-inner {
- width: 100%;
- height: 100%;
- border-radius: 50%;
- background: #fef3c7;
- color: #92400e;
- font-size: 11px;
- font-weight: 900;
- display: flex;
- align-items: center;
- justify-content: center;
-}
-.cc-text { font-size: 14px; font-weight: 400; color: #1f2937; line-height: 1.25; }
-
-.pbs-holdings-sec {
- padding: 18px 18px 20px;
- background: #f2f3f5;
+/* Trust & Partner Showcase */
+.partner-logos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 10px; }
+.partner-pill {
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ padding: 10px;
  text-align: center;
-}
-
-.pbs-holdings-copy {
+ font-weight: 700;
  font-size: 12.5px;
- color: #4b5563;
- line-height: 1.65;
- margin: 0 0 14px;
+ color: var(--fb-text);
 }
-
-.pbs-holdings-logos {
- display: flex;
- align-items: center;
- justify-content: center;
- flex-wrap: wrap;
- gap: 24px;
+.awards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 10px; }
+.award-card {
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ border-left: 4px solid var(--fb-gold);
+ border-radius: 10px;
+ padding: 11px 12px;
 }
+.award-title { font-size: 13px; font-weight: 700; color: var(--fb-text); }
+.award-sub { font-size: 11.5px; color: var(--fb-muted); margin-top: 3px; }
 
-.hlogo-booking { font-size: 16px; font-weight: 800; color: #003580; letter-spacing: -0.4px; }
-.hlogo-priceline { font-size: 17px; font-weight: 800; color: #0066ff; letter-spacing: -0.6px; }
-.hlogo-kayak {
- background: #ff690f;
- color: #ffffff;
- font-size: 13px;
- font-weight: 900;
- padding: 4px 8px;
- letter-spacing: 2.5px;
- display: inline-block;
-}
-.hlogo-agoda { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; }
-.hlogo-agoda-word { font-size: 14px; font-weight: 700; color: #374151; letter-spacing: 1px; }
-.hlogo-agoda-dots { display: flex; gap: 3px; margin-top: 3px; }
-.hlogo-agoda-dots span { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
-.hlogo-opentable { display: inline-flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 700; color: #374151; }
-.ot-dot-red { width: 10px; height: 10px; border-radius: 50%; background: #da3743; display: inline-block; }
-
+/* Chat with Hotel Background */
 .chat-box {
- display: flex;
- flex-direction: column;
- height: 370px;
- max-height: calc(100dvh - 215px);
- min-height: 270px;
+ position: relative;
  border: 1px solid var(--fb-border);
  border-radius: 12px;
  overflow: hidden;
- background: var(--fb-bg);
-}
-
-.chat-header {
- padding: 9px 12px;
  background: var(--fb-card);
- border-bottom: 1px solid var(--fb-border);
- font-weight: 700;
- font-size: 13px;
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- flex-shrink: 0;
 }
-
+.chat-box::before {
+ content: "";
+ position: absolute;
+ inset: 0;
+ background-image: var(--cs-bg-photo);
+ background-size: cover;
+ background-position: center;
+ opacity: 0.24;
+ pointer-events: none;
+ z-index: 0;
+}
+.chat-box > * { position: relative; z-index: 1; }
 .chat-messages {
- flex: 1;
- padding: 10px 12px;
+ height: 340px;
  overflow-y: auto;
- -webkit-overflow-scrolling: touch;
-}
-
-.chat-bubble {
- max-width: 84%;
- padding: 9px 12px;
- border-radius: 12px;
- margin: 7px 0;
- font-size: 14px;
- line-height: 1.55;
- word-break: break-word;
- overflow-wrap: anywhere;
- border: 1px solid var(--fb-border);
-}
-
-.chat-bubble-meta {
- font-size: 11px;
- opacity: 0.8;
- font-weight: 700;
- margin-bottom: 3px;
- line-height: 1.3;
-}
-
-.chat-footer {
+ padding: 12px;
  display: flex;
- gap: 6px;
- padding: 8px 10px;
- background: var(--fb-card);
- border-top: 1px solid var(--fb-border);
+ flex-direction: column;
+ gap: 8px;
+ background: rgba(240, 242, 245, 0.72);
+}
+body.dark .chat-messages { background: rgba(24, 25, 26, 0.76); }
+.chat-msg-row { display: flex; flex-direction: column; gap: 4px; }
+.chat-bubble {
+ max-width: 78%;
+ padding: 9px 12px;
+ border-radius: 14px;
+ font-size: 14px;
+ line-height: 1.4;
+ word-break: break-word;
+ user-select: none;
+ -webkit-user-select: none;
+ -webkit-touch-callout: none;
+ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+.chat-bubble-meta { font-size: 10px; opacity: 0.75; margin-bottom: 3px; }
+.chat-img-msg { max-width: 210px; border-radius: 10px; margin-top: 6px; display: block; cursor: pointer; }
+.msg-trash-bar { display: flex; align-items: center; gap: 6px; padding: 0 4px; }
+.msg-trash-btn {
+ display: inline-flex;
  align-items: center;
+ gap: 4px;
+ padding: 4px 10px;
+ border-radius: 999px;
+ border: 1px solid var(--fb-danger);
+ background: var(--fb-card);
+ color: var(--fb-danger);
+ font-size: 11.5px;
+ font-weight: 700;
+ cursor: pointer;
+ box-shadow: var(--shadow-soft);
+}
+.msg-trash-btn:hover { background: var(--fb-danger); color: #fff; }
+.msg-trash-btn svg { width: 14px; height: 14px; fill: currentColor; }
+.chat-input-row {
+ display: flex;
+ gap: 8px;
+ padding: 10px;
+ border-top: 1px solid var(--fb-border);
+ background: var(--fb-card);
+ align-items: center;
+}
+.icon-attach-btn {
+ width: 38px;
+ height: 38px;
+ border-radius: 50%;
+ border: 1px solid var(--fb-border);
+ background: var(--fb-bg);
+ color: var(--fb-text);
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ cursor: pointer;
  flex-shrink: 0;
 }
+.icon-attach-btn:hover { border-color: var(--fb-primary); color: var(--fb-primary); }
 
-.chat-img-msg {
- max-width: 210px;
- max-height: 210px;
- border-radius: 8px;
- margin-top: 6px;
- display: block;
+/* Image Lightbox */
+.lightbox-backdrop {
+ position: fixed;
+ inset: 0;
+ background: rgba(0, 0, 0, 0.88);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 2500;
+ padding: 16px;
+}
+.lightbox-backdrop img { max-width: 95vw; max-height: 88vh; border-radius: 10px; object-fit: contain; }
+.lightbox-close {
+ position: fixed;
+ top: 16px;
+ right: 20px;
+ width: 40px;
+ height: 40px;
+ border-radius: 50%;
+ border: none;
+ background: rgba(255, 255, 255, 0.18);
+ color: #fff;
+ font-size: 22px;
  cursor: pointer;
- border: 1px solid rgba(255,255,255,0.25);
 }
 
-.table-wrap { overflow-x: auto; }
+/* Tables */
+.table-wrap { overflow-x: auto; border: 1px solid var(--fb-border); border-radius: 10px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th, td {
- padding: 9px 10px;
- border-bottom: 1px solid var(--fb-border);
- text-align: left;
- white-space: nowrap;
-}
+th, td { padding: 9px 10px; border-bottom: 1px solid var(--fb-border); text-align: left; white-space: nowrap; }
 th { background: var(--fb-bg); font-weight: 700; }
 
+/* Bottom Nav */
 .bottom-nav {
  position: fixed;
  bottom: 0;
  left: 0;
  right: 0;
- height: 58px;
+ z-index: 120;
  background: var(--fb-card);
  border-top: 1px solid var(--fb-border);
  display: grid;
  grid-template-columns: repeat(5, 1fr);
- z-index: 950;
+ padding: 6px 4px;
+ box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
 }
-
 .bottom-nav button {
- background: none;
+ background: transparent;
  border: none;
- color: var(--icon-clean);
- cursor: pointer;
- display: flex;
- align-items: center;
- justify-content: center;
- padding: 0;
- transition: color 0.15s, background 0.15s;
-}
-
-.bottom-nav button:hover { background: rgba(29, 78, 216, 0.08); }
-.bottom-nav button.active {
- color: var(--icon-clean-active);
- border-top: 2px solid var(--icon-clean-active);
-}
-.bottom-nav button svg { width: 24px; height: 24px; fill: currentColor; display: block; }
-
-.modal {
- position: fixed;
- inset: 0;
- background: rgba(0,0,0,0.55);
- display: flex;
- align-items: center;
- justify-content: center;
- padding: 14px;
- z-index: 1200;
- overflow-y: auto;
-}
-
-.modal-box {
- background: var(--fb-card);
- color: var(--fb-text);
- border-radius: 12px;
- width: 100%;
- max-width: 470px;
- padding: 18px;
- box-shadow: 0 10px 30px rgba(0,0,0,0.3);
- max-height: 90vh;
- overflow-y: auto;
-}
-
-.modal-head {
- display: flex;
- justify-content: space-between;
- align-items: center;
- margin-bottom: 12px;
-}
-
-.close {
- background: none;
- border: none;
- font-size: 20px;
- cursor: pointer;
  color: var(--fb-muted);
-}
-
-label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; color: var(--fb-muted); }
-.hidden { display: none !important; }
-
-.pass-wrap { position: relative; display: flex; align-items: center; }
-.pass-wrap input { padding-right: 42px; }
-.eye-btn {
- position: absolute;
- right: 8px;
- background: none;
- border: none;
- cursor: pointer;
- font-size: 16px;
- color: var(--fb-muted);
- padding: 4px;
-}
-
-.sync-badge {
- display: inline-flex;
- align-items: center;
- gap: 6px;
- font-size: 12px;
- font-weight: 700;
- color: var(--fb-success);
- background: rgba(40,167,69,0.12);
- padding: 4px 10px;
- border-radius: 999px;
-}
-
-.sync-dot {
- width: 8px;
- height: 8px;
- border-radius: 50%;
- background: var(--fb-success);
-}
-
-.notif-badge {
- display: inline-flex;
- align-items: center;
- justify-content: center;
- min-width: 18px;
- height: 18px;
- padding: 0 5px;
- border-radius: 999px;
- background: var(--fb-danger);
- color: #fff;
  font-size: 11px;
- font-weight: 800;
- margin-left: 4px;
-}
-
-.admin-cs-grid {
- display: grid;
- grid-template-columns: 280px 1fr;
- gap: 12px;
-}
-
-@media (max-width: 768px) {
- .admin-cs-grid { grid-template-columns: 1fr; }
- .intro-trip-word { font-size: 36px; }
- .hero-banner { min-height: 175px; padding: 16px; }
- .hero-content h1 { font-size: 20px; }
- .chat-box { height: 330px; max-height: calc(100dvh - 205px); }
-}
-
-.lightbox-modal {
- position: fixed;
- inset: 0;
- background: rgba(0,0,0,0.88);
- z-index: 2000;
+ font-weight: 600;
+ padding: 6px 4px;
+ border-radius: 8px;
+ cursor: pointer;
  display: flex;
  flex-direction: column;
  align-items: center;
+ gap: 2px;
+ position: relative;
+ font-family: inherit;
+}
+.bottom-nav button.active { color: var(--fb-primary); background: rgba(29, 78, 216, 0.1); }
+.notif-badge {
+ background: var(--fb-danger);
+ color: #fff;
+ font-size: 10px;
+ font-weight: 700;
+ padding: 1px 6px;
+ border-radius: 999px;
+ margin-left: 4px;
+}
+
+/* Modals */
+.modal-backdrop {
+ position: fixed;
+ inset: 0;
+ background: rgba(0, 0, 0, 0.55);
+ display: flex;
+ align-items: center;
  justify-content: center;
- padding: 16px;
+ z-index: 2000;
+ padding: 14px;
 }
-
-.lightbox-img {
- max-width: 95%;
- max-height: 82vh;
- border-radius: 10px;
- box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+.modal-card {
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 14px;
+ width: 100%;
+ max-width: 470px;
+ padding: 18px;
+ box-shadow: var(--shadow-card);
+ max-height: 90vh;
+ overflow-y: auto;
 }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.modal-header h3 { margin: 0; font-size: 18px; }
+.close-x { background: none; border: none; font-size: 22px; color: var(--fb-muted); cursor: pointer; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; }
+.error-text { color: var(--fb-danger); font-size: 12.5px; margin-top: 6px; min-height: 18px; font-weight: 600; }
 
-.booking-meta-strip {
- display: grid;
- grid-template-columns: 1fr 1fr;
- gap: 8px;
- margin: 10px 0 12px;
+/* Order Review Modal */
+.order-preview-banner {
+ display: flex;
+ gap: 12px;
+ align-items: center;
  background: var(--fb-bg);
  border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 9px 11px;
- font-size: 12px;
+ border-radius: 12px;
+ padding: 10px;
+ margin-bottom: 12px;
 }
-
-.star-picker { display: flex; gap: 8px; margin: 8px 0 12px; flex-wrap: wrap; }
+.order-preview-thumb {
+ width: 78px;
+ height: 64px;
+ border-radius: 9px;
+ object-fit: cover;
+ flex-shrink: 0;
+}
+.star-picker-row { display: flex; gap: 6px; flex-wrap: wrap; }
 .star-pick-btn {
- flex: 1;
- min-width: 54px;
- padding: 8px 6px;
- border-radius: 8px;
  border: 1px solid var(--fb-border);
  background: var(--fb-bg);
  color: var(--fb-text);
- font-weight: 700;
+ border-radius: 8px;
+ padding: 6px 10px;
  font-size: 13px;
+ font-weight: 700;
  cursor: pointer;
 }
-.star-pick-btn.selected { background: #f59e0b; color: #ffffff; border-color: #f59e0b; }
-
-.review-chip-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.star-pick-btn.selected {
+ background: rgba(245, 158, 11, 0.18);
+ border-color: var(--fb-gold);
+ color: #b45309;
+}
+body.dark .star-pick-btn.selected { color: var(--fb-gold); }
+.review-chips-wrap { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
 .review-option {
  text-align: left;
- padding: 8px 10px;
- border-radius: 8px;
  border: 1px solid var(--fb-border);
  background: var(--fb-bg);
  color: var(--fb-text);
- font-size: 12px;
- cursor: pointer;
+ border-radius: 8px;
+ padding: 8px 10px;
+ font-size: 12.5px;
  line-height: 1.35;
+ cursor: pointer;
 }
-.review-option.selected { border-color: var(--fb-primary); background: rgba(29,78,216,0.1); font-weight: 700; }
-
-.verifying-box { padding: 36px 16px; text-align: center; }
-.spinner-ring {
- width: 44px;
- height: 44px;
- border: 4px solid rgba(29,78,216,0.2);
+.review-option.selected {
+ border-color: var(--fb-primary);
+ background: rgba(29, 78, 216, 0.12);
+ font-weight: 600;
+}
+.verifying-box { text-align: center; padding: 24px 12px; }
+.verifying-spinner {
+ width: 42px;
+ height: 42px;
+ border: 4px solid var(--fb-border);
  border-top-color: var(--fb-primary);
  border-radius: 50%;
- animation: spinRing 0.8s linear infinite;
- margin: 0 auto 14px;
+ margin: 0 auto 12px;
+ animation: spin 0.85s linear infinite;
 }
-@keyframes spinRing { to { transform: rotate(360deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.low-bal-frame {
- border: 2px solid var(--fb-danger);
- border-radius: 14px;
- background: var(--fb-bg);
- padding: 18px 14px;
- text-align: center;
- box-shadow: 0 8px 24px rgba(255, 77, 77, 0.14);
+@media (max-width: 600px) {
+ .hero h1 { font-size: 21px; }
+ .chat-bubble { max-width: 88%; }
+ .booking-metrics-row { gap: 7px; }
+ .booking-metric-val { font-size: 12px; }
 }
-.low-bal-title { margin: 0 0 8px; font-size: 16px; font-weight: 800; color: var(--fb-danger); }
-.low-bal-msg { margin: 0 0 16px; font-size: 13px; line-height: 1.55; color: var(--fb-text); }
-.low-bal-actions { display: flex; gap: 10px; }
-
-.profit-congrats-box {
- border: 2px solid var(--fb-success);
- border-radius: 12px;
- background: rgba(40, 167, 69, 0.08);
- padding: 20px 16px;
- text-align: center;
- margin: 10px 0 14px;
-}
-.profit-congrats-top { font-size: 18px; font-weight: 800; color: var(--fb-success); margin-bottom: 10px; }
-.profit-congrats-line { font-size: 14px; font-weight: 700; color: var(--fb-text); margin: 4px 0; }
-.profit-congrats-amt { font-size: 20px; font-weight: 900; color: var(--fb-primary); margin-top: 8px; }
 </style>
 </head>
- <body>
- <!-- Intro Splash Screen matching Trip Booking Logo -->
-<div class="intro-splash" id="introSplash">
- <div class="intro-stage-box" id="introStageBox">
-  <img src="image_d5eb87.png" alt="Trip Booking Logo" class="intro-logo-img" onerror="this.style.display='none'">
-  <div class="intro-trip-word" id="introTitleLine">Trip<span class="intro-trip-dot"></span></div>
-  <div class="intro-booking-word">BOOKING</div>
-  <div class="intro-sub-line" id="introSubLine">INTERNATIONAL PLATFORM</div>
+<body>
+
+<!-- Registration Success Toast (2.5s auto-dismiss) -->
+<div id="regSuccessToast" class="reg-toast-backdrop hidden" aria-live="polite" role="status">
+ <div class="reg-toast-card">
+  <div id="regToastTitle" class="reg-toast-title">ဂုဏ်ယူပါတယ်</div>
+  <div id="regToastSub" class="reg-toast-sub">အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်</div>
  </div>
 </div>
 
-<header class="fb-header">
- <div class="brand-box" onclick="handleLogoClick()" title="Home" aria-label="Home">
-  <img src="image_d5eb87.png" alt="Trip Booking Logo" class="brand-logo-img" onerror="this.style.display='none'">
-  <div class="brand-divider-bar"></div>
-  <div>
-   <div class="brand-name">Trip<span class="brand-dot"></span> BOOKING</div>
-   <div class="brand-sub">INTERNATIONAL PLATFORM</div>
-  </div>
+<!-- Intro Splash Screen -->
+<div id="introSplash" class="intro-splash" aria-hidden="true">
+ <div id="introStageBox" class="intro-stage-box">
+  <h1 class="intro-welcome-text">Welcome to Trip Booking</h1>
+  <div class="intro-brand-sub">International Trip Booking Platform</div>
  </div>
+</div>
+
+<!-- Top Header -->
+<header class="fb-header">
+ <div class="brand" onclick="handleLogoClick()">
+  <span class="brand-badge">TP</span>
+  <span>Trip Booking</span>
+ </div>
+
  <div class="header-actions">
-  <select id="language" class="lang-select" onchange="changeLanguage(this.value)" title="Language" aria-label="Language">
+  <select id="language" aria-label="Language Selector" onchange="changeLanguage(this.value)">
    <option value="my" selected>🇲🇲 မြန်မာ</option>
    <option value="en">🇺🇸 English</option>
    <option value="th">🇹🇭 ไทย</option>
    <option value="zh">🇨🇳 中文</option>
   </select>
-  <button type="button" class="icon-only-btn" onclick="toggleTheme()" title="Theme" aria-label="Theme">
-   <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
-  </button>
-  <button type="button" class="icon-only-btn" id="headerAuthBtn" onclick="openAuth('login')" title="Login" aria-label="Login">
-   <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-  </button>
+
+  <button type="button" class="btn btn-secondary" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
+  <button type="button" id="headerAuthBtn" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
  </div>
 </header>
 
 <main class="container">
 
-<section class="page active" id="homePage">
- <div class="hero-banner">
-  <div class="hero-content">
+ <!-- PAGE 1: HOME -->
+ <section id="homePage" class="page active">
+  <div class="hero">
    <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
    <p data-i18n="heroSub">International Trip Booking Platform</p>
-  </div>
- </div>
-
- <div class="section-title">
-  <h2><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
-  <button type="button" class="action-icon-btn" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" title="Get Order" aria-label="Get Order">
-   <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-  </button>
- </div>
-
- <input id="hotelSearch" class="search-input" placeholder="Search hotel, country, or stars..." oninput="renderHotels()" style="margin-bottom:14px" data-i18n-ph="hotelSearchPh">
-
- <div class="grid-cards" id="hotelGrid"></div>
-
- <div id="loadMoreHotelsWrap" style="text-align:center;margin-top:14px">
-  <button type="button" class="action-icon-btn" onclick="showAllHotels()" title="More" aria-label="More">
-   <svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-  </button>
- </div>
-
- <div class="guide-grid">
-  <div class="guide-step">
-   <span class="step-badge" data-i18n="step1Badge">STEP 1</span>
-   <h4 data-i18n="step1Title">Deposit Funds</h4>
-   <p data-i18n="step1Desc">Top up balance to start booking tasks smoothly.</p>
-  </div>
-  <div class="guide-step">
-   <span class="step-badge" data-i18n="step2Badge">STEP 2</span>
-   <h4 data-i18n="step2Title">Tap Get Order & Book</h4>
-   <p data-i18n="step2Desc">Claim hotel booking tasks and complete them properly.</p>
-  </div>
-  <div class="guide-step">
-   <span class="step-badge" data-i18n="step3Badge">STEP 3</span>
-   <h4 data-i18n="step3Title">Earn Commission</h4>
-   <p data-i18n="step3Desc">Receive commission credited after each completed order.</p>
-  </div>
- </div>
-
- <footer class="site-footer-info">
-  <div class="footer-grid">
-   <div class="footer-col">
-    <h4 data-i18n="footerTermsTitle">📜 Terms & Rules</h4>
-    <p data-i18n="footerRule1">• Complete assigned booking tasks accurately within time limits.</p>
-    <p data-i18n="footerRule2">• Unresolved orders over 24 hours follow progressive penalty rules.</p>
-   </div>
-   <div class="footer-col">
-    <h4 data-i18n="footerFaqTitle">❓ FAQ</h4>
-    <p data-i18n="footerFaq1">• Deposit window is set to 25 with official service support.</p>
-    <p data-i18n="footerFaq2">• Complete daily booking tasks steadily and contact support anytime.</p>
-   </div>
-   <div class="footer-col">
-    <h4 data-i18n="footerSecurityTitle">🛡️ Security & Assurance</h4>
-    <p data-i18n="footerSecDesc">Account records are protected with 24/7 Trip Booking Service support.</p>
-   </div>
-  </div>
-  <div class="footer-bottom-bar">
-   <div><strong>Trip Booking</strong> — International Platform</div>
-   <div class="security-badges">
-    <span class="sec-pill" data-i18n="badgeVerified">✔ Verified Platform</span>
-    <span class="sec-pill" data-i18n="badge247">🕒 24/7 Service</span>
-    <span class="sec-pill" data-i18n="badgeEncrypted">🔒 Secure Sync</span>
-   </div>
-  </div>
- </footer>
-</section>
-
-<section class="page" id="supportPage">
- <div class="section-title"><h2 data-i18n="csCenter">Trip Booking Service</h2></div>
- <div class="chat-box">
-  <div class="chat-header">
-   <span data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</span>
-   <span class="tag" data-i18n="csActiveBadge">● Active</span>
-  </div>
-  <div class="chat-messages" id="supportMessages"></div>
-  <div class="chat-footer">
-   <input type="file" id="userChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
-   <button type="button" class="icon-only-btn" onclick="$('userChatPhotoInput').click()" title="Photo" aria-label="Photo">
-    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-   </button>
-   <input id="supportInput" placeholder="စာရိုက်ရန်..." onkeypress="if(event.key==='Enter') sendSupportMessage()" data-i18n-ph="typeMsgPh">
-   <button type="button" class="icon-only-btn" onclick="sendSupportMessage()" title="Send" aria-label="Send">
-    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-   </button>
-  </div>
- </div>
-</section>
-
-<section class="page" id="bookingPage">
- <div class="section-title"><h2 data-i18n="taskCenter">ဘိုကင် တာဝန်စင်တာ</h2></div>
- <div class="panel">
-  <div class="booking-stage">
-   <div class="order-circle" id="orderCircle">0/30</div>
-   <button type="button" class="action-icon-btn" onclick="triggerGetOrder()" title="Get Order" aria-label="Get Order" style="width:52px;height:52px;border:2px solid var(--fb-primary);border-radius:50%;color:var(--fb-primary)">
-    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-   </button>
-  </div>
-
-  <div class="stats-row">
-   <div class="stat-box">
-    <span data-i18n="accBal">အကောင့် လက်ကျန်</span>
-    <strong id="taskWallet">$0.00 (0 MMK)</strong>
-   </div>
-   <div class="stat-box">
-    <span data-i18n="taskComm">တာဝန် ကော်မရှင်</span>
-    <strong id="taskProfit">$0.00 (0 MMK)</strong>
-   </div>
-   <div class="stat-box">
-    <span data-i18n="totalProfit">စုစုပေါင်း အမြတ်</span>
-    <strong id="taskTotalProfit">$0.00 (0 MMK)</strong>
+   <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button type="button" class="btn btn-gold" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">Start Booking Tasks</button>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('hotelDirectorySection').scrollIntoView({behavior:'smooth'})" data-i18n="hotelDir">International Hotels</button>
    </div>
   </div>
 
-  <div id="bookingHotelArea"></div>
- </div>
-</section>
-
-<section class="page" id="historyPage">
- <div class="section-title"><h2 data-i18n="histTitle">ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း</h2></div>
- <div class="panel">
-  <input id="historySearch" class="search-input" placeholder="ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်..." oninput="renderHistory()" style="margin-bottom:12px" data-i18n-ph="histSearchPh">
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th data-i18n="thDate">ရက်စွဲနှင့် အချိန် (စက္ကန့်အထိ)</th>
-      <th data-i18n="thType">အမျိုးအစား</th>
-      <th data-i18n="thDetails">အသေးစိတ်နှင့် မှတ်ချက်</th>
-      <th data-i18n="thAmount">ပမာဏ (USD / MMK)</th>
-      <th data-i18n="thStatus">အခြေအနေ</th>
-     </tr>
-    </thead>
-    <tbody id="historyRows"></tbody>
-   </table>
+  <div id="hotelDirectorySection" class="section-card">
+   <div class="section-head">
+    <h2 class="section-title"><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
+    <input id="hotelSearch" type="text" placeholder="ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်ပွင့် ရှာရန်..." data-i18n-ph="hotelSearchPh" oninput="renderHotels()" style="min-width:240px">
+   </div>
+   <div id="hotelGrid" class="grid"></div>
+   <div id="loadMoreHotelsWrap" style="text-align:center;margin-top:14px">
+    <button type="button" class="btn btn-secondary" onclick="showAllHotels()">More</button>
+   </div>
   </div>
- </div>
-</section>
 
-<section class="page" id="profilePage">
- <div class="section-title"><h2 data-i18n="myProfile">ကျွန်ုပ်၏ ပရိုဖိုင်</h2></div>
-
- <div class="panel" id="guestAuthBox">
-  <h3 style="margin-top:0" data-i18n="welcomeTrip">Welcome to Trip Booking</h3>
-  <p class="muted" data-i18n="loginPrompt">အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-   <button type="button" class="btn" onclick="openAuth('login')" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
-   <button type="button" class="btn btn-light" onclick="openAuth('register')" data-i18n="createAcc">အကောင့်ဖွင့်ရန်</button>
-  </div>
- </div>
-
- <div class="panel hidden" id="memberProfileBox">
-  <div class="profile-top-row">
-   <div class="profile-left">
-    <div class="avatar-wrap" onclick="$('profileAvatarInput').click()" title="Avatar">
-     <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop" alt="Profile Avatar">
-     <span class="avatar-cam-badge">📷</span>
-     <input type="file" id="profileAvatarInput" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
+  <!-- Step-by-Step Booking Guide -->
+  <div class="section-card">
+   <div class="section-head">
+    <h2 class="section-title" data-i18n="taskCenter">ဘိုကင် တာဝန်စင်တာ</h2>
+   </div>
+   <div class="guide-steps-grid">
+    <div class="guide-step-card">
+     <span class="guide-step-badge" data-i18n="step1Badge">အဆင့် (၁)</span>
+     <h4 style="margin:0 0 6px" data-i18n="step1Title">ငွေဖြည့်သွင်းပါ</h4>
+     <p class="small muted" style="margin:0" data-i18n="step1Desc">ဘိုကင်တာဝန်များ ဆောင်ရွက်ရန် လိုအပ်သော လက်ကျန်ငွေ ဖြည့်သွင်းပါ။</p>
     </div>
-    <div>
-     <div class="name-edit-row">
-      <h3 id="profileName" style="margin:0">Member</h3>
-      <button type="button" class="btn btn-light" style="padding:4px 10px;font-size:12px" onclick="openEditNameModal()" data-i18n="editNameModalTitle">အကောင့်အမည် ပြင်ဆင်ရန်</button>
-     </div>
-     <div class="profile-id-sub" id="profileIdentity">ID: -</div>
+    <div class="guide-step-card">
+     <span class="guide-step-badge" data-i18n="step2Badge">အဆင့် (၂)</span>
+     <h4 style="margin:0 0 6px" data-i18n="step2Title">Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ</h4>
+     <p class="small muted" style="margin:0" data-i18n="step2Desc">ဟိုတယ်ဘိုကင် တာဝန်များကို ရယူပြီး စနစ်တကျ ဆောင်ရွက်ပါ။</p>
+    </div>
+    <div class="guide-step-card">
+     <span class="guide-step-badge" data-i18n="step3Badge">အဆင့် (၃)</span>
+     <h4 style="margin:0 0 6px" data-i18n="step3Title">ကော်မရှင် ရယူပါ</h4>
+     <p class="small muted" style="margin:0" data-i18n="step3Desc">ဘိုကင်ပြီးစီးတိုင်း ကော်မရှင်ကို အကောင့်ထဲ ထည့်သွင်းပေးပါမည်။</p>
     </div>
    </div>
-   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-    <span class="vip-level-pill" id="profileVipBadge">VIP Level 1</span>
-    <button type="button" class="btn btn-danger" style="padding:6px 12px;font-size:12px" onclick="logout()">Logout</button>
-   </div>
   </div>
 
-  <div class="profile-quick-grid">
-   <div class="p-card-btn" onclick="showPage('historyPage', document.querySelectorAll('.bottom-nav button')[3])">
-    <div class="small muted" data-i18n="bookingHistCardTitle">ဘိုကင်မှတ်တမ်း</div>
-    <strong id="profileOrders" style="font-size:15px">0/30 ➔</strong>
-   </div>
-   <div class="p-card-btn">
-    <div class="small muted" data-i18n="walletBal">အကောင့်လက်ကျန်</div>
-    <strong id="walletBalance" style="font-size:15px;color:var(--fb-primary)">$0.00 (0 MMK)</strong>
-   </div>
-  </div>
-
-  <div class="ref-strip">
-   <div>
-    <span class="small muted" data-i18n="inviteCodeTitle">ဖိတ်ကြားကုဒ်</span>:
-    <strong id="inviteCode">TP2323</strong> ·
-    <span class="small muted" data-i18n="refBonus">မိတ်ဆက် အမြတ်</span>:
-    <strong id="referralEarned">$0.00 (0 MMK)</strong>
-   </div>
-   <button type="button" class="btn btn-light" style="padding:5px 10px;font-size:12px" onclick="copyInviteCode()">Copy</button>
-  </div>
-
-  <div class="action-hint-box" style="display:flex;gap:10px;flex-wrap:wrap">
-   <button type="button" class="btn btn-success" style="flex:1;min-width:140px" onclick="handleDepositRequest()">+ <span data-i18n="step1Title">ငွေဖြည့်သွင်းပါ</span></button>
-   <button type="button" class="btn btn-light" style="flex:1;min-width:140px" onclick="handleWithdrawRequest()">↗ Withdraw</button>
-  </div>
- </div>
-
- <div class="profile-bottom-showcase">
-  <div class="pbs-brand-banner">
-   <div class="pbs-brand-left">
-    <img src="image_d5eb87.png" alt="Trip Booking Logo" style="width:38px;height:38px;border-radius:8px;object-fit:cover" onerror="this.style.display='none'">
-    <div class="pbs-brand-pipe"></div>
-    <div>
-     <div style="font-weight:900;font-size:16px">Trip Booking International</div>
-     <div style="font-size:11px;opacity:0.9">Global Hospitality & Task Network</div>
+  <!-- Platform Footer -->
+  <footer class="platform-footer">
+   <div class="footer-grid">
+    <div class="footer-col">
+     <h4 data-i18n="footerTermsTitle">📜 စည်းမျဉ်းစည်းကမ်းများ</h4>
+     <ul>
+      <li data-i18n="footerRule1">• သတ်မှတ်ထားသော အော်ဒါများကို အချိန်မီ စနစ်တကျ ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။</li>
+      <li data-i18n="footerRule2">• ၂၄ နာရီအတွင်း မဖြေရှင်းပါက ဒဏ်ကြေးအဆင့်ဆင့် သတ်မှတ်ချက်အတိုင်း ဖြစ်ပါသည်။</li>
+     </ul>
+    </div>
+    <div class="footer-col">
+     <h4 data-i18n="footerFaqTitle">❓ အမေးများသော မေးခွန်းများ</h4>
+     <ul>
+      <li data-i18n="footerFaq1">• ငွေသွင်းအချိန် ၂၅ သတ်မှတ်ချက်အတွင်း ဝန်ဆောင်မှုနှင့် ချိတ်ဆက်ဆောင်ရွက်ပါ။</li>
+      <li data-i18n="footerFaq2">• နေ့စဉ် ဘိုကင်တာဝန်များကို စနစ်တကျ ဆောင်ရွက်နိုင်ပါသည်။</li>
+     </ul>
+    </div>
+    <div class="footer-col">
+     <h4 data-i18n="footerSecurityTitle">🛡️ လုံခြုံရေးနှင့် အာမခံချက်</h4>
+     <p data-i18n="footerSecDesc">အကောင့်မှတ်တမ်းများ လုံခြုံစွာ ထိန်းသိမ်းထားပြီး ၂၄ နာရီ ဝန်ဆောင်မှု ပေးနေပါသည်။</p>
     </div>
    </div>
-   <span class="sec-pill" style="background:rgba(255,255,255,0.18);color:#fff">238+ Hotels</span>
-  </div>
-
-  <div class="pbs-partners-sec">
-   <p class="pbs-partners-title">Trusted Global Travel & Review Partners</p>
-   <div class="pbs-partners-row">
-    <span class="google-wordmark">
-     <span class="g1">G</span><span class="g2">o</span><span class="g3">o</span><span class="g4">g</span><span class="g5">l</span><span class="g6">e</span>
-    </span>
-    <span class="tripadvisor-brand">
-     <span class="tripadvisor-owl-circle">🦉</span>
-     <span class="tripadvisor-text">Tripadvisor</span>
-    </span>
+   <div class="footer-bottom">
+    <div class="trust-badges">
+     <span class="trust-pill" data-i18n="badgeVerified">✔ စစ်ဆေးပြီး ပလက်ဖောင်း</span>
+     <span class="trust-pill" data-i18n="badge247">🕒 ၂၄/၇ ဝန်ဆောင်မှု</span>
+     <span class="trust-pill" data-i18n="badgeEncrypted">🔒 လုံခြုံသော စနစ်</span>
+    </div>
+    <div>© 2026 Trip Booking · International Hotel & Booking Platform</div>
    </div>
-  </div>
+  </footer>
+ </section>
 
-  <div class="pbs-awards-sec">
-   <div class="award-item">
-    <span class="if-award-badge">
-     <span class="if-big">iF</span>
-     <span class="if-sub-lines">DESIGN<br>AWARD</span>
-    </span>
-    <span class="if-label-text">Hospitality UI</span>
+ <!-- PAGE 2: CUSTOMER SERVICE CHAT -->
+ <section id="supportPage" class="page">
+  <div class="section-card">
+   <div class="section-head">
+    <h2 class="section-title" data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</h2>
+    <span class="tag" data-i18n="csActiveBadge">● အသုံးပြုနေသည်</span>
    </div>
-   <div class="good-design-badge">
-    <span class="gd-mark">G</span>
-    <span class="gd-text">GOOD<br>DESIGN</span>
-   </div>
-   <div class="cc-award-badge">
-    <span class="cc-medallion"><span class="cc-medallion-inner">★</span></span>
-    <span class="cc-text">Travellers' Choice</span>
-   </div>
-  </div>
 
-  <div class="pbs-holdings-sec">
-   <p class="pbs-holdings-copy">Connected across international travel ecosystems and partner hotel booking networks.</p>
-   <div class="pbs-holdings-logos">
-    <span class="hlogo-booking">Booking.com</span>
-    <span class="hlogo-priceline">priceline</span>
-    <span class="hlogo-kayak">KAYAK</span>
-    <span class="hlogo-agoda">
-     <span class="hlogo-agoda-word">agoda</span>
-     <span class="hlogo-agoda-dots">
-      <span style="background:#ef4444"></span><span style="background:#f59e0b"></span><span style="background:#10b981"></span><span style="background:#3b82f6"></span>
-     </span>
-    </span>
-    <span class="hlogo-opentable"><span class="ot-dot-red"></span>OpenTable</span>
-   </div>
-  </div>
- </div>
-</section>
-<section class="page" id="staffPage">
- <div class="section-title">
-  <h2 data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-   <span class="sync-badge"><span class="sync-dot"></span><span id="syncStatusText">Firebase Live Sync</span></span>
-   <button type="button" class="btn btn-light" onclick="forceSyncNow()">🔄 Sync</button>
-   <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
-  </div>
- </div>
-
- <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-  <button type="button" class="btn" onclick="switchAdminTab('users')"><span data-i18n="usersWord">အသုံးပြုသူများ</span> (<span id="totalUsersBadge">0</span>)</button>
-  <button type="button" class="btn btn-light" onclick="switchAdminTab('hotels')" data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</button>
-  <button type="button" class="btn btn-light" onclick="switchAdminTab('cs')"><span data-i18n="csCenter">Trip Booking Service</span><span id="adminUnreadBadge" class="notif-badge hidden">0</span></button>
- </div>
-
- <div id="adminUsersTab" class="panel">
-  <div class="section-title">
-   <h3 data-i18n="allUsersHead">မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)</h3>
-   <input id="adminUserSearch" class="search-input" style="max-width:260px" placeholder="အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်..." oninput="renderAdminUsers()" data-i18n-ph="adminUserSearchPh">
-  </div>
-  <button type="button" class="btn btn-success" style="margin-bottom:10px" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th>#</th>
-      <th data-i18n="thName">အမည်</th>
-      <th data-i18n="thPhoneEmail">ဖုန်း / အီးမေးလ်</th>
-      <th data-i18n="thPass">စကားဝှက်</th>
-      <th data-i18n="thRef">ဖိတ်ကြားကုဒ်</th>
-      <th data-i18n="thInvitedBy">ဖိတ်ခေါ်သူ</th>
-      <th data-i18n="thVip">VIP Level</th>
-      <th data-i18n="thBal">လက်ကျန် ($)</th>
-      <th data-i18n="thNeg">အနှုတ် ($)</th>
-      <th data-i18n="thProfitBox">အမြတ်ဘောက်စ် ($)</th>
-      <th data-i18n="thOrders">အော်ဒါ</th>
-      <th data-i18n="thReset">အစပြန်ရန်</th>
-     </tr>
-    </thead>
-    <tbody id="adminUsersRows"></tbody>
-   </table>
-  </div>
- </div>
-
- <div id="adminHotelsTab" class="panel hidden">
-  <div class="section-title">
-   <h3 data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</h3>
-   <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button type="button" class="btn btn-success" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">နှုန်းထားများသိမ်းမည်</button>
-    <button type="button" class="btn" onclick="openAddHotelModal()">+ <span data-i18n="addHotelModalHead">ဟိုတယ်အသစ်ထည့်ရန်</span></button>
-   </div>
-  </div>
-
-  <div class="table-wrap" style="margin-bottom:16px">
-   <table>
-    <thead>
-     <tr>
-      <th data-i18n="thLevel">အဆင့်</th>
-      <th data-i18n="thName">အမည်</th>
-      <th data-i18n="thDailyLimit">နေ့စဉ်ကန့်သတ်ချက်</th>
-      <th data-i18n="thProfitRate">အမြတ်နှုန်း (%)</th>
-      <th data-i18n="thMaxLimit">အများဆုံးထုတ်ယူခွင့် ($)</th>
-     </tr>
-    </thead>
-    <tbody id="adminVipRows"></tbody>
-   </table>
-  </div>
-
-  <div class="table-wrap">
-   <table>
-    <thead>
-     <tr>
-      <th>ID</th>
-      <th data-i18n="thHotelName">ဟိုတယ်အမည်</th>
-      <th data-i18n="thCountry">နိုင်ငံ</th>
-      <th data-i18n="thStars">ကြယ်ပွင့်</th>
-      <th data-i18n="thPrice">ဈေးနှုန်း ($)</th>
-      <th data-i18n="thAction">လုပ်ဆောင်ချက်</th>
-     </tr>
-    </thead>
-    <tbody id="adminHotelsRows"></tbody>
-   </table>
-  </div>
- </div>
-
- <div id="adminCsTab" class="panel hidden">
-  <div class="admin-cs-grid">
-   <div>
-    <h4 style="margin-top:0" data-i18n="regUsersChatHead">အသုံးပြုသူများ</h4>
-    <input id="csClientSearch" class="search-input" placeholder="အသုံးပြုသူ ရှာရန်..." oninput="renderCsClientList()" style="margin-bottom:8px" data-i18n-ph="csClientSearchPh">
-    <div id="csClientList" style="border:1px solid var(--fb-border);border-radius:8px;max-height:360px;overflow-y:auto"></div>
-   </div>
    <div class="chat-box">
-    <div class="chat-header"><span id="csActiveUserTitle" data-i18n="selectUserChat">ချတ်လုပ်ရန် အသုံးပြုသူကို ရွေးပါ</span></div>
-    <div class="chat-messages" id="adminChatMessages"></div>
-    <div class="chat-footer">
-     <input type="file" id="adminChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
-     <button type="button" class="icon-only-btn" onclick="$('adminChatPhotoInput').click()" title="Photo" aria-label="Photo">
-      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-     </button>
-     <input id="adminChatInput" placeholder="Trip Booking Service အဖြစ် စာပြန်ရန်..." onkeypress="if(event.key==='Enter') sendAdminChatReply()" data-i18n-ph="replyCsPh">
-     <button type="button" class="icon-only-btn" onclick="sendAdminChatReply()" title="Send" aria-label="Send">
+    <div id="supportMessages" class="chat-messages"></div>
+    <div class="chat-input-row">
+     <input id="supportPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
+     <button type="button" class="icon-attach-btn" onclick="document.getElementById('supportPhotoInput').click()" title="Send Photo" aria-label="Send Photo">📷</button>
+     <input id="supportInput" type="text" placeholder="စာရိုက်ရန်..." data-i18n-ph="typeMsgPh" onfocus="handleSupportInputFocus()" onkeydown="if(event.key==='Enter') sendSupportMessage()" style="flex:1">
+     <button type="button" class="action-icon-btn" onclick="sendSupportMessage()" title="Send" aria-label="Send">
       <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
      </button>
     </div>
    </div>
   </div>
- </div>
-</section>
+ </section>
+
+ <!-- PAGE 3: BOOKING TASK CENTER -->
+ <section id="bookingPage" class="page">
+  <div class="section-card" style="text-align:center">
+   <h2 class="section-title" style="margin-bottom:6px" data-i18n="taskCenter">ဘိုကင် တာဝန်စင်တာ</h2>
+
+   <div class="order-ring-wrap">
+    <div id="orderCircle" class="order-circle"><span>0/30</span></div>
+   </div>
+
+   <!-- 3 Key Metrics Directly Above Get Order Button -->
+   <div class="booking-metrics-row">
+    <div class="booking-metric-box">
+     <div class="booking-metric-label" data-i18n="accBal">အကောင့် လက်ကျန်</div>
+     <div id="taskWallet" class="booking-metric-val">$0.00 (0 MMK)</div>
+    </div>
+    <div class="booking-metric-box">
+     <div class="booking-metric-label" data-i18n="taskComm">တာဝန် ကော်မရှင်</div>
+     <div id="taskProfit" class="booking-metric-val">$0.00 (0 MMK)</div>
+    </div>
+    <div class="booking-metric-box">
+     <div class="booking-metric-label" data-i18n="totalProfit">စုစုပေါင်း အမြတ်</div>
+     <div id="taskTotalProfit" class="booking-metric-val">$0.00 (0 MMK)</div>
+    </div>
+   </div>
+
+   <div id="tp2323OrderHint" class="small muted hidden" style="margin-bottom:10px"></div>
+
+   <div style="margin:12px 0 14px;display:flex;justify-content:center">
+    <div class="get-order-light-frame">
+     <button type="button" id="getOrderBtn" class="get-order-rect-btn" onclick="triggerGetOrder()">
+      <span>Get Order</span>
+     </button>
+    </div>
+   </div>
+
+   <div id="bookingHotelArea" style="margin-top:14px;text-align:left"></div>
+  </div>
+ </section>
+
+ <!-- PAGE 4: TRANSACTION & BOOKING HISTORY -->
+ <section id="historyPage" class="page">
+  <div class="section-card">
+   <div class="section-head">
+    <h2 class="section-title" data-i18n="histTitle">ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း</h2>
+    <input id="historySearch" type="text" placeholder="ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်..." data-i18n-ph="histSearchPh" oninput="renderHistory()" style="min-width:230px">
+   </div>
+   <div class="table-wrap">
+    <table>
+     <thead>
+      <tr>
+       <th data-i18n="thDate">ရက်စွဲနှင့် အချိန် (စက္ကန့်အထိ)</th>
+       <th data-i18n="thType">အမျိုးအစား</th>
+       <th data-i18n="thDetails">အသေးစိတ်နှင့် မှတ်ချက်</th>
+       <th data-i18n="thAmount">ပမာဏ (USD / MMK)</th>
+       <th data-i18n="thStatus">အခြေအနေ</th>
+      </tr>
+     </thead>
+     <tbody id="historyRows"></tbody>
+    </table>
+   </div>
+  </div>
+ </section>
+
+ <!-- PAGE 5: MEMBER PROFILE -->
+ <section id="profilePage" class="page">
+  <div id="guestAuthBox" class="section-card" style="text-align:center;padding:28px 18px">
+   <h2 style="margin-top:0" data-i18n="welcomeTrip">Welcome to Trip Booking</h2>
+   <p class="muted" data-i18n="loginPrompt">အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။</p>
+   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button type="button" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
+    <button type="button" class="btn btn-success" onclick="openAuth('register')" data-i18n="createAcc">အကောင့်ဖွင့်ရန်</button>
+   </div>
+  </div>
+
+  <div id="memberProfileBox" class="hidden">
+   <div class="section-card">
+    <div class="profile-card">
+     <div class="avatar-wrap">
+      <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop" alt="Avatar" class="avatar-img">
+      <label for="profileAvatarInput" class="avatar-upload-btn" title="Change Photo">📷</label>
+      <input id="profileAvatarInput" type="file" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
+     </div>
+     <div style="flex:1;min-width:220px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+       <h2 id="profileName" style="margin:0">Member</h2>
+       <button type="button" class="btn btn-secondary" style="padding:4px 9px;font-size:12px" onclick="openEditNameModal()" title="Edit Name">✏️</button>
+       <span id="profileVipBadge" class="vip-badge">VIP Level 1</span>
+      </div>
+      <div id="profileIdentity" class="small muted" style="margin-top:4px"></div>
+      <div id="tp2323ProfileStatus" class="small hidden" style="margin-top:6px;color:var(--fb-primary);font-weight:700"></div>
+     </div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn btn-success" onclick="handleDepositRequest()">Deposit</button>
+      <button type="button" class="btn btn-primary" onclick="handleWithdrawRequest()">Withdraw</button>
+      <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+     </div>
+    </div>
+
+    <div class="stats-grid">
+     <div class="stat-box">
+      <div class="stat-label" data-i18n="walletBal">အကောင့်လက်ကျန်</div>
+      <div id="walletBalance" class="stat-val" style="color:var(--fb-primary)">$0.00 (0 MMK)</div>
+     </div>
+     <div class="stat-box">
+      <div class="stat-label" data-i18n="bookingHistCardTitle">ဘိုကင်မှတ်တမ်း</div>
+      <div id="profileOrders" class="stat-val" style="cursor:pointer;color:var(--fb-primary)" onclick="showPage('historyPage', document.querySelectorAll('.bottom-nav button')[3])">0/30 ➔</div>
+     </div>
+     <div class="stat-box">
+      <div class="stat-label" data-i18n="inviteCodeTitle">ဖိတ်ကြားကုဒ်</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+       <span id="inviteCode" class="stat-val" style="margin-top:0">TP2323</span>
+       <button type="button" class="btn btn-secondary" style="padding:3px 8px;font-size:11px" onclick="copyInviteCode()">Copy</button>
+      </div>
+     </div>
+     <div class="stat-box">
+      <div class="stat-label" data-i18n="refBonus">မိတ်ဆက် အမြတ်</div>
+      <div id="referralEarned" class="stat-val" style="color:var(--fb-success)">$0.00 (0 MMK)</div>
+     </div>
+    </div>
+   </div>
+
+   <div class="section-card">
+    <h3 style="margin:0 0 6px;font-size:16px">Global Hospitality Partners & Industry Recognition</h3>
+    <div class="partner-logos-grid">
+     <div class="partner-pill">MARRIOTT INTL</div>
+     <div class="partner-pill">HILTON WORLDWIDE</div>
+     <div class="partner-pill">ACCOR HOTELS</div>
+     <div class="partner-pill">IHG HOTELS</div>
+     <div class="partner-pill">FOUR SEASONS</div>
+     <div class="partner-pill">SHANGRI-LA</div>
+    </div>
+    <div class="awards-grid">
+     <div class="award-card">
+      <div class="award-title">🏆 World Travel Tech Excellence 2025</div>
+      <div class="award-sub">Recognized for real-time hotel booking reliability & partner sync.</div>
+     </div>
+     <div class="award-card">
+      <div class="award-title">🌟 Asia Pacific Hospitality Partner Award</div>
+      <div class="award-sub">Trusted international reservation & service coordination standard.</div>
+     </div>
+     <div class="award-card">
+      <div class="award-title">🔒 Verified 24/7 Service Operations</div>
+      <div class="award-sub">Continuous booking support and transparent record tracking.</div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- PAGE 6: ADMIN & CUSTOMER SERVICE CONTROL PANEL -->
+ <section id="staffPage" class="page">
+  <div class="section-card">
+   <div class="section-head">
+    <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+     <span id="syncStatusText" class="small muted">Connecting...</span>
+     <button type="button" class="btn btn-secondary" onclick="forceSyncNow()">🔄 Sync</button>
+     <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+    </div>
+   </div>
+
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <button type="button" class="btn btn-primary" onclick="switchAdminTab('users')"><span data-i18n="usersWord">အသုံးပြုသူများ</span> (<span id="totalUsersBadge">0</span>)</button>
+    <button type="button" class="btn btn-secondary" onclick="switchAdminTab('hotels')" data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</button>
+    <button type="button" class="btn btn-secondary" onclick="switchAdminTab('cs')"><span data-i18n="csCenter">Trip Booking Service</span> <span id="adminUnreadBadge" class="notif-badge hidden">0</span></button>
+   </div>
+
+   <!-- ADMIN TAB 1: USERS -->
+   <div id="adminUsersTab">
+    <div class="section-head">
+     <h3 style="margin:0" data-i18n="allUsersHead">မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)</h3>
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="adminUserSearch" type="text" placeholder="အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်..." data-i18n-ph="adminUserSearchPh" oninput="renderAdminUsers()">
+      <button type="button" class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+     </div>
+    </div>
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr>
+        <th>#</th>
+        <th data-i18n="thName">အမည်</th>
+        <th data-i18n="thPhoneEmail">ဖုန်း / အီးမေးလ်</th>
+        <th data-i18n="thPass">စကားဝှက်</th>
+        <th data-i18n="thRef">ဖိတ်ကြားကုဒ်</th>
+        <th data-i18n="thInvitedBy">ဖိတ်ခေါ်သူ</th>
+        <th data-i18n="thVip">VIP Level</th>
+        <th data-i18n="thBal">လက်ကျန် ($)</th>
+        <th data-i18n="thNeg">အနှုတ် ($)</th>
+        <th data-i18n="thProfitBox">အမြတ်ဘောက်စ် ($)</th>
+        <th data-i18n="thOrders">အော်ဒါ</th>
+        <th data-i18n="thReset">အစပြန်ရန်</th>
+       </tr>
+      </thead>
+      <tbody id="adminUsersRows"></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- ADMIN TAB 2: HOTELS & VIP RATES -->
+   <div id="adminHotelsTab" class="hidden">
+    <div class="section-head">
+     <h3 style="margin:0" data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</h3>
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn btn-primary" onclick="openAddHotelModal()">+ Hotel</button>
+      <button type="button" class="btn btn-success" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">နှုန်းထားများသိမ်းမည်</button>
+     </div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:16px">
+     <table>
+      <thead>
+       <tr>
+        <th data-i18n="thLevel">အဆင့်</th>
+        <th data-i18n="thName">အမည်</th>
+        <th data-i18n="thDailyLimit">နေ့စဉ်ကန့်သတ်ချက်</th>
+        <th data-i18n="thProfitRate">အမြတ်နှုန်း (%)</th>
+        <th data-i18n="thMaxLimit">အများဆုံးထုတ်ယူခွင့် ($)</th>
+       </tr>
+      </thead>
+      <tbody id="adminVipRows"></tbody>
+     </table>
+    </div>
+
+    <h4 style="margin:0 0 8px" data-i18n="hotelDirPricesHead">ဟိုတယ်စာရင်းနှင့် ဈေးနှုန်းများ</h4>
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr>
+        <th>ID</th>
+        <th data-i18n="thHotelName">ဟိုတယ်အမည်</th>
+        <th data-i18n="thCountry">နိုင်ငံ</th>
+        <th data-i18n="thStars">ကြယ်ပွင့်</th>
+        <th data-i18n="thPrice">ဈေးနှုန်း ($)</th>
+        <th data-i18n="thAction">လုပ်ဆောင်ချက်</th>
+       </tr>
+      </thead>
+      <tbody id="adminHotelsRows"></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- ADMIN TAB 3: CUSTOMER SERVICE CHAT CONSOLE -->
+   <div id="adminCsTab" class="hidden">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+     <div class="section-card" style="margin:0">
+      <h4 style="margin:0 0 8px" data-i18n="regUsersChatHead">အသုံးပြုသူများ</h4>
+      <input id="csClientSearch" type="text" placeholder="အသုံးပြုသူ ရှာရန်..." data-i18n-ph="csClientSearchPh" oninput="renderCsClientList()" style="width:100%;margin-bottom:8px">
+      <div id="csClientList" style="max-height:340px;overflow-y:auto"></div>
+     </div>
+
+     <div class="chat-box">
+      <div style="padding:10px 12px;border-bottom:1px solid var(--fb-border);font-weight:700;background:var(--fb-card)" id="csActiveUserTitle" data-i18n="selectUserChat">ချတ်လုပ်ရန် အသုံးပြုသူကို ရွေးပါ</div>
+      <div id="adminChatMessages" class="chat-messages"></div>
+      <div class="chat-input-row">
+       <input id="adminPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
+       <button type="button" class="icon-attach-btn" onclick="document.getElementById('adminPhotoInput').click()" title="Send Photo" aria-label="Send Photo">📷</button>
+       <input id="adminChatInput" type="text" placeholder="Trip Booking Service အဖြစ် စာပြန်ရန်..." data-i18n-ph="replyCsPh" onkeydown="if(event.key==='Enter') sendAdminChatReply()" style="flex:1">
+       <button type="button" class="action-icon-btn" onclick="sendAdminChatReply()" title="Send" aria-label="Send">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+       </button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>
 
 </main>
 
-<!-- Bottom Navigation Bar: 0: Home, 1: Service, 2: Booking, 3: History, 4: Profile -->
-<nav class="bottom-nav" id="bottomNav">
- <button type="button" class="active" onclick="showPage('homePage', this)" title="Home" aria-label="Home">
-  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
- </button>
- <button type="button" onclick="showPage('supportPage', this)" title="Service" aria-label="Service">
-  <svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
- </button>
- <button type="button" onclick="showPage('bookingPage', this)" title="Booking" aria-label="Booking">
-  <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
- </button>
- <button type="button" onclick="showPage('historyPage', this)" title="History" aria-label="History">
-  <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
- </button>
- <button type="button" onclick="handleBottomProfileClick(this)" title="Profile" aria-label="Profile">
-  <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
- </button>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+ <button type="button" class="active" onclick="showPage('homePage', this)"><span>🏠</span><span>Home</span></button>
+ <button type="button" onclick="showPage('supportPage', this)"><span>🎧</span><span>Service <span id="tabCsUnreadBadge" class="notif-badge hidden">0</span></span></button>
+ <button type="button" onclick="showPage('bookingPage', this)"><span>📋</span><span>Booking</span></button>
+ <button type="button" onclick="showPage('historyPage', this)"><span>🧾</span><span>History</span></button>
+ <button type="button" onclick="handleBottomProfileClick(this)"><span>👤</span><span>Profile</span></button>
 </nav>
 
-<!-- Auth Modal (Login / Register) -->
-<div class="modal hidden" id="authModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 id="authTitle" style="margin:0">အကောင့်ဝင်ရန်</h3>
-   <button type="button" class="close" onclick="closeModal('authModal')">&times;</button>
+<!-- AUTH MODAL (LOGIN / REGISTER) -->
+<div id="authModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 id="authTitle" data-i18n="loginModalTitle">အကောင့်ဝင်ရန်</h3>
+   <button type="button" class="close-x" onclick="closeModal('authModal')">&times;</button>
   </div>
+
   <div id="regExtraFields" class="hidden">
-   <label data-i18n="fullNameLabel">အမည်ပြည့်စုံ</label>
-   <input id="regName" placeholder="သင့်အမည်ပြည့်စုံ ထည့်ပါ" data-i18n-ph="fullNamePh">
+   <div class="form-group">
+    <label data-i18n="fullNameLabel">အမည်ပြည့်စုံ</label>
+    <input id="regName" type="text" placeholder="သင့်အမည်ပြည့်စုံ ထည့်ပါ" data-i18n-ph="fullNamePh">
+   </div>
+  </div>
+
+  <div class="form-group">
+   <label data-i18n="identityLabel">ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်</label>
+   <input id="authIdentity" type="text" placeholder="09xxxxxxxxx သို့မဟုတ် email@example.com" data-i18n-ph="identityPh">
+  </div>
+
+  <div class="form-group">
+   <label data-i18n="passwordLabel">စကားဝှက်</label>
+   <div style="display:flex;gap:6px">
+    <input id="authPassword" type="password" placeholder="စကားဝှက် ထည့်ပါ" data-i18n-ph="passwordPh" style="flex:1">
+    <button type="button" class="btn btn-secondary" onclick="togglePassVisibility('authPassword', this)">👁️</button>
+   </div>
+  </div>
+
+  <div id="regRefField" class="form-group hidden">
    <label data-i18n="refCodeLabel">ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)</label>
-   <input id="regRefInput" placeholder="TP2323">
+   <input id="regRefInput" type="text" placeholder="TP2323">
   </div>
-  <label data-i18n="identityLabel">ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်</label>
-  <input id="authIdentity" placeholder="09xxxxxxxxx သို့မဟုတ် email@example.com" data-i18n-ph="identityPh">
-  <label data-i18n="passwordLabel">စကားဝှက်</label>
-  <div class="pass-wrap">
-   <input id="authPassword" type="password" placeholder="စကားဝှက် ထည့်ပါ" data-i18n-ph="passwordPh" onkeypress="if(event.key==='Enter') submitAuth()">
-   <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
+
+  <div id="authError" class="error-text"></div>
+
+  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+   <button type="button" id="authSubmitBtn" class="btn btn-primary" style="flex:1" onclick="submitAuth()">အကောင့်ဝင်ရန်</button>
+   <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()" data-i18n="switchAuth">အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်</button>
   </div>
-  <div id="authError" style="color:var(--fb-danger);font-size:12px;margin-top:8px;min-height:16px"></div>
-  <button type="button" class="btn btn-block" style="margin-top:12px" onclick="submitAuth()" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
-  <button type="button" class="btn btn-light btn-block" style="margin-top:8px" onclick="toggleAuthMode()" data-i18n="switchAuth">အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်</button>
  </div>
 </div>
 
-<!-- Edit Name Modal -->
-<div class="modal hidden" id="editNameModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 style="margin:0" data-i18n="editNameModalTitle">အကောင့်အမည် ပြင်ဆင်ရန်</h3>
-   <button type="button" class="close" onclick="closeModal('editNameModal')">&times;</button>
+<!-- EDIT PROFILE NAME MODAL -->
+<div id="editNameModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 data-i18n="editNameModalTitle">အကောင့်အမည် ပြင်ဆင်ရန်</h3>
+   <button type="button" class="close-x" onclick="closeModal('editNameModal')">&times;</button>
   </div>
-  <label data-i18n="fullNameLabel">အမည်ပြည့်စုံ</label>
-  <input id="editProfileNameInput">
-  <button type="button" class="btn btn-block" style="margin-top:12px" onclick="saveProfileNameEdit()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+  <div class="form-group">
+   <label data-i18n="fullNameLabel">အမည်ပြည့်စုံ</label>
+   <input id="editProfileNameInput" type="text" placeholder="သင့်အမည်ပြည့်စုံ ထည့်ပါ" data-i18n-ph="fullNamePh">
+  </div>
+  <div style="text-align:right">
+   <button type="button" class="btn btn-primary" onclick="saveProfileNameEdit()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+  </div>
  </div>
 </div>
 
-<!-- Hotel Detail Modal -->
-<div class="modal hidden" id="hotelDetailModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 id="detailHotelName" style="margin:0">Hotel</h3>
-   <button type="button" class="close" onclick="closeModal('hotelDetailModal')">&times;</button>
+<!-- ADD HOTEL MODAL -->
+<div id="addHotelModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 data-i18n="addHotelModalHead">ဟိုတယ်အသစ်ထည့်ရန်</h3>
+   <button type="button" class="close-x" onclick="closeModal('addHotelModal')">&times;</button>
+  </div>
+  <div class="form-group"><label data-i18n="hotelNameLabel">ဟိုတယ်အမည်</label><input id="newHName" type="text"></div>
+  <div class="form-group"><label data-i18n="countryLabel">နိုင်ငံ</label><input id="newHCountry" type="text"></div>
+  <div class="form-group"><label data-i18n="priceLabel">ဈေးနှုန်း ($)</label><input id="newHPrice" type="number" value="92" min="85" max="99"></div>
+  <div class="form-group">
+   <label data-i18n="starsLabel">ကြယ်ပွင့်</label>
+   <select id="newHStars">
+    <option value="5">5 Stars</option>
+    <option value="4">4 Stars</option>
+    <option value="3">3 Stars</option>
+   </select>
+  </div>
+  <button type="button" class="btn btn-primary" style="width:100%" onclick="addHotelToDatabase()">Add</button>
+ </div>
+</div>
+
+<!-- HOTEL DETAIL MODAL -->
+<div id="hotelDetailModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 id="detailHotelName">Hotel</h3>
+   <button type="button" class="close-x" onclick="closeModal('hotelDetailModal')">&times;</button>
   </div>
   <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
   <div id="detailHotelBody"></div>
  </div>
 </div>
 
-<!-- Center Order Modal -->
-<div class="modal hidden" id="centerOrderModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 id="centerOrderTitle" style="margin:0">Order</h3>
-   <button type="button" class="close" onclick="closeCenterOrderModal()">&times;</button>
+<!-- CENTER ORDER & REVIEW MODAL -->
+<div id="centerOrderModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 id="centerOrderTitle">🏨 Hotel Booking</h3>
+   <button type="button" class="close-x" onclick="closeCenterOrderModal()">&times;</button>
   </div>
+
   <div id="centerOrderFormBody">
-   <img id="centerOrderImg" src="" alt="Hotel" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:8px">
-   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-    <div>
-     <strong id="centerOrderHotelName">Hotel</strong>
-     <div class="small muted" id="centerOrderCountry">Country</div>
+   <div class="order-preview-banner">
+    <img id="centerOrderImg" src="" alt="Hotel" class="order-preview-thumb">
+    <div style="flex:1;min-width:0">
+     <div id="centerOrderHotelName" style="font-weight:700;font-size:15px"></div>
+     <div id="centerOrderCountry" class="small muted"></div>
+     <div class="small" style="margin-top:4px">
+      <span data-i18n="orderPriceLabel">အော်ဒါတန်ဖိုး</span>: <b id="centerOrderPrice" style="color:var(--fb-primary)"></b>
+      · <span data-i18n="commissionLabel">ကော်မရှင်</span>: <b id="centerOrderComm" style="color:var(--fb-success)"></b>
+     </div>
     </div>
-    <div style="text-align:right">
-     <div class="small muted" data-i18n="orderPriceLabel">အော်ဒါတန်ဖိုး</div>
-     <strong id="centerOrderPrice" style="color:var(--fb-primary)">$0.00</strong>
+   </div>
+
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+    <div class="stat-box" style="padding:9px 10px">
+     <div class="stat-label" data-i18n="stayNightsLabel">တည်းခိုမည့် ညအရေအတွက်</div>
+     <div id="centerOrderNights" class="small" style="font-weight:700;margin-top:3px">1 Night · 2 Guests</div>
+    </div>
+    <div class="stat-box" style="padding:9px 10px">
+     <div class="stat-label" data-i18n="hotelRoomTypeLabel">အခန်းအမျိုးအစား</div>
+     <div id="centerOrderRoomType" class="small" style="font-weight:700;margin-top:3px">Deluxe Suite</div>
     </div>
    </div>
-   <div class="booking-meta-strip">
-    <div><span class="muted" data-i18n="stayNightsLabel">တည်းခိုမည့် ညအရေအတွက်</span>: <strong id="centerOrderNights">1 Night</strong></div>
-    <div><span class="muted" data-i18n="hotelRoomTypeLabel">အခန်းအမျိုးအစား</span>: <strong id="centerOrderRoomType">Deluxe Suite</strong></div>
-    <div><span class="muted" data-i18n="commissionLabel">ကော်မရှင်</span>: <strong id="centerOrderComm" style="color:var(--fb-success)">+$0.00</strong></div>
+
+   <div class="form-group">
+    <label data-i18n="rateHotelLabel">ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်</label>
+    <div id="centerStarPicker" class="star-picker-row">
+     <button type="button" class="star-pick-btn" data-star="1" onclick="selectOrderStar(1)">1 ★</button>
+     <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">2 ★★</button>
+     <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">3 ★★★</button>
+     <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">4 ★★★★</button>
+     <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 ★★★★★</button>
+    </div>
    </div>
-   <label data-i18n="rateHotelLabel">ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်</label>
-   <div class="star-picker" id="centerStarPicker">
-    <button type="button" class="star-pick-btn" data-star="1" onclick="selectOrderStar(1)">1 ★</button>
-    <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">2 ★</button>
-    <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">3 ★</button>
-    <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">4 ★</button>
-    <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 ★</button>
+
+   <div class="form-group">
+    <label data-i18n="chooseReviewLabel">မှတ်ချက် ၅ ခုထဲမှ တစ်ခု ရွေးချယ်ပါ</label>
+    <div id="centerReviewChips" class="review-chips-wrap"></div>
    </div>
-   <label data-i18n="chooseReviewLabel">မှတ်ချက် ၅ ခုထဲမှ တစ်ခု ရွေးချယ်ပါ</label>
-   <div class="review-chip-list" id="centerReviewChips"></div>
-   <label data-i18n="customReviewLabel">သို့မဟုတ် ကိုယ်တိုင်စိတ်ကြိုက် မှတ်ချက်ရေးပါ</label>
-   <input id="centerCustomReviewInput" placeholder="မှတ်ချက် ရေးထည့်နိုင်ပါသည်..." oninput="onCustomReviewInput()" data-i18n-ph="customReviewPh">
-   <div id="centerReviewWarn" style="color:var(--fb-danger);font-size:12px;margin-top:6px;min-height:16px"></div>
-   <button type="button" class="btn btn-success btn-block" style="margin-top:10px" onclick="confirmCenterOrder()" data-i18n="submitOrderBtn">ဘိုကင်ကတ် ပြန်ဖွင့်မည်</button>
+
+   <div class="form-group">
+    <label data-i18n="customReviewLabel">သို့မဟုတ် ကိုယ်တိုင်စိတ်ကြိုက် မှတ်ချက်ရေးပါ</label>
+    <textarea id="centerCustomReviewInput" rows="2" placeholder="မှတ်ချက် ရေးထည့်နိုင်ပါသည်..." data-i18n-ph="customReviewPh" oninput="onCustomReviewInput()"></textarea>
+   </div>
+
+   <div id="centerReviewWarn" class="error-text"></div>
+
+   <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+    <button type="button" class="btn btn-secondary" onclick="closeCenterOrderModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" onclick="confirmCenterOrder()">Confirm Booking</button>
+   </div>
   </div>
+
   <div id="centerOrderVerifyingBody" class="verifying-box hidden">
-   <div class="spinner-ring"></div>
-   <div data-i18n="verifyingBookingText">ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...</div>
+   <div class="verifying-spinner"></div>
+   <div id="centerOrderVerifyingText" style="font-weight:700;font-size:15px" data-i18n="verifyingBookingText">ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...</div>
   </div>
  </div>
 </div>
 
-<!-- Low Balance Modal -->
-<div class="modal hidden" id="lowBalanceModal">
- <div class="modal-box">
-  <div class="low-bal-frame">
-   <h3 class="low-bal-title" data-i18n="lowBalTitle">ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်</h3>
-   <p class="low-bal-msg" data-i18n="lowBalMsg">သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။</p>
-   <div class="low-bal-actions">
-    <button type="button" class="btn btn-danger" style="flex:1" onclick="goToServiceFromLowBalance()" data-i18n="csCenter">Trip Booking Service</button>
-    <button type="button" class="btn btn-light" style="flex:1" onclick="closeModal('lowBalanceModal')">OK</button>
-   </div>
+<!-- LOW BALANCE MODAL -->
+<div id="lowBalanceModal" class="modal-backdrop hidden">
+ <div class="modal-card" style="text-align:center">
+  <div class="modal-header">
+   <h3 id="lowBalTitle" data-i18n="lowBalTitle">ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်</h3>
+   <button type="button" class="close-x" onclick="closeModal('lowBalanceModal')">&times;</button>
+  </div>
+  <p id="lowBalMsg" style="margin:10px 0 18px;line-height:1.5" data-i18n="lowBalMsg">သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။</p>
+  <div style="display:flex;gap:10px;justify-content:center">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('lowBalanceModal')">Cancel</button>
+   <button type="button" class="btn btn-primary" onclick="goToServiceFromLowBalance()">Service</button>
   </div>
  </div>
 </div>
 
-<!-- Profit Success Modal -->
-<div class="modal hidden" id="profitSuccessModal">
- <div class="modal-box">
-  <div class="profit-congrats-box">
-   <div class="profit-congrats-top" data-i18n="congratsTop">ဂုဏ်ယူပါတယ်</div>
-   <div class="profit-congrats-line" data-i18n="bookingSuccessLine">ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်</div>
-   <div class="profit-congrats-amt" id="profitSuccessAmountText">0 ဒေါ်လာ အမြတ်ရရှိခဲ့သည်</div>
-  </div>
-  <button type="button" class="btn btn-success btn-block" onclick="closeModal('profitSuccessModal')">OK</button>
+<!-- PROFIT SUCCESS MODAL -->
+<div id="profitSuccessModal" class="modal-backdrop hidden">
+ <div class="modal-card" style="text-align:center;padding:24px 18px">
+  <div style="font-size:42px;margin-bottom:8px">🎉</div>
+  <h3 style="margin:0 0 6px;color:var(--fb-success)" data-i18n="bookingSuccessLine">ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်</h3>
+  <p id="profitSuccessAmountText" style="font-size:20px;font-weight:800;margin:10px 0 18px;color:var(--fb-primary)"></p>
+  <button type="button" class="btn btn-primary" style="min-width:120px" onclick="closeModal('profitSuccessModal')">OK</button>
  </div>
 </div>
 
-<!-- Add Hotel Modal -->
-<div class="modal hidden" id="addHotelModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 style="margin:0" data-i18n="addHotelModalHead">ဟိုတယ်အသစ်ထည့်ရန်</h3>
-   <button type="button" class="close" onclick="closeModal('addHotelModal')">&times;</button>
+<!-- GENERIC ALERT MODAL -->
+<div id="alertModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 id="alertTitle">အသိပေးချက်</h3>
+   <button type="button" class="close-x" onclick="closeModal('alertModal')">&times;</button>
   </div>
-  <label data-i18n="hotelNameLabel">ဟိုတယ်အမည်</label>
-  <input id="newHName">
-  <label data-i18n="countryLabel">နိုင်ငံ</label>
-  <input id="newHCountry">
-  <label data-i18n="priceLabel">ဈေးနှုန်း ($)</label>
-  <input id="newHPrice" type="number" min="85" max="99" value="92">
-  <label data-i18n="starsLabel">ကြယ်ပွင့်</label>
-  <input id="newHStars" type="number" min="1" max="5" value="5">
-  <button type="button" class="btn btn-block" style="margin-top:12px" onclick="addHotelToDatabase()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+  <div id="alertBody" style="line-height:1.5"></div>
+  <div style="text-align:right;margin-top:14px">
+   <button type="button" class="btn btn-primary" onclick="closeModal('alertModal')">OK</button>
+  </div>
  </div>
 </div>
 
-<!-- Generic Alert Modal -->
-<div class="modal hidden" id="alertModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 id="alertTitle" style="margin:0">အသိပေးချက်</h3>
-   <button type="button" class="close" onclick="closeModal('alertModal')">&times;</button>
-  </div>
-  <div id="alertBody" style="line-height:1.55;margin-bottom:14px"></div>
-  <button type="button" class="btn btn-block" onclick="closeModal('alertModal')">OK</button>
- </div>
-</div>
-
-<!-- Image Lightbox -->
-<div class="lightbox-modal hidden" id="imageLightbox" onclick="closeImageLightbox()">
- <img id="lightboxImgEl" class="lightbox-img" src="" alt="Preview" onclick="event.stopPropagation()">
- <button type="button" class="btn btn-light" style="margin-top:12px" onclick="closeImageLightbox()">Close</button>
+<!-- IMAGE LIGHTBOX -->
+<div id="imageLightbox" class="lightbox-backdrop hidden" onclick="closeImageLightbox()">
+ <button type="button" class="lightbox-close" onclick="closeImageLightbox()">&times;</button>
+ <img id="lightboxImgEl" src="" alt="Full Image" onclick="event.stopPropagation()">
 </div>
 <script>
 "use strict";
@@ -1869,8 +1406,9 @@ try {
 
 const $ = id => document.getElementById(id);
 const MMK_PER_USD = 4500;
-const TP2323_FREE_BONUS_USD = 15.00;
+const TP2323_FREE_BONUS_USD = 18.00;
 const TP2323_REQUIRED_ORDERS = 30;
+const CS_AUTO_GREETING_TEXT = "မင်္ဂလာပါရှင့်🙏၊ Trip Booking မှာ ကြိုဆိုပါတယ်☺️။ ဘာများ ကူညီပေးရမလဲရှင့်။";
 
 // Principal -> Target Profit Table (USD)
 const PRINCIPAL_PROFIT_TABLE = [
@@ -2117,12 +1655,13 @@ const I18N = {
   lowBalTitle: "ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်",
   lowBalMsg: "သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။",
   congratsTop: "ဂုဏ်ယူပါတယ်",
+  regSuccessSub: "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
   bookingSuccessLine: "ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်",
   profitEarnedTemplate: "{amt} ဒေါ်လာ အမြတ်ရရှိခဲ့သည်",
   specialOrderTitle: "✨ အထူးအော်ဒါ (Lucky/Combo Order)",
   specialOrderDesc: "အထူးအော်ဒါ (Lucky/Combo Order) ကျရောက်နေပါသည် — ဖြေရှင်းပြီးပါက မူလအရင်းနှင့် အပိုကော်မရှင် နှစ်ဆရရှိပါမည်။",
   specialOrderAmountLine: "လက်ရှိ အထူးပမာဏ: <b>-{neg}</b>",
-  clickGetOrderHint: "ဘိုကင်တာဝန်ရယူရန် <b>+</b> ခလုတ်ကို နှိပ်ပါ။",
+  clickGetOrderHint: "ဘိုကင်တာဝန်ရယူရန် <b>Get Order</b> ခလုတ်ကို နှိပ်ပါ။",
   orderPriceLabel: "အော်ဒါတန်ဖိုး", commissionLabel: "ကော်မရှင်", submitOrderBtn: "ဘိုကင်ကတ် ပြန်ဖွင့်မည်",
   stayNightsLabel: "တည်းခိုမည့် ညအရေအတွက်",
   rateHotelLabel: "ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်",
@@ -2142,8 +1681,8 @@ const I18N = {
   resetBtn: "Reset", deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 ဓာတ်ပုံပို့ပေးထားပါသည်", photoSentUserText: "📷 ဓာတ်ပုံ",
   depositQuickText: "ငွေသွင်းမည်",
   withdrawQuickText: "ငွေထုတ်မည် (လက်ကျန်ငွေ: {bal})",
-  withdrawNeed30OrdersMsg: "TP2323 ဖိတ်ကြားကုဒ် အခမဲ့ $15 ဘောနပ်စ်အကောင့်ဖြစ်သောကြောင့် ဘွတ်ကင် <b>အကြိမ် ၃၀</b> ပြည့်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည် (လက်ရှိ: <b>{cur}/{req}</b>)။",
-  tp2323WelcomeBonusMsg: "🎁 ဖိတ်ကြားကုဒ် <b>TP2323</b> ဖြင့် အကောင့်ဖွင့်သည့်အတွက် အခမဲ့ <b>$15.00</b> ဘောနပ်စ်ကို သင့်အကောင့်ထဲ ထည့်သွင်းပေးလိုက်ပါပြီ (ဘွတ်ကင် ၃၀ ကြိမ်တင်ပြီးမှ ထုတ်ယူနိုင်ပါသည်)။",
+  withdrawNeed30OrdersMsg: "TP2323 ဖိတ်ကြားကုဒ် အခမဲ့ $18 ဘောနပ်စ်အကောင့်ဖြစ်သောကြောင့် ဘွတ်ကင် <b>အကြိမ် ၃၀</b> ပြည့်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည် (လက်ရှိ: <b>{cur}/{req}</b>)။",
+  tp2323RuleBadge: "TP2323 အခမဲ့ $18 ဘောနပ်စ် · ငွေထုတ်ရန် ဘွတ်ကင် ၃၀ လိုအပ်ပါသည် ({cur}/{req})",
   txBookingProfit: "ဘိုကင်အမြတ်", txWelcomeBonus: "TP2323 ကြိုဆိုဘောနပ်စ်", txApproved: "အတည်ပြုပြီး",
   hotelRoomTypeLabel: "အခန်းအမျိုးအစား", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
@@ -2196,12 +1735,13 @@ const I18N = {
   hotelNameLabel: "Hotel Name", countryLabel: "Country", priceLabel: "Price ($)", starsLabel: "Stars",
   alertTitleDefault: "Notification", lowBalTitle: "Booking Operation",
   lowBalMsg: "Insufficient balance in your account. Please contact Customer Service to deposit.",
-  congratsTop: "Congratulations", bookingSuccessLine: "Booking completed successfully",
+  congratsTop: "ဂုဏ်ယူပါတယ်", regSuccessSub: "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
+  bookingSuccessLine: "Booking completed successfully",
   profitEarnedTemplate: "Earned {amt} profit",
   specialOrderTitle: "✨ Special Order (Lucky/Combo Order)",
   specialOrderDesc: "Special Order (Lucky/Combo Order) is active — once resolved, you will receive your original principal plus double extra commission.",
   specialOrderAmountLine: "Current Special Amount: <b>-{neg}</b>",
-  clickGetOrderHint: "Click <b>+</b> to match a hotel booking task.",
+  clickGetOrderHint: "Click <b>Get Order</b> to match a hotel booking task.",
   orderPriceLabel: "Order Price", commissionLabel: "Commission", submitOrderBtn: "Reopen Booking Card",
   stayNightsLabel: "Stay Duration", rateHotelLabel: "Star Rating",
   chooseReviewLabel: "Select 1 of 5 Quick Reviews", customReviewLabel: "Or Write Your Own Custom Review",
@@ -2215,10 +1755,10 @@ const I18N = {
    "Highly satisfied and would gladly book again"
   ],
   youLabel: "You", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (You)", userSenderLabel: "User",
-  resetBtn: "Reset", deleteBtn: "Delete", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
+  resetBtn: "Reset", deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
   depositQuickText: "I want to deposit", withdrawQuickText: "I want to withdraw (Balance: {bal})",
-  withdrawNeed30OrdersMsg: "With the TP2323 free $15 bonus, you must complete <b>30 booking orders</b> before withdrawing (Current: <b>{cur}/{req}</b>).",
-  tp2323WelcomeBonusMsg: "🎁 You received a free <b>$15.00</b> welcome bonus for registering with referral code <b>TP2323</b> (30 orders required before withdrawal).",
+  withdrawNeed30OrdersMsg: "With the TP2323 free $18 bonus, you must complete <b>30 booking orders</b> before withdrawing (Current: <b>{cur}/{req}</b>).",
+  tp2323RuleBadge: "TP2323 Free $18 Bonus · 30 booking orders required to withdraw ({cur}/{req})",
   txBookingProfit: "Booking Profit", txWelcomeBonus: "TP2323 Welcome Bonus", txApproved: "Approved",
   hotelRoomTypeLabel: "Room Type", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
@@ -2234,7 +1774,8 @@ I18N.th = {
  createAcc: "สมัครสมาชิก", editNameModalTitle: "แก้ไขชื่อโปรไฟล์",
  bookingHistCardTitle: "ประวัติการจอง", lowBalTitle: "การทำรายการจอง",
  lowBalMsg: "ยอดเงินในบัญชีไม่เพียงพอ กรุณาติดต่อฝ่ายบริการลูกค้าเพื่อเติมเงิน",
- congratsTop: "ขอแสดงความยินดี", bookingSuccessLine: "การจองสำเร็จเรียบร้อยแล้ว",
+ congratsTop: "ဂုဏ်ယူပါတယ်", regSuccessSub: "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
+ bookingSuccessLine: "การจองสำเร็จเรียบร้อยแล้ว",
  profitEarnedTemplate: "ได้รับกำไร {amt}"
 };
 
@@ -2246,7 +1787,8 @@ I18N.zh = {
  createAcc: "注册", editNameModalTitle: "修改账户名称",
  bookingHistCardTitle: "预订记录", lowBalTitle: "预订操作",
  lowBalMsg: "您的账户余额不足，请联系客服进行充值。",
- congratsTop: "恭喜您", bookingSuccessLine: "预订提交成功",
+ congratsTop: "ဂုဏ်ယူပါတယ်", regSuccessSub: "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
+ bookingSuccessLine: "预订提交成功",
  profitEarnedTemplate: "获得利润 {amt}"
 };
 
@@ -2270,9 +1812,46 @@ let selectedCsUserId = null;
 let showAllHotelsFlag = false;
 let lastSeenMessageCount = 0;
 
+// Persistent revealed message keys (stays visible until deleted by admin)
+const revealedTrashMsgKeys = new Set();
+let regToastTimer = null;
+
+// Track first-time CS greeting per user
+const autoGreetedUsers = new Set();
+let greetingInFlightForUserId = null;
+
 let selectedOrderStars = 5;
 let selectedOrderReviewIdx = -1;
 let missingReviewWarnCount = 0;
+
+function isTp2323BonusAccount(userObj) {
+ if (!userObj) return false;
+ return userObj.tp2323_bonus === true || String(userObj.invited_by || "").trim().toUpperCase() === "TP2323";
+}
+
+function showRegistrationSuccessToast() {
+ const toast = $("regSuccessToast");
+ if (!toast) return;
+ const d = getDict();
+ $("regToastTitle").textContent = d.congratsTop || "ဂုဏ်ယူပါတယ်";
+ $("regToastSub").textContent = d.regSuccessSub || "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်";
+
+ if (regToastTimer) {
+  clearTimeout(regToastTimer);
+  regToastTimer = null;
+ }
+
+ toast.classList.remove("fade-out");
+ toast.classList.remove("hidden");
+
+ regToastTimer = setTimeout(() => {
+  toast.classList.add("fade-out");
+  setTimeout(() => {
+   toast.classList.add("hidden");
+   toast.classList.remove("fade-out");
+  }, 350);
+ }, 2500);
+}
 
 function normalizeVipLabel(raw) {
  const s = String(raw || "").trim();
@@ -2308,12 +1887,12 @@ function normalizeIdentity(val) {
 }
 
 function isPhoneIdentity(val) {
- const clean = String(val || "").replace(/[\s\-()]/g, "");
+ const clean = String(val || "").replace(/[\s\-().]/g, "");
  return /^(\+?09|09|\+959|9)\d{6,11}$/.test(clean);
 }
 
 function canonicalPhone(val) {
- let clean = String(val || "").replace(/[\s\-()]/g, "");
+ let clean = String(val || "").replace(/[\s\-().]/g, "");
  if (clean.startsWith("+959")) clean = "09" + clean.slice(4);
  else if (clean.startsWith("9") && !clean.startsWith("09")) clean = "0" + clean;
  return clean;
@@ -2367,9 +1946,102 @@ function writeMessageToDb(msgObj) {
  return Promise.resolve();
 }
 
+async function deleteAdminMessageByKey(msgKey) {
+ if (!msgKey) return;
+ revealedTrashMsgKeys.delete(msgKey);
+ allMessages = allMessages.filter(m => m._key !== msgKey);
+ if (db) {
+  try {
+   await db.ref("messages/" + msgKey).remove();
+  } catch (e) {}
+ }
+ if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+ if (currentUser) loadUserMessages(currentUser.id);
+ updateAdminBadges();
+}
+
 function writeTransactionToDb(txObj) {
  if (db) return db.ref("transactions").push(txObj);
  return Promise.resolve();
+}
+
+function hasAnyAutoGreetingForUser(userId) {
+ const uidStr = String(userId || "");
+ if (!uidStr) return true;
+ if (autoGreetedUsers.has(uidStr)) return true;
+ const found = allMessages.some(
+  m => String(m.user_id) === uidStr &&
+       m.sender === "support" &&
+       (m.is_auto_greeting === true || String(m.text || "").trim() === CS_AUTO_GREETING_TEXT)
+ );
+ if (found) autoGreetedUsers.add(uidStr);
+ return found;
+}
+
+async function triggerFirstTimeAutoGreeting(userObj) {
+ if (!userObj || !userObj.id || isAdminSession) return;
+ const uidStr = String(userObj.id);
+ if (hasAnyAutoGreetingForUser(uidStr) || greetingInFlightForUserId === uidStr) return;
+
+ greetingInFlightForUserId = uidStr;
+ autoGreetedUsers.add(uidStr);
+ const nowTs = Date.now();
+ const optimisticMsg = {
+  _key: "local_greet_" + nowTs,
+  user_id: uidStr,
+  sender: "support",
+  is_auto_greeting: true,
+  text: CS_AUTO_GREETING_TEXT,
+  image: "",
+  read_by_admin: true,
+  time: formatExactTimestamp(new Date(nowTs)),
+  created_at: nowTs
+ };
+
+ if (!db) {
+  allMessages.push(optimisticMsg);
+  loadUserMessages(uidStr);
+  greetingInFlightForUserId = null;
+  return;
+ }
+
+ try {
+  await writeMessageToDb({
+   user_id: uidStr,
+   sender: "support",
+   is_auto_greeting: true,
+   text: CS_AUTO_GREETING_TEXT,
+   image: "",
+   read_by_admin: true,
+   time: formatExactTimestamp(new Date(nowTs)),
+   created_at: nowTs
+  });
+ } catch (e) {
+  autoGreetedUsers.delete(uidStr);
+ } finally {
+  greetingInFlightForUserId = null;
+ }
+}
+
+function isGreetingMessageText(text) {
+ const clean = String(text || "").trim().toLowerCase();
+ if (!clean) return false;
+ return (
+  clean === "hi" ||
+  clean.startsWith("hi ") ||
+  clean.startsWith("hi!") ||
+  clean.startsWith("hi,") ||
+  clean === "hello" ||
+  clean.startsWith("hello ") ||
+  clean.startsWith("hello!") ||
+  clean.startsWith("hello,") ||
+  clean.includes("မင်္ဂလာပါ")
+ );
+}
+
+function handleSupportInputFocus() {
+ if (!currentUser || isAdminSession) return;
+ triggerFirstTimeAutoGreeting(currentUser);
 }
 
 function updateAdminBadges() {
@@ -2533,15 +2205,19 @@ function showPage(pageId, navBtn) {
   navBtn.classList.add("active");
  }
  renderAllViews();
+ if (pageId === "supportPage" && currentUser && !isAdminSession) {
+  triggerFirstTimeAutoGreeting(currentUser);
+ }
 }
 
 function openAuth(mode) {
  authMode = mode;
  $("authModal").classList.remove("hidden");
  $("regExtraFields").classList.toggle("hidden", mode === "login");
- $("authTitle").textContent = mode === "login"
-  ? getDict().loginModalTitle
-  : getDict().createAcc;
+ $("regRefField").classList.toggle("hidden", mode === "login");
+ const titleText = mode === "login" ? getDict().loginModalTitle : getDict().createAcc;
+ $("authTitle").textContent = titleText;
+ $("authSubmitBtn").textContent = titleText;
  $("authError").textContent = "";
 }
 
@@ -2594,8 +2270,8 @@ async function submitAuth() {
 
   if (isDuplicate) {
    err.textContent = registeringPhone
-    ? "This phone number is already registered! Please use a different phone number."
-    : "This email is already registered!";
+    ? "ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်ပါသည် (တစ်လုံးကွဲလွဲသော နံပါတ်ဖြင့် ဖွင့်နိုင်ပါသည်)။"
+    : "ဤအီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်ပါသည်။";
    return;
   }
 
@@ -2638,7 +2314,7 @@ async function submitAuth() {
      user_id: String(newUser.id),
      date: formatExactTimestamp(new Date(nowTs)),
      type: "Welcome Bonus",
-     details: "Referral Code TP2323 Free Bonus (30 orders required before withdrawal)",
+     details: "Referral Code TP2323 Free $18 Bonus (30 booking orders required before withdrawal)",
      amount: welcomeBonus,
      status: "Approved",
      created_at: nowTs
@@ -2647,13 +2323,15 @@ async function submitAuth() {
    await writeMessageToDb({
     user_id: String(newUser.id),
     sender: "support",
-    text: `မင်္ဂလာပါ ${newUser.name} (${newUser.identity}) ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါသည်။` +
-     (usesTp2323 ? " ဖိတ်ကြားကုဒ် TP2323 အတွက် အခမဲ့ $15.00 ဘောနပ်စ် ထည့်သွင်းပေးပြီးပါပြီ (ဘွတ်ကင် ၃၀ ကြိမ်တင်ပြီးမှ ထုတ်ယူနိုင်ပါသည်)။" : ""),
+    is_auto_greeting: true,
+    text: CS_AUTO_GREETING_TEXT +
+     (usesTp2323 ? " (ဖိတ်ကြားကုဒ် TP2323 အတွက် အခမဲ့ $18.00 ဘောနပ်စ် ထည့်သွင်းပေးပြီးပါပြီ — ဘိုကင် အကြိမ် ၃၀ တင်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည်။)" : ""),
     image: "",
     read_by_admin: true,
     time: formatExactTimestamp(new Date(nowTs)),
     created_at: nowTs + 100
    });
+   autoGreetedUsers.add(String(newUser.id));
   } catch (dbErr) {
    err.textContent = "Failed to save account. Please check Firebase connection & rules.";
    return;
@@ -2670,9 +2348,7 @@ async function submitAuth() {
   closeModal("authModal");
   renderAllViews();
   showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
-  if (usesTp2323) {
-   showAlert(getDict().tp2323WelcomeBonusMsg);
-  }
+  showRegistrationSuccessToast();
   return;
  }
 
@@ -2989,9 +2665,8 @@ function handleWithdrawRequest() {
  if (!currentUser) { openAuth('login'); return; }
  const d = getDict();
  const curOrders = Number(currentUser.orders) || 0;
- const isTp2323BonusUser = currentUser.tp2323_bonus === true || String(currentUser.invited_by || "").toUpperCase() === "TP2323";
 
- if (isTp2323BonusUser && curOrders < TP2323_REQUIRED_ORDERS) {
+ if (isTp2323BonusAccount(currentUser) && curOrders < TP2323_REQUIRED_ORDERS) {
   showAlert(
    (d.withdrawNeed30OrdersMsg || "")
     .replace("{cur}", String(curOrders))
@@ -3030,15 +2705,32 @@ async function sendSupportMessage() {
  const text = inp.value.trim();
  if (!text) return;
  inp.value = "";
+ const nowTs = Date.now();
+ const shouldAutoReplyGreeting = isGreetingMessageText(text) && !hasAnyAutoGreetingForUser(currentUser.id);
+
  await writeMessageToDb({
   user_id: String(currentUser.id),
   sender: 'user',
   text: text,
   image: "",
   read_by_admin: false,
-  time: formatExactTimestamp(new Date()),
-  created_at: Date.now()
+  time: formatExactTimestamp(new Date(nowTs)),
+  created_at: nowTs
  });
+
+ if (shouldAutoReplyGreeting) {
+  autoGreetedUsers.add(String(currentUser.id));
+  await writeMessageToDb({
+   user_id: String(currentUser.id),
+   sender: 'support',
+   is_auto_greeting: true,
+   text: CS_AUTO_GREETING_TEXT,
+   image: "",
+   read_by_admin: true,
+   time: formatExactTimestamp(new Date(nowTs + 250)),
+   created_at: nowTs + 250
+  });
+ }
 }
 
 async function sendAdminChatReply() {
@@ -3088,20 +2780,80 @@ function handleChatPhotoUpload(event, senderRole) {
  event.target.value = "";
 }
 
-function renderMessageBubble(m, isRight, senderLabel) {
+function revealAdminMessageTrash(msgKey) {
+ if (!msgKey || !isAdminSession) return;
+ if (revealedTrashMsgKeys.has(msgKey)) return;
+ revealedTrashMsgKeys.add(msgKey);
+ if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+}
+
+function attachLongPressToAdminBubbles(containerEl) {
+ if (!containerEl || !isAdminSession) return;
+ const bubbles = containerEl.querySelectorAll(".chat-bubble[data-admin-msg-key]");
+ bubbles.forEach(bubble => {
+  const key = bubble.getAttribute("data-admin-msg-key");
+  let pressTimer = null;
+  let longPressed = false;
+
+  const startPress = () => {
+   longPressed = false;
+   clearTimeout(pressTimer);
+   pressTimer = setTimeout(() => {
+    longPressed = true;
+    revealAdminMessageTrash(key);
+   }, 450);
+  };
+
+  const cancelPress = () => {
+   clearTimeout(pressTimer);
+  };
+
+  bubble.addEventListener("pointerdown", startPress);
+  bubble.addEventListener("pointerup", cancelPress);
+  bubble.addEventListener("pointerleave", cancelPress);
+  bubble.addEventListener("pointercancel", cancelPress);
+  bubble.addEventListener("contextmenu", e => {
+   e.preventDefault();
+   longPressed = true;
+   revealAdminMessageTrash(key);
+  });
+  bubble.addEventListener("click", () => {
+   if (longPressed) {
+    longPressed = false;
+   }
+  });
+ });
+}
+
+function renderMessageBubble(m, isRight, senderLabel, options = {}) {
  const safeImg = m.image ? String(m.image).replace(/"/g, "&quot;") : "";
  const imgHtml = safeImg
-  ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="openImageLightbox('${safeImg}')">`
+  ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="event.stopPropagation(); openImageLightbox('${safeImg}')">`
   : "";
+ const canDelete = Boolean(options.canDelete && m._key);
+ const showTrash = Boolean(canDelete && revealedTrashMsgKeys.has(m._key));
+ const adminAttr = canDelete ? `data-admin-msg-key="${String(m._key).replace(/"/g, "&quot;")}"` : "";
+ const trashHtml = showTrash
+  ? `<div class="msg-trash-bar" style="justify-content:${isRight ? 'flex-end' : 'flex-start'}">
+      <button type="button" class="msg-trash-btn" onclick="event.stopPropagation(); deleteAdminMessageByKey('${String(m._key).replace(/'/g, "\\'")}')" title="${getDict().deleteBtn}" aria-label="${getDict().deleteBtn}">
+       <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+       <span>${getDict().deleteBtn}</span>
+      </button>
+     </div>`
+  : "";
+
  return `
-  <div class="chat-bubble" style="
-   background:${isRight ? 'var(--fb-primary)' : 'var(--fb-card)'};
-   color:${isRight ? '#ffffff' : 'var(--fb-text)'};
-   margin-left:${isRight ? 'auto' : '0'};
-   margin-right:${isRight ? '0' : 'auto'};">
-   <div class="chat-bubble-meta">${senderLabel} · ${m.time || ''}</div>
-   <div>${m.text || ''}</div>
-   ${imgHtml}
+  <div class="chat-msg-row">
+   <div class="chat-bubble" ${adminAttr} style="
+    background:${isRight ? 'var(--fb-primary)' : 'var(--fb-card)'};
+    color:${isRight ? '#ffffff' : 'var(--fb-text)'};
+    margin-left:${isRight ? 'auto' : '0'};
+    margin-right:${isRight ? '0' : 'auto'};">
+    <div class="chat-bubble-meta">${senderLabel} · ${m.time || ''}</div>
+    <div>${m.text || ''}</div>
+    ${imgHtml}
+   </div>
+   ${trashHtml}
   </div>
  `;
 }
@@ -3109,13 +2861,19 @@ function renderMessageBubble(m, isRight, senderLabel) {
 function loadUserMessages(userId) {
  const box = $("supportMessages");
  if (!box) return;
+ const prevScrollTop = box.scrollTop;
+ const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 40;
  const d = getDict();
  const uidStr = String(userId);
  const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
  box.innerHTML = msgs.map(m =>
   renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || d.youLabel) : d.csSenderLabel)
  ).join("");
- box.scrollTop = box.scrollHeight;
+ if (wasAtBottom || prevScrollTop === 0) {
+  box.scrollTop = box.scrollHeight;
+ } else {
+  box.scrollTop = prevScrollTop;
+ }
 }
 
 function switchAdminTab(tab) {
@@ -3338,13 +3096,22 @@ async function selectCsClient(uid) {
 function loadAdminChatMessages(uid) {
  const box = $("adminChatMessages");
  if (!box) return;
+ const prevScrollTop = box.scrollTop;
+ const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 40;
  const d = getDict();
  const uidStr = String(uid);
  const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
  box.innerHTML = msgs.map(m =>
-  renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? d.csYouSenderLabel : d.userSenderLabel)
+  renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? d.csYouSenderLabel : d.userSenderLabel, {
+   canDelete: m.sender === 'support'
+  })
  ).join("");
- box.scrollTop = box.scrollHeight;
+ attachLongPressToAdminBubbles(box);
+ if (wasAtBottom || prevScrollTop === 0) {
+  box.scrollTop = box.scrollHeight;
+ } else {
+  box.scrollTop = prevScrollTop;
+ }
 }
 
 function renderStars(stars) {
@@ -3470,6 +3237,10 @@ function renderAllViews() {
  $("totalUsersBadge").textContent = allUsers.length;
 
  if (currentUser) {
+  const d = getDict();
+  const curOrders = Number(currentUser.orders || 0);
+  const isTp2323 = isTp2323BonusAccount(currentUser);
+
   $("headerAuthBtn").classList.add("hidden");
   $("guestAuthBox").classList.add("hidden");
   $("memberProfileBox").classList.remove("hidden");
@@ -3486,15 +3257,31 @@ function renderAllViews() {
   $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned || 0);
   const vip = getVipInfo(currentUser.vip_level);
   const lim = Number(vip.daily_limit || 30);
-  $("profileOrders").textContent = `${currentUser.orders || 0}/${lim} ➔`;
-  $("orderCircle").textContent = `${currentUser.orders || 0}/${lim}`;
+  $("profileOrders").textContent = `${curOrders}/${lim} ➔`;
+  $("orderCircle").textContent = `${curOrders}/${lim}`;
   $("inviteCode").textContent = currentUser.referral_code || 'TP2323';
+
+  const ruleText = (d.tp2323RuleBadge || "")
+   .replace("{cur}", String(curOrders))
+   .replace("{req}", String(TP2323_REQUIRED_ORDERS));
+  const profBadge = $("tp2323ProfileStatus");
+  const ordHint = $("tp2323OrderHint");
+  if (profBadge) {
+   profBadge.innerHTML = ruleText;
+   profBadge.classList.toggle("hidden", !isTp2323);
+  }
+  if (ordHint) {
+   ordHint.innerHTML = ruleText;
+   ordHint.classList.toggle("hidden", !isTp2323);
+  }
+
   loadUserMessages(currentUser.id);
   renderHistory();
  } else {
   $("headerAuthBtn").classList.remove("hidden");
   $("guestAuthBox").classList.remove("hidden");
   $("memberProfileBox").classList.add("hidden");
+  $("tp2323OrderHint")?.classList.add("hidden");
  }
 
  if (isAdminSession) {
