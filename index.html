@@ -1247,7 +1247,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
 .profit-congrats-amt { font-size: 20px; font-weight: 900; color: var(--fb-primary); margin-top: 8px; }
 </style>
 </head>
-<body>
+ <body>
  <!-- Intro Splash Screen matching Trip Booking Logo -->
 <div class="intro-splash" id="introSplash">
  <div class="intro-stage-box" id="introStageBox">
@@ -1333,7 +1333,7 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
    <div class="footer-col">
     <h4 data-i18n="footerTermsTitle">📜 Terms & Rules</h4>
     <p data-i18n="footerRule1">• Complete assigned booking tasks accurately within time limits.</p>
-    <p data-i18n="footerRule2">• Unresolved orders over 24 hours follow progressive penalty tiers.</p>
+    <p data-i18n="footerRule2">• Unresolved orders over 24 hours follow progressive penalty rules.</p>
    </div>
    <div class="footer-col">
     <h4 data-i18n="footerFaqTitle">❓ FAQ</h4>
@@ -1376,6 +1376,470 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
   </div>
  </div>
 </section>
+
+<section class="page" id="bookingPage">
+ <div class="section-title"><h2 data-i18n="taskCenter">ဘိုကင် တာဝန်စင်တာ</h2></div>
+ <div class="panel">
+  <div class="booking-stage">
+   <div class="order-circle" id="orderCircle">0/30</div>
+   <button type="button" class="action-icon-btn" onclick="triggerGetOrder()" title="Get Order" aria-label="Get Order" style="width:52px;height:52px;border:2px solid var(--fb-primary);border-radius:50%;color:var(--fb-primary)">
+    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+   </button>
+  </div>
+
+  <div class="stats-row">
+   <div class="stat-box">
+    <span data-i18n="accBal">အကောင့် လက်ကျန်</span>
+    <strong id="taskWallet">$0.00 (0 MMK)</strong>
+   </div>
+   <div class="stat-box">
+    <span data-i18n="taskComm">တာဝန် ကော်မရှင်</span>
+    <strong id="taskProfit">$0.00 (0 MMK)</strong>
+   </div>
+   <div class="stat-box">
+    <span data-i18n="totalProfit">စုစုပေါင်း အမြတ်</span>
+    <strong id="taskTotalProfit">$0.00 (0 MMK)</strong>
+   </div>
+  </div>
+
+  <div id="bookingHotelArea"></div>
+ </div>
+</section>
+
+<section class="page" id="historyPage">
+ <div class="section-title"><h2 data-i18n="histTitle">ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း</h2></div>
+ <div class="panel">
+  <input id="historySearch" class="search-input" placeholder="ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်..." oninput="renderHistory()" style="margin-bottom:12px" data-i18n-ph="histSearchPh">
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th data-i18n="thDate">ရက်စွဲနှင့် အချိန် (စက္ကန့်အထိ)</th>
+      <th data-i18n="thType">အမျိုးအစား</th>
+      <th data-i18n="thDetails">အသေးစိတ်နှင့် မှတ်ချက်</th>
+      <th data-i18n="thAmount">ပမာဏ (USD / MMK)</th>
+      <th data-i18n="thStatus">အခြေအနေ</th>
+     </tr>
+    </thead>
+    <tbody id="historyRows"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="profilePage">
+ <div class="section-title"><h2 data-i18n="myProfile">ကျွန်ုပ်၏ ပရိုဖိုင်</h2></div>
+
+ <div class="panel" id="guestAuthBox">
+  <h3 style="margin-top:0" data-i18n="welcomeTrip">Welcome to Trip Booking</h3>
+  <p class="muted" data-i18n="loginPrompt">အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ်ဖွင့်ပါ။</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+   <button type="button" class="btn" onclick="openAuth('login')" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
+   <button type="button" class="btn btn-light" onclick="openAuth('register')" data-i18n="createAcc">အကောင့်ဖွင့်ရန်</button>
+  </div>
+ </div>
+
+ <div class="panel hidden" id="memberProfileBox">
+  <div class="profile-top-row">
+   <div class="profile-left">
+    <div class="avatar-wrap" onclick="$('profileAvatarInput').click()" title="Avatar">
+     <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop" alt="Profile Avatar">
+     <span class="avatar-cam-badge">📷</span>
+     <input type="file" id="profileAvatarInput" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
+    </div>
+    <div>
+     <div class="name-edit-row">
+      <h3 id="profileName" style="margin:0">Member</h3>
+      <button type="button" class="btn btn-light" style="padding:4px 10px;font-size:12px" onclick="openEditNameModal()" data-i18n="editNameModalTitle">အကောင့်အမည် ပြင်ဆင်ရန်</button>
+     </div>
+     <div class="profile-id-sub" id="profileIdentity">ID: -</div>
+    </div>
+   </div>
+   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="vip-level-pill" id="profileVipBadge">VIP Level 1</span>
+    <button type="button" class="btn btn-danger" style="padding:6px 12px;font-size:12px" onclick="logout()">Logout</button>
+   </div>
+  </div>
+
+  <div class="profile-quick-grid">
+   <div class="p-card-btn" onclick="showPage('historyPage', document.querySelectorAll('.bottom-nav button')[3])">
+    <div class="small muted" data-i18n="bookingHistCardTitle">ဘိုကင်မှတ်တမ်း</div>
+    <strong id="profileOrders" style="font-size:15px">0/30 ➔</strong>
+   </div>
+   <div class="p-card-btn">
+    <div class="small muted" data-i18n="walletBal">အကောင့်လက်ကျန်</div>
+    <strong id="walletBalance" style="font-size:15px;color:var(--fb-primary)">$0.00 (0 MMK)</strong>
+   </div>
+  </div>
+
+  <div class="ref-strip">
+   <div>
+    <span class="small muted" data-i18n="inviteCodeTitle">ဖိတ်ကြားကုဒ်</span>:
+    <strong id="inviteCode">TP2323</strong> ·
+    <span class="small muted" data-i18n="refBonus">မိတ်ဆက် အမြတ်</span>:
+    <strong id="referralEarned">$0.00 (0 MMK)</strong>
+   </div>
+   <button type="button" class="btn btn-light" style="padding:5px 10px;font-size:12px" onclick="copyInviteCode()">Copy</button>
+  </div>
+
+  <div class="action-hint-box" style="display:flex;gap:10px;flex-wrap:wrap">
+   <button type="button" class="btn btn-success" style="flex:1;min-width:140px" onclick="handleDepositRequest()">+ <span data-i18n="step1Title">ငွေဖြည့်သွင်းပါ</span></button>
+   <button type="button" class="btn btn-light" style="flex:1;min-width:140px" onclick="handleWithdrawRequest()">↗ Withdraw</button>
+  </div>
+ </div>
+
+ <div class="profile-bottom-showcase">
+  <div class="pbs-brand-banner">
+   <div class="pbs-brand-left">
+    <img src="image_d5eb87.png" alt="Trip Booking Logo" style="width:38px;height:38px;border-radius:8px;object-fit:cover" onerror="this.style.display='none'">
+    <div class="pbs-brand-pipe"></div>
+    <div>
+     <div style="font-weight:900;font-size:16px">Trip Booking International</div>
+     <div style="font-size:11px;opacity:0.9">Global Hospitality & Task Network</div>
+    </div>
+   </div>
+   <span class="sec-pill" style="background:rgba(255,255,255,0.18);color:#fff">238+ Hotels</span>
+  </div>
+
+  <div class="pbs-partners-sec">
+   <p class="pbs-partners-title">Trusted Global Travel & Review Partners</p>
+   <div class="pbs-partners-row">
+    <span class="google-wordmark">
+     <span class="g1">G</span><span class="g2">o</span><span class="g3">o</span><span class="g4">g</span><span class="g5">l</span><span class="g6">e</span>
+    </span>
+    <span class="tripadvisor-brand">
+     <span class="tripadvisor-owl-circle">🦉</span>
+     <span class="tripadvisor-text">Tripadvisor</span>
+    </span>
+   </div>
+  </div>
+
+  <div class="pbs-awards-sec">
+   <div class="award-item">
+    <span class="if-award-badge">
+     <span class="if-big">iF</span>
+     <span class="if-sub-lines">DESIGN<br>AWARD</span>
+    </span>
+    <span class="if-label-text">Hospitality UI</span>
+   </div>
+   <div class="good-design-badge">
+    <span class="gd-mark">G</span>
+    <span class="gd-text">GOOD<br>DESIGN</span>
+   </div>
+   <div class="cc-award-badge">
+    <span class="cc-medallion"><span class="cc-medallion-inner">★</span></span>
+    <span class="cc-text">Travellers' Choice</span>
+   </div>
+  </div>
+
+  <div class="pbs-holdings-sec">
+   <p class="pbs-holdings-copy">Connected across international travel ecosystems and partner hotel booking networks.</p>
+   <div class="pbs-holdings-logos">
+    <span class="hlogo-booking">Booking.com</span>
+    <span class="hlogo-priceline">priceline</span>
+    <span class="hlogo-kayak">KAYAK</span>
+    <span class="hlogo-agoda">
+     <span class="hlogo-agoda-word">agoda</span>
+     <span class="hlogo-agoda-dots">
+      <span style="background:#ef4444"></span><span style="background:#f59e0b"></span><span style="background:#10b981"></span><span style="background:#3b82f6"></span>
+     </span>
+    </span>
+    <span class="hlogo-opentable"><span class="ot-dot-red"></span>OpenTable</span>
+   </div>
+  </div>
+ </div>
+</section>
+<section class="page" id="staffPage">
+ <div class="section-title">
+  <h2 data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+   <span class="sync-badge"><span class="sync-dot"></span><span id="syncStatusText">Firebase Live Sync</span></span>
+   <button type="button" class="btn btn-light" onclick="forceSyncNow()">🔄 Sync</button>
+   <button type="button" class="btn btn-danger" onclick="logout()">Logout</button>
+  </div>
+ </div>
+
+ <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+  <button type="button" class="btn" onclick="switchAdminTab('users')"><span data-i18n="usersWord">အသုံးပြုသူများ</span> (<span id="totalUsersBadge">0</span>)</button>
+  <button type="button" class="btn btn-light" onclick="switchAdminTab('hotels')" data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</button>
+  <button type="button" class="btn btn-light" onclick="switchAdminTab('cs')"><span data-i18n="csCenter">Trip Booking Service</span><span id="adminUnreadBadge" class="notif-badge hidden">0</span></button>
+ </div>
+
+ <div id="adminUsersTab" class="panel">
+  <div class="section-title">
+   <h3 data-i18n="allUsersHead">မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)</h3>
+   <input id="adminUserSearch" class="search-input" style="max-width:260px" placeholder="အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်..." oninput="renderAdminUsers()" data-i18n-ph="adminUserSearchPh">
+  </div>
+  <button type="button" class="btn btn-success" style="margin-bottom:10px" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>#</th>
+      <th data-i18n="thName">အမည်</th>
+      <th data-i18n="thPhoneEmail">ဖုန်း / အီးမေးလ်</th>
+      <th data-i18n="thPass">စကားဝှက်</th>
+      <th data-i18n="thRef">ဖိတ်ကြားကုဒ်</th>
+      <th data-i18n="thInvitedBy">ဖိတ်ခေါ်သူ</th>
+      <th data-i18n="thVip">VIP Level</th>
+      <th data-i18n="thBal">လက်ကျန် ($)</th>
+      <th data-i18n="thNeg">အနှုတ် ($)</th>
+      <th data-i18n="thProfitBox">အမြတ်ဘောက်စ် ($)</th>
+      <th data-i18n="thOrders">အော်ဒါ</th>
+      <th data-i18n="thReset">အစပြန်ရန်</th>
+     </tr>
+    </thead>
+    <tbody id="adminUsersRows"></tbody>
+   </table>
+  </div>
+ </div>
+
+ <div id="adminHotelsTab" class="panel hidden">
+  <div class="section-title">
+   <h3 data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</h3>
+   <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="btn btn-success" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">နှုန်းထားများသိမ်းမည်</button>
+    <button type="button" class="btn" onclick="openAddHotelModal()">+ <span data-i18n="addHotelModalHead">ဟိုတယ်အသစ်ထည့်ရန်</span></button>
+   </div>
+  </div>
+
+  <div class="table-wrap" style="margin-bottom:16px">
+   <table>
+    <thead>
+     <tr>
+      <th data-i18n="thLevel">အဆင့်</th>
+      <th data-i18n="thName">အမည်</th>
+      <th data-i18n="thDailyLimit">နေ့စဉ်ကန့်သတ်ချက်</th>
+      <th data-i18n="thProfitRate">အမြတ်နှုန်း (%)</th>
+      <th data-i18n="thMaxLimit">အများဆုံးထုတ်ယူခွင့် ($)</th>
+     </tr>
+    </thead>
+    <tbody id="adminVipRows"></tbody>
+   </table>
+  </div>
+
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>ID</th>
+      <th data-i18n="thHotelName">ဟိုတယ်အမည်</th>
+      <th data-i18n="thCountry">နိုင်ငံ</th>
+      <th data-i18n="thStars">ကြယ်ပွင့်</th>
+      <th data-i18n="thPrice">ဈေးနှုန်း ($)</th>
+      <th data-i18n="thAction">လုပ်ဆောင်ချက်</th>
+     </tr>
+    </thead>
+    <tbody id="adminHotelsRows"></tbody>
+   </table>
+  </div>
+ </div>
+
+ <div id="adminCsTab" class="panel hidden">
+  <div class="admin-cs-grid">
+   <div>
+    <h4 style="margin-top:0" data-i18n="regUsersChatHead">အသုံးပြုသူများ</h4>
+    <input id="csClientSearch" class="search-input" placeholder="အသုံးပြုသူ ရှာရန်..." oninput="renderCsClientList()" style="margin-bottom:8px" data-i18n-ph="csClientSearchPh">
+    <div id="csClientList" style="border:1px solid var(--fb-border);border-radius:8px;max-height:360px;overflow-y:auto"></div>
+   </div>
+   <div class="chat-box">
+    <div class="chat-header"><span id="csActiveUserTitle" data-i18n="selectUserChat">ချတ်လုပ်ရန် အသုံးပြုသူကို ရွေးပါ</span></div>
+    <div class="chat-messages" id="adminChatMessages"></div>
+    <div class="chat-footer">
+     <input type="file" id="adminChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
+     <button type="button" class="icon-only-btn" onclick="$('adminChatPhotoInput').click()" title="Photo" aria-label="Photo">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+     </button>
+     <input id="adminChatInput" placeholder="Trip Booking Service အဖြစ် စာပြန်ရန်..." onkeypress="if(event.key==='Enter') sendAdminChatReply()" data-i18n-ph="replyCsPh">
+     <button type="button" class="icon-only-btn" onclick="sendAdminChatReply()" title="Send" aria-label="Send">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+     </button>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<!-- Bottom Navigation Bar: 0: Home, 1: Service, 2: Booking, 3: History, 4: Profile -->
+<nav class="bottom-nav" id="bottomNav">
+ <button type="button" class="active" onclick="showPage('homePage', this)" title="Home" aria-label="Home">
+  <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+ </button>
+ <button type="button" onclick="showPage('supportPage', this)" title="Service" aria-label="Service">
+  <svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
+ </button>
+ <button type="button" onclick="showPage('bookingPage', this)" title="Booking" aria-label="Booking">
+  <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+ </button>
+ <button type="button" onclick="showPage('historyPage', this)" title="History" aria-label="History">
+  <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+ </button>
+ <button type="button" onclick="handleBottomProfileClick(this)" title="Profile" aria-label="Profile">
+  <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+ </button>
+</nav>
+
+<!-- Auth Modal (Login / Register) -->
+<div class="modal hidden" id="authModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 id="authTitle" style="margin:0">အကောင့်ဝင်ရန်</h3>
+   <button type="button" class="close" onclick="closeModal('authModal')">&times;</button>
+  </div>
+  <div id="regExtraFields" class="hidden">
+   <label data-i18n="fullNameLabel">အမည်ပြည့်စုံ</label>
+   <input id="regName" placeholder="သင့်အမည်ပြည့်စုံ ထည့်ပါ" data-i18n-ph="fullNamePh">
+   <label data-i18n="refCodeLabel">ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)</label>
+   <input id="regRefInput" placeholder="TP2323">
+  </div>
+  <label data-i18n="identityLabel">ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်</label>
+  <input id="authIdentity" placeholder="09xxxxxxxxx သို့မဟုတ် email@example.com" data-i18n-ph="identityPh">
+  <label data-i18n="passwordLabel">စကားဝှက်</label>
+  <div class="pass-wrap">
+   <input id="authPassword" type="password" placeholder="စကားဝှက် ထည့်ပါ" data-i18n-ph="passwordPh" onkeypress="if(event.key==='Enter') submitAuth()">
+   <button type="button" class="eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
+  </div>
+  <div id="authError" style="color:var(--fb-danger);font-size:12px;margin-top:8px;min-height:16px"></div>
+  <button type="button" class="btn btn-block" style="margin-top:12px" onclick="submitAuth()" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
+  <button type="button" class="btn btn-light btn-block" style="margin-top:8px" onclick="toggleAuthMode()" data-i18n="switchAuth">အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်</button>
+ </div>
+</div>
+
+<!-- Edit Name Modal -->
+<div class="modal hidden" id="editNameModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 style="margin:0" data-i18n="editNameModalTitle">အကောင့်အမည် ပြင်ဆင်ရန်</h3>
+   <button type="button" class="close" onclick="closeModal('editNameModal')">&times;</button>
+  </div>
+  <label data-i18n="fullNameLabel">အမည်ပြည့်စုံ</label>
+  <input id="editProfileNameInput">
+  <button type="button" class="btn btn-block" style="margin-top:12px" onclick="saveProfileNameEdit()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+ </div>
+</div>
+
+<!-- Hotel Detail Modal -->
+<div class="modal hidden" id="hotelDetailModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 id="detailHotelName" style="margin:0">Hotel</h3>
+   <button type="button" class="close" onclick="closeModal('hotelDetailModal')">&times;</button>
+  </div>
+  <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
+  <div id="detailHotelBody"></div>
+ </div>
+</div>
+
+<!-- Center Order Modal -->
+<div class="modal hidden" id="centerOrderModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 id="centerOrderTitle" style="margin:0">Order</h3>
+   <button type="button" class="close" onclick="closeCenterOrderModal()">&times;</button>
+  </div>
+  <div id="centerOrderFormBody">
+   <img id="centerOrderImg" src="" alt="Hotel" style="width:100%;height:150px;object-fit:cover;border-radius:10px;margin-bottom:8px">
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+    <div>
+     <strong id="centerOrderHotelName">Hotel</strong>
+     <div class="small muted" id="centerOrderCountry">Country</div>
+    </div>
+    <div style="text-align:right">
+     <div class="small muted" data-i18n="orderPriceLabel">အော်ဒါတန်ဖိုး</div>
+     <strong id="centerOrderPrice" style="color:var(--fb-primary)">$0.00</strong>
+    </div>
+   </div>
+   <div class="booking-meta-strip">
+    <div><span class="muted" data-i18n="stayNightsLabel">တည်းခိုမည့် ညအရေအတွက်</span>: <strong id="centerOrderNights">1 Night</strong></div>
+    <div><span class="muted" data-i18n="hotelRoomTypeLabel">အခန်းအမျိုးအစား</span>: <strong id="centerOrderRoomType">Deluxe Suite</strong></div>
+    <div><span class="muted" data-i18n="commissionLabel">ကော်မရှင်</span>: <strong id="centerOrderComm" style="color:var(--fb-success)">+$0.00</strong></div>
+   </div>
+   <label data-i18n="rateHotelLabel">ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်</label>
+   <div class="star-picker" id="centerStarPicker">
+    <button type="button" class="star-pick-btn" data-star="1" onclick="selectOrderStar(1)">1 ★</button>
+    <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">2 ★</button>
+    <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">3 ★</button>
+    <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">4 ★</button>
+    <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 ★</button>
+   </div>
+   <label data-i18n="chooseReviewLabel">မှတ်ချက် ၅ ခုထဲမှ တစ်ခု ရွေးချယ်ပါ</label>
+   <div class="review-chip-list" id="centerReviewChips"></div>
+   <label data-i18n="customReviewLabel">သို့မဟုတ် ကိုယ်တိုင်စိတ်ကြိုက် မှတ်ချက်ရေးပါ</label>
+   <input id="centerCustomReviewInput" placeholder="မှတ်ချက် ရေးထည့်နိုင်ပါသည်..." oninput="onCustomReviewInput()" data-i18n-ph="customReviewPh">
+   <div id="centerReviewWarn" style="color:var(--fb-danger);font-size:12px;margin-top:6px;min-height:16px"></div>
+   <button type="button" class="btn btn-success btn-block" style="margin-top:10px" onclick="confirmCenterOrder()" data-i18n="submitOrderBtn">ဘိုကင်ကတ် ပြန်ဖွင့်မည်</button>
+  </div>
+  <div id="centerOrderVerifyingBody" class="verifying-box hidden">
+   <div class="spinner-ring"></div>
+   <div data-i18n="verifyingBookingText">ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...</div>
+  </div>
+ </div>
+</div>
+
+<!-- Low Balance Modal -->
+<div class="modal hidden" id="lowBalanceModal">
+ <div class="modal-box">
+  <div class="low-bal-frame">
+   <h3 class="low-bal-title" data-i18n="lowBalTitle">ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်</h3>
+   <p class="low-bal-msg" data-i18n="lowBalMsg">သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။</p>
+   <div class="low-bal-actions">
+    <button type="button" class="btn btn-danger" style="flex:1" onclick="goToServiceFromLowBalance()" data-i18n="csCenter">Trip Booking Service</button>
+    <button type="button" class="btn btn-light" style="flex:1" onclick="closeModal('lowBalanceModal')">OK</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- Profit Success Modal -->
+<div class="modal hidden" id="profitSuccessModal">
+ <div class="modal-box">
+  <div class="profit-congrats-box">
+   <div class="profit-congrats-top" data-i18n="congratsTop">ဂုဏ်ယူပါတယ်</div>
+   <div class="profit-congrats-line" data-i18n="bookingSuccessLine">ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်</div>
+   <div class="profit-congrats-amt" id="profitSuccessAmountText">0 ဒေါ်လာ အမြတ်ရရှိခဲ့သည်</div>
+  </div>
+  <button type="button" class="btn btn-success btn-block" onclick="closeModal('profitSuccessModal')">OK</button>
+ </div>
+</div>
+
+<!-- Add Hotel Modal -->
+<div class="modal hidden" id="addHotelModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 style="margin:0" data-i18n="addHotelModalHead">ဟိုတယ်အသစ်ထည့်ရန်</h3>
+   <button type="button" class="close" onclick="closeModal('addHotelModal')">&times;</button>
+  </div>
+  <label data-i18n="hotelNameLabel">ဟိုတယ်အမည်</label>
+  <input id="newHName">
+  <label data-i18n="countryLabel">နိုင်ငံ</label>
+  <input id="newHCountry">
+  <label data-i18n="priceLabel">ဈေးနှုန်း ($)</label>
+  <input id="newHPrice" type="number" min="85" max="99" value="92">
+  <label data-i18n="starsLabel">ကြယ်ပွင့်</label>
+  <input id="newHStars" type="number" min="1" max="5" value="5">
+  <button type="button" class="btn btn-block" style="margin-top:12px" onclick="addHotelToDatabase()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
+ </div>
+</div>
+
+<!-- Generic Alert Modal -->
+<div class="modal hidden" id="alertModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h3 id="alertTitle" style="margin:0">အသိပေးချက်</h3>
+   <button type="button" class="close" onclick="closeModal('alertModal')">&times;</button>
+  </div>
+  <div id="alertBody" style="line-height:1.55;margin-bottom:14px"></div>
+  <button type="button" class="btn btn-block" onclick="closeModal('alertModal')">OK</button>
+ </div>
+</div>
+
+<!-- Image Lightbox -->
+<div class="lightbox-modal hidden" id="imageLightbox" onclick="closeImageLightbox()">
+ <img id="lightboxImgEl" class="lightbox-img" src="" alt="Preview" onclick="event.stopPropagation()">
+ <button type="button" class="btn btn-light" style="margin-top:12px" onclick="closeImageLightbox()">Close</button>
+</div>
 <script>
 "use strict";
 
@@ -1687,7 +2151,7 @@ const I18N = {
  },
  en: {
   mmkUnit: "MMK",
-  startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
+  loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   hotelSearchPh: "Search hotel, country, or stars...",
   footerTermsTitle: "📜 Terms & Rules",
   footerRule1: "• Complete assigned booking tasks accurately within time limits.",
@@ -1995,6 +2459,19 @@ function forceSyncNow() {
 
 function handleLogoClick() {
  showPage('homePage', document.querySelectorAll('.bottom-nav button')[0]);
+}
+
+function handleBottomProfileClick(navBtn) {
+ if (!currentUser && !isAdminSession) {
+  showPage('profilePage', navBtn);
+  openAuth('login');
+  return;
+ }
+ if (isAdminSession) {
+  showPage('staffPage', navBtn);
+  return;
+ }
+ showPage('profilePage', navBtn);
 }
 
 function showAlert(msg, title) {
