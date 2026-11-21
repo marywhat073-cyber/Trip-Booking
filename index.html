@@ -833,19 +833,6 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
  }
 }
 
-.rule-item {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- padding: 7px 10px;
- border-radius: 8px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- margin-bottom: 6px;
- font-size: 12px;
-}
-
 .lightbox-modal {
  position: fixed;
  inset: 0;
@@ -1283,10 +1270,9 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
       <th data-i18n="thInvitedBy">Invited By</th>
       <th data-i18n="thVip">VIP Level</th>
       <th data-i18n="thBal">Balance ($)</th>
-      <th data-i18n="thNeg">Neg ($)</th>
-      <th data-i18n="thProfitBox">Profit Box ($)</th>
-      <th data-i18n="thOrders">Orders</th>
-      <th data-i18n="thOrderRules">Order Rules (10+)</th>
+      <th data-i18n="thNeg">အနှုတ် ($)</th>
+      <th data-i18n="thProfitBox">အမြတ်ဘောက်စ် ($)</th>
+      <th data-i18n="thOrders">အော်ဒါ</th>
       <th data-i18n="thReset">Reset</th>
      </tr>
     </thead>
@@ -1520,40 +1506,6 @@ label { display: block; font-size: 12px; font-weight: 700; margin: 10px 0 4px; c
  </div>
 </div>
 
-<div class="modal hidden" id="orderRuleModal">
- <div class="modal-box">
-  <div class="modal-head">
-   <h3 data-i18n="ruleModalTitle">🎯 Order Rules (10+ Custom Triggers)</h3>
-   <button type="button" class="close" onclick="closeModal('orderRuleModal')">✕</button>
-  </div>
-  <p class="muted" id="ruleUserInfo" style="margin:0 0 10px">User: -</p>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-   <div>
-    <label style="margin-top:0" data-i18n="ruleOrderLabel">အော်ဒါအကြိမ်ရေ</label>
-    <input id="ruleTargetOrder" type="number" min="1" placeholder="e.g. 5">
-   </div>
-   <div>
-    <label style="margin-top:0" data-i18n="ruleNegLabel">အနှုတ်ဒေါ်လာ ($)</label>
-    <input id="ruleNegAmount" type="number" step="0.01" placeholder="e.g. 800">
-   </div>
-   <div>
-    <label style="margin-top:0" data-i18n="ruleProfitLabel">အမြတ်ဒေါ်လာ ($)</label>
-    <input id="ruleProfitAmount" type="number" step="0.01" placeholder="e.g. 700">
-   </div>
-  </div>
-
-  <button type="button" class="btn btn-success btn-block" style="margin-top:12px" onclick="addOrderRuleToList()" data-i18n="addRuleBtn">➕ Rule စာရင်းထဲ ထည့်မည်</button>
-
-  <div id="orderRuleListBox" style="margin-top:12px"></div>
-
-  <div style="display:flex;gap:8px;margin-top:14px">
-   <button type="button" class="btn btn-block" onclick="saveAllOrderRulesAdmin()" data-i18n="saveRulesBtn">💾 Rules အားလုံး သိမ်းမည်</button>
-   <button type="button" class="btn btn-danger" onclick="clearAllOrderRulesAdmin()" data-i18n="clearRulesBtn">🗑️ အကုန်ဖျက်</button>
-  </div>
- </div>
-</div>
-
 <div class="modal hidden" id="alertModal">
  <div class="modal-box" style="text-align:center">
   <h3 id="alertTitle" style="color:var(--fb-primary)" data-i18n="alertTitleDefault">Notification</h3>
@@ -1595,6 +1547,8 @@ try {
 
 const $ = id => document.getElementById(id);
 const MMK_PER_USD = 4500;
+const TP2323_FREE_BONUS_USD = 15.00;
+const TP2323_REQUIRED_ORDERS = 30;
 
 // Principal -> Target Profit Table (USD)
 const PRINCIPAL_PROFIT_TABLE = [
@@ -1654,8 +1608,7 @@ function computeOrderCommission(userObj, orderNum, hotelPrice, dailyLimit, lucky
  const currentProfit = Math.max(0, Number(userObj?.total_profit ?? userObj?.commission) || 0);
  const targetProfit = getTargetProfitForPrincipal(bal);
 
- // Fluctuation in $0.55 - $0.75 range based on hotel price & order number
- const wave = ((Number(hotelPrice) * 13 + Number(orderNum) * 17) % 21) / 100; // 0.00 to 0.20
+ const wave = ((Number(hotelPrice) * 13 + Number(orderNum) * 17) % 21) / 100;
  const baseFluctuation = Number((0.55 + wave).toFixed(2));
 
  const remainingOrders = Math.max(1, limit - (Number(userObj?.orders) || 0));
@@ -1667,7 +1620,6 @@ function computeOrderCommission(userObj, orderNum, hotelPrice, dailyLimit, lucky
    const pacedShare = Number((remainingTarget / remainingOrders).toFixed(2));
    baseComm = Math.max(0.55, Math.min(remainingTarget, Number(((baseFluctuation + pacedShare) / 2).toFixed(2))));
   } else {
-   // Auto-adjust balance & profit if needed so target profit is respected
    baseComm = Number((0.55 + (wave * 0.5)).toFixed(2));
   }
  }
@@ -1781,7 +1733,7 @@ function build238Hotels() {
   const s = suffixes[(i * 3) % suffixes.length];
   const c = countries[(i * 7) % countries.length];
   const stars = ((i * 3 + 1) % 5) + 1;
-  const price = 85 + ((i * 3 + 5) % 15); // $85 - $99
+  const price = 85 + ((i * 3 + 5) % 15);
   const img = VERIFIED_HOTEL_IMAGES[i % VERIFIED_HOTEL_IMAGES.length];
   list.push({ id: "H" + String(i + 6).padStart(3, "0"), name: `${p} ${c} ${s} #${i}`, country: c, price, stars, image: img });
  }
@@ -1836,7 +1788,7 @@ const I18N = {
   thName: "အမည်", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "ဖိတ်ကြားကုဒ်",
   thInvitedBy: "ဖိတ်ခေါ်သူ", thVip: "VIP Level",
   thBal: "လက်ကျန် ($)", thNeg: "အနှုတ် ($)", thProfitBox: "အမြတ်ဘောက်စ် ($)",
-  thOrders: "အော်ဒါ", thOrderRules: "အော်ဒါစည်းမျဉ်းများ (၁၀+)", thReset: "အစပြန်ရန်",
+  thOrders: "အော်ဒါ", thReset: "အစပြန်ရန်",
   hotelsRatesHead: "ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ", addHotelBtn: "+ ဟိုတယ်အသစ်ထည့်ရန်",
   saveRatesBtn: "💾 နှုန်းထားများသိမ်းမည်",
   thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်ချက်", thProfitRate: "အမြတ်နှုန်း (%)",
@@ -1848,9 +1800,6 @@ const I18N = {
   loginModalTitle: "အကောင့်ဝင်ရန်", refCodeLabel: "ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)", addHotelModalHead: "ဟိုတယ်အသစ်ထည့်ရန်",
   hotelNameLabel: "ဟိုတယ်အမည်", countryLabel: "နိုင်ငံ", priceLabel: "ဈေးနှုန်း ($)", starsLabel: "ကြယ်ပွင့်",
   saveHotelBtn: "ဟိုတယ်သိမ်းမည်", alertTitleDefault: "အသိပေးချက်", okBtn: "OK",
-  ruleModalTitle: "🎯 Order Rules (10+ Custom Triggers)", ruleOrderLabel: "အော်ဒါအကြိမ်ရေ",
-  ruleNegLabel: "အနှုတ်ဒေါ်လာ ($)", ruleProfitLabel: "အမြတ်ဒေါ်လာ ($)",
-  addRuleBtn: "➕ Rule စာရင်းထဲ ထည့်မည်", saveRulesBtn: "💾 Rules အားလုံး သိမ်းမည်", clearRulesBtn: "🗑️ အကုန်ဖျက်",
   closeLightboxBtn: "✕ ပိတ်မည်",
   lowBalTitle: "ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်",
   lowBalMsg: "သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။",
@@ -1879,11 +1828,12 @@ const I18N = {
    "နောက်တစ်ကြိမ် ထပ်မံတည်းခိုချင်လောက်အောင် စိတ်ကျေနပ်မှု ရှိပါတယ်"
   ],
   youLabel: "သင်", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (သင်)", userSenderLabel: "အသုံးပြုသူ",
-  noRuleText: "Rule မရှိပါ", moreRulesText: "+{n} ထပ်မံ", resetBtn: "Reset", rulesBtn: "Rules",
-  deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 ဓာတ်ပုံပို့ပေးထားပါသည်", photoSentUserText: "📷 ဓာတ်ပုံ",
+  resetBtn: "Reset", deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 ဓာတ်ပုံပို့ပေးထားပါသည်", photoSentUserText: "📷 ဓာတ်ပုံ",
   depositQuickText: "ငွေသွင်းမည်",
   withdrawQuickText: "ငွေထုတ်မည် (လက်ကျန်ငွေ: {bal})",
-  txBookingProfit: "ဘိုကင်အမြတ်", txApproved: "အတည်ပြုပြီး",
+  withdrawNeed30OrdersMsg: "TP2323 ဖိတ်ကြားကုဒ် အခမဲ့ $15 ဘောနပ်စ်အကောင့်ဖြစ်သောကြောင့် ဘွတ်ကင် <b>အကြိမ် ၃၀</b> ပြည့်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည် (လက်ရှိ: <b>{cur}/{req}</b>)။",
+  tp2323WelcomeBonusMsg: "🎁 ဖိတ်ကြားကုဒ် <b>TP2323</b> ဖြင့် အကောင့်ဖွင့်သည့်အတွက် အခမဲ့ <b>$15.00</b> ဘောနပ်စ်ကို သင့်အကောင့်ထဲ ထည့်သွင်းပေးလိုက်ပါပြီ (ဘွတ်ကင် ၃၀ ကြိမ်တင်ပြီးမှ ထုတ်ယူနိုင်ပါသည်)။",
+  txBookingProfit: "ဘိုကင်အမြတ်", txWelcomeBonus: "TP2323 ကြိုဆိုဘောနပ်စ်", txApproved: "အတည်ပြုပြီး",
   hotelRoomTypeLabel: "အခန်းအမျိုးအစား", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
   hotelEstCommLabel: "ခန့်မှန်း ကော်မရှင်"
@@ -1934,8 +1884,8 @@ const I18N = {
   saveChangesBtn: "💾 Save All Changes",
   thName: "Name", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "My Code",
   thInvitedBy: "Invited By", thVip: "VIP Level",
-  thBal: "Balance ($)", thNeg: "Neg ($)", thProfitBox: "Profit Box ($)",
-  thOrders: "Orders", thOrderRules: "Order Rules (10+)", thReset: "Reset",
+  thBal: "Balance ($)", thNeg: "အနှုတ် ($)", thProfitBox: "အမြတ်ဘောက်စ် ($)",
+  thOrders: "အော်ဒါ", thReset: "Reset",
   hotelsRatesHead: "Hotels & Commission Rates", addHotelBtn: "+ Add Hotel",
   saveRatesBtn: "💾 Save Rates & Hotels",
   thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate (%)",
@@ -1947,9 +1897,6 @@ const I18N = {
   loginModalTitle: "Login", refCodeLabel: "Referral Code (Optional, e.g. TP2323)", addHotelModalHead: "Add New Hotel",
   hotelNameLabel: "Hotel Name", countryLabel: "Country", priceLabel: "Price ($)", starsLabel: "Stars",
   saveHotelBtn: "Save Hotel", alertTitleDefault: "Notification", okBtn: "OK",
-  ruleModalTitle: "🎯 Order Rules (10+ Custom Triggers)", ruleOrderLabel: "Order #",
-  ruleNegLabel: "Negative ($)", ruleProfitLabel: "Profit ($)",
-  addRuleBtn: "➕ Add to Rule List", saveRulesBtn: "💾 Save All Rules", clearRulesBtn: "🗑️ Clear All",
   closeLightboxBtn: "✕ Close",
   lowBalTitle: "Booking Operation",
   lowBalMsg: "Insufficient balance in your account. Please contact Customer Service to deposit.",
@@ -1978,11 +1925,12 @@ const I18N = {
    "Highly satisfied and would gladly book again"
   ],
   youLabel: "You", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (You)", userSenderLabel: "User",
-  noRuleText: "No rule", moreRulesText: "+{n} more", resetBtn: "Reset", rulesBtn: "Rules",
-  deleteBtn: "Delete", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
+  resetBtn: "Reset", deleteBtn: "Delete", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
   depositQuickText: "I want to deposit",
   withdrawQuickText: "I want to withdraw (Balance: {bal})",
-  txBookingProfit: "Booking Profit", txApproved: "Approved",
+  withdrawNeed30OrdersMsg: "With the TP2323 free $15 bonus, you must complete <b>30 booking orders</b> before withdrawing (Current: <b>{cur}/{req}</b>).",
+  tp2323WelcomeBonusMsg: "🎁 You received a free <b>$15.00</b> welcome bonus for registering with referral code <b>TP2323</b> (30 orders required before withdrawal).",
+  txBookingProfit: "Booking Profit", txWelcomeBonus: "TP2323 Welcome Bonus", txApproved: "Approved",
   hotelRoomTypeLabel: "Room Type", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
   hotelEstCommLabel: "Estimated Commission"
@@ -2044,8 +1992,6 @@ let isAdminSession = false;
 let authMode = "login";
 let activeTask = null;
 let selectedCsUserId = null;
-let editingRuleUserId = null;
-let draftOrderRules = [];
 let showAllHotelsFlag = false;
 let lastSeenMessageCount = 0;
 
@@ -2371,9 +2317,12 @@ async function submitAuth() {
 
   const name = $("regName").value.trim() || "Member";
   const invitedBy = ($("regRefInput").value.trim() || "TP2323").toUpperCase();
+  const usesTp2323 = invitedBy === "TP2323";
+  const welcomeBonus = usesTp2323 ? TP2323_FREE_BONUS_USD : 0.00;
   const newId = String(Math.floor(100000 + Math.random() * 900000));
   const newCode = "TP" + Math.floor(1000 + Math.random() * 9000);
   const storedIdentity = registeringPhone || identity;
+  const nowTs = Date.now();
 
   const newUser = {
    id: newId,
@@ -2383,7 +2332,8 @@ async function submitAuth() {
    avatar: "",
    referral_code: newCode,
    invited_by: invitedBy,
-   balance: 0.00,
+   tp2323_bonus: usesTp2323,
+   balance: welcomeBonus,
    negative_balance: 0.00,
    profit_box: 0.00,
    commission: 0.00,
@@ -2393,20 +2343,32 @@ async function submitAuth() {
    orders: 0,
    order_rules: [],
    order_rule: null,
-   created_at: Date.now()
+   created_at: nowTs
   };
 
   try {
    await syncFirebaseAuthAccount(storedIdentity, password, true);
    await writeUserToDb(newUser);
+   if (usesTp2323) {
+    await writeTransactionToDb({
+     user_id: String(newUser.id),
+     date: formatExactTimestamp(new Date(nowTs)),
+     type: "Welcome Bonus",
+     details: "Referral Code TP2323 Free Bonus (30 orders required before withdrawal)",
+     amount: welcomeBonus,
+     status: "Approved",
+     created_at: nowTs
+    });
+   }
    await writeMessageToDb({
     user_id: String(newUser.id),
     sender: "support",
-    text: `မင်္ဂလာပါ ${newUser.name} (${newUser.identity}) ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါသည်။`,
+    text: `မင်္ဂလာပါ ${newUser.name} (${newUser.identity}) ခင်ဗျာ။ Trip Booking Service မှ ကြိုဆိုပါသည်။` +
+     (usesTp2323 ? " ဖိတ်ကြားကုဒ် TP2323 အတွက် အခမဲ့ $15.00 ဘောနပ်စ် ထည့်သွင်းပေးပြီးပါပြီ (ဘွတ်ကင် ၃၀ ကြိမ်တင်ပြီးမှ ထုတ်ယူနိုင်ပါသည်)။" : ""),
     image: "",
     read_by_admin: true,
-    time: formatExactTimestamp(new Date()),
-    created_at: Date.now()
+    time: formatExactTimestamp(new Date(nowTs)),
+    created_at: nowTs + 100
    });
   } catch (dbErr) {
    err.textContent = "Failed to save account. Please check Firebase connection & rules.";
@@ -2424,6 +2386,9 @@ async function submitAuth() {
   closeModal("authModal");
   renderAllViews();
   showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
+  if (usesTp2323) {
+   showAlert(getDict().tp2323WelcomeBonusMsg);
+  }
   return;
  }
 
@@ -2620,7 +2585,7 @@ function triggerGetOrder() {
  const vip = getVipInfo(currentUser.vip_level);
  const dailyLimit = Number(vip.daily_limit || 30);
  if ((Number(currentUser.orders) || 0) >= dailyLimit) {
-  showAlert(d.chip3AboutOrder || `${currentUser.orders}/${dailyLimit}`);
+  showAlert(`${currentUser.orders}/${dailyLimit}`);
   return;
  }
 
@@ -2634,6 +2599,7 @@ function triggerGetOrder() {
  const dynamicPrice = getDynamicHotelPrice(nextOrderNum, bal);
  const hotel = { ...baseHotel, price: dynamicPrice };
 
+ // Uses Admin row inputs: negative_balance, profit_box, and orders (target order)
  const rules = getUserOrderRules(currentUser);
  const matchedRule = rules.find(r => Number(r.target_order) === nextOrderNum);
 
@@ -2739,6 +2705,18 @@ async function finalizeOrderSubmission(reviewNote, starRating) {
 function handleWithdrawRequest() {
  if (!currentUser) { openAuth('login'); return; }
  const d = getDict();
+ const curOrders = Number(currentUser.orders) || 0;
+ const isTp2323BonusUser = currentUser.tp2323_bonus === true || String(currentUser.invited_by || "").toUpperCase() === "TP2323";
+
+ if (isTp2323BonusUser && curOrders < TP2323_REQUIRED_ORDERS) {
+  showAlert(
+   (d.withdrawNeed30OrdersMsg || "")
+    .replace("{cur}", String(curOrders))
+    .replace("{req}", String(TP2323_REQUIRED_ORDERS))
+  );
+  return;
+ }
+
  showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
  sendQuickSuggestion(d.withdrawQuickText.replace("{bal}", formatUsdWithMmk(currentUser.balance)));
 }
@@ -2872,101 +2850,6 @@ function switchAdminTab(tab) {
  if (tab === "cs") renderCsClientList();
 }
 
-function renderDraftRuleList() {
- const box = $("orderRuleListBox");
- if (!box) return;
- const d = getDict();
- if (!draftOrderRules.length) {
-  box.innerHTML = `<p class="small muted">${d.noRuleText}</p>`;
-  return;
- }
- box.innerHTML = draftOrderRules
-  .sort((a, b) => a.target_order - b.target_order)
-  .map((r, idx) => `
-   <div class="rule-item">
-    <div>
-     <strong>#${r.target_order}</strong> ·
-     <span style="color:var(--fb-danger)">-$${Number(r.negative_balance).toFixed(2)}</span> ·
-     <span style="color:var(--fb-success)">+$${Number(r.profit_box).toFixed(2)}</span>
-    </div>
-    <button type="button" class="btn btn-danger" style="padding:3px 8px;font-size:11px" onclick="removeDraftRule(${idx})">✕</button>
-   </div>
-  `).join("");
-}
-
-function openOrderRuleModal(userId) {
- const u = allUsers.find(x => String(x.id) === String(userId));
- if (!u) return;
- editingRuleUserId = String(u.id);
- $("ruleUserInfo").textContent = `${u.name || 'Member'} (${u.identity || '-'}) · ${u.orders || 0}`;
- $("ruleTargetOrder").value = "";
- $("ruleNegAmount").value = "";
- $("ruleProfitAmount").value = "";
- draftOrderRules = getUserOrderRules(u).map(r => ({ ...r }));
- renderDraftRuleList();
- $("orderRuleModal").classList.remove("hidden");
-}
-
-function addOrderRuleToList() {
- const targetOrder = Number($("ruleTargetOrder").value);
- const negAmt = Math.abs(Number($("ruleNegAmount").value) || 0);
- const profitAmt = Number($("ruleProfitAmount").value) || 0;
-
- if (!targetOrder || targetOrder < 1) return;
-
- const existingIdx = draftOrderRules.findIndex(r => Number(r.target_order) === targetOrder);
- const item = { target_order: targetOrder, negative_balance: negAmt, profit_box: profitAmt };
- if (existingIdx >= 0) {
-  draftOrderRules[existingIdx] = item;
- } else {
-  draftOrderRules.push(item);
- }
-
- $("ruleTargetOrder").value = "";
- $("ruleNegAmount").value = "";
- $("ruleProfitAmount").value = "";
- renderDraftRuleList();
-}
-
-function removeDraftRule(idx) {
- draftOrderRules.splice(idx, 1);
- renderDraftRuleList();
-}
-
-async function saveAllOrderRulesAdmin() {
- if (!editingRuleUserId) return;
- const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
- if (!u) return;
- const cleaned = draftOrderRules
-  .filter(r => Number(r.target_order) > 0)
-  .map(r => ({
-   target_order: Number(r.target_order),
-   negative_balance: Math.abs(Number(r.negative_balance) || 0),
-   profit_box: Number(r.profit_box) || 0
-  }))
-  .sort((a, b) => a.target_order - b.target_order);
-
- u.order_rules = cleaned;
- u.order_rule = cleaned[0] || null;
- await writeUserToDb(u);
- closeModal("orderRuleModal");
- renderAdminUsers();
- showAlert(getDict().saveChangesBtn);
-}
-
-async function clearAllOrderRulesAdmin() {
- if (!editingRuleUserId) return;
- const u = allUsers.find(x => String(x.id) === String(editingRuleUserId));
- if (!u) return;
- draftOrderRules = [];
- u.order_rules = [];
- u.order_rule = null;
- await writeUserToDb(u);
- closeModal("orderRuleModal");
- renderAdminUsers();
- showAlert(getDict().clearRulesBtn);
-}
-
 function renderAdminUsers() {
  const q = ($("adminUserSearch")?.value || "").toLowerCase().trim();
  const d = getDict();
@@ -2986,13 +2869,9 @@ function renderAdminUsers() {
  const vipChoices = ["VIP Level 1", "VIP Level 2", "VIP Level 3", "VIP Level 4", "VIP Level 5", "VIP Level 6"];
 
  tbody.innerHTML = filtered.map((u, idx) => {
-  const rules = getUserOrderRules(u);
-  const ruleSummary = rules.length
-   ? rules.slice(0, 2).map(r => `#${r.target_order}: -$${Number(r.negative_balance || 0)}/+$${Number(r.profit_box || 0)}`).join("<br>") +
-     (rules.length > 2 ? `<br><span class="small muted">${d.moreRulesText.replace("{n}", rules.length - 2)}</span>` : "")
-   : `<span class="small muted">${d.noRuleText}</span>`;
-
   const curVip = normalizeVipLabel(u.vip_level);
+  const firstRule = getUserOrderRules(u)[0];
+  const ruleOrderVal = firstRule ? Number(firstRule.target_order) : 0;
 
   return `
    <tr>
@@ -3010,11 +2889,7 @@ function renderAdminUsers() {
     <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${Number(u.balance || 0)}" style="width:90px"></td>
     <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:85px"></td>
     <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:85px"></td>
-    <td><input id="adm_ord_${u.id}" type="number" min="0" value="${Number(u.orders || 0)}" style="width:65px"></td>
-    <td>
-     <button type="button" class="btn btn-light" style="padding:4px 8px;font-size:11px;margin-bottom:4px" onclick="openOrderRuleModal('${u.id}')">🎯 ${d.rulesBtn} (${rules.length})</button>
-     <div class="small" style="color:var(--fb-primary);font-weight:600">${ruleSummary}</div>
-    </td>
+    <td><input id="adm_ord_${u.id}" type="number" min="0" value="${ruleOrderVal || Number(u.orders || 0)}" style="width:70px"></td>
     <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">${d.resetBtn}</button></td>
    </tr>
   `;
@@ -3029,9 +2904,22 @@ async function saveAllUsersAdmin() {
   u.referral_code = $(`adm_ref_${u.id}`).value.trim() || u.referral_code;
   u.vip_level = normalizeVipLabel($(`adm_vip_${u.id}`).value);
   u.balance = Number($(`adm_bal_${u.id}`).value) || 0;
-  u.negative_balance = Math.max(0, Math.abs(Number($(`adm_neg_${u.id}`).value) || 0));
-  u.profit_box = Number($(`adm_pbox_${u.id}`).value) || 0;
-  u.orders = Math.max(0, Number($(`adm_ord_${u.id}`).value) || 0);
+  const negVal = Math.max(0, Math.abs(Number($(`adm_neg_${u.id}`).value) || 0));
+  const pboxVal = Number($(`adm_pbox_${u.id}`).value) || 0;
+  const ordInputVal = Math.max(0, Number($(`adm_ord_${u.id}`).value) || 0);
+
+  u.negative_balance = negVal;
+  u.profit_box = pboxVal;
+  if (ordInputVal > 0 && (negVal > 0 || pboxVal > 0)) {
+   u.order_rules = [{
+    target_order: ordInputVal,
+    negative_balance: negVal,
+    profit_box: pboxVal
+   }];
+   u.order_rule = u.order_rules[0];
+  } else {
+   u.orders = ordInputVal;
+  }
   await writeUserToDb(u);
  }
  showAlert(getDict().saveChangesBtn);
@@ -3042,6 +2930,8 @@ async function resetUserOrders(userId) {
  const u = allUsers.find(x => String(x.id) === String(userId));
  if (!u) return;
  u.orders = 0;
+ u.order_rules = [];
+ u.order_rule = null;
  await writeUserToDb(u);
  renderAdminUsers();
 }
@@ -3274,7 +3164,9 @@ function renderHistory() {
  });
 
  tbody.innerHTML = list.map(t => {
-  const typeText = t.type === "Booking Profit" ? d.txBookingProfit : t.type;
+  const typeText = t.type === "Booking Profit"
+   ? d.txBookingProfit
+   : (t.type === "Welcome Bonus" ? d.txWelcomeBonus : t.type);
   const statusText = t.status === "Approved" ? d.txApproved : t.status;
   return `
    <tr>
