@@ -49,7 +49,7 @@ body {
  font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Noto Sans Myanmar", sans-serif;
  background: var(--fb-bg);
  color: var(--fb-text);
- padding-bottom: 78px;
+ padding-bottom: 84px;
  transition: background 0.25s ease, color 0.25s ease;
  overflow-x: hidden;
 }
@@ -159,11 +159,11 @@ body {
  z-index: 100;
  background: var(--fb-card);
  border-bottom: 1px solid var(--fb-border);
- padding: 10px 16px;
+ padding: 10px 14px;
  display: flex;
  align-items: center;
  justify-content: space-between;
- gap: 10px;
+ gap: 8px;
  flex-wrap: wrap;
  box-shadow: var(--shadow-soft);
 }
@@ -177,7 +177,7 @@ body {
  font-weight: 700;
  letter-spacing: 0.4px;
 }
-.header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 select, input, textarea {
  border: 1px solid var(--fb-border);
  background: var(--fb-bg);
@@ -193,8 +193,8 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .btn {
  border: none;
  border-radius: 8px;
- padding: 8px 14px;
- font-size: 14px;
+ padding: 8px 13px;
+ font-size: 13.5px;
  font-weight: 600;
  cursor: pointer;
  transition: 0.15s ease;
@@ -203,6 +203,7 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
  justify-content: center;
  gap: 6px;
  font-family: inherit;
+ white-space: nowrap;
 }
 .btn:hover { transform: translateY(-1px); }
 .btn-primary { background: var(--fb-primary); color: #fff; }
@@ -211,8 +212,9 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .btn-danger { background: var(--fb-danger); color: #fff; }
 .btn-success { background: var(--fb-success); color: #fff; }
 .btn-gold { background: var(--fb-gold); color: #111827; }
+.btn-xs { padding: 4px 8px; font-size: 11.5px; border-radius: 6px; }
 
-.container { max-width: 1200px; margin: 16px auto; padding: 0 14px; }
+.container { max-width: 1220px; margin: 14px auto; padding: 0 12px; }
 .page { display: none; }
 .page.active { display: block; }
 
@@ -221,26 +223,26 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
              url("https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1400&auto=format&fit=crop") center/cover no-repeat;
  color: #fff;
  border-radius: 14px;
- padding: 26px 22px;
- margin-bottom: 16px;
+ padding: 24px 20px;
+ margin-bottom: 14px;
  box-shadow: var(--shadow-card);
  border: 1px solid rgba(255,255,255,0.12);
 }
-.hero h1 { margin: 0 0 8px; font-size: 26px; letter-spacing: -0.2px; color: #fff; }
+.hero h1 { margin: 0 0 8px; font-size: 25px; letter-spacing: -0.2px; color: #fff; }
 .hero p { margin: 0 0 14px; color: #e2e8f0; max-width: 700px; line-height: 1.5; }
 
 .section-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 14px;
- padding: 16px;
- margin-bottom: 16px;
+ padding: 15px;
+ margin-bottom: 14px;
  box-shadow: var(--shadow-soft);
 }
 .section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
 .section-title { margin: 0; font-size: 18px; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 13px; }
 .card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
@@ -254,15 +256,96 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
  cursor: pointer;
 }
 .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); }
-.hotel-img { width: 100%; height: 152px; object-fit: cover; background: #cbd5e1; display: block; }
-.card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-.price { font-size: 16px; font-weight: 700; color: var(--fb-primary); }
-.mmk-sub { font-size: 12px; color: var(--fb-muted); display: block; margin-top: 2px; }
+.hotel-img { width: 100%; height: 150px; object-fit: cover; background: #cbd5e1; display: block; }
+.card-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+.price { font-size: 15.5px; font-weight: 700; color: var(--fb-primary); }
+.mmk-sub { font-size: 11.5px; color: var(--fb-muted); display: block; margin-top: 2px; }
 .tag { display: inline-block; background: rgba(29, 78, 216, 0.12); color: var(--fb-primary); padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
-.gold-stars { color: var(--fb-gold); font-size: 14px; letter-spacing: 1px; }
+.gold-stars { color: var(--fb-gold); font-size: 13.5px; letter-spacing: 1px; }
+
+/* Status & Filter Badges */
+.status-pill {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ padding: 2px 8px;
+ border-radius: 999px;
+ font-size: 11px;
+ font-weight: 700;
+ line-height: 1.3;
+ white-space: nowrap;
+}
+.pill-live { background: rgba(228, 30, 63, 0.14); color: var(--fb-danger); border: 1px solid rgba(228, 30, 63, 0.35); }
+.pill-neg { background: rgba(245, 158, 11, 0.18); color: #b45309; border: 1px solid rgba(245, 158, 11, 0.45); }
+body.dark .pill-neg { color: #fbbf24; }
+.pill-rule { background: rgba(29, 78, 216, 0.14); color: var(--fb-primary); border: 1px solid rgba(29, 78, 216, 0.35); }
+.pill-online { background: rgba(46, 125, 50, 0.14); color: var(--fb-success); border: 1px solid rgba(46, 125, 50, 0.35); }
+.pill-offline { background: var(--fb-bg); color: var(--fb-muted); border: 1px solid var(--fb-border); }
+.pill-pending { background: rgba(29, 78, 216, 0.12); color: var(--fb-primary); }
+.pill-triggered { background: rgba(46, 125, 50, 0.14); color: var(--fb-success); }
+.pill-bonus { background: rgba(124, 58, 237, 0.14); color: #6d28d9; }
+body.dark .pill-bonus { color: #c4b5fd; }
+.pill-clear { background: rgba(14, 116, 144, 0.14); color: #0e7490; }
+body.dark .pill-clear { color: #67e8f9; }
+.pill-hotel { background: rgba(180, 83, 9, 0.14); color: #b45309; }
+body.dark .pill-hotel { color: #fbbf24; }
+
+/* Sticky Admin Live Banner */
+.admin-live-sticky {
+ position: sticky;
+ top: 62px;
+ z-index: 90;
+ background: linear-gradient(90deg, rgba(15, 23, 42, 0.96), rgba(30, 58, 138, 0.95));
+ color: #ffffff;
+ border: 1px solid rgba(255, 255, 255, 0.18);
+ border-radius: 12px;
+ padding: 10px 14px;
+ margin-bottom: 12px;
+ box-shadow: var(--shadow-card);
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 10px;
+ flex-wrap: wrap;
+}
+.live-pulse-dot {
+ width: 9px;
+ height: 9px;
+ border-radius: 50%;
+ background: #4ade80;
+ box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.25);
+ display: inline-block;
+}
+
+/* Pending Profit Banner (Shown cleanly when no negative balance) */
+.pending-profit-banner {
+ background: linear-gradient(135deg, rgba(29, 78, 216, 0.09), rgba(46, 125, 50, 0.09));
+ border: 1px solid rgba(29, 78, 216, 0.28);
+ border-radius: 12px;
+ padding: 11px 14px;
+ margin: 10px auto 12px;
+ max-width: 640px;
+ text-align: left;
+ font-size: 13px;
+ line-height: 1.5;
+}
+
+/* Last Completed Order Summary Banner */
+.last-completed-banner {
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ border-left: 4px solid var(--fb-success);
+ border-radius: 12px;
+ padding: 11px 14px;
+ margin: 10px auto 12px;
+ max-width: 640px;
+ text-align: left;
+ font-size: 13px;
+ line-height: 1.5;
+}
 
 /* Step Guide & Footer */
-.guide-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.guide-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
 .guide-step-card {
  background: var(--fb-bg);
  border: 1px solid var(--fb-border);
@@ -318,10 +401,10 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .booking-metrics-row {
  display: grid;
  grid-template-columns: repeat(3, minmax(0, 1fr));
- gap: 10px;
+ gap: 9px;
  width: 100%;
- max-width: 560px;
- margin: 14px auto 12px;
+ max-width: 640px;
+ margin: 12px auto;
 }
 .booking-metric-box {
  background: var(--fb-bg);
@@ -337,10 +420,11 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
  font-weight: 600;
 }
 .booking-metric-val {
- font-size: 13.5px;
+ font-size: 13px;
  font-weight: 800;
  color: var(--fb-primary);
  word-break: break-word;
+ line-height: 1.3;
 }
 
 /* Order Progress Circle */
@@ -467,7 +551,7 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 10px; margin-top: 12px; }
 .stat-box { background: var(--fb-bg); border: 1px solid var(--fb-border); border-radius: 10px; padding: 12px; }
 .stat-label { font-size: 12px; color: var(--fb-muted); }
-.stat-val { font-size: 17px; font-weight: 700; margin-top: 4px; }
+.stat-val { font-size: 16px; font-weight: 700; margin-top: 4px; }
 
 /* Trust & Partner Showcase */
 .partner-logos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 10px; }
@@ -605,9 +689,9 @@ body.dark .chat-messages { background: rgba(24, 25, 26, 0.76); }
 
 /* Tables */
 .table-wrap { overflow-x: auto; border: 1px solid var(--fb-border); border-radius: 10px; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th, td { padding: 9px 10px; border-bottom: 1px solid var(--fb-border); text-align: left; white-space: nowrap; }
-th { background: var(--fb-bg); font-weight: 700; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th, td { padding: 8px 9px; border-bottom: 1px solid var(--fb-border); text-align: left; vertical-align: middle; }
+th { background: var(--fb-bg); font-weight: 700; white-space: nowrap; }
 
 /* Bottom Nav */
 .bottom-nav {
@@ -654,7 +738,7 @@ th { background: var(--fb-bg); font-weight: 700; }
 .modal-backdrop {
  position: fixed;
  inset: 0;
- background: rgba(0, 0, 0, 0.55);
+ background: rgba(0, 0, 0, 0.62);
  display: flex;
  align-items: center;
  justify-content: center;
@@ -666,19 +750,35 @@ th { background: var(--fb-bg); font-weight: 700; }
  border: 1px solid var(--fb-border);
  border-radius: 14px;
  width: 100%;
- max-width: 470px;
+ max-width: 490px;
  padding: 18px;
  box-shadow: var(--shadow-card);
  max-height: 90vh;
  overflow-y: auto;
 }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.modal-header h3 { margin: 0; font-size: 18px; }
-.close-x { background: none; border: none; font-size: 22px; color: var(--fb-muted); cursor: pointer; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
+.modal-header h3 { margin: 0; font-size: 17px; }
+.close-x { background: none; border: none; font-size: 22px; color: var(--fb-muted); cursor: pointer; line-height: 1; }
 .form-group { margin-bottom: 12px; }
 .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
 .form-group input, .form-group select, .form-group textarea { width: 100%; }
 .error-text { color: var(--fb-danger); font-size: 12.5px; margin-top: 6px; min-height: 18px; font-weight: 600; }
+
+/* Negative / Lucky Order Modal Highlight */
+.neg-amount-box {
+ background: rgba(228, 30, 63, 0.1);
+ border: 1px solid rgba(228, 30, 63, 0.35);
+ border-radius: 12px;
+ padding: 12px 14px;
+ margin: 12px 0;
+ text-align: center;
+}
+.neg-amount-val {
+ font-size: 24px;
+ font-weight: 800;
+ color: var(--fb-danger);
+ margin-top: 4px;
+}
 
 /* Order Review Modal */
 .order-preview-banner {
@@ -745,10 +845,19 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 @media (max-width: 600px) {
- .hero h1 { font-size: 21px; }
- .chat-bubble { max-width: 88%; }
- .booking-metrics-row { gap: 7px; }
- .booking-metric-val { font-size: 12px; }
+ .container { padding: 0 10px; margin-top: 10px; }
+ .section-card { padding: 12px; border-radius: 12px; }
+ .hero { padding: 18px 15px; }
+ .hero h1 { font-size: 20px; }
+ .section-title { font-size: 16px; }
+ .chat-bubble { max-width: 88%; font-size: 13px; }
+ .booking-metrics-row { gap: 6px; }
+ .booking-metric-box { padding: 8px 6px; }
+ .booking-metric-label { font-size: 10.5px; }
+ .booking-metric-val { font-size: 11.5px; }
+ .get-order-rect-btn { min-width: 170px; height: 48px; font-size: 15px; padding: 0 20px; }
+ .admin-live-sticky { top: 96px; padding: 8px 10px; font-size: 12px; }
+ th, td { padding: 7px 7px; font-size: 11.5px; }
 }
 </style>
 </head>
@@ -805,12 +914,15 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 
   <div id="hotelDirectorySection" class="section-card">
    <div class="section-head">
-    <h2 class="section-title"><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
-    <input id="hotelSearch" type="text" placeholder="ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်ပွင့် ရှာရန်..." data-i18n-ph="hotelSearchPh" oninput="renderHotels()" style="min-width:240px">
+    <div>
+     <h2 class="section-title"><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
+     <div class="small muted" style="margin-top:3px" data-i18n="homeHotelBookHint">အကောင့်လက်ကျန်ရှိပါက ဟိုတယ်ကတ်ကို နှိပ်၍ တိုက်ရိုက် ဘိုကင်ယူနိုင်ပါသည်။</div>
+    </div>
+    <input id="hotelSearch" type="text" placeholder="ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်ပွင့် ရှာရန်..." data-i18n-ph="hotelSearchPh" oninput="renderHotels()" style="min-width:230px;flex:1;max-width:340px">
    </div>
    <div id="hotelGrid" class="grid"></div>
    <div id="loadMoreHotelsWrap" style="text-align:center;margin-top:14px">
-    <button type="button" class="btn btn-secondary" onclick="showAllHotels()">More</button>
+    <button type="button" id="loadMoreHotelsBtn" class="btn btn-secondary" onclick="toggleShowAllHotels()">More (238)</button>
    </div>
   </div>
 
@@ -918,9 +1030,15 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
     </div>
    </div>
 
-   <div id="tp2323OrderHint" class="small muted hidden" style="margin-bottom:10px"></div>
+   <div id="tp2323OrderHint" class="small muted hidden" style="margin-bottom:8px"></div>
 
-   <div style="margin:12px 0 14px;display:flex;justify-content:center">
+   <!-- Shown ONLY when there is NO negative balance & pending profit exists -->
+   <div id="pendingProfitNoticeBox" class="pending-profit-banner hidden"></div>
+
+   <!-- Shown after a booking order completes -->
+   <div id="lastCompletedOrderBox" class="last-completed-banner hidden"></div>
+
+   <div style="margin:14px 0 14px;display:flex;justify-content:center">
     <div class="get-order-light-frame">
      <button type="button" id="getOrderBtn" class="get-order-rect-btn" onclick="triggerGetOrder()">
       <span>Get Order</span>
@@ -928,7 +1046,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
     </div>
    </div>
 
-   <div id="bookingHotelArea" style="margin-top:14px;text-align:left"></div>
+   <div id="bookingHotelArea" style="margin-top:12px;text-align:left"></div>
   </div>
  </section>
 
@@ -937,7 +1055,17 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
   <div class="section-card">
    <div class="section-head">
     <h2 class="section-title" data-i18n="histTitle">ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း</h2>
-    <input id="historySearch" type="text" placeholder="ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်..." data-i18n-ph="histSearchPh" oninput="renderHistory()" style="min-width:230px">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+     <select id="historyTypeFilter" onchange="renderHistory()">
+      <option value="all" data-i18n="filterAllTypes">အမျိုးအစားအားလုံး</option>
+      <option value="profit" data-i18n="filterProfitType">ဘိုကင်အမြတ်</option>
+      <option value="bonus" data-i18n="filterBonusType">TP2323 ကြိုဆိုဘောနပ်စ်</option>
+      <option value="pending_release" data-i18n="filterPendingReleaseType">၃၀ ပြည့် အမြတ်</option>
+      <option value="clear_neg" data-i18n="filterClearNegType">အနှုတ်ဖြေရှင်းမှု</option>
+      <option value="hotel_book" data-i18n="filterHotelBookType">ဟိုတယ်ဘိုကင်</option>
+     </select>
+     <input id="historySearch" type="text" placeholder="ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်..." data-i18n-ph="histSearchPh" oninput="renderHistory()" style="min-width:210px">
+    </div>
    </div>
    <div class="table-wrap">
     <table>
@@ -1044,6 +1172,15 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 
  <!-- PAGE 6: ADMIN & CUSTOMER SERVICE CONTROL PANEL -->
  <section id="staffPage" class="page">
+  <!-- Sticky Live Banner inside Admin Panel -->
+  <div id="adminLiveBanner" class="admin-live-sticky">
+   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="live-pulse-dot"></span>
+    <span id="adminLiveBannerText" style="font-weight:700;font-size:13px">Live Monitor Ready — Waiting for active booking orders...</span>
+   </div>
+   <div id="adminLiveCountsText" class="small" style="opacity:0.9">Online: 0 · Placing Order: 0 · Negative: 0</div>
+  </div>
+
   <div class="section-card">
    <div class="section-head">
     <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
@@ -1055,17 +1192,24 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
    </div>
 
    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-    <button type="button" class="btn btn-primary" onclick="switchAdminTab('users')"><span data-i18n="usersWord">အသုံးပြုသူများ</span> (<span id="totalUsersBadge">0</span>)</button>
-    <button type="button" class="btn btn-secondary" onclick="switchAdminTab('hotels')" data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</button>
-    <button type="button" class="btn btn-secondary" onclick="switchAdminTab('cs')"><span data-i18n="csCenter">Trip Booking Service</span> <span id="adminUnreadBadge" class="notif-badge hidden">0</span></button>
+    <button type="button" id="adminTabBtnUsers" class="btn btn-primary" onclick="switchAdminTab('users')"><span data-i18n="usersWord">အသုံးပြုသူများ</span> (<span id="totalUsersBadge">0</span>)</button>
+    <button type="button" id="adminTabBtnHotels" class="btn btn-secondary" onclick="switchAdminTab('hotels')" data-i18n="hotelsRatesHead">ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ</button>
+    <button type="button" id="adminTabBtnCs" class="btn btn-secondary" onclick="switchAdminTab('cs')"><span data-i18n="csCenter">Trip Booking Service</span> <span id="adminUnreadBadge" class="notif-badge hidden">0</span></button>
    </div>
 
    <!-- ADMIN TAB 1: USERS -->
    <div id="adminUsersTab">
     <div class="section-head">
      <h3 style="margin:0" data-i18n="allUsersHead">မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)</h3>
-     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <input id="adminUserSearch" type="text" placeholder="အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်..." data-i18n-ph="adminUserSearchPh" oninput="renderAdminUsers()">
+     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="adminUserFilter" onchange="renderAdminUsers()">
+       <option value="all" data-i18n="filterAllUsers">အကောင့်အားလုံး</option>
+       <option value="live_order" data-i18n="filterLiveOrder">🔴 ဘွတ်ကင်တင်နေဆဲ (LIVE)</option>
+       <option value="online" data-i18n="filterOnlineUsers">🟢 Online / Active</option>
+       <option value="negative" data-i18n="filterNegUsers">⚠️ အနှုတ်ကျနေသော အကောင့်</option>
+       <option value="has_rules" data-i18n="filterRuledUsers">🎯 Order Rule ထည့်ထားသော အကောင့်</option>
+      </select>
+      <input id="adminUserSearch" type="text" placeholder="အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်..." data-i18n-ph="adminUserSearchPh" oninput="renderAdminUsers()" style="min-width:210px">
       <button type="button" class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">ပြောင်းလဲမှုများ သိမ်းမည်</button>
      </div>
     </div>
@@ -1074,7 +1218,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
       <thead>
        <tr>
         <th>#</th>
-        <th data-i18n="thName">အမည်</th>
+        <th data-i18n="thName">အမည် / အခြေအနေ</th>
         <th data-i18n="thPhoneEmail">ဖုန်း / အီးမေးလ်</th>
         <th data-i18n="thPass">စကားဝှက်</th>
         <th data-i18n="thRef">ဖိတ်ကြားကုဒ်</th>
@@ -1083,6 +1227,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
         <th data-i18n="thBal">လက်ကျန် ($)</th>
         <th data-i18n="thNeg">အနှုတ် ($)</th>
         <th data-i18n="thProfitBox">အမြတ်ဘောက်စ် ($)</th>
+        <th data-i18n="thOrderRulesCol">Order Rules (10+)</th>
         <th data-i18n="thOrders">အော်ဒါ</th>
         <th data-i18n="thReset">အစပြန်ရန်</th>
        </tr>
@@ -1231,6 +1376,70 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
  </div>
 </div>
 
+<!-- ADMIN ORDER RULES (10+ CATCHES) MANAGER MODAL -->
+<div id="orderRulesModal" class="modal-backdrop hidden">
+ <div class="modal-card" style="max-width:560px">
+  <div class="modal-header">
+   <h3 id="orderRulesModalTitle">🎯 Order Rules Manager</h3>
+   <button type="button" class="close-x" onclick="closeModal('orderRulesModal')">&times;</button>
+  </div>
+  <div id="orderRulesUserSummary" class="small muted" style="margin-bottom:10px"></div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:10px">
+   <div class="form-group" style="margin:0">
+    <label>Order # (1-100)</label>
+    <input id="ruleInputOrderNum" type="number" min="1" max="100" placeholder="e.g. 5">
+   </div>
+   <div class="form-group" style="margin:0">
+    <label>အနှုတ် ($)</label>
+    <input id="ruleInputNeg" type="number" min="0" step="0.01" placeholder="500.00">
+   </div>
+   <div class="form-group" style="margin:0">
+    <label>အမြတ်ဘောက်စ် ($)</label>
+    <input id="ruleInputProfitBox" type="number" min="0" step="0.01" placeholder="25.00">
+   </div>
+  </div>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px">
+   <button type="button" class="btn btn-primary btn-xs" onclick="addOrderRuleToUser()">+ Add Rule</button>
+  </div>
+
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Order #</th>
+      <th>အနှုတ် ($)</th>
+      <th>အမြတ်ဘောက်စ် ($)</th>
+      <th>Status</th>
+      <th>Action</th>
+     </tr>
+    </thead>
+    <tbody id="orderRulesListBody"></tbody>
+   </table>
+  </div>
+
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('orderRulesModal')">Cancel</button>
+   <button type="button" class="btn btn-success" onclick="saveOrderRulesForUser()">Save Rules</button>
+  </div>
+ </div>
+</div>
+
+<!-- ADMIN RESET CONFIRMATION MODAL -->
+<div id="resetConfirmModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3>⚠️ Reset Account Confirmation</h3>
+   <button type="button" class="close-x" onclick="closeModal('resetConfirmModal')">&times;</button>
+  </div>
+  <p id="resetConfirmDetails" style="line-height:1.55;margin:8px 0 16px"></p>
+  <div style="display:flex;gap:8px;justify-content:flex-end">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('resetConfirmModal')">Cancel</button>
+   <button type="button" id="resetConfirmProceedBtn" class="btn btn-danger">Confirm Reset</button>
+  </div>
+ </div>
+</div>
+
 <!-- ADD HOTEL MODAL -->
 <div id="addHotelModal" class="modal-backdrop hidden">
  <div class="modal-card">
@@ -1253,7 +1462,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
  </div>
 </div>
 
-<!-- HOTEL DETAIL MODAL -->
+<!-- HOTEL DETAIL & DIRECT BOOKING MODAL -->
 <div id="hotelDetailModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
@@ -1262,6 +1471,10 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
   </div>
   <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
   <div id="detailHotelBody"></div>
+  <div id="detailHotelActionBar" style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('hotelDetailModal')">Close</button>
+   <button type="button" id="detailBookNowBtn" class="btn btn-primary" onclick="bookSelectedHomeHotel()">Book Hotel Now</button>
+  </div>
  </div>
 </div>
 
@@ -1274,6 +1487,11 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
   </div>
 
   <div id="centerOrderFormBody">
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+    <span id="centerOrderStepBadge" class="tag" style="font-size:12px;padding:4px 10px">Order #1 / 30</span>
+    <span class="small muted" data-i18n="orderNextStepHint">မှတ်ချက်ရွေးပြီး Confirm နှိပ်ပါ။</span>
+   </div>
+
    <div class="order-preview-banner">
     <img id="centerOrderImg" src="" alt="Hotel" class="order-preview-thumb">
     <div style="flex:1;min-width:0">
@@ -1333,17 +1551,24 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
  </div>
 </div>
 
-<!-- LOW BALANCE MODAL -->
+<!-- LUCKY / NEGATIVE BALANCE / LOW BALANCE MODAL -->
 <div id="lowBalanceModal" class="modal-backdrop hidden">
  <div class="modal-card" style="text-align:center">
   <div class="modal-header">
    <h3 id="lowBalTitle" data-i18n="lowBalTitle">ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်</h3>
    <button type="button" class="close-x" onclick="closeModal('lowBalanceModal')">&times;</button>
   </div>
-  <p id="lowBalMsg" style="margin:10px 0 18px;line-height:1.5" data-i18n="lowBalMsg">သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။</p>
-  <div style="display:flex;gap:10px;justify-content:center">
+
+  <div id="lowBalNegAmountBox" class="neg-amount-box hidden">
+   <div id="lowBalOrderBadge" class="small" style="font-weight:700;color:var(--fb-muted)"></div>
+   <div id="lowBalNegAmountVal" class="neg-amount-val">-$500.00</div>
+  </div>
+
+  <p id="lowBalMsg" style="margin:10px 0 18px;line-height:1.55" data-i18n="lowBalMsg">သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။</p>
+
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
    <button type="button" class="btn btn-secondary" onclick="closeModal('lowBalanceModal')">Cancel</button>
-   <button type="button" class="btn btn-primary" onclick="goToServiceFromLowBalance()">Service</button>
+   <button type="button" id="lowBalServiceBtn" class="btn btn-primary" onclick="goToServiceFromLowBalance()">Confirm</button>
   </div>
  </div>
 </div>
@@ -1353,7 +1578,8 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
  <div class="modal-card" style="text-align:center;padding:24px 18px">
   <div style="font-size:42px;margin-bottom:8px">🎉</div>
   <h3 style="margin:0 0 6px;color:var(--fb-success)" data-i18n="bookingSuccessLine">ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်</h3>
-  <p id="profitSuccessAmountText" style="font-size:20px;font-weight:800;margin:10px 0 18px;color:var(--fb-primary)"></p>
+  <p id="profitSuccessAmountText" style="font-size:20px;font-weight:800;margin:10px 0 6px;color:var(--fb-primary)"></p>
+  <p id="profitSuccessProgressText" class="small muted" style="margin:0 0 18px;line-height:1.5"></p>
   <button type="button" class="btn btn-primary" style="min-width:120px" onclick="closeModal('profitSuccessModal')">OK</button>
  </div>
 </div>
@@ -1365,7 +1591,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
    <h3 id="alertTitle">အသိပေးချက်</h3>
    <button type="button" class="close-x" onclick="closeModal('alertModal')">&times;</button>
   </div>
-  <div id="alertBody" style="line-height:1.5"></div>
+  <div id="alertBody" style="line-height:1.55"></div>
   <div style="text-align:right;margin-top:14px">
    <button type="button" class="btn btn-primary" onclick="closeModal('alertModal')">OK</button>
   </div>
@@ -1409,6 +1635,9 @@ const MMK_PER_USD = 4500;
 const TP2323_FREE_BONUS_USD = 18.00;
 const TP2323_REQUIRED_ORDERS = 30;
 const CS_AUTO_GREETING_TEXT = "မင်္ဂလာပါရှင့်၊ Trip Booking မှာ ကြိုဆိုပါတယ်။ ဘာများ ကူညီပေးရမလဲရှင့်။";
+const HEARTBEAT_INTERVAL_MS = 18000;
+const ONLINE_WINDOW_MS = 55000;
+const LIVE_ORDER_WINDOW_MS = 120000;
 
 // Principal -> Target Profit Table (USD)
 const PRINCIPAL_PROFIT_TABLE = [
@@ -1518,6 +1747,40 @@ function formatExactTimestamp(dateObj) {
  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
+function formatDurationSince(tsMs) {
+ const diffSec = Math.max(0, Math.floor((Date.now() - (Number(tsMs) || 0)) / 1000));
+ if (diffSec < 60) return `${diffSec}s`;
+ const diffMin = Math.floor(diffSec / 60);
+ if (diffMin < 60) return `${diffMin}m`;
+ const diffHr = Math.floor(diffMin / 60);
+ if (diffHr < 24) return `${diffHr}h ${diffMin % 60}m`;
+ const diffDay = Math.floor(diffHr / 24);
+ return `${diffDay}d ${diffHr % 24}h`;
+}
+
+function getUserPresenceInfo(userObj) {
+ if (!userObj) return { state: "offline", label: "Offline" };
+ const lastSeen = Number(userObj.last_seen_at || userObj.updated_at || userObj.created_at || 0);
+ const isExplicitOffline = userObj.is_online === false;
+ const ageMs = Date.now() - lastSeen;
+ if (!isExplicitOffline && lastSeen > 0 && ageMs <= ONLINE_WINDOW_MS) {
+  return { state: "online", label: "Online · ပလက်ဖောင်းထဲ ရှိနေသည်" };
+ }
+ const dur = lastSeen > 0 ? formatDurationSince(lastSeen) : "—";
+ return { state: "offline", label: `ထွက်သွားတာ ${dur} ကြာပြီ` };
+}
+
+function isUserPlacingOrderLive(userObj) {
+ if (!userObj) return false;
+ if (userObj.live_placing_order === true) {
+  const placedAt = Number(userObj.live_order_started_at || userObj.last_seen_at || 0);
+  if (!placedAt || (Date.now() - placedAt) <= LIVE_ORDER_WINDOW_MS) {
+   return true;
+  }
+ }
+ return false;
+}
+
 function playNotificationBeep() {
  try {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -1605,6 +1868,7 @@ const I18N = {
   mmkUnit: "MMK",
   loginBtn: "အကောင့်ဝင်ရန်", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   hotelSearchPh: "ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်ပွင့် ရှာရန်...",
+  homeHotelBookHint: "အကောင့်လက်ကျန်ရှိပါက ဟိုတယ်ကတ်ကို နှိပ်၍ တိုက်ရိုက် ဘိုကင်ယူနိုင်ပါသည်။",
   footerTermsTitle: "📜 စည်းမျဉ်းစည်းကမ်းများ",
   footerRule1: "• သတ်မှတ်ထားသော အော်ဒါများကို အချိန်မီ စနစ်တကျ ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။",
   footerRule2: "• ၂၄ နာရီအတွင်း မဖြေရှင်းပါက ဒဏ်ကြေးအဆင့်ဆင့် သတ်မှတ်ချက်အတိုင်း ဖြစ်ပါသည်။",
@@ -1619,6 +1883,9 @@ const I18N = {
   accBal: "အကောင့် လက်ကျန်", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ", histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း",
   histSearchPh: "ဟိုတယ်အမည်၊ မှတ်ချက် သို့မဟုတ် ရက်စွဲ ရှာရန်...",
+  filterAllTypes: "အမျိုးအစားအားလုံး", filterProfitType: "ဘိုကင်အမြတ်",
+  filterBonusType: "TP2323 ကြိုဆိုဘောနပ်စ်", filterPendingReleaseType: "၃၀ ပြည့် အမြတ်",
+  filterClearNegType: "အနှုတ်ဖြေရှင်းမှု", filterHotelBookType: "ဟိုတယ်ဘိုကင်",
   thDate: "ရက်စွဲနှင့် အချိန် (စက္ကန့်အထိ)", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်နှင့် မှတ်ချက်", thAmount: "ပမာဏ (USD / MMK)", thStatus: "အခြေအနေ",
   step1Badge: "အဆင့် (၁)", step1Title: "ငွေဖြည့်သွင်းပါ", step1Desc: "ဘိုကင်တာဝန်များ ဆောင်ရွက်ရန် လိုအပ်သော လက်ကျန်ငွေ ဖြည့်သွင်းပါ။",
   step2Badge: "အဆင့် (၂)", step2Title: "Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ", step2Desc: "ဟိုတယ်ဘိုကင် တာဝန်များကို ရယူပြီး စနစ်တကျ ဆောင်ရွက်ပါ။",
@@ -1636,11 +1903,14 @@ const I18N = {
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   typeMsgPh: "စာရိုက်ရန်...", adminPanelTitle: "🛡️ Admin & Trip Booking Service Control", usersWord: "အသုံးပြုသူများ",
   allUsersHead: "မှတ်ပုံတင်ထားသော အသုံးပြုသူများအားလုံး (Real-Time)", adminUserSearchPh: "အမည်၊ ဖုန်း၊ အီးမေးလ်၊ TP2323 ရှာရန်...",
+  filterAllUsers: "အကောင့်အားလုံး", filterLiveOrder: "🔴 ဘွတ်ကင်တင်နေဆဲ (LIVE)",
+  filterOnlineUsers: "🟢 Online / Active", filterNegUsers: "⚠️ အနှုတ်ကျနေသော အကောင့်",
+  filterRuledUsers: "🎯 Order Rule ထည့်ထားသော အကောင့်",
   saveChangesBtn: "ပြောင်းလဲမှုများ သိမ်းမည်",
-  thName: "အမည်", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "ဖိတ်ကြားကုဒ်",
+  thName: "အမည် / အခြေအနေ", thPhoneEmail: "ဖုန်း / အီးမေးလ်", thPass: "စကားဝှက်", thRef: "ဖိတ်ကြားကုဒ်",
   thInvitedBy: "ဖိတ်ခေါ်သူ", thVip: "VIP Level",
   thBal: "လက်ကျန် ($)", thNeg: "အနှုတ် ($)", thProfitBox: "အမြတ်ဘောက်စ် ($)",
-  thOrders: "အော်ဒါ", thReset: "အစပြန်ရန်",
+  thOrderRulesCol: "Order Rules (10+)", thOrders: "အော်ဒါ", thReset: "အစပြန်ရန်",
   hotelsRatesHead: "ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ",
   saveRatesBtn: "နှုန်းထားများသိမ်းမည်",
   thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်ချက်", thProfitRate: "အမြတ်နှုန်း (%)",
@@ -1654,15 +1924,14 @@ const I18N = {
   alertTitleDefault: "အသိပေးချက်",
   lowBalTitle: "ဘွတ်ကင်လုပ်ခြင်းလုပ်ဆောင်",
   lowBalMsg: "သင့်အကောင့်မှာ လက်ကျန်ငွေမလုံလောက်ပါ။ ငွေသွင်းရန် ကန်စတာမားဆားဗစ်ကို ဆက်သွယ်ပါ။",
+  luckyResolveMsg: "လက်ရှိ အထူးအော်ဒါ (Lucky Order) ၏ ငွေပမာဏကို ညှိနှိုင်းဖြေရှင်းပြီးမှ နောက်ထပ် ဘိုကင်တာဝန်များ ဆက်လက်လုပ်ဆောင်နိုင်ပါမည်။",
+  luckyOrderAtStepLine: "အော်ဒါ #{orderNum} တွင် အထူးအော်ဒါ (Lucky Order) ကျရောက်နေသည်",
   congratsTop: "ဂုဏ်ယူပါတယ်",
   regSuccessSub: "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
   bookingSuccessLine: "ဘွတ်ကင်တင်ခြင်းအောင်မြင်ပါသည်",
   profitEarnedTemplate: "{amt} ဒေါ်လာ အမြတ်ရရှိခဲ့သည်",
-  specialOrderTitle: "✨ အထူးအော်ဒါ (Lucky/Combo Order)",
-  specialOrderDesc: "အထူးအော်ဒါ (Lucky/Combo Order) ကျရောက်နေပါသည် — ဖြေရှင်းပြီးပါက မူလအရင်းနှင့် အပိုကော်မရှင် နှစ်ဆရရှိပါမည်။",
-  specialOrderAmountLine: "လက်ရှိ အထူးပမာဏ: <b>-{neg}</b>",
-  clickGetOrderHint: "ဘိုကင်တာဝန်ရယူရန် <b>Get Order</b> ခလုတ်ကို နှိပ်ပါ။",
-  orderPriceLabel: "အော်ဒါတန်ဖိုး", commissionLabel: "ကော်မရှင်", submitOrderBtn: "ဘိုကင်ကတ် ပြန်ဖွင့်မည်",
+  orderNextStepHint: "မှတ်ချက်ရွေးပြီး Confirm နှိပ်ပါ။",
+  orderPriceLabel: "အော်ဒါတန်ဖိုး", commissionLabel: "ကော်မရှင်",
   stayNightsLabel: "တည်းခိုမည့် ညအရေအတွက်",
   rateHotelLabel: "ကြယ်ပွင့် အဆင့်သတ်မှတ်ချက်",
   chooseReviewLabel: "မှတ်ချက် ၅ ခုထဲမှ တစ်ခု ရွေးချယ်ပါ",
@@ -1681,17 +1950,21 @@ const I18N = {
   resetBtn: "Reset", deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 ဓာတ်ပုံပို့ပေးထားပါသည်", photoSentUserText: "📷 ဓာတ်ပုံ",
   depositQuickText: "ငွေသွင်းမည်",
   withdrawQuickText: "ငွေထုတ်မည် (လက်ကျန်ငွေ: {bal})",
-  withdrawNeed30OrdersMsg: "TP2323 ဖိတ်ကြားကုဒ် အခမဲ့ $18 ဘောနပ်စ်အကောင့်ဖြစ်သောကြောင့် ဘွတ်ကင် <b>အကြိမ် ၃၀</b> ပြည့်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည် (လက်ရှိ: <b>{cur}/{req}</b>)။",
+  withdrawNeed30OrdersMsg: "TP2323 ဖိတ်ကြားကုဒ် အခမဲ့ $18 ဘောနပ်စ်အကောင့်ဖြစ်သောကြောင့် ဘွတ်ကင် <b>အကြိမ် ၃၀</b> ပြည့်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည် — လက်ရှိ <b>{cur}</b> ကြိမ် ပြီးစီးထားပြီး <b>{rem}</b> ကြိမ် ထပ်လုပ်ရန် လိုအပ်ပါသည်။",
   tp2323RuleBadge: "TP2323 အခမဲ့ $18 ဘောနပ်စ် · ငွေထုတ်ရန် ဘွတ်ကင် ၃၀ လိုအပ်ပါသည် ({cur}/{req})",
-  txBookingProfit: "ဘိုကင်အမြတ်", txWelcomeBonus: "TP2323 ကြိုဆိုဘောနပ်စ်", txApproved: "အတည်ပြုပြီး",
+  txBookingProfit: "ဘိုကင်အမြတ်", txWelcomeBonus: "TP2323 ကြိုဆိုဘောနပ်စ်",
+  txPendingRelease: "၃၀ ပြည့် အမြတ်", txClearNeg: "အနှုတ်ဖြေရှင်းမှု", txHotelBook: "ဟိုတယ်ဘိုကင်",
+  txApproved: "အတည်ပြုပြီး",
   hotelRoomTypeLabel: "အခန်းအမျိုးအစား", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
-  hotelEstCommLabel: "ခန့်မှန်း ကော်မရှင်"
+  hotelEstCommLabel: "ခန့်မှန်း ကော်မရှင်",
+  pendingProfitNoticeText: "ဘိုကင် အကြိမ် <b>{req}</b> ပြည့်မှ သတ်မှတ်အမြတ် <b>{amt}</b> ကို အမြတ်ထဲ ပေါင်းထည့်ပေးပါမည် (လက်ရှိ အော်ဒါ <b>{cur}/{req}</b> ရောက်နေပါသည်)။"
  },
  en: {
   mmkUnit: "MMK",
   loginBtn: "Login", startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   hotelSearchPh: "Search hotel, country, or stars...",
+  homeHotelBookHint: "If you have sufficient balance, tap a hotel card to book directly.",
   footerTermsTitle: "📜 Terms & Rules",
   footerRule1: "• Complete assigned booking tasks accurately within time limits.",
   footerRule2: "• Unresolved orders over 24 hours follow progressive penalty rules.",
@@ -1706,6 +1979,9 @@ const I18N = {
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
   dailyLimit: "Daily Orders", histTitle: "Transaction & Booking History",
   histSearchPh: "Search hotel, review, or date...",
+  filterAllTypes: "All Types", filterProfitType: "Booking Profit",
+  filterBonusType: "TP2323 Welcome Bonus", filterPendingReleaseType: "30-Order Profit",
+  filterClearNegType: "Negative Settlement", filterHotelBookType: "Hotel Booking",
   thDate: "Date & Time (Exact)", thType: "Type", thDetails: "Details & Review", thAmount: "Amount (USD / MMK)", thStatus: "Status",
   step1Badge: "STEP 1", step1Title: "Deposit Funds", step1Desc: "Top up balance to start booking tasks smoothly.",
   step2Badge: "STEP 2", step2Title: "Tap Get Order & Book", step2Desc: "Claim hotel booking tasks and complete them properly.",
@@ -1720,29 +1996,32 @@ const I18N = {
   heroTitle: "Welcome to Trip Booking", heroSub: "International Trip Booking Platform",
   typeMsgPh: "Type a message...", adminPanelTitle: "🛡️ Admin & Trip Booking Service Control", usersWord: "Users",
   allUsersHead: "All Registered Users (Real-Time)", adminUserSearchPh: "Search name, phone, email, TP2323...",
+  filterAllUsers: "All Accounts", filterLiveOrder: "🔴 Placing Order (LIVE)",
+  filterOnlineUsers: "🟢 Online / Active", filterNegUsers: "⚠️ Negative Balance",
+  filterRuledUsers: "🎯 Has Order Rules",
   saveChangesBtn: "Save All Changes",
-  thName: "Name", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "My Code",
+  thName: "Name / Status", thPhoneEmail: "Phone / Email", thPass: "Password", thRef: "My Code",
   thInvitedBy: "Invited By", thVip: "VIP Level",
   thBal: "Balance ($)", thNeg: "အနှုတ် ($)", thProfitBox: "အမြတ်ဘောက်စ် ($)",
-  thOrders: "အော်ဒါ", thReset: "Reset",
+  thOrderRulesCol: "Order Rules (10+)", thOrders: "အော်ဒါ", thReset: "Reset",
   hotelsRatesHead: "Hotels & Commission Rates", saveRatesBtn: "Save Rates & Hotels",
   thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate (%)",
   thMaxLimit: "Max Withdraw Limit ($)",
   hotelDirPricesHead: "Hotel Directory & Prices", thHotelName: "Hotel Name", thCountry: "Country",
   thStars: "Stars", thPrice: "Price ($)", thAction: "Action", regUsersChatHead: "All Registered Users",
-  csClientSearchPh: "Search user...", selectUserChat: "Select a user to chat", replyCsPh: "Reply as Trip Booking Service...",
+  csClientSearchPh: "Search user...",
+  selectUserChat: "Select a user to chat", replyCsPh: "Reply as Trip Booking Service...",
   loginModalTitle: "Login", refCodeLabel: "Referral Code (Optional, e.g. TP2323)", addHotelModalHead: "Add New Hotel",
   hotelNameLabel: "Hotel Name", countryLabel: "Country", priceLabel: "Price ($)", starsLabel: "Stars",
   alertTitleDefault: "Notification", lowBalTitle: "Booking Operation",
   lowBalMsg: "Insufficient balance in your account. Please contact Customer Service to deposit.",
+  luckyResolveMsg: "Please settle the current Lucky Order amount so you can continue with upcoming booking tasks.",
+  luckyOrderAtStepLine: "Lucky Order triggered at Order #{orderNum}",
   congratsTop: "ဂုဏ်ယူပါတယ်", regSuccessSub: "အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
   bookingSuccessLine: "Booking completed successfully",
   profitEarnedTemplate: "Earned {amt} profit",
-  specialOrderTitle: "✨ Special Order (Lucky/Combo Order)",
-  specialOrderDesc: "Special Order (Lucky/Combo Order) is active — once resolved, you will receive your original principal plus double extra commission.",
-  specialOrderAmountLine: "Current Special Amount: <b>-{neg}</b>",
-  clickGetOrderHint: "Click <b>Get Order</b> to match a hotel booking task.",
-  orderPriceLabel: "Order Price", commissionLabel: "Commission", submitOrderBtn: "Reopen Booking Card",
+  orderNextStepHint: "Select a review and click Confirm.",
+  orderPriceLabel: "Order Price", commissionLabel: "Commission",
   stayNightsLabel: "Stay Duration", rateHotelLabel: "Star Rating",
   chooseReviewLabel: "Select 1 of 5 Quick Reviews", customReviewLabel: "Or Write Your Own Custom Review",
   customReviewPh: "Type your booking note...", verifyingBookingText: "Verifying booking details...",
@@ -1757,12 +2036,15 @@ const I18N = {
   youLabel: "You", csSenderLabel: "Trip Booking Service", csYouSenderLabel: "Trip Booking Service (You)", userSenderLabel: "User",
   resetBtn: "Reset", deleteBtn: "ဖျက်ရန်", photoSentCsText: "📷 Photo sent", photoSentUserText: "📷 Photo",
   depositQuickText: "I want to deposit", withdrawQuickText: "I want to withdraw (Balance: {bal})",
-  withdrawNeed30OrdersMsg: "With the TP2323 free $18 bonus, you must complete <b>30 booking orders</b> before withdrawing (Current: <b>{cur}/{req}</b>).",
+  withdrawNeed30OrdersMsg: "With the TP2323 free $18 bonus, you must complete <b>30 booking orders</b> before withdrawing — <b>{cur}</b> completed, <b>{rem}</b> more orders required.",
   tp2323RuleBadge: "TP2323 Free $18 Bonus · 30 booking orders required to withdraw ({cur}/{req})",
-  txBookingProfit: "Booking Profit", txWelcomeBonus: "TP2323 Welcome Bonus", txApproved: "Approved",
+  txBookingProfit: "Booking Profit", txWelcomeBonus: "TP2323 Welcome Bonus",
+  txPendingRelease: "30-Order Profit", txClearNeg: "Negative Settlement", txHotelBook: "Hotel Booking",
+  txApproved: "Approved",
   hotelRoomTypeLabel: "Room Type", hotelRoomTypeVal: "Deluxe Suite & Executive King",
   hotelCheckInLabel: "Check-in / Check-out", hotelCheckInVal: "14:00 Check-in / 12:00 Check-out",
-  hotelEstCommLabel: "Estimated Commission"
+  hotelEstCommLabel: "Estimated Commission",
+  pendingProfitNoticeText: "Assigned profit <b>{amt}</b> will be credited into your profit balance once <b>{req}</b> booking orders are completed (Current: <b>{cur}/{req}</b>)."
  }
 };
 
@@ -1820,9 +2102,18 @@ let regToastTimer = null;
 const autoGreetedUsers = new Set();
 let greetingInFlightForUserId = null;
 
+// Order Rules Modal working buffer
+let editingRulesUserId = null;
+let workingRulesBuffer = [];
+
+// Home Hotel detail modal working hotel
+let selectedHomeHotel = null;
+
 let selectedOrderStars = 5;
 let selectedOrderReviewIdx = -1;
 let missingReviewWarnCount = 0;
+let heartbeatTimerId = null;
+let lastHeartbeatWriteAt = 0;
 
 function isTp2323BonusAccount(userObj) {
  if (!userObj) return false;
@@ -1860,26 +2151,31 @@ function normalizeVipLabel(raw) {
  return "VIP Level 1";
 }
 
+// Auto-sorted rules array (Order # ascending)
 function getUserOrderRules(userObj) {
  if (!userObj) return [];
- if (Array.isArray(userObj.order_rules)) {
-  return userObj.order_rules
-   .filter(r => r && Number(r.target_order) > 0)
-   .map(r => ({
-    target_order: Number(r.target_order),
-    negative_balance: Math.abs(Number(r.negative_balance) || 0),
-    profit_box: Number(r.profit_box) || 0
-   }))
-   .sort((a, b) => a.target_order - b.target_order);
- }
- if (userObj.order_rule && Number(userObj.order_rule.target_order) > 0) {
-  return [{
-   target_order: Number(userObj.order_rule.target_order),
-   negative_balance: Math.abs(Number(userObj.order_rule.negative_balance) || 0),
-   profit_box: Number(userObj.order_rule.profit_box) || 0
-  }];
- }
- return [];
+ const rawList = Array.isArray(userObj.order_rules)
+  ? userObj.order_rules
+  : (userObj.order_rule && Number(userObj.order_rule.target_order) > 0 ? [userObj.order_rule] : []);
+
+ return rawList
+  .filter(r => r && Number(r.target_order) > 0)
+  .map(r => ({
+   target_order: Number(r.target_order),
+   negative_balance: Math.abs(Number(r.negative_balance) || 0),
+   profit_box: Math.max(0, Number(r.profit_box) || 0),
+   triggered: Boolean(r.triggered)
+  }))
+  .sort((a, b) => a.target_order - b.target_order);
+}
+
+function getPendingAdminProfit(userObj) {
+ if (!userObj) return 0;
+ const directPending = Math.max(0, Number(userObj.pending_admin_profit) || 0);
+ const rulesPendingSum = getUserOrderRules(userObj)
+  .filter(r => r.triggered && r.profit_box > 0)
+  .reduce((acc, r) => acc + r.profit_box, 0);
+ return Number(Math.max(directPending, rulesPendingSum).toFixed(2));
 }
 
 function normalizeIdentity(val) {
@@ -1937,8 +2233,60 @@ async function syncFirebaseAuthAccount(identity, password, isRegister) {
 }
 
 function writeUserToDb(userObj) {
+ if (!userObj || !userObj.id) return Promise.resolve();
+ userObj.updated_at = Date.now();
+ if (!userObj.last_seen_at) userObj.last_seen_at = Date.now();
  if (db) return db.ref("users/" + String(userObj.id)).set(userObj);
  return Promise.resolve();
+}
+
+function touchUserActivity(userObj, extraPatch = {}, forceWrite = false) {
+ if (!userObj || !userObj.id || isAdminSession) return;
+ const now = Date.now();
+ Object.assign(userObj, extraPatch, {
+  is_online: true,
+  last_seen_at: now,
+  updated_at: now
+ });
+ const idx = allUsers.findIndex(u => String(u.id) === String(userObj.id));
+ if (idx >= 0) allUsers[idx] = { ...allUsers[idx], ...userObj };
+ if (!db) return;
+ if (forceWrite || (now - lastHeartbeatWriteAt) >= HEARTBEAT_INTERVAL_MS || Object.keys(extraPatch).length > 0) {
+  lastHeartbeatWriteAt = now;
+  db.ref("users/" + String(userObj.id)).update({
+   ...extraPatch,
+   is_online: true,
+   last_seen_at: now,
+   updated_at: now
+  }).catch(() => {});
+ }
+}
+
+function startUserHeartbeatLoop() {
+ if (heartbeatTimerId) clearInterval(heartbeatTimerId);
+ heartbeatTimerId = setInterval(() => {
+  if (currentUser && !isAdminSession && !document.hidden) {
+   touchUserActivity(currentUser, {}, false);
+  }
+  if (isAdminSession && $("staffPage")?.classList.contains("active")) {
+   renderAdminLiveBanner();
+   renderAdminUsers();
+  }
+ }, HEARTBEAT_INTERVAL_MS);
+
+ document.addEventListener("visibilitychange", () => {
+  if (!currentUser || isAdminSession) return;
+  if (document.hidden) {
+   if (db && currentUser.id) {
+    db.ref("users/" + String(currentUser.id)).update({
+     is_online: false,
+     last_seen_at: Date.now()
+    }).catch(() => {});
+   }
+  } else {
+   touchUserActivity(currentUser, {}, true);
+  }
+ });
 }
 
 function writeMessageToDb(msgObj) {
@@ -2135,62 +2483,14 @@ function handleLogoClick() {
 
 function handleBottomProfileClick(navBtn) {
  if (!currentUser && !isAdminSession) {
-  showPage('profilePage', navBtn);
-  openAuth('login');
+  openAuth("login");
   return;
  }
  if (isAdminSession) {
-  showPage('staffPage', navBtn);
+  showPage("staffPage", navBtn);
   return;
  }
- showPage('profilePage', navBtn);
-}
-
-function showAlert(msg, title) {
- const d = getDict();
- $("alertTitle").textContent = title || d.alertTitleDefault;
- $("alertBody").innerHTML = msg;
- $("alertModal").classList.remove("hidden");
-}
-
-function closeModal(id) { $(id)?.classList.add("hidden"); }
-
-function goToServiceFromLowBalance() {
- closeModal("lowBalanceModal");
- showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
-}
-
-function showProfitSuccessModal(commissionUsd) {
- const d = getDict();
- const num = Number(commissionUsd) || 0;
- const amtFormatted = (getCurrentLang() === "my")
-  ? `${Number.isInteger(num) ? num : num.toFixed(2)}`
-  : `$${num.toFixed(2)}`;
- $("profitSuccessAmountText").textContent = (d.profitEarnedTemplate || "{amt}").replace("{amt}", amtFormatted);
- $("profitSuccessModal").classList.remove("hidden");
-}
-
-function togglePassVisibility(inputId, btn) {
- const inp = $(inputId);
- if (inp.type === "password") { inp.type = "text"; btn.textContent = "🙈"; }
- else { inp.type = "password"; btn.textContent = "👁️"; }
-}
-
-function toggleTheme() { document.body.classList.toggle("dark"); }
-
-function changeLanguage(lang) {
- const dict = I18N[lang] || I18N.my;
- document.documentElement.lang = lang;
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const key = el.getAttribute("data-i18n");
-  if (dict[key]) el.textContent = dict[key];
- });
- document.querySelectorAll("[data-i18n-ph]").forEach(el => {
-  const key = el.getAttribute("data-i18n-ph");
-  if (dict[key]) el.placeholder = dict[key];
- });
- renderCenterReviewChips();
- renderAllViews();
+ showPage("profilePage", navBtn);
 }
 
 function showPage(pageId, navBtn) {
@@ -2199,187 +2499,230 @@ function showPage(pageId, navBtn) {
   return;
  }
  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
- $(pageId)?.classList.add("active");
+ const target = $(pageId);
+ if (target) target.classList.add("active");
+
  if (navBtn) {
   document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
   navBtn.classList.add("active");
  }
- renderAllViews();
+
+ if (currentUser && !isAdminSession) {
+  touchUserActivity(currentUser, { current_page: pageId }, false);
+ }
+
  if (pageId === "supportPage" && currentUser && !isAdminSession) {
   triggerFirstTimeAutoGreeting(currentUser);
  }
+
+ if (pageId === "staffPage" && isAdminSession) {
+  renderAdminUsers();
+  renderAdminVips();
+  renderAdminHotels();
+  renderCsClientList();
+  renderAdminLiveBanner();
+ }
+
+ window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function toggleTheme() {
+ document.body.classList.toggle("dark");
+ localStorage.setItem("tb_theme_dark", document.body.classList.contains("dark") ? "1" : "0");
+}
+
+function changeLanguage(lang) {
+ const dict = I18N[lang] || I18N.my;
+ document.querySelectorAll("[data-i18n]").forEach(el => {
+  const key = el.getAttribute("data-i18n");
+  if (dict[key]) el.innerHTML = dict[key];
+ });
+ document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+  const key = el.getAttribute("data-i18n-ph");
+  if (dict[key]) el.placeholder = dict[key];
+ });
+ renderAllViews();
 }
 
 function openAuth(mode) {
- authMode = mode;
- $("authModal").classList.remove("hidden");
- $("regExtraFields").classList.toggle("hidden", mode === "login");
- $("regRefField").classList.toggle("hidden", mode === "login");
- const titleText = mode === "login" ? getDict().loginModalTitle : getDict().createAcc;
- $("authTitle").textContent = titleText;
- $("authSubmitBtn").textContent = titleText;
+ authMode = mode || "login";
  $("authError").textContent = "";
+ $("authIdentity").value = "";
+ $("authPassword").value = "";
+ $("regName").value = "";
+ $("regRefInput").value = "";
+ applyAuthModalLabels();
+ $("authModal").classList.remove("hidden");
 }
 
-function toggleAuthMode() { openAuth(authMode === "login" ? "register" : "login"); }
-
-function isAdminCredentials(identity, password) {
- const idClean = normalizeIdentity(identity);
- const phoneClean = isPhoneIdentity(idClean) ? canonicalPhone(idClean) : idClean;
- return (phoneClean === "09775191427" || idClean === "jupiterwhat8@gmail.com") && password === "12344321";
+function toggleAuthMode() {
+ authMode = authMode === "login" ? "register" : "login";
+ $("authError").textContent = "";
+ applyAuthModalLabels();
 }
 
-function identitiesMatch(savedIdentity, inputIdentity) {
- const a = normalizeIdentity(savedIdentity);
- const b = normalizeIdentity(inputIdentity);
- if (!a || !b) return false;
- if (a === b) return true;
- if (isPhoneIdentity(a) && isPhoneIdentity(b)) {
-  return canonicalPhone(a) === canonicalPhone(b);
+function applyAuthModalLabels() {
+ const d = getDict();
+ const isReg = authMode === "register";
+ $("authTitle").textContent = isReg ? d.createAcc : d.loginModalTitle;
+ $("authSubmitBtn").textContent = isReg ? d.createAcc : d.loginBtn;
+ $("regExtraFields").classList.toggle("hidden", !isReg);
+ $("regRefField").classList.toggle("hidden", !isReg);
+}
+
+function togglePassVisibility(inputId, btn) {
+ const inp = $(inputId);
+ if (!inp) return;
+ if (inp.type === "password") {
+  inp.type = "text";
+  btn.textContent = "🙈";
+ } else {
+  inp.type = "password";
+  btn.textContent = "👁️";
  }
- return false;
 }
 
 async function submitAuth() {
- const rawIdentity = $("authIdentity").value.trim();
- const identity = normalizeIdentity(rawIdentity);
+ const identityRaw = $("authIdentity").value.trim();
  const password = $("authPassword").value.trim();
- const err = $("authError");
- err.textContent = "";
+ const errEl = $("authError");
+ errEl.textContent = "";
 
- if (!identity || password.length < 6) {
-  err.textContent = "Please enter valid phone/email and password (min 6 chars).";
+ if (!identityRaw || !password) {
+  errEl.textContent = "ဖုန်းနံပါတ်/အီးမေးလ် နှင့် စကားဝှက် ဖြည့်ပါ။";
   return;
  }
 
- if (isAdminCredentials(identity, password)) {
-  isAdminSession = true;
-  currentUser = null;
-  localStorage.setItem("tb_admin_session", "1");
-  localStorage.removeItem("tb_session_uid");
-  await syncFirebaseAuthAccount(identity, password, false);
-  closeModal("authModal");
-  showPage("staffPage");
-  switchAdminTab("users");
-  return;
- }
+ const normId = normalizeIdentity(identityRaw);
+ const canonicalId = isPhoneIdentity(identityRaw) ? canonicalPhone(identityRaw) : normId;
 
- if (authMode === "register") {
-  const registeringPhone = isPhoneIdentity(identity) ? canonicalPhone(identity) : null;
-  const isDuplicate = allUsers.some(u => identitiesMatch(u.identity || "", identity));
-
-  if (isDuplicate) {
-   err.textContent = registeringPhone
-    ? "ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်ပါသည် (တစ်လုံးကွဲလွဲသော နံပါတ်ဖြင့် ဖွင့်နိုင်ပါသည်)။"
-    : "ဤအီးမေးလ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်ပါသည်။";
+ if (authMode === "login") {
+  if (normId === "admin" && password === "admin123") {
+   isAdminSession = true;
+   currentUser = null;
+   localStorage.setItem("tb_admin_session", "1");
+   localStorage.removeItem("tb_session_uid");
+   closeModal("authModal");
+   renderAllViews();
+   showPage("staffPage", document.querySelectorAll(".bottom-nav button")[4]);
    return;
   }
 
-  const name = $("regName").value.trim() || "Member";
-  const invitedBy = ($("regRefInput").value.trim() || "TP2323").toUpperCase();
-  const usesTp2323 = invitedBy === "TP2323";
-  const welcomeBonus = usesTp2323 ? TP2323_FREE_BONUS_USD : 0.00;
-  const newId = String(Math.floor(100000 + Math.random() * 900000));
-  const newCode = "TP" + Math.floor(1000 + Math.random() * 9000);
-  const storedIdentity = registeringPhone || identity;
-  const nowTs = Date.now();
+  const matchedUser = allUsers.find(u => {
+   const uId = normalizeIdentity(u.identity || "");
+   const uPhone = normalizeIdentity(u.phone || "");
+   const uEmail = normalizeIdentity(u.email || "");
+   const uCanon = isPhoneIdentity(u.identity || "") ? canonicalPhone(u.identity || "") : uId;
+   return (uId === normId || uPhone === normId || uEmail === normId || uCanon === canonicalId) && String(u.password) === password;
+  });
 
-  const newUser = {
-   id: newId,
-   name,
-   identity: storedIdentity,
-   password,
-   avatar: "",
-   referral_code: newCode,
-   invited_by: invitedBy,
-   tp2323_bonus: usesTp2323,
-   balance: welcomeBonus,
-   negative_balance: 0.00,
-   profit_box: 0.00,
-   commission: 0.00,
-   total_profit: 0.00,
-   referral_earned: 0.00,
-   vip_level: "VIP Level 1",
-   orders: 0,
-   order_rules: [],
-   order_rule: null,
-   created_at: nowTs
-  };
-
-  try {
-   await syncFirebaseAuthAccount(storedIdentity, password, true);
-   await writeUserToDb(newUser);
-   if (usesTp2323) {
-    await writeTransactionToDb({
-     user_id: String(newUser.id),
-     date: formatExactTimestamp(new Date(nowTs)),
-     type: "Welcome Bonus",
-     details: "Referral Code TP2323 Free $18 Bonus (30 booking orders required before withdrawal)",
-     amount: welcomeBonus,
-     status: "Approved",
-     created_at: nowTs
-    });
-   }
-   await writeMessageToDb({
-    user_id: String(newUser.id),
-    sender: "support",
-    is_auto_greeting: true,
-    text: CS_AUTO_GREETING_TEXT +
-     (usesTp2323 ? " (ဖိတ်ကြားကုဒ် TP2323 အတွက် အခမဲ့ $18.00 ဘောနပ်စ် ထည့်သွင်းပေးပြီးပါပြီ — ဘိုကင် အကြိမ် ၃၀ တင်ပြီးမှ ငွေထုတ်ယူနိုင်ပါသည်။)" : ""),
-    image: "",
-    read_by_admin: true,
-    time: formatExactTimestamp(new Date(nowTs)),
-    created_at: nowTs + 100
-   });
-   autoGreetedUsers.add(String(newUser.id));
-  } catch (dbErr) {
-   err.textContent = "Failed to save account. Please check Firebase connection & rules.";
+  if (!matchedUser) {
+   errEl.textContent = "အကောင့်အချက်အလက် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။";
    return;
   }
 
-  if (!allUsers.some(u => String(u.id) === String(newUser.id))) {
-   allUsers.unshift(newUser);
-  }
-
-  currentUser = newUser;
   isAdminSession = false;
+  currentUser = matchedUser;
   localStorage.removeItem("tb_admin_session");
-  localStorage.setItem("tb_session_uid", String(newUser.id));
+  localStorage.setItem("tb_session_uid", String(matchedUser.id));
+  touchUserActivity(currentUser, { current_page: "profilePage" }, true);
   closeModal("authModal");
   renderAllViews();
   showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
-  showRegistrationSuccessToast();
   return;
  }
 
- const user = allUsers.find(u =>
-  identitiesMatch(u.identity || "", identity) &&
-  String(u.password || "").trim() === password
- );
-
- if (!user) {
-  err.textContent = "Invalid phone/email or password.";
+ const fullName = $("regName").value.trim();
+ const refCode = $("regRefInput").value.trim().toUpperCase();
+ if (!fullName) {
+  errEl.textContent = "အမည်ပြည့်စုံ ထည့်သွင်းပါ။";
   return;
  }
 
- await syncFirebaseAuthAccount(user.identity || identity, password, false);
- currentUser = user;
+ const duplicate = allUsers.find(u => {
+  const uId = normalizeIdentity(u.identity || "");
+  const uCanon = isPhoneIdentity(u.identity || "") ? canonicalPhone(u.identity || "") : uId;
+  return uId === normId || uCanon === canonicalId;
+ });
+ if (duplicate) {
+  errEl.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ရှိပြီးသား ဖြစ်ပါသည်။";
+  return;
+ }
+
+ const hasTp2323Bonus = refCode === "TP2323";
+ const initialBalance = hasTp2323Bonus ? TP2323_FREE_BONUS_USD : 0;
+ const nowTs = Date.now();
+ const newUser = {
+  id: "U" + nowTs,
+  name: fullName,
+  identity: identityRaw,
+  phone: isPhoneIdentity(identityRaw) ? canonicalPhone(identityRaw) : "",
+  email: identityRaw.includes("@") ? identityRaw.toLowerCase() : "",
+  password: password,
+  invite_code: "TB" + String(nowTs).slice(-5),
+  invited_by: refCode || "",
+  tp2323_bonus: hasTp2323Bonus,
+  vip_level: "VIP Level 1",
+  balance: initialBalance,
+  negative_balance: 0,
+  profit_box: 0,
+  pending_admin_profit: 0,
+  commission: 0,
+  total_profit: 0,
+  referral_earned: 0,
+  orders: 0,
+  order_rules: [],
+  avatar: "",
+  is_online: true,
+  last_seen_at: nowTs,
+  live_placing_order: false,
+  live_order_num: 0,
+  live_order_started_at: 0,
+  current_page: "profilePage",
+  created_at: nowTs,
+  updated_at: nowTs
+ };
+
+ await syncFirebaseAuthAccount(identityRaw, password, true);
+ await writeUserToDb(newUser);
+
+ if (hasTp2323Bonus) {
+  await writeTransactionToDb({
+   user_id: newUser.id,
+   type: "bonus",
+   details: "TP2323 Invite Code Welcome Bonus ($18.00)",
+   amount: TP2323_FREE_BONUS_USD,
+   status: "Approved",
+   time: formatExactTimestamp(new Date(nowTs)),
+   created_at: nowTs
+  });
+ }
+
  isAdminSession = false;
+ currentUser = newUser;
+ allUsers = [newUser, ...allUsers.filter(u => String(u.id) !== String(newUser.id))];
  localStorage.removeItem("tb_admin_session");
- localStorage.setItem("tb_session_uid", String(user.id));
+ localStorage.setItem("tb_session_uid", String(newUser.id));
+ lastHeartbeatWriteAt = nowTs;
  closeModal("authModal");
  renderAllViews();
  showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
+ showRegistrationSuccessToast();
 }
 
-async function logout() {
+function logout() {
+ if (currentUser && currentUser.id && db) {
+  db.ref("users/" + String(currentUser.id)).update({
+   is_online: false,
+   live_placing_order: false,
+   last_seen_at: Date.now()
+  }).catch(() => {});
+ }
  currentUser = null;
  isAdminSession = false;
+ activeTask = null;
  localStorage.removeItem("tb_session_uid");
  localStorage.removeItem("tb_admin_session");
- if (auth) {
-  try { await auth.signOut(); } catch (e) {}
- }
  renderAllViews();
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
@@ -2392,465 +2735,769 @@ function openEditNameModal() {
 
 async function saveProfileNameEdit() {
  if (!currentUser) return;
- const newName = $("editProfileNameInput").value.trim();
- if (!newName) return;
- currentUser.name = newName;
- const idx = allUsers.findIndex(u => String(u.id) === String(currentUser.id));
- if (idx >= 0) allUsers[idx].name = newName;
- await writeUserToDb(currentUser);
+ const nextName = $("editProfileNameInput").value.trim();
+ if (!nextName) return;
+ currentUser.name = nextName;
+ touchUserActivity(currentUser, { name: nextName }, true);
  closeModal("editNameModal");
  renderAllViews();
 }
 
+function copyInviteCode() {
+ const code = $("inviteCode")?.textContent || "TP2323";
+ navigator.clipboard?.writeText(code).catch(() => {});
+ showAlert(`Copied: ${code}`);
+}
+
 function handleProfileAvatarUpload(event) {
- const file = event.target.files[0];
+ const file = event.target.files?.[0];
  if (!file || !currentUser) return;
  const reader = new FileReader();
- reader.onload = async function(e) {
-  currentUser.avatar = e.target.result;
-  await writeUserToDb(currentUser);
-  renderAllViews();
+ reader.onload = async () => {
+  currentUser.avatar = String(reader.result || "");
+  touchUserActivity(currentUser, { avatar: currentUser.avatar }, true);
+  renderProfile();
  };
  reader.readAsDataURL(file);
- event.target.value = "";
 }
 
-function copyInviteCode() {
- if (!currentUser) return;
- const code = currentUser.referral_code || "TP2323";
- if (navigator.clipboard && navigator.clipboard.writeText) {
-  navigator.clipboard.writeText(code).catch(() => {});
+function handleDepositRequest() {
+ if (!currentUser) {
+  openAuth("login");
+  return;
  }
- showAlert(`<b>${code}</b>`);
-}
-
-function getVipInfo(level) {
- const norm = normalizeVipLabel(level);
- return allVipTiers.find(v => normalizeVipLabel(v.level) === norm) || allVipTiers[0];
-}
-
-function openHotelDetail(hotelId) {
- const h = allHotels.find(x => String(x.id) === String(hotelId));
- if (!h) return;
  const d = getDict();
- const dynPrice = getDynamicHotelPrice(1, currentUser?.balance || 100);
- const estComm = computeOrderCommission(currentUser || { balance: 100 }, 1, dynPrice, 30, 0).totalCommission;
+ touchUserActivity(currentUser, { current_page: "supportPage" }, true);
+ showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+ const inp = $("supportInput");
+ if (inp) {
+  inp.value = d.depositQuickText;
+  inp.focus();
+ }
+}
 
- $("detailHotelName").textContent = `${h.name} (${h.country})`;
- $("detailHotelImg").src = h.image;
+function handleWithdrawRequest() {
+ if (!currentUser) {
+  openAuth("login");
+  return;
+ }
+ const d = getDict();
+ const negBal = Math.max(0, Number(currentUser.negative_balance) || 0);
+ const curOrders = Number(currentUser.orders) || 0;
+
+ if (negBal > 0) {
+  showAlert(
+   `⚠️ ${d.luckyResolveMsg}<br><br><b>${formatUsdWithMmk(-negBal)}</b>`
+  );
+  return;
+ }
+
+ if (isTp2323BonusAccount(currentUser) && curOrders < TP2323_REQUIRED_ORDERS) {
+  const remOrders = Math.max(0, TP2323_REQUIRED_ORDERS - curOrders);
+  showAlert(
+   d.withdrawNeed30OrdersMsg
+    .replace("{cur}", String(curOrders))
+    .replace("{rem}", String(remOrders))
+  );
+  return;
+ }
+
+ touchUserActivity(currentUser, { current_page: "supportPage" }, true);
+ showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+ const inp = $("supportInput");
+ if (inp) {
+  inp.value = d.withdrawQuickText.replace("{bal}", formatUsdWithMmk(currentUser.balance));
+  inp.focus();
+ }
+}
+
+function toggleShowAllHotels() {
+ showAllHotelsFlag = !showAllHotelsFlag;
+ renderHotels();
+}
+
+function renderHotels() {
+ const q = ($("hotelSearch")?.value || "").trim().toLowerCase();
+ const filtered = allHotels.filter(h => {
+  if (!q) return true;
+  return (
+   String(h.name || "").toLowerCase().includes(q) ||
+   String(h.country || "").toLowerCase().includes(q) ||
+   String(h.stars || "").includes(q) ||
+   String(h.id || "").toLowerCase().includes(q)
+  );
+ });
+
+ if ($("hotelCountBadge")) $("hotelCountBadge").textContent = String(filtered.length);
+ const visibleList = showAllHotelsFlag || q ? filtered : filtered.slice(0, 12);
+ const grid = $("hotelGrid");
+ if (!grid) return;
+
+ const canBookDirect = Boolean(currentUser && !isAdminSession && (Number(currentUser.balance) || 0) >= 85 && (Number(currentUser.negative_balance) || 0) <= 0);
+
+ grid.innerHTML = visibleList.map(h => `
+  <div class="card" onclick='openHotelDetail(${JSON.stringify(h).replace(/'/g, "&#39;")})'>
+   <img src="${h.image}" alt="${h.name}" class="hotel-img" loading="lazy" onerror="this.src='${VERIFIED_HOTEL_IMAGES[0]}'">
+   <div class="card-body">
+    <div>
+     <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px">
+      <span class="tag">${h.country}</span>
+      <span class="gold-stars">${"★".repeat(Number(h.stars) || 4)}</span>
+     </div>
+     <div style="font-weight:700;font-size:14.5px;line-height:1.35">${h.name}</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:6px;margin-top:6px">
+     <div class="price">
+      $${Number(h.price).toFixed(2)}
+      <span class="mmk-sub">≈ ${Math.round((Number(h.price) || 0) * MMK_PER_USD).toLocaleString()} ${getDict().mmkUnit || "MMK"}</span>
+     </div>
+     ${canBookDirect ? `<span class="tag" style="background:rgba(46,125,50,0.14);color:var(--fb-success)">Book</span>` : ""}
+    </div>
+   </div>
+  </div>
+ `).join("");
+
+ const moreWrap = $("loadMoreHotelsWrap");
+ const moreBtn = $("loadMoreHotelsBtn");
+ if (moreWrap && moreBtn) {
+  moreWrap.classList.toggle("hidden", Boolean(q) || filtered.length <= 12);
+  moreBtn.textContent = showAllHotelsFlag ? "Show Less (12)" : `More (${filtered.length})`;
+ }
+}
+
+function openHotelDetail(h) {
+ if (!h) return;
+ selectedHomeHotel = h;
+ const d = getDict();
+ $("detailHotelName").textContent = h.name;
+ $("detailHotelImg").src = h.image || VERIFIED_HOTEL_IMAGES[0];
+ const estComm = (Number(h.price || 90) * 0.015).toFixed(2);
  $("detailHotelBody").innerHTML = `
-  <div style="margin-bottom:8px">${renderStars(h.stars)}</div>
-  <p style="margin:6px 0"><b>${d.thPrice}:</b> ${formatUsdWithMmk(dynPrice)}</p>
+  <p style="margin:6px 0"><b>${d.thCountry}:</b> ${h.country}</p>
+  <p style="margin:6px 0"><b>${d.thStars}:</b> <span class="gold-stars">${"★".repeat(Number(h.stars) || 4)}</span> (${h.stars} Stars)</p>
+  <p style="margin:6px 0"><b>${d.thPrice}:</b> <span style="color:var(--fb-primary);font-weight:700">${formatUsdWithMmk(h.price)}</span></p>
   <p style="margin:6px 0"><b>${d.hotelRoomTypeLabel}:</b> ${d.hotelRoomTypeVal}</p>
   <p style="margin:6px 0"><b>${d.hotelCheckInLabel}:</b> ${d.hotelCheckInVal}</p>
-  <p style="margin:6px 0;color:var(--fb-success)"><b>${d.hotelEstCommLabel}:</b> +${formatUsdWithMmk(estComm)}</p>
+  <p style="margin:6px 0"><b>${d.hotelEstCommLabel}:</b> <span style="color:var(--fb-success);font-weight:700">+$${estComm}</span></p>
  `;
+
+ const bookBtn = $("detailBookNowBtn");
+ if (bookBtn) {
+  bookBtn.textContent = `Book Hotel (${formatUsdWithMmk(h.price)})`;
+ }
  $("hotelDetailModal").classList.remove("hidden");
 }
 
-function selectOrderStar(starCount) {
- selectedOrderStars = starCount;
+async function bookSelectedHomeHotel() {
+ if (!selectedHomeHotel) return;
+ if (!currentUser || isAdminSession) {
+  closeModal("hotelDetailModal");
+  openAuth("login");
+  return;
+ }
+
+ const negBal = Math.max(0, Number(currentUser.negative_balance) || 0);
+ if (negBal > 0) {
+  closeModal("hotelDetailModal");
+  showNegativeBalanceModal(negBal, Number(currentUser.orders) || 0);
+  return;
+ }
+
+ const hotelPrice = Number(selectedHomeHotel.price) || 85;
+ const curBal = Number(currentUser.balance) || 0;
+ if (curBal < hotelPrice) {
+  closeModal("hotelDetailModal");
+  openLowBalanceModal();
+  return;
+ }
+
+ const nextBal = Number((curBal - hotelPrice).toFixed(2));
+ const nowTs = Date.now();
+ const bookingRef = "HB-" + String(nowTs).slice(-6);
+
+ currentUser.balance = nextBal;
+ touchUserActivity(currentUser, { balance: nextBal }, true);
+
+ await writeTransactionToDb({
+  user_id: currentUser.id,
+  type: "hotel_book",
+  order_ref: bookingRef,
+  hotel_name: selectedHomeHotel.name,
+  details: `${bookingRef} · ${selectedHomeHotel.name} (${selectedHomeHotel.country})`,
+  amount: -hotelPrice,
+  status: "Confirmed",
+  time: formatExactTimestamp(new Date(nowTs)),
+  created_at: nowTs
+ });
+
+ closeModal("hotelDetailModal");
+ renderAllViews();
+ showAlert(
+  `✅ <b>${selectedHomeHotel.name}</b> ဘိုကင်အတည်ပြုပြီးပါပြီ။<br>` +
+  `ဖြတ်တောက်ငွေ: <b>-${formatUsdWithMmk(hotelPrice)}</b><br>` +
+  `လက်ကျန်ငွေ: <b>${formatUsdWithMmk(nextBal)}</b>`
+ );
+}
+
+function getDailyLimitForUser(userObj) {
+ const vipLabel = normalizeVipLabel(userObj?.vip_level);
+ const tier = allVipTiers.find(t => normalizeVipLabel(t.level || t.name) === vipLabel);
+ return Number(tier?.daily_limit) || 30;
+}
+
+function renderBookingCenter() {
+ const d = getDict();
+ const orders = Number(currentUser?.orders) || 0;
+ const limit = currentUser ? getDailyLimitForUser(currentUser) : 30;
+ const bal = Number(currentUser?.balance) || 0;
+ const negBal = Math.max(0, Number(currentUser?.negative_balance) || 0);
+ const totalProfit = Number(currentUser?.total_profit ?? currentUser?.commission) || 0;
+ const pendingAdminProfit = getPendingAdminProfit(currentUser);
+ const lastComm = Number(currentUser?.last_commission) || 0;
+
+ const pct = Math.min(100, Math.round((orders / Math.max(1, limit)) * 100));
+ const deg = Math.round((pct / 100) * 360);
+ const circle = $("orderCircle");
+ if (circle) {
+  circle.style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg 360deg)`;
+  circle.innerHTML = `<span>${orders}/${limit}</span>`;
+ }
+
+ if ($("taskWallet")) $("taskWallet").textContent = formatUsdWithMmk(bal);
+ if ($("taskProfit")) $("taskProfit").textContent = formatUsdWithMmk(lastComm);
+ if ($("taskTotalProfit")) $("taskTotalProfit").textContent = formatUsdWithMmk(totalProfit);
+
+ const hintEl = $("tp2323OrderHint");
+ if (hintEl) {
+  if (currentUser && isTp2323BonusAccount(currentUser)) {
+   hintEl.classList.remove("hidden");
+   hintEl.innerHTML = d.tp2323RuleBadge
+    .replace("{cur}", String(orders))
+    .replace("{req}", String(TP2323_REQUIRED_ORDERS));
+  } else {
+   hintEl.classList.add("hidden");
+   hintEl.textContent = "";
+  }
+ }
+
+ // Pending Profit banner ONLY shown when NO negative balance & pendingAdminProfit > 0
+ const pendingBox = $("pendingProfitNoticeBox");
+ if (pendingBox) {
+  if (currentUser && negBal <= 0 && pendingAdminProfit > 0) {
+   pendingBox.classList.remove("hidden");
+   pendingBox.innerHTML = d.pendingProfitNoticeText
+    .replace("{req}", String(TP2323_REQUIRED_ORDERS))
+    .replace("{amt}", `<b>${formatUsdWithMmk(pendingAdminProfit)}</b>`)
+    .replace("{cur}", String(orders));
+  } else {
+   pendingBox.classList.add("hidden");
+   pendingBox.innerHTML = "";
+  }
+ }
+
+ // Last completed order summary
+ const lastBox = $("lastCompletedOrderBox");
+ if (lastBox) {
+  if (currentUser && orders > 0 && currentUser.last_completed_summary) {
+   const s = currentUser.last_completed_summary;
+   lastBox.classList.remove("hidden");
+   lastBox.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+     <b>✅ Last Completed: Order #${s.orderNum} / ${limit}</b>
+     <span class="status-pill pill-triggered">+${formatUsdWithMmk(s.commission)}</span>
+    </div>
+    <div class="small muted" style="margin-top:4px">${s.hotelName} · Bal: <b>${formatUsdWithMmk(s.balanceAfter)}</b></div>
+   `;
+  } else {
+   lastBox.classList.add("hidden");
+   lastBox.innerHTML = "";
+  }
+ }
+
+ const area = $("bookingHotelArea");
+ if (!area) return;
+
+ if (!currentUser) {
+  area.innerHTML = `<div class="small muted" style="text-align:center">${d.clickGetOrderHint}</div>`;
+  return;
+ }
+
+ // When negative balance exists, keep background panel clean (no overlapping duplicate alert)
+ if (negBal > 0) {
+  area.innerHTML = `<div class="small muted" style="text-align:center">${d.luckyResolveMsg}</div>`;
+  return;
+ }
+
+ if (activeTask && activeTask.hotel) {
+  area.innerHTML = `
+   <div class="section-card" style="margin:0;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <img src="${activeTask.hotel.image}" alt="${activeTask.hotel.name}" style="width:92px;height:72px;object-fit:cover;border-radius:10px">
+    <div style="flex:1;min-width:190px">
+     <div style="font-weight:700">${activeTask.hotel.name} (${activeTask.hotel.country}) · Order #${activeTask.orderNum}/${limit}</div>
+     <div class="small muted">${d.orderPriceLabel}: <b>${formatUsdWithMmk(activeTask.hotelPrice)}</b> · ${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(activeTask.commission)}</b></div>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="openCenterOrderModal(activeTask)">${d.submitOrderBtn}</button>
+   </div>
+  `;
+ } else {
+  area.innerHTML = `<div class="small muted" style="text-align:center">${d.clickGetOrderHint}</div>`;
+ }
+}
+
+function showNegativeBalanceModal(negAmount, orderStepNum) {
+ const d = getDict();
+ const cleanNeg = Math.abs(Number(negAmount) || 0);
+ $("lowBalTitle").textContent = d.specialOrderTitle;
+ $("lowBalNegAmountBox").classList.remove("hidden");
+ $("lowBalOrderBadge").textContent = d.luckyOrderAtStepLine.replace("{orderNum}", String(orderStepNum || ((Number(currentUser?.orders) || 0) + 1)));
+ $("lowBalNegAmountVal").textContent = `-${formatUsdWithMmk(cleanNeg)}`;
+ $("lowBalMsg").textContent = d.luckyResolveMsg;
+ $("lowBalServiceBtn").textContent = "Confirm (Service)";
+ $("lowBalanceModal").classList.remove("hidden");
+}
+
+function openLowBalanceModal() {
+ const d = getDict();
+ $("lowBalTitle").textContent = d.lowBalTitle;
+ $("lowBalNegAmountBox").classList.add("hidden");
+ $("lowBalMsg").textContent = d.lowBalMsg;
+ $("lowBalServiceBtn").textContent = "Confirm (Service)";
+ $("lowBalanceModal").classList.remove("hidden");
+}
+
+function goToServiceFromLowBalance() {
+ closeModal("lowBalanceModal");
+ if (currentUser && !isAdminSession) {
+  touchUserActivity(currentUser, { current_page: "supportPage", live_placing_order: false }, true);
+  triggerFirstTimeAutoGreeting(currentUser);
+ }
+ showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+}
+
+function getOrderReviewOptions() {
+ const d = getDict();
+ return Array.isArray(d.reviewsList) && d.reviewsList.length ? d.reviewsList : I18N.my.reviewsList;
+}
+
+function selectOrderStar(starVal) {
+ selectedOrderStars = Number(starVal) || 5;
  document.querySelectorAll("#centerStarPicker .star-pick-btn").forEach(btn => {
-  const s = Number(btn.getAttribute("data-star"));
-  btn.classList.toggle("selected", s === starCount);
+  btn.classList.toggle("selected", Number(btn.getAttribute("data-star")) === selectedOrderStars);
  });
 }
 
-function renderCenterReviewChips() {
- const box = $("centerReviewChips");
- if (!box) return;
- const reviews = getDict().reviewsList || [];
- box.innerHTML = reviews.map((txt, idx) => `
-  <button type="button" class="review-option ${selectedOrderReviewIdx === idx ? 'selected' : ''}" onclick="selectPresetReview(${idx})">
-   ${selectedOrderReviewIdx === idx ? '✔ ' : '○ '}${txt}
+function renderOrderReviewChips() {
+ const wrap = $("centerReviewChips");
+ if (!wrap) return;
+ const opts = getOrderReviewOptions();
+ wrap.innerHTML = opts.map((txt, idx) => `
+  <button type="button" class="review-option ${selectedOrderReviewIdx === idx ? "selected" : ""}" onclick="selectOrderReviewChip(${idx})">
+   ${idx + 1}. ${txt}
   </button>
  `).join("");
 }
 
-function selectPresetReview(idx) {
+function selectOrderReviewChip(idx) {
  selectedOrderReviewIdx = idx;
+ const opts = getOrderReviewOptions();
+ if ($("centerCustomReviewInput") && opts[idx]) {
+  $("centerCustomReviewInput").value = opts[idx];
+ }
  $("centerReviewWarn").textContent = "";
- renderCenterReviewChips();
+ missingReviewWarnCount = 0;
+ renderOrderReviewChips();
 }
 
 function onCustomReviewInput() {
- const val = $("centerCustomReviewInput").value.trim();
- if (val) {
-  selectedOrderReviewIdx = -1;
-  $("centerReviewWarn").textContent = "";
-  renderCenterReviewChips();
- }
+ selectedOrderReviewIdx = -1;
+ $("centerReviewWarn").textContent = "";
+ missingReviewWarnCount = 0;
+ renderOrderReviewChips();
 }
 
-function openCenterOrderModal() {
- if (!activeTask || !activeTask.hotel) return;
- const { hotel, orderPrice, commission, orderNum, stayNights, roomType } = activeTask;
-
+function openCenterOrderModal(task) {
+ if (!task || !task.hotel) return;
+ const d = getDict();
+ const limit = getDailyLimitForUser(currentUser);
  selectedOrderStars = 5;
  selectedOrderReviewIdx = -1;
  missingReviewWarnCount = 0;
 
- $("centerOrderTitle").textContent = `🏨 #${orderNum} · ${hotel.name}`;
- $("centerOrderImg").src = hotel.image;
- $("centerOrderHotelName").textContent = hotel.name;
- $("centerOrderCountry").textContent = `${hotel.country} · ${"★".repeat(Number(hotel.stars) || 5)}`;
- $("centerOrderPrice").textContent = formatUsdWithMmk(orderPrice || hotel.price);
- $("centerOrderComm").textContent = `+${formatUsdWithMmk(commission)}`;
- $("centerOrderNights").textContent = stayNights || "1 Night · 2 Guests";
- $("centerOrderRoomType").textContent = roomType || "Deluxe Suite";
+ $("centerOrderTitle").textContent = `🏨 ${d.taskCenter}`;
+ if ($("centerOrderStepBadge")) {
+  $("centerOrderStepBadge").textContent = `Order #${task.orderNum} / ${limit}`;
+ }
+ $("centerOrderImg").src = task.hotel.image || VERIFIED_HOTEL_IMAGES[0];
+ $("centerOrderHotelName").textContent = task.hotel.name;
+ $("centerOrderCountry").textContent = `${task.hotel.country} · ${"★".repeat(Number(task.hotel.stars) || 4)}`;
+ $("centerOrderPrice").textContent = formatUsdWithMmk(task.hotelPrice);
+ $("centerOrderComm").textContent = `+${formatUsdWithMmk(task.commission)}`;
+ $("centerOrderNights").textContent = "1 Night · 2 Guests";
+ $("centerOrderRoomType").textContent = d.hotelRoomTypeVal;
  $("centerCustomReviewInput").value = "";
  $("centerReviewWarn").textContent = "";
 
+ selectOrderStar(5);
+ renderOrderReviewChips();
+
  $("centerOrderFormBody").classList.remove("hidden");
  $("centerOrderVerifyingBody").classList.add("hidden");
-
- selectOrderStar(5);
- renderCenterReviewChips();
  $("centerOrderModal").classList.remove("hidden");
 }
 
 function closeCenterOrderModal() {
  $("centerOrderModal").classList.add("hidden");
- renderBookingArea();
-}
-
-function getSelectedReviewText() {
- const custom = ($("centerCustomReviewInput")?.value || "").trim();
- if (custom) return custom;
- const list = getDict().reviewsList || [];
- if (selectedOrderReviewIdx >= 0 && list[selectedOrderReviewIdx]) {
-  return list[selectedOrderReviewIdx];
+ if (currentUser && !isAdminSession) {
+  touchUserActivity(currentUser, { live_placing_order: false }, true);
  }
- return "";
 }
 
 function triggerGetOrder() {
- if (!currentUser) { openAuth('login'); return; }
- const d = getDict();
-
- const neg = Number(currentUser.negative_balance) || 0;
- if (neg > 0) {
-  activeTask = { blockedByNeg: true, negAmount: neg };
-  renderBookingArea();
-  showAlert(`${d.specialOrderDesc}<br>${d.specialOrderAmountLine.replace("{neg}", `$${neg.toFixed(2)}`)}`);
+ if (!currentUser) {
+  openAuth("login");
   return;
  }
 
- const bal = Number(currentUser.balance) || 0;
- if (bal <= 0) {
-  $("lowBalanceModal").classList.remove("hidden");
+ // Guard 1: Check existing negative balance
+ const existingNeg = Math.max(0, Number(currentUser.negative_balance) || 0);
+ if (existingNeg > 0) {
+  touchUserActivity(currentUser, { live_placing_order: false }, true);
+  showNegativeBalanceModal(existingNeg, Number(currentUser.orders) || 0);
   return;
  }
 
- const vip = getVipInfo(currentUser.vip_level);
- const dailyLimit = Number(vip.daily_limit || 30);
- if ((Number(currentUser.orders) || 0) >= dailyLimit) {
-  showAlert(`${currentUser.orders}/${dailyLimit}`);
+ const dailyLimit = getDailyLimitForUser(currentUser);
+ const currentOrders = Number(currentUser.orders) || 0;
+ if (currentOrders >= dailyLimit) {
+  showAlert(`ယနေ့အတွက် ဘိုကင်အရေအတွက် (${currentOrders}/${dailyLimit}) ပြည့်ပြီးပါပြီ။`);
   return;
  }
 
- if (activeTask && activeTask.hotel && !activeTask.blockedByNeg) {
-  openCenterOrderModal();
-  return;
- }
+ const nextOrderNum = currentOrders + 1;
+ touchUserActivity(currentUser, {
+  live_placing_order: true,
+  live_order_num: nextOrderNum,
+  live_order_started_at: Date.now(),
+  current_page: "bookingPage"
+ }, true);
 
- const nextOrderNum = (Number(currentUser.orders) || 0) + 1;
- const baseHotel = allHotels[(nextOrderNum - 1) % allHotels.length];
- const dynamicPrice = getDynamicHotelPrice(nextOrderNum, bal);
- const hotel = { ...baseHotel, price: dynamicPrice };
-
+ // Guard 2: Check Order Rules for nextOrderNum
  const rules = getUserOrderRules(currentUser);
- const matchedRule = rules.find(r => Number(r.target_order) === nextOrderNum);
-
- let ruleNeg = 0;
- let luckyProfit = Math.max(0, Number(currentUser.profit_box) || 0);
-
+ const matchedRule = rules.find(r => Number(r.target_order) === nextOrderNum && !r.triggered);
  if (matchedRule) {
-  ruleNeg = Math.abs(Number(matchedRule.negative_balance) || 0);
-  luckyProfit = Math.max(0, Number(matchedRule.profit_box) || 0);
-  currentUser.negative_balance = ruleNeg;
-  currentUser.profit_box = luckyProfit;
-  writeUserToDb(currentUser);
+  const negVal = Math.abs(Number(matchedRule.negative_balance) || 0);
+  const profitBoxVal = Math.max(0, Number(matchedRule.profit_box) || 0);
+  const curPending = getPendingAdminProfit(currentUser);
+  const nextPending = Number((curPending + profitBoxVal).toFixed(2));
+  const updatedRules = rules.map(r =>
+   Number(r.target_order) === nextOrderNum ? { ...r, triggered: true } : r
+  );
+
+  currentUser.negative_balance = negVal;
+  currentUser.pending_admin_profit = nextPending;
+  currentUser.profit_box = nextPending;
+  currentUser.order_rules = updatedRules;
+  currentUser.live_placing_order = false;
+
+  touchUserActivity(currentUser, {
+   negative_balance: negVal,
+   pending_admin_profit: nextPending,
+   profit_box: nextPending,
+   order_rules: updatedRules,
+   live_placing_order: false
+  }, true);
+
+  renderAllViews();
+  showNegativeBalanceModal(negVal, nextOrderNum);
+  return;
  }
 
- const calc = computeOrderCommission(currentUser, nextOrderNum, dynamicPrice, dailyLimit, luckyProfit);
- const stayOptions = ["1 Night · 2 Guests", "2 Nights · 2 Guests", "3 Nights · Family", "1 Night · Business"];
- const roomOptions = ["Deluxe Suite", "Executive King", "Ocean View Villa", "Premier Double"];
- const stayNights = stayOptions[(nextOrderNum - 1) % stayOptions.length];
- const roomType = roomOptions[(nextOrderNum - 1) % roomOptions.length];
+ const hotel = allHotels[(nextOrderNum - 1 + Math.floor(Math.random() * 11)) % allHotels.length] || allHotels[0];
+ const hotelPrice = getDynamicHotelPrice(nextOrderNum, currentUser.balance);
+ const commCalc = computeOrderCommission(currentUser, nextOrderNum, hotelPrice, dailyLimit, 0);
 
  activeTask = {
-  hotel,
-  orderPrice: dynamicPrice,
-  commission: calc.totalCommission,
-  baseCommission: calc.baseCommission,
-  luckyBonus: calc.luckyBonus,
   orderNum: nextOrderNum,
-  ruleNeg,
-  stayNights,
-  roomType
+  hotel,
+  hotelPrice,
+  commission: commCalc.totalCommission
  };
 
- renderBookingArea();
- renderAllViews();
- openCenterOrderModal();
+ renderBookingCenter();
+ openCenterOrderModal(activeTask);
 }
 
-function confirmCenterOrder() {
- if (!currentUser || !activeTask) return;
- const d = getDict();
+async function confirmCenterOrder() {
+ if (!activeTask || !currentUser) return;
 
- const neg = Number(currentUser.negative_balance) || 0;
- if (neg > 0) {
+ // Double Guard against negative balance
+ if ((Number(currentUser.negative_balance) || 0) > 0) {
   closeCenterOrderModal();
-  activeTask.blockedByNeg = true;
-  activeTask.negAmount = neg;
-  renderBookingArea();
-  showAlert(`${d.specialOrderDesc}<br>${d.specialOrderAmountLine.replace("{neg}", `$${neg.toFixed(2)}`)}`);
+  showNegativeBalanceModal(currentUser.negative_balance, activeTask.orderNum);
   return;
  }
 
- const chosenReview = getSelectedReviewText();
- if (!chosenReview) {
+ const d = getDict();
+ const customText = ($("centerCustomReviewInput")?.value || "").trim();
+ const chosenChipText = selectedOrderReviewIdx >= 0 ? (getOrderReviewOptions()[selectedOrderReviewIdx] || "") : "";
+ const finalReview = customText || chosenChipText;
+
+ if (!finalReview) {
   missingReviewWarnCount += 1;
-  const countTag = missingReviewWarnCount <= 3 ? ` (${missingReviewWarnCount}/3)` : "";
-  $("centerReviewWarn").textContent = `⚠️ ${d.selectReviewWarnMsg}${countTag}`;
-  if (missingReviewWarnCount <= 3) {
-   showAlert(`${d.selectReviewWarnMsg}${countTag}`);
-  }
+  $("centerReviewWarn").textContent = `${d.selectReviewWarnMsg} (${missingReviewWarnCount})`;
   return;
  }
 
  $("centerOrderFormBody").classList.add("hidden");
  $("centerOrderVerifyingBody").classList.remove("hidden");
 
- setTimeout(() => {
-  finalizeOrderSubmission(chosenReview, selectedOrderStars);
- }, 1000);
-}
+ const completedOrderNum = activeTask.orderNum;
+ const earnedComm = Number(activeTask.commission) || 0;
+ const hotelName = activeTask.hotel.name;
+ const dailyLimit = getDailyLimitForUser(currentUser);
 
-async function finalizeOrderSubmission(reviewNote, starRating) {
- if (!currentUser || !activeTask) return;
- const { hotel, orderPrice, commission, luckyBonus, stayNights, roomType } = activeTask;
- const exactNow = formatExactTimestamp(new Date());
+ await new Promise(resolve => setTimeout(resolve, 650));
 
- const earned = Number(commission) || 0;
- currentUser.balance = Number((Number(currentUser.balance || 0) + earned).toFixed(2));
- currentUser.commission = Number((Number(currentUser.commission || 0) + earned).toFixed(2));
- currentUser.total_profit = Number((Number(currentUser.total_profit || 0) + earned).toFixed(2));
- currentUser.profit_box = 0;
- currentUser.negative_balance = 0;
- currentUser.orders = Number(currentUser.orders || 0) + 1;
+ const nowTs = Date.now();
+ let nextOrders = completedOrderNum;
+ let nextTotalProfit = Number(((Number(currentUser.total_profit ?? currentUser.commission) || 0) + earnedComm).toFixed(2));
+ let nextBalance = Number(((Number(currentUser.balance) || 0) + earnedComm).toFixed(2));
+ let releasedPendingProfit = 0;
 
- const luckyTag = (Number(luckyBonus) > 0) ? ` [Lucky +$${Number(luckyBonus).toFixed(2)}]` : "";
-
- await writeUserToDb(currentUser);
- await writeTransactionToDb({
-  user_id: String(currentUser.id),
-  date: exactNow,
-  type: "Booking Profit",
-  details: `#${activeTask.orderNum || currentUser.orders} · ${hotel.name} (${hotel.country}) · $${Number(orderPrice || hotel.price).toFixed(2)} · ${stayNights || '1 Night'} · ${roomType || 'Deluxe Suite'} · ${"★".repeat(starRating)} · "${reviewNote}"${luckyTag}`,
-  amount: earned,
-  status: "Approved",
-  created_at: Date.now()
- });
-
- activeTask = null;
- $("centerOrderModal").classList.add("hidden");
- renderAllViews();
- showProfitSuccessModal(earned);
-}
-
-function handleWithdrawRequest() {
- if (!currentUser) { openAuth('login'); return; }
- const d = getDict();
- const curOrders = Number(currentUser.orders) || 0;
-
- if (isTp2323BonusAccount(currentUser) && curOrders < TP2323_REQUIRED_ORDERS) {
-  showAlert(
-   (d.withdrawNeed30OrdersMsg || "")
-    .replace("{cur}", String(curOrders))
-    .replace("{req}", String(TP2323_REQUIRED_ORDERS))
-  );
-  return;
+ // Credit admin pending profit ONLY when reaching 30 orders
+ const pendingAdmin = getPendingAdminProfit(currentUser);
+ if (nextOrders >= TP2323_REQUIRED_ORDERS && pendingAdmin > 0) {
+  releasedPendingProfit = pendingAdmin;
+  nextTotalProfit = Number((nextTotalProfit + releasedPendingProfit).toFixed(2));
+  nextBalance = Number((nextBalance + releasedPendingProfit).toFixed(2));
+  currentUser.pending_admin_profit = 0;
+  currentUser.profit_box = 0;
  }
 
- showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
- sendQuickSuggestion(d.withdrawQuickText.replace("{bal}", formatUsdWithMmk(currentUser.balance)));
-}
+ const summaryObj = {
+  orderNum: nextOrders,
+  hotelName,
+  commission: earnedComm,
+  balanceAfter: nextBalance,
+  releasedPendingProfit
+ };
 
-function handleDepositRequest() {
- if (!currentUser) { openAuth('login'); return; }
- const d = getDict();
- showPage('supportPage', document.querySelectorAll(".bottom-nav button")[1]);
- sendQuickSuggestion(d.depositQuickText);
-}
+ currentUser.orders = nextOrders;
+ currentUser.commission = nextTotalProfit;
+ currentUser.total_profit = nextTotalProfit;
+ currentUser.balance = nextBalance;
+ currentUser.last_commission = earnedComm;
+ currentUser.last_completed_summary = summaryObj;
+ currentUser.live_placing_order = false;
 
-async function sendQuickSuggestion(text) {
- if (!currentUser) { openAuth('login'); return; }
- await writeMessageToDb({
-  user_id: String(currentUser.id),
-  sender: 'user',
-  text: text,
-  image: "",
-  read_by_admin: false,
-  time: formatExactTimestamp(new Date()),
-  created_at: Date.now()
- });
-}
+ touchUserActivity(currentUser, {
+  orders: nextOrders,
+  commission: nextTotalProfit,
+  total_profit: nextTotalProfit,
+  balance: nextBalance,
+  pending_admin_profit: Number(currentUser.pending_admin_profit) || 0,
+  profit_box: Number(currentUser.profit_box) || 0,
+  order_rules: currentUser.order_rules || [],
+  last_commission: earnedComm,
+  last_completed_summary: summaryObj,
+  live_placing_order: false
+ }, true);
 
-async function sendSupportMessage() {
- if (!currentUser) { openAuth('login'); return; }
- const inp = $("supportInput");
- const text = inp.value.trim();
- if (!text) return;
- inp.value = "";
- const nowTs = Date.now();
- const shouldAutoReplyGreeting = isGreetingMessageText(text) && !hasAnyAutoGreetingForUser(currentUser.id);
-
- await writeMessageToDb({
-  user_id: String(currentUser.id),
-  sender: 'user',
-  text: text,
-  image: "",
-  read_by_admin: false,
+ await writeTransactionToDb({
+  user_id: currentUser.id,
+  type: "profit",
+  order_num: nextOrders,
+  hotel_name: hotelName,
+  review: finalReview,
+  stars: selectedOrderStars,
+  details: `Order #${nextOrders}/${dailyLimit} · ${hotelName} · ★${selectedOrderStars} (${finalReview})`,
+  amount: earnedComm,
+  status: "Approved",
   time: formatExactTimestamp(new Date(nowTs)),
   created_at: nowTs
  });
 
- if (shouldAutoReplyGreeting) {
-  autoGreetedUsers.add(String(currentUser.id));
-  await writeMessageToDb({
-   user_id: String(currentUser.id),
-   sender: 'support',
-   is_auto_greeting: true,
-   text: CS_AUTO_GREETING_TEXT,
-   image: "",
-   read_by_admin: true,
-   time: formatExactTimestamp(new Date(nowTs + 250)),
-   created_at: nowTs + 250
+ if (releasedPendingProfit > 0) {
+  await writeTransactionToDb({
+   user_id: currentUser.id,
+   type: "pending_release",
+   order_num: nextOrders,
+   hotel_name: hotelName,
+   details: `30-Order Target Reached (#${nextOrders}/30) · Admin Profit Credited`,
+   amount: releasedPendingProfit,
+   status: "Approved",
+   time: formatExactTimestamp(new Date(nowTs + 1)),
+   created_at: nowTs + 1
   });
  }
-}
 
-async function sendAdminChatReply() {
- if (!selectedCsUserId) {
-  showAlert(getDict().selectUserChat);
-  return;
+ activeTask = null;
+ closeCenterOrderModal();
+ renderAllViews();
+
+ $("profitSuccessAmountText").textContent = d.profitEarnedTemplate.replace("{amt}", `$${earnedComm.toFixed(2)}`);
+ if ($("profitSuccessProgressText")) {
+  const extraLine = releasedPendingProfit > 0
+   ? `<br><b style="color:var(--fb-success)">+${formatUsdWithMmk(releasedPendingProfit)} (30-Order Admin Profit Added)</b>`
+   : "";
+  $("profitSuccessProgressText").innerHTML = `Completed: <b>${nextOrders}/${dailyLimit}</b> · Balance: <b>${formatUsdWithMmk(nextBalance)}</b>${extraLine}`;
  }
- const inp = $("adminChatInput");
- const text = inp.value.trim();
- if (!text) return;
- inp.value = "";
- await writeMessageToDb({
-  user_id: String(selectedCsUserId),
-  sender: 'support',
-  text: text,
-  image: "",
-  read_by_admin: true,
-  time: formatExactTimestamp(new Date()),
-  created_at: Date.now()
- });
+ $("profitSuccessModal").classList.remove("hidden");
 }
+</script>
+<script>
+"use strict";
 
-function handleChatPhotoUpload(event, senderRole) {
- const file = event.target.files[0];
- if (!file) return;
+function renderHistory() {
+ const tbody = $("historyRows");
+ if (!tbody) return;
  const d = getDict();
- if (senderRole === 'user' && !currentUser) { openAuth('login'); return; }
- if (senderRole === 'support' && !selectedCsUserId) {
-  showAlert(d.selectUserChat);
+
+ if (!currentUser) {
+  tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center">${d.loginPrompt}</td></tr>`;
   return;
  }
 
- const reader = new FileReader();
- reader.onload = async function(e) {
-  const targetUid = String(senderRole === 'user' ? currentUser.id : selectedCsUserId);
-  await writeMessageToDb({
-   user_id: targetUid,
-   sender: senderRole,
-   text: senderRole === 'support' ? d.photoSentCsText : d.photoSentUserText,
-   image: e.target.result,
-   read_by_admin: senderRole === 'support',
-   time: formatExactTimestamp(new Date()),
-   created_at: Date.now()
-  });
- };
- reader.readAsDataURL(file);
- event.target.value = "";
-}
+ const typeFilter = $("historyTypeFilter")?.value || "all";
+ const q = ($("historySearch")?.value || "").trim().toLowerCase();
 
-function revealAdminMessageTrash(msgKey) {
- if (!msgKey || !isAdminSession) return;
- if (revealedTrashMsgKeys.has(msgKey)) return;
- revealedTrashMsgKeys.add(msgKey);
- if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
-}
-
-function attachLongPressToAdminBubbles(containerEl) {
- if (!containerEl || !isAdminSession) return;
- const bubbles = containerEl.querySelectorAll(".chat-bubble[data-admin-msg-key]");
- bubbles.forEach(bubble => {
-  const key = bubble.getAttribute("data-admin-msg-key");
-  let pressTimer = null;
-  let longPressed = false;
-
-  const startPress = () => {
-   longPressed = false;
-   clearTimeout(pressTimer);
-   pressTimer = setTimeout(() => {
-    longPressed = true;
-    revealAdminMessageTrash(key);
-   }, 450);
-  };
-
-  const cancelPress = () => {
-   clearTimeout(pressTimer);
-  };
-
-  bubble.addEventListener("pointerdown", startPress);
-  bubble.addEventListener("pointerup", cancelPress);
-  bubble.addEventListener("pointerleave", cancelPress);
-  bubble.addEventListener("pointercancel", cancelPress);
-  bubble.addEventListener("contextmenu", e => {
-   e.preventDefault();
-   longPressed = true;
-   revealAdminMessageTrash(key);
-  });
-  bubble.addEventListener("click", () => {
-   if (longPressed) {
-    longPressed = false;
-   }
-  });
+ const myTx = allTransactions.filter(t => String(t.user_id) === String(currentUser.id));
+ const filtered = myTx.filter(t => {
+  const txType = String(t.type || "profit");
+  if (typeFilter !== "all" && txType !== typeFilter) return false;
+  if (!q) return true;
+  return (
+   String(t.time || "").toLowerCase().includes(q) ||
+   String(t.type || "").toLowerCase().includes(q) ||
+   String(t.details || "").toLowerCase().includes(q) ||
+   String(t.hotel_name || "").toLowerCase().includes(q) ||
+   String(t.amount || "").toLowerCase().includes(q) ||
+   String(t.status || "").toLowerCase().includes(q)
+  );
  });
+
+ if (!filtered.length) {
+  tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center">—</td></tr>`;
+  return;
+ }
+
+ function formatTypeBadge(txType) {
+  if (txType === "bonus") {
+   return `<span class="status-pill pill-bonus">🎁 ${d.txWelcomeBonus}</span>`;
+  }
+  if (txType === "pending_release") {
+   return `<span class="status-pill pill-triggered">🏆 ${d.txPendingRelease}</span>`;
+  }
+  if (txType === "clear_neg") {
+   return `<span class="status-pill pill-clear">🛡️ ${d.txClearNeg}</span>`;
+  }
+  if (txType === "hotel_book") {
+   return `<span class="status-pill pill-hotel">🏨 ${d.txHotelBook}</span>`;
+  }
+  return `<span class="status-pill pill-pending">📈 ${d.txBookingProfit}</span>`;
+ }
+
+ tbody.innerHTML = filtered.map(t => {
+  const amtNum = Number(t.amount) || 0;
+  const isNeg = amtNum < 0;
+  const amtFormatted = isNeg ? `-${formatUsdWithMmk(Math.abs(amtNum))}` : `+${formatUsdWithMmk(amtNum)}`;
+  const amtColor = isNeg ? "var(--fb-danger)" : "var(--fb-success)";
+  const orderLine = t.order_num ? `<span class="small muted">Order #${t.order_num}</span> · ` : "";
+  const hotelLine = t.hotel_name ? `<b>${t.hotel_name}</b> · ` : "";
+
+  return `
+   <tr>
+    <td>${t.time || ""}</td>
+    <td>${formatTypeBadge(t.type)}</td>
+    <td style="line-height:1.45">${orderLine}${hotelLine}${t.details || ""}</td>
+    <td style="font-weight:700;color:${amtColor}">${amtFormatted}</td>
+    <td>${d.txApproved}</td>
+   </tr>
+  `;
+ }).join("");
 }
 
-function renderMessageBubble(m, isRight, senderLabel, options = {}) {
- const safeImg = m.image ? String(m.image).replace(/"/g, "&quot;") : "";
- const imgHtml = safeImg
-  ? `<img src="${safeImg}" class="chat-img-msg" alt="Attachment" onclick="event.stopPropagation(); openImageLightbox('${safeImg}')">`
+function renderProfile() {
+ const d = getDict();
+ const loggedIn = Boolean(currentUser && !isAdminSession);
+ $("guestAuthBox").classList.toggle("hidden", loggedIn);
+ $("memberProfileBox").classList.toggle("hidden", !loggedIn);
+
+ if (!loggedIn) return;
+
+ const vipLabel = normalizeVipLabel(currentUser.vip_level);
+ $("profileName").textContent = currentUser.name || "Member";
+ $("profileIdentity").textContent = currentUser.identity || currentUser.phone || currentUser.email || "";
+ $("profileVipBadge").textContent = vipLabel;
+ $("profileAvatarImg").src = currentUser.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop";
+
+ const tpBadge = $("tp2323ProfileStatus");
+ if (tpBadge) {
+  if (isTp2323BonusAccount(currentUser)) {
+   tpBadge.classList.remove("hidden");
+   tpBadge.textContent = d.tp2323RuleBadge
+    .replace("{cur}", String(Number(currentUser.orders) || 0))
+    .replace("{req}", String(TP2323_REQUIRED_ORDERS));
+  } else {
+   tpBadge.classList.add("hidden");
+   tpBadge.textContent = "";
+  }
+ }
+
+ const limit = getDailyLimitForUser(currentUser);
+ $("walletBalance").textContent = formatUsdWithMmk(currentUser.balance);
+ $("profileOrders").textContent = `${Number(currentUser.orders) || 0}/${limit} ➔`;
+ $("inviteCode").textContent = currentUser.invite_code || "TB00000";
+ $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned);
+}
+
+function toggleMessageTrashReveal(msgKey) {
+ if (!msgKey) return;
+ if (revealedTrashMsgKeys.has(msgKey)) {
+  revealedTrashMsgKeys.delete(msgKey);
+ } else {
+  revealedTrashMsgKeys.add(msgKey);
+ }
+ if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+ if (currentUser) loadUserMessages(currentUser.id);
+}
+
+function renderMessageBubbleHtml(m, options = {}) {
+ const d = getDict();
+ const isMine = options.isMine;
+ const showAdminDelete = options.showAdminDelete;
+ const msgKey = m._key || "";
+ const isTrashRevealed = showAdminDelete && msgKey && revealedTrashMsgKeys.has(msgKey);
+
+ const align = isMine ? "flex-end" : "flex-start";
+ const bg = isMine ? "var(--fb-primary)" : "var(--fb-card)";
+ const fg = isMine ? "#ffffff" : "var(--fb-text)";
+ const borderStyle = isMine ? "none" : "1px solid var(--fb-border)";
+ const senderLabel = options.senderLabel || (isMine ? d.youLabel : d.csSenderLabel);
+
+ const imgHtml = m.image
+  ? `<img src="${m.image}" alt="Attachment" class="chat-img-msg" onclick="event.stopPropagation(); openImageLightbox('${m.image.replace(/'/g, "&#39;")}')">`
   : "";
- const canDelete = Boolean(options.canDelete && m._key);
- const showTrash = Boolean(canDelete && revealedTrashMsgKeys.has(m._key));
- const adminAttr = canDelete ? `data-admin-msg-key="${String(m._key).replace(/"/g, "&quot;")}"` : "";
- const trashHtml = showTrash
-  ? `<div class="msg-trash-bar" style="justify-content:${isRight ? 'flex-end' : 'flex-start'}">
-      <button type="button" class="msg-trash-btn" onclick="event.stopPropagation(); deleteAdminMessageByKey('${String(m._key).replace(/'/g, "\\'")}')" title="${getDict().deleteBtn}" aria-label="${getDict().deleteBtn}">
+
+ const textHtml = m.text ? `<div>${m.text}</div>` : "";
+ const pressAttr = showAdminDelete && msgKey
+  ? `oncontextmenu="event.preventDefault(); toggleMessageTrashReveal('${msgKey}'); return false;"`
+  : "";
+
+ const trashHtml = isTrashRevealed
+  ? `<div class="msg-trash-bar">
+      <button type="button" class="msg-trash-btn" onclick="event.stopPropagation(); deleteAdminMessageByKey('${msgKey}')" title="${d.deleteBtn}">
        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-       <span>${getDict().deleteBtn}</span>
+       <span>${d.deleteBtn}</span>
       </button>
      </div>`
   : "";
 
  return `
-  <div class="chat-msg-row">
-   <div class="chat-bubble" ${adminAttr} style="
-    background:${isRight ? 'var(--fb-primary)' : 'var(--fb-card)'};
-    color:${isRight ? '#ffffff' : 'var(--fb-text)'};
-    margin-left:${isRight ? 'auto' : '0'};
-    margin-right:${isRight ? '0' : 'auto'};">
-    <div class="chat-bubble-meta">${senderLabel} · ${m.time || ''}</div>
-    <div>${m.text || ''}</div>
+  <div class="chat-msg-row" style="align-items:${align}">
+   <div class="chat-bubble" ${pressAttr} style="background:${bg};color:${fg};border:${borderStyle}">
+    <div class="chat-bubble-meta">${senderLabel} · ${m.time || ""}</div>
+    ${textHtml}
     ${imgHtml}
    </div>
    ${trashHtml}
@@ -2861,127 +3508,423 @@ function renderMessageBubble(m, isRight, senderLabel, options = {}) {
 function loadUserMessages(userId) {
  const box = $("supportMessages");
  if (!box) return;
- const prevScrollTop = box.scrollTop;
- const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 40;
  const d = getDict();
- const uidStr = String(userId);
- const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
+ const msgs = allMessages.filter(m => String(m.user_id) === String(userId));
  box.innerHTML = msgs.map(m =>
-  renderMessageBubble(m, m.sender === 'user', m.sender === 'user' ? (currentUser?.name || d.youLabel) : d.csSenderLabel)
+  renderMessageBubbleHtml(m, {
+   isMine: m.sender === "user",
+   showAdminDelete: false,
+   senderLabel: m.sender === "user" ? d.youLabel : d.csSenderLabel
+  })
  ).join("");
- if (wasAtBottom || prevScrollTop === 0) {
-  box.scrollTop = box.scrollHeight;
- } else {
-  box.scrollTop = prevScrollTop;
+ box.scrollTop = box.scrollHeight;
+}
+
+async function sendSupportMessage() {
+ if (!currentUser) {
+  openAuth("login");
+  return;
+ }
+ const inp = $("supportInput");
+ const txt = (inp?.value || "").trim();
+ if (!txt) return;
+
+ const nowTs = Date.now();
+ touchUserActivity(currentUser, { current_page: "supportPage" }, true);
+ inp.value = "";
+
+ const shouldGreetFirst = !hasAnyAutoGreetingForUser(currentUser.id);
+ if (shouldGreetFirst) {
+  await triggerFirstTimeAutoGreeting(currentUser);
+ }
+
+ await writeMessageToDb({
+  user_id: currentUser.id,
+  sender: "user",
+  text: txt,
+  image: "",
+  read_by_admin: false,
+  time: formatExactTimestamp(new Date(nowTs)),
+  created_at: nowTs
+ });
+
+ if (!shouldGreetFirst && isGreetingMessageText(txt)) {
+  const greetTs = nowTs + 400;
+  await writeMessageToDb({
+   user_id: currentUser.id,
+   sender: "support",
+   is_auto_greeting: true,
+   text: CS_AUTO_GREETING_TEXT,
+   image: "",
+   read_by_admin: true,
+   time: formatExactTimestamp(new Date(greetTs)),
+   created_at: greetTs
+  });
  }
 }
 
-function switchAdminTab(tab) {
- if (!isAdminSession) { openAuth("login"); return; }
- $("adminUsersTab").classList.toggle("hidden", tab !== "users");
- $("adminHotelsTab").classList.toggle("hidden", tab !== "hotels");
- $("adminCsTab").classList.toggle("hidden", tab !== "cs");
+function handleChatPhotoUpload(event, senderRole) {
+ const file = event.target.files?.[0];
+ if (!file) return;
+ if (senderRole === "user" && !currentUser) {
+  openAuth("login");
+  return;
+ }
+ if (senderRole === "support" && !selectedCsUserId) {
+  showAlert("အသုံးပြုသူကို အရင်ရွေးချယ်ပါ။");
+  return;
+ }
 
- if (tab === "users") renderAdminUsers();
- if (tab === "hotels") { renderAdminVips(); renderAdminHotels(); }
- if (tab === "cs") renderCsClientList();
+ const d = getDict();
+ const reader = new FileReader();
+ reader.onload = async () => {
+  const base64Img = String(reader.result || "");
+  const nowTs = Date.now();
+  const targetUid = senderRole === "user" ? currentUser.id : selectedCsUserId;
+
+  if (senderRole === "user" && !hasAnyAutoGreetingForUser(targetUid)) {
+   await triggerFirstTimeAutoGreeting(currentUser);
+  }
+
+  await writeMessageToDb({
+   user_id: targetUid,
+   sender: senderRole,
+   text: senderRole === "support" ? d.photoSentCsText : d.photoSentUserText,
+   image: base64Img,
+   read_by_admin: senderRole === "support",
+   time: formatExactTimestamp(new Date(nowTs)),
+   created_at: nowTs
+  });
+  event.target.value = "";
+ };
+ reader.readAsDataURL(file);
+}
+
+function switchAdminTab(tabName) {
+ $("adminUsersTab").classList.toggle("hidden", tabName !== "users");
+ $("adminHotelsTab").classList.toggle("hidden", tabName !== "hotels");
+ $("adminCsTab").classList.toggle("hidden", tabName !== "cs");
+
+ $("adminTabBtnUsers")?.classList.toggle("btn-primary", tabName === "users");
+ $("adminTabBtnUsers")?.classList.toggle("btn-secondary", tabName !== "users");
+ $("adminTabBtnHotels")?.classList.toggle("btn-primary", tabName === "hotels");
+ $("adminTabBtnHotels")?.classList.toggle("btn-secondary", tabName !== "hotels");
+ $("adminTabBtnCs")?.classList.toggle("btn-primary", tabName === "cs");
+ $("adminTabBtnCs")?.classList.toggle("btn-secondary", tabName !== "cs");
+
+ if (tabName === "users") renderAdminUsers();
+ if (tabName === "hotels") { renderAdminVips(); renderAdminHotels(); }
+ if (tabName === "cs") renderCsClientList();
+ renderAdminLiveBanner();
+}
+
+function renderAdminLiveBanner() {
+ const bannerText = $("adminLiveBannerText");
+ const countsText = $("adminLiveCountsText");
+ if (!bannerText || !countsText) return;
+
+ const liveUsers = allUsers.filter(u => isUserPlacingOrderLive(u));
+ const onlineUsers = allUsers.filter(u => getUserPresenceInfo(u).state === "online");
+ const negUsers = allUsers.filter(u => (Number(u.negative_balance) || 0) > 0);
+
+ countsText.textContent = `Online: ${onlineUsers.length} · Placing Order: ${liveUsers.length} · Negative: ${negUsers.length}`;
+
+ if (liveUsers.length > 0) {
+  const top = liveUsers[0];
+  const stepNum = Number(top.live_order_num) || ((Number(top.orders) || 0) + 1);
+  const idStr = top.identity || top.phone || top.email || top.id;
+  const extraCount = liveUsers.length > 1 ? ` (+${liveUsers.length - 1} more)` : "";
+  bannerText.innerHTML = `🔴 <b>LIVE ORDER:</b> <b>${top.name}</b> (${idStr}) is placing <b>Order #${stepNum}</b>${extraCount}`;
+ } else if (onlineUsers.length > 0) {
+  const sample = onlineUsers[0];
+  bannerText.innerHTML = `🟢 <b>Active Platform:</b> <b>${sample.name}</b> is online (${onlineUsers.length} active account(s))`;
+ } else {
+  bannerText.textContent = "Live Monitor Ready — No user currently placing an order.";
+ }
 }
 
 function renderAdminUsers() {
- const q = ($("adminUserSearch")?.value || "").toLowerCase().trim();
- const d = getDict();
- const filtered = allUsers.filter(u =>
-  !q ||
-  (u.name || "").toLowerCase().includes(q) ||
-  (u.identity || "").toLowerCase().includes(q) ||
-  (u.referral_code || "").toLowerCase().includes(q) ||
-  String(u.id || "").toLowerCase().includes(q)
- );
-
- $("totalUsersBadge").textContent = allUsers.length;
-
  const tbody = $("adminUsersRows");
  if (!tbody) return;
- const vipChoices = ["VIP Level 1", "VIP Level 2", "VIP Level 3", "VIP Level 4", "VIP Level 5", "VIP Level 6"];
+ const d = getDict();
+ if ($("totalUsersBadge")) $("totalUsersBadge").textContent = String(allUsers.length);
+ renderAdminLiveBanner();
+
+ const filterMode = $("adminUserFilter")?.value || "all";
+ const q = ($("adminUserSearch")?.value || "").trim().toLowerCase();
+
+ const filtered = allUsers.filter(u => {
+  const isLive = isUserPlacingOrderLive(u);
+  const isOnline = getUserPresenceInfo(u).state === "online";
+  const hasNeg = (Number(u.negative_balance) || 0) > 0;
+  const rulesCount = getUserOrderRules(u).length;
+
+  if (filterMode === "live_order" && !isLive) return false;
+  if (filterMode === "online" && !isOnline) return false;
+  if (filterMode === "negative" && !hasNeg) return false;
+  if (filterMode === "has_rules" && rulesCount <= 0) return false;
+
+  if (!q) return true;
+  return (
+   String(u.name || "").toLowerCase().includes(q) ||
+   String(u.identity || "").toLowerCase().includes(q) ||
+   String(u.phone || "").toLowerCase().includes(q) ||
+   String(u.email || "").toLowerCase().includes(q) ||
+   String(u.invited_by || "").toLowerCase().includes(q) ||
+   String(u.invite_code || "").toLowerCase().includes(q)
+  );
+ });
 
  tbody.innerHTML = filtered.map((u, idx) => {
-  const curVip = normalizeVipLabel(u.vip_level);
-  const firstRule = getUserOrderRules(u)[0];
-  const ruleOrderVal = firstRule ? Number(firstRule.target_order) : 0;
+  const vipVal = normalizeVipLabel(u.vip_level);
+  const negVal = Math.abs(Number(u.negative_balance) || 0);
+  const pendingProfitVal = getPendingAdminProfit(u);
+  const rulesArr = getUserOrderRules(u);
+  const presence = getUserPresenceInfo(u);
+  const isLiveOrder = isUserPlacingOrderLive(u);
+  const liveStep = Number(u.live_order_num) || ((Number(u.orders) || 0) + 1);
+
+  const badgesHtml = [
+   isLiveOrder ? `<span class="status-pill pill-live">🔴 Placing #${liveStep}</span>` : "",
+   presence.state === "online"
+    ? `<span class="status-pill pill-online">● Online</span>`
+    : `<span class="status-pill pill-offline">${presence.label}</span>`,
+   negVal > 0 ? `<span class="status-pill pill-neg">⚠️ -$${negVal.toFixed(2)}</span>` : "",
+   rulesArr.length > 0 ? `<span class="status-pill pill-rule">🎯 ${rulesArr.length} Rule(s)</span>` : ""
+  ].filter(Boolean).join(" ");
 
   return `
-   <tr>
+   <tr data-uid="${u.id}">
     <td>${idx + 1}</td>
-    <td><input id="adm_name_${u.id}" value="${u.name || ''}" style="width:110px"></td>
-    <td>${u.identity || '-'}</td>
-    <td><input id="adm_pass_${u.id}" value="${u.password || ''}" style="width:95px"></td>
-    <td><input id="adm_ref_${u.id}" value="${u.referral_code || ''}" style="width:85px"></td>
-    <td><span class="tag">${u.invited_by || '-'}</span></td>
     <td>
-     <select id="adm_vip_${u.id}" style="width:130px;padding:6px">
-      ${vipChoices.map(lv => `<option value="${lv}" ${curVip===lv?'selected':''}>${lv}</option>`).join("")}
+     <div style="font-weight:700">${u.name || ""}</div>
+     <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">${badgesHtml}</div>
+    </td>
+    <td>${u.identity || u.phone || u.email || ""}</td>
+    <td>${u.password || ""}</td>
+    <td>${u.invite_code || ""}</td>
+    <td>${u.invited_by || "-"}</td>
+    <td>
+     <select class="adm-vip" style="padding:5px 7px;font-size:12px">
+      ${["VIP Level 1","VIP Level 2","VIP Level 3","VIP Level 4","VIP Level 5","VIP Level 6"].map(lv =>
+       `<option value="${lv}" ${vipVal === lv ? "selected" : ""}>${lv}</option>`
+      ).join("")}
      </select>
     </td>
-    <td><input id="adm_bal_${u.id}" type="number" step="0.01" value="${Number(u.balance || 0)}" style="width:90px"></td>
-    <td><input id="adm_neg_${u.id}" type="number" step="0.01" value="${Number(u.negative_balance || 0)}" style="width:85px"></td>
-    <td><input id="adm_pbox_${u.id}" type="number" step="0.01" value="${Number(u.profit_box || 0)}" style="width:85px"></td>
-    <td><input id="adm_ord_${u.id}" type="number" min="0" value="${ruleOrderVal || Number(u.orders || 0)}" style="width:70px"></td>
-    <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="resetUserOrders('${u.id}')">${d.resetBtn}</button></td>
+    <td><input class="adm-bal" type="number" step="0.01" value="${Number(u.balance || 0).toFixed(2)}" style="width:86px;padding:5px 7px;font-size:12px"></td>
+    <td><input class="adm-neg" type="number" step="0.01" min="0" value="${negVal.toFixed(2)}" style="width:80px;padding:5px 7px;font-size:12px"></td>
+    <td><input class="adm-pbox" type="number" step="0.01" min="0" value="${pendingProfitVal.toFixed(2)}" style="width:82px;padding:5px 7px;font-size:12px" title="30-Order Pending Profit ($)"></td>
+    <td>
+     <button type="button" class="btn btn-secondary btn-xs" onclick="openOrderRulesModal('${u.id}')">
+      Rules (${rulesArr.length})
+     </button>
+    </td>
+    <td><input class="adm-ord" type="number" min="0" max="100" value="${Number(u.orders || 0)}" style="width:62px;padding:5px 7px;font-size:12px"></td>
+    <td><button type="button" class="btn btn-danger btn-xs" onclick="promptResetUser('${u.id}')">${d.resetBtn}</button></td>
    </tr>
   `;
  }).join("");
 }
 
-async function saveAllUsersAdmin() {
- for (const u of allUsers) {
-  if (!$(`adm_name_${u.id}`)) continue;
-  u.name = $(`adm_name_${u.id}`).value.trim() || u.name;
-  u.password = $(`adm_pass_${u.id}`).value.trim() || u.password;
-  u.referral_code = $(`adm_ref_${u.id}`).value.trim() || u.referral_code;
-  u.vip_level = normalizeVipLabel($(`adm_vip_${u.id}`).value);
-  u.balance = Number($(`adm_bal_${u.id}`).value) || 0;
-  const negVal = Math.max(0, Math.abs(Number($(`adm_neg_${u.id}`).value) || 0));
-  const pboxVal = Number($(`adm_pbox_${u.id}`).value) || 0;
-  const ordInputVal = Math.max(0, Number($(`adm_ord_${u.id}`).value) || 0);
+function openOrderRulesModal(userId) {
+ const u = allUsers.find(item => String(item.id) === String(userId));
+ if (!u) return;
+ editingRulesUserId = String(u.id);
+ workingRulesBuffer = getUserOrderRules(u).map(r => ({ ...r }));
 
-  u.negative_balance = negVal;
-  u.profit_box = pboxVal;
-  if (ordInputVal > 0 && (negVal > 0 || pboxVal > 0)) {
-   u.order_rules = [{
-    target_order: ordInputVal,
-    negative_balance: negVal,
-    profit_box: pboxVal
-   }];
-   u.order_rule = u.order_rules[0];
-  } else {
-   u.orders = ordInputVal;
-  }
-  await writeUserToDb(u);
- }
- showAlert(getDict().saveChangesBtn);
- renderAllViews();
+ $("orderRulesModalTitle").textContent = `🎯 Order Rules — ${u.name || u.id}`;
+ $("orderRulesUserSummary").textContent = `Account: ${u.identity || u.phone || u.email || u.id} · Current Orders: ${Number(u.orders) || 0}`;
+ $("ruleInputOrderNum").value = "";
+ $("ruleInputNeg").value = "";
+ $("ruleInputProfitBox").value = "";
+ renderOrderRulesTable();
+ $("orderRulesModal").classList.remove("hidden");
 }
 
-async function resetUserOrders(userId) {
- const u = allUsers.find(x => String(x.id) === String(userId));
+function renderOrderRulesTable() {
+ const tbody = $("orderRulesListBody");
+ if (!tbody) return;
+ workingRulesBuffer.sort((a, b) => a.target_order - b.target_order);
+
+ if (!workingRulesBuffer.length) {
+  tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center">No rules added yet. Add 1 or 10+ rules above.</td></tr>`;
+  return;
+ }
+
+ tbody.innerHTML = workingRulesBuffer.map((r, idx) => {
+  const statusBadge = r.triggered
+   ? `<span class="status-pill pill-triggered">✔ Triggered</span>`
+   : `<span class="status-pill pill-pending">⏳ Pending</span>`;
+  return `
+   <tr>
+    <td><b>#${r.target_order}</b></td>
+    <td style="color:var(--fb-danger);font-weight:700">-$${Number(r.negative_balance || 0).toFixed(2)}</td>
+    <td style="color:var(--fb-success);font-weight:700">+$${Number(r.profit_box || 0).toFixed(2)}</td>
+    <td>${statusBadge}</td>
+    <td>
+     <button type="button" class="btn btn-danger btn-xs" onclick="removeWorkingRule(${idx})">Delete</button>
+    </td>
+   </tr>
+  `;
+ }).join("");
+}
+
+function addOrderRuleToUser() {
+ const orderNum = parseInt($("ruleInputOrderNum").value, 10);
+ const negVal = Math.abs(parseFloat($("ruleInputNeg").value) || 0);
+ const profitBoxVal = Math.max(0, parseFloat($("ruleInputProfitBox").value) || 0);
+
+ if (!Number.isFinite(orderNum) || orderNum < 1) {
+  showAlert("Order # ကို 1 အထက် မှန်ကန်စွာ ထည့်ပါ။");
+  return;
+ }
+
+ // Replace existing rule for same order # or append (supports 10+ rules)
+ const existingIdx = workingRulesBuffer.findIndex(r => Number(r.target_order) === orderNum);
+ const newRule = {
+  target_order: orderNum,
+  negative_balance: Number(negVal.toFixed(2)),
+  profit_box: Number(profitBoxVal.toFixed(2)),
+  triggered: false
+ };
+
+ if (existingIdx >= 0) {
+  workingRulesBuffer[existingIdx] = newRule;
+ } else {
+  workingRulesBuffer.push(newRule);
+ }
+
+ workingRulesBuffer.sort((a, b) => a.target_order - b.target_order);
+ $("ruleInputOrderNum").value = "";
+ $("ruleInputNeg").value = "";
+ $("ruleInputProfitBox").value = "";
+ renderOrderRulesTable();
+}
+
+function removeWorkingRule(idx) {
+ if (idx < 0 || idx >= workingRulesBuffer.length) return;
+ workingRulesBuffer.splice(idx, 1);
+ renderOrderRulesTable();
+}
+
+async function saveOrderRulesForUser() {
+ if (!editingRulesUserId) return;
+ const targetUser = allUsers.find(u => String(u.id) === String(editingRulesUserId));
+ if (!targetUser) return;
+
+ const sortedRules = [...workingRulesBuffer].sort((a, b) => a.target_order - b.target_order);
+ const totalTriggeredPending = sortedRules
+  .filter(r => r.triggered && r.profit_box > 0)
+  .reduce((sum, r) => sum + Number(r.profit_box), 0);
+
+ targetUser.order_rules = sortedRules;
+ targetUser.pending_admin_profit = Number(totalTriggeredPending.toFixed(2));
+ targetUser.profit_box = Number(totalTriggeredPending.toFixed(2));
+ targetUser.updated_at = Date.now();
+
+ await writeUserToDb(targetUser);
+ closeModal("orderRulesModal");
+ renderAllViews();
+ showAlert(`✅ Saved ${sortedRules.length} order rule(s) for <b>${targetUser.name}</b>.`);
+}
+
+async function saveAllUsersAdmin() {
+ const rows = document.querySelectorAll("#adminUsersRows tr[data-uid]");
+ const updates = [];
+ const nowTs = Date.now();
+
+ rows.forEach(tr => {
+  const uid = tr.getAttribute("data-uid");
+  const u = allUsers.find(item => String(item.id) === String(uid));
+  if (!u) return;
+
+  const prevNeg = Math.abs(Number(u.negative_balance) || 0);
+  const nextVip = tr.querySelector(".adm-vip")?.value || normalizeVipLabel(u.vip_level);
+  const nextBal = Number(tr.querySelector(".adm-bal")?.value);
+  const nextNeg = Math.abs(Number(tr.querySelector(".adm-neg")?.value) || 0);
+  const nextPendingProfit = Math.max(0, Number(tr.querySelector(".adm-pbox")?.value) || 0);
+  const nextOrd = Math.max(0, parseInt(tr.querySelector(".adm-ord")?.value, 10) || 0);
+
+  u.vip_level = nextVip;
+  if (!Number.isNaN(nextBal)) u.balance = Number(nextBal.toFixed(2));
+  u.negative_balance = Number(nextNeg.toFixed(2));
+  u.pending_admin_profit = Number(nextPendingProfit.toFixed(2));
+  u.profit_box = Number(nextPendingProfit.toFixed(2));
+  u.orders = nextOrd;
+  u.updated_at = nowTs;
+
+  // Record history entry if negative balance was cleared from > 0 to 0
+  if (prevNeg > 0 && nextNeg === 0) {
+   updates.push(writeTransactionToDb({
+    user_id: u.id,
+    type: "clear_neg",
+    order_num: nextOrd,
+    details: `Negative balance (-$${prevNeg.toFixed(2)}) settled & cleared`,
+    amount: prevNeg,
+    status: "Approved",
+    time: formatExactTimestamp(new Date(nowTs)),
+    created_at: nowTs
+   }));
+  }
+
+  updates.push(writeUserToDb(u));
+ });
+
+ await Promise.all(updates);
+ renderAllViews();
+ showAlert("✅ အသုံးပြုသူ အချက်အလက်များ သိမ်းဆည်းပြီးပါပြီ။");
+}
+
+function promptResetUser(userId) {
+ const u = allUsers.find(item => String(item.id) === String(userId));
  if (!u) return;
+ const idText = u.identity || u.phone || u.email || u.id;
+ $("resetConfirmDetails").innerHTML =
+  `သင်သည် အောက်ပါအကောင့်ကို <b>Reset</b> လုပ်ရန် သေချာပါသလား?<br><br>` +
+  `• အမည်: <b>${u.name || "-"}</b><br>` +
+  `• အကောင့်: <b>${idText}</b><br>` +
+  `• လက်ရှိ အော်ဒါ: <b>${Number(u.orders) || 0}</b> · အနှုတ်: <b>-$${Math.abs(Number(u.negative_balance) || 0).toFixed(2)}</b>`;
+
+ const proceedBtn = $("resetConfirmProceedBtn");
+ proceedBtn.onclick = async () => {
+  closeModal("resetConfirmModal");
+  await resetUserById(userId);
+ };
+ $("resetConfirmModal").classList.remove("hidden");
+}
+
+async function resetUserById(userId) {
+ const u = allUsers.find(item => String(item.id) === String(userId));
+ if (!u) return;
+ const resetRules = getUserOrderRules(u).map(r => ({ ...r, triggered: false }));
  u.orders = 0;
- u.order_rules = [];
- u.order_rule = null;
+ u.balance = 0;
+ u.negative_balance = 0;
+ u.profit_box = 0;
+ u.pending_admin_profit = 0;
+ u.commission = 0;
+ u.total_profit = 0;
+ u.last_commission = 0;
+ u.last_completed_summary = null;
+ u.live_placing_order = false;
+ u.live_order_num = 0;
+ u.order_rules = resetRules;
+ u.updated_at = Date.now();
  await writeUserToDb(u);
- renderAdminUsers();
+ renderAllViews();
+ showAlert(`✅ Reset completed for <b>${u.name}</b>.`);
 }
 
 function renderAdminVips() {
  const tbody = $("adminVipRows");
  if (!tbody) return;
- tbody.innerHTML = allVipTiers.map((v, idx) => `
-  <tr>
-   <td><strong>${normalizeVipLabel(v.level)}</strong></td>
-   <td><input id="vip_name_${idx}" value="${v.name}" style="width:120px"></td>
-   <td><input id="vip_limit_${idx}" type="number" value="${v.daily_limit}" style="width:80px"></td>
-   <td><input id="vip_rate_${idx}" type="number" step="0.01" value="${(Number(v.profit_rate)*100).toFixed(2)}" style="width:80px"></td>
-   <td><input id="vip_max_${idx}" type="number" value="${v.max_withdraw}" style="width:100px"></td>
+ tbody.innerHTML = allVipTiers.map((t, i) => `
+  <tr data-vidx="${i}">
+   <td>${t.level || `VIP Level ${i + 1}`}</td>
+   <td><input class="vip-name" type="text" value="${t.name || t.level}" style="width:120px;padding:5px 7px"></td>
+   <td><input class="vip-limit" type="number" min="1" value="${Number(t.daily_limit) || 30}" style="width:80px;padding:5px 7px"></td>
+   <td><input class="vip-rate" type="number" step="0.0001" value="${Number(t.profit_rate) || 0.0065}" style="width:95px;padding:5px 7px"></td>
+   <td><input class="vip-maxw" type="number" min="0" value="${Number(t.max_withdraw) || 1000}" style="width:95px;padding:5px 7px"></td>
   </tr>
  `).join("");
 }
@@ -2989,17 +3932,26 @@ function renderAdminVips() {
 function renderAdminHotels() {
  const tbody = $("adminHotelsRows");
  if (!tbody) return;
- const d = getDict();
- tbody.innerHTML = allHotels.slice(0, 40).map((h, idx) => `
-  <tr>
-   <td>${h.id}</td>
-   <td><input id="htl_name_${idx}" value="${h.name}" style="width:180px"></td>
-   <td><input id="htl_cnt_${idx}" value="${h.country}" style="width:110px"></td>
-   <td><input id="htl_str_${idx}" type="number" min="1" max="5" value="${h.stars}" style="width:60px"></td>
-   <td><input id="htl_prc_${idx}" type="number" value="${h.price}" style="width:80px"></td>
-   <td><button type="button" class="btn btn-danger" style="padding:4px 8px;font-size:11px" onclick="deleteHotelItem(${idx})">${d.deleteBtn}</button></td>
+ tbody.innerHTML = allHotels.map((h, i) => `
+  <tr data-hidx="${i}">
+   <td>${h.id || `H${i + 1}`}</td>
+   <td><input class="ah-name" type="text" value="${h.name}" style="width:180px;padding:5px 7px"></td>
+   <td><input class="ah-country" type="text" value="${h.country}" style="width:110px;padding:5px 7px"></td>
+   <td>
+    <select class="ah-stars" style="padding:5px 7px">
+     ${[5,4,3,2,1].map(st => `<option value="${st}" ${Number(h.stars) === st ? "selected" : ""}>${st} ★</option>`).join("")}
+    </select>
+   </td>
+   <td><input class="ah-price" type="number" min="85" max="99" value="${Number(h.price) || 90}" style="width:74px;padding:5px 7px"></td>
+   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteHotelRow(${i})">Delete</button></td>
   </tr>
  `).join("");
+}
+
+function deleteHotelRow(idx) {
+ allHotels.splice(idx, 1);
+ renderAdminHotels();
+ renderHotels();
 }
 
 function openAddHotelModal() {
@@ -3013,287 +3965,186 @@ function openAddHotelModal() {
 function addHotelToDatabase() {
  const name = $("newHName").value.trim();
  const country = $("newHCountry").value.trim();
- const rawPrice = Number($("newHPrice").value) || 92;
- const price = Math.min(99, Math.max(85, rawPrice));
+ const price = Math.min(99, Math.max(85, Number($("newHPrice").value) || 92));
  const stars = Number($("newHStars").value) || 5;
  if (!name || !country) return;
+
+ const nextId = "H" + String(allHotels.length + 1).padStart(3, "0");
  allHotels.unshift({
-  id: "H" + String(allHotels.length + 1).padStart(3, "0"),
-  name, country, price, stars,
+  id: nextId,
+  name,
+  country,
+  price,
+  stars,
   image: VERIFIED_HOTEL_IMAGES[allHotels.length % VERIFIED_HOTEL_IMAGES.length]
  });
- if (db) db.ref("hotels").set(allHotels);
+ if (db) db.ref("hotels").set(allHotels).catch(() => {});
  closeModal("addHotelModal");
  renderHotels();
- renderAdminHotels();
+ if (isAdminSession) renderAdminHotels();
 }
 
-function deleteHotelItem(idx) {
- allHotels.splice(idx, 1);
- if (db) db.ref("hotels").set(allHotels);
- renderHotels();
- renderAdminHotels();
-}
+async function saveHotelsAndVipsAdmin() {
+ document.querySelectorAll("#adminVipRows tr[data-vidx]").forEach(tr => {
+  const idx = Number(tr.getAttribute("data-vidx"));
+  if (!allVipTiers[idx]) return;
+  allVipTiers[idx].name = tr.querySelector(".vip-name")?.value || allVipTiers[idx].level;
+  allVipTiers[idx].daily_limit = Math.max(1, Number(tr.querySelector(".vip-limit")?.value) || 30);
+  allVipTiers[idx].profit_rate = Number(tr.querySelector(".vip-rate")?.value) || 0.0065;
+  allVipTiers[idx].max_withdraw = Math.max(0, Number(tr.querySelector(".vip-maxw")?.value) || 1000);
+ });
 
-function saveHotelsAndVipsAdmin() {
- allVipTiers.forEach((v, idx) => {
-  if (!$(`vip_name_${idx}`)) return;
-  v.name = $(`vip_name_${idx}`).value.trim() || v.name;
-  v.daily_limit = Number($(`vip_limit_${idx}`).value) || v.daily_limit;
-  v.profit_rate = (Number($(`vip_rate_${idx}`).value) || 0.65) / 100;
-  v.max_withdraw = Number($(`vip_max_${idx}`).value) || 1000;
+ document.querySelectorAll("#adminHotelsRows tr[data-hidx]").forEach(tr => {
+  const idx = Number(tr.getAttribute("data-hidx"));
+  if (!allHotels[idx]) return;
+  allHotels[idx].name = tr.querySelector(".ah-name")?.value || allHotels[idx].name;
+  allHotels[idx].country = tr.querySelector(".ah-country")?.value || allHotels[idx].country;
+  allHotels[idx].stars = Number(tr.querySelector(".ah-stars")?.value) || allHotels[idx].stars;
+  allHotels[idx].price = Math.min(99, Math.max(85, Number(tr.querySelector(".ah-price")?.value) || allHotels[idx].price));
  });
- allHotels.slice(0, 40).forEach((h, idx) => {
-  if (!$(`htl_name_${idx}`)) return;
-  h.name = $(`htl_name_${idx}`).value.trim() || h.name;
-  h.country = $(`htl_cnt_${idx}`).value.trim() || h.country;
-  h.stars = Number($(`htl_str_${idx}`).value) || h.stars;
-  const pVal = Number($(`htl_prc_${idx}`).value) || h.price;
-  h.price = Math.min(99, Math.max(85, pVal));
- });
+
  if (db) {
-  db.ref("vip_tiers").set(allVipTiers);
-  db.ref("hotels").set(allHotels);
+  await Promise.all([
+   db.ref("hotels").set(allHotels).catch(() => {}),
+   db.ref("vip_tiers").set(allVipTiers).catch(() => {})
+  ]);
  }
- showAlert(getDict().saveRatesBtn);
- renderAllViews();
+ renderHotels();
+ showAlert("✅ ဟိုတယ်နှင့် VIP နှုန်းထားများ သိမ်းဆည်းပြီးပါပြီ။");
 }
 
 function renderCsClientList() {
- const q = ($("csClientSearch")?.value || "").toLowerCase().trim();
- const cList = $("csClientList");
- if (!cList) return;
- const list = allUsers.filter(u => !q || (u.name || "").toLowerCase().includes(q) || (u.identity || "").toLowerCase().includes(q));
- cList.innerHTML = list.map(u => {
-  const unreadForUser = allMessages.filter(m => String(m.user_id) === String(u.id) && m.sender === "user" && !m.read_by_admin).length;
-  const badgeHtml = unreadForUser > 0 ? `<span class="notif-badge">${unreadForUser}</span>` : "";
-  return `
-   <div style="padding:8px;border-bottom:1px solid var(--fb-border);cursor:pointer;background:${String(selectedCsUserId)===String(u.id)?'rgba(29,78,216,0.12)':'transparent'}" onclick="selectCsClient('${u.id}')">
-    <b>${u.name || 'User'}</b> ${badgeHtml}
-    <div class="small muted">${u.identity || '-'} · ${formatUsdWithMmk(u.balance || 0)}</div>
-   </div>
-  `;
- }).join("");
-}
+ const listEl = $("csClientList");
+ if (!listEl) return;
+ const q = ($("csClientSearch")?.value || "").trim().toLowerCase();
 
-async function selectCsClient(uid) {
- selectedCsUserId = String(uid);
- const u = allUsers.find(x => String(x.id) === String(uid));
- if (db) {
-  const toMark = allMessages.filter(m => String(m.user_id) === selectedCsUserId && m.sender === "user" && !m.read_by_admin && m._key);
-  for (const item of toMark) {
-   await db.ref("messages/" + item._key + "/read_by_admin").set(true);
-  }
- }
- if (u) {
-  $("csActiveUserTitle").textContent = `${u.name || 'User'} (${u.identity})`;
-  loadAdminChatMessages(uid);
- }
- updateAdminBadges();
- renderCsClientList();
-}
-
-function loadAdminChatMessages(uid) {
- const box = $("adminChatMessages");
- if (!box) return;
- const prevScrollTop = box.scrollTop;
- const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 40;
- const d = getDict();
- const uidStr = String(uid);
- const msgs = allMessages.filter(m => String(m.user_id) === uidStr);
- box.innerHTML = msgs.map(m =>
-  renderMessageBubble(m, m.sender === 'support', m.sender === 'support' ? d.csYouSenderLabel : d.userSenderLabel, {
-   canDelete: m.sender === 'support'
-  })
- ).join("");
- attachLongPressToAdminBubbles(box);
- if (wasAtBottom || prevScrollTop === 0) {
-  box.scrollTop = box.scrollHeight;
- } else {
-  box.scrollTop = prevScrollTop;
- }
-}
-
-function renderStars(stars) {
- const count = Math.max(1, Math.min(5, Number(stars) || 5));
- return `<span class="gold-stars">${"★".repeat(count)}${"☆".repeat(5 - count)}</span>`;
-}
-
-function renderHotels() {
- const q = ($("hotelSearch")?.value || "").toLowerCase().trim();
- const grid = $("hotelGrid");
- if (!grid) return;
- const d = getDict();
-
- const filtered = allHotels.filter(h =>
-  !q ||
-  h.name.toLowerCase().includes(q) ||
-  h.country.toLowerCase().includes(q) ||
-  String(h.stars).includes(q)
- );
-
- $("hotelCountBadge").textContent = filtered.length;
- const visible = (q || showAllHotelsFlag) ? filtered : filtered.slice(0, 24);
- $("loadMoreHotelsWrap").classList.toggle("hidden", q.length > 0 || showAllHotelsFlag || filtered.length <= 24);
-
- grid.innerHTML = visible.map((h, i) => {
-  const displayPrice = getDynamicHotelPrice(i + 1, currentUser?.balance || 100);
-  return `
-   <div class="card" onclick="openHotelDetail('${h.id}')">
-    <img src="${h.image}" class="hotel-img" alt="${h.name}" loading="lazy">
-    <div class="card-body">
-     <div>
-      <span class="tag">${h.country}</span>
-      <h4 style="margin:6px 0 4px">${h.name}</h4>
-      <div>${renderStars(h.stars)}</div>
-     </div>
-     <div style="margin-top:10px">
-      <span class="price">$${displayPrice.toFixed(2)}</span>
-      <span class="mmk-sub">≈ ${Math.round(displayPrice * MMK_PER_USD).toLocaleString()} ${d.mmkUnit}</span>
-     </div>
-    </div>
-   </div>
-  `;
- }).join("");
-}
-
-function showAllHotels() {
- showAllHotelsFlag = true;
- renderHotels();
-}
-
-function renderBookingArea() {
- const area = $("bookingHotelArea");
- if (!area) return;
- const d = getDict();
-
- const neg = Number(currentUser?.negative_balance) || 0;
- if (currentUser && neg > 0) {
-  area.innerHTML = `
-   <div class="panel" style="background:rgba(255,77,77,0.08);border:2px solid var(--fb-danger)">
-    <h4 style="margin-top:0;color:var(--fb-danger)">${d.specialOrderTitle}</h4>
-    <p style="margin:6px 0">${d.specialOrderDesc}</p>
-    <p class="small muted" style="margin:6px 0 12px">${d.specialOrderAmountLine.replace("{neg}", `$${neg.toFixed(2)}`)}</p>
-    <button type="button" class="action-icon-btn" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])" title="Service" aria-label="Service">
-     <svg viewBox="0 0 24 24"><path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/></svg>
-    </button>
-   </div>
-  `;
-  return;
- }
-
- if (!activeTask) {
-  area.innerHTML = `<p class="muted" style="text-align:center">${d.clickGetOrderHint}</p>`;
-  return;
- }
- const { hotel, orderPrice, commission } = activeTask;
- area.innerHTML = `
-  <div class="panel" style="background:var(--fb-bg);border:2px dashed var(--fb-primary);text-align:center">
-   <h4 style="margin-top:0">🏨 ${hotel.name} (${hotel.country}) ${renderStars(hotel.stars)}</h4>
-   <p>${d.orderPriceLabel}: <b>${formatUsdWithMmk(orderPrice || hotel.price)}</b> · ${d.commissionLabel}: <b style="color:var(--fb-success)">+${formatUsdWithMmk(commission)}</b></p>
-   <button type="button" class="action-icon-btn" onclick="openCenterOrderModal()" title="Open Order" aria-label="Open Order">
-    <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-   </button>
-  </div>
- `;
-}
-
-function renderHistory() {
- const tbody = $("historyRows");
- if (!tbody) return;
- if (!currentUser) { tbody.innerHTML = ""; return; }
- const d = getDict();
- const q = ($("historySearch")?.value || "").toLowerCase().trim();
- const list = allTransactions.filter(t => {
-  if (String(t.user_id) !== String(currentUser.id)) return false;
+ const users = allUsers.filter(u => {
   if (!q) return true;
-  return (t.details || "").toLowerCase().includes(q) ||
-         (t.date || "").toLowerCase().includes(q) ||
-         (t.type || "").toLowerCase().includes(q);
+  return (
+   String(u.name || "").toLowerCase().includes(q) ||
+   String(u.identity || "").toLowerCase().includes(q) ||
+   String(u.phone || "").toLowerCase().includes(q) ||
+   String(u.email || "").toLowerCase().includes(q)
+  );
  });
 
- tbody.innerHTML = list.map(t => {
-  const typeText = t.type === "Booking Profit"
-   ? d.txBookingProfit
-   : (t.type === "Welcome Bonus" ? d.txWelcomeBonus : t.type);
-  const statusText = t.status === "Approved" ? d.txApproved : t.status;
+ listEl.innerHTML = users.map(u => {
+  const unreadCount = allMessages.filter(m => String(m.user_id) === String(u.id) && m.sender === "user" && !m.read_by_admin).length;
+  const active = String(selectedCsUserId) === String(u.id);
+  const presence = getUserPresenceInfo(u);
   return `
-   <tr>
-    <td><strong>${t.date}</strong></td>
-    <td><span class="tag">${typeText}</span></td>
-    <td style="white-space:normal;min-width:220px">${t.details}</td>
-    <td><strong style="color:var(--fb-primary)">+${formatUsdWithMmk(t.amount)}</strong></td>
-    <td><span style="color:var(--fb-success)">${statusText}</span></td>
-   </tr>
+   <div onclick="selectCsUser('${u.id}')" style="padding:9px 10px;border-radius:10px;cursor:pointer;margin-bottom:6px;border:1px solid ${active ? "var(--fb-primary)" : "var(--fb-border)"};background:${active ? "rgba(29,78,216,0.1)" : "var(--fb-bg)"}">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+     <b>${u.name || "User"}</b>
+     ${unreadCount > 0 ? `<span class="notif-badge">${unreadCount}</span>` : `<span class="small ${presence.state === "online" ? "muted" : "muted"}">${presence.state === "online" ? "🟢" : "⚪"}</span>`}
+    </div>
+    <div class="small muted">${u.identity || u.phone || u.email || ""}</div>
+   </div>
   `;
  }).join("");
+}
+
+async function selectCsUser(userId) {
+ selectedCsUserId = String(userId);
+ const u = allUsers.find(item => String(item.id) === String(userId));
+ $("csActiveUserTitle").textContent = u ? `💬 ${u.name} (${u.identity || u.phone || u.email || ""})` : "Chat";
+
+ if (db) {
+  const unreadMsgs = allMessages.filter(m => String(m.user_id) === String(userId) && m.sender === "user" && !m.read_by_admin && m._key);
+  await Promise.all(unreadMsgs.map(m => db.ref("messages/" + m._key).update({ read_by_admin: true }).catch(() => {})));
+ }
+
+ renderCsClientList();
+ loadAdminChatMessages(selectedCsUserId);
+ updateAdminBadges();
+}
+
+function loadAdminChatMessages(userId) {
+ const box = $("adminChatMessages");
+ if (!box) return;
+ const d = getDict();
+ const msgs = allMessages.filter(m => String(m.user_id) === String(userId));
+ box.innerHTML = msgs.map(m =>
+  renderMessageBubbleHtml(m, {
+   isMine: m.sender === "support",
+   showAdminDelete: true,
+   senderLabel: m.sender === "support" ? d.csYouSenderLabel : d.userSenderLabel
+  })
+ ).join("");
+ box.scrollTop = box.scrollHeight;
+}
+
+async function sendAdminChatReply() {
+ if (!selectedCsUserId) {
+  showAlert("အသုံးပြုသူကို အရင်ရွေးချယ်ပါ။");
+  return;
+ }
+ const inp = $("adminChatInput");
+ const txt = (inp?.value || "").trim();
+ if (!txt) return;
+
+ const nowTs = Date.now();
+ inp.value = "";
+ await writeMessageToDb({
+  user_id: selectedCsUserId,
+  sender: "support",
+  text: txt,
+  image: "",
+  read_by_admin: true,
+  time: formatExactTimestamp(new Date(nowTs)),
+  created_at: nowTs
+ });
+}
+
+function closeModal(id) {
+ const el = $(id);
+ if (el) el.classList.add("hidden");
+}
+
+function showAlert(htmlMsg, titleText) {
+ const d = getDict();
+ $("alertTitle").textContent = titleText || d.alertTitleDefault || "အသိပေးချက်";
+ $("alertBody").innerHTML = htmlMsg;
+ $("alertModal").classList.remove("hidden");
 }
 
 function renderAllViews() {
  renderHotels();
- renderBookingArea();
+ renderBookingCenter();
+ renderHistory();
+ renderProfile();
  updateAdminBadges();
 
- $("totalUsersBadge").textContent = allUsers.length;
-
- if (currentUser) {
-  const d = getDict();
-  const curOrders = Number(currentUser.orders || 0);
-  const isTp2323 = isTp2323BonusAccount(currentUser);
-
-  $("headerAuthBtn").classList.add("hidden");
-  $("guestAuthBox").classList.add("hidden");
-  $("memberProfileBox").classList.remove("hidden");
-  $("profileName").textContent = currentUser.name;
-  $("profileIdentity").textContent = `ID: ${currentUser.id} · ${currentUser.identity}`;
-  $("profileVipBadge").textContent = normalizeVipLabel(currentUser.vip_level);
-  if (currentUser.avatar) {
-   $("profileAvatarImg").src = currentUser.avatar;
-  }
-  $("walletBalance").textContent = formatUsdWithMmk(currentUser.balance || 0);
-  $("taskWallet").textContent = formatUsdWithMmk(currentUser.balance || 0);
-  $("taskProfit").textContent = formatUsdWithMmk(currentUser.commission || 0);
-  $("taskTotalProfit").textContent = formatUsdWithMmk(currentUser.total_profit || 0);
-  $("referralEarned").textContent = formatUsdWithMmk(currentUser.referral_earned || 0);
-  const vip = getVipInfo(currentUser.vip_level);
-  const lim = Number(vip.daily_limit || 30);
-  $("profileOrders").textContent = `${curOrders}/${lim} ➔`;
-  $("orderCircle").textContent = `${curOrders}/${lim}`;
-  $("inviteCode").textContent = currentUser.referral_code || 'TP2323';
-
-  const ruleText = (d.tp2323RuleBadge || "")
-   .replace("{cur}", String(curOrders))
-   .replace("{req}", String(TP2323_REQUIRED_ORDERS));
-  const profBadge = $("tp2323ProfileStatus");
-  const ordHint = $("tp2323OrderHint");
-  if (profBadge) {
-   profBadge.innerHTML = ruleText;
-   profBadge.classList.toggle("hidden", !isTp2323);
-  }
-  if (ordHint) {
-   ordHint.innerHTML = ruleText;
-   ordHint.classList.toggle("hidden", !isTp2323);
-  }
-
-  loadUserMessages(currentUser.id);
-  renderHistory();
- } else {
-  $("headerAuthBtn").classList.remove("hidden");
-  $("guestAuthBox").classList.remove("hidden");
-  $("memberProfileBox").classList.add("hidden");
-  $("tp2323OrderHint")?.classList.add("hidden");
+ const loggedIn = Boolean(currentUser || isAdminSession);
+ const hdrBtn = $("headerAuthBtn");
+ if (hdrBtn) {
+  hdrBtn.textContent = loggedIn ? (isAdminSession ? "Admin" : (currentUser?.name || "Member")) : getDict().loginBtn;
+  hdrBtn.onclick = loggedIn
+   ? () => showPage(isAdminSession ? "staffPage" : "profilePage", document.querySelectorAll(".bottom-nav button")[4])
+   : () => openAuth("login");
  }
 
  if (isAdminSession) {
   renderAdminUsers();
+  renderAdminCsClientListSafe();
+  renderAdminLiveBanner();
+ }
+}
+
+function renderAdminCsClientListSafe() {
+ if ($("adminCsTab") && !$("adminCsTab").classList.contains("hidden")) {
   renderCsClientList();
  }
 }
 
 window.addEventListener("load", () => {
+ if (localStorage.getItem("tb_theme_dark") === "1") {
+  document.body.classList.add("dark");
+ }
  runIntroSplash();
  changeLanguage($("language").value);
  startRealtimeListeners();
+ startUserHeartbeatLoop();
 });
 </script>
 </body>
