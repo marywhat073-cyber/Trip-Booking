@@ -29,7 +29,6 @@
       --danger: #ef4444;
       --danger-soft: rgba(239, 68, 68, 0.16);
       --success: #22c55e;
-      --success-soft: rgba(34, 197, 94, 0.16);
       --border: rgba(148, 163, 184, 0.2);
       --border-strong: rgba(148, 163, 184, 0.35);
       --shadow-card: 0 12px 32px rgba(2, 6, 23, 0.55);
@@ -40,13 +39,7 @@
       --radius-pill: 999px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -68,7 +61,7 @@
       padding: 16px 16px 40px;
     }
 
-    /* Header & Account Bar */
+    /* Header & Account Login Bar */
     .tb-header {
       display: flex;
       align-items: center;
@@ -79,7 +72,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 14px 18px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       box-shadow: var(--shadow-card);
     }
 
@@ -107,12 +100,9 @@
       font-size: 18px;
       font-weight: 800;
       color: #ffffff;
-      letter-spacing: 0.2px;
     }
 
-    .tb-brand span {
-      color: var(--accent-gold);
-    }
+    .tb-brand span { color: var(--accent-gold); }
 
     .tb-brand-sub {
       font-size: 12px;
@@ -152,6 +142,54 @@
       color: var(--accent-amber);
     }
 
+    .tb-nav-btn {
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg-soft);
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tb-nav-btn.is-primary {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue-bright);
+      color: #ffffff;
+    }
+
+    /* မူလ Navigation Tab Bar (Booking / History / Profile / CS / Admin) */
+    .tb-main-nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+    }
+
+    .tb-tab-btn {
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tb-tab-btn.is-active {
+      background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+      border-color: var(--accent-blue-bright);
+      color: #ffffff;
+    }
+
     /* 3-Column Core Wallet Stats */
     .tb-stats-grid {
       display: grid;
@@ -167,11 +205,6 @@
       padding: 15px 14px;
       text-align: center;
       box-shadow: var(--shadow-card);
-      transition: transform 0.15s ease, border-color 0.15s ease;
-    }
-
-    .tb-stat-card:hover {
-      border-color: var(--border-strong);
     }
 
     .tb-stat-card.is-negative {
@@ -192,9 +225,7 @@
       color: var(--accent-sky);
     }
 
-    .tb-stat-card.is-negative .tb-stat-value {
-      color: #f87171;
-    }
+    .tb-stat-card.is-negative .tb-stat-value { color: #f87171; }
 
     .tb-stat-hint {
       font-size: 11px;
@@ -216,19 +247,15 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px;
-      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .tb-30-profit-banner.is-hidden-for-negative {
-      display: none;
-    }
+    .tb-30-profit-banner.is-hidden-for-negative { display: none; }
 
     .tb-30-profit-banner.is-highlighted {
       background: rgba(34, 197, 94, 0.22);
       border-color: rgba(74, 222, 128, 0.72);
       color: #ffffff;
       font-weight: 700;
-      box-shadow: 0 8px 24px rgba(34, 197, 94, 0.14);
     }
 
     .tb-30-profit-badge {
@@ -282,6 +309,50 @@
       color: var(--text-secondary);
     }
 
+    /* အကောင့်ဝင် / မှတ်ပုံတင် Modal (မူလ အကောင့်ဝင်တာ ပြန်ပါဝင်ခြင်း) */
+    .tb-auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 16, 0.84);
+      backdrop-filter: blur(3px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 99990;
+    }
+
+    .tb-auth-overlay.active { display: flex; }
+
+    .tb-auth-box {
+      width: 100%;
+      max-width: 410px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-modal);
+    }
+
+    .tb-auth-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .tb-auth-input {
+      min-height: 42px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      padding: 0 12px;
+      font-size: 14px;
+    }
+
     /* အပိုင်း (၁) Update: Lucky Order / အနှုတ်ဒေါ်လာ Modal */
     .tb-p1-overlay {
       position: fixed;
@@ -295,9 +366,7 @@
       z-index: 99999;
     }
 
-    .tb-p1-overlay.active {
-      display: flex;
-    }
+    .tb-p1-overlay.active { display: flex; }
 
     .tb-p1-modal {
       width: 100%;
@@ -386,11 +455,6 @@
       font-weight: 800;
       cursor: pointer;
       border: none;
-      transition: transform 0.12s ease, opacity 0.15s ease;
-    }
-
-    .tb-p1-btn:active {
-      transform: scale(0.98);
     }
 
     .tb-p1-btn-cancel {
@@ -405,23 +469,18 @@
     }
 
     @media (max-width: 820px) {
-      .tb-main-workspace {
-        grid-template-columns: 1fr;
-      }
+      .tb-main-workspace { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      .tb-stats-grid {
-        grid-template-columns: 1fr;
-      }
-      .tb-stat-value {
-        font-size: 19px;
-      }
+      .tb-stats-grid { grid-template-columns: 1fr; }
+      .tb-stat-value { font-size: 19px; }
     }
   </style>
 </head>
 <body>
   <div id="app" class="tb-app-shell">
+    <!-- မူလ Header + အကောင့်ဝင်/ထွက် ခလုတ်များ -->
     <header class="tb-header">
       <div class="tb-brand-group">
         <div class="tb-brand-badge">TB</div>
@@ -433,14 +492,26 @@
 
       <div class="tb-header-right">
         <span class="tb-referral-chip">Code: TP2323 ($18.00 / 81,000 MMK)</span>
-        <span id="tb-user-status-chip" class="tb-status-chip">Ready</span>
+        <span id="tb-user-status-chip" class="tb-status-chip">Guest / မဝင်ရသေးပါ</span>
+        <button type="button" id="tb-open-login-btn" class="tb-nav-btn is-primary">အကောင့်ဝင်ရန် (Login)</button>
+        <button type="button" id="tb-logout-btn" class="tb-nav-btn" style="display: none;">ထွက်ရန်</button>
       </div>
     </header>
 
+    <!-- မူလ Section ခလုတ်များ (Booking / History / Profile / CS / Admin) -->
+    <nav class="tb-main-nav-tabs" aria-label="Main Sections">
+      <button type="button" class="tb-tab-btn is-active" data-tb-section-jump="tb-booking-stage">ဘိုကင် (Booking)</button>
+      <button type="button" class="tb-tab-btn" data-tb-section-jump="tb-part3-history-module">ငွေစာရင်း (History)</button>
+      <button type="button" class="tb-tab-btn" data-tb-section-jump="tb-part6-profile-download-section">ပရိုဖိုင် (Profile)</button>
+      <button type="button" class="tb-tab-btn" data-tb-section-jump="tb-cs-chat-panel">Customer Service</button>
+      <button type="button" class="tb-tab-btn" data-tb-section-jump="tb-part4-admin-module">Admin Panel</button>
+    </nav>
+
+    <!-- မူလ 3-Column Wallet Stats ($50.00 / $0.00 / $0.00) -->
     <section class="tb-stats-grid" aria-label="Account Summary">
       <div id="tb-balance-card" class="tb-stat-card">
         <div class="tb-stat-label">အကောင့် လက်ကျန်</div>
-        <div id="tb-balance-display" class="tb-stat-value">$0.00</div>
+        <div id="tb-balance-display" class="tb-stat-value">$50.00</div>
         <div id="tb-balance-sub" class="tb-stat-hint">Available Balance</div>
       </div>
 
@@ -457,7 +528,7 @@
       </div>
     </section>
 
-    <!-- ၃၀ ပြည့်မှ ပေါင်းပေးမည့် အမြတ် စာတန်း (အနှုတ်ကျနေချိန် ဖွက်ထားပြီး အနှုတ်ရှင်းပြီးချိန်မှ ထင်ရှားစွာ ပြမည်) -->
+    <!-- ၃၀ ပြည့်မှ ပေါင်းပေးမည့် အမြတ် စာတန်း -->
     <div id="tb-30-profit-notice" class="tb-30-profit-banner">
       <div>
         ဘိုကင် အကြိမ် ၃၀ ပြည့်မြောက်ပြီးသည့်အခါ သတ်မှတ်အမြတ်ငွေကို အကောင့်အမြတ်ထဲသို့ ပေါင်းထည့်ပေးပါမည်။
@@ -469,7 +540,7 @@
       <section id="tb-booking-stage" class="tb-panel">
         <div class="tb-panel-header">
           <h2 class="tb-panel-title">Booking Workspace</h2>
-          <span id="tb-workspace-lock-badge" style="font-size: 12px; color: #94a3b8;">Active</span>
+          <span id="tb-workspace-lock-badge" style="font-size: 12px; color: #4ade80;">Active</span>
         </div>
         <div id="tb-order-slot"></div>
       </section>
@@ -484,6 +555,27 @@
         </div>
       </aside>
     </main>
+  </div>
+
+  <!-- မူလ အကောင့်ဝင် Modal -->
+  <div id="tb-auth-modal" class="tb-auth-overlay" role="dialog" aria-modal="true" aria-labelledby="tb-auth-title">
+    <div class="tb-auth-box">
+      <h3 id="tb-auth-title" style="margin: 0 0 12px; font-size: 18px; font-weight: 800;">အကောင့်ဝင်ရန် (Login)</h3>
+      <form id="tb-auth-form">
+        <div class="tb-auth-field">
+          <label for="tb-login-phone">ဖုန်းနံပါတ် သို့မဟုတ် အကောင့်အမည်</label>
+          <input id="tb-login-phone" type="text" class="tb-auth-input" placeholder="ဥပမာ - 09xxxxxxxxx" required>
+        </div>
+        <div class="tb-auth-field">
+          <label for="tb-login-code">ဖိတ်ကြားကုဒ် (Referral Code)</label>
+          <input id="tb-login-code" type="text" class="tb-auth-input" value="TP2323">
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 14px;">
+          <button type="button" id="tb-cancel-login-btn" class="tb-p1-btn tb-p1-btn-cancel">ပိတ်မည်</button>
+          <button type="submit" class="tb-p1-btn tb-p1-btn-confirm">အကောင့်ဝင်မည်</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- အပိုင်း (၁) Update: Lucky Order / အနှုတ်ဒေါ်လာ Modal (Cancel / Confirm) -->
@@ -520,6 +612,17 @@
       const balanceCardEl = document.getElementById("tb-balance-card");
       const lockBadgeEl = document.getElementById("tb-workspace-lock-badge");
 
+      const openLoginBtn = document.getElementById("tb-open-login-btn");
+      const logoutBtn = document.getElementById("tb-logout-btn");
+      const statusChip = document.getElementById("tb-user-status-chip");
+      const authModal = document.getElementById("tb-auth-modal");
+      const authForm = document.getElementById("tb-auth-form");
+      const cancelLoginBtn = document.getElementById("tb-cancel-login-btn");
+      const loginPhoneInput = document.getElementById("tb-login-phone");
+      const loginCodeInput = document.getElementById("tb-login-code");
+
+      const jumpButtons = document.querySelectorAll("[data-tb-section-jump]");
+
       let currentNegativeState = {
         active: false,
         amount: 0,
@@ -531,7 +634,6 @@
         return "-$" + numeric.toFixed(2);
       }
 
-      // အနှုတ်ကျနေချိန်မှာ ၃၀ ပြည့်အမြတ် စာတန်းကို ဖွက်ထားပြီး အနှုတ်ဖြေရှင်းပြီးချိန်မှ ထင်ရှားစွာ ပြခြင်း
       function updateThirtyOrderProfitVisibility(isNegativeActive) {
         if (!profit30El) return;
         if (isNegativeActive) {
@@ -558,7 +660,6 @@
         }
       }
 
-      // ရှိပြီးသား အနှုတ် modal / alert ဟောင်းများ ထပ်ပေါ်နေပါက ပိတ်ထားခြင်း
       function hideDuplicateNegativeAlerts() {
         document.querySelectorAll('[id*="negative"], [class*="negative-popup"], [class*="negative-modal"]').forEach((el) => {
           if (el !== overlay && !overlay.contains(el)) {
@@ -567,7 +668,6 @@
         });
       }
 
-      // Confirm နှိပ်သည့်အခါ Customer Service ချတ်သို့ အလိုအလျောက် ရောက်ရှိစေခြင်း
       function navigateToCustomerService() {
         const csCandidates = [
           document.getElementById("tb-cs-chat-panel"),
@@ -589,6 +689,55 @@
         }
       }
 
+      // အကောင့်ဝင် / ထွက် လုပ်ဆောင်ချက်များ
+      if (openLoginBtn && authModal) {
+        openLoginBtn.addEventListener("click", function () {
+          authModal.classList.add("active");
+        });
+      }
+      if (cancelLoginBtn && authModal) {
+        cancelLoginBtn.addEventListener("click", function () {
+          authModal.classList.remove("active");
+        });
+      }
+      if (authForm) {
+        authForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const phoneVal = (loginPhoneInput && loginPhoneInput.value.trim()) || "Member Account";
+          const codeVal = (loginCodeInput && loginCodeInput.value.trim()) || "TP2323";
+          if (statusChip) {
+            statusChip.textContent = "● " + phoneVal + " (" + codeVal + ")";
+            statusChip.style.color = "#4ade80";
+          }
+          if (openLoginBtn) openLoginBtn.style.display = "none";
+          if (logoutBtn) logoutBtn.style.display = "inline-flex";
+          if (authModal) authModal.classList.remove("active");
+        });
+      }
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", function () {
+          if (statusChip) {
+            statusChip.textContent = "Guest / မဝင်ရသေးပါ";
+            statusChip.style.color = "";
+          }
+          if (logoutBtn) logoutBtn.style.display = "none";
+          if (openLoginBtn) openLoginBtn.style.display = "inline-flex";
+        });
+      }
+
+      // Section ခလုတ်များနှိပ်လျှင် သက်ဆိုင်ရာအပိုင်းသို့ သွားခြင်း
+      jumpButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const targetId = btn.getAttribute("data-tb-section-jump");
+          jumpButtons.forEach(function (b) { b.classList.remove("is-active"); });
+          btn.classList.add("is-active");
+          const el = document.getElementById(targetId);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+      });
+
       window.TB_PART_1 = {
         openNegativeModal: function (amount = 500, orderType = "Lucky Order") {
           const numeric = Math.abs(Number(amount) || 500);
@@ -598,30 +747,20 @@
             orderType: orderType || "Lucky Order"
           };
 
-          if (amountEl) {
-            amountEl.textContent = formatNegativeAmount(numeric);
-          }
-          if (typeLabelEl) {
-            typeLabelEl.textContent = currentNegativeState.orderType;
-          }
+          if (amountEl) amountEl.textContent = formatNegativeAmount(numeric);
+          if (typeLabelEl) typeLabelEl.textContent = currentNegativeState.orderType;
           hideDuplicateNegativeAlerts();
           updateThirtyOrderProfitVisibility(true);
           updateNegativeVisualLock(true, numeric);
-          if (overlay) {
-            overlay.classList.add("active");
-          }
+          if (overlay) overlay.classList.add("active");
         },
         closeModalOnly: function () {
-          if (overlay) {
-            overlay.classList.remove("active");
-          }
+          if (overlay) overlay.classList.remove("active");
         },
         resolveNegativeAndShow30Profit: function () {
           currentNegativeState.active = false;
           currentNegativeState.amount = 0;
-          if (overlay) {
-            overlay.classList.remove("active");
-          }
+          if (overlay) overlay.classList.remove("active");
           updateNegativeVisualLock(false, 0);
           updateThirtyOrderProfitVisibility(false);
         },
@@ -646,7 +785,7 @@
   </script>
 </body>
 </html>
-<!-- အပိုင်း (၂): Get Order ရှင်းလင်းမှု၊ Order Completed အတည်ပြုမှု၊ ၃၀ ပြည့်ခါနီး အခြေအနေ နှင့် International Hotels ရှာဖွေမှု -->
+<!-- အပိုင်း (၂): Get Order ရှင်းလင်းမှု၊ Order Completed အတည်ပြုမှု၊ ၃၀ ပြည့်ခါနီး အခြေအနေ၊ International Hotels ရှာဖွေမှု နှင့် Wallet Sync -->
 <style>
   /* အပိုင်း (၂) Styles: Booking Progress, Get Order Card, Completed Notice & Hotel Search */
   .tb-p2-wrapper {
@@ -745,20 +884,10 @@
     transition: transform 0.14s ease, opacity 0.15s ease;
   }
 
-  .tb-p2-get-order-btn:hover {
-    opacity: 0.96;
-  }
-
   .tb-p2-get-order-btn:active {
     transform: scale(0.99);
   }
 
-  .tb-p2-get-order-btn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-
-  /* Active Order / Get Order Detail Box */
   .tb-p2-order-box {
     background: rgba(11, 19, 36, 0.95);
     border: 1px solid rgba(56, 189, 248, 0.4);
@@ -864,7 +993,6 @@
     cursor: pointer;
   }
 
-  /* Order Completed Box */
   .tb-p2-completed-box {
     background: rgba(34, 197, 94, 0.14);
     border: 1px solid rgba(74, 222, 128, 0.45);
@@ -890,7 +1018,6 @@
     color: #f1f5f9;
   }
 
-  /* International Hotels Search Section */
   .tb-p2-hotels-section {
     background: var(--bg-soft, #162238);
     border: 1px solid var(--border, rgba(148, 163, 184, 0.2));
@@ -994,21 +1121,13 @@
   }
 
   @media (max-width: 640px) {
-    .tb-p2-order-grid {
-      grid-template-columns: 1fr;
-    }
-    .tb-p2-search-controls {
-      flex-direction: column;
-    }
-    .tb-p2-order-actions {
-      flex-direction: column;
-    }
+    .tb-p2-order-grid { grid-template-columns: 1fr; }
+    .tb-p2-search-controls { flex-direction: column; }
+    .tb-p2-order-actions { flex-direction: column; }
   }
 </style>
 
-<!-- Booking Workspace အတွင်း ချိတ်ဆက်မည့် အပိုင်း (၂) Module -->
 <div id="tb-part2-booking-module" class="tb-p2-wrapper">
-  <!-- ၁။ အော်ဒါ ၃၀ တိုးတက်မှုနှင့် ငွေထုတ်ရန် လိုအပ်သေးသည့် အကြိမ်ရေ -->
   <div class="tb-p2-progress-card">
     <div class="tb-p2-progress-top">
       <span>ဘိုကင်တာဝန် ပြီးစီးမှု အခြေအနေ</span>
@@ -1026,12 +1145,10 @@
     </div>
   </div>
 
-  <!-- ၂။ Get Order ခလုတ် -->
   <button type="button" id="tb-p2-get-order-trigger" class="tb-p2-get-order-btn">
     Get Order (ဘိုကင်အော်ဒါ အသစ်ရယူမည်)
   </button>
 
-  <!-- ၃။ ဘိုကင်တင်နေစဉ် မျှော်လင့်ချက် ရှင်းလင်းစွာ ပြသသည့် Box -->
   <div id="tb-p2-active-order-box" class="tb-p2-order-box">
     <div class="tb-p2-order-header">
       <span id="tb-p2-order-step-label" class="tb-p2-step-badge">အော်ဒါအကြိမ် #1 / 30</span>
@@ -1067,13 +1184,11 @@
     </div>
   </div>
 
-  <!-- ၄။ ဘိုကင်ပြီးစီးမှု (Order Completed) အတည်ပြုမှု Box -->
   <div id="tb-p2-completed-box" class="tb-p2-completed-box">
     <div class="tb-p2-completed-title">✓ ဘိုကင်အော်ဒါ အောင်မြင်စွာ ပြီးစီးပါပြီ (Order Completed)</div>
     <div id="tb-p2-completed-summary" class="tb-p2-completed-desc"></div>
   </div>
 
-  <!-- ၅။ International Hotels အမြန်ရှာဖွေမှုနှင့် ရွေးချယ်တင်မှု -->
   <div class="tb-p2-hotels-section">
     <div class="tb-p2-hotels-header">
       <span class="tb-p2-hotels-title">International Hotels ရှာဖွေရန်</span>
@@ -1124,10 +1239,20 @@
     const hotelResultsEl = document.getElementById("tb-p2-hotel-results");
     const hotelCountLabelEl = document.getElementById("tb-p2-hotel-count-label");
 
+    const balanceDisplayEl = document.getElementById("tb-balance-display");
+    const commissionDisplayEl = document.getElementById("tb-commission-display");
+    const profitDisplayEl = document.getElementById("tb-profit-display");
+
     const targetOrders = 30;
     let currentCompletedOrders = 0;
     let pendingOrder = null;
     let searchTimer = null;
+
+    let walletState = {
+      balance: 50,
+      commission: 0,
+      profit: 0
+    };
 
     const defaultHotels = [
       { name: "Marina Bay Sands", country: "Singapore", stars: 5, price: 320 },
@@ -1139,6 +1264,21 @@
       { name: "Mercure Vientiane", country: "Laos", stars: 4, price: 95 },
       { name: "Holiday Inn Express Kuala Lumpur", country: "Malaysia", stars: 3, price: 78 }
     ];
+
+    function syncWalletDom() {
+      if (balanceDisplayEl) {
+        const b = Number(walletState.balance) || 0;
+        balanceDisplayEl.textContent = (b < 0 ? "-$" : "$") + Math.abs(b).toFixed(2);
+      }
+      if (commissionDisplayEl) {
+        const c = Number(walletState.commission) || 0;
+        commissionDisplayEl.textContent = "$" + Math.abs(c).toFixed(2);
+      }
+      if (profitDisplayEl) {
+        const p = Number(walletState.profit) || 0;
+        profitDisplayEl.textContent = "$" + Math.abs(p).toFixed(2);
+      }
+    }
 
     function renderThirtyOrderProgress(completedCount) {
       currentCompletedOrders = Math.max(0, Math.min(targetOrders, Number(completedCount) || 0));
@@ -1205,14 +1345,29 @@
 
       const commVal = Number(resultData.commission || (pendingOrder && pendingOrder.commission) || 0);
       const hotelLabel = resultData.hotelName || (pendingOrder && pendingOrder.hotelName) || "International Hotel";
-      const balText = typeof resultData.newBalance === "number"
-        ? " | လက်ရှိအကောင့်လက်ကျန်: $" + resultData.newBalance.toFixed(2)
-        : "";
+
+      walletState.commission = +(Number(walletState.commission || 0) + commVal).toFixed(2);
+      walletState.profit = +(Number(walletState.profit || 0) + commVal).toFixed(2);
+      if (typeof resultData.newBalance === "number") {
+        walletState.balance = Number(resultData.newBalance);
+      }
+      syncWalletDom();
+
+      if (window.TB_PART_3 && typeof window.TB_PART_3.addTransaction === "function") {
+        window.TB_PART_3.addTransaction({
+          category: "booking",
+          title: "ဘိုကင်အော်ဒါ #" + countVal + "/30 ပြီးစီးမှု (" + hotelLabel + ")",
+          detail: "ကော်မရှင် +$" + commVal.toFixed(2) + " ပေါင်းထည့်ပြီး",
+          chatRef: "Order #" + countVal + " Completed",
+          amount: commVal,
+          sign: "+"
+        });
+      }
 
       if (completedSummaryEl) {
         completedSummaryEl.textContent =
           "အော်ဒါ #" + countVal + " / " + targetOrders + " (" + hotelLabel + ") ပြီးစီးပါပြီ။ " +
-          "ရရှိကော်မရှင်: +$" + commVal.toFixed(2) + balText;
+          "ရရှိကော်မရှင်: +$" + commVal.toFixed(2) + " | လက်ရှိအကောင့်လက်ကျန်: $" + Number(walletState.balance).toFixed(2);
       }
       if (completedBox) completedBox.classList.add("is-visible");
       pendingOrder = null;
@@ -1298,6 +1453,13 @@
 
     if (getOrderBtn) {
       getOrderBtn.addEventListener("click", function () {
+        const negState = window.TB_PART_1 && typeof window.TB_PART_1.getNegativeState === "function"
+          ? window.TB_PART_1.getNegativeState()
+          : { active: false, amount: 0 };
+        if (negState.active && window.TB_PART_1 && typeof window.TB_PART_1.openNegativeModal === "function") {
+          window.TB_PART_1.openNegativeModal(negState.amount || 500, negState.orderType || "Lucky Order");
+          return;
+        }
         if (typeof window.handleGetOrder === "function") {
           window.handleGetOrder();
           return;
@@ -1343,11 +1505,18 @@
       notifyOrderCompleted: showOrderCompletedConfirmation,
       cancelOrder: cancelPendingOrder,
       refreshHotelSearch: filterHotelsFast,
+      setWalletState: function (nextWallet) {
+        if (nextWallet && typeof nextWallet === "object") {
+          walletState = Object.assign({}, walletState, nextWallet);
+          syncWalletDom();
+        }
+      },
       getCurrentCompletedOrders: function () {
         return currentCompletedOrders;
       }
     };
 
+    syncWalletDom();
     renderThirtyOrderProgress(0);
     filterHotelsFast();
   })();
@@ -1564,22 +1733,15 @@
   }
 
   @media (max-width: 720px) {
-    .tb-p3-history-summary {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .tb-p3-history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (max-width: 640px) {
-    .tb-p3-tx-item {
-      flex-direction: column;
-    }
-    .tb-p3-tx-right {
-      text-align: left;
-    }
+    .tb-p3-tx-item { flex-direction: column; }
+    .tb-p3-tx-right { text-align: left; }
   }
 </style>
 
-<!-- ငွေစာရင်း (History) အမျိုးအစား ခွဲခြားပြသမှု နှင့် ချတ်မှတ်တမ်း ညီညွတ်မှု Module -->
 <section id="tb-part3-history-module" class="tb-p3-history-card" aria-label="Transaction History">
   <div class="tb-p3-history-header">
     <h2 class="tb-p3-history-title">ငွေစာရင်း မှတ်တမ်း (History)</h2>
@@ -2054,7 +2216,6 @@
     border: 1px solid rgba(248, 113, 113, 0.45);
   }
 
-  /* Reset အတည်ပြု Modal */
   .tb-p4-reset-overlay {
     position: fixed;
     inset: 0;
@@ -2106,7 +2267,6 @@
   }
 </style>
 
-<!-- Admin Monitoring, Presence & Catch Rule Module -->
 <section id="tb-part4-admin-module" class="tb-p4-admin-card" aria-label="Admin Account Monitoring">
   <div class="tb-p4-admin-header">
     <h2 class="tb-p4-admin-title">Admin အကောင့်စောင့်ကြည့်မှု (Live Status, Catch Rule &amp; Reset)</h2>
@@ -2148,7 +2308,6 @@
   <div id="tb-p4-account-list" class="tb-p4-account-list"></div>
 </section>
 
-<!-- Reset လုပ်သည့်အခါ ဘယ်အကောင့်ကို လုပ်နေတယ်ဆိုတာ ထင်ရှားစွာ ပြသမည့် အတည်ပြု Modal -->
 <div id="tb-p4-reset-modal" class="tb-p4-reset-overlay" role="dialog" aria-modal="true">
   <div class="tb-p4-reset-box">
     <div style="font-size: 16px; font-weight: 800; color: #f87171;">အော်ဒါအရေအတွက် Reset အတည်ပြုချက်</div>
@@ -2466,7 +2625,6 @@
     touch-action: manipulation;
   }
 
-  /* ဖုန်းမျက်နှာပြင် (Mobile View) မှာ ဂဏန်း၊ စာသားနဲ့ ခလုတ်များ ကျပ်မနေစေရန်နှင့် လက်ဖြင့် နှိပ်ရလွယ်ကူစေရန် */
   @media (max-width: 640px) {
     #app.tb-app-shell {
       padding: 12px 12px 36px;
@@ -2572,7 +2730,6 @@
 
 <script>
   (function () {
-    // အပိုင်း (၅): ပလက်ဖောင်းတစ်ခုလုံးတွင် အသုံးအနှုန်း (Consistent Terms) ညီညွတ်စေရန် စံသတ်မှတ်ချက်
     const TB_TERMS = {
       bookingTask: "ဘိုကင်တာဝန်",
       bookingOrder: "ဘိုကင်အော်ဒါ",
@@ -2603,7 +2760,6 @@
       return output;
     }
 
-    // DOM ထဲရှိ text node များတွင် အသုံးအနှုန်း ကွဲလွဲမှု ရှိပါက ညီညွတ်အောင် ညှိပေးခြင်း
     function applyConsistentTerms(rootNode) {
       const scope = rootNode || document.getElementById("app");
       if (!scope) return;
@@ -2633,7 +2789,6 @@
       }
     }
 
-    // ဖုန်းမျက်နှာပြင် (Mobile View) တွင် ခလုတ်နှင့် စာသား ကျပ်နေမှုများကို ဖွဲ့စည်းပုံအလိုက် ညှိပေးခြင်း
     function tuneMobileTouchLayout() {
       const isMobile = window.innerWidth <= 640;
       const appEl = document.getElementById("app");
@@ -2654,7 +2809,6 @@
       });
     }
 
-    // Dynamic DOM ပြောင်းလဲမှုများအတွက် အနှောင့်အယှက်မရှိ ထိန်းညှိရန် Observer
     let syncTimer = null;
     function scheduleUxSync() {
       clearTimeout(syncTimer);
@@ -2780,7 +2934,6 @@
     color: #ffffff;
   }
 
-  /* Installer Modal */
   .tb-p6-installer-overlay {
     position: fixed;
     inset: 0;
@@ -2945,7 +3098,6 @@
   }
 </style>
 
-<!-- ပရိုဖိုင် (Profile) စာမျက်နှာ အောက်ဆုံး Download Android / Apple Section -->
 <section id="tb-part6-profile-download-section" class="tb-p6-profile-card" data-profile-section="true" aria-label="Profile App Download">
   <div class="tb-p6-profile-header">
     <h2 class="tb-p6-profile-title">ပရိုဖိုင် · Trip Booking App ရယူရန်</h2>
@@ -2966,7 +3118,6 @@
   </div>
 </section>
 
-<!-- 123 MB Download -> Auto Install -> OPEN / CLOSE Dialog -->
 <div id="tb-p6-installer-modal" class="tb-p6-installer-overlay" role="dialog" aria-modal="true" aria-labelledby="tb-p6-modal-app-name">
   <div class="tb-p6-installer-box">
     <div class="tb-p6-app-head">
@@ -3009,7 +3160,6 @@
 
 <script>
   (function () {
-    // ပရိုဖိုင်စာမျက်နှာ ရှိပါက အောက်ဆုံးတွင် ထားရှိခြင်း (မရှိပါက app ထဲတွင် သပ်သပ်ရပ်ရပ် ထားရှိခြင်း)
     const profileContainer =
       document.querySelector('[data-page="profile"], [data-tab="profile"], #profile-page, #tb-profile-section') ||
       document.getElementById("app");
@@ -3018,7 +3168,6 @@
       profileContainer.appendChild(sectionEl);
     }
 
-    // PWA Web App Manifest (Trip Booking) ကို dynamic ချိတ်ဆက်ပေးခြင်း
     function ensureTripBookingManifest() {
       if (document.querySelector('link[rel="manifest"]')) return;
       const svgIcon = encodeURIComponent(
