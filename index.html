@@ -259,7 +259,7 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .hero h1 { margin: 0 0 8px; font-size: 25px; letter-spacing: -0.2px; color: #fff; }
 .hero p { margin: 0 0 14px; color: #e2e8f0; max-width: 700px; line-height: 1.5; }
 
-/* Rectangular 1000-Account Live Activity Box */
+/* Rectangular 1000-Account Live Activity Box (Slower Pace for Easy Reading) */
 .activity-ticker-box {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
@@ -283,15 +283,15 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
  border-radius: 10px;
  background: var(--fb-bg);
  border: 1px solid var(--fb-border);
- padding: 8px 0;
+ padding: 9px 0;
 }
 .ticker-track {
  display: inline-flex;
  align-items: center;
- gap: 10px;
+ gap: 14px;
  white-space: nowrap;
  will-change: transform;
- animation: tickerSmoothScroll 135s linear infinite;
+ animation: tickerSmoothScroll 340s linear infinite;
 }
 .ticker-track:hover {
  animation-play-state: paused;
@@ -303,13 +303,13 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .ticker-chip {
  display: inline-flex;
  align-items: center;
- gap: 6px;
- padding: 6px 11px;
+ gap: 7px;
+ padding: 7px 12px;
  border-radius: 9px;
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- font-size: 12px;
- line-height: 1.25;
+ font-size: 12.5px;
+ line-height: 1.3;
  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
 }
 .ticker-chip.real-user-highlight {
@@ -377,6 +377,69 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
  margin-top: 8px;
  font-size: 12px;
  color: var(--fb-muted);
+}
+
+/* Profile Today's USD Rate & Converter Box */
+.today-fx-box {
+ margin-top: 14px;
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ border-radius: 12px;
+ padding: 14px;
+}
+.today-fx-top {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 10px;
+ flex-wrap: wrap;
+ margin-bottom: 10px;
+}
+.converter-row-box {
+ display: grid;
+ grid-template-columns: minmax(120px, 1fr) auto minmax(120px, 1fr) auto minmax(150px, 1.2fr);
+ align-items: center;
+ gap: 8px;
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ padding: 10px;
+}
+.swap-dir-btn {
+ width: 38px;
+ height: 38px;
+ border-radius: 9px;
+ border: 1px solid var(--fb-primary);
+ background: rgba(29, 78, 216, 0.12);
+ color: var(--fb-primary);
+ font-size: 16px;
+ font-weight: 800;
+ cursor: pointer;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+}
+.swap-dir-btn:hover {
+ background: var(--fb-primary);
+ color: #ffffff;
+}
+.converter-eq-sign {
+ font-size: 18px;
+ font-weight: 800;
+ color: var(--fb-muted);
+ text-align: center;
+}
+.converter-result-box {
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ border-radius: 8px;
+ padding: 8px 10px;
+ font-weight: 800;
+ font-size: 13.5px;
+ color: var(--fb-primary);
+ min-height: 36px;
+ display: flex;
+ align-items: center;
 }
 
 .section-card {
@@ -1039,6 +1102,19 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+@media (max-width: 680px) {
+ .converter-row-box {
+  grid-template-columns: 1fr auto 1fr;
+ }
+ .converter-eq-sign {
+  grid-column: 1 / -1;
+  font-size: 15px;
+ }
+ .converter-result-box {
+  grid-column: 1 / -1;
+ }
+}
+
 @media (max-width: 600px) {
  .container { padding: 0 10px; margin-top: 10px; }
  .section-card, .fx-chart-card, .activity-ticker-box { padding: 12px; border-radius: 12px; }
@@ -1133,7 +1209,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
      <b style="font-size:14px">📢 Live Payouts & Deposits Feed</b>
      <span class="tag">1,000 Demo Accounts + Live Deposits</span>
     </div>
-    <span id="tickerLiveStatusLabel" class="small muted">Smooth Feed Active</span>
+    <span id="tickerLiveStatusLabel" class="small muted">Smooth Slow Feed · Hover/Tap to Pause</span>
    </div>
    <div class="ticker-viewport">
     <div id="activityTickerTrack" class="ticker-track"></div>
@@ -1147,6 +1223,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <b style="font-size:15px" data-i18n="fxChartTitle">📈 USD ↔ MMK Live Rate Trend</b>
       <span id="fxChangeBadge" class="status-pill pill-online">+0.00%</span>
+      <span id="fxDayTrendBadge" class="status-pill pill-rule">Today Trend</span>
      </div>
      <div id="fxFormulaReadout" class="fx-formula-pill">1 USD = 4,500.0 MMK</div>
     </div>
@@ -1441,6 +1518,27 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
       <div class="stat-label" data-i18n="refBonus">Referral Earned</div>
       <div id="referralEarned" class="stat-val">$0.00</div>
      </div>
+    </div>
+
+    <!-- Today's USD Rate Box + Bidirectional USD <-> MMK Calculator -->
+    <div class="today-fx-box">
+     <div class="today-fx-top">
+      <div>
+       <b style="font-size:14px" data-i18n="todayUsdRateTitle">ဒီနေ့ ဒေါ်လာပေါက်ဈေး</b>
+       <span id="todayFxDayBadge" class="status-pill pill-online" style="margin-left:6px">Auto Daily</span>
+       <div id="todayFxDateInfo" class="small muted" style="margin-top:3px"></div>
+      </div>
+      <div id="todayFxRateValue" style="font-size:16px;font-weight:800;color:var(--fb-primary)">1 USD = 4,500.0 MMK</div>
+     </div>
+
+     <div class="converter-row-box">
+      <input type="number" id="calcInputA" step="any" min="0" value="1" oninput="runBidirectionalConverter('A')" placeholder="USD">
+      <button type="button" class="swap-dir-btn" id="calcSwapBtn" onclick="swapConverterDirection()" title="Switch USD ↔ MMK">🔁</button>
+      <input type="number" id="calcInputB" step="any" min="0" value="4500" oninput="runBidirectionalConverter('B')" placeholder="MMK">
+      <span class="converter-eq-sign">=</span>
+      <div id="calcAnswerBox" class="converter-result-box">4,500 MMK</div>
+     </div>
+     <div id="calcDirectionHint" class="small muted" style="margin-top:6px">USD 🔁 MMK · Type in either box or tap 🔁 to convert MMK ➔ USD</div>
     </div>
    </div>
   </div>
@@ -1967,6 +2065,7 @@ const $ = id => document.getElementById(id);
 let MMK_PER_USD = 4500;
 let OFFICIAL_BASE_RATE = 4500;
 let CURRENT_LIVE_MMK_RATE = 4500;
+let TODAY_FX_MODE = "flat"; // "up" | "down" | "flat"
 let OFFICIAL_RATE_META = {
  source: "Configured / Synced Base",
  dateStr: "",
@@ -2170,6 +2269,198 @@ function formatUsdWithMmk(usdVal) {
  return `$${num.toFixed(2)} (${mmk} ${mmkWord})`;
 }
 
+// Daily Midnight (00:00) Up / Down / Flat Rate Engine
+function getLocalDayKey(dateObj = new Date()) {
+ const y = dateObj.getFullYear();
+ const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+ const d = String(dateObj.getDate()).padStart(2, "0");
+ return `${y}-${m}-${d}`;
+}
+
+function computeDeterministicDailyShift(dayKey, baseRate) {
+ let hash = 0;
+ for (let i = 0; i < dayKey.length; i++) {
+  hash = ((hash * 31) + dayKey.charCodeAt(i)) % 100000;
+ }
+ const mod3 = hash % 3; // 0 = Up, 1 = Down, 2 = Flat (Unchanged Day)
+ if (mod3 === 2) {
+  return { mode: "flat", delta: 0, rate: Number(Number(baseRate).toFixed(1)) };
+ }
+ const stepMag = 8 + (hash % 18); // 8 to 25 MMK daily change
+ const delta = mod3 === 0 ? stepMag : -stepMag;
+ const nextRate = Number(Math.max(100, Number(baseRate) + delta).toFixed(1));
+ return { mode: mod3 === 0 ? "up" : "down", delta, rate: nextRate };
+}
+
+function ensureDailyMidnightRateSync(dateObj = new Date()) {
+ const todayKey = getLocalDayKey(dateObj);
+ const storedKey = localStorage.getItem("tb_daily_rate_date_key") || "";
+ const savedRate = Number(localStorage.getItem("tb_mmk_per_usd"));
+ const savedDayRate = Number(localStorage.getItem("tb_today_base_rate"));
+ const savedDayMode = localStorage.getItem("tb_today_fx_mode") || "flat";
+
+ if (storedKey !== todayKey) {
+  // Midnight (00:00) crossed -> automatically assign today's Up / Down / Flat rate
+  const prevRefRate = Number.isFinite(savedRate) && savedRate >= 100
+   ? savedRate
+   : (Number.isFinite(savedDayRate) && savedDayRate >= 100 ? savedDayRate : 4500);
+
+  const daily = computeDeterministicDailyShift(todayKey, prevRefRate);
+  MMK_PER_USD = daily.rate;
+  CURRENT_LIVE_MMK_RATE = daily.rate;
+  TODAY_FX_MODE = daily.mode;
+
+  localStorage.setItem("tb_daily_rate_date_key", todayKey);
+  localStorage.setItem("tb_today_base_rate", String(daily.rate));
+  localStorage.setItem("tb_today_fx_mode", daily.mode);
+  localStorage.setItem("tb_mmk_per_usd", String(daily.rate));
+
+  const dt = formatDateTimeParts(dateObj);
+  OFFICIAL_RATE_META = {
+   source: daily.mode === "up"
+    ? "Daily Rate Up (00:00 Reset)"
+    : (daily.mode === "down" ? "Daily Rate Down (00:00 Reset)" : "Daily Rate Unchanged (00:00 Reset)"),
+   dateStr: dt.dateStr,
+   timeStr: dt.timeStr,
+   updatedAtMs: Date.now()
+  };
+  return true;
+ }
+
+ if (Number.isFinite(savedRate) && savedRate >= 100) {
+  MMK_PER_USD = savedRate;
+  CURRENT_LIVE_MMK_RATE = savedRate;
+ }
+ TODAY_FX_MODE = savedDayMode;
+ return false;
+}
+
+function renderTodayRateAndConverterBox() {
+ const rateEl = $("todayFxRateValue");
+ const infoEl = $("todayFxDateInfo");
+ const badgeEl = $("todayFxDayBadge");
+ if (!rateEl) return;
+
+ const d = getDict();
+ const mmkWord = d.mmkUnit || "MMK";
+ const activeRate = getActiveRateForConversion();
+ const dt = formatDateTimeParts(new Date());
+
+ rateEl.textContent = `1 USD = ${activeRate.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${mmkWord}`;
+
+ if (badgeEl) {
+  if (TODAY_FX_MODE === "up") {
+   badgeEl.textContent = "▲ Up Today";
+   badgeEl.className = "status-pill pill-online";
+  } else if (TODAY_FX_MODE === "down") {
+   badgeEl.textContent = "▼ Down Today";
+   badgeEl.className = "status-pill pill-live";
+  } else {
+   badgeEl.textContent = "— Unchanged Today";
+   badgeEl.className = "status-pill pill-offline";
+  }
+ }
+
+ if (infoEl) {
+  infoEl.textContent = `${dt.dateStr} · Auto resets at 00:00 · ${OFFICIAL_RATE_META.source}`;
+ }
+
+ syncConverterWithCurrentRate();
+}
+
+// Bidirectional USD <-> MMK Calculator
+let converterReverseMode = false; // false: A=USD, B=MMK; true: A=MMK, B=USD
+
+function syncConverterWithCurrentRate() {
+ const inpA = $("calcInputA");
+ const inpB = $("calcInputB");
+ const ansEl = $("calcAnswerBox");
+ const hintEl = $("calcDirectionHint");
+ if (!inpA || !inpB || !ansEl) return;
+
+ const rate = Math.max(1, getActiveRateForConversion());
+ const mmkWord = getDict().mmkUnit || "MMK";
+
+ if (!converterReverseMode) {
+  inpA.placeholder = "USD";
+  inpB.placeholder = mmkWord;
+  const usdVal = Math.max(0, Number(inpA.value) || 0);
+  const mmkVal = Math.round(usdVal * rate);
+  if (document.activeElement !== inpB) {
+   inpB.value = usdVal > 0 ? String(mmkVal) : "0";
+  }
+  ansEl.textContent = `${mmkVal.toLocaleString()} ${mmkWord}`;
+  if (hintEl) hintEl.textContent = `USD ➔ ${mmkWord} · Rate 1 USD = ${rate.toLocaleString()} ${mmkWord} · Tap 🔁 for ${mmkWord} ➔ USD`;
+ } else {
+  inpA.placeholder = mmkWord;
+  inpB.placeholder = "USD";
+  const mmkVal = Math.max(0, Number(inpA.value) || 0);
+  const usdVal = Number((mmkVal / rate).toFixed(4));
+  if (document.activeElement !== inpB) {
+   inpB.value = mmkVal > 0 ? String(usdVal) : "0";
+  }
+  ansEl.textContent = `$${usdVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+  if (hintEl) hintEl.textContent = `${mmkWord} ➔ USD · Rate 1 USD = ${rate.toLocaleString()} ${mmkWord} · Tap 🔁 for USD ➔ ${mmkWord}`;
+ }
+}
+
+function runBidirectionalConverter(sourceBox) {
+ const inpA = $("calcInputA");
+ const inpB = $("calcInputB");
+ const ansEl = $("calcAnswerBox");
+ if (!inpA || !inpB || !ansEl) return;
+
+ const rate = Math.max(1, getActiveRateForConversion());
+ const mmkWord = getDict().mmkUnit || "MMK";
+
+ if (!converterReverseMode) {
+  // A = USD, B = MMK
+  if (sourceBox === "A") {
+   const usdVal = Math.max(0, Number(inpA.value) || 0);
+   const mmkVal = Math.round(usdVal * rate);
+   inpB.value = String(mmkVal);
+   ansEl.textContent = `${mmkVal.toLocaleString()} ${mmkWord}`;
+  } else {
+   const mmkVal = Math.max(0, Number(inpB.value) || 0);
+   const usdVal = Number((mmkVal / rate).toFixed(4));
+   inpA.value = String(usdVal);
+   ansEl.textContent = `${mmkVal.toLocaleString()} ${mmkWord} ($${usdVal.toFixed(2)})`;
+  }
+ } else {
+  // A = MMK, B = USD
+  if (sourceBox === "A") {
+   const mmkVal = Math.max(0, Number(inpA.value) || 0);
+   const usdVal = Number((mmkVal / rate).toFixed(4));
+   inpB.value = String(usdVal);
+   ansEl.textContent = `$${usdVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+  } else {
+   const usdVal = Math.max(0, Number(inpB.value) || 0);
+   const mmkVal = Math.round(usdVal * rate);
+   inpA.value = String(mmkVal);
+   ansEl.textContent = `$${usdVal.toFixed(2)} (${mmkVal.toLocaleString()} ${mmkWord})`;
+  }
+ }
+}
+
+function swapConverterDirection() {
+ const inpA = $("calcInputA");
+ const inpB = $("calcInputB");
+ converterReverseMode = !converterReverseMode;
+ if (inpA && inpB) {
+  const rate = Math.max(1, getActiveRateForConversion());
+  if (!converterReverseMode) {
+   const usdVal = Math.max(1, Number(inpB.value) || 1);
+   inpA.value = String(usdVal);
+   inpB.value = String(Math.round(usdVal * rate));
+  } else {
+   const mmkVal = Math.max(rate, Number(inpB.value) || rate);
+   inpA.value = String(Math.round(mmkVal));
+   inpB.value = String(Number((mmkVal / rate).toFixed(4)));
+  }
+ }
+ syncConverterWithCurrentRate();
+}
+
 // 1,000 Mock Accounts + Live Real-User Deposit Ticker
 let mock1000Accounts = [];
 let realUserDepositFeed = [];
@@ -2193,7 +2484,6 @@ function build1000MockAccounts() {
   const fullName = `${fn} ${ln}`;
   const accId = `ID-${String(100000 + i * 73).slice(-6)}`;
   const refCode = inviteCodes[i % inviteCodes.length];
-  // Alternate withdrawals ($1,xxx) and deposits ($1,xxx or $xxx)
   const isWithdraw = (i % 3) !== 0;
   const highAmount = (i % 2) === 0
    ? Number((1000 + ((i * 37) % 2800) + ((i % 99) / 100)).toFixed(2))
@@ -2244,7 +2534,6 @@ function renderActivityTicker() {
  const mmkWord = getDict().mmkUnit || "MMK";
  const rate = getActiveRateForConversion();
 
- // Mix real user deposits at the front + sample slice from 1,000 mock accounts for smooth continuous loop
  const sampleSlice = mock1000Accounts.slice(0, 60);
  const combined = [...realUserDepositFeed, ...sampleSlice];
 
@@ -2276,7 +2565,7 @@ function renderActivityTicker() {
 }
 
 // Natural USD <-> MMK Trend Chart (Spikes, Pullbacks, Trend Waves + Date/Time/Rate Hover)
-let fxChartPoints = []; // { rate, dateStr, timeStr, fullStamp }
+let fxChartPoints = [];
 let fxChartTimerId = null;
 let fxTickStep = 0;
 
@@ -2296,11 +2585,10 @@ function buildNaturalFxSeries(centerRate) {
  const series = [];
 
  for (let i = 0; i < count; i++) {
-  const relIndex = i - (count - 1); // negative = past seconds/ticks
+  const relIndex = i - (count - 1);
   const ptTime = new Date(nowMs + relIndex * 2000);
   const dt = formatDateTimeParts(ptTime);
 
-  // Choppy market swing + local peaks & dips similar to trading / FX charts
   const macroWave = Math.sin(i * 0.24) * 14 + Math.cos(i * 0.11) * 9;
   const jaggedPulse = ((i % 2 === 0 ? 1 : -1) * (3 + (i % 5) * 1.8));
   const spike = (i === 14 || i === 33) ? 16 : ((i === 22 || i === 39) ? -15 : 0);
@@ -2335,12 +2623,26 @@ function updateFxSummaryText(ptObj) {
   badgeEl.className = `status-pill ${diffPct >= 0 ? "pill-online" : "pill-live"}`;
  }
 
+ const dayBadge = $("fxDayTrendBadge");
+ if (dayBadge) {
+  if (TODAY_FX_MODE === "up") {
+   dayBadge.textContent = "▲ Daily Up";
+   dayBadge.className = "status-pill pill-online";
+  } else if (TODAY_FX_MODE === "down") {
+   dayBadge.textContent = "▼ Daily Down";
+   dayBadge.className = "status-pill pill-live";
+  } else {
+   dayBadge.textContent = "— Daily Flat";
+   dayBadge.className = "status-pill pill-offline";
+  }
+ }
+
  if ($("fxCurrentRateDisplay")) {
   $("fxCurrentRateDisplay").textContent = `1 USD = ${CURRENT_LIVE_MMK_RATE.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${mmkWord}`;
  }
 
  if ($("fxFormulaReadout")) {
-  $("fxFormulaReadout").textContent = `1 USD + ${Math.round(CURRENT_LIVE_MMK_RATE).toLocaleString()} ${mmkWord} · Base: ${baseRate.toLocaleString()} ${mmkWord}`;
+  $("fxFormulaReadout").textContent = `1 USD = ${Math.round(CURRENT_LIVE_MMK_RATE).toLocaleString()} ${mmkWord} · Today Base: ${baseRate.toLocaleString()} ${mmkWord}`;
  }
 
  if ($("fxLastUpdatedLabel")) {
@@ -2350,6 +2652,8 @@ function updateFxSummaryText(ptObj) {
  if ($("fxSampleConvText")) {
   $("fxSampleConvText").textContent = `1 USD + ${Math.round(CURRENT_LIVE_MMK_RATE).toLocaleString()} ${mmkWord}`;
  }
+
+ renderTodayRateAndConverterBox();
 }
 
 function drawFxChartSvg(pointsArr) {
@@ -2429,11 +2733,15 @@ function initFxTrendChart() {
 
  if (fxChartTimerId) clearInterval(fxChartTimerId);
  fxChartTimerId = setInterval(() => {
+  const rolledOverDay = ensureDailyMidnightRateSync(new Date());
+  if (rolledOverDay) {
+   fxChartPoints = buildNaturalFxSeries(MMK_PER_USD);
+  }
+
   fxTickStep += 1;
   const base = Number(MMK_PER_USD) || 4500;
   const prevRate = fxChartPoints.length ? Number(fxChartPoints[fxChartPoints.length - 1].rate) : base;
 
-  // Pull back gently toward base while creating natural up/down ticks
   const pullTowardBase = (base - prevRate) * 0.14;
   const swing = Math.sin(fxTickStep * 0.52) * 7.5 + ((fxTickStep % 2 === 0 ? 1 : -1) * (2.5 + (fxTickStep % 4) * 1.4));
   const nextRate = Number(Math.max(100, prevRate + pullTowardBase + swing).toFixed(1));
@@ -2451,7 +2759,6 @@ function initFxTrendChart() {
   drawFxChartSvg(fxChartPoints);
   updateFxSummaryText(fxChartPoints[fxChartPoints.length - 1]);
 
-  // Refresh dynamic MMK prices & ticker values with live tick
   renderHotels();
   renderBookingCenter();
   renderHistory();
@@ -2461,9 +2768,9 @@ function initFxTrendChart() {
 }
 
 async function fetchOfficialExchangeRate() {
- // Attempt public open FX rate endpoint without blocking local/admin override
- const hasSavedManualRate = Boolean(localStorage.getItem("tb_mmk_per_usd"));
- if (hasSavedManualRate) return;
+ // Respect daily midnight / admin rate unless no base rate has been set yet
+ const hasSavedRate = Boolean(localStorage.getItem("tb_mmk_per_usd") || localStorage.getItem("tb_daily_rate_date_key"));
+ if (hasSavedRate) return;
 
  try {
   const controller = new AbortController();
@@ -2484,6 +2791,9 @@ async function fetchOfficialExchangeRate() {
    };
    if (!db) {
     MMK_PER_USD = OFFICIAL_BASE_RATE;
+    CURRENT_LIVE_MMK_RATE = OFFICIAL_BASE_RATE;
+    localStorage.setItem("tb_mmk_per_usd", String(MMK_PER_USD));
+    localStorage.setItem("tb_daily_rate_date_key", getLocalDayKey(new Date()));
     initFxTrendChart();
     renderAllViews();
    }
@@ -2496,22 +2806,35 @@ async function fetchOfficialExchangeRate() {
 async function applyPlatformFxRate(nextRate, persistDb = false) {
  const cleanRate = Number(nextRate);
  if (!Number.isFinite(cleanRate) || cleanRate < 100) return;
+
+ const prevBase = Number(MMK_PER_USD) || cleanRate;
+ if (cleanRate > prevBase) TODAY_FX_MODE = "up";
+ else if (cleanRate < prevBase) TODAY_FX_MODE = "down";
+
  MMK_PER_USD = cleanRate;
  CURRENT_LIVE_MMK_RATE = cleanRate;
+
  const dt = formatDateTimeParts(new Date());
  OFFICIAL_RATE_META = {
-  source: persistDb ? "Admin Synced Rate" : "Platform Rate",
+  source: persistDb ? "Admin Updated Line Rate" : "Platform Rate",
   dateStr: dt.dateStr,
   timeStr: dt.timeStr,
   updatedAtMs: Date.now()
  };
+
+ localStorage.setItem("tb_daily_rate_date_key", getLocalDayKey(new Date()));
+ localStorage.setItem("tb_today_base_rate", String(cleanRate));
+ localStorage.setItem("tb_today_fx_mode", TODAY_FX_MODE);
  localStorage.setItem("tb_mmk_per_usd", String(cleanRate));
+
  if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) {
   $("adminFxRateInput").value = String(cleanRate);
  }
  if (persistDb && db) {
   await db.ref("platform_settings/mmk_per_usd").set(cleanRate).catch(() => {});
  }
+
+ // Immediately switch chart line & all conversions to the new rate
  initFxTrendChart();
  renderAllViews();
 }
@@ -2573,6 +2896,7 @@ const I18N = {
   loginBtn: "Login", logoutBtn: "Logout", depositBtn: "Deposit", withdrawBtn: "Withdraw",
   contactServiceBtn: "Contact Customer Service",
   fxChartTitle: "📈 USD ↔ MMK Live Rate Trend", fxRateInputLabel: "USD/MMK:",
+  todayUsdRateTitle: "Today's USD Rate",
   startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   hotelSearchPh: "Search hotel, country, or stars...",
   homeHotelBookHint: "Tap any hotel card to view details or book directly with your balance.",
@@ -2669,6 +2993,7 @@ const I18N = {
   loginBtn: "အကောင့်ဝင်ရန်", logoutBtn: "ထွက်ရန်", depositBtn: "ငွေသွင်းရန်", withdrawBtn: "ငွေထုတ်ရန်",
   contactServiceBtn: "ဝန်ဆောင်မှုသို့ ဆက်သွယ်ရန်",
   fxChartTitle: "📈 USD ↔ MMK ငွေကြေးအတတ်အကျ လိုင်းဂရပ်", fxRateInputLabel: "USD/MMK:",
+  todayUsdRateTitle: "ဒီနေ့ ဒေါ်လာပေါက်ဈေး",
   startTaskBtn: "Start Booking Tasks", hotelDir: "International Hotels",
   hotelSearchPh: "ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်ပွင့် ရှာရန်...",
   homeHotelBookHint: "အကောင့်လက်ကျန်ရှိပါက ဟိုတယ်ကတ်ကို နှိပ်၍ တိုက်ရိုက် ဘိုကင်ယူနိုင်ပါသည်။",
@@ -3159,21 +3484,7 @@ function startRealtimeListeners() {
  db.ref("platform_settings/mmk_per_usd").on("value", snap => {
   const rateVal = Number(snap.val());
   if (Number.isFinite(rateVal) && rateVal >= 100 && rateVal !== MMK_PER_USD) {
-   MMK_PER_USD = rateVal;
-   CURRENT_LIVE_MMK_RATE = rateVal;
-   const dt = formatDateTimeParts(new Date());
-   OFFICIAL_RATE_META = {
-    source: "Firebase Rate Sync",
-    dateStr: dt.dateStr,
-    timeStr: dt.timeStr,
-    updatedAtMs: Date.now()
-   };
-   localStorage.setItem("tb_mmk_per_usd", String(rateVal));
-   if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) {
-    $("adminFxRateInput").value = String(rateVal);
-   }
-   initFxTrendChart();
-   renderAllViews();
+   applyPlatformFxRate(rateVal, false);
   }
  });
 
@@ -3227,7 +3538,6 @@ function startRealtimeListeners() {
   const val = snap.val() || {};
   allTransactions = Object.values(val).sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
 
-  // Detect any real user deposit transaction and surface in the Home ticker box
   allTransactions.forEach(tx => {
    const amt = Number(tx.amount) || 0;
    const tType = String(tx.type || "").toLowerCase();
@@ -3264,6 +3574,7 @@ function startRealtimeListeners() {
 }
 
 function forceSyncNow() {
+ ensureDailyMidnightRateSync(new Date());
  startRealtimeListeners();
  fetchOfficialExchangeRate();
  showAlert("🔄 Real-time Firebase & FX data synced!");
@@ -4326,7 +4637,10 @@ function renderProfile() {
  $("guestAuthBox").classList.toggle("hidden", loggedIn);
  $("memberProfileBox").classList.toggle("hidden", !loggedIn);
 
- if (!loggedIn) return;
+ if (!loggedIn) {
+  renderTodayRateAndConverterBox();
+  return;
+ }
 
  const vipLabel = normalizeVipLabel(currentUser.vip_level);
  $("profileName").textContent = currentUser.name || "Member";
@@ -4356,6 +4670,8 @@ function renderProfile() {
  if ($("profileInviteLinkText")) {
   $("profileInviteLinkText").textContent = getPlatformInviteLink(currentUser);
  }
+
+ renderTodayRateAndConverterBox();
 }
 
 // Emoji Picker (User & Customer Service)
@@ -5274,22 +5590,23 @@ function renderAdminCsClientListSafe() {
 }
 
 window.addEventListener("load", () => {
- const savedRate = Number(localStorage.getItem("tb_mmk_per_usd"));
- if (Number.isFinite(savedRate) && savedRate >= 100) {
-  MMK_PER_USD = savedRate;
-  CURRENT_LIVE_MMK_RATE = savedRate;
- }
+ ensureDailyMidnightRateSync(new Date());
+
  if (localStorage.getItem("tb_theme_dark") === "1") {
   document.body.classList.add("dark");
  }
 
- const dt = formatDateTimeParts(new Date());
- OFFICIAL_RATE_META = {
-  source: "Configured / Synced Rate",
-  dateStr: dt.dateStr,
-  timeStr: dt.timeStr,
-  updatedAtMs: Date.now()
- };
+ if (!OFFICIAL_RATE_META.dateStr) {
+  const dt = formatDateTimeParts(new Date());
+  OFFICIAL_RATE_META = {
+   source: TODAY_FX_MODE === "up"
+    ? "Daily Rate Up (00:00)"
+    : (TODAY_FX_MODE === "down" ? "Daily Rate Down (00:00)" : "Daily Rate Unchanged (00:00)"),
+   dateStr: dt.dateStr,
+   timeStr: dt.timeStr,
+   updatedAtMs: Date.now()
+  };
+ }
 
  const initialLang = localStorage.getItem("tb_lang") || "en";
  mock1000Accounts = build1000MockAccounts();
