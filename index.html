@@ -259,6 +259,66 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 .hero h1 { margin: 0 0 8px; font-size: 25px; letter-spacing: -0.2px; color: #fff; }
 .hero p { margin: 0 0 14px; color: #e2e8f0; max-width: 700px; line-height: 1.5; }
 
+/* Rectangular 1000-Account Live Activity Box */
+.activity-ticker-box {
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 14px;
+ padding: 12px 14px;
+ margin-bottom: 14px;
+ box-shadow: var(--shadow-soft);
+}
+.activity-ticker-head {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 8px;
+ flex-wrap: wrap;
+ margin-bottom: 8px;
+}
+.ticker-viewport {
+ position: relative;
+ overflow: hidden;
+ width: 100%;
+ border-radius: 10px;
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ padding: 8px 0;
+}
+.ticker-track {
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ white-space: nowrap;
+ will-change: transform;
+ animation: tickerSmoothScroll 135s linear infinite;
+}
+.ticker-track:hover {
+ animation-play-state: paused;
+}
+@keyframes tickerSmoothScroll {
+ 0% { transform: translateX(0); }
+ 100% { transform: translateX(-50%); }
+}
+.ticker-chip {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ padding: 6px 11px;
+ border-radius: 9px;
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ font-size: 12px;
+ line-height: 1.25;
+ box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.ticker-chip.real-user-highlight {
+ border-color: var(--fb-success);
+ background: rgba(46, 125, 50, 0.1);
+}
+.ticker-kind-wd { color: var(--fb-primary); font-weight: 800; }
+.ticker-kind-dp { color: var(--fb-success); font-weight: 800; }
+
 /* Live USD <-> MMK Exchange Chart Card */
 .fx-chart-card {
  background: var(--fb-card);
@@ -270,18 +330,32 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 }
 .fx-header-row {
  display: flex;
- align-items: center;
+ align-items: flex-start;
  justify-content: space-between;
- gap: 10px;
+ gap: 12px;
  flex-wrap: wrap;
  margin-bottom: 10px;
 }
 .fx-rate-big {
- font-size: 19px;
+ font-size: 18px;
  font-weight: 800;
  color: var(--fb-primary);
 }
+.fx-formula-pill {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ margin-top: 6px;
+ padding: 4px 10px;
+ border-radius: 8px;
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ font-size: 12.5px;
+ font-weight: 700;
+ color: var(--fb-text);
+}
 .fx-svg-wrap {
+ position: relative;
  width: 100%;
  background: var(--fb-bg);
  border: 1px solid var(--fb-border);
@@ -290,8 +364,19 @@ select:focus, input:focus, textarea:focus { border-color: var(--fb-primary); }
 }
 .fx-svg {
  width: 100%;
- height: 118px;
+ height: 132px;
  display: block;
+ cursor: crosshair;
+}
+.fx-readout-bar {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 8px;
+ flex-wrap: wrap;
+ margin-top: 8px;
+ font-size: 12px;
+ color: var(--fb-muted);
 }
 
 .section-card {
@@ -956,7 +1041,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 
 @media (max-width: 600px) {
  .container { padding: 0 10px; margin-top: 10px; }
- .section-card, .fx-chart-card { padding: 12px; border-radius: 12px; }
+ .section-card, .fx-chart-card, .activity-ticker-box { padding: 12px; border-radius: 12px; }
  .hero { padding: 18px 15px; }
  .hero h1 { font-size: 20px; }
  .section-title { font-size: 16px; }
@@ -973,25 +1058,25 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 </head>
 <body>
 
-<!-- Registration Success Toast (2.5s auto-dismiss) -->
-<div id="regSuccessToast" class="reg-toast-backdrop hidden" aria-live="polite" role="status">
+<!-- Registration Success Toast -->
+<div id="regSuccessToast" class="reg-toast-backdrop hidden" aria-live="polite">
  <div class="reg-toast-card">
   <div id="regToastTitle" class="reg-toast-title">Congrats!</div>
   <div id="regToastSub" class="reg-toast-sub">Account registration successful</div>
  </div>
 </div>
 
-<!-- Live CS Incoming Toast (Admin / CS Devices) -->
+<!-- Live CS Incoming Toast (Admin / Service) -->
 <div id="csIncomingToast" class="cs-alert-toast hidden" onclick="handleCsToastClick()">
  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-  <b style="color:var(--fb-primary);font-size:12.5px">💬 New Customer Service Message</b>
-  <span class="small muted" id="csToastTime"></span>
+  <span style="font-size:11px;font-weight:800;color:var(--fb-primary)">📩 NEW USER MESSAGE</span>
+  <span id="csToastTime" class="small muted"></span>
  </div>
  <div id="csToastSender" style="font-weight:700;font-size:13px;margin-top:3px"></div>
- <div id="csToastPreview" class="small" style="margin-top:3px;line-height:1.35"></div>
+ <div id="csToastPreview" class="small" style="margin-top:2px;line-height:1.35"></div>
 </div>
 
-<!-- Intro Splash Screen -->
+<!-- Intro Splash -->
 <div id="introSplash" class="intro-splash" aria-hidden="true">
  <div id="introStageBox" class="intro-stage-box">
   <h1 class="intro-welcome-text">Welcome to Trip Booking</h1>
@@ -1002,32 +1087,32 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 <!-- Top Header -->
 <header class="fb-header">
  <div class="brand" onclick="handleLogoClick()">
-  <span class="brand-badge">TP</span>
+  <span class="brand-badge">TB</span>
   <span>Trip Booking</span>
  </div>
 
  <div class="header-actions">
-  <select id="language" aria-label="Language Selector" onchange="changeLanguage(this.value)">
-   <option value="en" selected>🇺🇸 English</option>
-   <option value="my">🇲🇲 မြန်မာ</option>
-   <option value="th">🇹🇭 ไทย</option>
-   <option value="zh">🇨🇳 中文</option>
+  <select id="language" aria-label="Language" onchange="changeLanguage(this.value)">
+   <option value="en" selected>English</option>
+   <option value="my">မြန်မာ</option>
+   <option value="th">ไทย</option>
+   <option value="zh">中文</option>
   </select>
-
-  <button type="button" class="btn btn-secondary" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
-  <button type="button" id="headerAuthBtn" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
+  <button type="button" class="btn btn-secondary" onclick="toggleTheme()" title="Toggle Dark/Light">🌓</button>
+  <button type="button" class="btn btn-primary" id="headerAuthBtn" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
  </div>
 </header>
 
 <main class="container">
-
- <!-- Suspended Account Restricted Notice (Shown when user is banned/suspended) -->
+ <!-- Suspended Account Lock Notice -->
  <div id="suspendedAccountNotice" class="suspended-lock-card hidden">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-   <span class="status-pill pill-banned">🚫 Account Suspended</span>
-   <button type="button" class="btn btn-primary btn-xs" onclick="openSupportFromSuspension()" data-i18n="contactServiceBtn">Contact Customer Service</button>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+   <div>
+    <div style="font-weight:800;font-size:15px;color:var(--fb-danger)">🚫 Account Suspended — Customer Service Only</div>
+    <div id="suspendedReasonText" class="small" style="margin-top:4px;line-height:1.5"></div>
+   </div>
+   <button type="button" class="btn btn-primary" onclick="openSupportFromSuspension()">💬 Ask Service</button>
   </div>
-  <p id="suspendedReasonText" style="margin:8px 0 0;line-height:1.5;font-size:13.5px"></p>
  </div>
 
  <!-- PAGE 1: HOME -->
@@ -1035,79 +1120,137 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
   <div class="hero">
    <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
    <p data-i18n="heroSub">International Trip Booking Platform</p>
-   <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <button type="button" class="btn btn-gold" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">Start Booking Tasks</button>
-    <button type="button" class="btn btn-secondary" onclick="document.getElementById('hotelDirectorySection').scrollIntoView({behavior:'smooth'})" data-i18n="hotelDir">International Hotels</button>
+   <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="btn btn-primary" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">Start Booking Tasks</button>
+    <button type="button" class="btn btn-secondary" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])" data-i18n="contactServiceBtn">Contact Customer Service</button>
    </div>
   </div>
 
-  <!-- Live USD <-> MMK Exchange Line Chart -->
+  <!-- Rectangular 1000-Account Live Activity Box (Withdraw + Deposit + Live User Deposits) -->
+  <div class="activity-ticker-box">
+   <div class="activity-ticker-head">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+     <b style="font-size:14px">📢 Live Payouts & Deposits Feed</b>
+     <span class="tag">1,000 Demo Accounts + Live Deposits</span>
+    </div>
+    <span id="tickerLiveStatusLabel" class="small muted">Smooth Feed Active</span>
+   </div>
+   <div class="ticker-viewport">
+    <div id="activityTickerTrack" class="ticker-track"></div>
+   </div>
+  </div>
+
+  <!-- USD <-> MMK Live Rate Trend Chart & Dynamic MMK Converter Readout -->
   <div class="fx-chart-card">
    <div class="fx-header-row">
     <div>
      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <h3 style="margin:0;font-size:15.5px" data-i18n="fxChartTitle">📈 USD ↔ MMK Live Rate Trend</h3>
-      <span class="status-pill pill-online" id="fxLiveBadge">● Live Tick</span>
+      <b style="font-size:15px" data-i18n="fxChartTitle">📈 USD ↔ MMK Live Rate Trend</b>
+      <span id="fxChangeBadge" class="status-pill pill-online">+0.00%</span>
      </div>
-     <div class="small muted" style="margin-top:3px" id="fxRateMeta">Base Rate synced automatically · Updates every second</div>
+     <div id="fxFormulaReadout" class="fx-formula-pill">1 USD = 4,500.0 MMK</div>
     </div>
     <div style="text-align:right">
-     <div id="fxCurrentRateDisplay" class="fx-rate-big">1 USD = 4,500 MMK</div>
-     <div class="small muted" id="fxLastUpdatedLabel">Last tick: --:--:--</div>
+     <div id="fxCurrentRateDisplay" class="fx-rate-big">1 USD = 4,500.0 MMK</div>
+     <div id="fxLastUpdatedLabel" class="small muted">Date · Time · Rate</div>
     </div>
    </div>
 
    <div class="fx-svg-wrap">
-    <svg id="fxTrendSvg" class="fx-svg" viewBox="0 0 600 118" preserveAspectRatio="none" aria-label="USD to MMK Trend Line">
-     <line x1="0" y1="24" x2="600" y2="24" stroke="rgba(148,163,184,0.22)" stroke-dasharray="4 4"/>
-     <line x1="0" y1="59" x2="600" y2="59" stroke="rgba(148,163,184,0.22)" stroke-dasharray="4 4"/>
-     <line x1="0" y1="94" x2="600" y2="94" stroke="rgba(148,163,184,0.22)" stroke-dasharray="4 4"/>
-     <polyline id="fxTrendArea" fill="rgba(29,78,216,0.12)" stroke="none" points=""/>
-     <polyline id="fxTrendLine" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points=""/>
-     <circle id="fxTrendDot" cx="590" cy="59" r="4.5" fill="#22c55e" stroke="#ffffff" stroke-width="1.5"/>
+    <svg id="fxTrendSvg" class="fx-svg" viewBox="0 0 600 132" preserveAspectRatio="none" onmousemove="handleFxChartHover(event)" onmouseleave="resetFxChartHover()">
+     <defs>
+      <linearGradient id="fxAreaGrad" x1="0" y1="0" x2="0" y2="1">
+       <stop offset="0%" stop-color="#1d4ed8" stop-opacity="0.26"/>
+       <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.01"/>
+      </linearGradient>
+     </defs>
+     <line x1="0" y1="22" x2="600" y2="22" stroke="var(--fb-border)" stroke-dasharray="4 4" stroke-width="1"/>
+     <line x1="0" y1="66" x2="600" y2="66" stroke="var(--fb-border)" stroke-dasharray="4 4" stroke-width="1"/>
+     <line x1="0" y1="110" x2="600" y2="110" stroke="var(--fb-border)" stroke-dasharray="4 4" stroke-width="1"/>
+     <polygon id="fxTrendArea" fill="url(#fxAreaGrad)" points="0,116 600,116"/>
+     <polyline id="fxTrendLine" fill="none" stroke="#1d4ed8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points=""/>
+     <line id="fxCrosshairLine" x1="-10" y1="8" x2="-10" y2="124" stroke="#64748b" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>
+     <circle id="fxTrendDot" cx="590" cy="66" r="4.5" fill="#16a34a" stroke="#ffffff" stroke-width="2"/>
     </svg>
+   </div>
+
+   <div class="fx-readout-bar">
+    <span id="fxPointDetailText">Official / Synced Rate · Hover or move across chart to inspect Date, Time & Rate</span>
+    <span id="fxSampleConvText" style="font-weight:700;color:var(--fb-text)">1 USD + 4,500 MMK</span>
    </div>
   </div>
 
-  <div id="hotelDirectorySection" class="section-card">
+  <!-- Hotels Directory -->
+  <div class="section-card">
    <div class="section-head">
-    <div>
-     <h2 class="section-title"><span data-i18n="hotelDir">International Hotels</span> (<span id="hotelCountBadge">238</span>)</h2>
-     <div class="small muted" style="margin-top:3px" data-i18n="homeHotelBookHint">Tap any hotel card to view details or book directly with your balance.</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+     <h2 class="section-title" data-i18n="hotelDir">International Hotels</h2>
+     <span class="tag" id="hotelCountBadge">238</span>
     </div>
-    <input id="hotelSearch" type="text" placeholder="Search hotel, country, or stars..." data-i18n-ph="hotelSearchPh" oninput="renderHotels()" style="min-width:230px;flex:1;max-width:340px">
+    <input type="text" id="hotelSearch" oninput="renderHotels()" data-i18n-ph="hotelSearchPh" placeholder="Search hotel, country, or stars..." style="min-width:220px">
    </div>
+   <div class="small muted" style="margin-bottom:10px" data-i18n="homeHotelBookHint">Tap any hotel card to view details or book directly with your balance.</div>
    <div id="hotelGrid" class="grid"></div>
    <div id="loadMoreHotelsWrap" style="text-align:center;margin-top:14px">
     <button type="button" id="loadMoreHotelsBtn" class="btn btn-secondary" onclick="toggleShowAllHotels()">More (238)</button>
    </div>
   </div>
 
-  <!-- Step-by-Step Booking Guide -->
+  <!-- Booking Guide -->
   <div class="section-card">
    <div class="section-head">
-    <h2 class="section-title" data-i18n="taskCenter">Booking Task Center</h2>
+    <h2 class="section-title">How Trip Booking Works</h2>
    </div>
    <div class="guide-steps-grid">
     <div class="guide-step-card">
      <span class="guide-step-badge" data-i18n="step1Badge">STEP 1</span>
-     <h4 style="margin:0 0 6px" data-i18n="step1Title">Deposit Funds</h4>
-     <p class="small muted" style="margin:0" data-i18n="step1Desc">Top up balance to start booking tasks smoothly.</p>
+     <div style="font-weight:700;margin-bottom:4px" data-i18n="step1Title">Deposit Funds</div>
+     <div class="small muted" data-i18n="step1Desc">Top up balance to start booking tasks smoothly.</div>
     </div>
     <div class="guide-step-card">
      <span class="guide-step-badge" data-i18n="step2Badge">STEP 2</span>
-     <h4 style="margin:0 0 6px" data-i18n="step2Title">Tap Get Order & Book</h4>
-     <p class="small muted" style="margin:0" data-i18n="step2Desc">Claim hotel booking tasks and complete them properly.</p>
+     <div style="font-weight:700;margin-bottom:4px" data-i18n="step2Title">Tap Get Order & Book</div>
+     <div class="small muted" data-i18n="step2Desc">Claim hotel booking tasks and complete them properly.</div>
     </div>
     <div class="guide-step-card">
      <span class="guide-step-badge" data-i18n="step3Badge">STEP 3</span>
-     <h4 style="margin:0 0 6px" data-i18n="step3Title">Earn Commission</h4>
-     <p class="small muted" style="margin:0" data-i18n="step3Desc">Receive commission credited after each completed order.</p>
+     <div style="font-weight:700;margin-bottom:4px" data-i18n="step3Title">Earn Commission</div>
+     <div class="small muted" data-i18n="step3Desc">Receive commission credited after each completed order.</div>
     </div>
    </div>
   </div>
 
-  <!-- Platform Footer -->
+  <!-- Global Hospitality Partners & Industry Recognition -->
+  <div class="section-card">
+   <div class="section-head">
+    <h2 class="section-title">Global Hospitality Partners & Industry Recognition</h2>
+    <span class="tag">Verified Network</span>
+   </div>
+   <div class="partner-logos-grid">
+    <div class="partner-pill">🏨 Marina Bay Group</div>
+    <div class="partner-pill">🌏 Grand Asia Resorts</div>
+    <div class="partner-pill">🏔️ Alpine Stays</div>
+    <div class="partner-pill">🌴 Lagoon Villas</div>
+    <div class="partner-pill">🏙️ Crown City Hotels</div>
+    <div class="partner-pill">✈️ Skyway Travel</div>
+   </div>
+   <div class="awards-grid">
+    <div class="award-card">
+     <div class="award-title">🏆 Asia Travel Service Excellence</div>
+     <div class="award-sub">Recognized for fast booking confirmation & 24/7 guest assistance.</div>
+    </div>
+    <div class="award-card">
+     <div class="award-title">⭐ Trusted Partner Hospitality Seal</div>
+     <div class="award-sub">Connected across 238+ international hotel properties & resorts.</div>
+    </div>
+    <div class="award-card">
+     <div class="award-title">🛡️ Reliable Order Settlement Standard</div>
+     <div class="award-sub">Transparent order tracking, clear profit records & dedicated support.</div>
+    </div>
+   </div>
+  </div>
+
+  <!-- Footer -->
   <footer class="platform-footer">
    <div class="footer-grid">
     <div class="footer-col">
@@ -1130,92 +1273,84 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
     </div>
    </div>
    <div class="footer-bottom">
+    <div>© 2026 Trip Booking · All rights reserved.</div>
     <div class="trust-badges">
      <span class="trust-pill" data-i18n="badgeVerified">✔ Verified Platform</span>
      <span class="trust-pill" data-i18n="badge247">🕒 24/7 Service</span>
      <span class="trust-pill" data-i18n="badgeEncrypted">🔒 Secure Sync</span>
     </div>
-    <div>© 2026 Trip Booking · International Hotel & Booking Platform</div>
    </div>
   </footer>
  </section>
 
- <!-- PAGE 2: CUSTOMER SERVICE CHAT -->
+ <!-- PAGE 2: CUSTOMER SERVICE -->
  <section id="supportPage" class="page">
   <div class="section-card">
    <div class="section-head">
     <h2 class="section-title" data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</h2>
     <span class="tag" data-i18n="csActiveBadge">● Active</span>
    </div>
-
    <div class="chat-box">
     <div id="supportMessages" class="chat-messages"></div>
     <div id="userEmojiPicker" class="emoji-picker-panel hidden"></div>
     <div class="chat-input-row">
-     <button type="button" class="icon-attach-btn" onclick="toggleEmojiPicker('user')" title="Emoji" aria-label="Emoji">😊</button>
-     <input id="supportPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
-     <button type="button" class="icon-attach-btn" onclick="document.getElementById('supportPhotoInput').click()" title="Send Photo" aria-label="Send Photo">📷</button>
-     <input id="supportInput" type="text" placeholder="Type a message..." data-i18n-ph="typeMsgPh" onfocus="handleSupportInputFocus()" onkeydown="if(event.key==='Enter') sendSupportMessage()" style="flex:1">
-     <button type="button" class="action-icon-btn" onclick="sendSupportMessage()" title="Send" aria-label="Send">
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-     </button>
+     <button type="button" class="icon-attach-btn" onclick="toggleEmojiPicker('user')" title="Emoji">😊</button>
+     <button type="button" class="icon-attach-btn" onclick="$('userChatPhotoInput').click()" title="Send Photo">📷</button>
+     <input type="file" id="userChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
+     <input type="text" id="supportInput" data-i18n-ph="typeMsgPh" placeholder="Type a message..." style="flex:1" onfocus="handleSupportInputFocus()" onkeydown="if(event.key==='Enter') sendSupportMessage()">
+     <button type="button" class="btn btn-primary" onclick="sendSupportMessage()">➤</button>
     </div>
    </div>
   </div>
  </section>
 
- <!-- PAGE 3: BOOKING TASK CENTER -->
+ <!-- PAGE 3: BOOKING CENTER -->
  <section id="bookingPage" class="page">
   <div class="section-card" style="text-align:center">
    <h2 class="section-title" style="margin-bottom:6px" data-i18n="taskCenter">Booking Task Center</h2>
+   <div id="tp2323OrderHint" class="small muted hidden" style="margin-bottom:8px"></div>
 
    <div class="order-ring-wrap">
     <div id="orderCircle" class="order-circle"><span>0/30</span></div>
    </div>
 
-   <!-- 3 Key Metrics Directly Above Get Order Button -->
    <div class="booking-metrics-row">
     <div class="booking-metric-box">
      <div class="booking-metric-label" data-i18n="accBal">Account Balance</div>
-     <div id="taskWallet" class="booking-metric-val">$0.00 (0 MMK)</div>
+     <div id="taskWallet" class="booking-metric-val">$0.00</div>
     </div>
     <div class="booking-metric-box">
      <div class="booking-metric-label" data-i18n="taskComm">Task Commission</div>
-     <div id="taskProfit" class="booking-metric-val">$0.00 (0 MMK)</div>
+     <div id="taskProfit" class="booking-metric-val">$0.00</div>
     </div>
     <div class="booking-metric-box">
      <div class="booking-metric-label" data-i18n="totalProfit">Total Profit</div>
-     <div id="taskTotalProfit" class="booking-metric-val">$0.00 (0 MMK)</div>
+     <div id="taskTotalProfit" class="booking-metric-val">$0.00</div>
     </div>
    </div>
 
-   <div id="tp2323OrderHint" class="small muted hidden" style="margin-bottom:8px"></div>
-
-   <!-- Shown ONLY when there is NO negative balance & pending profit exists -->
    <div id="pendingProfitNoticeBox" class="pending-profit-banner hidden"></div>
-
-   <!-- Shown after a booking order completes -->
    <div id="lastCompletedOrderBox" class="last-completed-banner hidden"></div>
 
-   <div style="margin:14px 0 14px;display:flex;justify-content:center">
+   <div style="margin:14px 0 12px;display:flex;justify-content:center">
     <div class="get-order-light-frame">
-     <button type="button" id="getOrderBtn" class="get-order-rect-btn" onclick="triggerGetOrder()">
-      <span>Get Order</span>
+     <button type="button" class="get-order-rect-btn" onclick="triggerGetOrder()">
+      <span>⚡ Get Order</span>
      </button>
     </div>
    </div>
 
-   <div id="bookingHotelArea" style="margin-top:12px;text-align:left"></div>
+   <div id="bookingHotelArea" style="margin-top:14px;text-align:left"></div>
   </div>
  </section>
 
- <!-- PAGE 4: TRANSACTION & BOOKING HISTORY -->
+ <!-- PAGE 4: HISTORY -->
  <section id="historyPage" class="page">
   <div class="section-card">
    <div class="section-head">
     <h2 class="section-title" data-i18n="histTitle">Transaction & Booking History</h2>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-     <select id="historyTypeFilter" onchange="renderHistory()">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+     <select id="historyTypeFilter" onchange="renderHistory()" style="min-width:165px">
       <option value="all" data-i18n="filterAllTypes">All Types</option>
       <option value="profit" data-i18n="filterProfitType">Booking Profit</option>
       <option value="bonus" data-i18n="filterBonusType">TP2323 Welcome Bonus</option>
@@ -1223,7 +1358,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
       <option value="clear_neg" data-i18n="filterClearNegType">Negative Settlement</option>
       <option value="hotel_book" data-i18n="filterHotelBookType">Hotel Booking</option>
      </select>
-     <input id="historySearch" type="text" placeholder="Search hotel, review, or date..." data-i18n-ph="histSearchPh" oninput="renderHistory()" style="min-width:210px">
+     <input type="text" id="historySearch" oninput="renderHistory()" data-i18n-ph="histSearchPh" placeholder="Search hotel, review, or date..." style="min-width:210px">
     </div>
    </div>
    <div class="table-wrap">
@@ -1243,14 +1378,14 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
   </div>
  </section>
 
- <!-- PAGE 5: MEMBER PROFILE -->
+ <!-- PAGE 5: PROFILE -->
  <section id="profilePage" class="page">
   <div id="guestAuthBox" class="section-card" style="text-align:center;padding:28px 18px">
    <h2 style="margin-top:0" data-i18n="welcomeTrip">Welcome to Trip Booking</h2>
    <p class="muted" data-i18n="loginPrompt">Login or register a new account to start earning commissions.</p>
-   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px">
     <button type="button" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
-    <button type="button" class="btn btn-success" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
+    <button type="button" class="btn btn-secondary" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
    </div>
   </div>
 
@@ -1258,14 +1393,14 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
    <div class="section-card">
     <div class="profile-card">
      <div class="avatar-wrap">
-      <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop" alt="Avatar" class="avatar-img">
-      <label for="profileAvatarInput" class="avatar-upload-btn" title="Change Photo">📷</label>
-      <input id="profileAvatarInput" type="file" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
+      <img id="profileAvatarImg" src="" alt="Avatar" class="avatar-img">
+      <button type="button" class="avatar-upload-btn" onclick="$('profileAvatarInput').click()" title="Upload Photo">📷</button>
+      <input type="file" id="profileAvatarInput" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
      </div>
-     <div style="flex:1;min-width:220px">
+     <div style="flex:1;min-width:210px">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-       <h2 id="profileName" style="margin:0">Member</h2>
-       <button type="button" class="btn btn-secondary" style="padding:4px 9px;font-size:12px" onclick="openEditNameModal()" title="Edit Name">✏️</button>
+       <h2 id="profileName" style="margin:0;font-size:20px">Member</h2>
+       <button type="button" class="btn btn-secondary btn-xs" onclick="openEditNameModal()" title="Edit Name">✏️</button>
        <span id="profileVipBadge" class="vip-badge">VIP Level 1</span>
       </div>
       <div id="profileIdentity" class="small muted" style="margin-top:4px"></div>
@@ -1273,108 +1408,80 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
      </div>
      <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button type="button" class="btn btn-success" onclick="handleDepositRequest()" data-i18n="depositBtn">Deposit</button>
-      <button type="button" class="btn btn-primary" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">Withdraw</button>
+      <button type="button" class="btn btn-gold" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">Withdraw</button>
       <button type="button" class="btn btn-danger" onclick="logout()" data-i18n="logoutBtn">Logout</button>
      </div>
+    </div>
+
+    <div class="invite-link-box">
+     <div style="min-width:200px;flex:1">
+      <span class="muted"><b data-i18n="inviteLinkLabel">Invite Link</b>:</span>
+      <span id="profileInviteLinkText" style="font-weight:600;word-break:break-all"></span>
+     </div>
+     <button type="button" class="btn btn-secondary btn-xs" onclick="copyInviteLink()">Copy Link</button>
     </div>
 
     <div class="stats-grid">
      <div class="stat-box">
       <div class="stat-label" data-i18n="walletBal">Account Balance</div>
-      <div id="walletBalance" class="stat-val" style="color:var(--fb-primary)">$0.00 (0 MMK)</div>
+      <div id="walletBalance" class="stat-val">$0.00</div>
      </div>
-     <div class="stat-box">
+     <div class="stat-box" style="cursor:pointer" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">
       <div class="stat-label" data-i18n="bookingHistCardTitle">Booking History</div>
-      <div id="profileOrders" class="stat-val" style="cursor:pointer;color:var(--fb-primary)" onclick="showPage('historyPage', document.querySelectorAll('.bottom-nav button')[3])">0/30 ➔</div>
+      <div id="profileOrders" class="stat-val">0/30 ➔</div>
      </div>
      <div class="stat-box">
       <div class="stat-label" data-i18n="inviteCodeTitle">Referral Code</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
-       <span id="inviteCode" class="stat-val" style="margin-top:0">TP2323</span>
-       <button type="button" class="btn btn-secondary" style="padding:3px 8px;font-size:11px" onclick="copyInviteCode()">COPY</button>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+       <span id="inviteCode" class="stat-val" style="margin-top:0">TB00000</span>
+       <button type="button" class="btn btn-secondary btn-xs" onclick="copyInviteCode()">Copy</button>
       </div>
      </div>
      <div class="stat-box">
       <div class="stat-label" data-i18n="refBonus">Referral Earned</div>
-      <div id="referralEarned" class="stat-val" style="color:var(--fb-success)">$0.00 (0 MMK)</div>
-     </div>
-    </div>
-
-    <!-- Subtle Invite Link + COPY in Profile -->
-    <div class="invite-link-box">
-     <div style="min-width:0;flex:1">
-      <span class="muted" data-i18n="inviteLinkLabel">ဖိတ်ခေါ်လင့်</span>:
-      <span id="profileInviteLinkText" class="small" style="font-weight:600;word-break:break-all"></span>
-     </div>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="copyInviteLink()">COPY</button>
-    </div>
-   </div>
-
-   <div class="section-card">
-    <h3 style="margin:0 0 6px;font-size:16px">Global Hospitality Partners & Industry Recognition</h3>
-    <div class="partner-logos-grid">
-     <div class="partner-pill">MARRIOTT INTL</div>
-     <div class="partner-pill">HILTON WORLDWIDE</div>
-     <div class="partner-pill">ACCOR HOTELS</div>
-     <div class="partner-pill">IHG HOTELS</div>
-     <div class="partner-pill">FOUR SEASONS</div>
-     <div class="partner-pill">SHANGRI-LA</div>
-    </div>
-    <div class="awards-grid">
-     <div class="award-card">
-      <div class="award-title">🏆 World Travel Tech Excellence 2025</div>
-      <div class="award-sub">Recognized for real-time hotel booking reliability & partner sync.</div>
-     </div>
-     <div class="award-card">
-      <div class="award-title">🌟 Asia Pacific Hospitality Partner Award</div>
-      <div class="award-sub">Trusted international reservation & service coordination standard.</div>
-     </div>
-     <div class="award-card">
-      <div class="award-title">🔒 Verified 24/7 Service Operations</div>
-      <div class="award-sub">Continuous booking support and transparent record tracking.</div>
+      <div id="referralEarned" class="stat-val">$0.00</div>
      </div>
     </div>
    </div>
   </div>
  </section>
 
- <!-- PAGE 6: ADMIN & CUSTOMER SERVICE CONTROL PANEL -->
+ <!-- ADMIN & SERVICE PANEL -->
  <section id="staffPage" class="page">
-  <!-- Sticky Live Banner inside Admin Panel -->
   <div id="adminLiveBanner" class="admin-live-sticky">
-   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+   <div style="display:flex;align-items:center;gap:8px">
     <span class="live-pulse-dot"></span>
-    <span id="adminLiveBannerText" style="font-weight:700;font-size:13px">Live Monitor Ready — Waiting for active booking orders...</span>
+    <span id="adminLiveBannerText" style="font-size:13px;font-weight:600">Live Monitor Ready</span>
    </div>
-   <div id="adminLiveCountsText" class="small" style="opacity:0.9">Online: 0 · Placing Order: 0 · Negative: 0</div>
+   <div id="adminLiveCountsText" class="small" style="opacity:0.9"></div>
   </div>
 
   <div class="section-card">
    <div class="section-head">
     <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-     <span id="syncStatusText" class="small muted">Connecting...</span>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+     <button type="button" id="adminTabBtnUsers" class="btn btn-primary" onclick="switchAdminTab('users')">
+      <span data-i18n="usersWord">Users</span> (<span id="totalUsersBadge">0</span>)
+     </button>
+     <button type="button" id="adminTabBtnHotels" class="btn btn-secondary" onclick="switchAdminTab('hotels')">Hotels & VIP</button>
+     <button type="button" id="adminTabBtnCs" class="btn btn-secondary" onclick="switchAdminTab('cs')">
+      Service Chat <span id="adminUnreadBadge" class="notif-badge hidden">0</span>
+     </button>
      <button type="button" class="btn btn-secondary" onclick="forceSyncNow()">🔄 Sync</button>
      <button type="button" class="btn btn-danger" onclick="logout()" data-i18n="logoutBtn">Logout</button>
     </div>
    </div>
 
-   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-    <button type="button" id="adminTabBtnUsers" class="btn btn-primary" onclick="switchAdminTab('users')"><span data-i18n="usersWord">Users</span> (<span id="totalUsersBadge">0</span>)</button>
-    <button type="button" id="adminTabBtnHotels" class="btn btn-secondary" onclick="switchAdminTab('hotels')" data-i18n="hotelsRatesHead">Hotels & Commission Rates</button>
-    <button type="button" id="adminTabBtnCs" class="btn btn-secondary" onclick="switchAdminTab('cs')"><span data-i18n="csCenter">Trip Booking Service</span> <span id="adminUnreadBadge" class="notif-badge hidden">0</span></button>
-   </div>
-
-   <!-- ADMIN TAB 1: USERS -->
+   <!-- Admin Users Tab -->
    <div id="adminUsersTab">
     <div class="section-head">
-     <h3 style="margin:0" data-i18n="allUsersHead">All Registered Users (Real-Time)</h3>
+     <h3 style="margin:0;font-size:16px" data-i18n="allUsersHead">All Registered Users (Real-Time)</h3>
      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <div style="display:flex;align-items:center;gap:4px">
-       <span class="small muted" data-i18n="fxRateInputLabel">USD/MMK:</span>
-       <input id="adminFxRateInput" type="number" step="1" min="100" value="4500" style="width:84px;padding:6px 8px;font-size:12.5px" title="Platform USD to MMK Exchange Rate">
+      <div style="display:flex;align-items:center;gap:5px;background:var(--fb-bg);border:1px solid var(--fb-border);padding:4px 8px;border-radius:8px">
+       <span class="small muted" style="font-weight:700" data-i18n="fxRateInputLabel">USD/MMK:</span>
+       <input type="number" id="adminFxRateInput" value="4500" min="100" step="1" style="width:88px;padding:4px 6px;font-size:12px" onchange="applyPlatformFxRate(this.value, true)">
       </div>
-      <select id="adminUserFilter" onchange="renderAdminUsers()">
+      <select id="adminUserFilter" onchange="renderAdminUsers()" style="min-width:175px">
        <option value="all" data-i18n="filterAllUsers">All Accounts</option>
        <option value="live_order" data-i18n="filterLiveOrder">🔴 Placing Order (LIVE)</option>
        <option value="online" data-i18n="filterOnlineUsers">🟢 Online / Active</option>
@@ -1382,7 +1489,7 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
        <option value="has_rules" data-i18n="filterRuledUsers">🎯 Has Order Rules</option>
        <option value="banned" data-i18n="filterBannedUsers">🚫 Suspended Accounts</option>
       </select>
-      <input id="adminUserSearch" type="text" placeholder="Search name, phone, email, TP2323..." data-i18n-ph="adminUserSearchPh" oninput="renderAdminUsers()" style="min-width:190px">
+      <input type="text" id="adminUserSearch" oninput="renderAdminUsers()" data-i18n-ph="adminUserSearchPh" placeholder="Search name, phone, email, TP2323..." style="min-width:210px">
       <button type="button" class="btn btn-success" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">Save All Changes</button>
      </div>
     </div>
@@ -1398,10 +1505,10 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
         <th data-i18n="thInvitedBy">Invited By</th>
         <th data-i18n="thVip">VIP Level</th>
         <th data-i18n="thBal">Balance ($)</th>
-        <th data-i18n="thNeg">အနှုတ် ($)</th>
-        <th data-i18n="thProfitBox">အမြတ်ဘောက်စ် ($)</th>
+        <th data-i18n="thNeg">Negative ($)</th>
+        <th data-i18n="thProfitBox">Profit Box ($)</th>
         <th data-i18n="thOrderRulesCol">Order Rules (10+)</th>
-        <th data-i18n="thOrders">အော်ဒါ</th>
+        <th data-i18n="thOrders">Orders</th>
         <th data-i18n="thAccountControlCol">Account</th>
        </tr>
       </thead>
@@ -1410,22 +1517,22 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
     </div>
    </div>
 
-   <!-- ADMIN TAB 2: HOTELS & VIP RATES -->
+   <!-- Admin Hotels & VIP Tab -->
    <div id="adminHotelsTab" class="hidden">
     <div class="section-head">
-     <h3 style="margin:0" data-i18n="hotelsRatesHead">Hotels & Commission Rates</h3>
+     <h3 style="margin:0;font-size:16px" data-i18n="hotelsRatesHead">Hotels & Commission Rates</h3>
      <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" class="btn btn-primary" onclick="openAddHotelModal()">+ Hotel</button>
+      <button type="button" class="btn btn-primary" onclick="openAddHotelModal()">+ Add Hotel</button>
       <button type="button" class="btn btn-success" onclick="saveHotelsAndVipsAdmin()" data-i18n="saveRatesBtn">Save Rates & Hotels</button>
      </div>
     </div>
 
-    <div class="table-wrap" style="margin-bottom:16px">
+    <div class="table-wrap" style="margin-bottom:14px">
      <table>
       <thead>
        <tr>
         <th data-i18n="thLevel">Level</th>
-        <th data-i18n="thName">Name</th>
+        <th>VIP Name</th>
         <th data-i18n="thDailyLimit">Daily Limit</th>
         <th data-i18n="thProfitRate">Profit Rate (%)</th>
         <th data-i18n="thMaxLimit">Max Withdraw Limit ($)</th>
@@ -1453,175 +1560,183 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
     </div>
    </div>
 
-   <!-- ADMIN TAB 3: CUSTOMER SERVICE CHAT CONSOLE -->
+   <!-- Admin Customer Service Chat Tab -->
    <div id="adminCsTab" class="hidden">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
-     <div class="section-card" style="margin:0">
+     <div>
       <h4 style="margin:0 0 8px" data-i18n="regUsersChatHead">All Registered Users</h4>
-      <input id="csClientSearch" type="text" placeholder="Search user..." data-i18n-ph="csClientSearchPh" oninput="renderCsClientList()" style="width:100%;margin-bottom:8px">
-      <div id="csClientList" style="max-height:340px;overflow-y:auto"></div>
+      <input type="text" id="csClientSearch" oninput="renderCsClientList()" data-i18n-ph="csClientSearchPh" placeholder="Search user..." style="width:100%;margin-bottom:8px">
+      <div id="csClientList" style="max-height:390px;overflow-y:auto"></div>
      </div>
-
-     <div class="chat-box">
-      <div style="padding:10px 12px;border-bottom:1px solid var(--fb-border);font-weight:700;background:var(--fb-card)" id="csActiveUserTitle" data-i18n="selectUserChat">Select a user to chat</div>
-      <div id="adminChatMessages" class="chat-messages"></div>
-      <div id="adminEmojiPicker" class="emoji-picker-panel hidden"></div>
-      <div class="chat-input-row">
-       <button type="button" class="icon-attach-btn" onclick="toggleEmojiPicker('support')" title="Emoji" aria-label="Emoji">😊</button>
-       <input id="adminPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
-       <button type="button" class="icon-attach-btn" onclick="document.getElementById('adminPhotoInput').click()" title="Send Photo" aria-label="Send Photo">📷</button>
-       <input id="adminChatInput" type="text" placeholder="Reply as Trip Booking Service..." data-i18n-ph="replyCsPh" onkeydown="if(event.key==='Enter') sendAdminChatReply()" style="flex:1">
-       <button type="button" class="action-icon-btn" onclick="sendAdminChatReply()" title="Send" aria-label="Send">
-        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-       </button>
+     <div>
+      <h4 id="csActiveUserTitle" style="margin:0 0 8px" data-i18n="selectUserChat">Select a user to chat</h4>
+      <div class="chat-box">
+       <div id="adminChatMessages" class="chat-messages"></div>
+       <div id="adminEmojiPicker" class="emoji-picker-panel hidden"></div>
+       <div class="chat-input-row">
+        <button type="button" class="icon-attach-btn" onclick="toggleEmojiPicker('support')" title="Emoji">😊</button>
+        <button type="button" class="icon-attach-btn" onclick="$('adminChatPhotoInput').click()" title="Send Photo">📷</button>
+        <input type="file" id="adminChatPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
+        <input type="text" id="adminChatInput" data-i18n-ph="replyCsPh" placeholder="Reply as Trip Booking Service..." style="flex:1" onkeydown="if(event.key==='Enter') sendAdminChatReply()">
+        <button type="button" class="btn btn-primary" onclick="sendAdminChatReply()">➤</button>
+       </div>
       </div>
      </div>
     </div>
    </div>
   </div>
  </section>
-
 </main>
 
 <!-- Bottom Navigation -->
 <nav class="bottom-nav">
- <button type="button" class="active" onclick="showPage('homePage', this)"><span>🏠</span><span data-i18n="navHome">Home</span></button>
- <button type="button" onclick="showPage('supportPage', this)"><span>🎧</span><span><span data-i18n="navService">Service</span> <span id="tabCsUnreadBadge" class="notif-badge hidden">0</span></span></button>
- <button type="button" onclick="showPage('bookingPage', this)"><span>📋</span><span data-i18n="navBooking">Booking</span></button>
- <button type="button" onclick="showPage('historyPage', this)"><span>🧾</span><span data-i18n="navHistory">History</span></button>
- <button type="button" onclick="handleBottomProfileClick(this)"><span>👤</span><span data-i18n="navProfile">Profile</span></button>
+ <button type="button" class="active" onclick="showPage('homePage', this)">
+  <span>🏠</span>
+  <span data-i18n="navHome">Home</span>
+ </button>
+ <button type="button" onclick="showPage('supportPage', this)">
+  <span>🎧</span>
+  <span data-i18n="navService">Service</span>
+ </button>
+ <button type="button" onclick="showPage('bookingPage', this)">
+  <span>📋</span>
+  <span data-i18n="navBooking">Booking</span>
+ </button>
+ <button type="button" onclick="showPage('historyPage', this)">
+  <span>🕒</span>
+  <span data-i18n="navHistory">History</span>
+ </button>
+ <button type="button" onclick="handleBottomProfileClick(this)">
+  <span>👤</span>
+  <span><span data-i18n="navProfile">Profile</span><span id="tabCsUnreadBadge" class="notif-badge hidden">0</span></span>
+ </button>
 </nav>
 
-<!-- AUTH MODAL (LOGIN / REGISTER) -->
+<!-- Auth Modal -->
 <div id="authModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
    <h3 id="authTitle" data-i18n="loginModalTitle">Login</h3>
-   <button type="button" class="close-x" onclick="closeModal('authModal')">&times;</button>
+   <button type="button" class="close-x" onclick="closeModal('authModal')">×</button>
   </div>
-
   <div id="regExtraFields" class="hidden">
    <div class="form-group">
     <label data-i18n="fullNameLabel">Full Name</label>
-    <input id="regName" type="text" placeholder="Enter your full name" data-i18n-ph="fullNamePh">
+    <input type="text" id="regName" data-i18n-ph="fullNamePh" placeholder="Enter your full name">
    </div>
   </div>
-
   <div class="form-group">
    <label data-i18n="identityLabel">Phone Number or Email</label>
-   <input id="authIdentity" type="text" placeholder="09xxxxxxxxx or email@example.com" data-i18n-ph="identityPh">
+   <input type="text" id="authIdentity" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com">
   </div>
-
   <div class="form-group">
    <label data-i18n="passwordLabel">Password</label>
-   <div style="display:flex;gap:6px">
-    <input id="authPassword" type="password" placeholder="Enter password" data-i18n-ph="passwordPh" style="flex:1">
-    <button type="button" class="btn btn-secondary" onclick="togglePassVisibility('authPassword', this)">👁️</button>
+   <div style="display:flex;gap:6px;align-items:center">
+    <input type="password" id="authPassword" data-i18n-ph="passwordPh" placeholder="Enter password" style="flex:1" onkeydown="if(event.key==='Enter') submitAuth()">
+    <button type="button" class="btn btn-secondary" onclick="togglePassVisibility('authPassword', this)" title="Show/Hide Password">👁️</button>
    </div>
   </div>
-
   <div id="regRefField" class="form-group hidden">
    <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
-   <input id="regRefInput" type="text" placeholder="TP2323">
+   <input type="text" id="regRefInput" placeholder="e.g. TP2323">
   </div>
-
   <div id="authError" class="error-text"></div>
-
-  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-   <button type="button" id="authSubmitBtn" class="btn btn-primary" style="flex:1" onclick="submitAuth()">Login</button>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+   <button type="button" id="authSubmitBtn" class="btn btn-primary" style="flex:1" onclick="submitAuth()" data-i18n="loginBtn">Login</button>
    <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()" data-i18n="switchAuth">Switch Login / Register</button>
   </div>
  </div>
 </div>
 
-<!-- EDIT PROFILE NAME MODAL -->
+<!-- Edit Profile Name Modal -->
 <div id="editNameModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
    <h3 data-i18n="editNameModalTitle">Edit Profile Name</h3>
-   <button type="button" class="close-x" onclick="closeModal('editNameModal')">&times;</button>
+   <button type="button" class="close-x" onclick="closeModal('editNameModal')">×</button>
   </div>
   <div class="form-group">
    <label data-i18n="fullNameLabel">Full Name</label>
-   <input id="editProfileNameInput" type="text" placeholder="Enter your full name" data-i18n-ph="fullNamePh">
+   <input type="text" id="editProfileNameInput" onkeydown="if(event.key==='Enter') saveProfileNameEdit()">
   </div>
-  <div style="text-align:right">
+  <div style="display:flex;justify-content:flex-end;gap:8px">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('editNameModal')">Cancel</button>
    <button type="button" class="btn btn-primary" onclick="saveProfileNameEdit()" data-i18n="saveChangesBtn">Save All Changes</button>
   </div>
  </div>
 </div>
 
-<!-- ADMIN EDIT CHAT MESSAGE MODAL -->
+<!-- Suspend Account Modal (Admin) -->
+<div id="suspendUserModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3>🚫 Suspend User Account</h3>
+   <button type="button" class="close-x" onclick="closeModal('suspendUserModal')">×</button>
+  </div>
+  <div id="suspendUserTargetInfo" class="small" style="font-weight:700;margin-bottom:10px"></div>
+  <div class="form-group">
+   <label>Suspension Reason / Note (Optional)</label>
+   <textarea id="suspendReasonInput" rows="3" placeholder="Enter reason why this account is suspended..."></textarea>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('suspendUserModal')">Cancel</button>
+   <button type="button" class="btn btn-danger" onclick="confirmSuspendUser()">Confirm Suspend</button>
+  </div>
+ </div>
+</div>
+
+<!-- Edit Admin Chat Message Modal -->
 <div id="editChatMsgModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
    <h3>✏️ Edit Service Message</h3>
-   <button type="button" class="close-x" onclick="closeModal('editChatMsgModal')">&times;</button>
+   <button type="button" class="close-x" onclick="closeModal('editChatMsgModal')">×</button>
   </div>
   <div class="form-group">
    <label>Message Text</label>
    <textarea id="editChatMsgTextarea" rows="3"></textarea>
   </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
+  <div style="display:flex;justify-content:flex-end;gap:8px">
    <button type="button" class="btn btn-secondary" onclick="closeModal('editChatMsgModal')">Cancel</button>
    <button type="button" class="btn btn-primary" onclick="saveEditedChatMessage()">Save</button>
   </div>
  </div>
 </div>
 
-<!-- ADMIN SUSPEND USER MODAL -->
-<div id="suspendUserModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3>🚫 Suspend / Ban User Account</h3>
-   <button type="button" class="close-x" onclick="closeModal('suspendUserModal')">&times;</button>
-  </div>
-  <p id="suspendUserTargetInfo" class="small muted" style="margin:0 0 10px"></p>
-  <div class="form-group">
-   <label>Suspension Reason (Shown to user & CS)</label>
-   <input id="suspendReasonInput" type="text" placeholder="e.g. Policy review required — contact Service">
-  </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeModal('suspendUserModal')">Cancel</button>
-   <button type="button" class="btn btn-danger" onclick="confirmSuspendUser()">Suspend Account</button>
-  </div>
- </div>
-</div>
-
-<!-- ADMIN ORDER RULES (10+ CATCHES) MANAGER MODAL -->
+<!-- Multi-Order Rules Modal (10+ Rules per User) -->
 <div id="orderRulesModal" class="modal-backdrop hidden">
  <div class="modal-card" style="max-width:560px">
   <div class="modal-header">
-   <h3 id="orderRulesModalTitle">🎯 Order Rules Manager</h3>
-   <button type="button" class="close-x" onclick="closeModal('orderRulesModal')">&times;</button>
+   <h3 id="orderRulesModalTitle">🎯 Order Rules</h3>
+   <button type="button" class="close-x" onclick="closeModal('orderRulesModal')">×</button>
   </div>
   <div id="orderRulesUserSummary" class="small muted" style="margin-bottom:10px"></div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:10px">
-   <div class="form-group" style="margin:0">
-    <label>Order # (1-100)</label>
-    <input id="ruleInputOrderNum" type="number" min="1" max="100" placeholder="e.g. 5">
+   <div class="form-group" style="margin-bottom:0">
+    <label>Order #</label>
+    <input type="number" id="ruleInputOrderNum" min="1" max="100" placeholder="e.g. 5">
    </div>
-   <div class="form-group" style="margin:0">
-    <label>အနှုတ် ($)</label>
-    <input id="ruleInputNeg" type="number" min="0" step="0.01" placeholder="500.00">
+   <div class="form-group" style="margin-bottom:0">
+    <label>Negative ($)</label>
+    <input type="number" id="ruleInputNeg" min="0" step="0.01" placeholder="e.g. 120">
    </div>
-   <div class="form-group" style="margin:0">
-    <label>အမြတ်ဘောက်စ် ($)</label>
-    <input id="ruleInputProfitBox" type="number" min="0" step="0.01" placeholder="25.00">
+   <div class="form-group" style="margin-bottom:0">
+    <label>Profit Box ($)</label>
+    <input type="number" id="ruleInputProfitBox" min="0" step="0.01" placeholder="e.g. 25">
    </div>
   </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px">
+  <div style="margin-bottom:12px">
    <button type="button" class="btn btn-primary btn-xs" onclick="addOrderRuleToUser()">+ Add Rule</button>
   </div>
 
-  <div class="table-wrap">
+  <div class="table-wrap" style="margin-bottom:14px">
    <table>
     <thead>
      <tr>
       <th>Order #</th>
-      <th>အနှုတ် ($)</th>
-      <th>အမြတ်ဘောက်စ် ($)</th>
+      <th>Negative ($)</th>
+      <th>Profit Box ($)</th>
       <th>Status</th>
       <th>Action</th>
      </tr>
@@ -1630,100 +1745,95 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
    </table>
   </div>
 
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+  <div style="display:flex;justify-content:flex-end;gap:8px">
    <button type="button" class="btn btn-secondary" onclick="closeModal('orderRulesModal')">Cancel</button>
-   <button type="button" class="btn btn-success" onclick="saveOrderRulesForUser()">Save Rules</button>
+   <button type="button" class="btn btn-success" onclick="saveOrderRulesForUser()">Save All Rules</button>
   </div>
  </div>
 </div>
 
-<!-- ADMIN RESET / DELETE CONFIRMATION MODAL -->
-<div id="resetConfirmModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="resetConfirmTitle">⚠️ Account Action Confirmation</h3>
-   <button type="button" class="close-x" onclick="closeModal('resetConfirmModal')">&times;</button>
-  </div>
-  <p id="resetConfirmDetails" style="line-height:1.55;margin:8px 0 16px"></p>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeModal('resetConfirmModal')">Cancel</button>
-   <button type="button" id="resetConfirmProceedBtn" class="btn btn-danger">Confirm</button>
-  </div>
- </div>
-</div>
-
-<!-- ADD HOTEL MODAL -->
+<!-- Add Hotel Modal -->
 <div id="addHotelModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
    <h3 data-i18n="addHotelModalHead">Add New Hotel</h3>
-   <button type="button" class="close-x" onclick="closeModal('addHotelModal')">&times;</button>
+   <button type="button" class="close-x" onclick="closeModal('addHotelModal')">×</button>
   </div>
-  <div class="form-group"><label data-i18n="hotelNameLabel">Hotel Name</label><input id="newHName" type="text"></div>
-  <div class="form-group"><label data-i18n="countryLabel">Country</label><input id="newHCountry" type="text"></div>
-  <div class="form-group"><label data-i18n="priceLabel">Price ($)</label><input id="newHPrice" type="number" value="92" min="85" max="99"></div>
+  <div class="form-group">
+   <label data-i18n="hotelNameLabel">Hotel Name</label>
+   <input type="text" id="newHName" placeholder="e.g. Grand Royal Hotel">
+  </div>
+  <div class="form-group">
+   <label data-i18n="countryLabel">Country</label>
+   <input type="text" id="newHCountry" placeholder="e.g. Singapore">
+  </div>
+  <div class="form-group">
+   <label data-i18n="priceLabel">Price ($)</label>
+   <input type="number" id="newHPrice" value="92" min="85" max="99">
+  </div>
   <div class="form-group">
    <label data-i18n="starsLabel">Stars</label>
    <select id="newHStars">
-    <option value="5">5 Stars</option>
-    <option value="4">4 Stars</option>
-    <option value="3">3 Stars</option>
+    <option value="5">5 ★</option>
+    <option value="4">4 ★</option>
+    <option value="3">3 ★</option>
    </select>
   </div>
-  <button type="button" class="btn btn-primary" style="width:100%" onclick="addHotelToDatabase()">Add</button>
+  <div style="display:flex;justify-content:flex-end;gap:8px">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('addHotelModal')">Cancel</button>
+   <button type="button" class="btn btn-primary" onclick="addHotelToDatabase()">Add Hotel</button>
+  </div>
  </div>
 </div>
 
-<!-- HOTEL DETAIL & DIRECT BOOKING MODAL -->
+<!-- Hotel Detail Modal -->
 <div id="hotelDetailModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
    <h3 id="detailHotelName">Hotel</h3>
-   <button type="button" class="close-x" onclick="closeModal('hotelDetailModal')">&times;</button>
+   <button type="button" class="close-x" onclick="closeModal('hotelDetailModal')">×</button>
   </div>
   <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
   <div id="detailHotelBody"></div>
-  <div id="detailHotelActionBar" style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+  <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:14px">
    <button type="button" class="btn btn-secondary" onclick="closeModal('hotelDetailModal')">Close</button>
-   <button type="button" id="detailBookNowBtn" class="btn btn-primary" onclick="bookSelectedHomeHotel()">Book Hotel Now</button>
+   <button type="button" id="detailBookNowBtn" class="btn btn-success" onclick="bookSelectedHomeHotel()">Book Hotel</button>
   </div>
  </div>
 </div>
 
-<!-- CENTER ORDER & REVIEW MODAL -->
+<!-- Booking Center Order Review Modal -->
 <div id="centerOrderModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
-   <h3 id="centerOrderTitle">🏨 Hotel Booking</h3>
-   <button type="button" class="close-x" onclick="closeCenterOrderModal()">&times;</button>
+   <h3 id="centerOrderTitle">🏨 Booking Task Center</h3>
+   <button type="button" class="close-x" onclick="closeCenterOrderModal()">×</button>
   </div>
 
   <div id="centerOrderFormBody">
-   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-    <span id="centerOrderStepBadge" class="tag" style="font-size:12px;padding:4px 10px">Order #1 / 30</span>
-    <span class="small muted" data-i18n="orderNextStepHint">Select a review and click Confirm.</span>
-   </div>
-
    <div class="order-preview-banner">
     <img id="centerOrderImg" src="" alt="Hotel" class="order-preview-thumb">
     <div style="flex:1;min-width:0">
-     <div id="centerOrderHotelName" style="font-weight:700;font-size:15px"></div>
+     <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
+      <div id="centerOrderHotelName" style="font-weight:700;font-size:15px"></div>
+      <span id="centerOrderStepBadge" class="tag">Order #1/30</span>
+     </div>
      <div id="centerOrderCountry" class="small muted"></div>
      <div class="small" style="margin-top:4px">
-      <span data-i18n="orderPriceLabel">Order Price</span>: <b id="centerOrderPrice" style="color:var(--fb-primary)"></b>
-      · <span data-i18n="commissionLabel">Commission</span>: <b id="centerOrderComm" style="color:var(--fb-success)"></b>
+      <span data-i18n="orderPriceLabel">Order Price</span>: <b id="centerOrderPrice" style="color:var(--fb-primary)">$0.00</b> ·
+      <span data-i18n="commissionLabel">Commission</span>: <b id="centerOrderComm" style="color:var(--fb-success)">+$0.00</b>
      </div>
     </div>
    </div>
 
-   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+   <div class="stats-grid" style="margin-top:0;margin-bottom:12px">
     <div class="stat-box" style="padding:9px 10px">
      <div class="stat-label" data-i18n="stayNightsLabel">Stay Duration</div>
-     <div id="centerOrderNights" class="small" style="font-weight:700;margin-top:3px">1 Night · 2 Guests</div>
+     <div id="centerOrderNights" class="stat-val" style="font-size:13.5px">1 Night · 2 Guests</div>
     </div>
     <div class="stat-box" style="padding:9px 10px">
      <div class="stat-label" data-i18n="hotelRoomTypeLabel">Room Type</div>
-     <div id="centerOrderRoomType" class="small" style="font-weight:700;margin-top:3px">Deluxe Suite</div>
+     <div id="centerOrderRoomType" class="stat-val" style="font-size:13.5px">Deluxe Suite & Executive King</div>
     </div>
    </div>
 
@@ -1731,10 +1841,10 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
     <label data-i18n="rateHotelLabel">Star Rating</label>
     <div id="centerStarPicker" class="star-picker-row">
      <button type="button" class="star-pick-btn" data-star="1" onclick="selectOrderStar(1)">1 ★</button>
-     <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">2 ★★</button>
-     <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">3 ★★★</button>
-     <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">4 ★★★★</button>
-     <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 ★★★★★</button>
+     <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">2 ★</button>
+     <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">3 ★</button>
+     <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">4 ★</button>
+     <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 ★</button>
     </div>
    </div>
 
@@ -1745,75 +1855,86 @@ body.dark .star-pick-btn.selected { color: var(--fb-gold); }
 
    <div class="form-group">
     <label data-i18n="customReviewLabel">Or Write Your Own Custom Review</label>
-    <textarea id="centerCustomReviewInput" rows="2" placeholder="Type your booking note..." data-i18n-ph="customReviewPh" oninput="onCustomReviewInput()"></textarea>
+    <input type="text" id="centerCustomReviewInput" data-i18n-ph="customReviewPh" placeholder="Type your booking note..." oninput="onCustomReviewInput()">
+    <div id="centerReviewWarn" class="error-text"></div>
    </div>
 
-   <div id="centerReviewWarn" class="error-text"></div>
-
-   <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+   <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px">
     <button type="button" class="btn btn-secondary" onclick="closeCenterOrderModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" onclick="confirmCenterOrder()">Confirm Booking</button>
+    <button type="button" class="btn btn-primary" onclick="confirmCenterOrder()" data-i18n="submitOrderBtn">Complete Order</button>
    </div>
   </div>
 
   <div id="centerOrderVerifyingBody" class="verifying-box hidden">
    <div class="verifying-spinner"></div>
-   <div id="centerOrderVerifyingText" style="font-weight:700;font-size:15px" data-i18n="verifyingBookingText">Verifying booking details...</div>
+   <div style="font-weight:700;font-size:15px" data-i18n="verifyingBookingText">Verifying booking details...</div>
   </div>
  </div>
 </div>
 
-<!-- LUCKY / NEGATIVE BALANCE / LOW BALANCE MODAL -->
-<div id="lowBalanceModal" class="modal-backdrop hidden">
- <div class="modal-card" style="text-align:center">
-  <div class="modal-header">
-   <h3 id="lowBalTitle" data-i18n="lowBalTitle">Booking Operation</h3>
-   <button type="button" class="close-x" onclick="closeModal('lowBalanceModal')">&times;</button>
-  </div>
-
-  <div id="lowBalNegAmountBox" class="neg-amount-box hidden">
-   <div id="lowBalOrderBadge" class="small" style="font-weight:700;color:var(--fb-muted)"></div>
-   <div id="lowBalNegAmountVal" class="neg-amount-val">-$500.00</div>
-  </div>
-
-  <p id="lowBalMsg" style="margin:10px 0 18px;line-height:1.55" data-i18n="lowBalMsg">Insufficient balance in your account. Please contact Customer Service to deposit.</p>
-
-  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-   <button type="button" class="btn btn-secondary" onclick="closeModal('lowBalanceModal')">Cancel</button>
-   <button type="button" id="lowBalServiceBtn" class="btn btn-primary" onclick="goToServiceFromLowBalance()">Confirm</button>
-  </div>
- </div>
-</div>
-
-<!-- PROFIT SUCCESS MODAL -->
+<!-- Profit Success Modal -->
 <div id="profitSuccessModal" class="modal-backdrop hidden">
- <div class="modal-card" style="text-align:center;padding:24px 18px">
-  <div style="font-size:42px;margin-bottom:8px">🎉</div>
-  <h3 style="margin:0 0 6px;color:var(--fb-success)" data-i18n="bookingSuccessLine">Booking completed successfully</h3>
-  <p id="profitSuccessAmountText" style="font-size:20px;font-weight:800;margin:10px 0 6px;color:var(--fb-primary)"></p>
-  <p id="profitSuccessProgressText" class="small muted" style="margin:0 0 18px;line-height:1.5"></p>
+ <div class="modal-card" style="text-align:center">
+  <div style="font-size:40px;line-height:1;margin-bottom:8px">🎉</div>
+  <h3 id="profitSuccessTitle" style="margin:0 0 8px;color:var(--fb-success)" data-i18n="bookingSuccessLine">Booking completed successfully</h3>
+  <div id="profitSuccessAmountText" style="font-size:18px;font-weight:800;margin:8px 0"></div>
+  <div id="profitSuccessProgressText" class="small muted" style="margin-bottom:14px"></div>
   <button type="button" class="btn btn-primary" style="min-width:120px" onclick="closeModal('profitSuccessModal')">OK</button>
  </div>
 </div>
 
-<!-- GENERIC ALERT MODAL -->
+<!-- Low Balance / Negative Order Modal -->
+<div id="lowBalanceModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 id="lowBalTitle" data-i18n="lowBalTitle">Booking Operation</h3>
+   <button type="button" class="close-x" onclick="closeModal('lowBalanceModal')">×</button>
+  </div>
+  <div id="lowBalNegAmountBox" class="neg-amount-box hidden">
+   <div id="lowBalOrderBadge" class="small" style="font-weight:700"></div>
+   <div id="lowBalNegAmountVal" class="neg-amount-val">-$0.00</div>
+  </div>
+  <p id="lowBalMsg" style="margin:6px 0 14px;line-height:1.55" data-i18n="lowBalMsg">Insufficient balance in your account. Please contact Customer Service to deposit.</p>
+  <div style="display:flex;justify-content:flex-end;gap:8px">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('lowBalanceModal')">Cancel</button>
+   <button type="button" id="lowBalServiceBtn" class="btn btn-primary" onclick="goToServiceFromLowBalance()">Confirm (Service)</button>
+  </div>
+ </div>
+</div>
+
+<!-- Reset / Delete Confirm Modal -->
+<div id="resetConfirmModal" class="modal-backdrop hidden">
+ <div class="modal-card">
+  <div class="modal-header">
+   <h3 id="resetConfirmTitle">⚠️ Confirm Action</h3>
+   <button type="button" class="close-x" onclick="closeModal('resetConfirmModal')">×</button>
+  </div>
+  <div id="resetConfirmDetails" style="margin:8px 0 16px;line-height:1.6;font-size:14px"></div>
+  <div style="display:flex;justify-content:flex-end;gap:8px">
+   <button type="button" class="btn btn-secondary" onclick="closeModal('resetConfirmModal')">Cancel</button>
+   <button type="button" id="resetConfirmProceedBtn" class="btn btn-danger">Confirm</button>
+  </div>
+ </div>
+</div>
+
+<!-- Alert Modal -->
 <div id="alertModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
-   <h3 id="alertTitle">Notification</h3>
-   <button type="button" class="close-x" onclick="closeModal('alertModal')">&times;</button>
+   <h3 id="alertTitle" data-i18n="alertTitleDefault">Notification</h3>
+   <button type="button" class="close-x" onclick="closeModal('alertModal')">×</button>
   </div>
-  <div id="alertBody" style="line-height:1.55"></div>
-  <div style="text-align:right;margin-top:14px">
+  <div id="alertBody" style="margin:8px 0 16px;line-height:1.5"></div>
+  <div style="display:flex;justify-content:flex-end">
    <button type="button" class="btn btn-primary" onclick="closeModal('alertModal')">OK</button>
   </div>
  </div>
 </div>
 
-<!-- IMAGE LIGHTBOX -->
+<!-- Fullscreen Image Lightbox -->
 <div id="imageLightbox" class="lightbox-backdrop hidden" onclick="closeImageLightbox()">
- <button type="button" class="lightbox-close" onclick="closeImageLightbox()">&times;</button>
- <img id="lightboxImgEl" src="" alt="Full Image" onclick="event.stopPropagation()">
+ <button type="button" class="lightbox-close" onclick="closeImageLightbox()" aria-label="Close">×</button>
+ <img id="lightboxImgEl" src="" alt="Preview" onclick="event.stopPropagation()">
 </div>
 <script>
 "use strict";
@@ -1844,6 +1965,15 @@ try {
 
 const $ = id => document.getElementById(id);
 let MMK_PER_USD = 4500;
+let OFFICIAL_BASE_RATE = 4500;
+let CURRENT_LIVE_MMK_RATE = 4500;
+let OFFICIAL_RATE_META = {
+ source: "Configured / Synced Base",
+ dateStr: "",
+ timeStr: "",
+ updatedAtMs: 0
+};
+
 const TP2323_FREE_BONUS_USD = 18.00;
 const TP2323_REQUIRED_ORDERS = 30;
 const CS_AUTO_GREETING_TEXT = "Welcome to Trip Booking! How can our Customer Service team help you today?";
@@ -2028,70 +2158,219 @@ function getDict() {
  return I18N[getCurrentLang()] || I18N.en;
 }
 
+function getActiveRateForConversion() {
+ return Number(CURRENT_LIVE_MMK_RATE || MMK_PER_USD || 4500);
+}
+
 function formatUsdWithMmk(usdVal) {
  const num = Number(usdVal) || 0;
- const mmk = Math.round(num * MMK_PER_USD).toLocaleString();
+ const activeRate = getActiveRateForConversion();
+ const mmk = Math.round(num * activeRate).toLocaleString();
  const mmkWord = getDict().mmkUnit || "MMK";
  return `$${num.toFixed(2)} (${mmk} ${mmkWord})`;
 }
 
-// Live USD <-> MMK Chart & Rate Sync
-let fxHistorySeries = [];
-let fxChartTimerId = null;
-let fxTickOffset = 0;
+// 1,000 Mock Accounts + Live Real-User Deposit Ticker
+let mock1000Accounts = [];
+let realUserDepositFeed = [];
+let seenRealDepositIds = new Set();
 
-function initFxTrendChart() {
- const base = Number(MMK_PER_USD) || 4500;
- fxHistorySeries = Array.from({ length: 28 }, (_, i) => {
-  const wave = Math.sin(i * 0.55) * 8 + ((i % 3) - 1) * 4;
-  return Number((base + wave).toFixed(1));
- });
- renderFxTrendChart(base);
+function build1000MockAccounts() {
+ const firstNames = [
+  "Kyaw", "Aung", "Min", "Thura", "Htet", "Zaw", "Nyi", "Kaung", "Ye", "Hein",
+  "Su", "Ei", "Thin", "May", "Hnin", "Moe", "Khin", "Phyo", "Wai", "Zin"
+ ];
+ const lastNames = [
+  "Lin", "Naing", "Aung", "Tun", "Myint", "Htoo", "Oo", "Kyaw", "Soe", "Win",
+  "Phyu", "Thandar", "Hlaing", "Mon", "Wint", "Khine", "Swe", "Lwin", "Thein", "Ko"
+ ];
+ const inviteCodes = ["TP2323", "TB8891", "TB4512", "TB7740", "TB9024", "TB3318", "TB6195", "TB5208"];
+ const list = [];
 
- if (fxChartTimerId) clearInterval(fxChartTimerId);
- fxChartTimerId = setInterval(() => {
-  fxTickOffset += 1;
-  const curBase = Number(MMK_PER_USD) || 4500;
-  const microWave = Math.sin(fxTickOffset * 0.7) * 9 + Math.cos(fxTickOffset * 0.35) * 5;
-  const tickVal = Number((curBase + microWave).toFixed(1));
-  fxHistorySeries.push(tickVal);
-  if (fxHistorySeries.length > 28) fxHistorySeries.shift();
-  renderFxTrendChart(tickVal);
- }, 1000);
+ for (let i = 1; i <= 1000; i++) {
+  const fn = firstNames[(i * 7 + 3) % firstNames.length];
+  const ln = lastNames[(i * 13 + 5) % lastNames.length];
+  const fullName = `${fn} ${ln}`;
+  const accId = `ID-${String(100000 + i * 73).slice(-6)}`;
+  const refCode = inviteCodes[i % inviteCodes.length];
+  // Alternate withdrawals ($1,xxx) and deposits ($1,xxx or $xxx)
+  const isWithdraw = (i % 3) !== 0;
+  const highAmount = (i % 2) === 0
+   ? Number((1000 + ((i * 37) % 2800) + ((i % 99) / 100)).toFixed(2))
+   : Number((120 + ((i * 29) % 850) + ((i % 99) / 100)).toFixed(2));
+
+  list.push({
+   id: accId,
+   name: fullName,
+   code: refCode,
+   action: isWithdraw ? "withdraw" : "deposit",
+   amount: highAmount,
+   isReal: false
+  });
+ }
+ return list;
 }
 
-function renderFxTrendChart(latestTickVal) {
+function recordRealUserDeposit(userObj, amountUsd, sourceNote = "Deposit") {
+ const amt = Number(amountUsd) || 0;
+ if (!userObj || amt <= 0) return;
+ const entryId = `${userObj.id}_${amt}_${Math.floor(Date.now() / 4000)}`;
+ if (seenRealDepositIds.has(entryId)) return;
+ seenRealDepositIds.add(entryId);
+
+ const now = new Date();
+ const pad = n => String(n).padStart(2, "0");
+ const timeShort = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+ realUserDepositFeed.unshift({
+  id: String(userObj.id),
+  name: userObj.name || "Member",
+  code: userObj.invite_code || userObj.invited_by || "TP2323",
+  action: "deposit",
+  amount: Number(amt.toFixed(2)),
+  timeShort,
+  note: sourceNote,
+  isReal: true
+ });
+ if (realUserDepositFeed.length > 25) realUserDepositFeed.pop();
+ renderActivityTicker();
+}
+
+function renderActivityTicker() {
+ const track = $("activityTickerTrack");
+ if (!track) return;
+ if (!mock1000Accounts.length) mock1000Accounts = build1000MockAccounts();
+
+ const mmkWord = getDict().mmkUnit || "MMK";
+ const rate = getActiveRateForConversion();
+
+ // Mix real user deposits at the front + sample slice from 1,000 mock accounts for smooth continuous loop
+ const sampleSlice = mock1000Accounts.slice(0, 60);
+ const combined = [...realUserDepositFeed, ...sampleSlice];
+
+ const makeChipsHtml = arr => arr.map(item => {
+  const isWd = item.action === "withdraw";
+  const kindLabel = isWd ? "WITHDREW" : "DEPOSITED";
+  const kindClass = isWd ? "ticker-kind-wd" : "ticker-kind-dp";
+  const mmkVal = Math.round(item.amount * rate).toLocaleString();
+  const realTag = item.isReal ? ` <span class="status-pill pill-online" style="padding:1px 6px;font-size:10px">LIVE</span>` : "";
+  const timeTag = item.timeShort ? ` · ${item.timeShort}` : "";
+
+  return `
+   <div class="ticker-chip ${item.isReal ? "real-user-highlight" : ""}">
+    <span><b>${item.id}</b></span>
+    <span>·</span>
+    <span><b>${item.name}</b></span>
+    <span>·</span>
+    <span class="tag" style="padding:1px 6px;font-size:10px">${item.code}</span>
+    <span class="${kindClass}">${kindLabel}</span>
+    <b>$${item.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</b>
+    <span class="muted">(${mmkVal} ${mmkWord}${timeTag})</span>
+    ${realTag}
+   </div>
+  `;
+ }).join("");
+
+ const oneCycle = makeChipsHtml(combined);
+ track.innerHTML = oneCycle + oneCycle;
+}
+
+// Natural USD <-> MMK Trend Chart (Spikes, Pullbacks, Trend Waves + Date/Time/Rate Hover)
+let fxChartPoints = []; // { rate, dateStr, timeStr, fullStamp }
+let fxChartTimerId = null;
+let fxTickStep = 0;
+
+function formatDateTimeParts(dateObj) {
+ const d = dateObj || new Date();
+ const pad = n => String(n).padStart(2, "0");
+ const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+ const dateStr = `${pad(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
+ const timeStr = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+ return { dateStr, timeStr, fullStamp: `${dateStr} · ${timeStr}` };
+}
+
+function buildNaturalFxSeries(centerRate) {
+ const base = Number(centerRate) || 4500;
+ const nowMs = Date.now();
+ const count = 48;
+ const series = [];
+
+ for (let i = 0; i < count; i++) {
+  const relIndex = i - (count - 1); // negative = past seconds/ticks
+  const ptTime = new Date(nowMs + relIndex * 2000);
+  const dt = formatDateTimeParts(ptTime);
+
+  // Choppy market swing + local peaks & dips similar to trading / FX charts
+  const macroWave = Math.sin(i * 0.24) * 14 + Math.cos(i * 0.11) * 9;
+  const jaggedPulse = ((i % 2 === 0 ? 1 : -1) * (3 + (i % 5) * 1.8));
+  const spike = (i === 14 || i === 33) ? 16 : ((i === 22 || i === 39) ? -15 : 0);
+  const rateVal = Number((base + macroWave + jaggedPulse + spike).toFixed(1));
+
+  series.push({
+   rate: rateVal,
+   dateStr: dt.dateStr,
+   timeStr: dt.timeStr,
+   fullStamp: dt.fullStamp
+  });
+ }
+ return series;
+}
+
+function updateFxSummaryText(ptObj) {
  const d = getDict();
- const baseRate = Number(MMK_PER_USD) || 4500;
- const displayRate = latestTickVal || baseRate;
  const mmkWord = d.mmkUnit || "MMK";
+ const baseRate = Number(MMK_PER_USD) || 4500;
+ const activePt = ptObj || fxChartPoints[fxChartPoints.length - 1] || {
+  rate: baseRate,
+  ...formatDateTimeParts(new Date())
+ };
+
+ CURRENT_LIVE_MMK_RATE = Number(activePt.rate) || baseRate;
+
+ const diffPct = baseRate > 0 ? (((CURRENT_LIVE_MMK_RATE - baseRate) / baseRate) * 100) : 0;
+ const signStr = diffPct >= 0 ? "+" : "";
+ const badgeEl = $("fxChangeBadge");
+ if (badgeEl) {
+  badgeEl.textContent = `${signStr}${diffPct.toFixed(2)}%`;
+  badgeEl.className = `status-pill ${diffPct >= 0 ? "pill-online" : "pill-live"}`;
+ }
 
  if ($("fxCurrentRateDisplay")) {
-  $("fxCurrentRateDisplay").textContent = `1 USD = ${displayRate.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 1 })} ${mmkWord}`;
- }
- if ($("fxLastUpdatedLabel")) {
-  const now = new Date();
-  const pad = n => String(n).padStart(2, "0");
-  $("fxLastUpdatedLabel").textContent = `Base: ${baseRate.toLocaleString()} ${mmkWord} · ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  $("fxCurrentRateDisplay").textContent = `1 USD = ${CURRENT_LIVE_MMK_RATE.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${mmkWord}`;
  }
 
+ if ($("fxFormulaReadout")) {
+  $("fxFormulaReadout").textContent = `1 USD + ${Math.round(CURRENT_LIVE_MMK_RATE).toLocaleString()} ${mmkWord} · Base: ${baseRate.toLocaleString()} ${mmkWord}`;
+ }
+
+ if ($("fxLastUpdatedLabel")) {
+  $("fxLastUpdatedLabel").textContent = `${activePt.dateStr} · ${activePt.timeStr} · ${CURRENT_LIVE_MMK_RATE.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${mmkWord}`;
+ }
+
+ if ($("fxSampleConvText")) {
+  $("fxSampleConvText").textContent = `1 USD + ${Math.round(CURRENT_LIVE_MMK_RATE).toLocaleString()} ${mmkWord}`;
+ }
+}
+
+function drawFxChartSvg(pointsArr) {
  const lineEl = $("fxTrendLine");
  const areaEl = $("fxTrendArea");
  const dotEl = $("fxTrendDot");
- if (!lineEl || !areaEl || !dotEl || !fxHistorySeries.length) return;
+ if (!lineEl || !areaEl || !dotEl || !pointsArr.length) return;
 
- const minV = Math.min(...fxHistorySeries) - 4;
- const maxV = Math.max(...fxHistorySeries) + 4;
+ const rates = pointsArr.map(p => Number(p.rate));
+ const minV = Math.min(...rates) - 3;
+ const maxV = Math.max(...rates) + 3;
  const span = Math.max(1, maxV - minV);
  const w = 600;
- const h = 118;
+ const h = 132;
  const padTop = 14;
- const padBot = 14;
+ const padBot = 16;
  const usableH = h - padTop - padBot;
 
- const pts = fxHistorySeries.map((val, idx) => {
-  const x = fxHistorySeries.length === 1 ? w : (idx / (fxHistorySeries.length - 1)) * w;
-  const norm = (val - minV) / span;
+ const pts = pointsArr.map((p, idx) => {
+  const x = pointsArr.length === 1 ? w : (idx / (pointsArr.length - 1)) * w;
+  const norm = (Number(p.rate) - minV) / span;
   const y = padTop + (1 - norm) * usableH;
   return `${x.toFixed(1)},${y.toFixed(1)}`;
  });
@@ -2104,10 +2383,128 @@ function renderFxTrendChart(latestTickVal) {
  dotEl.setAttribute("cy", lastPt[1]);
 }
 
+function handleFxChartHover(evt) {
+ const svgEl = $("fxTrendSvg");
+ if (!svgEl || !fxChartPoints.length) return;
+ const rect = svgEl.getBoundingClientRect();
+ if (!rect.width) return;
+
+ const ratio = Math.max(0, Math.min(1, (evt.clientX - rect.left) / rect.width));
+ const idx = Math.min(fxChartPoints.length - 1, Math.round(ratio * (fxChartPoints.length - 1)));
+ const pt = fxChartPoints[idx];
+ if (!pt) return;
+
+ const svgX = ratio * 600;
+ const crosshair = $("fxCrosshairLine");
+ if (crosshair) {
+  crosshair.setAttribute("x1", svgX.toFixed(1));
+  crosshair.setAttribute("x2", svgX.toFixed(1));
+  crosshair.setAttribute("opacity", "1");
+ }
+
+ const mmkWord = getDict().mmkUnit || "MMK";
+ if ($("fxPointDetailText")) {
+  $("fxPointDetailText").innerHTML =
+   `<b>Date:</b> ${pt.dateStr} · <b>Time:</b> ${pt.timeStr} · <b>Rate:</b> 1 USD = <b>${Number(pt.rate).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${mmkWord}</b>`;
+ }
+}
+
+function resetFxChartHover() {
+ const crosshair = $("fxCrosshairLine");
+ if (crosshair) crosshair.setAttribute("opacity", "0");
+ const d = getDict();
+ const mmkWord = d.mmkUnit || "MMK";
+ const latest = fxChartPoints[fxChartPoints.length - 1];
+ if ($("fxPointDetailText") && latest) {
+  $("fxPointDetailText").innerHTML =
+   `<b>Latest:</b> ${latest.dateStr} · ${latest.timeStr} · 1 USD = <b>${Number(latest.rate).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${mmkWord}</b> (${OFFICIAL_RATE_META.source})`;
+ }
+}
+
+function initFxTrendChart() {
+ fxChartPoints = buildNaturalFxSeries(MMK_PER_USD);
+ drawFxChartSvg(fxChartPoints);
+ updateFxSummaryText(fxChartPoints[fxChartPoints.length - 1]);
+ resetFxChartHover();
+
+ if (fxChartTimerId) clearInterval(fxChartTimerId);
+ fxChartTimerId = setInterval(() => {
+  fxTickStep += 1;
+  const base = Number(MMK_PER_USD) || 4500;
+  const prevRate = fxChartPoints.length ? Number(fxChartPoints[fxChartPoints.length - 1].rate) : base;
+
+  // Pull back gently toward base while creating natural up/down ticks
+  const pullTowardBase = (base - prevRate) * 0.14;
+  const swing = Math.sin(fxTickStep * 0.52) * 7.5 + ((fxTickStep % 2 === 0 ? 1 : -1) * (2.5 + (fxTickStep % 4) * 1.4));
+  const nextRate = Number(Math.max(100, prevRate + pullTowardBase + swing).toFixed(1));
+
+  const dt = formatDateTimeParts(new Date());
+  fxChartPoints.push({
+   rate: nextRate,
+   dateStr: dt.dateStr,
+   timeStr: dt.timeStr,
+   fullStamp: dt.fullStamp
+  });
+  if (fxChartPoints.length > 48) fxChartPoints.shift();
+
+  CURRENT_LIVE_MMK_RATE = nextRate;
+  drawFxChartSvg(fxChartPoints);
+  updateFxSummaryText(fxChartPoints[fxChartPoints.length - 1]);
+
+  // Refresh dynamic MMK prices & ticker values with live tick
+  renderHotels();
+  renderBookingCenter();
+  renderHistory();
+  renderProfile();
+  renderActivityTicker();
+ }, 1800);
+}
+
+async function fetchOfficialExchangeRate() {
+ // Attempt public open FX rate endpoint without blocking local/admin override
+ const hasSavedManualRate = Boolean(localStorage.getItem("tb_mmk_per_usd"));
+ if (hasSavedManualRate) return;
+
+ try {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3500);
+  const resp = await fetch("https://open.er-api.com/v6/latest/USD", { signal: controller.signal });
+  clearTimeout(timeout);
+  if (!resp.ok) return;
+  const data = await resp.json();
+  const apiRate = Number(data?.rates?.MMK);
+  if (Number.isFinite(apiRate) && apiRate >= 100) {
+   OFFICIAL_BASE_RATE = Number(apiRate.toFixed(2));
+   const dt = formatDateTimeParts(new Date());
+   OFFICIAL_RATE_META = {
+    source: "Live Market Feed",
+    dateStr: dt.dateStr,
+    timeStr: dt.timeStr,
+    updatedAtMs: Date.now()
+   };
+   if (!db) {
+    MMK_PER_USD = OFFICIAL_BASE_RATE;
+    initFxTrendChart();
+    renderAllViews();
+   }
+  }
+ } catch (e) {
+  // Fallback gracefully to configured base rate (4500 MMK or Firebase/Admin rate)
+ }
+}
+
 async function applyPlatformFxRate(nextRate, persistDb = false) {
  const cleanRate = Number(nextRate);
  if (!Number.isFinite(cleanRate) || cleanRate < 100) return;
  MMK_PER_USD = cleanRate;
+ CURRENT_LIVE_MMK_RATE = cleanRate;
+ const dt = formatDateTimeParts(new Date());
+ OFFICIAL_RATE_META = {
+  source: persistDb ? "Admin Synced Rate" : "Platform Rate",
+  dateStr: dt.dateStr,
+  timeStr: dt.timeStr,
+  updatedAtMs: Date.now()
+ };
  localStorage.setItem("tb_mmk_per_usd", String(cleanRate));
  if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) {
   $("adminFxRateInput").value = String(cleanRate);
@@ -2415,7 +2812,6 @@ let showAllHotelsFlag = false;
 let lastSeenUserMsgCount = 0;
 let initialMsgSnapshotLoaded = false;
 
-// Auto-hiding action bar state per message key (COPY / EDIT / DEL)
 const activeMsgActionBarKey = { key: null, timerId: null };
 let editingMessageKey = null;
 let suspendingUserId = null;
@@ -2424,15 +2820,11 @@ let regToastTimer = null;
 let csToastTimer = null;
 let lastAlertedCsUserId = null;
 
-// Track first-time CS greeting per user
 const autoGreetedUsers = new Set();
 let greetingInFlightForUserId = null;
 
-// Order Rules Modal working buffer
 let editingRulesUserId = null;
 let workingRulesBuffer = [];
-
-// Home Hotel detail modal working hotel
 let selectedHomeHotel = null;
 
 let selectedOrderStars = 5;
@@ -2760,17 +3152,22 @@ function startRealtimeListeners() {
  if (savedAdmin) isAdminSession = true;
 
  if (!db) {
-  $("syncStatusText").textContent = "Local / Offline Mode";
   renderAllViews();
   return;
  }
-
- $("syncStatusText").textContent = "Firebase Live Sync Connected";
 
  db.ref("platform_settings/mmk_per_usd").on("value", snap => {
   const rateVal = Number(snap.val());
   if (Number.isFinite(rateVal) && rateVal >= 100 && rateVal !== MMK_PER_USD) {
    MMK_PER_USD = rateVal;
+   CURRENT_LIVE_MMK_RATE = rateVal;
+   const dt = formatDateTimeParts(new Date());
+   OFFICIAL_RATE_META = {
+    source: "Firebase Rate Sync",
+    dateStr: dt.dateStr,
+    timeStr: dt.timeStr,
+    updatedAtMs: Date.now()
+   };
    localStorage.setItem("tb_mmk_per_usd", String(rateVal));
    if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) {
     $("adminFxRateInput").value = String(rateVal);
@@ -2787,12 +3184,16 @@ function startRealtimeListeners() {
   if (activeUid && !isAdminSession) {
    const latest = allUsers.find(u => String(u.id) === String(activeUid));
    if (latest) {
+    const prevBal = Number(currentUser?.balance) || 0;
+    const nextBal = Number(latest.balance) || 0;
+    if (nextBal > prevBal && prevBal > 0) {
+     recordRealUserDeposit(latest, nextBal - prevBal, "Balance Top-Up");
+    }
     currentUser = latest;
     if ((Number(currentUser.negative_balance) || 0) <= 0 && activeTask && activeTask.blockedByNeg) {
      activeTask = null;
     }
    } else {
-    // Account was deleted by Admin
     currentUser = null;
     localStorage.removeItem("tb_session_uid");
    }
@@ -2825,6 +3226,22 @@ function startRealtimeListeners() {
  db.ref("transactions").on("value", snap => {
   const val = snap.val() || {};
   allTransactions = Object.values(val).sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
+
+  // Detect any real user deposit transaction and surface in the Home ticker box
+  allTransactions.forEach(tx => {
+   const amt = Number(tx.amount) || 0;
+   const tType = String(tx.type || "").toLowerCase();
+   const isDepositTx = amt > 0 && (tType.includes("deposit") || tType.includes("topup") || tType.includes("top_up"));
+   if (isDepositTx) {
+    const uObj = allUsers.find(u => String(u.id) === String(tx.user_id)) || {
+     id: tx.user_id || "REAL-U",
+     name: tx.user_name || "Member",
+     invite_code: "TP2323"
+    };
+    recordRealUserDeposit(uObj, amt, "Deposit");
+   }
+  });
+
   if (currentUser) renderHistory();
  });
 
@@ -2848,7 +3265,8 @@ function startRealtimeListeners() {
 
 function forceSyncNow() {
  startRealtimeListeners();
- showAlert("🔄 Real-time Firebase data synced!");
+ fetchOfficialExchangeRate();
+ showAlert("🔄 Real-time Firebase & FX data synced!");
 }
 
 function enforceSuspendedAccountGuard() {
@@ -2865,10 +3283,8 @@ function enforceSuspendedAccountGuard() {
   reasonEl.innerHTML = `${d.suspendedNoticeDefault}` + (reasonStr ? `<br><span class="small muted"><b>Reason:</b> ${reasonStr}</span>` : "");
  }
 
- // Lock bottom nav tabs except Service when suspended
  const navBtns = document.querySelectorAll(".bottom-nav button");
  if (navBtns.length >= 5) {
-  // 0: Home, 1: Service, 2: Booking, 3: History, 4: Profile
   [0, 2, 3].forEach(idx => {
    if (navBtns[idx]) {
     navBtns[idx].disabled = banned;
@@ -2978,7 +3394,8 @@ function changeLanguage(lang) {
   if (dict[key] !== undefined) el.placeholder = dict[key];
  });
 
- initFxTrendChart();
+ drawFxChartSvg(fxChartPoints);
+ updateFxSummaryText(fxChartPoints[fxChartPoints.length - 1]);
  renderAllViews();
  enforceSuspendedAccountGuard();
 }
@@ -3303,6 +3720,7 @@ function renderHotels() {
  if (!grid) return;
 
  const canBookDirect = Boolean(currentUser && !isAdminSession && !isAccountSuspended(currentUser) && (Number(currentUser.balance) || 0) >= 85 && (Number(currentUser.negative_balance) || 0) <= 0);
+ const activeRate = getActiveRateForConversion();
 
  grid.innerHTML = visibleList.map(h => `
   <div class="card" onclick='openHotelDetail(${JSON.stringify(h).replace(/'/g, "&#39;")})'>
@@ -3318,7 +3736,7 @@ function renderHotels() {
     <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:6px;margin-top:6px">
      <div class="price">
       $${Number(h.price).toFixed(2)}
-      <span class="mmk-sub">≈ ${Math.round((Number(h.price) || 0) * MMK_PER_USD).toLocaleString()} ${getDict().mmkUnit || "MMK"}</span>
+      <span class="mmk-sub">≈ ${Math.round((Number(h.price) || 0) * activeRate).toLocaleString()} ${getDict().mmkUnit || "MMK"}</span>
      </div>
      ${canBookDirect ? `<span class="tag" style="background:rgba(46,125,50,0.14);color:var(--fb-success)">Book</span>` : ""}
     </div>
@@ -4242,7 +4660,6 @@ function renderAdminLiveBanner() {
 
  const liveUsers = allUsers.filter(u => isUserPlacingOrderLive(u));
  const onlineUsers = allUsers.filter(u => getUserPresenceInfo(u).state === "online");
- const negUsers = allUsers.filter(u => (Number(u.negative_balance) || 0) > 0);
  const bannedUsers = allUsers.filter(u => isAccountSuspended(u));
 
  countsText.textContent = `Online: ${onlineUsers.length} · Placing Order: ${liveUsers.length} · Banned: ${bannedUsers.length}`;
@@ -4547,6 +4964,7 @@ async function saveAllUsersAdmin() {
   const u = allUsers.find(item => String(item.id) === String(uid));
   if (!u) return;
 
+  const prevBal = Number(u.balance) || 0;
   const prevNeg = Math.abs(Number(u.negative_balance) || 0);
   const nextVip = tr.querySelector(".adm-vip")?.value || normalizeVipLabel(u.vip_level);
   const nextBal = Number(tr.querySelector(".adm-bal")?.value);
@@ -4555,7 +4973,13 @@ async function saveAllUsersAdmin() {
   const nextOrd = Math.max(0, parseInt(tr.querySelector(".adm-ord")?.value, 10) || 0);
 
   u.vip_level = nextVip;
-  if (!Number.isNaN(nextBal)) u.balance = Number(nextBal.toFixed(2));
+  if (!Number.isNaN(nextBal)) {
+   const cleanNextBal = Number(nextBal.toFixed(2));
+   if (cleanNextBal > prevBal && prevBal > 0) {
+    recordRealUserDeposit(u, cleanNextBal - prevBal, "Deposit Credited");
+   }
+   u.balance = cleanNextBal;
+  }
   u.negative_balance = Number(nextNeg.toFixed(2));
   u.pending_admin_profit = Number(nextPendingProfit.toFixed(2));
   u.profit_box = Number(nextPendingProfit.toFixed(2));
@@ -4820,6 +5244,7 @@ function showAlert(htmlMsg, titleText) {
 }
 
 function renderAllViews() {
+ renderActivityTicker();
  renderHotels();
  renderBookingCenter();
  renderHistory();
@@ -4852,19 +5277,29 @@ window.addEventListener("load", () => {
  const savedRate = Number(localStorage.getItem("tb_mmk_per_usd"));
  if (Number.isFinite(savedRate) && savedRate >= 100) {
   MMK_PER_USD = savedRate;
+  CURRENT_LIVE_MMK_RATE = savedRate;
  }
  if (localStorage.getItem("tb_theme_dark") === "1") {
   document.body.classList.add("dark");
  }
 
- // Default language is English ("en") on first entry
+ const dt = formatDateTimeParts(new Date());
+ OFFICIAL_RATE_META = {
+  source: "Configured / Synced Rate",
+  dateStr: dt.dateStr,
+  timeStr: dt.timeStr,
+  updatedAtMs: Date.now()
+ };
+
  const initialLang = localStorage.getItem("tb_lang") || "en";
+ mock1000Accounts = build1000MockAccounts();
  renderEmojiPalettes();
  initFxTrendChart();
  runIntroSplash();
  changeLanguage(initialLang);
  startRealtimeListeners();
  startUserHeartbeatLoop();
+ fetchOfficialExchangeRate();
 });
 </script>
 </body>
