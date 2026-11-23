@@ -99,7 +99,6 @@
    background: radial-gradient(circle at center, rgba(10, 16, 28, 0.22) 0%, rgba(10, 16, 28, 0.62) 100%);
   }
 
-  /* Thin 7-color light traveling strictly along the border rim, leaving interior clean */
   .intro-rainbow-frame {
    position: relative;
    z-index: 2;
@@ -297,7 +296,6 @@
   .ticker-kind-dp { color: var(--fb-success); font-weight: 700; }
   .ticker-kind-wd { color: var(--fb-gold); font-weight: 700; }
 
-  /* Luxury Hotel Photo Hero Banner (Replaces Solid Blue Banner) */
   .hero {
    position: relative;
    overflow: hidden;
@@ -317,11 +315,7 @@
    z-index: 0;
   }
 
-  .hero > * {
-   position: relative;
-   z-index: 1;
-  }
-
+  .hero > * { position: relative; z-index: 1; }
   .hero h1 { margin: 0 0 6px; font-size: 24px; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45); }
   .hero p { margin: 0 0 14px; opacity: 0.95; font-size: 14.5px; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45); }
   .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -645,8 +639,6 @@
    white-space: pre-line;
   }
 
-  .chat-bubble.staff-editable { cursor: pointer; }
-
   .chat-bubble-meta {
    font-size: 11px;
    opacity: 0.78;
@@ -740,7 +732,7 @@
    box-shadow: var(--shadow);
    display: flex;
    flex-direction: column;
-   gap: 8px;
+   gap: 6px;
   }
 
   .bank-choice-btn {
@@ -916,26 +908,6 @@
    padding: 4px 10px;
    border-radius: 999px;
    margin-top: 6px;
-  }
-
-  .pending-profit-banner {
-   background: rgba(46, 125, 50, 0.12);
-   border: 1px solid rgba(46, 125, 50, 0.35);
-   color: var(--fb-text);
-   border-radius: 10px;
-   padding: 10px 12px;
-   margin-bottom: 12px;
-   font-size: 13px;
-  }
-
-  .last-order-banner {
-   background: rgba(24, 119, 242, 0.09);
-   border: 1px solid rgba(24, 119, 242, 0.28);
-   color: var(--fb-text);
-   border-radius: 10px;
-   padding: 10px 12px;
-   margin-bottom: 12px;
-   font-size: 13px;
   }
 
   .invite-link-box {
@@ -1394,7 +1366,7 @@
    <div id="userBankCardPicker" class="bank-card-picker-box hidden"></div>
    <div class="support-composer-bar">
     <button type="button" id="userCsEmojiBtn" class="btn btn-secondary" onclick="toggleEmojiPicker('user')" title="Emoji">😊</button>
-    <button type="button" id="userCsBankBtn" class="btn btn-secondary hidden" onclick="toggleChatBankCardPicker('user')" title="ဘဏ်ကဒ် စာရင်း">💳 ဘဏ်ကဒ် စာရင်း</button>
+    <button type="button" id="userCsBankBtn" class="btn btn-secondary" onclick="toggleChatBankCardPicker('user')" title="ဘဏ်ကဒ် စာရင်း">💳 ဘဏ်ကဒ် စာရင်း</button>
     <button type="button" class="btn btn-secondary" onclick="$('userChatPhotoInput').click()" title="Send Photo">📷</button>
     <input id="userChatPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
     <textarea id="supportInput" class="chat-multiline-input" rows="1" data-i18n-ph="typeMsgPh" placeholder="စာရိုက်ရန်..." onfocus="handleSupportInputFocus()" oninput="autoGrowTextarea(this)" onkeydown="handleChatTextareaKeydown(event, 'user')"></textarea>
@@ -1429,11 +1401,10 @@
     <h2 class="section-title" data-i18n="taskCenter">Booking Task Center</h2>
     <span class="tag" id="orderRateLockStatus">🔒 Order Rate Lock Ready</span>
    </div>
-   <div id="pendingProfitNoticeBox" class="pending-profit-banner hidden"></div>
-   <div id="lastOrderSummaryBanner" class="last-order-banner hidden"></div>
    <div class="progress-ring-wrap">
     <div class="circle-progress" id="orderCircle"><span>0/30</span></div>
     <div class="small muted" data-i18n="clickGetOrderHint">Tap Get Order to receive a hotel booking task.</div>
+    <div id="orderCycleProfitSummary" class="small muted"></div>
     <div id="tp2323OrderHint" class="tp2323-badge hidden"></div>
     <button type="button" class="btn btn-primary" style="min-width:190px;padding:12px 18px;font-size:15px" onclick="triggerGetOrder()" data-i18n="submitOrderBtn">Get Order</button>
    </div>
@@ -1450,7 +1421,6 @@
       <option value="all" data-i18n="filterAllTypes">All Types</option>
       <option value="profit" data-i18n="filterProfitType">Booking Profit</option>
       <option value="bonus" data-i18n="filterBonusType">TP2323 $18 Bonus</option>
-      <option value="pending_release" data-i18n="filterPendingReleaseType">30-Order Profit</option>
       <option value="clear_neg" data-i18n="filterClearNegType">Negative Settlement</option>
       <option value="hotel_book" data-i18n="filterHotelBookType">Hotel Booking</option>
      </select>
@@ -1498,7 +1468,7 @@
        <h2 id="profileName" style="margin:0;font-size:20px">Member</h2>
        <span id="profileVipBadge" class="vip-badge">VIP Level 1</span>
        <button type="button" class="btn btn-secondary btn-xs" onclick="openEditNameModal()">✏️ Edit Name</button>
-       <button type="button" id="profileAdminPanelBtn" class="btn btn-primary btn-xs hidden" onclick="openAdminControlPanel()">🛡️ Admin Panel</button>
+       <button type="button" id="profileAdminPanelBtn" class="btn btn-primary btn-xs hidden" onclick="openAdminControlPanel()"> Admin Panel</button>
       </div>
       <div class="small muted" id="profileIdentity" style="margin-top:4px"></div>
       <div id="tp2323ProfileStatus" class="tp2323-badge hidden"></div>
@@ -1540,11 +1510,13 @@
   <div class="section-card">
    <div class="section-header">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin &amp; Trip Booking Service Control</h2>
+     <h2 class="section-title" data-i18n="adminPanelTitle"> Admin &amp; Trip Booking Service Control</h2>
      <span id="adminUnreadBadge" class="notif-badge hidden">0</span>
+     <span id="adminLiveAlertPill" class="status-pill pill-online hidden">🔔 Live Activity</span>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
      <button type="button" id="adminTabBtnUsers" class="btn btn-primary btn-xs" onclick="switchAdminTab('users')">👥 <span data-i18n="usersWord">Users</span> (<span id="totalUsersBadge">0</span>)</button>
+     <button type="button" id="adminTabBtnProfitTable" class="btn btn-secondary btn-xs" onclick="switchAdminTab('profit_table')">📊 $100–$5,000 Profit Table</button>
      <button type="button" id="adminTabBtnHotels" class="btn btn-secondary btn-xs" onclick="switchAdminTab('hotels')">🏨 Hotels &amp; VIP</button>
      <button type="button" id="adminTabBtnBanks" class="btn btn-secondary btn-xs" onclick="switchAdminTab('banks')">💳 ဘဏ်ကဒ် စာရင်း</button>
      <button type="button" id="adminTabBtnCs" class="btn btn-secondary btn-xs" onclick="switchAdminTab('cs')">🎧 Service Chat <span id="tabCsUnreadBadge" class="notif-badge hidden">0</span></button>
@@ -1595,7 +1567,7 @@
     </div>
     <div class="section-header">
      <div style="display:flex;gap:8px;flex-wrap:wrap;flex:1">
-      <input id="adminUserSearch" type="text" data-i18n-ph="adminUserSearchPh" placeholder="Search name, phone, device, location..." oninput="renderAdminUsers()" style="min-width:210px;flex:1">
+      <input id="adminUserSearch" type="text" data-i18n-ph="adminUserSearchPh" placeholder="Search name, phone, code, device, location..." oninput="renderAdminUsers()" style="min-width:210px;flex:1">
       <select id="adminUserFilter" onchange="renderAdminUsers()">
        <option value="all" data-i18n="filterAllUsers">All Accounts</option>
        <option value="live_order" data-i18n="filterLiveOrder">🔴 Placing Order (LIVE)</option>
@@ -1616,8 +1588,8 @@
         <th>📍 တည်နေရာ &amp; 💻 စက်ပစ္စည်း</th>
         <th data-i18n="thPhoneEmail">Phone / Email</th>
         <th data-i18n="thPass">Password</th>
-        <th data-i18n="thRef">My Code</th>
-        <th data-i18n="thInvitedBy">Invited By</th>
+        <th data-i18n="thRef">မိမိကုဒ်</th>
+        <th data-i18n="thInvitedBy">အသုံးပြုခဲ့သော ကုဒ်</th>
         <th data-i18n="thVip">VIP Level</th>
         <th data-i18n="thBal">Balance ($)</th>
         <th data-i18n="thNeg">Negative ($)</th>
@@ -1632,7 +1604,41 @@
     </div>
    </div>
 
-   <!-- Admin Tab 2: Hotels & VIP -->
+   <!-- Admin Tab 2: $100 - $5,000 Profit Table -->
+   <div id="adminProfitTableTab" class="hidden">
+    <div class="section-header">
+     <div>
+      <h3 style="margin:0">📊 ၃၀-အော်ဒါ အရင်းနှင့် အမြတ် ဇယား ($100 – $5,000)</h3>
+      <div class="small muted">အရင်း ($) နှင့် အမြတ် ($) ကွက်လက်များကို ပြင်ပြီး "အတည်ပြုရန်" နှိပ်လိုက်တာနဲ့ အကောင့်အားလုံးရဲ့ အော်ဒါအမြတ်ပုံစံ ချက်ချင်းပြောင်းလဲသွားပါမယ် (အချိုးကျ တွက်ချက်ပြီး ၃၀ ပြည့်မှ သတ်မှတ်အမြတ် တိတိကျကျ ရရှိမည်)။</div>
+     </div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn btn-secondary btn-xs" onclick="addProfitTierRow()">+ Row ထည့်ရန်</button>
+      <button type="button" class="btn btn-success" onclick="confirmAndApplyProfitTable()">✅ အတည်ပြုရန် (Apply All Users)</button>
+     </div>
+    </div>
+
+    <div class="live-order-banner" id="profitTableActiveSummary">
+     <span>Active Rule: $100 → $20 (20.00% over 30 orders · unequal per order, exact total at #30)</span>
+     <span class="small muted" id="profitTableUpdatedAt"></span>
+    </div>
+
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr>
+        <th>#</th>
+        <th>အရင်းပမာဏ Capital ($)</th>
+        <th>၃၀-အော်ဒါ အမြတ် Profit ($)</th>
+        <th>အချိုး Return (%)</th>
+        <th>လုပ်ဆောင်ချက်</th>
+       </tr>
+      </thead>
+      <tbody id="adminProfitTableRows"></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- Admin Tab 3: Hotels & VIP -->
    <div id="adminHotelsTab" class="hidden">
     <div class="section-header">
      <h3 style="margin:0" data-i18n="hotelsRatesHead">Hotels &amp; Commission Rates</h3>
@@ -1672,12 +1678,12 @@
     </div>
    </div>
 
-   <!-- Admin Tab 3: Bank Cards -->
+   <!-- Admin Tab 4: Bank Cards -->
    <div id="adminBanksTab" class="hidden">
     <div class="section-header">
      <div>
       <h3 style="margin:0">💳 ဘဏ်ကဒ် စာရင်း (KPay / Wave / AYA Pay / Banking)</h3>
-      <div class="small muted">ဘဏ်တစ်မျိုးလျှင် အများဆုံး ၁၀ ခုအထိ ထည့်သွင်းသိမ်းဆည်းနိုင်ပါသည်။</div>
+      <div class="small muted">ဘဏ်တစ်မျိုးလျှင် အများဆုံး ၁၀ ခုအထိ ထည့်သွင်းသိမ်းဆည်းနိုင်ပါသည်။ Chat ထဲမှ နှိပ်ပြီး အော်တိုပို့နိုင်ပါသည်။</div>
      </div>
      <span class="tag" id="adminBankQuotaSummary">0 / 40</span>
     </div>
@@ -1713,7 +1719,7 @@
     <div id="adminBankCardsList" style="display:flex;flex-direction:column;gap:8px"></div>
    </div>
 
-   <!-- Admin Tab 4: Customer Service Chat -->
+   <!-- Admin Tab 5: Customer Service Chat -->
    <div id="adminCsTab" class="hidden">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
      <div>
@@ -1749,21 +1755,21 @@
     <p data-i18n="footerRule2">Duplicate accounts and abusive activity are prevented automatically.</p>
    </div>
    <div class="footer-col">
-    <h4 data-i18n="footerFaqTitle">❓ FAQ</h4>
+    <h4 data-i18n="footerFaqTitle"> FAQ</h4>
     <p data-i18n="footerFaq1">Order exchange rate locks at the moment an order starts until completion.</p>
     <p data-i18n="footerFaq2">New account registrations automatically record device type and location for Admin review.</p>
    </div>
    <div class="footer-col">
-    <h4 data-i18n="footerSecurityTitle">🛡️ Security &amp; Assurance</h4>
+    <h4 data-i18n="footerSecurityTitle"> Security &amp; Assurance</h4>
     <p data-i18n="footerSecDesc">Protected account records, real-time sync, and 24/7 customer support.</p>
    </div>
   </div>
   <div class="footer-bottom">
    <span>© 2026 Trip Booking Platform. All rights reserved.</span>
    <div class="trust-badges">
-    <span class="trust-badge" data-i18n="badgeVerified">✔ Verified Platform</span>
-    <span class="trust-badge" data-i18n="badge247">🕒 24/7 Service</span>
-    <span class="trust-badge" data-i18n="badgeEncrypted">🔒 Secure Sync</span>
+    <span class="trust-badge" data-i18n="badgeVerified"> Verified Platform</span>
+    <span class="trust-badge" data-i18n="badge247"> 24/7 Service</span>
+    <span class="trust-badge" data-i18n="badgeEncrypted"> Secure Sync</span>
    </div>
   </div>
  </div>
@@ -1772,7 +1778,7 @@
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
  <button type="button" class="active" onclick="showPage('homePage', this)">
-  <span></span>
+  <span>🏠</span>
   <span data-i18n="navHome">Home</span>
  </button>
  <button type="button" onclick="showPage('supportPage', this)">
@@ -1821,7 +1827,7 @@
      <option value="+44">+44 🇬🇧 အင်္ဂလိပ် (UK)</option>
      <option value="+86">+86 🇨🇳 တရုတ်</option>
      <option disabled>──────────</option>
-     <!-- Other countries sorted neatly below -->
+     <!-- Other countries sorted below -->
      <option value="+60">+60 🇲🇾 Malaysia</option>
      <option value="+62">+62 🇮🇩 Indonesia</option>
      <option value="+63">+63 🇵🇭 Philippines</option>
@@ -1879,17 +1885,137 @@
      <option value="+998">+998 🇺🇿 Uzbekistan</option>
      <option value="+852">+852 🇭🇰 Hong Kong</option>
      <option value="+853">+853 🇲🇴 Macau</option>
-     <option value="+855">+855 🇰🇭 Cambodia</option>
-     <option value="+20">+20 🇪🇬 Egypt</option>
+     <!-- အာရှနှင့် အရှေ့အလယ်ပိုင်း (ကျန်ရှိနေသေးသော နိုင်ငံများ) -->
+<option value="+673">+673 🇧🇳 Brunei</option>
+<option value="+670">+670 🇹🇱 Timor-Leste</option>
+<option value="+93">+93 🇦🇫 Afghanistan</option>
+<option value="+960">+960 🇲🇻 Maldives</option>
+<option value="+961">+961 🇱🇧 Lebanon</option>
+<option value="+962">+962 🇯🇴 Jordan</option>
+<option value="+963">+963 🇸🇾 Syria</option>
+<option value="+964">+964 🇮🇶 Iraq</option>
+<option value="+965">+965 🇰🇼 Kuwait</option>
+<option value="+967">+967 🇾🇪 Yemen</option>
+<option value="+968">+968 🇴🇲 Oman</option>
+<option value="+970">+970 🇵🇸 Palestine</option>
+<option value="+973">+973 🇧🇭 Bahrain</option>
+<option value="+7">+7 🇷🇺 Russia</option>
+<option value="+374">+374 🇦🇲 Armenia</option>
+<option value="+90">+90 🇹🇷 Turkey</option>
+
+<!-- ဥရောပ (ကျန်ရှိနေသေးသော နိုင်ငံများ) -->
+<option value="+30">+30 🇬🇷 Greece</option>
+<option value="+351">+351 🇵🇹 Portugal</option>
+<option value="+352">+352 🇱🇺 Luxembourg</option>
+<option value="+353">+353 🇮🇪 Ireland</option>
+<option value="+354">+354 🇮🇸 Iceland</option>
+<option value="+355">+355 🇦🇱 Albania</option>
+<option value="+356">+356 🇲🇹 Malta</option>
+<option value="+357">+357 🇨🇾 Cyprus</option>
+<option value="+358">+358 🇫🇮 Finland</option>
+<option value="+359">+359 🇧🇬 Bulgaria</option>
+<option value="+370">+370 🇱🇹 Lithuania</option>
+<option value="+371">+371 🇱🇻 Latvia</option>
+<option value="+372">+372 🇪🇪 Estonia</option>
+<option value="+373">+373 🇲🇩 Moldova</option>
+<option value="+375">+375 🇧🇾 Belarus</option>
+<option value="+376">+376 🇦🇩 Andorra</option>
+<option value="+377">+377 🇲🇨 Monaco</option>
+<option value="+378">+378 🇸🇲 San Marino</option>
+<option value="+380">+380 🇺🇦 Ukraine</option>
+<option value="+381">+381 🇷🇸 Serbia</option>
+<option value="+382">+382 🇲🇪 Montenegro</option>
+<option value="+383">+383 🇽🇰 Kosovo</option>
+<option value="+385">+385 🇭🇷 Croatia</option>
+<option value="+386">+386 🇸🇮 Slovenia</option>
+<option value="+387">+387 🇧🇦 Bosnia and Herzegovina</option>
+<option value="+389">+389 🇲🇰 North Macedonia</option>
+<option value="+420">+420 🇨🇿 Czechia</option>
+<option value="+421">+421 🇸🇰 Slovakia</option>
+<option value="+423">+423 🇱🇮 Liechtenstein</option>
+
+<!-- အမေရိက (ကျန်ရှိနေသေးသော နိုင်ငံများ - +1 နိုင်ငံများ ချန်လှပ်ထားသည်) -->
 <option value="+51">+51 🇵🇪 Peru</option>
 <option value="+53">+53 🇨🇺 Cuba</option>
-<option value="+351">+351 🇵🇹 Portugal</option>
-<option value="+353">+353 🇮🇪 Ireland</option>
-<option value="+358">+358 🇫🇮 Finland</option>
-<option value="+380">+380 🇺🇦 Ukraine</option>
-<option value="+420">+420 🇨🇿 Czechia</option>
-<option value="+673">+673 🇧🇳 Brunei</option>
+<option value="+501">+501 🇧🇿 Belize</option>
+<option value="+502">+502 🇬🇹 Guatemala</option>
+<option value="+503">+503 🇸🇻 El Salvador</option>
+<option value="+504">+504 🇭🇳 Honduras</option>
+<option value="+505">+505 🇳🇮 Nicaragua</option>
+<option value="+506">+506 🇨🇷 Costa Rica</option>
+<option value="+507">+507 🇵🇦 Panama</option>
+<option value="+509">+509 🇭🇹 Haiti</option>
+<option value="+591">+591 🇧🇴 Bolivia</option>
+<option value="+592">+592 🇬🇾 Guyana</option>
+<option value="+593">+593 🇪🇨 Ecuador</option>
+<option value="+595">+595 🇵🇾 Paraguay</option>
+<option value="+597">+597 🇸🇷 Suriname</option>
+<option value="+598">+598 🇺🇾 Uruguay</option>
+
+<!-- အာဖရိက (ကျန်ရှိနေသေးသော နိုင်ငံများ) -->
+<option value="+20">+20 🇪🇬 Egypt</option>
+<option value="+211">+211 🇸🇸 South Sudan</option>
+<option value="+220">+220 🇬🇲 Gambia</option>
+<option value="+221">+221 🇸🇳 Senegal</option>
+<option value="+222">+222 🇲🇷 Mauritania</option>
+<option value="+223">+223 🇲🇱 Mali</option>
+<option value="+224">+224 🇬🇳 Guinea</option>
+<option value="+225">+225 🇨🇮 Côte d'Ivoire</option>
+<option value="+226">+226 🇧🇫 Burkina Faso</option>
+<option value="+227">+227 🇳🇪 Niger</option>
+<option value="+228">+228 🇹🇬 Togo</option>
+<option value="+229">+229 🇧🇯 Benin</option>
+<option value="+230">+230 🇲🇺 Mauritius</option>
+<option value="+231">+231 🇱🇷 Liberia</option>
+<option value="+232">+232 🇸🇱 Sierra Leone</option>
+<option value="+233">+233 🇬🇭 Ghana</option>
+<option value="+235">+235 🇹🇩 Chad</option>
+<option value="+236">+236 🇨🇫 Central African Republic</option>
+<option value="+237">+237 🇨🇲 Cameroon</option>
+<option value="+238">+238 🇨🇻 Cape Verde</option>
+<option value="+239">+239 🇸🇹 São Tomé and Príncipe</option>
+<option value="+240">+240 🇬🇶 Equatorial Guinea</option>
+<option value="+241">+241 🇬🇦 Gabon</option>
+<option value="+242">+242 🇨🇬 Republic of the Congo</option>
+<option value="+243">+243 🇨🇩 DR Congo</option>
+<option value="+244">+244 🇦🇴 Angola</option>
+<option value="+245">+245 🇬🇼 Guinea-Bissau</option>
+<option value="+248">+248 🇸🇨 Seychelles</option>
+<option value="+249">+249 🇸🇩 Sudan</option>
+<option value="+250">+250 🇷🇼 Rwanda</option>
+<option value="+251">+251 🇪🇹 Ethiopia</option>
+<option value="+252">+252 🇸🇴 Somalia</option>
+<option value="+253">+253 🇩🇯 Djibouti</option>
+<option value="+255">+255 🇹🇿 Tanzania</option>
+<option value="+256">+256 🇺🇬 Uganda</option>
+<option value="+257">+257 🇧🇮 Burundi</option>
+<option value="+258">+258 🇲🇿 Mozambique</option>
+<option value="+260">+260 🇿🇲 Zambia</option>
+<option value="+261">+261 🇲🇬 Madagascar</option>
+<option value="+263">+263 🇿🇼 Zimbabwe</option>
+<option value="+264">+264 🇳🇦 Namibia</option>
+<option value="+265">+265 🇲🇼 Malawi</option>
+<option value="+266">+266 🇱🇸 Lesotho</option>
+<option value="+267">+267 🇧🇼 Botswana</option>
+<option value="+268">+268 🇸🇿 Eswatini</option>
+<option value="+269">+269 🇰🇲 Comoros</option>
+<option value="+291">+291 🇪🇷 Eritrea</option>
+
+<!-- အိုရှန်းနီးယား / ပစိဖိတ် (ကျန်ရှိနေသေးသော နိုင်ငံများ) -->
+<option value="+674">+674 🇳🇷 Nauru</option>
+<option value="+675">+675 🇵🇬 Papua New Guinea</option>
+<option value="+676">+676 🇹🇴 Tonga</option>
+<option value="+677">+677 🇸🇧 Solomon Islands</option>
+<option value="+678">+678 🇻🇺 Vanuatu</option>
 <option value="+679">+679 🇫🇯 Fiji</option>
+<option value="+680">+680 🇵🇼 Palau</option>
+<option value="+682">+682 🇨🇰 Cook Islands</option>
+<option value="+685">+685 🇼🇸 Samoa</option>
+<option value="+686">+686 🇰🇮 Kiribati</option>
+<option value="+688">+688 🇹🇻 Tuvalu</option>
+<option value="+691">+691 🇫🇲 Micronesia</option>
+<option value="+692">+692 🇲🇭 Marshall Islands</option>
+     <option value="+855">+855 🇰🇭 Cambodia</option>
      <option value="+856">+856 🇱🇦 Laos</option>
     </select>
     <input id="authPhone" class="phone-long-input" type="text" placeholder="ဖုန်းနံပါတ် (သို့မဟုတ်) အီးမေးလ်">
@@ -1906,7 +2032,7 @@
   </div>
 
   <div id="regInviteField" class="field hidden">
-   <label for="authInvite">ဖိတ်ကြားကုဒ်</label>
+   <label for="authInvite">ဖိတ်ကြားကုဒ် </label>
    <input id="authInvite" type="text" placeholder="ဖိတ်ကြားကုဒ်">
   </div>
 
@@ -2066,7 +2192,7 @@
 <div id="lowBalanceModal" class="modal-backdrop hidden" onclick="closeLowBalanceModal()">
  <div class="modal-card" onclick="event.stopPropagation()">
   <div class="modal-header">
-   <h3 id="lbmTitle" data-i18n="lbmTitle">⚠️ Insufficient Balance</h3>
+   <h3 id="lbmTitle" data-i18n="lbmTitle"> Insufficient Balance</h3>
    <button type="button" class="close-x" onclick="closeLowBalanceModal()">✕</button>
   </div>
   <p id="lbmDesc" style="margin:0 0 12px;line-height:1.5;font-size:13.5px"></p>
@@ -2100,18 +2226,19 @@
    <button type="button" class="btn btn-primary" onclick="closeProfitSuccessModal()" data-i18n="psmContinueBtn">Continue</button>
   </div>
  </div>
-</div> 
- <script>
+</div>
+<script>
 const $ = (id) => document.getElementById(id);
 
 const FIREBASE_DB_URL = "https://trip-booking-62b6a-default-rtdb.asia-southeast1.firebasedatabase.app";
-const USERS_STORAGE_KEY = "tb_users_v2";
-const SESSION_USER_KEY = "tb_session_user_v2";
-const HOTELS_STORAGE_KEY = "tb_hotels_v2";
-const VIPS_STORAGE_KEY = "tb_vips_v2";
-const BANKS_STORAGE_KEY = "tb_bank_cards_v2";
-const CHATS_STORAGE_KEY = "tb_chats_v2";
-const FX_STATE_STORAGE_KEY = "tb_fx_state_v2";
+const USERS_STORAGE_KEY = "tb_users_v3";
+const SESSION_USER_KEY = "tb_session_user_v3";
+const HOTELS_STORAGE_KEY = "tb_hotels_v3";
+const VIPS_STORAGE_KEY = "tb_vips_v3";
+const BANKS_STORAGE_KEY = "tb_bank_cards_v3";
+const CHATS_STORAGE_KEY = "tb_chats_v3";
+const FX_STATE_STORAGE_KEY = "tb_fx_state_v3";
+const PROFIT_TIERS_STORAGE_KEY = "tb_profit_tiers_v1";
 const SOUND_MUTE_STORAGE_KEY = "tb_sound_muted_v1";
 
 const ADMIN_PHONE_MAIN = "09775191427";
@@ -2124,6 +2251,15 @@ const BIG_ORDER_THRESHOLD_USD = 250;
 
 const BANK_TYPES = ["KPay", "Wave", "AYA Pay", "Banking"];
 const MAX_CARDS_PER_BANK = 10;
+
+const DEFAULT_PROFIT_TIERS = [
+ { capital: 100, profit: 20 },
+ { capital: 250, profit: 50 },
+ { capital: 500, profit: 100 },
+ { capital: 1000, profit: 200 },
+ { capital: 2500, profit: 500 },
+ { capital: 5000, profit: 1000 }
+];
 
 const SPLASH_HOTEL_PHOTOS = [
  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&auto=format&fit=crop",
@@ -2167,17 +2303,21 @@ const CHAT_EMOJIS = [
  "😊", "😄", "😁", "🥰", "😍", "🤩", "😎", "🥳", "🤗", "🙏", "👍", "👌", "👏", "🙌", "💪", "❤️",
  "💙", "💚", "💛", "🧡", "💜", "🖤", "🤍", "💯", "✨", "⭐", "🌟", "🔥", "🎉", "🎊", "🏆", "💎",
  "💰", "💵", "💳", "🏦", "📈", "📊", "🏨", "🛎️", "🧳", "✈️", "🌴", "🌊", "🌞", "🌅", "🍽️", "🥂",
- "✅", "☑️", "✔️", "❗", "❓", "⏳", "⏰", "📌", "📍", "💬", "📞", "📲", "🔒", "🔑","🎁"
+ "✅", "☑️", "✔️", "❗", "❓", "⏳", "⏰", "📌", "📍", "💬", "📞", "📲", "🔒", "🔑", "🛡️", "🎁"
 ];
 
 let firebaseReady = false;
 let db = null;
 let isSyncingFromCloud = false;
 let audioCtxInstance = null;
+let lastKnownUserIds = new Set();
+let lastKnownChatCount = 0;
 
 const appState = {
  currentUser: null,
  users: [],
+ profitTiers: DEFAULT_PROFIT_TIERS.map((t) => ({ ...t })),
+ profitTableUpdatedAt: Date.now(),
  hotels: DEFAULT_HOTELS.slice(),
  vipTiers: DEFAULT_VIP_TIERS.slice(),
  bankCards: { KPay: [], Wave: [], "AYA Pay": [], Banking: [] },
@@ -2197,7 +2337,7 @@ const appState = {
  tickerIndex: 0
 };
 
-/* ---------------- 4-TYPE SOUND EFFECTS ENGINE (WEB AUDIO API) ---------------- */
+/* ---------------- SOUND EFFECTS ENGINE (7 EVENTS, AUTO-UNLOCKED ON INTERACTION) ---------------- */
 function loadSoundMutePreference() {
  try {
   appState.soundMuted = localStorage.getItem(SOUND_MUTE_STORAGE_KEY) === "1";
@@ -2214,7 +2354,7 @@ function toggleSoundMute() {
  } catch (_) {}
  updateSoundToggleButton();
  if (!appState.soundMuted) {
-  playSoundEffect("register");
+  playSoundEffect("cs_chat");
  }
 }
 
@@ -2225,12 +2365,12 @@ function updateSoundToggleButton() {
  btn.title = appState.soundMuted ? "Sound Muted (Tap to Unmute)" : "Sound On (Tap to Mute)";
 }
 
-function getAudioContext() {
+function unlockAudioContext() {
  if (appState.soundMuted) return null;
- const Ctx = window.AudioContext || window.webkitAudioContext;
- if (!Ctx) return null;
+ const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+ if (!AudioContextClass) return null;
  if (!audioCtxInstance) {
-  audioCtxInstance = new Ctx();
+  audioCtxInstance = new AudioContextClass();
  }
  if (audioCtxInstance.state === "suspended") {
   audioCtxInstance.resume().catch(() => {});
@@ -2238,66 +2378,199 @@ function getAudioContext() {
  return audioCtxInstance;
 }
 
-function playToneSequence(notes) {
- const ctx = getAudioContext();
- if (!ctx) return;
- const startAt = ctx.currentTime + 0.01;
-
- notes.forEach((n) => {
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = n.type || "sine";
-  osc.frequency.setValueAtTime(n.freq, startAt + n.delay);
-
-  const vol = n.gain || 0.14;
-  gain.gain.setValueAtTime(0.0001, startAt + n.delay);
-  gain.gain.exponentialRampToValueAtTime(vol, startAt + n.delay + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + n.delay + n.duration);
-
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-
-  osc.start(startAt + n.delay);
-  osc.stop(startAt + n.delay + n.duration + 0.03);
+function installGlobalAudioUnlockListeners() {
+ const unlockOnce = () => {
+  unlockAudioContext();
+ };
+ ["pointerdown", "touchstart", "keydown", "click"].forEach((evName) => {
+  window.addEventListener(evName, unlockOnce, { passive: true });
  });
 }
 
-// soundKind: "register" | "big_order" | "deposit" | "withdraw"
+function playTonePattern(steps) {
+ if (appState.soundMuted) return;
+ const ctx = unlockAudioContext();
+ if (!ctx) return;
+
+ const playNow = () => {
+  const baseTime = ctx.currentTime + 0.01;
+  steps.forEach((s) => {
+   const osc = ctx.createOscillator();
+   const gain = ctx.createGain();
+   osc.type = s.type || "sine";
+   osc.frequency.setValueAtTime(s.freq, baseTime + s.delay);
+
+   const peakGain = Math.min(0.28, Math.max(0.02, s.gain || 0.16));
+   gain.gain.setValueAtTime(0.0001, baseTime + s.delay);
+   gain.gain.exponentialRampToValueAtTime(peakGain, baseTime + s.delay + 0.018);
+   gain.gain.exponentialRampToValueAtTime(0.0001, baseTime + s.delay + s.duration);
+
+   osc.connect(gain);
+   gain.connect(ctx.destination);
+
+   osc.start(baseTime + s.delay);
+   osc.stop(baseTime + s.delay + s.duration + 0.03);
+  });
+ };
+
+ if (ctx.state === "suspended") {
+  ctx.resume().then(playNow).catch(() => {});
+ } else {
+  playNow();
+ }
+}
+
+// soundKind: "register" | "login" | "deposit" | "withdraw" | "big_order" | "vip_up" | "cs_chat"
 function playSoundEffect(soundKind) {
  if (appState.soundMuted) return;
  if (soundKind === "register") {
-  // Bright celebratory chime for successful account registration
-  playToneSequence([
-   { freq: 523.25, delay: 0.00, duration: 0.14, type: "triangle", gain: 0.15 },
-   { freq: 659.25, delay: 0.11, duration: 0.14, type: "triangle", gain: 0.15 },
-   { freq: 783.99, delay: 0.22, duration: 0.16, type: "triangle", gain: 0.16 },
-   { freq: 1046.50, delay: 0.34, duration: 0.32, type: "sine", gain: 0.17 }
+  playTonePattern([
+   { freq: 523.25, delay: 0.00, duration: 0.14, type: "triangle", gain: 0.18 },
+   { freq: 659.25, delay: 0.11, duration: 0.14, type: "triangle", gain: 0.18 },
+   { freq: 783.99, delay: 0.22, duration: 0.16, type: "triangle", gain: 0.19 },
+   { freq: 1046.50, delay: 0.34, duration: 0.34, type: "sine", gain: 0.20 }
   ]);
- } else if (soundKind === "big_order") {
-  // Rich high-value / big order alert & completion chord
-  playToneSequence([
-   { freq: 440.00, delay: 0.00, duration: 0.16, type: "triangle", gain: 0.16 },
-   { freq: 554.37, delay: 0.10, duration: 0.16, type: "triangle", gain: 0.16 },
-   { freq: 659.25, delay: 0.20, duration: 0.18, type: "triangle", gain: 0.17 },
-   { freq: 880.00, delay: 0.32, duration: 0.22, type: "sine", gain: 0.18 },
-   { freq: 1108.73, delay: 0.45, duration: 0.38, type: "sine", gain: 0.18 }
+ } else if (soundKind === "login") {
+  playTonePattern([
+   { freq: 493.88, delay: 0.00, duration: 0.12, type: "sine", gain: 0.16 },
+   { freq: 739.99, delay: 0.11, duration: 0.22, type: "triangle", gain: 0.17 }
   ]);
  } else if (soundKind === "deposit") {
-  // Crisp upward credit/deposit confirmation tone
-  playToneSequence([
-   { freq: 587.33, delay: 0.00, duration: 0.13, type: "sine", gain: 0.15 },
-   { freq: 783.99, delay: 0.11, duration: 0.15, type: "sine", gain: 0.16 },
-   { freq: 987.77, delay: 0.23, duration: 0.28, type: "triangle", gain: 0.16 }
+  playTonePattern([
+   { freq: 587.33, delay: 0.00, duration: 0.13, type: "sine", gain: 0.18 },
+   { freq: 783.99, delay: 0.11, duration: 0.15, type: "sine", gain: 0.19 },
+   { freq: 987.77, delay: 0.23, duration: 0.28, type: "triangle", gain: 0.20 }
   ]);
  } else if (soundKind === "withdraw") {
-  // Smooth calm payout/withdrawal completion tone
-  playToneSequence([
-   { freq: 783.99, delay: 0.00, duration: 0.14, type: "sine", gain: 0.14 },
-   { freq: 659.25, delay: 0.12, duration: 0.14, type: "sine", gain: 0.14 },
-   { freq: 523.25, delay: 0.24, duration: 0.16, type: "triangle", gain: 0.15 },
-   { freq: 783.99, delay: 0.38, duration: 0.30, type: "sine", gain: 0.16 }
+  playTonePattern([
+   { freq: 783.99, delay: 0.00, duration: 0.14, type: "sine", gain: 0.17 },
+   { freq: 659.25, delay: 0.12, duration: 0.14, type: "sine", gain: 0.17 },
+   { freq: 523.25, delay: 0.24, duration: 0.16, type: "triangle", gain: 0.18 },
+   { freq: 783.99, delay: 0.38, duration: 0.30, type: "sine", gain: 0.18 }
+  ]);
+ } else if (soundKind === "big_order") {
+  playTonePattern([
+   { freq: 440.00, delay: 0.00, duration: 0.16, type: "triangle", gain: 0.19 },
+   { freq: 554.37, delay: 0.10, duration: 0.16, type: "triangle", gain: 0.19 },
+   { freq: 659.25, delay: 0.20, duration: 0.18, type: "triangle", gain: 0.20 },
+   { freq: 880.00, delay: 0.32, duration: 0.22, type: "sine", gain: 0.21 },
+   { freq: 1108.73, delay: 0.45, duration: 0.38, type: "sine", gain: 0.21 }
+  ]);
+ } else if (soundKind === "vip_up") {
+  playTonePattern([
+   { freq: 587.33, delay: 0.00, duration: 0.12, type: "triangle", gain: 0.18 },
+   { freq: 739.99, delay: 0.10, duration: 0.12, type: "triangle", gain: 0.18 },
+   { freq: 880.00, delay: 0.20, duration: 0.14, type: "triangle", gain: 0.19 },
+   { freq: 1174.66, delay: 0.31, duration: 0.36, type: "sine", gain: 0.21 }
+  ]);
+ } else if (soundKind === "cs_chat") {
+  playTonePattern([
+   { freq: 880.00, delay: 0.00, duration: 0.10, type: "sine", gain: 0.17 },
+   { freq: 1174.66, delay: 0.09, duration: 0.18, type: "triangle", gain: 0.18 }
   ]);
  }
+}
+
+/* ---------------- $100 - $5,000 PROFIT TABLE & 30-ORDER UNEQUAL DISTRIBUTION ENGINE ---------------- */
+function normalizeProfitTiers(raw) {
+ const arr = Array.isArray(raw) ? raw : DEFAULT_PROFIT_TIERS;
+ const clean = arr
+  .map((item) => ({
+   capital: Math.max(100, Math.min(5000, Number(item?.capital) || 100)),
+   profit: Math.max(0, Number(item?.profit) || 0)
+  }))
+  .sort((a, b) => a.capital - b.capital);
+ return clean.length ? clean : DEFAULT_PROFIT_TIERS.map((t) => ({ ...t }));
+}
+
+function getProportionalReturnRateForCapital(capitalAmt) {
+ const cap = Math.max(0, Number(capitalAmt) || 0);
+ const tiers = normalizeProfitTiers(appState.profitTiers);
+ let chosen = tiers[0];
+ for (let i = 0; i < tiers.length; i++) {
+  if (cap >= tiers[i].capital) {
+   chosen = tiers[i];
+  } else {
+   break;
+  }
+ }
+ const tierCap = Math.max(1, Number(chosen?.capital) || 100);
+ const tierProfit = Math.max(0, Number(chosen?.profit) || 0);
+ return tierProfit / tierCap;
+}
+
+function computeCycleTotalProfitForUser(userObj) {
+ const baseCapital = Math.max(0, Number(userObj?.balance) || 0);
+ const rate = getProportionalReturnRateForCapital(baseCapital);
+ return Number((baseCapital * rate).toFixed(2));
+}
+
+function getOrderSplitWeights(userIdStr) {
+ let seed = 0;
+ const s = String(userIdStr || "seed");
+ for (let i = 0; i < s.length; i++) {
+  seed = (seed * 31 + s.charCodeAt(i)) % 1000003;
+ }
+ const weights = [];
+ for (let ord = 1; ord <= 30; ord++) {
+  const waveA = Math.sin(ord * 1.37 + (seed % 97) * 0.13) * 0.34;
+  const waveB = Math.cos(ord * 2.41 + (seed % 53) * 0.19) * 0.22;
+  const jitter = (((seed + ord * 7919) % 41) - 20) / 100;
+  const w = Math.max(0.35, 1.0 + waveA + waveB + jitter);
+  weights.push(w);
+ }
+ return weights;
+}
+
+function computeProfitForSpecificOrder(userObj, orderNumber, cycleTotalProfit) {
+ const totalOrders = 30;
+ const clampedOrd = Math.max(1, Math.min(totalOrders, Number(orderNumber) || 1));
+ const totalTarget = Number((Number(cycleTotalProfit) || 0).toFixed(2));
+ if (totalTarget <= 0) return 0;
+
+ const weights = getOrderSplitWeights(userObj?.id || userObj?.phone || "member");
+ const weightSum = weights.reduce((a, b) => a + b, 0) || totalOrders;
+
+ let prevCum = 0;
+ for (let i = 1; i < clampedOrd; i++) {
+  const rawShare = totalTarget * (weights[i - 1] / weightSum);
+  prevCum = Number((prevCum + rawShare).toFixed(2));
+ }
+
+ if (clampedOrd === totalOrders) {
+  return Number(Math.max(0, totalTarget - prevCum).toFixed(2));
+ }
+
+ const rawCurrent = totalTarget * (weights[clampedOrd - 1] / weightSum);
+ const nextCum = Number((prevCum + rawCurrent).toFixed(2));
+ const remainingOrders = totalOrders - clampedOrd;
+ const reserveMin = remainingOrders * 0.01;
+ const safeNextCum = Math.min(Math.max(prevCum + 0.01, nextCum), Number((totalTarget - reserveMin).toFixed(2)));
+ return Number(Math.max(0.01, safeNextCum - prevCum).toFixed(2));
+}
+
+function recalculateActiveAndPendingProfitsForAllUsers() {
+ (appState.users || []).forEach((u) => {
+  if (!u || u.isAdmin) return;
+  const total30 = computeCycleTotalProfitForUser(u);
+  const doneOrders = Math.max(0, Math.min(30, Number(u.ordersToday) || 0));
+
+  let earnedSoFar = 0;
+  for (let i = 1; i <= doneOrders; i++) {
+   earnedSoFar = Number((earnedSoFar + computeProfitForSpecificOrder(u, i, total30)).toFixed(2));
+  }
+  u.pendingProfit = Number(Math.max(0, total30 - earnedSoFar).toFixed(2));
+
+  if (u.activeOrder && u.activeOrder.ruleMode !== "negative") {
+   const ordNum = Number(u.activeOrder.orderNum) || (doneOrders + 1);
+   const matchedRule = getRuleForOrderNumber(u, ordNum);
+   if (matchedRule && matchedRule.mode === "custom_profit") {
+    u.activeOrder.estProfit = Math.max(0, Number(matchedRule.value) || 0);
+   } else {
+    u.activeOrder.estProfit = computeProfitForSpecificOrder(u, ordNum, total30);
+   }
+  }
+ });
 }
 
 /* ---------------- FX 5-WAVE ENGINE (1 USD = 5,000 MMK -> up to +500) ---------------- */
@@ -2344,8 +2617,7 @@ function computeFiveWaveOffset(stepIdx) {
   raw += w.weight * w.amp * Math.sin(stepIdx * w.freq + w.phase);
  });
  const micro = Math.sin(stepIdx * 0.53) * 12;
- const offset = raw + micro;
- return Math.max(0, Math.min(500, offset));
+ return Math.max(0, Math.min(500, raw + micro));
 }
 
 function generateInitialFxHistory(count = FX_MAX_POINTS) {
@@ -2452,7 +2724,7 @@ function setAdminFxRate(newRateVal) {
  updateFxChartAndReadout();
 }
 
-/* ---------------- FIREBASE & PERMANENT ADMIN ACCOUNT ---------------- */
+/* ---------------- FIREBASE REAL-TIME SYNC (OBJECT/KEY + CHAT + PROFIT TABLE) ---------------- */
 function ensurePermanentAdminAccount(list) {
  const arr = Array.isArray(list) ? list.slice() : [];
  const adminIdx = arr.findIndex(
@@ -2485,6 +2757,22 @@ function ensurePermanentAdminAccount(list) {
  return arr;
 }
 
+function usersArrayToMap(list) {
+ const map = {};
+ ensurePermanentAdminAccount(list).forEach((raw) => {
+  const norm = normalizeUserRecord(raw);
+  map[norm.id] = norm;
+ });
+ return map;
+}
+
+function triggerAdminLiveAlert(badgeText) {
+ const pill = $("adminLiveAlertPill");
+ if (!pill) return;
+ pill.textContent = `🔔 ${badgeText || "Live Activity"}`;
+ pill.classList.remove("hidden");
+}
+
 function initFirebase() {
  try {
   if (!window.firebase || !FIREBASE_DB_URL) return;
@@ -2497,11 +2785,20 @@ function initFirebase() {
   db.ref("users").on("value", (snap) => {
    const val = snap.val();
    if (!val) return;
-   const cloudList = Array.isArray(val) ? val : Object.values(val);
+   const cloudList = Array.isArray(val)
+    ? val.filter(Boolean)
+    : Object.entries(val).map(([k, v]) => ({ ...(v || {}), id: (v && v.id) || k }));
    if (!cloudList.length) return;
+
+   const prevIds = new Set(lastKnownUserIds);
+   const normalizedList = ensurePermanentAdminAccount(cloudList.map(normalizeUserRecord));
+   const newAccounts = normalizedList.filter((u) => !u.isAdmin && prevIds.size > 0 && !prevIds.has(u.id));
+
    isSyncingFromCloud = true;
-   appState.users = ensurePermanentAdminAccount(cloudList.map(normalizeUserRecord));
+   appState.users = normalizedList;
+   lastKnownUserIds = new Set(appState.users.map((u) => u.id));
    persistUsersToLocal();
+
    if (appState.currentUser) {
     const updatedMe = appState.users.find((u) => u.id === appState.currentUser.id);
     if (updatedMe) {
@@ -2510,20 +2807,66 @@ function initFirebase() {
     }
    }
    isSyncingFromCloud = false;
+
+   if (newAccounts.length && appState.currentUser?.isAdmin) {
+    playSoundEffect("register");
+    triggerAdminLiveAlert(`အကောင့်အသစ်: ${newAccounts[0].name}`);
+   }
    renderAll();
   });
 
   db.ref("chats").on("value", (snap) => {
    const val = snap.val();
    if (!val || typeof val !== "object") return;
+
+   let totalMsgs = 0;
+   let latestUserMsg = null;
+   Object.entries(val).forEach(([uid, arr]) => {
+    if (!Array.isArray(arr)) return;
+    totalMsgs += arr.length;
+    arr.forEach((m) => {
+     if (m && m.sender === "user") {
+      if (!latestUserMsg || (Number(m.ts) || 0) > (Number(latestUserMsg.ts) || 0)) {
+       latestUserMsg = { ...m, uid };
+      }
+     }
+    });
+   });
+
+   const hadPriorMsgs = lastKnownChatCount > 0;
+   const increasedMsgs = totalMsgs > lastKnownChatCount;
+
    isSyncingFromCloud = true;
    appState.chats = val;
+   lastKnownChatCount = totalMsgs;
    try { localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(appState.chats)); } catch (_) {}
    isSyncingFromCloud = false;
+
+   if (hadPriorMsgs && increasedMsgs) {
+    playSoundEffect("cs_chat");
+    if (appState.currentUser?.isAdmin && latestUserMsg) {
+     const senderUser = appState.users.find((u) => u.id === latestUserMsg.uid);
+     triggerAdminLiveAlert(`CS စာသစ်: ${senderUser?.name || latestUserMsg.uid}`);
+    }
+   }
+
    renderSupportMessages();
    renderAdminChatMessages();
    renderCsClientList();
    updateAdminUnreadBadge();
+  });
+
+  db.ref("profitTiers").on("value", (snap) => {
+   const val = snap.val();
+   if (!val) return;
+   const arr = Array.isArray(val) ? val : Object.values(val);
+   if (!arr.length) return;
+   isSyncingFromCloud = true;
+   appState.profitTiers = normalizeProfitTiers(arr);
+   recalculateActiveAndPendingProfitsForAllUsers();
+   try { localStorage.setItem(PROFIT_TIERS_STORAGE_KEY, JSON.stringify(appState.profitTiers)); } catch (_) {}
+   isSyncingFromCloud = false;
+   renderAll();
   });
 
   db.ref("fxRate").on("value", (snap) => {
@@ -2545,10 +2888,53 @@ function initFirebase() {
 
 function syncAllAccountsEverywhere() {
  appState.users = ensurePermanentAdminAccount(appState.users);
+ lastKnownUserIds = new Set(appState.users.map((u) => u.id));
  persistUsersToLocal();
  if (firebaseReady && db && !isSyncingFromCloud) {
-  db.ref("users").set(appState.users).catch(() => {});
+  db.ref("users").set(usersArrayToMap(appState.users)).catch(() => {});
  }
+}
+
+function pullLatestFromFirebaseOnce() {
+ if (!firebaseReady || !db) return Promise.resolve(false);
+ return Promise.all([
+  db.ref("users").once("value").then((snap) => {
+   const val = snap.val();
+   if (!val) return;
+   const list = Array.isArray(val)
+    ? val.filter(Boolean)
+    : Object.entries(val).map(([k, v]) => ({ ...(v || {}), id: (v && v.id) || k }));
+   if (list.length) {
+    appState.users = ensurePermanentAdminAccount(list.map(normalizeUserRecord));
+    lastKnownUserIds = new Set(appState.users.map((u) => u.id));
+    persistUsersToLocal();
+    if (appState.currentUser) {
+     const foundMe = appState.users.find((u) => u.id === appState.currentUser.id);
+     if (foundMe) {
+      appState.currentUser = normalizeUserRecord(foundMe);
+      try { localStorage.setItem(SESSION_USER_KEY, JSON.stringify(appState.currentUser)); } catch (_) {}
+     }
+    }
+   }
+  }).catch(() => {}),
+  db.ref("chats").once("value").then((snap) => {
+   const val = snap.val();
+   if (val && typeof val === "object") {
+    appState.chats = val;
+    try { localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(appState.chats)); } catch (_) {}
+   }
+  }).catch(() => {}),
+  db.ref("profitTiers").once("value").then((snap) => {
+   const val = snap.val();
+   if (val) {
+    const arr = Array.isArray(val) ? val : Object.values(val);
+    if (arr.length) {
+     appState.profitTiers = normalizeProfitTiers(arr);
+     recalculateActiveAndPendingProfitsForAllUsers();
+    }
+   }
+  }).catch(() => {})
+ ]).then(() => true);
 }
 
 function forceSyncNow() {
@@ -2558,8 +2944,11 @@ function forceSyncNow() {
  persistHotelsAndVips();
  persistBankCards();
  persistChats();
- renderAll();
- showRegistrationToast("Sync ပြီးပါပြီ", "ဒေတာများကို တိုက်ရိုက် ညှိနှိုင်းပြီးပါပြီ။");
+ persistProfitTiersToCloud();
+ pullLatestFromFirebaseOnce().then(() => {
+  renderAll();
+  showRegistrationToast("Sync ပြီးပါပြီ", "အကောင့်များ၊ CS စာများနှင့် ဇယားများကို အပ်ဒိတ်လုပ်ပြီးပါပြီ။");
+ });
 }
 
 /* ---------------- HOTEL SPLASH INTRO CONTROLLER ---------------- */
@@ -2607,7 +2996,7 @@ const LANG_DICTS = {
   contactServiceBtn: "Customer Service ဆက်သွယ်ရန်",
   todayUsdRateTitle: "ယနေ့ USD ငွေလဲနှုန်း",
   mmkUnit: "ကျပ်",
-  fxChartTitle: "📈 USD ↔ MMK ငွေကြေးဈေးနှုန်း အတက်အကျ",
+  fxChartTitle: " USD ↔ MMK ငွေကြေးဈေးနှုန်း အတက်အကျ",
   step1Badge: "အဆင့် ၁",
   step1Title: "ငွေဖြည့်သွင်းပါ",
   step1Desc: "ဘိုကင်တာဝန်များ အဆင်ပြေချောမွေ့စွာ လုပ်ဆောင်ရန် လက်ကျန်ငွေ ဖြည့်သွင်းပါ။",
@@ -2624,7 +3013,7 @@ const LANG_DICTS = {
   csActiveBadge: "● အသုံးပြုနေသည်",
   typeMsgPh: "စာရိုက်ရန်...",
   accBal: "အကောင့် လက်ကျန်ငွေ",
-  taskComm: "တာဝန် ကော်မရှင်",
+  taskComm: "ကျန်ရှိ ၃၀-အော်ဒါ အမြတ်",
   totalProfit: "စုစုပေါင်း အမြတ်",
   dailyLimit: "နေ့စဉ် အော်ဒါ",
   taskCenter: "ဘိုကင် တာဝန်ဌာန",
@@ -2652,11 +3041,11 @@ const LANG_DICTS = {
   inviteCodeTitle: "ဖိတ်ကြားကုဒ်",
   refBonus: "ဖိတ်ခေါ်မှု အမြတ်",
   inviteLinkLabel: "ဖိတ်ကြားလင့်ခ်",
-  adminPanelTitle: "Admin & Trip Booking Service ထိန်းချုပ်ခန်း",
+  adminPanelTitle: " Admin & Trip Booking Service ",
   usersWord: "အသုံးပြုသူများ",
-  adminUserSearchPh: "အမည်၊ ဖုန်း၊ စက်ပစ္စည်း၊ တည်နေရာ ရှာရန်...",
+  adminUserSearchPh: "အမည်၊ ဖုန်း၊ ကုဒ်၊ စက်ပစ္စည်း၊ တည်နေရာ ရှာရန်...",
   filterAllUsers: "အကောင့် အားလုံး",
-  filterLiveOrder: "🔴 အော်ဒါတင်နေသူ (LIVE)",
+  filterLiveOrder: "😍 အော်ဒါတင်နေသူ (LIVE)",
   filterOnlineUsers: "🟢 အွန်လိုင်း ရှိနေသူများ",
   filterNegUsers: "⚠️ Negative လက်ကျန်ရှိသူ",
   filterRuledUsers: "🎯 Order Rules သတ်မှတ်ထားသူ",
@@ -2666,7 +3055,7 @@ const LANG_DICTS = {
   thPhoneEmail: "ဖုန်းနံပါတ် / အီးမေးလ်",
   thPass: "စကားဝှက်",
   thRef: "မိမိကုဒ်",
-  thInvitedBy: "ဖိတ်ခေါ်သူကုဒ်",
+  thInvitedBy: "အသုံးပြုခဲ့သော ကုဒ်",
   thVip: "VIP အဆင့်",
   thBal: "လက်ကျန် ($)",
   thNeg: "Negative ($)",
@@ -2715,7 +3104,7 @@ const LANG_DICTS = {
   ormModeLabel: "Rule အမျိုးအစား",
   ormModeNone: "ပုံမှန် (Rule မရှိ)",
   ormModeCustomProfit: "သတ်မှတ် အမြတ် ($)",
-  ormModeNegative: "အနှုတ် လက်ကျန် ($)",
+  ormModeNegative: "Negative လက်ကျန် ($)",
   ormProfitValLabel: "သတ်မှတ် အမြတ် ($)",
   ormNegValLabel: "Negative ပမာဏ ($)",
   ormSaveRuleBtn: "Rule သိမ်းဆည်းရန်",
@@ -2725,10 +3114,10 @@ const LANG_DICTS = {
   ormColValue: "တန်ဖိုး ($)",
   ormColStatus: "အခြေအနေ",
   ormClearAllBtn: "Rules အားလုံး ဖျက်ရန်",
-  comTitle: " ဘိုကင် အော်ဒါ",
+  comTitle: "🛎️ ဘိုကင် အော်ဒါ",
   comHotelPrice: "ဟိုတယ် ဈေးနှုန်း:",
   comLockedRate: "Lock နှုန်း:",
-  comEstProfit: "ခန့်မှန်း အမြတ်:",
+  comEstProfit: "ဤအော်ဒါ အမြတ်:",
   comWalletBal: "လက်ကျန်ငွေ:",
   comStarLabel: "အဆင့်သတ်မှတ်ချက် (၁–၅ ကြယ်)",
   comQuickReviewLabel: "အမြန် သုံးသပ်ချက်များ",
@@ -2779,11 +3168,11 @@ function changeLanguage(langCode) {
 
 /* ---------------- LIVE TICKER ---------------- */
 const TICKER_ITEMS = [
- { kind: "profit", text: "💎 VIP Commission Settled · +$18.00 (90,000 ကျပ်)" },
- { kind: "dp", text: " Deposit Confirmed · +$250.00 via KPay" },
- { kind: "wd", text: " Withdrawal Completed · -$180.00 via Wave" },
- { kind: "profit", text: " Order #14/30 Completed · +$6.40 Commission" },
- { kind: "bonus", text: "🎁 TP2323 Invite Bonus $18 · Unlocks at 30 Completed Orders" }
+ { kind: "profit", text: "💎 30-Order Proportional Profit · $100 → $20 (Unequal per order, exact at #30)" },
+ { kind: "dp", text: "💵 Deposit Confirmed · +$250.00 via KPay" },
+ { kind: "wd", text: "🏦 Withdrawal Completed · -$180.00 via Wave" },
+ { kind: "profit", text: "🏨 Order #14/30 Completed · Commission Credited" },
+ { kind: "bonus", text: "🎁 TP2323 Invite Bonus $18 · Separate Bonus Bucket (Unlocks at 30 Orders)" }
 ];
 
 function renderActivityTicker() {
@@ -3194,6 +3583,7 @@ function normalizeUserRecord(u) {
  rec.history = Array.isArray(rec.history) ? rec.history.slice() : [];
  rec.activeOrder = rec.activeOrder && typeof rec.activeOrder === "object" ? { ...rec.activeOrder } : null;
 
+ // Separate $18 TP2323 bonus bucket (independent of capital & booking profit calculation)
  rec.tp2323Eligible = isAdminAcct ? false : Boolean(rec.tp2323Eligible);
  rec.tp2323LockedBonus = isAdminAcct ? 0 : Math.max(0, Number(rec.tp2323LockedBonus) || 0);
  rec.tp2323UnlockedBonus = isAdminAcct ? 0 : Math.max(0, Number(rec.tp2323UnlockedBonus) || 0);
@@ -3202,7 +3592,7 @@ function normalizeUserRecord(u) {
  return rec;
 }
 
-/* ---------------- TP2323 & DOWNLINE $18 BONUS (30 ORDERS UNLOCK) ---------------- */
+/* ---------------- TP2323 $18 SEPARATE BONUS BUCKET (UNLOCKS AT 30 ORDERS) ---------------- */
 function getTp2323RootCodes() {
  const set = new Set(["TP2323"]);
  (appState.users || []).forEach((u) => {
@@ -3221,12 +3611,11 @@ function isEligibleForTp2323Bonus(userObj, explicitInviteCode = "") {
  const codeToCheck = String(explicitInviteCode || userObj.invitedBy || "").trim().toUpperCase();
  if (!codeToCheck) return false;
  if (codeToCheck === "TP2323") return true;
- const rootCodes = getTp2323RootCodes();
- return rootCodes.has(codeToCheck);
+ return getTp2323RootCodes().has(codeToCheck);
 }
 
 function evaluateTp2323BonusOnOrderProgress(userObj) {
- if (!userObj || !userObj.tp2323Eligible) return false;
+ if (!userObj || !userObj.tp2323Eligible || userObj.tp2323Withdrawn) return false;
  const ordersDone = Number(userObj.ordersToday) || 0;
  const locked = Number(userObj.tp2323LockedBonus) || 0;
  if (ordersDone >= TP2323_UNLOCK_ORDERS && locked > 0) {
@@ -3237,7 +3626,7 @@ function evaluateTp2323BonusOnOrderProgress(userObj) {
    id: "tp2323_unlock_" + Date.now(),
    ts: Date.now(),
    type: "bonus",
-   title: "TP2323 $18 Bonus Unlocked (30 Orders Completed)",
+   title: "TP2323 $18 Separate Bonus Unlocked (30/30 Orders Completed)",
    amount: locked,
    status: "Unlocked / Withdrawable"
   });
@@ -3246,13 +3635,18 @@ function evaluateTp2323BonusOnOrderProgress(userObj) {
  return false;
 }
 
+function getWithdrawableBonusAmount(userObj) {
+ if (!userObj || !userObj.tp2323Eligible || userObj.tp2323Withdrawn) return 0;
+ if ((Number(userObj.ordersToday) || 0) >= TP2323_UNLOCK_ORDERS) {
+  return Math.max(0, Number(userObj.tp2323UnlockedBonus) || 0);
+ }
+ return 0;
+}
+
 function getEffectiveAvailableBalance(userObj) {
  if (!userObj) return 0;
  const baseBal = Number(userObj.balance) || 0;
- const unlockedBonus = (Number(userObj.ordersToday) || 0) >= TP2323_UNLOCK_ORDERS
-  ? (Number(userObj.tp2323UnlockedBonus) || 0)
-  : 0;
- return Math.max(0, baseBal + unlockedBonus);
+ return Math.max(0, baseBal + getWithdrawableBonusAmount(userObj));
 }
 
 /* ---------------- AUTH & FIELD-SPECIFIC ERROR HIGHLIGHT ---------------- */
@@ -3349,7 +3743,7 @@ function submitAuth() {
    appState.users = ensurePermanentAdminAccount(appState.users);
    const adminAcct = appState.users.find((u) => u.phone === ADMIN_PHONE_MAIN);
    stampUserTelemetry(adminAcct, { force: true });
-   completeLogin(adminAcct, false);
+   completeLogin(adminAcct, "login");
    return;
   }
 
@@ -3379,7 +3773,7 @@ function submitAuth() {
   }
 
   stampUserTelemetry(matchedUser, { force: true });
-  completeLogin(matchedUser, false);
+  completeLogin(matchedUser, "login");
   return;
  }
 
@@ -3392,6 +3786,7 @@ function submitAuth() {
  const nameVal = String(nameEl?.value || "").trim();
  const phoneOrEmailRaw = String(phoneEl?.value || "").trim();
  const codePrefix = String($("authCountryCode")?.value || "+95").trim();
+ // Any referral code is accepted freely on registration
  const inviteCodeVal = String(inviteEl?.value || "").trim().toUpperCase();
 
  if (!nameVal) {
@@ -3450,26 +3845,31 @@ function submitAuth() {
  stampUserTelemetry(newUser, { force: true });
  appState.users.unshift(newUser);
  syncAllAccountsEverywhere();
- completeLogin(newUser, true);
+ completeLogin(newUser, "register");
 }
 
-function completeLogin(userObj, isNewRegistration = false) {
+function completeLogin(userObj, authAction = "login") {
  const normalized = normalizeUserRecord(userObj);
  appState.currentUser = normalized;
  try { localStorage.setItem(SESSION_USER_KEY, JSON.stringify(normalized)); } catch (_) {}
  closeAuth();
 
+ if (authAction === "register") {
+  playSoundEffect("register");
+ } else {
+  playSoundEffect("login");
+ }
+
  if (normalized.isAdmin) {
   openAdminControlPanel();
-  showRegistrationToast("Admin ထိန်းချုပ်ခန်း ဝင်ရောက်ပြီးပါပြီ", "အကောင့်များ၊ ဟိုတယ်များ၊ ဘဏ်ကဒ်များနှင့် Service Chat ကို စီမံနိုင်ပါပြီ။");
+  showRegistrationToast("Admin ထိန်းချုပ်ခန်း ဝင်ရောက်ပြီးပါပြီ", "အကောင့်များ၊ ၃၀-အော်ဒါ အမြတ်ဇယား၊ ဟိုတယ်များနှင့် Service Chat ကို စီမံနိုင်ပါပြီ။");
   return;
  }
 
  renderAll();
- if (isNewRegistration) {
-  playSoundEffect("register");
+ if (authAction === "register") {
   const bonusNote = normalized.tp2323Eligible
-   ? " · TP2323 $18 ဘောနပ်စ် (အော်ဒါ ၃၀ ပြည့်မှ ထုတ်ယူနိုင်)"
+   ? " · TP2323 $18 ဘောနပ်စ် (သီးခြား · အော်ဒါ ၃၀ ပြည့်မှ ထုတ်ယူနိုင်)"
    : "";
   showRegistrationToast("ဂုဏ်ယူပါတယ်", `အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်${bonusNote}`);
  } else {
@@ -3504,7 +3904,7 @@ function handleLogoClick() {
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
 
-/* ---------------- BOOKING & ORDERS ---------------- */
+/* ---------------- BOOKING & 30-ORDER PROPORTIONAL PROFIT ENGINE ---------------- */
 function getActiveOrderRules(userObj) {
  if (!userObj || !Array.isArray(userObj.orderRules)) return [];
  return userObj.orderRules.filter((r) => r && Number(r.orderNum) >= 1 && Number(r.orderNum) <= 30 && r.mode && r.mode !== "none");
@@ -3558,7 +3958,8 @@ function triggerGetOrder() {
  const pickedHotel = hotelList[(nextOrderNum - 1) % hotelList.length];
  const lockedRate = getCurrentLiveFxRate();
 
- let estProfit = Number(((Number(pickedHotel.price) || 100) * (Number(vip.profitRate) || 0.012)).toFixed(2));
+ const cycleTotalProfit = computeCycleTotalProfitForUser(u);
+ let estProfit = computeProfitForSpecificOrder(u, nextOrderNum, cycleTotalProfit);
  if (matchedRule && matchedRule.mode === "custom_profit") {
   estProfit = Math.max(0, Number(matchedRule.value) || estProfit);
  }
@@ -3578,6 +3979,7 @@ function triggerGetOrder() {
   hotelPrice: Number(pickedHotel.price) || 100,
   lockedRate,
   estProfit,
+  cycleTotalProfit,
   ruleMode: matchedRule ? matchedRule.mode : "none",
   ruleValue: matchedRule ? (Number(matchedRule.value) || 0) : 0,
   startedAt: Date.now()
@@ -3672,6 +4074,7 @@ function submitCenterOrderReview() {
   if (!ord) return;
 
   const wasBigOrder = isBigOrderTask(ord);
+  const prevVip = Number(u.vipLevel) || 1;
   u.ordersToday = Math.min(30, (Number(u.ordersToday) || 0) + 1);
   let profitEarned = 0;
 
@@ -3681,9 +4084,16 @@ function submitCenterOrderReview() {
    u.balance = (Number(u.balance) || 0) - negAmt;
   } else {
    profitEarned = Number(ord.estProfit) || 0;
-   u.balance = (Number(u.balance) || 0) + profitEarned;
-   u.totalProfit = (Number(u.totalProfit) || 0) + profitEarned;
+   u.balance = Number(((Number(u.balance) || 0) + profitEarned).toFixed(2));
+   u.totalProfit = Number(((Number(u.totalProfit) || 0) + profitEarned).toFixed(2));
   }
+
+  if (u.balance >= 1000 && Number(u.vipLevel) < 3) {
+   u.vipLevel = 3;
+  } else if (u.balance >= 300 && Number(u.vipLevel) < 2) {
+   u.vipLevel = 2;
+  }
+  const leveledUpVip = Number(u.vipLevel) > prevVip;
 
   if (Array.isArray(u.orderRules)) {
    u.orderRules.forEach((r) => {
@@ -3704,7 +4114,8 @@ function submitCenterOrderReview() {
    status: ord.ruleMode === "negative" ? "Negative Settled" : "Completed"
   });
 
-  const unlockedNow = evaluateTp2323BonusOnOrderProgress(u);
+  const unlockedTp2323Now = evaluateTp2323BonusOnOrderProgress(u);
+  recalculateActiveAndPendingProfitsForAllUsers();
   u.activeOrder = null;
   stampUserTelemetry(u, { force: true });
   upsertCurrentUserInList();
@@ -3712,7 +4123,9 @@ function submitCenterOrderReview() {
   closeCenterOrderModal(false);
   renderAll();
 
-  if (wasBigOrder || unlockedNow) {
+  if (leveledUpVip) {
+   playSoundEffect("vip_up");
+  } else if (wasBigOrder || unlockedTp2323Now) {
    playSoundEffect("big_order");
   }
 
@@ -3721,9 +4134,11 @@ function submitCenterOrderReview() {
   $("psmRateVal").textContent = `1 USD = ${formatNumber(ord.lockedRate, 2)} ${getDict().mmkUnit || "ကျပ်"}`;
   $("psmBalanceVal").textContent = formatUsd(getEffectiveAvailableBalance(u));
   $("psmOrdersVal").textContent = `${u.ordersToday}/30`;
-  $("psmReviewSummary").textContent = unlockedNow
-   ? `★ ${selectedOrderStars}/5 · "${reviewComment}" — ဂုဏ်ယူပါတယ်! အော်ဒါ ၃၀ ပြည့်သွားသဖြင့် TP2323 $18 ဘောနပ်စ် ပွင့်သွားပါပြီ။`
-   : `★ ${selectedOrderStars}/5 · "${reviewComment}"`;
+
+  const notes = [`★ ${selectedOrderStars}/5 · "${reviewComment}"`];
+  if (leveledUpVip) notes.push(`👑 VIP Level Up → VIP ${u.vipLevel}!`);
+  if (unlockedTp2323Now) notes.push("🎁 TP2323 $18 Separate Bonus Unlocked (30/30 Orders Completed)!");
+  $("psmReviewSummary").textContent = notes.join(" · ");
   $("profitSuccessModal")?.classList.remove("hidden");
  }, 900);
 }
@@ -3762,11 +4177,19 @@ function renderBookingCenter() {
  const u = appState.currentUser;
  const ordersDone = u ? Math.min(30, Number(u.ordersToday) || 0) : 0;
  const deg = Math.round((ordersDone / 30) * 360);
+ const cycleTarget = u ? computeCycleTotalProfitForUser(u) : 0;
+ const ratePct = (getProportionalReturnRateForCapital(u?.balance || 0) * 100).toFixed(2);
 
  if ($("taskWallet")) $("taskWallet").textContent = formatUsd(getEffectiveAvailableBalance(u));
  if ($("taskProfit")) $("taskProfit").textContent = formatUsd(u?.pendingProfit || 0);
  if ($("taskTotalProfit")) $("taskTotalProfit").textContent = formatUsd(u?.totalProfit || 0);
  if ($("taskOrdersText")) $("taskOrdersText").textContent = `${ordersDone}/30`;
+
+ if ($("orderCycleProfitSummary")) {
+  $("orderCycleProfitSummary").textContent = u
+   ? `30-Order Target Profit: ${formatUsd(cycleTarget)} (${ratePct}% proportional · unequal per order, exact at #30)`
+   : "";
+ }
 
  if ($("orderCircle")) {
   $("orderCircle").style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg 360deg)`;
@@ -3784,11 +4207,13 @@ function renderBookingCenter() {
  if (tpHint) {
   if (u && u.tp2323Eligible) {
    tpHint.classList.remove("hidden");
-   if (ordersDone >= TP2323_UNLOCK_ORDERS) {
-    tpHint.textContent = `🎁 TP2323 $18 Bonus: Unlocked (${ordersDone}/30 Orders Completed — Withdrawable)`;
+   if (u.tp2323Withdrawn) {
+    tpHint.textContent = "🎁 TP2323 $18 Separate Bonus: Withdrawn";
+   } else if (ordersDone >= TP2323_UNLOCK_ORDERS) {
+    tpHint.textContent = `🎁 TP2323 $18 Separate Bonus: Unlocked (${formatUsd(u.tp2323UnlockedBonus || TP2323_BONUS_AMOUNT)} Ready)`;
    } else {
     const left = Math.max(0, TP2323_UNLOCK_ORDERS - ordersDone);
-    tpHint.textContent = `🔒 TP2323 $18 Bonus: Locked (${ordersDone}/30 Orders · ${left} orders left to unlock)`;
+    tpHint.textContent = `🔒 TP2323 $18 Separate Bonus: Locked (${ordersDone}/30 Orders · ${left} left to unlock)`;
    }
   } else {
    tpHint.classList.add("hidden");
@@ -3869,10 +4294,12 @@ function renderProfile() {
   if (u.tp2323Eligible) {
    const ordersDone = Number(u.ordersToday) || 0;
    tpStatusEl.classList.remove("hidden");
-   if (ordersDone >= TP2323_UNLOCK_ORDERS) {
-    tpStatusEl.textContent = `🎁 TP2323 $18 Bonus: Unlocked (${formatUsd(u.tp2323UnlockedBonus || TP2323_BONUS_AMOUNT)} Ready to Withdraw · ${ordersDone}/30 Orders)`;
+   if (u.tp2323Withdrawn) {
+    tpStatusEl.textContent = "🎁 TP2323 $18 Separate Bonus: Withdrawn";
+   } else if (ordersDone >= TP2323_UNLOCK_ORDERS) {
+    tpStatusEl.textContent = `🎁 TP2323 $18 Separate Bonus: Unlocked (${formatUsd(u.tp2323UnlockedBonus || TP2323_BONUS_AMOUNT)} Ready to Withdraw · ${ordersDone}/30 Orders)`;
    } else {
-    tpStatusEl.textContent = `🔒 TP2323 $18 Bonus: Locked (${formatUsd(u.tp2323LockedBonus || TP2323_BONUS_AMOUNT)} · ${ordersDone}/30 Orders Completed)`;
+    tpStatusEl.textContent = `🔒 TP2323 $18 Separate Bonus: Locked (${formatUsd(u.tp2323LockedBonus || TP2323_BONUS_AMOUNT)} · ${ordersDone}/30 Orders Completed)`;
    }
   } else {
    tpStatusEl.classList.add("hidden");
@@ -3950,7 +4377,7 @@ function handleWithdrawRequest() {
  const u = appState.currentUser;
  if (!u) return openAuth("login");
  const avail = getEffectiveAvailableBalance(u);
- const hasLockedTp2323 = u.tp2323Eligible && (Number(u.ordersToday) || 0) < TP2323_UNLOCK_ORDERS;
+ const hasLockedTp2323 = u.tp2323Eligible && !u.tp2323Withdrawn && (Number(u.ordersToday) || 0) < TP2323_UNLOCK_ORDERS;
  if (avail <= 0) {
   if (hasLockedTp2323) {
    showRegistrationToast("TP2323 $18 ဘောနပ်စ် Lock ဖြစ်နေပါသည်", `အော်ဒါ ၃၀ ပြည့်မှသာ ($18.00) ထုတ်ယူနိုင်ပါမည်။ (လက်ရှိ: ${u.ordersToday || 0}/30)`);
@@ -3958,6 +4385,11 @@ function handleWithdrawRequest() {
   }
   showRegistrationToast("ထုတ်ယူရန် လက်ကျန်မရှိပါ", "လက်ကျန်ငွေ မရှိသေးပါ။");
   return;
+ }
+ if (getWithdrawableBonusAmount(u) > 0) {
+  u.tp2323UnlockedBonus = 0;
+  u.tp2323Withdrawn = true;
+  upsertCurrentUserInList();
  }
  playSoundEffect("withdraw");
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
@@ -4045,6 +4477,7 @@ function switchAdminTab(tabName) {
  appState.activeAdminTab = tabName || "users";
  const map = {
   users: "adminUsersTab",
+  profit_table: "adminProfitTableTab",
   hotels: "adminHotelsTab",
   banks: "adminBanksTab",
   cs: "adminCsTab"
@@ -4056,6 +4489,7 @@ function switchAdminTab(tabName) {
 
  const btnMap = {
   users: "adminTabBtnUsers",
+  profit_table: "adminTabBtnProfitTable",
   hotels: "adminTabBtnHotels",
   banks: "adminTabBtnBanks",
   cs: "adminTabBtnCs"
@@ -4067,6 +4501,7 @@ function switchAdminTab(tabName) {
 
  updateAdminFourPointSummary();
  if (appState.activeAdminTab === "users") renderAdminUsers();
+ else if (appState.activeAdminTab === "profit_table") renderAdminProfitTable();
  else if (appState.activeAdminTab === "hotels") renderAdminHotelsAndVips();
  else if (appState.activeAdminTab === "banks") renderAdminBankCardsTab();
  else if (appState.activeAdminTab === "cs") {
@@ -4075,6 +4510,107 @@ function switchAdminTab(tabName) {
  }
 }
 
+/* ---------------- ADMIN $100 - $5,000 PROFIT TABLE ---------------- */
+function renderAdminProfitTable() {
+ const tbody = $("adminProfitTableRows");
+ const tiers = normalizeProfitTiers(appState.profitTiers);
+ appState.profitTiers = tiers;
+
+ const first = tiers[0] || { capital: 100, profit: 20 };
+ const pct = first.capital > 0 ? ((first.profit / first.capital) * 100).toFixed(2) : "20.00";
+ if ($("profitTableActiveSummary")) {
+  $("profitTableActiveSummary").innerHTML = `<span>Active Base Rule: ${formatUsd(first.capital)} → ${formatUsd(first.profit)} (${pct}% over 30 orders · unequal per order, exact total at #30)</span>`;
+ }
+ if ($("profitTableUpdatedAt")) {
+  $("profitTableUpdatedAt").textContent = `Updated: ${formatExactTimestamp(appState.profitTableUpdatedAt)}`;
+ }
+
+ if (!tbody) return;
+ tbody.innerHTML = tiers.map((t, idx) => {
+  const cap = Number(t.capital) || 100;
+  const prof = Number(t.profit) || 0;
+  const retPct = cap > 0 ? ((prof / cap) * 100).toFixed(2) : "0.00";
+  return `
+   <tr>
+    <td>${idx + 1}</td>
+    <td>
+     <input type="number" class="pt-cap-inp" data-pidx="${idx}" min="100" max="5000" step="1" value="${cap}" style="width:120px" oninput="updateProfitRowPreview(${idx})">
+    </td>
+    <td>
+     <input type="number" class="pt-prof-inp" data-pidx="${idx}" min="0" step="0.01" value="${prof}" style="width:120px" oninput="updateProfitRowPreview(${idx})">
+    </td>
+    <td>
+     <span class="tag" id="ptRowRatio_${idx}">${retPct}%</span>
+    </td>
+    <td>
+     <button type="button" class="btn btn-danger btn-xs" onclick="deleteProfitTierRow(${idx})">Delete</button>
+    </td>
+   </tr>
+  `;
+ }).join("");
+}
+
+function updateProfitRowPreview(idx) {
+ const capEl = document.querySelector(`.pt-cap-inp[data-pidx="${idx}"]`);
+ const profEl = document.querySelector(`.pt-prof-inp[data-pidx="${idx}"]`);
+ const badgeEl = $(`ptRowRatio_${idx}`);
+ if (!capEl || !profEl || !badgeEl) return;
+ const cap = Math.max(100, Math.min(5000, Number(capEl.value) || 100));
+ const prof = Math.max(0, Number(profEl.value) || 0);
+ badgeEl.textContent = `${((prof / cap) * 100).toFixed(2)}%`;
+}
+
+function addProfitTierRow() {
+ const current = normalizeProfitTiers(appState.profitTiers);
+ const last = current[current.length - 1] || { capital: 100, profit: 20 };
+ const nextCap = Math.min(5000, Math.max(100, (Number(last.capital) || 100) + 500));
+ const nextProf = Number(((nextCap * (Number(last.profit) || 20)) / Math.max(1, Number(last.capital) || 100)).toFixed(2));
+ current.push({ capital: nextCap, profit: nextProf });
+ appState.profitTiers = current;
+ renderAdminProfitTable();
+}
+
+function deleteProfitTierRow(idx) {
+ if (!Array.isArray(appState.profitTiers) || appState.profitTiers.length <= 1) {
+  showRegistrationToast("အနည်းဆုံး Row ၁ ခု ရှိရပါမည်", "$100–$5,000 ဇယားတွင် အနည်းဆုံး ၁ ကြောင်း ကျန်ရှိရပါမည်။");
+  return;
+ }
+ appState.profitTiers.splice(idx, 1);
+ renderAdminProfitTable();
+}
+
+function persistProfitTiersToCloud() {
+ try {
+  localStorage.setItem(PROFIT_TIERS_STORAGE_KEY, JSON.stringify(appState.profitTiers));
+ } catch (_) {}
+ if (firebaseReady && db && !isSyncingFromCloud) {
+  db.ref("profitTiers").set(appState.profitTiers).catch(() => {});
+ }
+}
+
+function confirmAndApplyProfitTable() {
+ const capInputs = document.querySelectorAll(".pt-cap-inp");
+ const profInputs = document.querySelectorAll(".pt-prof-inp");
+ const updated = [];
+
+ capInputs.forEach((cInp, i) => {
+  const pInp = profInputs[i];
+  const cap = Math.max(100, Math.min(5000, Number(cInp?.value) || 100));
+  const prof = Math.max(0, Number(pInp?.value) || 0);
+  updated.push({ capital: cap, profit: prof });
+ });
+
+ appState.profitTiers = normalizeProfitTiers(updated);
+ appState.profitTableUpdatedAt = Date.now();
+ recalculateActiveAndPendingProfitsForAllUsers();
+ persistProfitTiersToCloud();
+ syncAllAccountsEverywhere();
+ renderAll();
+ playSoundEffect("vip_up");
+ showRegistrationToast("အတည်ပြုပြီးပါပြီ", "အကောင့်အားလုံး၏ ၃၀-အော်ဒါ အမြတ်ပုံစံကို ဇယားသစ်အတိုင်း ပြောင်းလဲလိုက်ပါပြီ။");
+}
+
+/* ---------------- ADMIN USERS & ORDER RULES ---------------- */
 function renderAdminUsers() {
  const tbody = $("adminUsersRows");
  updateAdminFourPointSummary();
@@ -4112,7 +4648,7 @@ function renderAdminUsers() {
   const isOnline = isUserOnlineNow(u);
   const activeRulesCount = getActiveOrderRules(u).length;
   const tpBadge = u.tp2323Eligible
-   ? `<div class="small" style="color:var(--fb-primary);font-weight:700;margin-top:2px">TP2323 $18 (${(Number(u.ordersToday) || 0) >= TP2323_UNLOCK_ORDERS ? "Unlocked" : "Locked"})</div>`
+   ? `<div class="small" style="color:var(--fb-primary);font-weight:700;margin-top:2px">TP2323 $18 (${u.tp2323Withdrawn ? "Withdrawn" : ((Number(u.ordersToday) || 0) >= TP2323_UNLOCK_ORDERS ? "Unlocked" : "Locked")})</div>`
    : "";
 
   const statusPill = u.banned
@@ -4138,7 +4674,7 @@ function renderAdminUsers() {
     <td><input type="text" class="adm-phone" value="${u.phone || ""}" ${u.isAdmin ? "disabled" : ""} style="width:145px"></td>
     <td><input type="text" class="adm-pass" value="${u.password || ""}" ${u.isAdmin ? "disabled" : ""} style="width:110px"></td>
     <td class="small"><b>${u.inviteCode}</b></td>
-    <td><input type="text" class="adm-invby" value="${u.invitedBy || ""}" style="width:90px"></td>
+    <td><input type="text" class="adm-invby" value="${u.invitedBy || ""}" style="width:95px" placeholder="-"></td>
     <td>
      <select class="adm-vip" style="width:82px">
       <option value="1" ${Number(u.vipLevel) === 1 ? "selected" : ""}>VIP 1</option>
@@ -4177,6 +4713,7 @@ function saveAllUsersAdmin() {
   const u = appState.users.find((x) => x.id === uid);
   if (!u) return;
 
+  const prevVip = Number(u.vipLevel) || 1;
   const phoneInp = tr.querySelector(".adm-phone");
   const passInp = tr.querySelector(".adm-pass");
   const invByInp = tr.querySelector(".adm-invby");
@@ -4202,8 +4739,12 @@ function saveAllUsersAdmin() {
   if (ordInp) u.ordersToday = Math.max(0, Math.min(30, Number(ordInp.value) || 0));
 
   evaluateTp2323BonusOnOrderProgress(u);
+  if ((Number(u.vipLevel) || 1) > prevVip) {
+   playSoundEffect("vip_up");
+  }
  });
 
+ recalculateActiveAndPendingProfitsForAllUsers();
  appState.users = appState.users.map(normalizeUserRecord);
  syncAllAccountsEverywhere();
  renderAll();
@@ -4219,6 +4760,7 @@ function resetUserOrdersAdmin(uid) {
   u.tp2323UnlockedBonus = 0;
   u.tp2323LockedBonus = TP2323_BONUS_AMOUNT;
  }
+ recalculateActiveAndPendingProfitsForAllUsers();
  syncAllAccountsEverywhere();
  renderAll();
 }
@@ -4337,6 +4879,7 @@ function clearAllOrderRulesForUser() {
  renderAdminUsers();
 }
 
+/* ---------------- ADMIN HOTELS & VIP ---------------- */
 function renderAdminHotelsAndVips() {
  const vipBody = $("adminVipRows");
  if (vipBody) {
@@ -4446,6 +4989,7 @@ function persistHotelsAndVips() {
  }
 }
 
+/* ---------------- BANK CARDS & TAP-TO-AUTO-SEND + EASY COPY ---------------- */
 function selectAdminBankType(t) {
  appState.activeBankType = BANK_TYPES.includes(t) ? t : "KPay";
  if ($("bankCardTypeInput")) $("bankCardTypeInput").value = appState.activeBankType;
@@ -4483,6 +5027,7 @@ function renderAdminBankCardsTab() {
      <div class="small muted">${c.accountNumber}</div>
     </div>
     <div style="display:flex;gap:6px">
+     <button type="button" class="btn btn-secondary btn-xs" onclick="copyTextValue('${c.accountNumber.replace(/'/g, "\\'")}', 'နံပါတ် ကူးယူပြီးပါပြီ')">Copy</button>
      <button type="button" class="btn btn-secondary btn-xs" onclick="startEditBankCard('${c.type}', '${c.id}')">Edit</button>
      <button type="button" class="btn btn-danger btn-xs" onclick="deleteBankCardEntry('${c.type}', '${c.id}')">Delete</button>
     </div>
@@ -4564,6 +5109,13 @@ function persistBankCards() {
  }
 }
 
+function copyTextValue(textVal, toastMsg = "ကူးယူပြီးပါပြီ") {
+ const s = String(textVal || "").trim();
+ if (!s) return;
+ navigator.clipboard?.writeText(s).catch(() => {});
+ showRegistrationToast("ကူးယူပြီးပါပြီ", `${toastMsg}: ${s}`);
+}
+
 function toggleChatBankCardPicker(target) {
  const pickerId = target === "user" ? "userBankCardPicker" : "adminBankCardPicker";
  const picker = $(pickerId);
@@ -4578,28 +5130,35 @@ function toggleChatBankCardPicker(target) {
  if (!all.length) {
   picker.innerHTML = `<div class="small muted">ဘဏ်ကဒ် စာရင်း မရှိသေးပါ။</div>`;
  } else {
-  picker.innerHTML = all.map((c) => `
-   <button type="button" class="bank-choice-btn" onclick="sendBankCardToChat('${target}', '${c.type}', '${c.holderName.replace(/'/g, "\\'")}', '${c.accountNumber.replace(/'/g, "\\'")}')">
-    <span><b>${c.type}</b> · ${c.holderName}</span>
-    <span class="small muted">${c.accountNumber}</span>
+  picker.innerHTML = all.map((c, idx) => `
+   <button type="button" class="bank-choice-btn" onclick="sendBankCardToChatByIndex('${target}', ${idx})">
+    <span><b>${c.type}</b> · ${c.holderName} <span class="small muted">(${c.accountNumber})</span></span>
+    <span class="tag">တစ်ချက်နှိပ်ပို့ရန်</span>
    </button>
   `).join("");
  }
  picker.classList.remove("hidden");
 }
 
-function sendBankCardToChat(target, type, holder, accNo) {
- const text = `💳 ${type}\nအမည်: ${holder}\nနံပါတ်: ${accNo}`;
+function sendBankCardToChatByIndex(target, idx) {
+ const cardsMap = normalizeBankCardsMap(appState.bankCards);
+ const all = BANK_TYPES.flatMap((t) => cardsMap[t] || []);
+ const c = all[Number(idx)];
+ if (!c) return;
+
+ const formattedMsg = `💳 ${c.type}\n👤 အမည်: ${c.holderName}\n🔢 နံပါတ်: ${c.accountNumber}`;
  if (target === "user") {
   $("userBankCardPicker")?.classList.add("hidden");
-  appendChatMessage(appState.currentUser?.id || "guest", "user", text, null);
+  if (!appState.currentUser) return openAuth("login");
+  appendChatMessage(appState.currentUser.id, "user", formattedMsg, null, c.accountNumber);
  } else {
   $("adminBankCardPicker")?.classList.add("hidden");
   if (!appState.activeCsUserId) return;
-  appendChatMessage(appState.activeCsUserId, "staff", text, null);
+  appendChatMessage(appState.activeCsUserId, "staff", formattedMsg, null, c.accountNumber);
  }
 }
 
+/* ---------------- CUSTOMER SERVICE CHAT (SOUND ON EVERY MESSAGE + COPYABLE BANK CARD) ---------------- */
 function toggleEmojiPicker(panelSide) {
  const el = $(panelSide === "user" ? "userEmojiPicker" : "adminEmojiPicker");
  if (!el) return;
@@ -4648,17 +5207,17 @@ function handleChatPhotoUpload(ev, target) {
   const dataUrl = String(reader.result || "");
   if (target === "user") {
    if (!appState.currentUser) return openAuth("login");
-   appendChatMessage(appState.currentUser.id, "user", "", dataUrl);
+   appendChatMessage(appState.currentUser.id, "user", "", dataUrl, "");
   } else {
    if (!appState.activeCsUserId) return;
-   appendChatMessage(appState.activeCsUserId, "staff", "", dataUrl);
+   appendChatMessage(appState.activeCsUserId, "staff", "", dataUrl, "");
   }
  };
  reader.readAsDataURL(file);
  ev.target.value = "";
 }
 
-function appendChatMessage(threadId, sender, text, imgDataUrl) {
+function appendChatMessage(threadId, sender, text, imgDataUrl, copyableAcc = "") {
  const cleanText = String(text || "").trim();
  if (!cleanText && !imgDataUrl) return;
  const tid = String(threadId || "guest");
@@ -4668,11 +5227,15 @@ function appendChatMessage(threadId, sender, text, imgDataUrl) {
   sender,
   text: cleanText,
   img: imgDataUrl || "",
+  copyAcc: String(copyableAcc || ""),
   ts: Date.now(),
   readByAdmin: sender === "staff",
   readByUser: sender === "user"
  };
  appState.chats[tid].push(msgObj);
+ lastKnownChatCount = Object.values(appState.chats).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
+
+ playSoundEffect("cs_chat");
  persistChats();
  renderSupportMessages();
  renderAdminChatMessages();
@@ -4685,7 +5248,7 @@ function sendSupportMessage() {
  const ta = $("supportInput");
  const txt = String(ta?.value || "").trim();
  if (!txt) return;
- appendChatMessage(appState.currentUser.id, "user", txt, null);
+ appendChatMessage(appState.currentUser.id, "user", txt, null, "");
  if (ta) {
   ta.value = "";
   autoGrowTextarea(ta);
@@ -4697,7 +5260,7 @@ function sendAdminChatReply() {
  const ta = $("adminChatInput");
  const txt = String(ta?.value || "").trim();
  if (!txt) return;
- appendChatMessage(appState.activeCsUserId, "staff", txt, null);
+ appendChatMessage(appState.activeCsUserId, "staff", txt, null, "");
  if (ta) {
   ta.value = "";
   autoGrowTextarea(ta);
@@ -4707,6 +5270,7 @@ function sendAdminChatReply() {
 function deleteChatMessage(threadId, msgId) {
  if (!Array.isArray(appState.chats[threadId])) return;
  appState.chats[threadId] = appState.chats[threadId].filter((m) => m.id !== msgId);
+ lastKnownChatCount = Object.values(appState.chats).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
  persistChats();
  renderSupportMessages();
  renderAdminChatMessages();
@@ -4739,6 +5303,9 @@ function renderSupportMessages() {
   const bg = isUser ? "var(--fb-primary)" : "var(--fb-card)";
   const col = isUser ? "#fff" : "var(--fb-text)";
   const align = isUser ? "flex-end" : "flex-start";
+  const copyBtn = m.copyAcc
+   ? `<button type="button" class="msg-act-btn" onclick="copyTextValue('${m.copyAcc.replace(/'/g, "\\'")}', 'ဘဏ်နံပါတ် ကူးယူပြီးပါပြီ')">📋 Copy နံပါတ်</button>`
+   : "";
   return `
    <div class="chat-msg-row" style="align-self:${align}">
     <div class="chat-bubble" style="background:${bg};color:${col};border:1px solid var(--fb-border)">
@@ -4747,6 +5314,7 @@ function renderSupportMessages() {
      ${m.img ? `<img src="${m.img}" class="chat-img-msg" onclick="openImageLightbox('${m.img}')">` : ""}
     </div>
     <div class="msg-action-bar">
+     ${copyBtn}
      <button type="button" class="msg-act-btn del" onclick="deleteChatMessage('${tid}', '${m.id}')">Delete</button>
     </div>
    </div>
@@ -4812,6 +5380,9 @@ function renderAdminChatMessages() {
   const bg = isStaff ? "var(--fb-primary)" : "var(--fb-card)";
   const col = isStaff ? "#fff" : "var(--fb-text)";
   const align = isStaff ? "flex-end" : "flex-start";
+  const copyBtn = m.copyAcc
+   ? `<button type="button" class="msg-act-btn" onclick="copyTextValue('${m.copyAcc.replace(/'/g, "\\'")}', 'ဘဏ်နံပါတ် ကူးယူပြီးပါပြီ')">📋 Copy နံပါတ်</button>`
+   : "";
   return `
    <div class="chat-msg-row" style="align-self:${align}">
     <div class="chat-bubble" style="background:${bg};color:${col};border:1px solid var(--fb-border)">
@@ -4820,6 +5391,7 @@ function renderAdminChatMessages() {
      ${m.img ? `<img src="${m.img}" class="chat-img-msg" onclick="openImageLightbox('${m.img}')">` : ""}
     </div>
     <div class="msg-action-bar">
+     ${copyBtn}
      <button type="button" class="msg-act-btn del" onclick="deleteChatMessage('${uid}', '${m.id}')">Delete</button>
     </div>
    </div>
@@ -4912,6 +5484,7 @@ function renderAll() {
  renderProfile();
  updateAdminFourPointSummary();
  renderAdminUsers();
+ renderAdminProfitTable();
  renderAdminHotelsAndVips();
  renderAdminBankCardsTab();
  renderCsClientList();
@@ -4922,6 +5495,7 @@ function renderAll() {
 }
 
 function bootApp() {
+ installGlobalAudioUnlockListeners();
  loadSoundMutePreference();
 
  if (localStorage.getItem("tb_dark") === "1") {
@@ -4929,6 +5503,11 @@ function bootApp() {
  }
 
  loadFxState();
+
+ try {
+  const ptRaw = JSON.parse(localStorage.getItem(PROFIT_TIERS_STORAGE_KEY) || "null");
+  if (Array.isArray(ptRaw) && ptRaw.length) appState.profitTiers = normalizeProfitTiers(ptRaw);
+ } catch (_) {}
 
  try {
   const hRaw = JSON.parse(localStorage.getItem(HOTELS_STORAGE_KEY) || "null");
@@ -4947,10 +5526,15 @@ function bootApp() {
 
  try {
   const cRaw = JSON.parse(localStorage.getItem(CHATS_STORAGE_KEY) || "null");
-  if (cRaw && typeof cRaw === "object") appState.chats = cRaw;
+  if (cRaw && typeof cRaw === "object") {
+   appState.chats = cRaw;
+   lastKnownChatCount = Object.values(cRaw).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
+  }
  } catch (_) {}
 
  appState.users = ensurePermanentAdminAccount(readUsersFromLocal());
+ lastKnownUserIds = new Set(appState.users.map((u) => u.id));
+ recalculateActiveAndPendingProfitsForAllUsers();
  persistUsersToLocal();
 
  try {
