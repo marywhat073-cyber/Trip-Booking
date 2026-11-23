@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trip Booking — International Hotel Platform</title>
+<title>Trip Booking — အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
@@ -12,58 +12,60 @@
  --fb-card: #ffffff;
  --fb-text: #1c1e21;
  --fb-muted: #65676b;
+ --fb-border: #dadde1;
+ --fb-input-bg: #f5f6f7;
  --fb-primary: #1877f2;
  --fb-primary-hover: #166fe5;
- --fb-border: #ccd0d5;
- --fb-input-bg: #f5f6f7;
+ --fb-success: #2e8b57;
+ --fb-danger: #d93848;
+ --fb-gold: #d49b1a;
  --fb-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
- --fb-success: #2e7d32;
- --fb-warning: #b26a00;
- --fb-danger: #c62828;
- --gold-1: #fff3b0;
- --gold-2: #f5c542;
- --gold-3: #d49b1a;
- --gold-4: #9c6b06;
+ --fb-radius: 12px;
 }
 
 body.dark {
- --fb-bg: #18191a;
- --fb-card: #242526;
- --fb-text: #e4e6eb;
- --fb-muted: #b0b3b8;
+ --fb-bg: #121316;
+ --fb-card: #1d1f24;
+ --fb-text: #e6e8ec;
+ --fb-muted: #9aa0a6;
+ --fb-border: #2f333a;
+ --fb-input-bg: #262930;
  --fb-primary: #2d88ff;
- --fb-primary-hover: #1a73e8;
- --fb-border: #3e4042;
- --fb-input-bg: #3a3b3c;
- --fb-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
- --fb-success: #4caf50;
- --fb-warning: #ffb74d;
- --fb-danger: #ef5350;
- --gold-1: #ffe885;
- --gold-2: #e6b835;
- --gold-3: #b88414;
- --gold-4: #7c5404;
+ --fb-primary-hover: #1b74e4;
+ --fb-success: #36a469;
+ --fb-danger: #e24a59;
+ --fb-gold: #e5ae28;
+ --fb-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
 * {
  box-sizing: border-box;
  margin: 0;
  padding: 0;
- font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
+ font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Myanmar", sans-serif;
  background: var(--fb-bg);
  color: var(--fb-text);
+ min-height: 100vh;
  padding-bottom: 84px;
- transition: background 0.25s, color 0.25s;
+ transition: background 0.2s ease, color 0.2s ease;
 }
 
 .hidden {
  display: none !important;
 }
 
-/* ---------------- SPLASH INTRO (12-COLOR SLOW FRAME + CONVERGING TEXT + ROTATING HOTEL BG) ---------------- */
+.small {
+ font-size: 12.5px;
+}
+
+.muted {
+ color: var(--fb-muted);
+}
+
+/* SPLASH INTRO OVERLAY */
 #introSplash {
  position: fixed;
  inset: 0;
@@ -71,181 +73,107 @@ body {
  display: flex;
  align-items: center;
  justify-content: center;
- overflow: hidden;
- background: #091326;
- transition: opacity 0.7s ease, visibility 0.7s ease;
+ padding: 20px;
+ background: #0d1117;
+ transition: opacity 0.75s ease;
 }
 
 #introSplash.fade-out {
  opacity: 0;
- visibility: hidden;
  pointer-events: none;
 }
 
 .splash-hotel-backdrop {
  position: absolute;
- inset: -24px;
+ inset: 0;
  overflow: hidden;
- z-index: 0;
 }
 
 .splash-hotel-bg-img {
  width: 100%;
  height: 100%;
  object-fit: cover;
- filter: brightness(0.66) contrast(1.08) saturate(1.15);
- transform: scale(1.1);
- transition: transform 2.6s cubic-bezier(0.22, 1, 0.36, 1), filter 1.6s ease;
+ transform: scale(1.06);
+ filter: brightness(0.55) saturate(1.1);
+ transition: transform 2.2s ease;
 }
 
 #introSplash.active-anim .splash-hotel-bg-img {
- transform: scale(1.02);
- filter: brightness(0.75) contrast(1.1) saturate(1.2);
+ transform: scale(1.14);
 }
 
 .splash-hotel-scrim {
  position: absolute;
  inset: 0;
- background: linear-gradient(180deg, rgba(6, 12, 24, 0.38) 0%, rgba(6, 12, 24, 0.68) 100%);
- pointer-events: none;
+ background: radial-gradient(circle at center, rgba(13, 17, 23, 0.35), rgba(13, 17, 23, 0.82));
 }
 
 .splash-twelve-color-frame {
  position: relative;
  z-index: 2;
- padding: 4px;
- border-radius: 22px;
- background: linear-gradient(
-  135deg,
-  #ff0000,
-  #ff7f00,
-  #ffff00,
-  #00c853,
-  #0088ff,
-  #283593,
-  #8e24aa,
-  #ff4081,
-  #795548,
-  #9e9e9e,
-  #ffffff,
-  #111111,
-  #ff0000
- );
- background-size: 500% 500%;
- animation: slowTwelveColorCycle 18s ease-in-out infinite;
- box-shadow: 0 22px 54px rgba(0, 0, 0, 0.55);
+ padding: 3px;
+ border-radius: 20px;
+ background: linear-gradient(120deg, #ff3b30, #ff9500, #ffcc00, #34c759, #00c7be, #007aff, #5856d6, #af52de, #ff2d55, #ff3b30);
+ background-size: 260% 260%;
+ animation: splashRainbowShift 3.5s linear infinite;
+ box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
 }
 
-@keyframes slowTwelveColorCycle {
+@keyframes splashRainbowShift {
  0% { background-position: 0% 50%; }
  50% { background-position: 100% 50%; }
  100% { background-position: 0% 50%; }
 }
 
 .splash-stage-box {
- position: relative;
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: center;
- gap: 14px;
- min-width: min(90vw, 440px);
- padding: 30px 32px;
- border-radius: 18px;
- background: rgba(9, 17, 34, 0.72);
- backdrop-filter: blur(8px);
- -webkit-backdrop-filter: blur(8px);
- overflow: hidden;
+ background: rgba(18, 22, 29, 0.86);
+ backdrop-filter: blur(10px);
+ border-radius: 17px;
+ padding: 28px 34px;
+ text-align: center;
+ color: #ffffff;
+ transform: translateY(14px) scale(0.96);
+ opacity: 0.7;
+ transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
+}
+
+.splash-stage-box.converged {
+ transform: translateY(0) scale(1);
+ opacity: 1;
 }
 
 .splash-title {
- color: #ffffff;
  font-size: 26px;
  font-weight: 800;
- letter-spacing: 0.4px;
- text-align: center;
- text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
- opacity: 0;
- transform: translate3d(-180px, -110px, 0) scale(0.85);
- transition: transform 1.25s cubic-bezier(0.18, 0.9, 0.25, 1), opacity 0.95s ease;
+ letter-spacing: 0.3px;
+ margin-bottom: 6px;
 }
 
 .splash-sub {
- color: #e2e8f0;
- font-size: 15px;
- font-weight: 700;
- text-align: center;
- line-height: 1.45;
- text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
- opacity: 0;
- transform: translate3d(180px, 120px, 0) scale(0.85);
- transition: transform 1.35s cubic-bezier(0.18, 0.9, 0.25, 1) 0.15s, opacity 1s ease 0.15s;
+ font-size: 14.5px;
+ color: #d8dee9;
+ margin-bottom: 10px;
 }
 
 .splash-hotel-caption {
- font-size: 12px;
+ font-size: 13px;
+ color: #ffd166;
  font-weight: 700;
- color: #fef08a;
- text-align: center;
- opacity: 0;
- transform: translate3d(0px, 140px, 0);
- transition: transform 1.2s cubic-bezier(0.18, 0.9, 0.25, 1) 0.28s, opacity 0.9s ease 0.28s;
 }
 
-.splash-stage-box.converged .splash-title,
-.splash-stage-box.converged .splash-sub,
-.splash-stage-box.converged .splash-hotel-caption {
- opacity: 1;
- transform: translate3d(0px, 0px, 0) scale(1);
-}
-
-/* ---------------- 12-COLOR SLOW FRAME FOR CARDS ---------------- */
-.rainbow-flow-frame {
- position: relative;
- border-radius: 14px;
- padding: 3px;
- background: linear-gradient(
-  135deg,
-  #ff0000,
-  #ff7f00,
-  #ffff00,
-  #00c853,
-  #0088ff,
-  #283593,
-  #8e24aa,
-  #ff4081,
-  #795548,
-  #9e9e9e,
-  #ffffff,
-  #111111,
-  #ff0000
- );
- background-size: 500% 500%;
- animation: slowTwelveColorCycle 18s ease-in-out infinite;
- box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.rainbow-flow-frame > .rainbow-inner {
- background: var(--fb-card);
- border-radius: 11px;
- padding: 14px;
- height: 100%;
- width: 100%;
-}
-
-/* ---------------- TOP BAR ---------------- */
+/* TOP BAR */
 .topbar {
  position: sticky;
  top: 0;
- z-index: 100;
+ z-index: 200;
  background: var(--fb-card);
  border-bottom: 1px solid var(--fb-border);
  padding: 10px 16px;
  display: flex;
  align-items: center;
  justify-content: space-between;
+ gap: 10px;
  box-shadow: var(--fb-shadow);
- gap: 8px;
 }
 
 .brand-area {
@@ -253,275 +181,327 @@ body {
  align-items: center;
  gap: 10px;
  cursor: pointer;
- flex-shrink: 0;
 }
 
 .brand-badge {
  width: 38px;
  height: 38px;
  border-radius: 10px;
- background: linear-gradient(135deg, var(--fb-primary), #00c6ff);
+ background: linear-gradient(135deg, var(--fb-primary), #4ea8ff);
  color: #fff;
+ font-weight: 900;
+ font-size: 16px;
  display: flex;
  align-items: center;
  justify-content: center;
- font-weight: 800;
- font-size: 18px;
- box-shadow: 0 3px 8px rgba(24, 119, 242, 0.35);
 }
 
 .brand-name {
  font-size: 18px;
  font-weight: 800;
- color: var(--fb-primary);
- letter-spacing: -0.3px;
- white-space: nowrap;
 }
 
 .top-actions {
  display: flex;
  align-items: center;
- gap: 7px;
+ gap: 8px;
  flex-wrap: wrap;
- justify-content: flex-end;
 }
 
-.icon-btn,
-.lang-select {
- border: 1px solid var(--fb-border);
+.icon-btn {
  background: var(--fb-input-bg);
  color: var(--fb-text);
+ border: 1px solid var(--fb-border);
  border-radius: 8px;
- padding: 6px 9px;
- font-size: 13px;
+ padding: 6px 10px;
+ font-size: 14px;
  cursor: pointer;
- font-weight: 600;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ transition: opacity 0.15s ease, background 0.15s ease;
 }
 
 .icon-btn:hover {
- background: rgba(24, 119, 242, 0.1);
+ opacity: 0.88;
+}
+
+.lang-select {
+ background: var(--fb-input-bg);
+ color: var(--fb-text);
+ border: 1px solid var(--fb-border);
+ border-radius: 8px;
+ padding: 6px 10px;
+ font-size: 13px;
+ font-weight: 600;
+ cursor: pointer;
 }
 
 .auth-top-btn {
  background: var(--fb-primary);
- color: #fff;
+ color: #ffffff;
  border: none;
  border-radius: 8px;
- padding: 7px 12px;
+ padding: 7px 13px;
  font-size: 13px;
  font-weight: 700;
  cursor: pointer;
- white-space: nowrap;
 }
 
 .auth-top-btn:hover {
  background: var(--fb-primary-hover);
 }
 
-/* ---------------- LIVE ACTIVITY TICKER BAR ---------------- */
+/* TICKER BAR */
 .activity-ticker-wrap {
- max-width: 1080px;
+ max-width: 1120px;
  margin: 10px auto 0;
  padding: 0 14px;
 }
 
 .activity-ticker-box {
- display: flex;
- align-items: center;
- gap: 10px;
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 10px;
- padding: 8px 12px;
- box-shadow: var(--fb-shadow);
+ padding: 7px 12px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
  overflow: hidden;
+ box-shadow: var(--fb-shadow);
 }
 
 .ticker-live-pill {
- flex-shrink: 0;
- background: linear-gradient(135deg, #e53935, #ff6f00);
- color: #fff;
- font-size: 10px;
+ background: #ff3b30;
+ color: #ffffff;
+ font-size: 10.5px;
  font-weight: 800;
- letter-spacing: 0.6px;
- padding: 3px 8px;
+ padding: 2px 7px;
  border-radius: 999px;
- text-transform: uppercase;
+ letter-spacing: 0.4px;
+ flex-shrink: 0;
 }
 
 .ticker-viewport {
- position: relative;
  flex: 1;
- height: 22px;
  overflow: hidden;
+ height: 22px;
+ position: relative;
  display: flex;
  align-items: center;
 }
 
 .ticker-slide {
- position: absolute;
- left: 0;
- right: 0;
+ font-size: 13px;
+ font-weight: 700;
  white-space: nowrap;
  overflow: hidden;
  text-overflow: ellipsis;
- font-size: 12.5px;
- font-weight: 600;
- color: var(--fb-text);
- transform: translateY(0px);
- opacity: 1;
- transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.36s ease;
+ transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .ticker-slide.enter-from-bottom {
- transform: translateY(22px);
+ transform: translateY(100%);
  opacity: 0;
- transition: none;
 }
 
-.ticker-kind-dp { color: var(--fb-success); }
-.ticker-kind-wd { color: var(--fb-primary); }
-.ticker-slide.real-user-highlight {
- font-weight: 800;
- color: #0f52ba;
-}
-body.dark .ticker-slide.real-user-highlight {
- color: #7dd3fc;
+.ticker-kind-dp {
+ color: var(--fb-success);
 }
 
-/* ---------------- CONTAINER & PAGES ---------------- */
+.ticker-kind-wd {
+ color: var(--fb-primary);
+}
+
+.real-user-highlight {
+ color: var(--fb-gold);
+}
+
+/* MAIN CONTAINER & PAGES */
 .container {
- max-width: 1080px;
- margin: 12px auto 0;
+ max-width: 1120px;
+ margin: 14px auto 0;
  padding: 0 14px;
 }
 
 .page {
  display: none;
- animation: fadeIn 0.2s ease;
 }
 
 .page.active {
  display: block;
 }
 
-@keyframes fadeIn {
- from { opacity: 0; transform: translateY(4px); }
- to { opacity: 1; transform: translateY(0); }
-}
-
-/* ---------------- HERO & LIVE RATE BANNER ---------------- */
 .hero-card {
- background: linear-gradient(120deg, #1877f2, #0d47a1);
- color: #fff;
- border-radius: 14px;
- padding: 20px;
+ background: linear-gradient(135deg, #1877f2, #0d47a1);
+ color: #ffffff;
+ border-radius: var(--fb-radius);
+ padding: 22px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 16px;
+ flex-wrap: wrap;
  margin-bottom: 14px;
  box-shadow: var(--fb-shadow);
- display: flex;
- flex-wrap: wrap;
- align-items: center;
- justify-content: space-between;
- gap: 14px;
 }
 
 .hero-card h1 {
- font-size: 22px;
- margin-bottom: 5px;
-}
-
-.hero-card p {
- font-size: 13.5px;
- opacity: 0.94;
+ font-size: 24px;
+ margin-bottom: 4px;
 }
 
 .hero-actions {
  display: flex;
- gap: 9px;
+ gap: 10px;
  flex-wrap: wrap;
+}
+
+.btn {
+ border: none;
+ border-radius: 8px;
+ padding: 9px 15px;
+ font-size: 13.5px;
+ font-weight: 700;
+ cursor: pointer;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 6px;
+ transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn:active {
+ transform: scale(0.98);
+}
+
+.btn-xs {
+ padding: 5px 10px;
+ font-size: 12px;
+ border-radius: 6px;
+}
+
+.btn-primary {
+ background: var(--fb-primary);
+ color: #ffffff;
+}
+
+.btn-primary:hover {
+ background: var(--fb-primary-hover);
+}
+
+.btn-secondary {
+ background: var(--fb-input-bg);
+ color: var(--fb-text);
+ border: 1px solid var(--fb-border);
+}
+
+.btn-success {
+ background: var(--fb-success);
+ color: #ffffff;
+}
+
+.btn-danger {
+ background: var(--fb-danger);
+ color: #ffffff;
+}
+
+.btn-gold {
+ background: var(--fb-gold);
+ color: #111315;
+}
+
+.btn-light {
+ background: #ffffff;
+ color: #1877f2;
+}
+
+.btn-outline-light {
+ background: rgba(255, 255, 255, 0.14);
+ color: #ffffff;
+ border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .live-rate-banner {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-left: 5px solid var(--fb-primary);
- border-radius: 12px;
- padding: 12px 16px;
- margin-bottom: 14px;
+ border-radius: 10px;
+ padding: 10px 14px;
  display: flex;
- flex-wrap: wrap;
- align-items: center;
  justify-content: space-between;
- gap: 10px;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 8px;
+ margin-bottom: 14px;
  box-shadow: var(--fb-shadow);
 }
 
 .rate-value {
- font-size: 16px;
  font-weight: 800;
+ font-size: 15px;
  color: var(--fb-primary);
 }
 
-/* ---------------- FX TREND CHART & CONVERTER ---------------- */
+/* FX SHOWCASE */
 .fx-showcase-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px 16px;
+ border-radius: var(--fb-radius);
+ padding: 16px;
  margin-bottom: 16px;
  box-shadow: var(--fb-shadow);
 }
 
 .fx-showcase-header {
  display: flex;
- flex-wrap: wrap;
- align-items: center;
  justify-content: space-between;
+ align-items: flex-start;
  gap: 10px;
  margin-bottom: 10px;
 }
 
 .fx-rate-readout {
  display: flex;
- align-items: baseline;
+ align-items: center;
  gap: 10px;
  flex-wrap: wrap;
 }
 
 .fx-big-num {
  font-size: 20px;
- font-weight: 800;
- letter-spacing: -0.3px;
+ font-weight: 900;
 }
 
-.fx-big-num.is-up { color: var(--fb-success); }
-.fx-big-num.is-down { color: var(--fb-danger); }
-.fx-big-num.is-flat { color: var(--fb-primary); }
+.fx-big-num.is-up {
+ color: var(--fb-success);
+}
+
+.fx-big-num.is-down {
+ color: var(--fb-danger);
+}
+
+.fx-big-num.is-flat {
+ color: var(--fb-primary);
+}
 
 .fx-chart-shell {
- position: relative;
- width: 100%;
+ background: var(--fb-input-bg);
  border: 1px solid var(--fb-border);
  border-radius: 10px;
- background: var(--fb-input-bg);
- padding: 8px 10px 6px;
- overflow: hidden;
+ padding: 10px;
+ margin-bottom: 12px;
 }
 
 .fx-svg {
  width: 100%;
  height: 138px;
  display: block;
- touch-action: none;
  cursor: crosshair;
 }
 
 .fx-chart-footer {
  display: flex;
  justify-content: space-between;
- align-items: center;
- flex-wrap: wrap;
- gap: 6px;
  font-size: 11.5px;
  color: var(--fb-muted);
  margin-top: 6px;
@@ -530,152 +510,94 @@ body.dark .ticker-slide.real-user-highlight {
 .fx-converter-grid {
  display: grid;
  grid-template-columns: 1fr auto 1fr;
- gap: 8px;
- align-items: center;
- margin-top: 12px;
- padding-top: 12px;
- border-top: 1px solid var(--fb-border);
-}
-
-@media (max-width: 640px) {
- .fx-converter-grid {
-  grid-template-columns: 1fr;
- }
-}
-
-.fx-conv-box {
- background: var(--fb-input-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 8px 10px;
+ gap: 10px;
+ align-items: end;
 }
 
 .fx-conv-box label {
  display: block;
- font-size: 11px;
+ font-size: 12px;
  font-weight: 700;
- color: var(--fb-muted);
  margin-bottom: 4px;
+ color: var(--fb-muted);
 }
 
 .fx-conv-box input {
  width: 100%;
- border: none;
- background: transparent;
+ padding: 9px 11px;
+ border-radius: 8px;
+ border: 1px solid var(--fb-border);
+ background: var(--fb-input-bg);
  color: var(--fb-text);
- font-size: 15px;
- font-weight: 800;
- outline: none;
- padding: 2px 0;
+ font-size: 14px;
+ font-weight: 700;
 }
 
 .fx-swap-btn {
+ padding: 9px 12px;
+ border-radius: 8px;
  border: 1px solid var(--fb-border);
- background: var(--fb-card);
- color: var(--fb-primary);
- border-radius: 999px;
- padding: 7px 12px;
- font-size: 12px;
- font-weight: 800;
+ background: var(--fb-input-bg);
+ color: var(--fb-text);
+ font-weight: 700;
  cursor: pointer;
- white-space: nowrap;
 }
 
-/* ---------------- 3-STEP GUIDE ---------------- */
-.steps-grid {
- display: grid;
- grid-template-columns: repeat(3, 1fr);
- gap: 12px;
- margin-bottom: 18px;
-}
-
-@media (max-width: 768px) {
- .steps-grid {
-  grid-template-columns: 1fr;
- }
-}
-
-.step-card {
- padding: 14px;
-}
-
-.step-num {
- display: inline-block;
- background: rgba(24, 119, 242, 0.12);
- color: var(--fb-primary);
- font-weight: 800;
- font-size: 12px;
- padding: 3px 9px;
- border-radius: 999px;
- margin-bottom: 8px;
-}
-
-.step-card h3 {
- font-size: 15px;
- margin-bottom: 5px;
-}
-
-.step-card p {
- font-size: 13px;
- color: var(--fb-muted);
- line-height: 1.45;
-}
-
-/* ---------------- SECTION HEADERS & GRIDS ---------------- */
+/* HOTELS DIRECTORY */
 .section-header {
  display: flex;
- flex-wrap: wrap;
- align-items: center;
  justify-content: space-between;
+ align-items: center;
  gap: 10px;
- margin-bottom: 12px;
+ flex-wrap: wrap;
+ margin-bottom: 10px;
 }
 
 .section-title {
+ display: flex;
+ align-items: center;
+ gap: 8px;
  font-size: 18px;
  font-weight: 800;
 }
 
+.tag {
+ background: var(--fb-input-bg);
+ border: 1px solid var(--fb-border);
+ color: var(--fb-text);
+ padding: 2px 8px;
+ border-radius: 999px;
+ font-size: 12px;
+ font-weight: 700;
+}
+
 .search-input {
  padding: 8px 12px;
- border-radius: 20px;
+ border-radius: 8px;
  border: 1px solid var(--fb-border);
- background: var(--fb-card);
+ background: var(--fb-input-bg);
  color: var(--fb-text);
  font-size: 13.5px;
- min-width: 220px;
- outline: none;
+ min-width: 190px;
 }
 
 .grid {
  display: grid;
- grid-template-columns: repeat(3, 1fr);
+ grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
  gap: 14px;
  margin-bottom: 16px;
-}
-
-@media (max-width: 900px) {
- .grid {
-  grid-template-columns: repeat(2, 1fr);
- }
-}
-
-@media (max-width: 560px) {
- .grid {
-  grid-template-columns: 1fr;
- }
 }
 
 .card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 12px;
+ border-radius: var(--fb-radius);
  overflow: hidden;
  box-shadow: var(--fb-shadow);
+ cursor: pointer;
  display: flex;
  flex-direction: column;
- transition: transform 0.18s ease;
- cursor: pointer;
+ transition: transform 0.15s ease;
 }
 
 .card:hover {
@@ -684,9 +606,9 @@ body.dark .ticker-slide.real-user-highlight {
 
 .hotel-img {
  width: 100%;
- height: 158px;
+ height: 165px;
  object-fit: cover;
- background: #dce3ec;
+ display: block;
 }
 
 .card-body {
@@ -695,84 +617,168 @@ body.dark .ticker-slide.real-user-highlight {
  display: flex;
  flex-direction: column;
  justify-content: space-between;
- gap: 8px;
-}
-
-.tag {
- display: inline-block;
- font-size: 11px;
- font-weight: 700;
- padding: 2px 8px;
- border-radius: 6px;
- background: rgba(24, 119, 242, 0.12);
- color: var(--fb-primary);
+ gap: 10px;
 }
 
 .gold-stars {
- color: #f5b400;
+ color: var(--fb-gold);
  font-size: 13px;
  letter-spacing: 1px;
 }
 
 .price {
  font-size: 16px;
- font-weight: 800;
- color: var(--fb-success);
+ font-weight: 900;
+ color: var(--fb-primary);
 }
 
 .mmk-sub {
- font-size: 11.5px;
+ font-size: 12px;
  color: var(--fb-muted);
  font-weight: 600;
 }
 
-/* ---------------- BUTTONS ---------------- */
-.btn {
- border: none;
- border-radius: 8px;
- padding: 8px 14px;
- font-size: 13.5px;
- font-weight: 700;
- cursor: pointer;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- gap: 6px;
+/* PANEL CARD, CHAT, BOOKING, HISTORY, PROFILE */
+.panel-card {
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: var(--fb-radius);
+ padding: 16px;
+ margin-bottom: 14px;
+ box-shadow: var(--fb-shadow);
 }
 
-.btn:hover { opacity: 0.92; }
-.btn:disabled { opacity: 0.55; cursor: not-allowed; }
-.btn-primary { background: var(--fb-primary); color: #fff; }
-.btn-secondary { background: var(--fb-input-bg); color: var(--fb-text); border: 1px solid var(--fb-border); }
-.btn-success { background: var(--fb-success); color: #fff; }
-.btn-danger { background: var(--fb-danger); color: #fff; }
-.btn-gold { background: linear-gradient(135deg, var(--gold-2), var(--gold-3)); color: #1c1404; }
-.btn-light { background: #fff; color: #1877f2; }
-.btn-outline-light { background: rgba(255, 255, 255, 0.16); color: #fff; border: 1px solid rgba(255, 255, 255, 0.45); }
-.btn-xs { padding: 4px 8px; font-size: 11.5px; border-radius: 6px; }
+.chat-box {
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ background: var(--fb-input-bg);
+ overflow: hidden;
+}
 
-/* ---------------- BOOKING CENTER ---------------- */
+.chat-messages {
+ height: 340px;
+ overflow-y: auto;
+ padding: 12px;
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+}
+
+.chat-msg-row {
+ display: flex;
+ max-width: 82%;
+}
+
+.chat-bubble {
+ padding: 8px 12px;
+ border-radius: 12px;
+ font-size: 13.5px;
+ line-height: 1.45;
+ word-break: break-word;
+}
+
+.chat-bubble-meta {
+ font-size: 10.5px;
+ opacity: 0.75;
+ margin-bottom: 3px;
+}
+
+.chat-img-msg {
+ max-width: 210px;
+ border-radius: 8px;
+ margin-top: 6px;
+ cursor: pointer;
+ display: block;
+}
+
+.chat-input-area {
+ position: relative;
+ display: flex;
+ align-items: flex-end;
+ gap: 8px;
+ padding: 8px 10px;
+ background: var(--fb-card);
+ border-top: 1px solid var(--fb-border);
+}
+
+.chat-textarea {
+ flex: 1;
+ resize: none;
+ border: 1px solid var(--fb-border);
+ border-radius: 8px;
+ background: var(--fb-input-bg);
+ color: var(--fb-text);
+ padding: 8px 10px;
+ font-size: 13.5px;
+ min-height: 40px;
+ max-height: 130px;
+ font-family: inherit;
+}
+
+.emoji-picker-popover,
+.bank-card-picker-popover {
+ position: absolute;
+ bottom: 58px;
+ left: 10px;
+ z-index: 40;
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ padding: 8px;
+ box-shadow: var(--fb-shadow);
+ max-width: 320px;
+}
+
+.emoji-picker-popover {
+ display: grid;
+ grid-template-columns: repeat(8, 1fr);
+ gap: 4px;
+}
+
+.emoji-item-btn {
+ background: transparent;
+ border: none;
+ font-size: 18px;
+ cursor: pointer;
+ padding: 4px;
+ border-radius: 6px;
+}
+
+.emoji-item-btn:hover {
+ background: var(--fb-input-bg);
+}
+
+.bank-choice-btn {
+ width: 100%;
+ text-align: left;
+ background: var(--fb-input-bg);
+ color: var(--fb-text);
+ border: 1px solid var(--fb-border);
+ border-radius: 8px;
+ padding: 7px 10px;
+ font-size: 12.5px;
+ cursor: pointer;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 8px;
+ margin-bottom: 6px;
+}
+
 .booking-box {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 14px;
+ border-radius: var(--fb-radius);
  padding: 20px;
- box-shadow: var(--fb-shadow);
  text-align: center;
- margin-bottom: 16px;
+ box-shadow: var(--fb-shadow);
 }
 
 .stats-row {
  display: grid;
- grid-template-columns: repeat(4, 1fr);
+ grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
  gap: 10px;
- margin: 14px 0 18px;
-}
-
-@media (max-width: 720px) {
- .stats-row {
-  grid-template-columns: repeat(2, 1fr);
- }
+ margin: 16px 0;
 }
 
 .stat-tile {
@@ -783,25 +789,25 @@ body.dark .ticker-slide.real-user-highlight {
 }
 
 .stat-tile .num {
- font-size: 18px;
- font-weight: 800;
+ font-size: 19px;
+ font-weight: 900;
  color: var(--fb-primary);
  margin-top: 4px;
 }
 
 .order-progress-circle {
- width: 124px;
- height: 124px;
+ width: 112px;
+ height: 112px;
  border-radius: 50%;
- margin: 10px auto 14px;
+ margin: 12px auto;
  display: flex;
  align-items: center;
  justify-content: center;
  background: conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg);
- padding: 10px;
+ padding: 9px;
 }
 
-.order-progress-circle > span {
+.order-progress-circle span {
  width: 100%;
  height: 100%;
  border-radius: 50%;
@@ -809,22 +815,11 @@ body.dark .ticker-slide.real-user-highlight {
  display: flex;
  align-items: center;
  justify-content: center;
- font-weight: 800;
+ font-weight: 900;
  font-size: 18px;
 }
 
-/* ---------------- TABLES ---------------- */
-.panel-card {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 16px;
- box-shadow: var(--fb-shadow);
- margin-bottom: 16px;
-}
-
 .table-wrap {
- width: 100%;
  overflow-x: auto;
 }
 
@@ -843,19 +838,15 @@ th, td {
 
 th {
  background: var(--fb-input-bg);
- font-weight: 700;
- white-space: nowrap;
+ font-weight: 800;
 }
 
-/* ---------------- PROFILE & ADMIN ---------------- */
 .profile-header-card {
- padding: 18px;
- margin-bottom: 14px;
  display: flex;
- flex-wrap: wrap;
- align-items: center;
  justify-content: space-between;
- gap: 14px;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 16px;
 }
 
 .profile-identity-row {
@@ -866,35 +857,31 @@ th {
 
 .avatar-upload-wrap {
  position: relative;
- width: 72px;
- height: 72px;
- flex-shrink: 0;
+ width: 68px;
+ height: 68px;
 }
 
 .profile-avatar-img {
- width: 72px;
- height: 72px;
+ width: 68px;
+ height: 68px;
  border-radius: 50%;
  object-fit: cover;
- border: 3px solid var(--fb-primary);
- background: var(--fb-input-bg);
- display: block;
+ border: 2px solid var(--fb-primary);
 }
 
 .avatar-camera-btn {
  position: absolute;
  right: -2px;
  bottom: -2px;
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 50%;
  width: 26px;
  height: 26px;
- border-radius: 50%;
- border: 2px solid var(--fb-card);
- background: var(--fb-primary);
- color: #fff;
- font-size: 12px;
  display: flex;
  align-items: center;
  justify-content: center;
+ font-size: 12px;
  cursor: pointer;
 }
 
@@ -906,67 +893,54 @@ th {
 }
 
 .edit-name-btn {
- border: 1px solid var(--fb-border);
  background: var(--fb-input-bg);
  color: var(--fb-text);
+ border: 1px solid var(--fb-border);
  border-radius: 6px;
  padding: 3px 8px;
  font-size: 12px;
- font-weight: 700;
  cursor: pointer;
 }
 
 .vip-badge {
- display: inline-flex;
- align-items: center;
- gap: 4px;
- padding: 3px 10px;
- border-radius: 999px;
+ background: linear-gradient(135deg, #f5b727, #ff8c00);
+ color: #111315;
+ font-weight: 900;
  font-size: 11.5px;
- font-weight: 800;
- color: #2b1a00;
- background: linear-gradient(135deg, var(--gold-1), var(--gold-2) 45%, var(--gold-3) 78%, var(--gold-4));
+ padding: 2px 8px;
+ border-radius: 999px;
 }
 
 .wallet-box {
- background: linear-gradient(135deg, rgba(24, 119, 242, 0.12), rgba(0, 198, 255, 0.12));
- border: 1px solid rgba(24, 119, 242, 0.25);
- border-radius: 12px;
- padding: 14px 18px;
- min-width: 240px;
+ text-align: right;
 }
 
 .wallet-amount {
  font-size: 24px;
- font-weight: 800;
- color: var(--fb-primary);
- margin: 4px 0 10px;
+ font-weight: 900;
+ color: var(--fb-success);
+ margin: 4px 0 8px;
 }
 
 .invite-box {
  background: var(--fb-input-bg);
- border: 1px dashed var(--fb-primary);
+ border: 1px solid var(--fb-border);
  border-radius: 10px;
  padding: 12px;
- margin-top: 12px;
  display: flex;
- flex-wrap: wrap;
- align-items: center;
  justify-content: space-between;
+ align-items: center;
+ flex-wrap: wrap;
  gap: 10px;
+ margin-top: 10px;
 }
 
+/* ADMIN CONTROLS */
 .admin-4pt-grid {
  display: grid;
- grid-template-columns: repeat(4, 1fr);
+ grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
  gap: 10px;
- margin-bottom: 14px;
-}
-
-@media (max-width: 820px) {
- .admin-4pt-grid {
-  grid-template-columns: repeat(2, 1fr);
- }
+ margin-bottom: 12px;
 }
 
 .admin-4pt-card {
@@ -977,230 +951,112 @@ th {
 }
 
 .admin-4pt-label {
- font-size: 11.5px;
- font-weight: 700;
+ font-size: 12px;
  color: var(--fb-muted);
+ font-weight: 700;
 }
 
 .admin-4pt-val {
- font-size: 16px;
- font-weight: 800;
- color: var(--fb-text);
- margin-top: 4px;
+ font-size: 18px;
+ font-weight: 900;
+ color: var(--fb-primary);
+ margin-top: 3px;
 }
 
 .admin-live-banner {
- display: flex;
- flex-wrap: wrap;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- background: rgba(24, 119, 242, 0.08);
- border: 1px solid rgba(24, 119, 242, 0.25);
+ background: var(--fb-input-bg);
+ border: 1px solid var(--fb-border);
  border-radius: 10px;
  padding: 9px 12px;
- margin-bottom: 12px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 8px;
+ margin-bottom: 14px;
  font-size: 12.5px;
+ font-weight: 700;
 }
 
 .status-pill {
- display: inline-flex;
- align-items: center;
- gap: 4px;
+ display: inline-block;
  padding: 2px 8px;
  border-radius: 999px;
- font-size: 11px;
+ font-size: 11.5px;
  font-weight: 800;
- white-space: nowrap;
 }
 
 .pill-online {
- background: rgba(46, 125, 50, 0.14);
+ background: rgba(46, 139, 87, 0.16);
  color: var(--fb-success);
- border: 1px solid rgba(46, 125, 50, 0.3);
 }
 
 .pill-offline {
- background: rgba(101, 103, 107, 0.14);
+ background: rgba(128, 128, 128, 0.18);
  color: var(--fb-muted);
- border: 1px solid var(--fb-border);
 }
 
 .pill-banned {
- background: rgba(198, 40, 40, 0.14);
+ background: rgba(217, 56, 72, 0.18);
  color: var(--fb-danger);
- border: 1px solid rgba(198, 40, 40, 0.3);
 }
 
 .notif-badge {
- display: inline-flex;
- align-items: center;
- justify-content: center;
- min-width: 18px;
- height: 18px;
- padding: 0 5px;
- border-radius: 999px;
- background: #e53935;
+ background: var(--fb-danger);
  color: #fff;
+ border-radius: 999px;
+ padding: 1px 6px;
  font-size: 11px;
  font-weight: 800;
- margin-left: 5px;
 }
 
-/* ---------------- CHAT BOX ---------------- */
-.chat-box {
- display: flex;
- flex-direction: column;
- height: 420px;
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- overflow: hidden;
+/* BOTTOM NAV */
+.bottom-nav {
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ z-index: 250;
  background: var(--fb-card);
-}
-
-.chat-messages {
- flex: 1;
- padding: 12px;
- overflow-y: auto;
- display: flex;
- flex-direction: column;
- gap: 8px;
- background: var(--fb-input-bg);
-}
-
-.chat-msg-row {
- display: flex;
- flex-direction: column;
- max-width: 78%;
- gap: 3px;
-}
-
-.chat-bubble {
- padding: 8px 12px;
- border-radius: 14px;
- font-size: 13.5px;
- line-height: 1.4;
- word-break: break-word;
-}
-
-.chat-bubble-meta {
- font-size: 10.5px;
- opacity: 0.72;
- margin-bottom: 2px;
-}
-
-.chat-img-msg {
- max-width: 210px;
- max-height: 210px;
- border-radius: 10px;
- display: block;
- margin-top: 4px;
- cursor: pointer;
- border: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.chat-input-area {
- display: flex;
- gap: 6px;
- padding: 8px;
  border-top: 1px solid var(--fb-border);
- background: var(--fb-card);
- align-items: center;
- position: relative;
-}
-
-.chat-textarea {
- flex: 1;
- border: 1px solid var(--fb-border);
- border-radius: 18px;
- padding: 9px 13px;
- background: var(--fb-input-bg);
- color: var(--fb-text);
- outline: none;
- resize: none;
- min-height: 40px;
- max-height: 130px;
- font-size: 13.5px;
- line-height: 1.4;
- overflow-y: auto;
- font-family: inherit;
-}
-
-.emoji-picker-popover {
- position: absolute;
- bottom: 58px;
- left: 8px;
- width: 310px;
- max-width: calc(100vw - 36px);
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
- padding: 8px;
- z-index: 60;
- display: grid;
- grid-template-columns: repeat(8, 1fr);
- gap: 4px;
- max-height: 190px;
- overflow-y: auto;
-}
-
-.emoji-item-btn {
- border: none;
- background: transparent;
- font-size: 18px;
- padding: 4px;
- border-radius: 6px;
- cursor: pointer;
-}
-
-.emoji-item-btn:hover {
- background: var(--fb-input-bg);
-}
-
-.bank-card-picker-popover {
- position: absolute;
- bottom: 58px;
- left: 8px;
- right: 8px;
- max-width: 440px;
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
- padding: 10px;
- z-index: 65;
- max-height: 240px;
- overflow-y: auto;
-}
-
-.bank-choice-btn {
- width: 100%;
- text-align: left;
- border: 1px solid var(--fb-border);
- background: var(--fb-input-bg);
- color: var(--fb-text);
- border-radius: 8px;
- padding: 8px 10px;
- margin-bottom: 6px;
- cursor: pointer;
  display: flex;
- justify-content: space-between;
- align-items: center;
- gap: 8px;
- font-size: 12.5px;
+ justify-content: space-around;
+ padding: 6px 4px;
+ box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* ---------------- MODALS ---------------- */
+.bottom-nav button {
+ flex: 1;
+ background: transparent;
+ border: none;
+ color: var(--fb-muted);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 2px;
+ font-size: 11px;
+ font-weight: 700;
+ padding: 5px 2px;
+ border-radius: 8px;
+ cursor: pointer;
+}
+
+.bottom-nav button.active {
+ color: var(--fb-primary);
+ background: rgba(24, 119, 242, 0.1);
+}
+
+/* MODALS */
 .modal-backdrop {
  position: fixed;
  inset: 0;
- background: rgba(0, 0, 0, 0.55);
+ z-index: 500;
+ background: rgba(0, 0, 0, 0.6);
  display: flex;
  align-items: center;
  justify-content: center;
- z-index: 500;
  padding: 14px;
+ overflow-y: auto;
 }
 
 .modal-card {
@@ -1208,38 +1064,32 @@ th {
  max-width: 440px;
  background: var(--fb-card);
  color: var(--fb-text);
- border-radius: 14px;
- padding: 20px;
- box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
  border: 1px solid var(--fb-border);
+ border-radius: 14px;
+ padding: 18px;
+ box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
  max-height: 90vh;
  overflow-y: auto;
 }
 
 .modal-card.wide-modal {
- max-width: 660px;
-}
-
-.modal-card h2 {
- font-size: 19px;
- margin-bottom: 12px;
+ max-width: 560px;
 }
 
 .form-group {
- margin-bottom: 11px;
+ margin-bottom: 12px;
 }
 
 .form-group label {
  display: block;
  font-size: 12.5px;
  font-weight: 700;
- margin-bottom: 4px;
+ margin-bottom: 5px;
  color: var(--fb-muted);
 }
 
 .form-group input,
-.form-group select,
-.form-group textarea {
+.form-group select {
  width: 100%;
  padding: 9px 11px;
  border-radius: 8px;
@@ -1247,17 +1097,15 @@ th {
  background: var(--fb-input-bg);
  color: var(--fb-text);
  font-size: 14px;
- outline: none;
 }
 
 .phone-input-row {
  display: flex;
  gap: 8px;
- align-items: center;
 }
 
 .country-code-select {
- width: 138px !important;
+ width: 132px !important;
  flex-shrink: 0;
 }
 
@@ -1267,32 +1115,22 @@ th {
  align-items: center;
 }
 
-.password-input-wrap input {
- width: 100%;
- padding-right: 40px;
-}
-
 .password-toggle-btn {
  position: absolute;
  right: 8px;
- border: none;
  background: transparent;
- color: var(--fb-muted);
+ border: none;
  cursor: pointer;
  font-size: 15px;
- padding: 4px 6px;
- border-radius: 6px;
 }
 
 .error-text {
  color: var(--fb-danger);
  font-size: 12.5px;
- font-weight: 600;
- margin-top: 6px;
- min-height: 16px;
+ font-weight: 700;
+ min-height: 18px;
 }
 
-/* ---------------- ORDER & REVIEW MODAL ---------------- */
 .order-hotel-banner {
  display: flex;
  gap: 12px;
@@ -1305,17 +1143,16 @@ th {
 }
 
 .order-hotel-thumb {
- width: 76px;
- height: 60px;
+ width: 68px;
+ height: 54px;
  border-radius: 8px;
  object-fit: cover;
- flex-shrink: 0;
 }
 
 .order-calc-grid {
  display: grid;
- grid-template-columns: repeat(2, 1fr);
- gap: 8px;
+ grid-template-columns: 1fr 1fr;
+ gap: 10px;
  margin-bottom: 12px;
 }
 
@@ -1323,44 +1160,41 @@ th {
  background: var(--fb-input-bg);
  border: 1px solid var(--fb-border);
  border-radius: 8px;
- padding: 8px 10px;
+ padding: 9px;
 }
 
 .order-calc-item .k {
- font-size: 11px;
+ font-size: 11.5px;
  color: var(--fb-muted);
- font-weight: 700;
 }
 
 .order-calc-item .v {
- font-size: 14px;
- font-weight: 800;
+ font-size: 16px;
+ font-weight: 900;
  margin-top: 2px;
- color: var(--fb-text);
 }
 
 .star-picker-row {
  display: flex;
- gap: 6px;
- flex-wrap: wrap;
+ gap: 8px;
  margin-bottom: 10px;
+ flex-wrap: wrap;
 }
 
 .star-pick-btn {
+ padding: 6px 10px;
+ border-radius: 8px;
  border: 1px solid var(--fb-border);
  background: var(--fb-input-bg);
  color: var(--fb-text);
- border-radius: 8px;
- padding: 6px 10px;
  font-size: 12.5px;
  font-weight: 700;
  cursor: pointer;
 }
 
 .star-pick-btn.selected {
- background: rgba(245, 197, 66, 0.24);
- border-color: #d49b1a;
- color: #8a5a00;
+ border-color: var(--fb-gold);
+ background: rgba(212, 155, 26, 0.16);
 }
 
 .review-options-list {
@@ -1372,30 +1206,29 @@ th {
 
 .review-option {
  text-align: left;
+ padding: 7px 10px;
+ border-radius: 8px;
  border: 1px solid var(--fb-border);
  background: var(--fb-input-bg);
  color: var(--fb-text);
- border-radius: 8px;
- padding: 8px 10px;
  font-size: 12.5px;
  cursor: pointer;
- line-height: 1.35;
 }
 
 .review-option.selected {
  border-color: var(--fb-primary);
  background: rgba(24, 119, 242, 0.12);
- font-weight: 600;
+ font-weight: 700;
 }
 
 .verifying-box {
  text-align: center;
- padding: 24px 12px;
+ padding: 28px 12px;
 }
 
 .verifying-spinner {
- width: 42px;
- height: 42px;
+ width: 38px;
+ height: 38px;
  border: 4px solid var(--fb-border);
  border-top-color: var(--fb-primary);
  border-radius: 50%;
@@ -1408,70 +1241,50 @@ th {
 }
 
 .profit-highlight-box {
- background: linear-gradient(135deg, rgba(46, 125, 50, 0.14), rgba(24, 119, 242, 0.12));
- border: 1px solid rgba(46, 125, 50, 0.35);
- border-radius: 12px;
- padding: 14px;
+ background: rgba(46, 139, 87, 0.12);
+ border: 1px solid var(--fb-success);
+ border-radius: 10px;
+ padding: 16px;
  text-align: center;
- margin: 10px 0 14px;
+ margin-bottom: 14px;
 }
 
-.profit-highlight-box .big-profit {
+.big-profit {
  font-size: 26px;
- font-weight: 800;
+ font-weight: 900;
  color: var(--fb-success);
- margin: 4px 0;
+ margin-bottom: 4px;
 }
 
-/* ---------------- TOASTS & LIGHTBOX ---------------- */
-.reg-success-toast {
- position: fixed;
- top: 68px;
- left: 50%;
- transform: translateX(-50%) translateY(0);
- z-index: 1200;
- background: linear-gradient(135deg, #1877f2, #0d47a1);
- color: #fff;
- padding: 12px 22px;
- border-radius: 999px;
- box-shadow: 0 10px 28px rgba(13, 71, 161, 0.38);
- border: 1px solid rgba(255, 255, 255, 0.35);
- display: flex;
- align-items: center;
- gap: 10px;
- font-size: 13.5px;
- font-weight: 700;
- opacity: 1;
- transition: opacity 0.35s ease, transform 0.35s ease;
- max-width: calc(100vw - 28px);
-}
-
-.reg-success-toast.fade-out {
- opacity: 0;
- transform: translateX(-50%) translateY(-10px);
-}
-
+/* TOASTS & LIGHTBOX */
+.reg-success-toast,
 .cs-incoming-toast {
  position: fixed;
  top: 68px;
  right: 16px;
- z-index: 1150;
- max-width: 340px;
+ z-index: 900;
  background: var(--fb-card);
  color: var(--fb-text);
  border: 1px solid var(--fb-primary);
- border-left: 5px solid var(--fb-primary);
- border-radius: 12px;
- padding: 11px 14px;
- box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+ border-radius: 10px;
+ padding: 10px 14px;
+ box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+ font-weight: 700;
+ font-size: 13px;
  cursor: pointer;
+ transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.reg-success-toast.fade-out {
+ opacity: 0;
+ transform: translateY(-8px);
 }
 
 .image-lightbox-backdrop {
  position: fixed;
  inset: 0;
- background: rgba(0, 0, 0, 0.86);
- z-index: 2000;
+ z-index: 1000;
+ background: rgba(0, 0, 0, 0.85);
  display: flex;
  align-items: center;
  justify-content: center;
@@ -1480,128 +1293,9 @@ th {
 
 .image-lightbox-backdrop img {
  max-width: 95vw;
- max-height: 88vh;
+ max-height: 90vh;
  border-radius: 10px;
- box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
 }
-
-/* ---------------- FOOTER ---------------- */
-.site-footer {
- max-width: 1080px;
- margin: 26px auto 16px;
- padding: 0 14px;
-}
-
-.footer-panel {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 14px;
- padding: 20px;
- box-shadow: var(--fb-shadow);
-}
-
-.footer-grid {
- display: grid;
- grid-template-columns: repeat(3, 1fr);
- gap: 18px;
- margin-bottom: 16px;
-}
-
-@media (max-width: 820px) {
- .footer-grid {
-  grid-template-columns: 1fr;
- }
-}
-
-.footer-col h4 {
- font-size: 14.5px;
- font-weight: 800;
- margin-bottom: 8px;
- color: var(--fb-primary);
-}
-
-.footer-col p,
-.footer-col li {
- font-size: 12.5px;
- color: var(--fb-muted);
- line-height: 1.55;
-}
-
-.footer-col ul {
- list-style: none;
- padding: 0;
-}
-
-.footer-col li {
- margin-bottom: 5px;
-}
-
-.footer-bottom-bar {
- border-top: 1px solid var(--fb-border);
- padding-top: 12px;
- display: flex;
- flex-wrap: wrap;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- font-size: 12px;
- color: var(--fb-muted);
-}
-
-.footer-badges {
- display: flex;
- flex-wrap: wrap;
- gap: 8px;
-}
-
-.footer-badge {
- background: var(--fb-input-bg);
- border: 1px solid var(--fb-border);
- border-radius: 999px;
- padding: 4px 10px;
- font-size: 11.5px;
- font-weight: 700;
- color: var(--fb-text);
-}
-
-/* ---------------- BOTTOM NAVIGATION ---------------- */
-.bottom-nav {
- position: fixed;
- bottom: 0;
- left: 0;
- right: 0;
- background: var(--fb-card);
- border-top: 1px solid var(--fb-border);
- display: flex;
- justify-content: space-around;
- padding: 6px 4px;
- z-index: 100;
- box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
-}
-
-.bottom-nav button {
- flex: 1;
- background: none;
- border: none;
- color: var(--fb-muted);
- font-size: 11px;
- font-weight: 700;
- padding: 6px 4px;
- border-radius: 8px;
- cursor: pointer;
- display: flex;
- flex-direction: column;
- align-items: center;
- gap: 2px;
-}
-
-.bottom-nav button.active {
- color: var(--fb-primary);
- background: rgba(24, 119, 242, 0.08);
-}
-
-.small { font-size: 12px; }
-.muted { color: var(--fb-muted); }
 </style>
 </head>
 <body>
@@ -1615,7 +1309,7 @@ th {
   <div id="splashStageBox" class="splash-stage-box">
    <div class="splash-title">Welcome to Trip Booking</div>
    <div id="splashPlatformSub" class="splash-sub">အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း</div>
-   <div id="splashHotelCaption" class="splash-hotel-caption">✨ Global Hotel Stays &amp; Order Platform</div>
+   <div id="splashHotelCaption" class="splash-hotel-caption">🏨 Global Hotel Booking</div>
   </div>
  </div>
 </div>
@@ -1644,7 +1338,7 @@ th {
  <div class="activity-ticker-box">
   <span class="ticker-live-pill">LIVE</span>
   <div class="ticker-viewport">
-   <div id="activityTickerSlide" class="ticker-slide">💎 $100 → $20 · Trip Booking</div>
+   <div id="activityTickerSlide" class="ticker-slide">💎 Trip Booking</div>
   </div>
  </div>
 </div>
@@ -1724,31 +1418,6 @@ th {
    <div id="calcAnswerBox" class="small" style="margin-top:8px;font-weight:700;color:var(--fb-primary)">$100.00 = 500,000 ကျပ်</div>
   </div>
 
-  <!-- 3-STEP GUIDE -->
-  <div class="steps-grid">
-   <div class="rainbow-flow-frame">
-    <div class="rainbow-inner step-card">
-     <span class="step-num" data-i18n="step1Badge">1</span>
-     <h3 data-i18n="step1Title">Deposit</h3>
-     <p data-i18n="step1Desc">Add balance for hotel order tasks.</p>
-    </div>
-   </div>
-   <div class="rainbow-flow-frame">
-    <div class="rainbow-inner step-card">
-     <span class="step-num" data-i18n="step2Badge">2</span>
-     <h3 data-i18n="step2Title">Get Order</h3>
-     <p data-i18n="step2Desc">Complete 30 hotel booking orders.</p>
-    </div>
-   </div>
-   <div class="rainbow-flow-frame">
-    <div class="rainbow-inner step-card">
-     <span class="step-num" data-i18n="step3Badge">3</span>
-     <h3 data-i18n="step3Title">Profit ($100→$20)</h3>
-     <p data-i18n="step3Desc">Receive order commission profit.</p>
-    </div>
-   </div>
-  </div>
-
   <!-- HOTELS DIRECTORY -->
   <div class="section-header">
    <div class="section-title">
@@ -1771,6 +1440,9 @@ th {
     <h2 style="font-size:18px" data-i18n="csHeader">🎧 Customer Service</h2>
     <span class="tag" data-i18n="csActiveBadge">● Online</span>
    </div>
+   <div id="bannedAccountNoticeBox" class="hidden" style="margin-bottom:10px;padding:10px 12px;border-radius:10px;border:1px solid var(--fb-danger);background:rgba(217,56,72,0.12);font-size:13px;font-weight:700;color:var(--fb-danger)">
+    အကောင့်ကို ယာယီပိတ်ထားပါသည်။ Customer Service တွင် မေးမြန်းပြီး လိုအပ်သော အချက်အလက်များ ထည့်သွင်း၍ ပြန်ဖွင့်နိုင်ပါသည်။
+   </div>
    <div class="chat-box">
     <div id="supportMessages" class="chat-messages"></div>
     <div class="chat-input-area">
@@ -1792,6 +1464,7 @@ th {
    <h2 style="font-size:20px;margin-bottom:4px" data-i18n="taskCenter">Booking Center</h2>
    <p class="small muted" data-i18n="clickGetOrderHint">Press Get Order to start.</p>
    <div id="orderCycleProfitSummary" class="small" style="margin-top:6px;font-weight:700;color:var(--fb-primary)"></div>
+   <div id="orderCatchStatusBanner" class="small hidden" style="margin-top:6px;font-weight:800;color:var(--fb-danger)"></div>
    <div id="tp2323OrderHint" class="small hidden" style="margin-top:6px;font-weight:800;color:#b26a00"></div>
 
    <div class="stats-row">
@@ -1800,7 +1473,7 @@ th {
      <div class="num" id="taskWallet">$0.00</div>
     </div>
     <div class="stat-tile">
-     <div class="small muted" data-i18n="taskComm">Pending 30-Order Profit</div>
+     <div class="small muted" data-i18n="taskComm">Pending Profit</div>
      <div class="num" id="taskProfit">$0.00</div>
     </div>
     <div class="stat-tile">
@@ -1814,9 +1487,8 @@ th {
    </div>
 
    <div id="orderCircle" class="order-progress-circle"><span>0/30</span></div>
-   <div id="orderRateLockStatus" class="small muted" style="margin-bottom:12px">$100 → $20</div>
 
-   <button type="button" class="btn btn-primary" style="padding:12px 28px;font-size:15px" onclick="triggerGetOrder()" data-i18n="submitOrderBtn">Get Order</button>
+   <button type="button" id="getOrderActionBtn" class="btn btn-primary" style="padding:12px 28px;font-size:15px" onclick="triggerGetOrder()" data-i18n="submitOrderBtn">Get Order</button>
   </div>
  </section>
 
@@ -1887,7 +1559,7 @@ th {
     <div class="wallet-box">
      <div class="small muted" data-i18n="walletBal">Balance</div>
      <div class="wallet-amount" id="walletBalance">$0.00</div>
-     <div style="display:flex;gap:8px;flex-wrap:wrap">
+     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
       <button type="button" class="btn btn-success btn-xs" onclick="handleDepositRequest()" data-i18n="depositBtn">Deposit</button>
       <button type="button" class="btn btn-danger btn-xs" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">Withdraw</button>
       <button type="button" class="btn btn-secondary btn-xs" onclick="logout()" data-i18n="logoutBtn">Logout</button>
@@ -1968,7 +1640,7 @@ th {
     </div>
    </div>
 
-   <!-- TAB 1: USERS & ORDER CONTROLS -->
+   <!-- TAB 1: USERS, DEVICE & LOCATION, ORDER CATCH, VIP 1-6, RESET / BAN / DELETE -->
    <div id="adminUsersTab">
     <div class="section-header">
      <h3 style="font-size:16px" data-i18n="adminUsersHeading">Users &amp; Orders</h3>
@@ -1980,11 +1652,11 @@ th {
        <tr>
         <th>User</th>
         <th>Phone / ID</th>
-        <th>Code</th>
-        <th>Used Code</th>
+        <th>VIP</th>
+        <th>စက်ပစ္စည်းနှင့် တည်နေရာ</th>
         <th>Balance ($)</th>
-        <th>Orders (30)</th>
-        <th>Profit</th>
+        <th>Orders</th>
+        <th>Catch (10+)</th>
         <th>Status</th>
         <th>Action</th>
        </tr>
@@ -1996,34 +1668,32 @@ th {
 
    <!-- TAB 2: ORDER DOLLAR PROFIT TABLE ($100 -> $20) -->
    <div id="adminProfitTab" class="hidden">
-    <div class="rainbow-flow-frame" style="margin-bottom:14px">
-     <div class="rainbow-inner">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-       <div>
-        <h3 style="font-size:16px;font-weight:800">📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက် ($100 → $20)</h3>
-        <div class="small muted">$100 → $20 · 30-Order Profit Table</div>
-       </div>
-       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn btn-secondary btn-xs" onclick="resetDefaultProfitTiers()">↺ $100→$20</button>
-        <button type="button" class="btn btn-success btn-xs" onclick="confirmAndApplyProfitTable()">✅ Apply</button>
-       </div>
+    <div class="panel-card">
+     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div>
+       <h3 style="font-size:16px;font-weight:800">📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက် ($100 → $20)</h3>
+       <div class="small muted">30-Order Profit Table</div>
       </div>
-      <div class="table-wrap">
-       <table>
-        <thead>
-         <tr>
-          <th>Tier</th>
-          <th>Min ($)</th>
-          <th>Max ($)</th>
-          <th>30-Order Profit ($)</th>
-          <th>Rate (%)</th>
-         </tr>
-        </thead>
-        <tbody id="adminProfitTierRows"></tbody>
-       </table>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+       <button type="button" class="btn btn-secondary btn-xs" onclick="resetDefaultProfitTiers()">↺ $100→$20</button>
+       <button type="button" class="btn btn-success btn-xs" onclick="confirmAndApplyProfitTable()">Save</button>
       </div>
-      <div id="profitTableApplyStatus" class="small" style="margin-top:8px;font-weight:700;color:var(--fb-success)"></div>
      </div>
+     <div class="table-wrap">
+      <table>
+       <thead>
+        <tr>
+         <th>Tier</th>
+         <th>Min ($)</th>
+         <th>Max ($)</th>
+         <th>30-Order Profit ($)</th>
+         <th>Rate (%)</th>
+        </tr>
+       </thead>
+       <tbody id="adminProfitTierRows"></tbody>
+      </table>
+     </div>
+     <div id="profitTableApplyStatus" class="small" style="margin-top:8px;font-weight:700;color:var(--fb-success)"></div>
     </div>
    </div>
 
@@ -2077,40 +1747,6 @@ th {
  </section>
 </div>
 
-<!-- ==================== SINGLE FOOTER ==================== -->
-<footer id="mainSiteFooter" class="site-footer">
- <div class="footer-panel">
-  <div class="footer-grid">
-   <div class="footer-col">
-    <h4>Trip Booking</h4>
-    <p>Welcome to Trip Booking · အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း</p>
-   </div>
-   <div class="footer-col">
-    <h4>Rules</h4>
-    <ul>
-     <li>• $100 → $20 (30 Orders)</li>
-     <li>• 24/7 Service</li>
-    </ul>
-   </div>
-   <div class="footer-col">
-    <h4>Contact</h4>
-    <ul>
-     <li>• 09775191427</li>
-     <li>• Live Service Chat</li>
-    </ul>
-   </div>
-  </div>
-  <div class="footer-bottom-bar">
-   <div>© 2026 Trip Booking</div>
-   <div class="footer-badges">
-    <span class="footer-badge">🏨 Hotels</span>
-    <span class="footer-badge">⚡ Live Sync</span>
-    <span class="footer-badge">💎 $100 → $20</span>
-   </div>
-  </div>
- </div>
-</footer>
-
 <!-- ==================== BOTTOM NAVIGATION ==================== -->
 <nav class="bottom-nav">
  <button type="button" class="active" onclick="showPage('homePage', this)">
@@ -2158,7 +1794,7 @@ th {
     </div>
    </div>
    <div class="form-group">
-    <label>Country Code &amp; Phone</label>
+    <label>ဖုန်းနံပါတ်ထည့်ရန်</label>
     <div class="phone-input-row">
      <select id="authCountryCode" class="country-code-select" onchange="updateAuthPhoneFormat()">
       <option value="+95" selected>🇲🇲 +95 (MM)</option>
@@ -2172,13 +1808,13 @@ th {
       <option value="+1">🇺🇸 +1 (US)</option>
       <option value="+44">🇬🇧 +44 (UK)</option>
      </select>
-     <input type="text" id="authPhone" placeholder="09775191427" required>
+     <input type="text" id="authPhone" placeholder="ဖုန်းနံပါတ်ထည့်ရန်" required>
     </div>
    </div>
    <div class="form-group">
-    <label>Password</label>
+    <label>စကားဝှက်ထည့်ရန်</label>
     <div class="password-input-wrap">
-     <input type="password" id="authPassword" placeholder="Password" required>
+     <input type="password" id="authPassword" placeholder="စကားဝှက်ထည့်ရန်" required>
      <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('authPassword', this)">👁️</button>
     </div>
    </div>
@@ -2188,7 +1824,7 @@ th {
    </div>
    <div id="authError" class="error-text"></div>
    <div style="display:flex;gap:8px;margin-top:12px">
-    <button type="submit" class="btn btn-primary" style="flex:1" id="authSubmitBtn">OK</button>
+    <button type="submit" class="btn btn-primary" style="flex:1" id="authSubmitBtn">Save</button>
    </div>
   </form>
  </div>
@@ -2230,7 +1866,7 @@ th {
    </div>
    <div style="display:flex;gap:8px;justify-content:flex-end">
     <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">Cancel</button>
-    <button type="button" class="btn btn-primary" onclick="confirmOrderAndReview()">✅ Confirm</button>
+    <button type="button" class="btn btn-primary" onclick="confirmOrderAndReview()">Save</button>
    </div>
   </div>
   <div id="orderStep2Verifying" class="verifying-box hidden">
@@ -2264,7 +1900,7 @@ th {
     <div class="price" id="detailHotelPrice">$0</div>
     <div class="mmk-sub" id="detailHotelMmk">0 ကျပ်</div>
    </div>
-   <button type="button" class="btn btn-primary" id="detailBookNowBtn">🏨 Book</button>
+   <button type="button" class="btn btn-primary" id="detailBookNowBtn">Book</button>
   </div>
  </div>
 </div>
@@ -2277,7 +1913,7 @@ th {
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeEditNameModal()">✕</button>
   </div>
   <div class="form-group">
-   <label>New Name</label>
+   <label>Name</label>
    <input type="text" id="editNameInput" placeholder="Name">
   </div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
@@ -2287,25 +1923,82 @@ th {
  </div>
 </div>
 
-<!-- ==================== ADMIN USER ORDER CONTROL MODAL ==================== -->
+<!-- ==================== ADMIN USER FULL CONTROL & ORDER CATCH MODAL ==================== -->
 <div id="adminUserOrderModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
    <h2 style="margin:0;font-size:18px" id="adminUserModalTitle">User Control</h2>
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeAdminUserOrderModal()">✕</button>
   </div>
-  <div id="adminUserModalSummary" class="small muted" style="margin-bottom:12px"></div>
-  <div class="form-group">
-   <label>Balance ($)</label>
-   <input type="number" id="adminEditBalanceInput" step="0.01">
+  <div id="adminUserModalSummary" class="small muted" style="margin-bottom:10px"></div>
+  <div id="adminUserDeviceLocationDetail" class="small" style="background:var(--fb-input-bg);border:1px solid var(--fb-border);border-radius:8px;padding:8px 10px;margin-bottom:12px"></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+   <div class="form-group">
+    <label>Name</label>
+    <input type="text" id="adminEditNameInput">
+   </div>
+   <div class="form-group">
+    <label>ဖုန်းနံပါတ်ထည့်ရန်</label>
+    <input type="text" id="adminEditPhoneInput">
+   </div>
+   <div class="form-group">
+    <label>စကားဝှက်ထည့်ရန်</label>
+    <input type="text" id="adminEditPasswordInput">
+   </div>
+   <div class="form-group">
+    <label>VIP (1 - 6)</label>
+    <select id="adminEditVipInput">
+     <option value="1">VIP 1</option>
+     <option value="2">VIP 2</option>
+     <option value="3">VIP 3</option>
+     <option value="4">VIP 4</option>
+     <option value="5">VIP 5</option>
+     <option value="6">VIP 6</option>
+    </select>
+   </div>
+   <div class="form-group">
+    <label>Balance ($)</label>
+    <input type="number" id="adminEditBalanceInput" step="0.01">
+   </div>
+   <div class="form-group">
+    <label>Orders Done</label>
+    <input type="number" id="adminEditOrdersInput" min="0" step="1">
+   </div>
   </div>
-  <div class="form-group">
-   <label>Orders (0 - 30)</label>
-   <input type="number" id="adminEditOrdersInput" min="0" max="30">
+
+  <div style="border-top:1px solid var(--fb-border);padding-top:10px;margin-top:4px">
+   <div class="small" style="font-weight:800;margin-bottom:8px;color:var(--fb-primary)">🎯 အော်ဒါဖမ်း (Order Catch — ၁၀ အထက်သာ ဖမ်းခွင့်ရှိသည်)</div>
+   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+    <div class="form-group">
+     <label>ဖမ်းမည့် Order # (11+)</label>
+     <input type="number" id="adminCatchOrderNumInput" min="11" step="1" placeholder="11">
+    </div>
+    <div class="form-group">
+     <label>အနှုတ်ဒေါ်လာ (-$)</label>
+     <input type="number" id="adminCatchNegativeInput" step="0.01" placeholder="-50">
+    </div>
+    <div class="form-group">
+     <label>အမြတ် Profit (+$)</label>
+     <input type="number" id="adminCatchProfitInput" step="0.01" placeholder="20">
+    </div>
+   </div>
+   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:12.5px;font-weight:700">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+     <input type="checkbox" id="adminCatchEnabledInput"> အော်ဒါဖမ်း ဖွင့်မည်
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+     <input type="checkbox" id="adminCatchUnlimitedInput"> ကန့်သတ်ချက်မရှိ ဖမ်းမည် (Unlimited)
+    </label>
+   </div>
   </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeAdminUserOrderModal()">Close</button>
-   <button type="button" class="btn btn-success" onclick="saveAdminUserOrderControl()">💾 Save</button>
+
+  <div style="display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap">
+   <button type="button" class="btn btn-secondary" onclick="resetUserOrdersFromModal()">🔄 Order Reset</button>
+   <div style="display:flex;gap:8px">
+    <button type="button" class="btn btn-secondary" onclick="closeAdminUserOrderModal()">Cancel</button>
+    <button type="button" class="btn btn-success" onclick="saveAdminUserOrderControl()">Save</button>
+   </div>
   </div>
  </div>
 </div>
@@ -2319,15 +2012,15 @@ th {
   </div>
   <div class="form-group">
    <label>Bank</label>
-   <input type="text" id="newBankNameInput" placeholder="KBZPay">
+   <input type="text" id="newBankNameInput">
   </div>
   <div class="form-group">
    <label>Holder</label>
-   <input type="text" id="newBankHolderInput" placeholder="Name">
+   <input type="text" id="newBankHolderInput">
   </div>
   <div class="form-group">
    <label>Account</label>
-   <input type="text" id="newBankAccInput" placeholder="09xxxxxxxxx">
+   <input type="text" id="newBankAccInput">
   </div>
   <div class="form-group">
    <label>Type</label>
@@ -2478,22 +2171,90 @@ function cloneProfitTiers(tiers) {
  }));
 }
 
+function detectClientDeviceType() {
+ const ua = String(navigator.userAgent || "").toLowerCase();
+ const w = Number(window.screen && window.screen.width) || Number(window.innerWidth) || 1280;
+ const touch = ("ontouchstart" in window) || (navigator.maxTouchPoints > 0);
+ if (/ipad|tablet|playbook|silk|(android(?!.*mobile))/.test(ua) || (touch && w >= 768 && w <= 1180)) {
+  return "Tablet";
+ }
+ if (/iphone|ipod|android.*mobile|windows phone|blackberry|bb10|mobile/.test(ua) || (touch && w < 768)) {
+  return "Phone";
+ }
+ if (/macintosh|mac os x|cros|laptop/.test(ua) && w <= 1600) {
+  return "Laptop";
+ }
+ return "Computer";
+}
+
+function detectClientDeviceSummary() {
+ const type = detectClientDeviceType();
+ const ua = String(navigator.userAgent || "");
+ let os = "OS";
+ if (/iphone/i.test(ua)) os = "iPhone/iOS";
+ else if (/ipad/i.test(ua)) os = "iPad/iPadOS";
+ else if (/android/i.test(ua)) os = "Android";
+ else if (/windows/i.test(ua)) os = "Windows";
+ else if (/mac os x/i.test(ua)) os = "macOS";
+ else if (/linux/i.test(ua)) os = "Linux";
+ const res = `${window.screen ? window.screen.width : window.innerWidth}x${window.screen ? window.screen.height : window.innerHeight}`;
+ return `${type} · ${os} (${res})`;
+}
+
+function detectClientLocationSummary() {
+ let tz = "UTC";
+ try {
+  tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+ } catch (_) {}
+ const lang = navigator.language || "";
+ return lang ? `${tz} · ${lang}` : tz;
+}
+
+function refreshClientDeviceAndLocation(user) {
+ if (!user || typeof user !== "object") return user;
+ const devStr = detectClientDeviceSummary();
+ const locStr = detectClientLocationSummary();
+ user.deviceInfo = devStr;
+ user.locationInfo = locStr;
+ if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+  try {
+   navigator.geolocation.getCurrentPosition((pos) => {
+    const lat = Number(pos.coords.latitude).toFixed(4);
+    const lon = Number(pos.coords.longitude).toFixed(4);
+    user.locationInfo = `${locStr} (${lat}, ${lon})`;
+    if (firebaseReady && db && user.id) {
+     db.ref("users/" + user.id + "/locationInfo").set(user.locationInfo).catch(() => {});
+    }
+   }, () => {}, { timeout: 3000, maximumAge: 600000 });
+  } catch (_) {}
+ }
+ return user;
+}
+
 function normalizeUserRecord(u) {
  if (!u || typeof u !== "object") return null;
  const phone = normalizePhone(u.phone || u.id || "");
  const id = String(u.id || (phone ? "u_" + phone : "u_" + Date.now()));
  const isAdmin = Boolean(u.isAdmin) || phone === ADMIN_PHONE;
  const balance = Number.isFinite(Number(u.balance)) ? Number(u.balance) : 0;
- const ordersToday = Math.max(0, Math.min(DAILY_ORDER_LIMIT, Math.floor(Number(u.ordersToday) || 0)));
+ const ordersToday = Math.max(0, Math.floor(Number(u.ordersToday) || 0));
  const totalProfit = Number.isFinite(Number(u.totalProfit)) ? Number(u.totalProfit) : 0;
  const pendingProfit = Number.isFinite(Number(u.pendingProfit)) ? Number(u.pendingProfit) : 0;
  const referralEarned = Number.isFinite(Number(u.referralEarned)) ? Number(u.referralEarned) : 0;
  const tp2323LockedBonus = Number.isFinite(Number(u.tp2323LockedBonus)) ? Number(u.tp2323LockedBonus) : 0;
  const tp2323UnlockedBonus = Number.isFinite(Number(u.tp2323UnlockedBonus)) ? Number(u.tp2323UnlockedBonus) : 0;
- const vipLevel = Math.max(1, Math.min(10, Math.floor(Number(u.vipLevel) || 1)));
+ const vipLevel = Math.max(1, Math.min(6, Math.floor(Number(u.vipLevel) || 1)));
  const inviteCode = String(u.inviteCode || ("TB" + (phone.slice(-4) || Math.floor(1000 + Math.random() * 9000))));
  const usedInviteCode = String(u.usedInviteCode || "");
  const history = Array.isArray(u.history) ? u.history : [];
+
+ const rawCatchOrder = Math.floor(Number(u.catchOrderNumber) || 11);
+ const catchOrderNumber = Math.max(11, rawCatchOrder);
+ const catchNegativeAmount = Number.isFinite(Number(u.catchNegativeAmount)) ? Number(u.catchNegativeAmount) : 0;
+ const catchProfitAmount = Number.isFinite(Number(u.catchProfitAmount)) ? Number(u.catchProfitAmount) : 0;
+ const catchEnabled = Boolean(u.catchEnabled) && catchOrderNumber >= 11;
+ const catchUnlimited = Boolean(u.catchUnlimited);
+
  return {
   id,
   name: String(u.name || (isAdmin ? "Admin" : ("Member " + (phone.slice(-4) || "User")))),
@@ -2513,6 +2274,14 @@ function normalizeUserRecord(u) {
   vipLevel,
   inviteCode,
   usedInviteCode,
+  deviceInfo: String(u.deviceInfo || detectClientDeviceSummary()),
+  locationInfo: String(u.locationInfo || detectClientLocationSummary()),
+  catchEnabled,
+  catchUnlimited,
+  catchOrderNumber,
+  catchNegativeAmount,
+  catchProfitAmount,
+  catchTriggeredOrders: Array.isArray(u.catchTriggeredOrders) ? u.catchTriggeredOrders : [],
   avatar: String(u.avatar || DEFAULT_AVATAR_SVG),
   lastActiveAt: Number(u.lastActiveAt) || Date.now(),
   createdAt: String(u.createdAt || nowFullDateTime()),
@@ -2540,6 +2309,7 @@ function ensureAdminUserExists() {
    countryCode: "+95",
    password: ADMIN_PASS,
    isAdmin: true,
+   vipLevel: 6,
    balance: 1000,
    inviteCode: "TBADMIN"
   });
@@ -2673,11 +2443,15 @@ function getOrderWeight(orderIndex1To30) {
  return 0.72 + ((idx * 17) % 19) * 0.03;
 }
 
-function computeProfitForSpecificOrder(user, orderNumber1To30) {
- const n = Math.max(1, Math.min(DAILY_ORDER_LIMIT, Math.floor(Number(orderNumber1To30) || 1)));
+function computeProfitForSpecificOrder(user, orderNumber) {
+ const n = Math.max(1, Math.floor(Number(orderNumber) || 1));
+ if (user && user.catchEnabled && n >= 11 && n === Math.max(11, Math.floor(Number(user.catchOrderNumber) || 11))) {
+  return Number((Number(user.catchProfitAmount) || 0).toFixed(2));
+ }
  const totalTarget = getCycleProfitTargetForUser(user);
  if (totalTarget <= 0) return 0;
- if (n === DAILY_ORDER_LIMIT) {
+ const bounded = Math.min(DAILY_ORDER_LIMIT, n);
+ if (bounded === DAILY_ORDER_LIMIT) {
   let prevSum = 0;
   for (let i = 1; i < DAILY_ORDER_LIMIT; i++) {
    prevSum += computeProfitForSpecificOrder(user, i);
@@ -2688,13 +2462,13 @@ function computeProfitForSpecificOrder(user, orderNumber1To30) {
  for (let i = 1; i <= DAILY_ORDER_LIMIT; i++) {
   totalWeight += getOrderWeight(i);
  }
- const raw = totalTarget * (getOrderWeight(n) / totalWeight);
+ const raw = totalTarget * (getOrderWeight(bounded) / totalWeight);
  return Number(raw.toFixed(2));
 }
 
 function recalculateActiveAndPendingProfitsForUser(user) {
  if (!user) return;
- const done = Math.max(0, Math.min(DAILY_ORDER_LIMIT, Math.floor(Number(user.ordersToday) || 0)));
+ const done = Math.max(0, Math.floor(Number(user.ordersToday) || 0));
  const remaining = Math.max(0, DAILY_ORDER_LIMIT - done);
  let pendingSum = 0;
  for (let orderNum = done + 1; orderNum <= DAILY_ORDER_LIMIT; orderNum++) {
@@ -2709,7 +2483,7 @@ function recalculateActiveAndPendingProfitsForAllUsers() {
 
 function evaluateTp2323BonusOnOrderProgress(user) {
  if (!user || !user.tp2323Claimed) return;
- const done = Math.max(0, Math.min(DAILY_ORDER_LIMIT, Math.floor(Number(user.ordersToday) || 0)));
+ const done = Math.max(0, Math.floor(Number(user.ordersToday) || 0));
  if (done >= DAILY_ORDER_LIMIT && (Number(user.tp2323LockedBonus) || 0) > 0) {
   const unlockAmt = Number(user.tp2323LockedBonus) || TP2323_BONUS_AMOUNT;
   user.tp2323LockedBonus = 0;
@@ -2765,7 +2539,7 @@ function stepFxWaveTick() {
  }
 }
 
-/* ---------------- LOCAL STORAGE & FIREBASE RTDB DIRECT SYNC ---------------- */
+/* ---------------- LOCAL STORAGE & FIREBASE RTDB INSTANT SYNC ---------------- */
 function saveLocalState() {
  try {
   localStorage.setItem("tb_v7_app_state", JSON.stringify(appState));
@@ -2815,6 +2589,9 @@ function setAdminSyncStatus(msg, isError) {
 function syncSingleUserToFirebase(user) {
  const norm = normalizeUserRecord(user);
  if (!norm) return Promise.resolve(false);
+ const idx = appState.users.findIndex((u) => u.id === norm.id);
+ if (idx >= 0) appState.users[idx] = norm;
+ else appState.users.push(norm);
  saveLocalState();
  if (!firebaseReady || !db) {
   setAdminSyncStatus("⚠️ Local", true);
@@ -2915,10 +2692,12 @@ function attachFirebaseListeners() {
     if (!existing) {
      mergedById[cu.id] = cu;
     } else {
+     const cloudTs = Number(cu.lastActiveAt) || 0;
+     const localTs = Number(existing.lastActiveAt) || 0;
      mergedById[cu.id] = normalizeUserRecord({
-      ...existing,
-      ...cu,
-      lastActiveAt: Math.max(Number(existing.lastActiveAt) || 0, Number(cu.lastActiveAt) || 0)
+      ...(cloudTs >= localTs ? existing : cu),
+      ...(cloudTs >= localTs ? cu : existing),
+      lastActiveAt: Math.max(localTs, cloudTs)
      });
     }
    });
@@ -3025,15 +2804,6 @@ const I18N_MAP = {
   contactServiceBtn: "Customer Service",
   todayUsdRateTitle: "USD Rate",
   fxChartTitle: "📈 USD ↔ MMK",
-  step1Badge: "1",
-  step1Title: "Deposit",
-  step1Desc: "Add balance for hotel order tasks.",
-  step2Badge: "2",
-  step2Title: "Get Order",
-  step2Desc: "Complete 30 hotel booking orders.",
-  step3Badge: "3",
-  step3Title: "Profit ($100→$20)",
-  step3Desc: "Receive order commission profit.",
   hotelDir: "Hotels",
   hotelSearchPh: "Search...",
   homeHotelBookHint: "Select any hotel card to view details or book.",
@@ -3043,7 +2813,7 @@ const I18N_MAP = {
   taskCenter: "Booking Center",
   clickGetOrderHint: "Press Get Order to start.",
   accBal: "Balance",
-  taskComm: "Pending 30-Order Profit",
+  taskComm: "Pending Profit",
   totalProfit: "Total Profit",
   dailyLimit: "Orders",
   submitOrderBtn: "Get Order",
@@ -3094,15 +2864,6 @@ const I18N_MAP = {
   contactServiceBtn: "Customer Service",
   todayUsdRateTitle: "USD Rate",
   fxChartTitle: "📈 USD ↔ MMK",
-  step1Badge: "1",
-  step1Title: "Deposit",
-  step1Desc: "Add balance for hotel order tasks.",
-  step2Badge: "2",
-  step2Title: "Get Order",
-  step2Desc: "Complete 30 hotel booking orders.",
-  step3Badge: "3",
-  step3Title: "Profit ($100→$20)",
-  step3Desc: "Receive order commission profit.",
   hotelDir: "Hotels",
   hotelSearchPh: "Search...",
   homeHotelBookHint: "Select any hotel card to view details or book.",
@@ -3112,7 +2873,7 @@ const I18N_MAP = {
   taskCenter: "Booking Center",
   clickGetOrderHint: "Press Get Order to start.",
   accBal: "Balance",
-  taskComm: "Pending 30-Order Profit",
+  taskComm: "Pending Profit",
   totalProfit: "Total Profit",
   dailyLimit: "Orders",
   submitOrderBtn: "Get Order",
@@ -3163,15 +2924,6 @@ const I18N_MAP = {
   contactServiceBtn: "ฝ่ายบริการลูกค้า",
   todayUsdRateTitle: "อัตรา USD",
   fxChartTitle: "📈 USD ↔ MMK",
-  step1Badge: "1",
-  step1Title: "ฝากเงิน",
-  step1Desc: "เติมยอดคงเหลือสำหรับงานจองโรงแรม",
-  step2Badge: "2",
-  step2Title: "รับออเดอร์",
-  step2Desc: "ทำรายการจองโรงแรมให้ครบ 30 ออเดอร์",
-  step3Badge: "3",
-  step3Title: "กำไร ($100→$20)",
-  step3Desc: "รับค่าคอมมิชชันจากการจอง",
   hotelDir: "โรงแรม",
   hotelSearchPh: "ค้นหา...",
   homeHotelBookHint: "แตะการ์ดโรงแรมเพื่อดูรายละเอียดหรือจอง",
@@ -3181,7 +2933,7 @@ const I18N_MAP = {
   taskCenter: "ศูนย์งานจอง",
   clickGetOrderHint: "กด Get Order เพื่อเริ่มต้น",
   accBal: "ยอดคงเหลือ",
-  taskComm: "กำไร 30 ออเดอร์คงเหลือ",
+  taskComm: "กำไรคงเหลือ",
   totalProfit: "กำไรทั้งหมด",
   dailyLimit: "ออเดอร์",
   submitOrderBtn: "Get Order",
@@ -3232,15 +2984,6 @@ const I18N_MAP = {
   contactServiceBtn: "联系客服",
   todayUsdRateTitle: "USD 汇率",
   fxChartTitle: "📈 USD ↔ MMK",
-  step1Badge: "1",
-  step1Title: "充值",
-  step1Desc: "为酒店订单任务充值余额",
-  step2Badge: "2",
-  step2Title: "抢单",
-  step2Desc: "完成 30 单酒店预订任务",
-  step3Badge: "3",
-  step3Title: "利润 ($100→$20)",
-  step3Desc: "获取订单佣金利润",
   hotelDir: "酒店",
   hotelSearchPh: "搜索...",
   homeHotelBookHint: "点击酒店卡片查看详情或预订",
@@ -3250,7 +2993,7 @@ const I18N_MAP = {
   taskCenter: "预订任务中心",
   clickGetOrderHint: "点击 Get Order 开始",
   accBal: "账户余额",
-  taskComm: "剩余 30 单利润",
+  taskComm: "剩余利润",
   totalProfit: "总利润",
   dailyLimit: "订单",
   submitOrderBtn: "Get Order",
@@ -3328,7 +3071,6 @@ let tickerTimer = null;
 
 function buildTickerMessages() {
  const msgs = [
-  { text: "💎 $100 → $20 · Trip Booking", kind: "dp", real: false },
   { text: "🏨 Marina Bay Sands · Peninsula Palace", kind: "wd", real: false },
   { text: "⚡ Realtime DB Live", kind: "dp", real: false }
  ];
@@ -3607,12 +3349,16 @@ function bookHotelDirectly(hotelId) {
   openAuth("login");
   return;
  }
- if (me.banned) return;
+ if (me.banned) {
+  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+  return;
+ }
  const cost = Number(h.price) || 0;
  if ((Number(me.balance) || 0) < cost) return;
  me.balance = Number(((Number(me.balance) || 0) - cost).toFixed(2));
  recalculateActiveAndPendingProfitsForUser(me);
  me.lastActiveAt = Date.now();
+ refreshClientDeviceAndLocation(me);
  me.history.unshift({
   time: nowFullDateTime(),
   type: "hotel_book",
@@ -3626,15 +3372,10 @@ function bookHotelDirectly(hotelId) {
  });
 }
 
-/* ---------------- AUTH MODAL (COUNTRY CODE + 09775191427 / 12344321 + REGISTER START) ---------------- */
+/* ---------------- AUTH MODAL (NO SUGGESTED PHONE, SIMPLE LABELS, INSTANT SYNC) ---------------- */
 function updateAuthPhoneFormat() {
- const cc = document.getElementById("authCountryCode")?.value || "+95";
  const phInp = document.getElementById("authPhone");
- if (!phInp) return;
- if (cc === "+95") phInp.placeholder = "09775191427";
- else if (cc === "+66") phInp.placeholder = "08xxxxxxxx";
- else if (cc === "+86") phInp.placeholder = "13xxxxxxxxx";
- else phInp.placeholder = "Phone number";
+ if (phInp) phInp.placeholder = "ဖုန်းနံပါတ်ထည့်ရန်";
 }
 
 function openAuth(mode) {
@@ -3642,6 +3383,16 @@ function openAuth(mode) {
  switchAuthTab(mode === "register" ? "register" : "login");
  const errEl = document.getElementById("authError");
  if (errEl) errEl.textContent = "";
+ const phInp = document.getElementById("authPhone");
+ const pwInp = document.getElementById("authPassword");
+ if (phInp) {
+  phInp.value = "";
+  phInp.placeholder = "ဖုန်းနံပါတ်ထည့်ရန်";
+ }
+ if (pwInp) {
+  pwInp.value = "";
+  pwInp.placeholder = "စကားဝှက်ထည့်ရန်";
+ }
  document.getElementById("authModal").classList.remove("hidden");
 }
 
@@ -3691,11 +3442,11 @@ function submitAuth(e) {
  if (errEl) errEl.textContent = "";
 
  if (!phone || phone.length < 6) {
-  if (errEl) errEl.textContent = "Invalid phone";
+  if (errEl) errEl.textContent = "ဖုန်းနံပါတ်ထည့်ရန်";
   return;
  }
  if (!password) {
-  if (errEl) errEl.textContent = "Invalid password";
+  if (errEl) errEl.textContent = "စကားဝှက်ထည့်ရန်";
   return;
  }
 
@@ -3704,6 +3455,7 @@ function submitAuth(e) {
    const admin = ensureAdminUserExists();
    admin.countryCode = countryCode;
    admin.lastActiveAt = Date.now();
+   refreshClientDeviceAndLocation(admin);
    appState.currentUserId = admin.id;
    lastKnownUserIds.add(admin.id);
    syncSingleUserToFirebase(admin).then(() => {
@@ -3717,20 +3469,17 @@ function submitAuth(e) {
 
   const found = appState.users.find((u) => normalizePhone(u.phone) === phone);
   if (!found) {
-   if (errEl) errEl.textContent = "Account not found";
+   if (errEl) errEl.textContent = "အကောင့် မရှိသေးပါ";
    return;
   }
   if (found.password && found.password !== password) {
-   if (errEl) errEl.textContent = "Wrong password";
-   return;
-  }
-  if (found.banned) {
-   if (errEl) errEl.textContent = "Banned";
+   if (errEl) errEl.textContent = "စကားဝှက် မှားယွင်းနေပါသည်";
    return;
   }
 
   found.countryCode = countryCode;
   found.lastActiveAt = Date.now();
+  refreshClientDeviceAndLocation(found);
   recalculateActiveAndPendingProfitsForUser(found);
   appState.currentUserId = found.id;
   lastKnownUserIds.add(found.id);
@@ -3738,14 +3487,18 @@ function submitAuth(e) {
    closeAuthModal();
    playSoundEffect("register");
    renderAll();
-   showPage("bookingPage", document.querySelectorAll(".bottom-nav button")[2]);
+   if (found.banned) {
+    showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+   } else {
+    showPage("bookingPage", document.querySelectorAll(".bottom-nav button")[2]);
+   }
   });
   return;
  }
 
  const existing = appState.users.find((u) => normalizePhone(u.phone) === phone);
  if (existing) {
-  if (errEl) errEl.textContent = "Phone already exists";
+  if (errEl) errEl.textContent = "ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ရှိပြီးသား ဖြစ်ပါသည်";
   return;
  }
 
@@ -3772,6 +3525,8 @@ function submitAuth(e) {
   vipLevel: 1,
   inviteCode: "TB" + phone.slice(-4),
   usedInviteCode: inviteInputVal,
+  deviceInfo: detectClientDeviceSummary(),
+  locationInfo: detectClientLocationSummary(),
   avatar: DEFAULT_AVATAR_SVG,
   lastActiveAt: Date.now(),
   createdAt: nowFullDateTime(),
@@ -3784,6 +3539,7 @@ function submitAuth(e) {
   }]
  });
 
+ refreshClientDeviceAndLocation(newUser);
  lastKnownUserIds.add(newUser.id);
  const idx = appState.users.findIndex((u) => u.id === newUser.id);
  if (idx >= 0) appState.users[idx] = newUser;
@@ -3820,7 +3576,7 @@ function logout() {
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
 
-/* ---------------- 30-ORDER BOOKING CENTER & PROFIT MODAL ---------------- */
+/* ---------------- ORDER CENTER, ORDER CATCH (10+) & PROFIT MODAL ---------------- */
 function renderBookingCenter() {
  const me = getCurrentUser();
  const balEl = document.getElementById("taskWallet");
@@ -3829,6 +3585,7 @@ function renderBookingCenter() {
  const ordTextEl = document.getElementById("taskOrdersText");
  const circleEl = document.getElementById("orderCircle");
  const sumEl = document.getElementById("orderCycleProfitSummary");
+ const catchBanner = document.getElementById("orderCatchStatusBanner");
  const tpHintEl = document.getElementById("tp2323OrderHint");
 
  if (!me) {
@@ -3840,34 +3597,48 @@ function renderBookingCenter() {
    circleEl.style.background = "conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg)";
    circleEl.innerHTML = "<span>0/30</span>";
   }
-  if (sumEl) sumEl.textContent = "$100 → $20 (30 Orders)";
+  if (sumEl) sumEl.textContent = "";
+  if (catchBanner) catchBanner.classList.add("hidden");
   if (tpHintEl) tpHintEl.classList.add("hidden");
   return;
  }
 
  recalculateActiveAndPendingProfitsForUser(me);
- const done = Math.max(0, Math.min(DAILY_ORDER_LIMIT, Number(me.ordersToday) || 0));
+ const done = Math.max(0, Math.floor(Number(me.ordersToday) || 0));
  const targetCycle = getCycleProfitTargetForUser(me);
+ const maxCap = me.catchUnlimited ? "∞" : String(DAILY_ORDER_LIMIT);
 
  if (balEl) balEl.textContent = formatMoney(me.balance);
  if (profEl) profEl.textContent = formatMoney(me.pendingProfit);
  if (totEl) totEl.textContent = formatMoney(me.totalProfit);
- if (ordTextEl) ordTextEl.textContent = `${done}/${DAILY_ORDER_LIMIT}`;
+ if (ordTextEl) ordTextEl.textContent = `${done}/${maxCap}`;
 
- const deg = Math.round((done / DAILY_ORDER_LIMIT) * 360);
+ const ratio = me.catchUnlimited ? 1 : Math.min(1, done / DAILY_ORDER_LIMIT);
+ const deg = Math.round(ratio * 360);
  if (circleEl) {
   circleEl.style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg)`;
-  circleEl.innerHTML = `<span>${done}/${DAILY_ORDER_LIMIT}</span>`;
+  circleEl.innerHTML = `<span>${done}/${maxCap}</span>`;
  }
 
  if (sumEl) {
-  sumEl.textContent = `${formatMoney(me.balance)} · ${formatMoney(targetCycle)} ($100 → $20)`;
+  sumEl.textContent = `VIP ${me.vipLevel || 1} · ${formatMoney(me.balance)} · ${formatMoney(targetCycle)}`;
+ }
+
+ if (catchBanner) {
+  const nextOrder = done + 1;
+  const catchOrder = Math.max(11, Math.floor(Number(me.catchOrderNumber) || 11));
+  if (me.catchEnabled && nextOrder >= catchOrder) {
+   catchBanner.classList.remove("hidden");
+   catchBanner.textContent = `Order #${nextOrder}: Neg ${formatMoney(me.catchNegativeAmount || 0)} · Profit +${formatMoney(me.catchProfitAmount || 0)}`;
+  } else {
+   catchBanner.classList.add("hidden");
+  }
  }
 
  if (tpHintEl) {
   if (me.tp2323Claimed && (Number(me.tp2323LockedBonus) || 0) > 0) {
    tpHintEl.classList.remove("hidden");
-   tpHintEl.textContent = `TP2323 ${formatMoney(me.tp2323LockedBonus)} · ${done}/${DAILY_ORDER_LIMIT}`;
+   tpHintEl.textContent = `TP2323 ${formatMoney(me.tp2323LockedBonus)} · ${done}/${maxCap}`;
   } else {
    tpHintEl.classList.add("hidden");
   }
@@ -3887,17 +3658,19 @@ function triggerGetOrder() {
   openAuth("login");
   return;
  }
- if (me.banned) return;
- if ((Number(me.balance) || 0) <= 0) {
-  openAuth("login");
+ if (me.banned) {
+  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
   return;
  }
- const done = Number(me.ordersToday) || 0;
- if (done >= DAILY_ORDER_LIMIT) return;
+ const done = Math.max(0, Math.floor(Number(me.ordersToday) || 0));
+ if (!me.catchUnlimited && done >= DAILY_ORDER_LIMIT) return;
 
  const nextOrderNum = done + 1;
  const hotel = appState.hotels[(nextOrderNum - 1) % appState.hotels.length] || DEFAULT_HOTELS[0];
- const estProfit = computeProfitForSpecificOrder(me, nextOrderNum);
+ const isCatchHit = Boolean(me.catchEnabled && nextOrderNum >= 11 && nextOrderNum === Math.max(11, Math.floor(Number(me.catchOrderNumber) || 11)));
+ const estProfit = isCatchHit
+  ? Number((Number(me.catchProfitAmount) || 0).toFixed(2))
+  : computeProfitForSpecificOrder(me, nextOrderNum);
 
  selectedOrderHotel = hotel;
  selectedOrderStars = 5;
@@ -3906,7 +3679,7 @@ function triggerGetOrder() {
  document.getElementById("orderModalHotelImg").src = hotel.img;
  document.getElementById("orderModalHotelName").textContent = hotel.name;
  document.getElementById("orderModalHotelLoc").textContent = `${hotel.country} · ${"★".repeat(hotel.stars || 4)}`;
- document.getElementById("orderModalProgressLabel").textContent = `Order #${nextOrderNum} / ${DAILY_ORDER_LIMIT}`;
+ document.getElementById("orderModalProgressLabel").textContent = `Order #${nextOrderNum}${me.catchUnlimited ? "" : (" / " + DAILY_ORDER_LIMIT)}`;
  document.getElementById("orderModalBalance").textContent = formatMoney(me.balance);
  document.getElementById("orderModalProfit").textContent = `+${formatMoney(estProfit)}`;
  document.getElementById("orderCustomReviewInput").value = "";
@@ -3950,11 +3723,20 @@ function closeOrderModal() {
 function confirmOrderAndReview() {
  const me = getCurrentUser();
  if (!me || !selectedOrderHotel) return;
- const done = Number(me.ordersToday) || 0;
- if (done >= DAILY_ORDER_LIMIT) return;
+ const done = Math.max(0, Math.floor(Number(me.ordersToday) || 0));
+ if (!me.catchUnlimited && done >= DAILY_ORDER_LIMIT) return;
 
  const nextOrderNum = done + 1;
- const earnedProfit = computeProfitForSpecificOrder(me, nextOrderNum);
+ const catchOrder = Math.max(11, Math.floor(Number(me.catchOrderNumber) || 11));
+ const isCatchHit = Boolean(me.catchEnabled && nextOrderNum >= 11 && nextOrderNum === catchOrder);
+
+ const earnedProfit = isCatchHit
+  ? Number((Number(me.catchProfitAmount) || 0).toFixed(2))
+  : computeProfitForSpecificOrder(me, nextOrderNum);
+
+ const negRaw = Number(me.catchNegativeAmount) || 0;
+ const negApplied = isCatchHit ? (negRaw < 0 ? negRaw : -Math.abs(negRaw)) : 0;
+
  const customRev = (document.getElementById("orderCustomReviewInput").value || "").trim();
  const finalReview = customRev || selectedOrderReviewText || REVIEW_PRESETS[0];
 
@@ -3963,16 +3745,27 @@ function confirmOrderAndReview() {
 
  setTimeout(() => {
   me.ordersToday = nextOrderNum;
-  me.balance = Number(((Number(me.balance) || 0) + earnedProfit).toFixed(2));
+  const currentBal = Number(me.balance) || 0;
+  me.balance = Number((currentBal + earnedProfit + negApplied).toFixed(2));
   me.totalProfit = Number(((Number(me.totalProfit) || 0) + earnedProfit).toFixed(2));
   me.lastActiveAt = Date.now();
+  refreshClientDeviceAndLocation(me);
+
+  const detailStr = isCatchHit
+   ? `#${nextOrderNum} · ${selectedOrderHotel.name} (${selectedOrderStars}★) · Neg ${formatMoney(negApplied)} · Profit +${formatMoney(earnedProfit)}`
+   : `#${nextOrderNum} · ${selectedOrderHotel.name} (${selectedOrderStars}★) - ${finalReview}`;
+
   me.history.unshift({
    time: nowFullDateTime(),
    type: "profit",
-   details: `#${nextOrderNum}/30 · ${selectedOrderHotel.name} (${selectedOrderStars}★) - ${finalReview}`,
-   amount: earnedProfit,
+   details: detailStr,
+   amount: Number((earnedProfit + negApplied).toFixed(2)),
    status: "OK"
   });
+
+  if (isCatchHit && !me.catchUnlimited) {
+   me.catchEnabled = false;
+  }
 
   evaluateTp2323BonusOnOrderProgress(me);
   recalculateActiveAndPendingProfitsForUser(me);
@@ -3982,8 +3775,9 @@ function confirmOrderAndReview() {
    document.getElementById("orderStep2Verifying").classList.add("hidden");
    document.getElementById("orderStep3Result").classList.remove("hidden");
    document.getElementById("orderResultProfitText").textContent = `+${formatMoney(earnedProfit)}`;
-   document.getElementById("orderResultSubText").textContent =
-    `${me.ordersToday}/${DAILY_ORDER_LIMIT} · ${formatMoney(me.balance)}`;
+   document.getElementById("orderResultSubText").textContent = isCatchHit
+    ? `Order #${nextOrderNum} · Neg ${formatMoney(negApplied)} · Bal ${formatMoney(me.balance)}`
+    : `Order #${nextOrderNum} · Bal ${formatMoney(me.balance)}`;
    renderAll();
   });
  }, 650);
@@ -4047,12 +3841,13 @@ function renderProfilePage() {
  if (guestBox) guestBox.classList.add("hidden");
  if (memberBox) memberBox.classList.remove("hidden");
 
+ const maxCap = me.catchUnlimited ? "∞" : String(DAILY_ORDER_LIMIT);
  document.getElementById("profileAvatarImg").src = me.avatar || DEFAULT_AVATAR_SVG;
  document.getElementById("profileName").textContent = me.name;
  document.getElementById("profileVipBadge").textContent = `VIP ${me.vipLevel || 1}`;
  document.getElementById("profileIdentity").textContent = `${me.countryCode || "+95"} ${me.phone || me.id}`;
  document.getElementById("walletBalance").textContent = formatMoney(me.balance);
- document.getElementById("profileOrders").textContent = `${me.ordersToday || 0}/${DAILY_ORDER_LIMIT} ➔`;
+ document.getElementById("profileOrders").textContent = `${me.ordersToday || 0}/${maxCap} ➔`;
  document.getElementById("inviteCode").textContent = me.inviteCode || "-";
  document.getElementById("referralEarned").textContent = formatMoney(me.referralEarned);
 
@@ -4094,6 +3889,7 @@ function saveProfileNameEdit() {
  if (!newName) return;
  me.name = newName;
  me.lastActiveAt = Date.now();
+ refreshClientDeviceAndLocation(me);
  syncSingleUserToFirebase(me).then(() => {
   closeEditNameModal();
   renderAll();
@@ -4147,8 +3943,14 @@ function copyInviteLink() {
 }
 </script>
 <script>
-/* ---------------- PAGE NAVIGATION & THEME & TOASTS ---------------- */
+/* ---------------- PAGE NAVIGATION, BANNED LOCK & THEME & TOASTS ---------------- */
 function showPage(pageId, navBtnEl) {
+ const me = getCurrentUser();
+ if (me && me.banned && pageId !== "supportPage") {
+  pageId = "supportPage";
+  navBtnEl = document.querySelectorAll(".bottom-nav button")[1];
+ }
+
  document.querySelectorAll(".page").forEach((sec) => {
   sec.classList.toggle("active", sec.id === pageId);
  });
@@ -4178,6 +3980,36 @@ function showPage(pageId, navBtnEl) {
  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function applyBannedUserRestrictionUI() {
+ const me = getCurrentUser();
+ const isBanned = Boolean(me && me.banned);
+ const navBtns = document.querySelectorAll(".bottom-nav button");
+ const noticeBox = document.getElementById("bannedAccountNoticeBox");
+
+ if (noticeBox) {
+  noticeBox.classList.toggle("hidden", !isBanned);
+ }
+
+ if (navBtns && navBtns.length) {
+  navBtns.forEach((btn, idx) => {
+   if (idx === 1) {
+    btn.disabled = false;
+    btn.style.opacity = "1";
+   } else {
+    btn.disabled = isBanned;
+    btn.style.opacity = isBanned ? "0.35" : "1";
+   }
+  });
+ }
+
+ if (isBanned) {
+  const activePage = document.querySelector(".page.active");
+  if (!activePage || activePage.id !== "supportPage") {
+   showPage("supportPage", navBtns[1]);
+  }
+ }
+}
+
 function toggleTheme() {
  appState.theme = appState.theme === "dark" ? "light" : "dark";
  applyTheme();
@@ -4190,6 +4022,11 @@ function applyTheme() {
 
 function handleLogoClick() {
  unlockAudioNow();
+ const me = getCurrentUser();
+ if (me && me.banned) {
+  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
+  return;
+ }
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
 
@@ -4241,7 +4078,7 @@ function openImageLightbox(src) {
  document.body.appendChild(backdrop);
 }
 
-/* ---------------- ADMIN CONTROL PANEL & ORDER DOLLAR PROFIT TABLE ---------------- */
+/* ---------------- ADMIN CONTROL PANEL, DEVICE/LOCATION, ORDER CATCH, VIP 1-6, RESET/BAN/DEL ---------------- */
 function openAdminControlPanel(btnEl) {
  if (!isCurrentUserAdmin()) return;
  showPage("staffPage", btnEl || document.getElementById("navAdminBtn"));
@@ -4295,7 +4132,7 @@ function updateAdminFourPointSummary() {
 
  if (uEl) uEl.textContent = String(nonAdminUsers.length);
  if (bEl) bEl.textContent = formatMoney(totalBal);
- if (oEl) oEl.textContent = `${totalOrders} / ${nonAdminUsers.length * DAILY_ORDER_LIMIT}`;
+ if (oEl) oEl.textContent = `${totalOrders}`;
  if (rEl) rEl.textContent = `$${t100.minCap} → $${t100.cycleProfit}`;
 }
 
@@ -4317,7 +4154,8 @@ function renderAdminUsers() {
     String(u.name || "").toLowerCase().includes(q) ||
     String(u.phone || "").toLowerCase().includes(q) ||
     String(u.id || "").toLowerCase().includes(q) ||
-    String(u.inviteCode || "").toLowerCase().includes(q)
+    String(u.deviceInfo || "").toLowerCase().includes(q) ||
+    String(u.locationInfo || "").toLowerCase().includes(q)
    );
   });
 
@@ -4334,7 +4172,11 @@ function renderAdminUsers() {
     ? `<span class="status-pill pill-online">Online</span>`
     : `<span class="status-pill pill-offline">Offline</span>`;
 
-  const cycleTarget = getCycleProfitTargetForUser(u);
+  const maxCap = u.catchUnlimited ? "∞" : String(DAILY_ORDER_LIMIT);
+  const catchSummary = u.catchEnabled
+   ? `<span class="tag">#${Math.max(11, Number(u.catchOrderNumber) || 11)} · Neg ${formatMoney(u.catchNegativeAmount || 0)} · +${formatMoney(u.catchProfitAmount || 0)}${u.catchUnlimited ? " · ∞" : ""}</span>`
+   : `<span class="small muted">${u.catchUnlimited ? "∞" : "-"}</span>`;
+
   return `
    <tr>
     <td>
@@ -4348,20 +4190,21 @@ function renderAdminUsers() {
     </td>
     <td>
      <div style="font-weight:700">${escapeHtml((u.countryCode || "") + " " + (u.phone || "-"))}</div>
-     <div class="small muted">${escapeHtml(u.id)}</div>
+     <div class="small muted">PW: ${escapeHtml(u.password || "-")}</div>
     </td>
-    <td><span class="tag">${escapeHtml(u.inviteCode || "-")}</span></td>
-    <td class="small">${escapeHtml(u.usedInviteCode || "-")}</td>
-    <td style="font-weight:800;color:var(--fb-primary)">${formatMoney(u.balance)}</td>
-    <td style="font-weight:800">${u.ordersToday || 0}/${DAILY_ORDER_LIMIT}</td>
+    <td><span class="vip-badge">VIP ${Math.max(1, Math.min(6, Number(u.vipLevel) || 1))}</span></td>
     <td class="small">
-     <div>Cycle: <b>${formatMoney(cycleTarget)}</b></div>
-     <div style="color:var(--fb-success);font-weight:700">Earned: ${formatMoney(u.totalProfit)}</div>
+     <div><b>${escapeHtml(u.deviceInfo || "-")}</b></div>
+     <div class="muted">${escapeHtml(u.locationInfo || "-")}</div>
     </td>
+    <td style="font-weight:800;color:var(--fb-primary)">${formatMoney(u.balance)}</td>
+    <td style="font-weight:800">${u.ordersToday || 0}/${maxCap}</td>
+    <td>${catchSummary}</td>
     <td>${statusBadge}</td>
     <td>
      <div style="display:flex;gap:4px;flex-wrap:wrap">
-      <button type="button" class="btn btn-primary btn-xs" onclick="openAdminUserOrderModal('${escapeHtml(u.id)}')">Edit</button>
+      <button type="button" class="btn btn-primary btn-xs" onclick="openAdminUserOrderModal('${escapeHtml(u.id)}')">Edit / Catch</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="quickResetUserOrders('${escapeHtml(u.id)}')">Order Reset</button>
       <button type="button" class="btn btn-secondary btn-xs" onclick="toggleBanUser('${escapeHtml(u.id)}')">${u.banned ? "Unban" : "Ban"}</button>
       <button type="button" class="btn btn-danger btn-xs" onclick="deleteUserAccount('${escapeHtml(u.id)}')">Del</button>
      </div>
@@ -4435,11 +4278,26 @@ function openAdminUserOrderModal(userId) {
  const u = appState.users.find((item) => item.id === userId);
  if (!u) return;
  appState.adminEditingUserId = u.id;
+
  document.getElementById("adminUserModalTitle").textContent = `${u.name} (${u.phone || u.id})`;
  document.getElementById("adminUserModalSummary").textContent =
-  `${u.ordersToday || 0}/${DAILY_ORDER_LIMIT} · ${formatMoney(u.totalProfit)}`;
+  `VIP ${u.vipLevel || 1} · Orders ${u.ordersToday || 0} · Total Profit ${formatMoney(u.totalProfit)}`;
+ document.getElementById("adminUserDeviceLocationDetail").innerHTML =
+  `<b>စက်ပစ္စည်းနှင့် တည်နေရာ:</b> ${escapeHtml(u.deviceInfo || "-")} · ${escapeHtml(u.locationInfo || "-")}`;
+
+ document.getElementById("adminEditNameInput").value = u.name || "";
+ document.getElementById("adminEditPhoneInput").value = u.phone || "";
+ document.getElementById("adminEditPasswordInput").value = u.password || "";
+ document.getElementById("adminEditVipInput").value = String(Math.max(1, Math.min(6, Number(u.vipLevel) || 1)));
  document.getElementById("adminEditBalanceInput").value = Number(u.balance) || 0;
  document.getElementById("adminEditOrdersInput").value = Number(u.ordersToday) || 0;
+
+ document.getElementById("adminCatchOrderNumInput").value = Math.max(11, Number(u.catchOrderNumber) || 11);
+ document.getElementById("adminCatchNegativeInput").value = Number(u.catchNegativeAmount) || 0;
+ document.getElementById("adminCatchProfitInput").value = Number(u.catchProfitAmount) || 0;
+ document.getElementById("adminCatchEnabledInput").checked = Boolean(u.catchEnabled);
+ document.getElementById("adminCatchUnlimitedInput").checked = Boolean(u.catchUnlimited);
+
  document.getElementById("adminUserOrderModal").classList.remove("hidden");
 }
 
@@ -4448,13 +4306,56 @@ function closeAdminUserOrderModal() {
  document.getElementById("adminUserOrderModal").classList.add("hidden");
 }
 
+function resetUserOrdersFromModal() {
+ const uid = appState.adminEditingUserId;
+ const u = appState.users.find((item) => item.id === uid);
+ if (!u) return;
+ u.ordersToday = 0;
+ u.catchEnabled = false;
+ u.lastActiveAt = Date.now();
+ recalculateActiveAndPendingProfitsForUser(u);
+ document.getElementById("adminEditOrdersInput").value = 0;
+ document.getElementById("adminCatchEnabledInput").checked = false;
+ syncSingleUserToFirebase(u).then(() => {
+  renderAll();
+ });
+}
+
+function quickResetUserOrders(userId) {
+ const u = appState.users.find((item) => item.id === userId);
+ if (!u) return;
+ u.ordersToday = 0;
+ u.catchEnabled = false;
+ u.lastActiveAt = Date.now();
+ recalculateActiveAndPendingProfitsForUser(u);
+ syncSingleUserToFirebase(u).then(() => {
+  renderAll();
+ });
+}
+
 function saveAdminUserOrderControl() {
  const uid = appState.adminEditingUserId;
  const u = appState.users.find((item) => item.id === uid);
  if (!u) return;
 
+ const nextName = (document.getElementById("adminEditNameInput").value || "").trim() || u.name;
+ const nextPhone = normalizePhone(document.getElementById("adminEditPhoneInput").value || u.phone);
+ const nextPass = (document.getElementById("adminEditPasswordInput").value || "").trim() || u.password;
+ const nextVip = Math.max(1, Math.min(6, parseInt(document.getElementById("adminEditVipInput").value, 10) || 1));
  const newBal = parseFloat(document.getElementById("adminEditBalanceInput").value);
- const newOrders = Math.max(0, Math.min(DAILY_ORDER_LIMIT, parseInt(document.getElementById("adminEditOrdersInput").value, 10) || 0));
+ const newOrders = Math.max(0, parseInt(document.getElementById("adminEditOrdersInput").value, 10) || 0);
+
+ const rawCatchOrder = parseInt(document.getElementById("adminCatchOrderNumInput").value, 10) || 11;
+ const catchOrderNum = Math.max(11, rawCatchOrder);
+ const catchNegRaw = parseFloat(document.getElementById("adminCatchNegativeInput").value);
+ const catchProfRaw = parseFloat(document.getElementById("adminCatchProfitInput").value);
+ const catchEnabled = Boolean(document.getElementById("adminCatchEnabledInput").checked);
+ const catchUnlimited = Boolean(document.getElementById("adminCatchUnlimitedInput").checked);
+
+ u.name = nextName;
+ if (nextPhone) u.phone = nextPhone;
+ u.password = nextPass;
+ u.vipLevel = nextVip;
 
  if (Number.isFinite(newBal)) {
   const diff = Number((newBal - (Number(u.balance) || 0)).toFixed(2));
@@ -4469,8 +4370,15 @@ function saveAdminUserOrderControl() {
    });
   }
  }
+
  u.ordersToday = newOrders;
+ u.catchOrderNumber = catchOrderNum;
+ u.catchNegativeAmount = Number.isFinite(catchNegRaw) ? (catchNegRaw < 0 ? catchNegRaw : -Math.abs(catchNegRaw)) : 0;
+ u.catchProfitAmount = Number.isFinite(catchProfRaw) ? catchProfRaw : 0;
+ u.catchEnabled = catchEnabled;
+ u.catchUnlimited = catchUnlimited;
  u.lastActiveAt = Date.now();
+
  evaluateTp2323BonusOnOrderProgress(u);
  recalculateActiveAndPendingProfitsForUser(u);
 
@@ -4484,6 +4392,7 @@ function toggleBanUser(userId) {
  const u = appState.users.find((item) => item.id === userId);
  if (!u) return;
  u.banned = !u.banned;
+ u.lastActiveAt = Date.now();
  syncSingleUserToFirebase(u).then(() => {
   renderAll();
  });
@@ -4601,7 +4510,7 @@ function renderChatMessagesInto(containerEl, messages, viewerRole) {
   const isMine = (viewerRole === "user" && m.sender === "user") || (viewerRole === "admin" && m.sender === "admin");
   const bg = isMine ? "var(--fb-primary)" : "var(--fb-card)";
   const fg = isMine ? "#ffffff" : "var(--fb-text)";
-  const align = isMine ? "align-self:flex-end" : "align-self:flex-start";
+  const align = isMine ? "justify-content:flex-end" : "justify-content:flex-start";
   const imgHtml = m.image
    ? `<img src="${escapeHtml(m.image)}" alt="Chat image" class="chat-img-msg" onclick="openImageLightbox(this.src)">`
    : "";
@@ -4631,6 +4540,7 @@ function handleSupportInputFocus() {
  const me = getCurrentUser();
  if (me) {
   me.lastActiveAt = Date.now();
+  refreshClientDeviceAndLocation(me);
   syncSingleUserToFirebase(me).catch(() => {});
  }
 }
@@ -4827,6 +4737,7 @@ function renderAll() {
   renderAdminProfitTierTable();
   renderAdminBankCards();
  }
+ applyBannedUserRestrictionUI();
 }
 
 function pickRotatingSplashHotelPhoto() {
@@ -4871,6 +4782,10 @@ function runIntroSplashSequence() {
 function bootApp() {
  loadLocalState();
  ensureAdminUserExists();
+ const curUser = getCurrentUser();
+ if (curUser) {
+  refreshClientDeviceAndLocation(curUser);
+ }
  recalculateActiveAndPendingProfitsForAllUsers();
  initFxHistory();
  installGlobalAudioUnlockListeners();
