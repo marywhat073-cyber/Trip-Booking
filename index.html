@@ -4790,7 +4790,7 @@ function openOrderRulesModal(uid) {
  const u = appState.users.find((x) => x.id === uid);
  if (!u) return;
  appState.rulesTargetUserId = uid;
- $("ormTitle").textContent = `🎯 Order Rules · ${u.name}`;
+ $("ormTitle").textContent = ` Order Rules · ${u.name}`;
  $("ormUserSub").textContent = `${u.phone} · Orders: ${u.ordersToday || 0}/30 · Balance: ${formatUsd(u.balance)}`;
  $("ormOrderNum").value = String(Math.min(30, (Number(u.ordersToday) || 0) + 1));
  $("ormMode").value = "none";
