@@ -545,7 +545,7 @@ body {
   <div class="card">
    <div class="section-head">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <h2 class="section-title" data-i18n="adminPanelTitle"> Admin & Trip Booking Service Control</h2>
+     <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
      <span class="tag"><span id="totalUsersBadge">0</span> <span data-i18n="usersWord">Users</span></span>
      <span id="adminUnreadBadge" class="notif-badge hidden">0</span>
     </div>
@@ -684,19 +684,19 @@ body {
 <!-- Clean Fixed Bottom Navigation -->
 <nav class="bottom-nav" aria-label="Primary Navigation">
  <button type="button" class="active" onclick="showPage('homePage', this)">
-  <span class="nav-ico"></span>
+  <span class="nav-ico">🏠</span>
   <span class="nav-txt" data-i18n="navHome">Home</span>
  </button>
  <button type="button" onclick="showPage('supportPage', this)">
-  <span class="nav-ico"></span>
+  <span class="nav-ico">🎧</span>
   <span class="nav-txt" data-i18n="navService">Service</span>
  </button>
  <button type="button" onclick="showPage('bookingPage', this)">
-  <span class="nav-ico"></span>
+  <span class="nav-ico">📋</span>
   <span class="nav-txt" data-i18n="navBooking">Booking</span>
  </button>
  <button type="button" onclick="showPage('historyPage', this)">
-  <span class="nav-ico"></span>
+  <span class="nav-ico">📜</span>
   <span class="nav-txt" data-i18n="navHistory">History</span>
  </button>
  <button type="button" onclick="handleBottomProfileClick(this)">
@@ -800,7 +800,7 @@ body {
    <button type="button" class="btn btn-secondary" onclick="closeModal('hotelDetailModal')" data-i18n="closeBtn">Close</button>
   </div>
  </div>
-</div> 
+</div>
  <!-- Center Order Modal -->
 <div id="centerOrderModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
@@ -3516,7 +3516,7 @@ async function confirmCenterOrder() {
   $("profitSuccessModal").classList.remove("hidden");
  }
 }
-function renderHistory() {
+  function renderHistory() {
  const tbody = $("historyRows");
  if (!tbody) return;
  if (!currentUser) {
