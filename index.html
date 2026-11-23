@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trip Booking — International Hotel Platform</title>
+<title>Trip Booking — Internitial Hotel Platform</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
@@ -60,8 +60,8 @@ body {
  padding-bottom: calc(var(--nav-height) + 12px);
 }
 
-/* 7-Second Intro Splash Screen: Converging Text + Slow Color-Chasing Frame */
-@property --splash-angle {
+/* 5-Second Glowing Rainbow Frame Splash Screen (Matched to image_3ffdc6.png) */
+@property --splash-spin {
  syntax: "<angle>";
  initial-value: 0deg;
  inherits: false;
@@ -78,15 +78,15 @@ body {
  background-size: cover;
  background-position: center;
  background-repeat: no-repeat;
- transition: opacity 0.65s ease, visibility 0.65s ease;
+ transition: opacity 0.55s ease, visibility 0.55s ease;
 }
 
 #introSplash::before {
  content: "";
  position: absolute;
  inset: 0;
- background: linear-gradient(135deg, rgba(10, 17, 32, 0.82), rgba(24, 119, 242, 0.42));
- backdrop-filter: blur(2px);
+ background: rgba(9, 14, 26, 0.82);
+ backdrop-filter: blur(4px);
 }
 
 #introSplash.fade-out {
@@ -95,88 +95,107 @@ body {
  pointer-events: none;
 }
 
-.intro-frame-shell {
+.splash-rainbow-frame {
  position: relative;
  z-index: 2;
- width: min(460px, 92vw);
- padding: 4px;
- border-radius: 22px;
+ width: min(440px, 90vw);
+ padding: 3.5px;
+ border-radius: 18px;
  background: conic-gradient(
-  from var(--splash-angle),
-  #ff2a6d 0deg 60deg,
-  #ff9f1c 60deg 120deg,
-  #2ec4b6 120deg 180deg,
-  #2d88ff 180deg 240deg,
-  #a855f7 240deg 300deg,
-  #f43f5e 300deg 360deg
+  from var(--splash-spin),
+  #3b82f6 0deg 65deg,
+  #a855f7 65deg 130deg,
+  #ef4444 130deg 195deg,
+  #ec4899 195deg 260deg,
+  #f59e0b 260deg 320deg,
+  #10b981 320deg 360deg
  );
  box-shadow:
-  0 0 28px rgba(45, 136, 255, 0.35),
-  0 20px 52px rgba(0, 0, 0, 0.52);
- animation: splashColorTravel 9s linear infinite;
+  0 0 24px rgba(168, 85, 247, 0.35),
+  0 0 36px rgba(59, 130, 246, 0.28),
+  0 18px 40px rgba(0, 0, 0, 0.55);
+ animation: splashFrameSpin 6s linear infinite;
 }
 
-.intro-frame-shell::after {
+.splash-rainbow-frame::after {
  content: "";
  position: absolute;
  inset: -2px;
- border-radius: 24px;
+ border-radius: 20px;
  z-index: -1;
  background: conic-gradient(
-  from var(--splash-angle),
-  rgba(255, 42, 109, 0.65) 0deg 60deg,
-  rgba(255, 159, 28, 0.65) 60deg 120deg,
-  rgba(46, 196, 182, 0.65) 120deg 180deg,
-  rgba(45, 136, 255, 0.65) 180deg 240deg,
-  rgba(168, 85, 247, 0.65) 240deg 300deg,
-  rgba(244, 63, 94, 0.65) 300deg 360deg
+  from var(--splash-spin),
+  rgba(59, 130, 246, 0.65) 0deg 65deg,
+  rgba(168, 85, 247, 0.65) 65deg 130deg,
+  rgba(239, 68, 68, 0.65) 130deg 195deg,
+  rgba(236, 72, 153, 0.65) 195deg 260deg,
+  rgba(245, 158, 11, 0.65) 260deg 320deg,
+  rgba(16, 185, 129, 0.65) 320deg 360deg
  );
- filter: blur(10px);
+ filter: blur(11px);
  opacity: 0.78;
- animation: splashColorTravel 9s linear infinite;
+ animation: splashFrameSpin 6s linear infinite;
 }
 
-@keyframes splashColorTravel {
+@keyframes splashFrameSpin {
  to {
-  --splash-angle: 360deg;
+  --splash-spin: 360deg;
  }
 }
 
-.intro-stage {
- position: relative;
+.splash-inner-card {
  width: 100%;
+ padding: 26px 22px;
+ border-radius: 15px;
+ background: linear-gradient(145deg, #161b26, #1d222d);
  text-align: center;
  color: #ffffff;
- padding: 30px 24px;
- border-radius: 19px;
- background: rgba(13, 20, 34, 0.9);
- backdrop-filter: blur(8px);
- overflow: hidden;
 }
 
-.intro-title {
- font-size: 26px;
+.splash-main-heading {
+ margin: 0 0 8px;
+ font-size: 24px;
  font-weight: 800;
- margin: 0 0 10px;
  letter-spacing: 0.3px;
- transform: translate(-46vw, -24vh) scale(0.75) rotate(-6deg);
- opacity: 0;
- transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.05s ease;
+ color: #ffffff;
 }
 
-.intro-sub {
- font-size: 15px;
+.splash-sub-heading {
+ margin: 0;
+ font-size: 14.5px;
  font-weight: 600;
- opacity: 0;
- color: #e2e8f0;
- transform: translate(46vw, 24vh) scale(0.75) rotate(6deg);
- transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1) 0.14s, opacity 1.05s ease 0.14s;
+ color: #cbd5e1;
 }
 
-.intro-stage.converge .intro-title,
-.intro-stage.converge .intro-sub {
- transform: translate(0, 0) scale(1) rotate(0deg);
- opacity: 1;
+/* Custom Glowing Hotel + Globe Emblem Brand Logo */
+.brand-logo-wrap {
+ display: inline-flex;
+ align-items: center;
+ gap: 9px;
+ cursor: pointer;
+ user-select: none;
+}
+
+.brand-emblem-svg {
+ width: 34px;
+ height: 34px;
+ flex-shrink: 0;
+ filter: drop-shadow(0 0 7px rgba(245, 158, 11, 0.55));
+}
+
+.brand-wordmark {
+ font-size: 18px;
+ font-weight: 800;
+ letter-spacing: 0.2px;
+ background: linear-gradient(90deg, #1877f2, #f59e0b);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+}
+
+body.dark .brand-wordmark {
+ background: linear-gradient(90deg, #60a5fa, #fbbf24);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
 }
 
 /* Top Header */
@@ -199,17 +218,6 @@ body {
  justify-content: space-between;
  gap: 10px;
  flex-wrap: wrap;
-}
-
-.brand-logo {
- display: flex;
- align-items: center;
- gap: 8px;
- font-size: 18px;
- font-weight: 800;
- color: var(--fb-primary);
- cursor: pointer;
- user-select: none;
 }
 
 .top-controls {
@@ -447,7 +455,7 @@ select:focus, input:focus, textarea:focus {
  display: block;
 }
 
-/* Full-bleed / Full-height Support Page Layout */
+/* Full-Height Support Page Layout */
 .support-full-wrap {
  display: flex;
  flex-direction: column;
@@ -465,7 +473,7 @@ select:focus, input:focus, textarea:focus {
 .support-full-messages {
  flex: 1;
  min-height: 360px;
- max-height: calc(100vh - var(--nav-height) - 255px);
+ max-height: calc(100vh - var(--nav-height) - 270px);
  overflow-y: auto;
  padding: 12px;
  border-radius: 10px;
@@ -579,6 +587,32 @@ select:focus, input:focus, textarea:focus {
  font-weight: 700;
 }
 
+.quick-presets-row {
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ flex-wrap: wrap;
+ margin-top: 2px;
+}
+
+.quick-preset-btn {
+ border: 1px solid var(--fb-border);
+ background: var(--fb-card);
+ color: var(--fb-text);
+ border-radius: 6px;
+ padding: 3px 8px;
+ font-size: 11.5px;
+ font-weight: 700;
+ cursor: pointer;
+ transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.quick-preset-btn:hover {
+ border-color: var(--fb-primary);
+ background: rgba(24, 119, 242, 0.08);
+ color: var(--fb-primary);
+}
+
 .converter-answer {
  font-size: 13px;
  font-weight: 700;
@@ -586,7 +620,7 @@ select:focus, input:focus, textarea:focus {
  padding-top: 2px;
 }
 
-/* Smooth Single-Line 3D LIVE FX Trend Card */
+/* Smooth Single-Line 3D LIVE FX Trend Canvas */
 .fx-chart-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
@@ -802,6 +836,32 @@ select:focus, input:focus, textarea:focus {
  font-weight: 800;
 }
 
+.task-progress-summary {
+ max-width: 520px;
+ margin: 0 auto 14px;
+ text-align: left;
+ background: var(--fb-bg);
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ padding: 10px 12px;
+}
+
+.task-progress-track {
+ width: 100%;
+ height: 10px;
+ border-radius: 999px;
+ background: var(--fb-secondary);
+ overflow: hidden;
+ margin-top: 6px;
+}
+
+.task-progress-fill {
+ height: 100%;
+ width: 0%;
+ background: linear-gradient(90deg, var(--fb-primary), #22c55e);
+ transition: width 0.3s ease;
+}
+
 .task-center-box {
  text-align: center;
  padding: 22px 16px;
@@ -910,7 +970,7 @@ th {
  margin-top: 12px;
 }
 
-/* Chat */
+/* Chat & Multi-Line Composer */
 .chat-messages {
  height: 340px;
  overflow-y: auto;
@@ -936,6 +996,10 @@ th {
  line-height: 1.45;
  word-break: break-word;
  position: relative;
+}
+
+.chat-bubble-text {
+ white-space: pre-line;
 }
 
 .chat-bubble.staff-editable {
@@ -991,14 +1055,19 @@ th {
 
 .chat-composer {
  display: flex;
- align-items: center;
+ align-items: flex-end;
  gap: 8px;
  margin-top: 10px;
 }
 
-.chat-composer input[type="text"] {
+.chat-textarea {
  flex: 1;
  min-width: 0;
+ min-height: 40px;
+ max-height: 110px;
+ resize: vertical;
+ line-height: 1.38;
+ padding: 8px 10px;
 }
 
 .emoji-picker-panel {
@@ -1424,7 +1493,7 @@ th {
  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* Clean Fixed Bottom Navigation — Zero Overlap */
+/* Clean Fixed Bottom Navigation */
 .bottom-nav {
  position: fixed;
  bottom: 0;
@@ -1485,14 +1554,14 @@ th {
  display: none !important;
 }
 </style>
-</head> 
- <body>
-<!-- 7-Second Intro Splash Screen: Converging Text + Slow Color-Chasing Frame -->
+</head>
+<body>
+<!-- 5-Second Intro Splash Screen (Matched to image_3ffdc6.png) -->
 <div id="introSplash">
- <div class="intro-frame-shell">
-  <div id="introStageBox" class="intro-stage">
-   <div class="intro-title" data-i18n="splashMainTitle">Welcome To Trip Booking</div>
-   <div class="intro-sub" data-i18n="splashSubTitle">International Hotel Platform</div>
+ <div class="splash-rainbow-frame">
+  <div class="splash-inner-card">
+   <h1 class="splash-main-heading" data-i18n="splashMainTitle">Welcome To Trip Booking</h1>
+   <p class="splash-sub-heading" data-i18n="splashSubTitle">Internitial Hotel Platform</p>
   </div>
  </div>
 </div>
@@ -1518,12 +1587,32 @@ th {
  <img id="lightboxImgEl" src="" alt="Preview" onclick="event.stopPropagation()">
 </div>
 
-<!-- Top Navigation Header -->
+<!-- Top Navigation Header with Custom Glowing Hotel + Globe Emblem Logo -->
 <header class="topbar">
  <div class="topbar-inner">
-  <div class="brand-logo" onclick="handleLogoClick()">
-   <span>🏨</span>
-   <span>Trip Booking</span>
+  <div class="brand-logo-wrap" onclick="handleLogoClick()">
+   <svg class="brand-emblem-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <defs>
+     <linearGradient id="tbGlobeGrad" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1877f2"/>
+      <stop offset="55%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+     </linearGradient>
+     <linearGradient id="tbGoldRoof" x1="16" y1="14" x2="48" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+     </linearGradient>
+    </defs>
+    <circle cx="32" cy="32" r="27" stroke="url(#tbGlobeGrad)" stroke-width="3" fill="rgba(24, 119, 242, 0.08)"/>
+    <ellipse cx="32" cy="32" rx="14" ry="26.5" stroke="url(#tbGlobeGrad)" stroke-width="1.6" stroke-dasharray="3 2"/>
+    <path d="M7.5 34C18.5 39 45.5 39 56.5 34" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M18 39V25L32 15L46 25V39" fill="rgba(255,255,255,0.92)" stroke="url(#tbGoldRoof)" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M14 26L32 13L50 26" stroke="url(#tbGoldRoof)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M32 18.2L33.1 20.5L35.6 20.8L33.8 22.5L34.2 25L32 23.8L29.8 25L30.2 22.5L28.4 20.8L30.9 20.5L32 18.2Z" fill="#f59e0b"/>
+    <rect x="29" y="31" width="6" height="8" rx="1" fill="#1877f2"/>
+    <path d="M51 14L55.5 11.5L53 16L54 18.5L51.5 17.5L49 19L49.5 16.3L47.5 14.5L50.2 14.2L51 14Z" fill="#fbbf24"/>
+   </svg>
+   <span class="brand-wordmark">Trip Booking</span>
   </div>
   <div class="top-controls">
    <select id="language" aria-label="Language" onchange="changeLanguage(this.value)">
@@ -1560,7 +1649,7 @@ th {
   <div id="homeHeroBanner" class="hero">
    <div class="hero-content">
     <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-    <p data-i18n="heroSub">International Hotel Platform</p>
+    <p data-i18n="heroSub">Internitial Hotel Platform</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
      <button type="button" class="btn btn-primary" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">Start Booking Tasks</button>
      <button type="button" class="btn btn-secondary" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])" data-i18n="contactServiceBtn">Contact Customer Service</button>
@@ -1568,7 +1657,7 @@ th {
    </div>
   </div>
 
-  <!-- Today's USD Rate & Converter Box -->
+  <!-- Today's USD Rate & Converter Box with Quick Presets -->
   <div class="fx-top-grid">
    <div class="today-rate-card">
     <div>
@@ -1594,6 +1683,14 @@ th {
      <div class="converter-row">
       <label for="calcInputB">MMK (Ks)</label>
       <input id="calcInputB" type="number" step="any" min="0" value="5000" oninput="runBidirectionalConverter('B')">
+     </div>
+     <div class="quick-presets-row">
+      <button type="button" class="quick-preset-btn" onclick="applyQuickUsdPreset(100)">$100</button>
+      <button type="button" class="quick-preset-btn" onclick="applyQuickUsdPreset(500)">$500</button>
+      <button type="button" class="quick-preset-btn" onclick="applyQuickUsdPreset(1000)">$1,000</button>
+      <button type="button" class="quick-preset-btn" onclick="applyQuickMmkPreset(100000)">100,000 MMK</button>
+      <button type="button" class="quick-preset-btn" onclick="applyQuickMmkPreset(500000)">500,000 MMK</button>
+      <button type="button" class="quick-preset-btn" onclick="applyQuickMmkPreset(1000000)">1,000,000 MMK</button>
      </div>
      <div id="calcDirectionHint" class="small muted">USD ➔ MMK</div>
      <div id="calcAnswerBox" class="converter-answer">1 USD = 5,000 MMK</div>
@@ -1663,7 +1760,8 @@ th {
    </div>
   </div>
  </section>
- <!-- CUSTOMER SERVICE PAGE (Full-Height, Zero Wasted Space) -->
+
+ <!-- CUSTOMER SERVICE PAGE (Full-Height + Multi-Line Composer + Offline Draft Protection) -->
  <section id="supportPage" class="page">
   <div class="support-full-wrap">
    <div class="card support-full-card">
@@ -1677,14 +1775,14 @@ th {
      <button type="button" class="btn btn-secondary btn-xs" onclick="toggleEmojiPicker('user')" title="Emoji">😊</button>
      <button type="button" class="btn btn-secondary btn-xs" onclick="$('userChatPhotoInput').click()" title="Photo">📷</button>
      <input id="userChatPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
-     <input id="supportInput" type="text" data-i18n-ph="typeMsgPh" placeholder="Type a message..." onfocus="handleSupportInputFocus()" onkeydown="if(event.key==='Enter') sendSupportMessage()">
+     <textarea id="supportInput" class="chat-textarea" rows="1" data-i18n-ph="typeMsgPh" placeholder="Type a message (Shift+Enter for new line)..." onfocus="handleSupportInputFocus()" oninput="saveDraftText('user_cs_draft', this.value)" onkeydown="handleChatTextareaKeydown(event, 'user')"></textarea>
      <button type="button" class="btn btn-primary btn-xs" onclick="sendSupportMessage()">➤</button>
     </div>
    </div>
   </div>
  </section>
 
- <!-- BOOKING TASK CENTER PAGE -->
+ <!-- BOOKING TASK CENTER PAGE (Clean Order Progress Without Profit Forecast Spoiler) -->
  <section id="bookingPage" class="page">
   <div class="stats-grid">
    <div class="stat-box">
@@ -1706,7 +1804,18 @@ th {
   </div>
 
   <div class="card task-center-box">
-   <h2 style="margin:0 0 6px" data-i18n="taskCenter">Booking Task Center</h2>
+   <h2 style="margin:0 0 8px" data-i18n="taskCenter">Booking Task Center</h2>
+
+   <div class="task-progress-summary">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap" class="small">
+     <span id="taskRemainingLabel" style="font-weight:700">Remaining Orders: 30</span>
+     <span id="taskProgressPctLabel" class="muted" style="font-weight:700">0%</span>
+    </div>
+    <div class="task-progress-track">
+     <div id="taskProgressBarFill" class="task-progress-fill"></div>
+    </div>
+   </div>
+
    <div id="tp2323OrderHint" class="tag hidden" style="margin-bottom:8px"></div>
    <div id="pendingProfitNoticeBox" class="hidden" style="margin-bottom:8px;font-weight:700;color:var(--fb-primary)"></div>
    <div id="lastCompletedOrderBox" class="hidden" style="margin-bottom:8px"></div>
@@ -1753,7 +1862,7 @@ th {
   </div>
  </section>
 
- <!-- PROFILE PAGE (Expanded Full-Space Layout) -->
+ <!-- PROFILE PAGE -->
  <section id="profilePage" class="page">
   <div id="guestAuthBox" class="card profile-expanded-card" style="text-align:center;justify-content:center;padding:32px 18px">
    <div>
@@ -1845,7 +1954,6 @@ th {
     </div>
    </div>
 
-   <!-- Admin USD/MMK Live Base Rate Control -->
    <div class="admin-live-banner">
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
      <label for="adminFxRateInput" class="small" style="font-weight:700" data-i18n="adminFxRateLabel">💱 USD/MMK Rate:</label>
@@ -1955,7 +2063,7 @@ th {
        <button type="button" class="btn btn-secondary btn-xs" onclick="toggleEmojiPicker('support')" title="Emoji">😊</button>
        <button type="button" class="btn btn-secondary btn-xs" onclick="$('adminChatPhotoInput').click()" title="Photo">📷</button>
        <input id="adminChatPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
-       <input id="adminChatInput" type="text" data-i18n-ph="replyCsPh" placeholder="Reply..." onkeydown="if(event.key==='Enter') sendAdminChatReply()">
+       <textarea id="adminChatInput" class="chat-textarea" rows="1" data-i18n-ph="replyCsPh" placeholder="Reply (Shift+Enter for new line)..." oninput="saveAdminCsDraft()" onkeydown="handleChatTextareaKeydown(event, 'support')"></textarea>
        <button type="button" class="btn btn-primary btn-xs" onclick="sendAdminChatReply()">➤</button>
       </div>
      </div>
@@ -1998,16 +2106,16 @@ th {
 
   <div id="regExtraFields" class="field hidden">
    <label data-i18n="fullNameLabel">Full Name</label>
-   <input id="regName" type="text" data-i18n-ph="fullNamePh" placeholder="Enter your full name">
+   <input id="regName" type="text" data-i18n-ph="fullNamePh" placeholder="Enter your full name" oninput="saveDraftText('reg_name_draft', this.value)">
   </div>
 
   <div class="field">
    <label data-i18n="identityLabel">Phone Number or Email</label>
    <div id="regPhoneRow" class="phone-inline-group hidden">
     <select id="regCountryCode" class="phone-code-compact" aria-label="Country Code"></select>
-    <input id="authIdentity" class="phone-number-expanded" type="text" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent='';">
+    <input id="authIdentity" class="phone-number-expanded" type="text" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent=''; saveDraftText('reg_id_draft', this.value);">
    </div>
-   <input id="loginIdentityInput" type="text" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent='';">
+   <input id="loginIdentityInput" type="text" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent=''; saveDraftText('login_id_draft', this.value);">
   </div>
 
   <div class="field">
@@ -2020,359 +2128,7 @@ th {
 
   <div id="regRefField" class="field hidden">
    <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
-   <input id="regRefInput" type="text" placeholder="TP2323">
-   <label class="terms-agree-row">
-    <input id="regAgreeTermsCheckbox" type="checkbox" onchange="if(this.checked && $('authError')) $('authError').textContent=''">
-    <span data-i18n="agreeTermsText">သတ်မှတ်ထားသော စည်းမျဉ်းစည်းကမ်းများ လိုက်နာပါသည်။</span>
-   </label>
-  </div>
-
-  <div id="authError" class="error-text"></div>
-
-  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-   <button type="button" id="authSubmitBtn" class="btn btn-primary" style="flex:1" onclick="submitAuth()">Login</button>
-   <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()" data-i18n="switchAuth">Switch Login / Register</button>
-  </div>
- </div>
-</div>
-
-<!-- Admin Booking Profit Table Modal ($100 to $10,000, 30-Order Exact Profit) -->
-<div id="profitTableModal" class="modal-backdrop hidden">
- <div class="modal-card wide-modal">
-  <div class="modal-header">
-   <h3 data-i18n="profitTableModalTitle">📊 Booking Profit Table ($100 – $10,000)</h3>
-   <button type="button" class="close-x" onclick="closeModal('profitTableModal')">✕</button>
-  </div>
-
-  <p class="small muted" style="margin:0 0 12px" data-i18n="profitTableDesc">
-   Configure principal tiers from $100 to $10,000. Without lucky rules, completing 30 orders on $100 grants exact $20 profit ($120 total), with varying per-order commissions (e.g. 0.21, 0.49).
-  </p>
-
-  <div class="table-wrap" style="margin-bottom:14px">
-   <table>
-    <thead>
-     <tr>
-      <th>Principal ($)</th>
-      <th>Orders</th>
-      <th>30-Order Profit ($)</th>
-      <th>Total Return ($)</th>
-      <th>Sample Varied Orders (#1–#5)</th>
-     </tr>
-    </thead>
-    <tbody id="adminProfitTableRows"></tbody>
-   </table>
-  </div>
-
-  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center">
-   <button type="button" class="btn btn-secondary btn-xs" onclick="resetProfitTableDefaults()" data-i18n="resetProfitTableBtn">Reset Defaults ($100 = +$20)</button>
-   <button type="button" class="btn btn-success btn-xs" onclick="saveProfitTableAdmin()" data-i18n="saveProfitTableBtn">Save Profit Table</button>
-  </div>
- </div>
-</div>
-
-<!-- Hotel Detail Modal -->
-<div id="hotelDetailModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="detailHotelName">Hotel</h3>
-   <button type="button" class="close-x" onclick="closeModal('hotelDetailModal')">✕</button>
-  </div>
-  <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
-  <div id="detailHotelBody"></div>
-  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-   <button type="button" id="detailBookNowBtn" class="btn btn-primary" style="flex:1" onclick="bookSelectedHomeHotel()">Book Hotel</button>
-   <button type="button" class="btn btn-secondary" onclick="closeModal('hotelDetailModal')" data-i18n="closeBtn">Close</button>
-  </div>
- </div>
-</div>
-
-<!-- Center Order Modal -->
-<div id="centerOrderModal" class="modal-backdrop hidden">
- <div class="modal-card wide-modal">
-  <div class="modal-header">
-   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-    <h3 id="centerOrderTitle">🏨 Booking Task</h3>
-    <span id="centerOrderStepBadge" class="tag"></span>
-   </div>
-   <button type="button" class="close-x" onclick="closeCenterOrderModal()">✕</button>
-  </div>
-
-  <div id="centerOrderFormBody">
-   <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <img id="centerOrderImg" src="" alt="Hotel" style="width:104px;height:80px;object-fit:cover;border-radius:10px">
-    <div>
-     <div id="centerOrderHotelName" style="font-weight:700;font-size:16px"></div>
-     <div id="centerOrderCountry" class="small muted"></div>
-    </div>
-   </div>
-
-   <div class="order-meta-grid">
-    <div><span class="muted" data-i18n="orderPriceLabel">Order Price</span>: <b id="centerOrderPrice"></b></div>
-    <div><span class="muted" data-i18n="commissionLabel">Commission</span>: <b id="centerOrderComm" style="color:var(--fb-success)"></b></div>
-    <div><span class="muted" data-i18n="stayNightsLabel">Stay Duration</span>: <b id="centerOrderNights"></b></div>
-    <div><span class="muted" data-i18n="hotelRoomTypeLabel">Room Type</span>: <b id="centerOrderRoomType"></b></div>
-   </div>
-
-   <div class="field">
-    <label data-i18n="rateHotelLabel">Star Rating</label>
-    <div id="centerStarPicker" class="star-picker-row">
-     <button type="button" class="star-pick-btn" data-star="1" onclick="selectOrderStar(1)">1 ★</button>
-     <button type="button" class="star-pick-btn" data-star="2" onclick="selectOrderStar(2)">2 ★★</button>
-     <button type="button" class="star-pick-btn" data-star="3" onclick="selectOrderStar(3)">3 ★★★</button>
-     <button type="button" class="star-pick-btn" data-star="4" onclick="selectOrderStar(4)">4 ★★★★</button>
-     <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 ★★★★★</button>
-    </div>
-   </div>
-
-   <div class="field">
-    <label data-i18n="chooseReviewLabel">Select 1 of 5 Quick Reviews</label>
-    <div id="centerReviewChips" class="review-chips-list"></div>
-   </div>
-
-   <div class="field">
-    <label data-i18n="customReviewLabel">Or Write Your Own Custom Review</label>
-    <textarea id="centerCustomReviewInput" rows="2" data-i18n-ph="customReviewPh" oninput="onCustomReviewInput()"></textarea>
-   </div>
-
-   <div id="centerReviewWarn" class="error-text"></div>
-
-   <div style="display:flex;gap:8px;margin-top:12px">
-    <button type="button" class="btn btn-primary" style="flex:1" onclick="confirmCenterOrder()" data-i18n="submitOrderBtn">Complete Order</button>
-    <button type="button" class="btn btn-secondary" onclick="closeCenterOrderModal()" data-i18n="cancelBtn">Cancel</button>
-   </div>
-  </div>
-
-  <div id="centerOrderVerifyingBody" class="verifying-box hidden">
-   <div class="spinner-ring"></div>
-   <div style="font-weight:700" data-i18n="verifyingBookingText">Verifying booking details...</div>
-  </div>
- </div>
-</div>
-
-<!-- Profit Success Modal -->
-<div id="profitSuccessModal" class="modal-backdrop hidden">
- <div class="modal-card" style="text-align:center">
-  <div style="font-size:38px">🎉</div>
-  <h3 id="profitSuccessAmountText" style="margin:8px 0;color:var(--fb-success)"></h3>
-  <div id="profitSuccessProgressText" class="small" style="margin-bottom:14px"></div>
-  <button type="button" class="btn btn-primary" style="width:100%" onclick="closeModal('profitSuccessModal')" data-i18n="okBtn">OK</button>
- </div>
-</div>
-
-<!-- Low Balance / Special Order Modal -->
-<div id="lowBalanceModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="lowBalTitle">Notification</h3>
-   <button type="button" class="close-x" onclick="closeModal('lowBalanceModal')">✕</button>
-  </div>
-  <div id="lowBalNegAmountBox" class="hidden" style="margin-bottom:10px;padding:10px;border-radius:10px;background:rgba(198,40,40,0.1);border:1px solid rgba(198,40,40,0.3)">
-   <div id="lowBalOrderBadge" class="small" style="font-weight:700;color:var(--fb-danger)"></div>
-   <div id="lowBalNegAmountVal" style="font-size:18px;font-weight:800;color:var(--fb-danger);margin-top:4px"></div>
-  </div>
-  <p id="lowBalMsg" style="line-height:1.5;margin:0 0 14px"></p>
-  <button type="button" id="lowBalServiceBtn" class="btn btn-primary" style="width:100%" onclick="goToServiceFromLowBalance()" data-i18n="confirmServiceBtn">Confirm (Service)</button>
- </div>
-</div>
-
-<!-- Edit Profile Name Modal -->
-<div id="editNameModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 data-i18n="editNameModalTitle">Edit Profile Name</h3>
-   <button type="button" class="close-x" onclick="closeModal('editNameModal')">✕</button>
-  </div>
-  <div class="field">
-   <input id="editProfileNameInput" type="text">
-  </div>
-  <button type="button" class="btn btn-primary" style="width:100%" onclick="saveProfileNameEdit()" data-i18n="saveBtn">Save</button>
- </div>
-</div>
-
-<!-- Order Rules Modal -->
-<div id="orderRulesModal" class="modal-backdrop hidden">
- <div class="modal-card wide-modal">
-  <div class="modal-header">
-   <h3 id="orderRulesModalTitle">🎯 Order Rules</h3>
-   <button type="button" class="close-x" onclick="closeModal('orderRulesModal')">✕</button>
-  </div>
-  <div id="orderRulesUserSummary" class="small muted" style="margin-bottom:12px"></div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-   <input id="ruleInputOrderNum" type="number" min="1" placeholder="Order # (e.g. 5)" style="width:130px">
-   <input id="ruleInputNeg" type="number" step="0.01" min="0" placeholder="Negative ($)" style="width:140px">
-   <input id="ruleInputProfitBox" type="number" step="0.01" min="0" placeholder="Profit Box ($)" style="width:140px">
-   <button type="button" class="btn btn-primary btn-xs" onclick="addOrderRuleToUser()">+ Add Rule</button>
-  </div>
-  <div class="table-wrap" style="margin-bottom:14px">
-   <table>
-    <thead>
-     <tr>
-      <th>Order #</th>
-      <th>Negative</th>
-      <th>Profit Box</th>
-      <th>Status</th>
-      <th>Action</th>
-     </tr>
-    </thead>
-    <tbody id="orderRulesListBody"></tbody>
-   </table>
-  </div>
-  <button type="button" class="btn btn-success" style="width:100%" onclick="saveOrderRulesForUser()">Save Rules</button>
- </div>
-</div>
-
-<!-- Reset / Delete Confirm Modal -->
-<div id="resetConfirmModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="resetConfirmTitle">Confirm</h3>
-   <button type="button" class="close-x" onclick="closeModal('resetConfirmModal')">✕</button>
-  </div>
-  <p id="resetConfirmDetails" style="line-height:1.5;margin:0 0 16px"></p>
-  <div style="display:flex;gap:8px">
-   <button type="button" id="resetConfirmProceedBtn" class="btn btn-danger" style="flex:1">Confirm</button>
-   <button type="button" class="btn btn-secondary" onclick="closeModal('resetConfirmModal')" data-i18n="cancelBtn">Cancel</button>
-  </div>
- </div>
-</div>
-
-<!-- Suspend User Modal -->
-<div id="suspendUserModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3>🚫 Suspend Account</h3>
-   <button type="button" class="close-x" onclick="closeModal('suspendUserModal')">✕</button>
-  </div>
-  <div id="suspendUserTargetInfo" class="small" style="font-weight:700;margin-bottom:10px"></div>
-  <div class="field">
-   <label>Reason (Optional)</label>
-   <textarea id="suspendReasonInput" rows="3" placeholder="Enter reason..."></textarea>
-  </div>
-  <div style="display:flex;gap:8px">
-   <button type="button" class="btn btn-danger" style="flex:1" onclick="confirmSuspendUser()">Suspend</button>
-   <button type="button" class="btn btn-secondary" onclick="closeModal('suspendUserModal')" data-i18n="cancelBtn">Cancel</button>
-  </div>
- </div>
-</div>
-
-<!-- Edit Chat Message Modal -->
-<div id="editChatMsgModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3>✏️ Edit Message</h3>
-   <button type="button" class="close-x" onclick="closeModal('editChatMsgModal')">✕</button>
-  </div>
-  <div class="field">
-   <textarea id="editChatMsgTextarea" rows="3"></textarea>
-  </div>
-  <div style="display:flex;gap:8px">
-   <button type="button" class="btn btn-primary" style="flex:1" onclick="saveEditedChatMessage()" data-i18n="saveBtn">Save</button>
-   <button type="button" class="btn btn-secondary" onclick="closeModal('editChatMsgModal')" data-i18n="cancelBtn">Cancel</button>
-  </div>
- </div>
-</div>
-
-<!-- Add Hotel Modal -->
-<div id="addHotelModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 data-i18n="addHotelModalHead">Add New Hotel</h3>
-   <button type="button" class="close-x" onclick="closeModal('addHotelModal')">✕</button>
-  </div>
-  <div class="field">
-   <label data-i18n="hotelNameLabel">Hotel Name</label>
-   <input id="newHName" type="text">
-  </div>
-  <div class="field">
-   <label data-i18n="countryLabel">Country</label>
-   <input id="newHCountry" type="text">
-  </div>
-  <div class="field">
-   <label data-i18n="priceLabel">Price ($)</label>
-   <input id="newHPrice" type="number" min="85" max="99" value="92">
-  </div>
-  <div class="field">
-   <label data-i18n="starsLabel">Stars</label>
-   <select id="newHStars">
-    <option value="5">5 ★</option>
-    <option value="4">4 ★</option>
-    <option value="3">3 ★</option>
-    <option value="2">2 ★</option>
-    <option value="1">1 ★</option>
-   </select>
-  </div>
-  <button type="button" class="btn btn-primary" style="width:100%" onclick="addHotelToDatabase()" data-i18n="addBtn">Add</button>
- </div>
-</div>
-
-<!-- Alert Modal -->
-<div id="alertModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="alertTitle">Notification</h3>
-   <button type="button" class="close-x" onclick="closeModal('alertModal')">✕</button>
-  </div>
-  <div id="alertBody" style="line-height:1.5;margin-bottom:14px"></div>
-  <button type="button" class="btn btn-primary" style="width:100%" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
- </div>
-</div>
-<!-- Clean Fixed Bottom Navigation -->
-<nav class="bottom-nav" aria-label="Primary Navigation">
- <button type="button" class="active" onclick="showPage('homePage', this)">
-  <span class="nav-ico">🏠</span>
-  <span class="nav-txt" data-i18n="navHome">Home</span>
- </button>
- <button type="button" onclick="showPage('supportPage', this)">
-  <span class="nav-ico">🎧</span>
-  <span class="nav-txt" data-i18n="navService">Service</span>
- </button>
- <button type="button" onclick="showPage('bookingPage', this)">
-  <span class="nav-ico">📋</span>
-  <span class="nav-txt" data-i18n="navBooking">Booking</span>
- </button>
- <button type="button" onclick="showPage('historyPage', this)">
-  <span class="nav-ico">📜</span>
-  <span class="nav-txt" data-i18n="navHistory">History</span>
- </button>
- <button type="button" onclick="handleBottomProfileClick(this)">
-  <span class="nav-ico">👤</span>
-  <span class="nav-txt" data-i18n="navProfile">Profile</span>
- </button>
-</nav>
-
-<!-- Auth Modal (Login & Register with Compact Country Code + Terms Checkbox) -->
-<div id="authModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="authTitle">Login</h3>
-   <button type="button" class="close-x" onclick="closeModal('authModal')">✕</button>
-  </div>
-
-  <div id="regExtraFields" class="field hidden">
-   <label data-i18n="fullNameLabel">Full Name</label>
-   <input id="regName" type="text" data-i18n-ph="fullNamePh" placeholder="Enter your full name">
-  </div>
-
-  <div class="field">
-   <label data-i18n="identityLabel">Phone Number or Email</label>
-   <div id="regPhoneRow" class="phone-inline-group hidden">
-    <select id="regCountryCode" class="phone-code-compact" aria-label="Country Code"></select>
-    <input id="authIdentity" class="phone-number-expanded" type="text" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent='';">
-   </div>
-   <input id="loginIdentityInput" type="text" data-i18n-ph="identityPh" placeholder="09xxxxxxxxx or email@example.com" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent='';">
-  </div>
-
-  <div class="field">
-   <label data-i18n="passwordLabel">Password</label>
-   <div class="pass-wrap">
-    <input id="authPassword" type="password" data-i18n-ph="passwordPh" placeholder="Enter password" oninput="this.classList.remove('input-error-box'); if($('authError')) $('authError').textContent='';" onkeydown="if(event.key==='Enter') submitAuth()">
-    <button type="button" class="pass-eye-btn" onclick="togglePassVisibility('authPassword', this)">👁️</button>
-   </div>
-  </div>
-
-  <div id="regRefField" class="field hidden">
-   <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
-   <input id="regRefInput" type="text" placeholder="TP2323">
+   <input id="regRefInput" type="text" placeholder="TP2323" oninput="saveDraftText('reg_ref_draft', this.value)">
    <label class="terms-agree-row">
     <input id="regAgreeTermsCheckbox" type="checkbox" onchange="if(this.checked && $('authError')) $('authError').textContent=''">
     <span data-i18n="agreeTermsText">သတ်မှတ်ထားသော စည်းမျဉ်းစည်းကမ်းများ လိုက်နာပါသည်။</span>
@@ -2691,6 +2447,134 @@ try {
 
 const $ = id => document.getElementById(id);
 
+/* Draft Protection Helpers (Persists across page changes & offline reloads) */
+function saveDraftText(draftKey, val) {
+ try {
+  localStorage.setItem("tb_draft_" + draftKey, String(val ?? ""));
+ } catch (_) {}
+}
+
+function loadDraftText(draftKey) {
+ try {
+  return localStorage.getItem("tb_draft_" + draftKey) || "";
+ } catch (_) {
+  return "";
+ }
+}
+
+function clearDraftText(draftKey) {
+ try {
+  localStorage.removeItem("tb_draft_" + draftKey);
+ } catch (_) {}
+}
+
+function saveAdminCsDraft() {
+ const uidKey = selectedCsUserId || "default";
+ const val = $("adminChatInput")?.value || "";
+ saveDraftText("admin_cs_" + uidKey, val);
+}
+
+function restoreAdminCsDraftForUser(uid) {
+ const inp = $("adminChatInput");
+ if (!inp) return;
+ inp.value = loadDraftText("admin_cs_" + (uid || "default"));
+ autoResizeTextarea(inp);
+}
+
+function autoResizeTextarea(el) {
+ if (!el) return;
+ el.style.height = "auto";
+ el.style.height = Math.min(110, Math.max(40, el.scrollHeight)) + "px";
+}
+
+/* Sound Effects (Order Complete / Alert) + English Female Voice on Account Creation (No Mute Button) */
+let sharedAudioCtx = null;
+function getAudioContextSafe() {
+ try {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
+  if (sharedAudioCtx.state === "suspended") {
+   sharedAudioCtx.resume().catch(() => {});
+  }
+  return sharedAudioCtx;
+ } catch (_) {
+  return null;
+ }
+}
+
+function playOrderCompleteSound() {
+ const ctx = getAudioContextSafe();
+ if (!ctx) return;
+ try {
+  const now = ctx.currentTime;
+  const notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach((freq, idx) => {
+   const osc = ctx.createOscillator();
+   const gain = ctx.createGain();
+   osc.type = "triangle";
+   osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+   gain.gain.setValueAtTime(0.001, now + idx * 0.08);
+   gain.gain.exponentialRampToValueAtTime(0.12, now + idx * 0.08 + 0.02);
+   gain.gain.exponentialRampToValueAtTime(0.0008, now + idx * 0.08 + 0.28);
+   osc.connect(gain);
+   gain.connect(ctx.destination);
+   osc.start(now + idx * 0.08);
+   osc.stop(now + idx * 0.08 + 0.3);
+  });
+ } catch (_) {}
+}
+
+function playAlertChimeSound() {
+ const ctx = getAudioContextSafe();
+ if (!ctx) return;
+ try {
+  const now = ctx.currentTime;
+  const freqs = [880, 659.25];
+  freqs.forEach((freq, idx) => {
+   const osc = ctx.createOscillator();
+   const gain = ctx.createGain();
+   osc.type = "sine";
+   osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+   gain.gain.setValueAtTime(0.001, now + idx * 0.11);
+   gain.gain.exponentialRampToValueAtTime(0.1, now + idx * 0.11 + 0.02);
+   gain.gain.exponentialRampToValueAtTime(0.0008, now + idx * 0.11 + 0.22);
+   osc.connect(gain);
+   gain.connect(ctx.destination);
+   osc.start(now + idx * 0.11);
+   osc.stop(now + idx * 0.11 + 0.24);
+  });
+ } catch (_) {}
+}
+
+function speakCongratulationsFemaleEnglish() {
+ try {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance("Congratulations! Your account has been created successfully.");
+  utter.lang = "en-US";
+  utter.rate = 0.98;
+  utter.pitch = 1.18;
+  utter.volume = 1.0;
+
+  const voices = window.speechSynthesis.getVoices() || [];
+  const femaleKeywords = ["female", "samantha", "victoria", "zira", "jenny", "aria", "google us english", "siri"];
+  const preferredVoice =
+   voices.find(v => /en/i.test(v.lang) && femaleKeywords.some(k => v.name.toLowerCase().includes(k))) ||
+   voices.find(v => /en-US/i.test(v.lang)) ||
+   voices.find(v => /en/i.test(v.lang));
+
+  if (preferredVoice) utter.voice = preferredVoice;
+  window.speechSynthesis.speak(utter);
+ } catch (_) {}
+}
+
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+ window.speechSynthesis.onvoiceschanged = () => {
+  window.speechSynthesis.getVoices();
+ };
+}
+
 const COUNTRY_CODES_LIST = [
  { code: "+95", label: "🇲🇲 +95" },
  { code: "+66", label: "🇹🇭 +66" },
@@ -2789,7 +2673,6 @@ const DEFAULT_VIP_TIERS = [
  { level: "VIP Level 6", name: "Imperial Tier", daily_limit: 60, profit_rate: 0.0220, max_withdraw: 100000 }
 ];
 
-/* Principal Tiers ($100 to $10,000) — $100 principal across 30 orders yields exact $20 profit ($120 total) */
 const DEFAULT_PROFIT_TIERS = [
  { principal: 100, orders_count: 30, cycle_profit: 20 },
  { principal: 250, orders_count: 30, cycle_profit: 50 },
@@ -2833,8 +2716,8 @@ let liveOrderHeartbeatTimer = null;
 let activeLiveOrderNum = null;
 let isOrderModalOpen = false;
 let isVerifyingOrder = false;
+let userHeartbeatTimer = null;
 
-/* Live FX Rate & Smooth Non-Lagging Single-Line 3D Renderer */
 let MMK_PER_USD = Number(localStorage.getItem("tb_mmk_per_usd")) || 5000;
 let TODAY_OPEN_MMK_PER_USD = Number(localStorage.getItem("tb_today_open_mmk")) || MMK_PER_USD;
 let LAST_RATE_DAY_KEY = localStorage.getItem("tb_last_rate_day") || "";
@@ -2851,7 +2734,6 @@ let fxRhythmState = {
  waveSeed: (Date.now() % 997) + 13
 };
 
-/* Booking Profit Table & Varied Per-Order Commission Formula */
 function getMatchedProfitTier(balanceVal, ordersCount = 30) {
  const bal = Math.max(0, Number(balanceVal) || 0);
  const cnt = Math.max(1, Number(ordersCount) || 30);
@@ -2865,7 +2747,6 @@ function getMatchedProfitTier(balanceVal, ordersCount = 30) {
  }
  const tierPrincipal = Math.max(1, Number(chosen.principal) || 100);
  const baseCycleProfit = Number(chosen.cycle_profit) || 20;
- // Scale proportionally if balance sits between tiers, while exact $100 gives exact $20
  const ratioToTier = bal > 0 ? (bal / tierPrincipal) : 1;
  const scaledCycleProfit = Math.abs(bal - tierPrincipal) < 0.005
   ? baseCycleProfit
@@ -2882,13 +2763,11 @@ function computeVariedScheduleForCycle(cycleProfit, ordersCount = 30, seedSalt =
  const count = Math.max(1, Number(ordersCount) || 30);
  if (count === 1) return [Number(totalTarget.toFixed(2))];
 
- const avg = totalTarget / count;
  const rawWeights = [];
  for (let i = 1; i <= count; i++) {
   const wave = Math.sin(i * 1.37 + seedSalt * 0.71) * 0.34 + Math.cos(i * 2.19 - seedSalt * 0.43) * 0.24;
   const jitter = (((i * 29 + seedSalt * 17) % 13) - 6) * 0.035;
-  const w = Math.max(0.28, 1 + wave + jitter);
-  rawWeights.push(w);
+  rawWeights.push(Math.max(0.28, 1 + wave + jitter));
  }
  const weightSum = rawWeights.reduce((a, b) => a + b, 0) || 1;
  const scale = totalTarget / weightSum;
@@ -2900,7 +2779,6 @@ function computeVariedScheduleForCycle(cycleProfit, ordersCount = 30, seedSalt =
   amounts.push(item);
   runningSum = Number((runningSum + item).toFixed(2));
  }
- // Final order reconciles exact sum so 30 orders always equal exact cycleProfit (e.g. $20.00)
  const finalOrderAmt = Number(Math.max(0.01, totalTarget - runningSum).toFixed(2));
  amounts.push(finalOrderAmt);
  return amounts;
@@ -3221,8 +3099,7 @@ function updateMoneyDisplaysOnTick() {
  if ($("walletBalance") && currentUser) $("walletBalance").innerHTML = formatUsdWithMmk(currentUser.balance);
  if ($("referralEarned") && currentUser) $("referralEarned").innerHTML = formatUsdWithMmk(currentUser.referral_earned);
  if ($("profileIdentity") && currentUser) {
-  const tier = getMatchedProfitTier(currentUser.balance, DEFAULT_ORDERS_LIMIT);
-  $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"} (30-Order Target: +$${tier.cycle_profit.toFixed(2)})`;
+  $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"}`;
  }
  if ($("adminCurrentRateStatus")) {
   const { floor, ceiling } = getFxFloorAndCeiling(MMK_PER_USD);
@@ -3278,6 +3155,20 @@ function swapConverterDirection() {
  renderTodayRateAndConverterBox();
 }
 
+function applyQuickUsdPreset(usdAmt) {
+ const aInp = $("calcInputA");
+ if (!aInp) return;
+ aInp.value = String(usdAmt);
+ runBidirectionalConverter("A");
+}
+
+function applyQuickMmkPreset(mmkAmt) {
+ const bInp = $("calcInputB");
+ if (!bInp) return;
+ bInp.value = String(mmkAmt);
+ runBidirectionalConverter("B");
+}
+
 function runBidirectionalConverter(sourceSide) {
  const d = getDict();
  const aInp = $("calcInputA");
@@ -3306,7 +3197,6 @@ function runBidirectionalConverter(sourceSide) {
  }
 }
 
-/* Smooth Non-Lagging Single-Line 3D Renderer (Up goes up, Down drops down) */
 let fxCanvasCachedState = { coords: [], activeIdx: 0, isDownTrend: false };
 
 function drawSingleLine3dFrame(coords, activeIdx, isDownTrend) {
@@ -3347,7 +3237,6 @@ function drawSingleLine3dFrame(coords, activeIdx, isDownTrend) {
   return { x, y, pt };
  });
 
- // Clean subtle horizontal baseline guides
  ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
  ctx.lineWidth = 1;
  for (let g = 0; g <= 2; g++) {
@@ -3361,7 +3250,6 @@ function drawSingleLine3dFrame(coords, activeIdx, isDownTrend) {
  const lineColor = isDownTrend ? "#ef4444" : "#22c55e";
  const shadow3dColor = isDownTrend ? "rgba(153, 27, 27, 0.72)" : "rgba(20, 83, 45, 0.72)";
 
- // Soft vertical gradient under single line (no multi-layer polygon clutter)
  const areaGrad = ctx.createLinearGradient(0, topY, 0, botY);
  if (isDownTrend) {
   areaGrad.addColorStop(0, "rgba(239, 68, 68, 0.24)");
@@ -3382,7 +3270,6 @@ function drawSingleLine3dFrame(coords, activeIdx, isDownTrend) {
  ctx.fillStyle = areaGrad;
  ctx.fill();
 
- // 3D extruded offset base shadow along the single line
  ctx.beginPath();
  pts.forEach((p, idx) => {
   const sx = p.x + 3;
@@ -3396,7 +3283,6 @@ function drawSingleLine3dFrame(coords, activeIdx, isDownTrend) {
  ctx.lineJoin = "round";
  ctx.stroke();
 
- // Single crisp 3D primary line
  ctx.beginPath();
  pts.forEach((p, idx) => {
   if (idx === 0) ctx.moveTo(p.x, p.y);
@@ -3408,7 +3294,6 @@ function drawSingleLine3dFrame(coords, activeIdx, isDownTrend) {
  ctx.lineJoin = "round";
  ctx.stroke();
 
- // Active / Hover marker
  const focusPt = pts[activeIdx] || pts[pts.length - 1];
  if (focusPt) {
   if (fxHoverIdx !== null) {
@@ -3577,9 +3462,7 @@ async function fetchOfficialExchangeRate() {
 const I18N = {
  en: {
   splashMainTitle: "Welcome To Trip Booking",
-  splashSubTitle: "International Hotel Platform",
-  introBadge: "International Hospitality Network",
-  introSub: "Global Hotel Reservations & Booking Rewards",
+  splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "Login", logoutBtn: "Logout", switchAuth: "Switch Login / Register",
   fullNameLabel: "Full Name", fullNamePh: "Enter your full name",
   identityLabel: "Phone Number or Email", identityPh: "09xxxxxxxxx or email@example.com",
@@ -3587,7 +3470,7 @@ const I18N = {
   refCodeLabel: "Referral Code (Optional, e.g. TP2323)",
   agreeTermsText: "I agree to the platform terms and conditions.",
   createAcc: "Register",
-  heroTitle: "Welcome to Trip Booking", heroSub: "International Hotel Platform",
+  heroTitle: "Welcome to Trip Booking", heroSub: "Internitial Hotel Platform",
   startTaskBtn: "Start Booking Tasks", contactServiceBtn: "Contact Customer Service",
   todayUsdRateTitle: "Today's USD Rate",
   midnightResetNote: "Auto resets at 00:00",
@@ -3607,9 +3490,10 @@ const I18N = {
   bookHotelSuccess: "Hotel booked successfully!",
   insufficientBalanceError: "Insufficient account balance. Please top up your balance first.",
   csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● Active",
-  typeMsgPh: "Type a message...",
+  typeMsgPh: "Type a message (Shift+Enter for new line)...",
   newCsAlertTitle: "📩 NEW CUSTOMER SERVICE MESSAGE",
   accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit", dailyLimit: "Daily Orders",
+  remainingOrdersLabel: "Remaining Orders",
   taskCenter: "Booking Task Center", getOrderBtn: "Get Order",
   histTitle: "Transaction & Booking History", histSearchPh: "Search...",
   filterAllTypes: "All Types", filterProfitType: "Booking Profit", filterBonusType: "TP2323 Welcome Bonus",
@@ -3638,7 +3522,7 @@ const I18N = {
   hotelsRatesHead: "Hotels & Commission Rates", addHotelBtn: "+ Add Hotel", saveRatesBtn: "Save Rates & Hotels",
   thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate", thMaxLimit: "Max Withdraw ($)",
   thHotelName: "Hotel Name", thCountry: "Country", thStars: "Stars", thPrice: "Price ($)", thAction: "Action",
-  csClientSearchPh: "Search user...", selectUserChat: "Select a user to chat", replyCsPh: "Reply...",
+  csClientSearchPh: "Search user...", selectUserChat: "Select a user to chat", replyCsPh: "Reply (Shift+Enter for new line)...",
   navHome: "Home", navService: "Service", navBooking: "Booking", navHistory: "History", navProfile: "Profile",
   closeBtn: "Close", okBtn: "OK", cancelBtn: "Cancel", saveBtn: "Save", addBtn: "Add",
   editNameModalTitle: "Edit Profile Name", addHotelModalHead: "Add New Hotel",
@@ -3650,14 +3534,12 @@ const I18N = {
   confirmServiceBtn: "Confirm (Service)", alertTitleDefault: "Notification",
   tickerBadgeLabel: "🔔 Live Notice",
   resetBtn: "Reset", banBtn: "Suspend", unbanBtn: "Unsuspend", deleteBtn: "Delete",
-  regSuccessTitle: "Congratulations", regSuccessSub: "Your account has been registered successfully.",
+  regSuccessTitle: "ဂုဏ်ယူပါတယ်", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "Please check the terms and conditions box to register."
  },
  my: {
   splashMainTitle: "Welcome To Trip Booking",
-  splashSubTitle: "International Hotel Platform",
-  introBadge: "International Hospitality Network",
-  introSub: "နိုင်ငံတကာ ဟိုတယ်ဘိုကင်နှင့် ဆုကြေးစနစ်",
+  splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "အကောင့်ဝင်ရန်", logoutBtn: "ထွက်ရန်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
   fullNameLabel: "အမည်ပြည့်စုံ", fullNamePh: "သင့်အမည်ပြည့်စုံ ထည့်ပါ",
   identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်", identityPh: "09xxxxxxxxx သို့မဟုတ် email@example.com",
@@ -3665,7 +3547,7 @@ const I18N = {
   refCodeLabel: "ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)",
   agreeTermsText: "သတ်မှတ်ထားသော စည်းမျဉ်းစည်းကမ်းများ လိုက်နာပါသည်။",
   createAcc: "အကောင့်ဖွင့်ရန်",
-  heroTitle: "Trip Booking မှ ကြိုဆိုပါသည်", heroSub: "International Hotel Platform",
+  heroTitle: "Trip Booking မှ ကြိုဆိုပါသည်", heroSub: "Internitial Hotel Platform",
   startTaskBtn: "ဘိုကင်တာဝန်များ စတင်ရန်", contactServiceBtn: "ဝန်ဆောင်မှုသို့ ဆက်သွယ်ရန်",
   todayUsdRateTitle: "ဒီနေ့ ဒေါ်လာပေါက်ဈေး",
   midnightResetNote: "ည ၁၂:၀၀ နာရီတွင် အလိုအလျောက် ပြန်ညှိသည်",
@@ -3685,9 +3567,10 @@ const I18N = {
   bookHotelSuccess: "ဟိုတယ်ဘိုကင် တင်ခြင်း အောင်မြင်ပါသည်။",
   insufficientBalanceError: "အကောင့်လက်ကျန် မရှိပါ သို့မဟုတ် မလုံလောက်ပါ။ အော်ဒါတင် လုပ်ဆောင်၍ မရပါ။",
   csHeader: "🎧 Trip Booking ဝန်ဆောင်မှု (၂၄/၇ ဖွင့်လှစ်သည်)", csActiveBadge: "● အွန်လိုင်းရှိသည်",
-  typeMsgPh: "မက်ဆေ့ချ် ရိုက်ထည့်ပါ...",
+  typeMsgPh: "မက်ဆေ့ချ် ရိုက်ထည့်ပါ (စာကြောင်းသစ်အတွက် Shift+Enter)...",
   newCsAlertTitle: "📩 ဝန်ဆောင်မှု မက်ဆေ့ချ် အသစ်",
   accBal: "အကောင့်လက်ကျန်", taskComm: "တာဝန်ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်", dailyLimit: "နေ့စဉ် အော်ဒါ",
+  remainingOrdersLabel: "ကျန်ရှိအော်ဒါအရေအတွက်",
   taskCenter: "ဘိုကင်တာဝန် ဗဟိုဌာန", getOrderBtn: "အော်ဒါရယူရန်",
   histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း", histSearchPh: "ရှာဖွေရန်...",
   filterAllTypes: "အမျိုးအစား အားလုံး", filterProfitType: "ဘိုကင်အမြတ်", filterBonusType: "TP2323 ကြိုဆိုဆုကြေး",
@@ -3716,7 +3599,7 @@ const I18N = {
   hotelsRatesHead: "ဟိုတယ်များနှင့် ကော်မရှင်နှုန်းထားများ", addHotelBtn: "+ ဟိုတယ်ထည့်ရန်", saveRatesBtn: "နှုန်းထားနှင့် ဟိုတယ်များ သိမ်းမည်",
   thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်ချက်", thProfitRate: "အမြတ်နှုန်း", thMaxLimit: "အများဆုံးထုတ်ငွေ ($)",
   thHotelName: "ဟိုတယ်အမည်", thCountry: "နိုင်ငံ", thStars: "ကြယ်အဆင့်", thPrice: "ဈေးနှုန်း ($)", thAction: "လုပ်ဆောင်ချက်",
-  csClientSearchPh: "အသုံးပြုသူ ရှာရန်...", selectUserChat: "ချတ်ရန် အသုံးပြုသူ ရွေးပါ", replyCsPh: "ပြန်ကြားစာ ရိုက်ပါ...",
+  csClientSearchPh: "အသုံးပြုသူ ရှာရန်...", selectUserChat: "ချတ်ရန် အသုံးပြုသူ ရွေးပါ", replyCsPh: "ပြန်ကြားစာ ရိုက်ပါ (စာကြောင်းသစ်အတွက် Shift+Enter)...",
   navHome: "ပင်မ", navService: "ဝန်ဆောင်မှု", navBooking: "ဘိုကင်", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
   closeBtn: "ပိတ်ရန်", okBtn: "ကောင်းပြီ", cancelBtn: "မလုပ်တော့ပါ", saveBtn: "သိမ်းရန်", addBtn: "ထည့်ရန်",
   editNameModalTitle: "အမည်ပြင်ဆင်ရန်", addHotelModalHead: "ဟိုတယ်အသစ် ထည့်ရန်",
@@ -3733,9 +3616,7 @@ const I18N = {
  },
  zh: {
   splashMainTitle: "Welcome To Trip Booking",
-  splashSubTitle: "International Hotel Platform",
-  introBadge: "International Hospitality Network",
-  introSub: "全球酒店预订与佣金奖励平台",
+  splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "登录", logoutBtn: "退出登录", switchAuth: "切换 登录 / 注册",
   fullNameLabel: "姓名", fullNamePh: "请输入您的姓名",
   identityLabel: "手机号或邮箱", identityPh: "09xxxxxxxxx 或 email@example.com",
@@ -3743,7 +3624,7 @@ const I18N = {
   refCodeLabel: "邀请码（选填，如 TP2323）",
   agreeTermsText: "我同意平台规定的条款和条件。",
   createAcc: "注册账号",
-  heroTitle: "欢迎来到 Trip Booking", heroSub: "International Hotel Platform",
+  heroTitle: "欢迎来到 Trip Booking", heroSub: "Internitial Hotel Platform",
   startTaskBtn: "开始预订任务", contactServiceBtn: "联系在线客服",
   todayUsdRateTitle: "今日美元汇率",
   midnightResetNote: "每日 00:00 自动重置",
@@ -3763,9 +3644,10 @@ const I18N = {
   bookHotelSuccess: "酒店预订成功！",
   insufficientBalanceError: "账户余额不足，无法提交订单，请先充值。",
   csHeader: "🎧 Trip Booking 客服中心（24/7 在线）", csActiveBadge: "● 在线服务",
-  typeMsgPh: "输入消息...",
+  typeMsgPh: "输入消息（Shift+Enter 换行）...",
   newCsAlertTitle: "📩 新客服消息",
   accBal: "账户余额", taskComm: "任务佣金", totalProfit: "累计利润", dailyLimit: "每日订单",
+  remainingOrdersLabel: "剩余订单数",
   taskCenter: "预订任务中心", getOrderBtn: "获取订单",
   histTitle: "资金与预订记录", histSearchPh: "搜索...",
   filterAllTypes: "全部类型", filterProfitType: "预订佣金", filterBonusType: "TP2323 迎新奖励",
@@ -3794,7 +3676,7 @@ const I18N = {
   hotelsRatesHead: "酒店与佣金费率", addHotelBtn: "+ 添加酒店", saveRatesBtn: "保存费率与酒店",
   thLevel: "等级", thDailyLimit: "每日上限", thProfitRate: "佣金比例", thMaxLimit: "最高提现 ($)",
   thHotelName: "酒店名称", thCountry: "国家", thStars: "星级", thPrice: "价格 ($)", thAction: "操作",
-  csClientSearchPh: "搜索客户...", selectUserChat: "请选择客户开始聊天", replyCsPh: "输入回复...",
+  csClientSearchPh: "搜索客户...", selectUserChat: "请选择客户开始聊天", replyCsPh: "输入回复（Shift+Enter 换行）...",
   navHome: "首页", navService: "客服", navBooking: "预订", navHistory: "记录", navProfile: "我的",
   closeBtn: "关闭", okBtn: "确定", cancelBtn: "取消", saveBtn: "保存", addBtn: "添加",
   editNameModalTitle: "修改姓名", addHotelModalHead: "添加新酒店",
@@ -3806,14 +3688,12 @@ const I18N = {
   confirmServiceBtn: "确认（联系客服）", alertTitleDefault: "系统提示",
   tickerBadgeLabel: "🔔 实时动态",
   resetBtn: "重置", banBtn: "封禁", unbanBtn: "解封", deleteBtn: "删除",
-  regSuccessTitle: "恭喜您", regSuccessSub: "您的账号已成功注册。",
+  regSuccessTitle: "恭喜您", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "请先勾选同意条款和条件后再注册。"
  },
  th: {
   splashMainTitle: "Welcome To Trip Booking",
-  splashSubTitle: "International Hotel Platform",
-  introBadge: "International Hospitality Network",
-  introSub: "แพลตฟอร์มจองโรงแรมและรับค่าคอมมิชชั่นระดับสากล",
+  splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "เข้าสู่ระบบ", logoutBtn: "ออกจากระบบ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
   fullNameLabel: "ชื่อ-นามสกุล", fullNamePh: "กรอกชื่อ-นามสกุลของคุณ",
   identityLabel: "เบอร์โทรศัพท์ หรือ อีเมล", identityPh: "09xxxxxxxxx หรือ email@example.com",
@@ -3821,7 +3701,7 @@ const I18N = {
   refCodeLabel: "รหัสคำเชิญ (ไม่บังคับ เช่น TP2323)",
   agreeTermsText: "ฉันยอมรับข้อกำหนดและเงื่อนไขของแพลตฟอร์ม",
   createAcc: "สมัครสมาชิก",
-  heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroSub: "International Hotel Platform",
+  heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroSub: "Internitial Hotel Platform",
   startTaskBtn: "เริ่มงานจอง", contactServiceBtn: "ติดต่อฝ่ายบริการลูกค้า",
   todayUsdRateTitle: "อัตราแลกเปลี่ยน USD วันนี้",
   midnightResetNote: "รีเซ็ตอัตโนมัติเวลา 00:00",
@@ -3841,9 +3721,10 @@ const I18N = {
   bookHotelSuccess: "จองโรงแรมสำเร็จแล้ว",
   insufficientBalanceError: "ยอดเงินคงเหลือไม่เพียงพอ ไม่สามารถทำรายการสั่งจองได้",
   csHeader: "🎧 ฝ่ายบริการ Trip Booking (เปิด 24/7)", csActiveBadge: "● ออนไลน์",
-  typeMsgPh: "พิมพ์ข้อความ...",
+  typeMsgPh: "พิมพ์ข้อความ (Shift+Enter ขึ้นบรรทัดใหม่)...",
   newCsAlertTitle: "📩 ข้อความใหม่จากฝ่ายบริการ",
   accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่นงาน", totalProfit: "กำไรรวม", dailyLimit: "ออเดอร์รายวัน",
+  remainingOrdersLabel: "ออเดอร์ที่เหลือ",
   taskCenter: "ศูนย์งานจอง", getOrderBtn: "รับออเดอร์",
   histTitle: "ประวัติธุรกรรมและการจอง", histSearchPh: "ค้นหา...",
   filterAllTypes: "ทุกประเภท", filterProfitType: "กำไรจากการจอง", filterBonusType: "โบนัสต้อนรับ TP2323",
@@ -3872,7 +3753,7 @@ const I18N = {
   hotelsRatesHead: "โรงแรมและอัตราคอมมิชชั่น", addHotelBtn: "+ เพิ่มโรงแรม", saveRatesBtn: "บันทึกเรตและโรงแรม",
   thLevel: "ระดับ", thDailyLimit: "จำกัดรายวัน", thProfitRate: "อัตราคอมฯ", thMaxLimit: "ถอนสูงสุด ($)",
   thHotelName: "ชื่อโรงแรม", thCountry: "ประเทศ", thStars: "ดาว", thPrice: "ราคา ($)", thAction: "จัดการ",
-  csClientSearchPh: "ค้นหาลูกค้า...", selectUserChat: "เลือกลูกค้าเพื่อแชต", replyCsPh: "พิมพ์ข้อความตอบกลับ...",
+  csClientSearchPh: "ค้นหาลูกค้า...", selectUserChat: "เลือกลูกค้าเพื่อแชต", replyCsPh: "พิมพ์ข้อความตอบกลับ (Shift+Enter ขึ้นบรรทัดใหม่)...",
   navHome: "หน้าหลัก", navService: "บริการ", navBooking: "งานจอง", navHistory: "ประวัติ", navProfile: "โปรไฟล์",
   closeBtn: "ปิด", okBtn: "ตกลง", cancelBtn: "ยกเลิก", saveBtn: "บันทึก", addBtn: "เพิ่ม",
   editNameModalTitle: "แก้ไขชื่อโปรไฟล์", addHotelModalHead: "เพิ่มโรงแรมใหม่",
@@ -3884,7 +3765,7 @@ const I18N = {
   confirmServiceBtn: "ยืนยัน (ติดต่อบริการ)", alertTitleDefault: "แจ้งเตือน",
   tickerBadgeLabel: "🔔 แจ้งเตือนสด",
   resetBtn: "รีเซ็ต", banBtn: "ระงับ", unbanBtn: "ปลดระงับ", deleteBtn: "ลบ",
-  regSuccessTitle: "ยินดีด้วย", regSuccessSub: "สมัครสมาชิกสำเร็จเรียบร้อยแล้ว",
+  regSuccessTitle: "ยินดีด้วย", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "กรุณาทำเครื่องหมายยอมรับข้อกำหนดและเงื่อนไขก่อนสมัครสมาชิก"
  }
 };
@@ -4014,25 +3895,18 @@ function closeImageLightbox() {
  $("lightboxImgEl").src = "";
 }
 
-/* 7-Second Intro Splash: Converging Text + Rainbow Border + Auto-Enter Platform */
+/* 5-Second Intro Splash (Matched to image_3ffdc6.png) */
 function runIntroSplash() {
  applyRotatingPlatformBackdrops();
  const splash = $("introSplash");
- const stage = $("introStageBox");
- if (!splash || !stage) return;
-
- requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-   stage.classList.add("converge");
-  });
- });
+ if (!splash) return;
 
  setTimeout(() => {
   splash.classList.add("fade-out");
   setTimeout(() => {
    splash.classList.add("hidden");
-  }, 650);
- }, 7000);
+  }, 550);
+ }, 5000);
 }
 
 function showRegistrationSuccessToast() {
@@ -4041,13 +3915,14 @@ function showRegistrationSuccessToast() {
  if (!toast) return;
  if ($("regToastTitle")) $("regToastTitle").textContent = d.regSuccessTitle;
  if ($("regToastSub")) $("regToastSub").textContent = d.regSuccessSub;
+ speakCongratulationsFemaleEnglish();
  toast.classList.remove("hidden", "fade-out");
  setTimeout(() => {
   toast.classList.add("fade-out");
   setTimeout(() => {
    toast.classList.add("hidden");
   }, 380);
- }, 3000);
+ }, 3200);
 }
 
 function showIncomingCsNotification(msgObj) {
@@ -4062,6 +3937,8 @@ function showIncomingCsNotification(msgObj) {
  } else {
   return;
  }
+
+ playAlertChimeSound();
 
  const toast = $("csIncomingToast");
  if (!toast) return;
@@ -4143,7 +4020,6 @@ function handleLogoClick() {
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
 
-/* Slow Bottom-to-Top Single-Item Activity Ticker */
 let tickerEntriesCache = [];
 let tickerCurrentIndex = 0;
 let tickerTimerId = null;
@@ -4310,12 +4186,14 @@ async function directBookHotel(idx) {
   return;
  }
  if (currentUser.is_banned) {
+  playAlertChimeSound();
   showAlert("🚫 Your account is suspended. Please contact Customer Service.");
   return;
  }
  const bal = Number(currentUser.balance) || 0;
  const price = Number(h.price) || 0;
  if (bal <= 0 || bal < price) {
+  playAlertChimeSound();
   showAlert(`⚠️ ${d.insufficientBalanceError}`);
   return;
  }
@@ -4348,11 +4226,11 @@ async function directBookHotel(idx) {
    updated_at: nowTs
   }).catch(() => {});
  }
+ playOrderCompleteSound();
  renderAllViews();
  showAlert(`✅ <b>${d.bookHotelSuccess}</b><br>${h.name} — ${formatUsdPlainWithMmk(price)}`);
 }
 
-/* Auth: Admin Exact Check (09775191427 / 12344321) + User Auto Leading-Zero Strip & Strict Exact Matching */
 let authMode = "login";
 
 function updateAuthModalTexts() {
@@ -4364,7 +4242,14 @@ function updateAuthModalTexts() {
  if ($("regRefField")) $("regRefField").classList.toggle("hidden", !isReg);
  if ($("regPhoneRow")) $("regPhoneRow").classList.toggle("hidden", !isReg);
  if ($("loginIdentityInput")) $("loginIdentityInput").classList.toggle("hidden", isReg);
- if (isReg) populateCountryCodeSelect();
+ if (isReg) {
+  populateCountryCodeSelect();
+  if ($("regName") && !$("regName").value) $("regName").value = loadDraftText("reg_name_draft");
+  if ($("authIdentity") && !$("authIdentity").value) $("authIdentity").value = loadDraftText("reg_id_draft");
+  if ($("regRefInput") && !$("regRefInput").value) $("regRefInput").value = loadDraftText("reg_ref_draft");
+ } else {
+  if ($("loginIdentityInput") && !$("loginIdentityInput").value) $("loginIdentityInput").value = loadDraftText("login_id_draft");
+ }
 }
 
 function openAuth(mode = "login") {
@@ -4436,6 +4321,7 @@ async function submitAuth() {
  }
 
  if (authMode === "login" && isExactAdminLogin(rawId, pass)) {
+  clearDraftText("login_id_draft");
   isAdminSession = true;
   currentUser = null;
   localStorage.removeItem("tb_session_user");
@@ -4516,6 +4402,10 @@ async function submitAuth() {
   saveCachedUsersLocal(allUsers);
   if (db) await db.ref("users/" + newUid).set(newUser).catch(() => {});
 
+  clearDraftText("reg_name_draft");
+  clearDraftText("reg_id_draft");
+  clearDraftText("reg_ref_draft");
+
   isAdminSession = false;
   currentUser = newUser;
   localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
@@ -4547,6 +4437,7 @@ async function submitAuth() {
   return;
  }
 
+ clearDraftText("login_id_draft");
  isAdminSession = false;
  currentUser = { ...found, is_online: true, last_seen: Date.now() };
  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
@@ -4556,8 +4447,7 @@ async function submitAuth() {
  startUserHeartbeatLoop();
  showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
 }
-</script>
- <script>
+
 function closeModal(modalId) {
  const el = $(modalId);
  if (el) el.classList.add("hidden");
@@ -4629,7 +4519,6 @@ function startUserHeartbeatLoop() {
  userHeartbeatTimer = setInterval(beat, 20000);
 }
 
-let userHeartbeatTimer = null;
 function stopUserHeartbeatLoop() {
  if (userHeartbeatTimer) {
   clearInterval(userHeartbeatTimer);
@@ -4774,6 +4663,7 @@ function triggerGetOrder() {
   return;
  }
  if (currentUser.is_banned) {
+  playAlertChimeSound();
   showAlert("🚫 Your account is suspended. Please contact Customer Service.");
   return;
  }
@@ -4781,6 +4671,7 @@ function triggerGetOrder() {
  const bal = Number(currentUser.balance) || 0;
  const neg = Number(currentUser.negative_balance) || 0;
  if (bal <= 0 || neg > 0) {
+  playAlertChimeSound();
   openLowBalanceModal(
    `⚠️ ${d.insufficientBalanceError}`,
    bal < 0 ? Math.abs(bal) : neg,
@@ -4804,7 +4695,6 @@ function triggerGetOrder() {
  const rules = getUserOrderRules(currentUser);
  const matchedRule = rules.find(r => !r.triggered && Number(r.target_order) === nextOrderNum);
 
- // Varied per-order commission across 30 orders that sums to exact cycle_profit (e.g. $20 on $100)
  const variedComm = getVariedOrderCommission(currentUser, nextOrderNum, bal);
  const commission = Number(variedComm.toFixed(2));
 
@@ -4975,20 +4865,23 @@ async function confirmCenterOrder() {
  renderAllViews();
 
  if (triggeredNegAmt > 0) {
+  playAlertChimeSound();
   openLowBalanceModal(
    `⚠️ Order #${ord.orderNum} triggered a negative balance adjustment. Please contact Customer Service.`,
    triggeredNegAmt,
    ord.orderNum
   );
  } else {
+  playOrderCompleteSound();
   if ($("profitSuccessAmountText")) $("profitSuccessAmountText").innerHTML = `+${formatUsdPlainWithMmk(earnedThisOrder)}`;
   if ($("profitSuccessProgressText")) {
-   $("profitSuccessProgressText").textContent = `Completed Order #${nextOrders}/${ord.dailyLimit} • Profit Box: $${nextProfitBox.toFixed(2)}`;
+   $("profitSuccessProgressText").textContent = `Completed Order #${nextOrders}/${ord.dailyLimit}`;
   }
   $("profitSuccessModal").classList.remove("hidden");
  }
 }
 
+/* Booking Center Progress Without Profit Forecast Spoiler */
 function renderBookingCenter() {
  const d = getDict();
  const bal = currentUser ? Number(currentUser.balance) || 0 : 0;
@@ -4996,11 +4889,17 @@ function renderBookingCenter() {
  const totProf = currentUser ? Number(currentUser.total_profit) || 0 : 0;
  const orders = currentUser ? Number(currentUser.orders) || 0 : 0;
  const limit = currentUser ? (Number(getVipTierObj(currentUser.vip_level).daily_limit) || DEFAULT_ORDERS_LIMIT) : DEFAULT_ORDERS_LIMIT;
+ const remaining = Math.max(0, limit - orders);
+ const pct = Math.min(100, Math.round((orders / Math.max(1, limit)) * 100));
 
  if ($("taskWallet")) $("taskWallet").innerHTML = formatUsdWithMmk(bal);
  if ($("taskProfit")) $("taskProfit").innerHTML = formatUsdWithMmk(prof);
  if ($("taskTotalProfit")) $("taskTotalProfit").innerHTML = formatUsdWithMmk(totProf);
  if ($("taskOrdersText")) $("taskOrdersText").textContent = `${orders}/${limit}`;
+
+ if ($("taskRemainingLabel")) $("taskRemainingLabel").textContent = `${d.remainingOrdersLabel}: ${remaining}`;
+ if ($("taskProgressPctLabel")) $("taskProgressPctLabel").textContent = `${pct}% (${orders}/${limit})`;
+ if ($("taskProgressBarFill")) $("taskProgressBarFill").style.width = `${pct}%`;
 
  const deg = Math.min(360, Math.round((orders / Math.max(1, limit)) * 360));
  const ring = $("orderCircle");
@@ -5099,9 +4998,8 @@ function renderProfile() {
  memberBox.classList.remove("hidden");
 
  if ($("profileName")) $("profileName").textContent = currentUser.name || "Member";
- const tier = getMatchedProfitTier(currentUser.balance, DEFAULT_ORDERS_LIMIT);
  if ($("profileIdentity")) {
-  $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"} (30-Order Target: +$${tier.cycle_profit.toFixed(2)})`;
+  $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"}`;
  }
  if ($("profileVipBadge")) $("profileVipBadge").textContent = currentUser.vip_level || "VIP Level 1";
  if ($("tp2323ProfileStatus")) {
@@ -5175,7 +5073,9 @@ function handleDepositRequest() {
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
  const inp = $("supportInput");
  if (inp) {
-  inp.value = "Hello Service, I would like to deposit funds into my account.";
+  inp.value = "Hello Service,\nI would like to deposit funds into my account.";
+  saveDraftText("user_cs_draft", inp.value);
+  autoResizeTextarea(inp);
   inp.focus();
  }
 }
@@ -5186,14 +5086,31 @@ function handleWithdrawRequest() {
   return;
  }
  if (currentUser.is_banned) {
+  playAlertChimeSound();
   showAlert("🚫 Your account is suspended. Please contact Customer Service.");
   return;
  }
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
  const inp = $("supportInput");
  if (inp) {
-  inp.value = `Hello Service, I would like to withdraw from my balance ($${Number(currentUser.balance || 0).toFixed(2)}).`;
+  inp.value = `Hello Service,\nI would like to withdraw from my balance ($${Number(currentUser.balance || 0).toFixed(2)}).`;
+  saveDraftText("user_cs_draft", inp.value);
+  autoResizeTextarea(inp);
   inp.focus();
+ }
+}
+
+/* Multi-Line Chat Keydown (Enter sends, Shift+Enter inserts new line) */
+function handleChatTextareaKeydown(e, role) {
+ saveDraftText("user_cs_draft", $("supportInput")?.value || "");
+ saveAdminCsDraft();
+ if (role === "user") autoResizeTextarea($("supportInput"));
+ if (role === "support") autoResizeTextarea($("adminChatInput"));
+
+ if (e.key === "Enter" && !e.shiftKey) {
+  e.preventDefault();
+  if (role === "user") sendSupportMessage();
+  else sendAdminChatReply();
  }
 }
 
@@ -5214,6 +5131,9 @@ function insertEmojiIntoChat(target, emojiStr) {
  const inp = target === "user" ? $("supportInput") : $("adminChatInput");
  if (!inp) return;
  inp.value = (inp.value || "") + emojiStr;
+ if (target === "user") saveDraftText("user_cs_draft", inp.value);
+ else saveAdminCsDraft();
+ autoResizeTextarea(inp);
  inp.focus();
 }
 
@@ -5285,7 +5205,7 @@ async function pushChatMessage({ text = "", image = "", sender = "user", targetU
   return;
  }
 
- const cleanText = String(text || "").trim();
+ const cleanText = String(text || "").replace(/\r\n/g, "\n").trim();
  if (!cleanText && !image) return;
 
  const nowTs = Date.now();
@@ -5319,7 +5239,11 @@ async function sendSupportMessage() {
  const inp = $("supportInput");
  const txt = (inp?.value || "").trim();
  if (!txt) return;
- if (inp) inp.value = "";
+ if (inp) {
+  inp.value = "";
+  autoResizeTextarea(inp);
+ }
+ clearDraftText("user_cs_draft");
  await pushChatMessage({ text: txt, sender: "user" });
 }
 
@@ -5331,7 +5255,11 @@ async function sendAdminChatReply() {
   showAlert("Please select a user from the list first.");
   return;
  }
- if (inp) inp.value = "";
+ if (inp) {
+  inp.value = "";
+  autoResizeTextarea(inp);
+ }
+ clearDraftText("admin_cs_" + selectedCsUserId);
  await pushChatMessage({ text: txt, sender: "support", targetUserId: selectedCsUserId });
 }
 
@@ -5425,21 +5353,31 @@ async function deleteChatMessage(uid, msgId) {
  renderAdminBadges();
 }
 
+function escapeHtmlPreservingLines(str) {
+ return String(str || "")
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;")
+  .replace(/'/g, "&#39;")
+  .replace(/\n/g, "<br>");
+}
+
 function buildSingleChatBubbleHtml(m, isMine) {
  const bg = isMine ? "var(--fb-primary)" : "var(--fb-card)";
  const color = isMine ? "#ffffff" : "var(--fb-text)";
  const border = isMine ? "none" : "1px solid var(--fb-border)";
  const align = isMine ? "flex-end" : "flex-start";
  const senderTag = m.sender === "support" ? "🎧 Service" : "👤 User";
- const safeTextEscaped = String(m.text || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+ const safeAttrText = String(m.text || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
  const staffEditableClass = isAdminSession ? "staff-editable" : "";
  const staffClickAttr = isAdminSession
-  ? `onclick="event.stopPropagation(); toggleMessageActionBar(this, '${m.id}', '${m.user_id}', '${safeTextEscaped}')"`
+  ? `onclick="event.stopPropagation(); toggleMessageActionBar(this, '${m.id}', '${m.user_id}', '${safeAttrText}')"`
   : "";
  const imgHtml = m.image
   ? `<img class="chat-img-msg" src="${m.image}" alt="Attachment" onclick="event.stopPropagation(); openImageLightbox('${m.image}')">`
   : "";
- const textHtml = m.text ? `<div>${m.text}</div>` : "";
+ const textHtml = m.text ? `<div class="chat-bubble-text">${escapeHtmlPreservingLines(m.text)}</div>` : "";
  const editedLabel = m.edited_at ? ` · edited` : "";
 
  return `
@@ -5490,6 +5428,7 @@ function switchAdminTab(tabName) {
  if (tabName === "cs") {
   renderCsClientList();
   renderAdminChatMessages();
+  restoreAdminCsDraftForUser(selectedCsUserId);
  }
 }
 
@@ -5965,6 +5904,7 @@ async function selectCsUser(uid) {
   $("csActiveUserTitle").textContent = `💬 ${uObj?.name || "Customer"} (${uObj?.identity || selectedCsUserId})`;
  }
  await markUserMessagesReadByAdmin(selectedCsUserId);
+ restoreAdminCsDraftForUser(selectedCsUserId);
  renderCsClientList();
  renderAdminChatMessages();
 }
@@ -6144,6 +6084,11 @@ window.addEventListener("resize", () => {
 
  const savedLang = localStorage.getItem("tb_lang") || "en";
  changeLanguage(savedLang);
+
+ if ($("supportInput")) {
+  $("supportInput").value = loadDraftText("user_cs_draft");
+  autoResizeTextarea($("supportInput"));
+ }
 
  initFxTrendChart();
  await fetchOfficialExchangeRate();
