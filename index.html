@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trip Booking — Hotel Booking & Order Platform</title>
+<title>Trip Booking — International Hotel Platform</title>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
@@ -63,7 +63,7 @@ body {
  display: none !important;
 }
 
-/* ---------------- HOTEL SPLASH INTRO OVERLAY ---------------- */
+/* ---------------- SPLASH INTRO (12-COLOR SLOW FRAME + CONVERGING TEXT + ROTATING HOTEL BG) ---------------- */
 #introSplash {
  position: fixed;
  inset: 0;
@@ -73,7 +73,7 @@ body {
  justify-content: center;
  overflow: hidden;
  background: #091326;
- transition: opacity 0.65s ease, visibility 0.65s ease;
+ transition: opacity 0.7s ease, visibility 0.7s ease;
 }
 
 #introSplash.fade-out {
@@ -93,199 +93,144 @@ body {
  width: 100%;
  height: 100%;
  object-fit: cover;
- filter: brightness(0.68) contrast(1.08) saturate(1.18);
- transform: scale(1.12);
- transition: transform 2.4s cubic-bezier(0.22, 1, 0.36, 1), filter 1.6s ease;
+ filter: brightness(0.66) contrast(1.08) saturate(1.15);
+ transform: scale(1.1);
+ transition: transform 2.6s cubic-bezier(0.22, 1, 0.36, 1), filter 1.6s ease;
 }
 
 #introSplash.active-anim .splash-hotel-bg-img {
  transform: scale(1.02);
- filter: brightness(0.76) contrast(1.1) saturate(1.22);
+ filter: brightness(0.75) contrast(1.1) saturate(1.2);
 }
 
 .splash-hotel-scrim {
  position: absolute;
  inset: 0;
- background:
-  radial-gradient(circle at 50% 42%, rgba(24, 119, 242, 0.14), rgba(6, 12, 24, 0.62) 72%),
-  linear-gradient(180deg, rgba(6, 12, 24, 0.35) 0%, rgba(6, 12, 24, 0.68) 100%);
+ background: linear-gradient(180deg, rgba(6, 12, 24, 0.38) 0%, rgba(6, 12, 24, 0.68) 100%);
  pointer-events: none;
+}
+
+.splash-twelve-color-frame {
+ position: relative;
+ z-index: 2;
+ padding: 4px;
+ border-radius: 22px;
+ background: linear-gradient(
+  135deg,
+  #ff0000,
+  #ff7f00,
+  #ffff00,
+  #00c853,
+  #0088ff,
+  #283593,
+  #8e24aa,
+  #ff4081,
+  #795548,
+  #9e9e9e,
+  #ffffff,
+  #111111,
+  #ff0000
+ );
+ background-size: 500% 500%;
+ animation: slowTwelveColorCycle 18s ease-in-out infinite;
+ box-shadow: 0 22px 54px rgba(0, 0, 0, 0.55);
+}
+
+@keyframes slowTwelveColorCycle {
+ 0% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+ 100% { background-position: 0% 50%; }
 }
 
 .splash-stage-box {
  position: relative;
- z-index: 2;
  display: flex;
  flex-direction: column;
  align-items: center;
  justify-content: center;
- gap: 16px;
- padding: 28px 34px;
- border-radius: 24px;
- background: rgba(10, 20, 38, 0.42);
- backdrop-filter: blur(6px);
- -webkit-backdrop-filter: blur(6px);
- border: 1px solid rgba(255, 255, 255, 0.22);
- box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-}
-
-.splash-emblem-row {
- position: relative;
- width: 228px;
- height: 88px;
- display: flex;
- align-items: center;
- justify-content: center;
-}
-
-.splash-ring-pulse {
- position: absolute;
- width: 84px;
- height: 84px;
- border-radius: 50%;
- border: 2px solid rgba(125, 211, 252, 0.85);
- opacity: 0;
- transform: scale(0.55);
- pointer-events: none;
-}
-
-#introSplash.active-anim .splash-ring-pulse {
- animation: splashRingExpand 1.35s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
-}
-
-@keyframes splashRingExpand {
- 0% { opacity: 0.92; transform: scale(0.55); }
- 70% { opacity: 0.45; transform: scale(1.45); }
- 100% { opacity: 0; transform: scale(1.85); }
-}
-
-.splash-piece {
- position: absolute;
- width: 64px;
- height: 64px;
+ gap: 14px;
+ min-width: min(90vw, 440px);
+ padding: 30px 32px;
  border-radius: 18px;
- display: flex;
- align-items: center;
- justify-content: center;
- font-size: 30px;
- font-weight: 800;
- color: #ffffff;
- box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42), inset 0 1px 1px rgba(255, 255, 255, 0.45);
- opacity: 0;
- will-change: transform, opacity;
- transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease, box-shadow 0.6s ease;
-}
-
-.splash-piece-hotel {
- background: linear-gradient(135deg, #1877f2, #00c6ff);
- transform: translate3d(-190px, -110px, 0) rotate(-32deg) scale(0.72);
-}
-
-.splash-piece-globe {
- background: linear-gradient(135deg, #00b09b, #1877f2);
- transform: translate3d(190px, -105px, 0) rotate(34deg) scale(0.72);
-}
-
-.splash-piece-key {
- background: linear-gradient(135deg, #f5c542, #ff8c00);
- transform: translate3d(0px, 165px, 0) rotate(24deg) scale(0.72);
-}
-
-.splash-stage-box.converged .splash-piece {
- opacity: 1;
-}
-
-.splash-stage-box.converged .splash-piece-hotel {
- transform: translate3d(-68px, 0px, 0) rotate(-8deg) scale(1);
-}
-
-.splash-stage-box.converged .splash-piece-globe {
- transform: translate3d(0px, -4px, 0) rotate(0deg) scale(1.06);
-}
-
-.splash-stage-box.converged .splash-piece-key {
- transform: translate3d(68px, 0px, 0) rotate(8deg) scale(1);
-}
-
-.splash-brand-lockup {
- text-align: center;
- opacity: 0;
- transform: translateY(14px) scale(0.96);
- transition: opacity 0.7s ease 0.48s, transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.48s;
-}
-
-.splash-stage-box.converged .splash-brand-lockup {
- opacity: 1;
- transform: translateY(0) scale(1);
+ background: rgba(9, 17, 34, 0.72);
+ backdrop-filter: blur(8px);
+ -webkit-backdrop-filter: blur(8px);
+ overflow: hidden;
 }
 
 .splash-title {
  color: #ffffff;
- font-size: 27px;
+ font-size: 26px;
  font-weight: 800;
- letter-spacing: 0.5px;
- text-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+ letter-spacing: 0.4px;
+ text-align: center;
+ text-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+ opacity: 0;
+ transform: translate3d(-180px, -110px, 0) scale(0.85);
+ transition: transform 1.25s cubic-bezier(0.18, 0.9, 0.25, 1), opacity 0.95s ease;
 }
 
 .splash-sub {
- color: #e0f2fe;
- font-size: 13px;
- margin-top: 4px;
- letter-spacing: 0.3px;
- text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+ color: #e2e8f0;
+ font-size: 15px;
+ font-weight: 700;
+ text-align: center;
+ line-height: 1.45;
+ text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+ opacity: 0;
+ transform: translate3d(180px, 120px, 0) scale(0.85);
+ transition: transform 1.35s cubic-bezier(0.18, 0.9, 0.25, 1) 0.15s, opacity 1s ease 0.15s;
 }
 
 .splash-hotel-caption {
- margin-top: 2px;
- padding: 4px 12px;
- border-radius: 999px;
- font-size: 11px;
+ font-size: 12px;
  font-weight: 700;
  color: #fef08a;
- background: rgba(15, 23, 42, 0.58);
- border: 1px solid rgba(254, 240, 138, 0.32);
+ text-align: center;
  opacity: 0;
- transform: translateY(8px);
- transition: opacity 0.65s ease 0.72s, transform 0.65s ease 0.72s;
+ transform: translate3d(0px, 140px, 0);
+ transition: transform 1.2s cubic-bezier(0.18, 0.9, 0.25, 1) 0.28s, opacity 0.9s ease 0.28s;
 }
 
+.splash-stage-box.converged .splash-title,
+.splash-stage-box.converged .splash-sub,
 .splash-stage-box.converged .splash-hotel-caption {
  opacity: 1;
- transform: translateY(0);
+ transform: translate3d(0px, 0px, 0) scale(1);
 }
 
-/* ---------------- RAINBOW FLOWING BORDER ---------------- */
+/* ---------------- 12-COLOR SLOW FRAME FOR CARDS ---------------- */
 .rainbow-flow-frame {
  position: relative;
  border-radius: 14px;
- padding: 2px;
+ padding: 3px;
  background: linear-gradient(
-  120deg,
-  #ff2a5f,
-  #ff9f1c,
-  #ffe600,
-  #00e676,
-  #00b0ff,
-  #7c4dff,
-  #ff2a5f
+  135deg,
+  #ff0000,
+  #ff7f00,
+  #ffff00,
+  #00c853,
+  #0088ff,
+  #283593,
+  #8e24aa,
+  #ff4081,
+  #795548,
+  #9e9e9e,
+  #ffffff,
+  #111111,
+  #ff0000
  );
- background-size: 300% 300%;
- animation: rainbowBorderFlow 6s linear infinite;
+ background-size: 500% 500%;
+ animation: slowTwelveColorCycle 18s ease-in-out infinite;
  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .rainbow-flow-frame > .rainbow-inner {
  background: var(--fb-card);
- border-radius: 12px;
+ border-radius: 11px;
  padding: 14px;
  height: 100%;
  width: 100%;
-}
-
-@keyframes rainbowBorderFlow {
- 0% { background-position: 0% 50%; }
- 50% { background-position: 100% 50%; }
- 100% { background-position: 0% 50%; }
 }
 
 /* ---------------- TOP BAR ---------------- */
@@ -402,7 +347,6 @@ body {
  padding: 3px 8px;
  border-radius: 999px;
  text-transform: uppercase;
- box-shadow: 0 2px 6px rgba(229, 57, 53, 0.3);
 }
 
 .ticker-viewport {
@@ -427,7 +371,6 @@ body {
  transform: translateY(0px);
  opacity: 1;
  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.36s ease;
- will-change: transform, opacity;
 }
 
 .ticker-slide.enter-from-bottom {
@@ -436,21 +379,14 @@ body {
  transition: none;
 }
 
-.ticker-slide.exit-to-top {
- transform: translateY(-22px);
- opacity: 0;
-}
-
 .ticker-kind-dp { color: var(--fb-success); }
 .ticker-kind-wd { color: var(--fb-primary); }
 .ticker-slide.real-user-highlight {
  font-weight: 800;
  color: #0f52ba;
- text-shadow: 0 0 8px rgba(24, 119, 242, 0.22);
 }
 body.dark .ticker-slide.real-user-highlight {
  color: #7dd3fc;
- text-shadow: 0 0 10px rgba(125, 211, 252, 0.35);
 }
 
 /* ---------------- CONTAINER & PAGES ---------------- */
@@ -556,7 +492,6 @@ body.dark .ticker-slide.real-user-highlight {
  font-size: 20px;
  font-weight: 800;
  letter-spacing: -0.3px;
- transition: color 0.25s ease;
 }
 
 .fx-big-num.is-up { color: var(--fb-success); }
@@ -644,10 +579,6 @@ body.dark .ticker-slide.real-user-highlight {
  font-weight: 800;
  cursor: pointer;
  white-space: nowrap;
-}
-
-.fx-swap-btn:hover {
- background: rgba(24, 119, 242, 0.1);
 }
 
 /* ---------------- 3-STEP GUIDE ---------------- */
@@ -807,7 +738,6 @@ body.dark .ticker-slide.real-user-highlight {
  align-items: center;
  justify-content: center;
  gap: 6px;
- transition: opacity 0.15s, background 0.15s;
 }
 
 .btn:hover { opacity: 0.92; }
@@ -966,7 +896,6 @@ th {
  align-items: center;
  justify-content: center;
  cursor: pointer;
- box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .profile-name-row {
@@ -987,11 +916,6 @@ th {
  cursor: pointer;
 }
 
-.edit-name-btn:hover {
- background: rgba(24, 119, 242, 0.12);
- color: var(--fb-primary);
-}
-
 .vip-badge {
  display: inline-flex;
  align-items: center;
@@ -1000,11 +924,8 @@ th {
  border-radius: 999px;
  font-size: 11.5px;
  font-weight: 800;
- letter-spacing: 0.4px;
  color: #2b1a00;
  background: linear-gradient(135deg, var(--gold-1), var(--gold-2) 45%, var(--gold-3) 78%, var(--gold-4));
- border: 1px solid rgba(255, 243, 176, 0.85);
- box-shadow: 0 2px 8px rgba(184, 132, 20, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.75);
 }
 
 .wallet-box {
@@ -1093,12 +1014,6 @@ th {
  white-space: nowrap;
 }
 
-.pill-live {
- background: rgba(229, 57, 53, 0.14);
- color: #e53935;
- border: 1px solid rgba(229, 57, 53, 0.35);
-}
-
 .pill-online {
  background: rgba(46, 125, 50, 0.14);
  color: var(--fb-success);
@@ -1117,18 +1032,6 @@ th {
  border: 1px solid rgba(198, 40, 40, 0.3);
 }
 
-.pill-pending {
- background: rgba(245, 197, 66, 0.22);
- color: #8a5a00;
- border: 1px solid rgba(212, 155, 26, 0.45);
-}
-
-.pill-triggered {
- background: rgba(46, 125, 50, 0.14);
- color: var(--fb-success);
- border: 1px solid rgba(46, 125, 50, 0.3);
-}
-
 .notif-badge {
  display: inline-flex;
  align-items: center;
@@ -1142,19 +1045,6 @@ th {
  font-size: 11px;
  font-weight: 800;
  margin-left: 5px;
-}
-
-.live-alert-pill {
- display: inline-flex;
- align-items: center;
- gap: 5px;
- padding: 3px 9px;
- border-radius: 999px;
- background: rgba(229, 57, 53, 0.14);
- border: 1px solid rgba(229, 57, 53, 0.38);
- color: #e53935;
- font-size: 11.5px;
- font-weight: 800;
 }
 
 /* ---------------- CHAT BOX ---------------- */
@@ -1197,34 +1087,6 @@ th {
  font-size: 10.5px;
  opacity: 0.72;
  margin-bottom: 2px;
-}
-
-.msg-action-bar {
- display: flex;
- gap: 6px;
- align-items: center;
- padding: 0 4px;
-}
-
-.msg-act-btn {
- border: none;
- background: transparent;
- color: var(--fb-muted);
- font-size: 11px;
- font-weight: 700;
- cursor: pointer;
- padding: 1px 4px;
- border-radius: 4px;
-}
-
-.msg-act-btn:hover {
- background: rgba(24, 119, 242, 0.12);
- color: var(--fb-primary);
-}
-
-.msg-act-btn.del:hover {
- background: rgba(198, 40, 40, 0.12);
- color: var(--fb-danger);
 }
 
 .chat-img-msg {
@@ -1290,7 +1152,6 @@ th {
  padding: 4px;
  border-radius: 6px;
  cursor: pointer;
- line-height: 1.2;
 }
 
 .emoji-item-btn:hover {
@@ -1328,11 +1189,6 @@ th {
  align-items: center;
  gap: 8px;
  font-size: 12.5px;
-}
-
-.bank-choice-btn:hover {
- border-color: var(--fb-primary);
- background: rgba(24, 119, 242, 0.08);
 }
 
 /* ---------------- MODALS ---------------- */
@@ -1394,10 +1250,15 @@ th {
  outline: none;
 }
 
-.input-error-box {
- border-color: var(--fb-danger) !important;
- background: rgba(198, 40, 40, 0.08) !important;
- box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.2) !important;
+.phone-input-row {
+ display: flex;
+ gap: 8px;
+ align-items: center;
+}
+
+.country-code-select {
+ width: 138px !important;
+ flex-shrink: 0;
 }
 
 .password-input-wrap {
@@ -1421,11 +1282,6 @@ th {
  font-size: 15px;
  padding: 4px 6px;
  border-radius: 6px;
-}
-
-.password-toggle-btn:hover {
- color: var(--fb-primary);
- background: rgba(24, 119, 242, 0.08);
 }
 
 .error-text {
@@ -1749,24 +1605,18 @@ th {
 </style>
 </head>
 <body>
- <!-- HOTEL SPLASH INTRO OVERLAY -->
+ <!-- SPLASH INTRO OVERLAY -->
 <div id="introSplash">
  <div class="splash-hotel-backdrop">
-  <img id="splashHotelBgImg" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&auto=format&fit=crop" alt="Luxury Hotel" class="splash-hotel-bg-img">
+  <img id="splashHotelBgImg" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&auto=format&fit=crop" alt="Hotel" class="splash-hotel-bg-img">
   <div class="splash-hotel-scrim"></div>
  </div>
- <div id="splashStageBox" class="splash-stage-box">
-  <div class="splash-emblem-row">
-   <div class="splash-ring-pulse"></div>
-   <div class="splash-piece splash-piece-hotel">🏨</div>
-   <div class="splash-piece splash-piece-globe">🌐</div>
-   <div class="splash-piece splash-piece-key">🔑</div>
+ <div class="splash-twelve-color-frame">
+  <div id="splashStageBox" class="splash-stage-box">
+   <div class="splash-title">Welcome to Trip Booking</div>
+   <div id="splashPlatformSub" class="splash-sub">အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း</div>
+   <div id="splashHotelCaption" class="splash-hotel-caption">✨ Global Hotel Stays &amp; Order Platform</div>
   </div>
-  <div class="splash-brand-lockup">
-   <div class="splash-title">Trip Booking</div>
-   <div class="splash-sub">Global Hotel Booking &amp; Order Platform</div>
-  </div>
-  <div id="splashHotelCaption" class="splash-hotel-caption">✨ Signature Suites · Worldwide Stays</div>
  </div>
 </div>
 
@@ -1777,11 +1627,14 @@ th {
   <div class="brand-name">Trip Booking</div>
  </div>
  <div class="top-actions">
-  <button type="button" class="icon-btn" id="soundToggleBtn" onclick="toggleSoundMute()" title="Sound On/Off">🔊</button>
+  <button type="button" class="icon-btn" id="soundToggleBtn" onclick="toggleSoundMute()" title="Sound">🔊</button>
   <select id="language" class="lang-select" onchange="changeLanguage(this.value)" title="Language">
    <option value="my" selected>🇲🇲 မြန်မာ</option>
+   <option value="en">🇬🇧 English</option>
+   <option value="th">🇹🇭 ไทย</option>
+   <option value="zh">🇨🇳 中文</option>
   </select>
-  <button type="button" class="icon-btn" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
+  <button type="button" class="icon-btn" onclick="toggleTheme()" title="Theme">🌓</button>
   <button type="button" class="auth-top-btn" id="headerAuthBtn" onclick="openAuth('login')" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
  </div>
 </header>
@@ -1791,7 +1644,7 @@ th {
  <div class="activity-ticker-box">
   <span class="ticker-live-pill">LIVE</span>
   <div class="ticker-viewport">
-   <div id="activityTickerSlide" class="ticker-slide">💎 $100 → $20 30-Order Profit Cycle Ready · Trip Booking Live</div>
+   <div id="activityTickerSlide" class="ticker-slide">💎 $100 → $20 · Trip Booking</div>
   </div>
  </div>
 </div>
@@ -1801,34 +1654,34 @@ th {
  <section id="homePage" class="page active">
   <div class="hero-card">
    <div>
-    <h1 data-i18n="heroTitle">Trip Booking မှ ကြိုဆိုပါသည်</h1>
-    <p data-i18n="heroSub">နိုင်ငံတကာ ဟိုတယ်ဘိုကင် ဝန်ဆောင်မှု ပလက်ဖောင်း</p>
+    <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
+    <p data-i18n="heroSub">အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း</p>
    </div>
    <div class="hero-actions">
     <button type="button" class="btn btn-light" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">ဘိုကင်တာဝန် စတင်ရန်</button>
-    <button type="button" class="btn btn-outline-light" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])" data-i18n="contactServiceBtn">Customer Service ဆက်သွယ်ရန်</button>
+    <button type="button" class="btn btn-outline-light" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])" data-i18n="contactServiceBtn">Customer Service</button>
    </div>
   </div>
 
   <div class="live-rate-banner">
    <div>
-    <span class="muted small" data-i18n="todayUsdRateTitle">ယနေ့ USD ငွေလဲနှုန်း</span>:
+    <span class="muted small" data-i18n="todayUsdRateTitle">USD Rate</span>:
     <span class="rate-value" id="todayFxRateValue">1 USD = 5,000 ကျပ်</span>
    </div>
-   <div class="small muted" id="todayFxDateInfo">Base: 5,000 ကျပ် · Live 5-Wave Engine</div>
+   <div class="small muted" id="todayFxDateInfo">Base: 5,000 ကျပ်</div>
   </div>
 
   <!-- FX TREND CHART & BIDIRECTIONAL CONVERTER -->
   <div class="fx-showcase-card">
    <div class="fx-showcase-header">
     <div>
-     <div style="font-weight:800;font-size:15px" data-i18n="fxChartTitle">📈 USD ↔ MMK ငွေကြေးဈေးနှုန်း အတက်အကျ</div>
+     <div style="font-weight:800;font-size:15px" data-i18n="fxChartTitle">📈 USD ↔ MMK</div>
      <div class="fx-rate-readout" style="margin-top:4px">
       <span id="fxCurrentRateDisplay" class="fx-big-num is-flat">1 USD = 5,000.0 ကျပ်</span>
       <span id="fxChangeBadge" class="status-pill pill-online">+0.00%</span>
      </div>
     </div>
-    <div class="small muted" id="fxPointDetailText">Live Rate</div>
+    <div class="small muted" id="fxPointDetailText">Live</div>
    </div>
 
    <div class="fx-chart-shell">
@@ -1852,7 +1705,7 @@ th {
      <circle id="fxTrendDot" cx="600" cy="69" r="4.5" fill="#1877f2" stroke="#fff" stroke-width="1.5"></circle>
     </svg>
     <div class="fx-chart-footer">
-     <span id="fxFormulaReadout">5-Wave Harmonic</span>
+     <span id="fxFormulaReadout">5-Wave</span>
      <span id="fxLastUpdatedLabel">Live</span>
     </div>
    </div>
@@ -1875,23 +1728,23 @@ th {
   <div class="steps-grid">
    <div class="rainbow-flow-frame">
     <div class="rainbow-inner step-card">
-     <span class="step-num" data-i18n="step1Badge">အဆင့် ၁</span>
-     <h3 data-i18n="step1Title">ငွေဖြည့်သွင်းပါ</h3>
-     <p data-i18n="step1Desc">ဘိုကင်တာဝန်များ အဆင်ပြေချောမွေ့စွာ လုပ်ဆောင်ရန် လက်ကျန်ငွေ ဖြည့်သွင်းပါ။</p>
+     <span class="step-num" data-i18n="step1Badge">1</span>
+     <h3 data-i18n="step1Title">Deposit</h3>
+     <p data-i18n="step1Desc">Add balance for hotel order tasks.</p>
     </div>
    </div>
    <div class="rainbow-flow-frame">
     <div class="rainbow-inner step-card">
-     <span class="step-num" data-i18n="step2Badge">အဆင့် ၂</span>
-     <h3 data-i18n="step2Title">Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ</h3>
-     <p data-i18n="step2Desc">ဟိုတယ်ဘိုကင် တာဝန်များ ရယူပြီး သတ်မှတ်ချက်အတိုင်း ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။</p>
+     <span class="step-num" data-i18n="step2Badge">2</span>
+     <h3 data-i18n="step2Title">Get Order</h3>
+     <p data-i18n="step2Desc">Complete 30 hotel booking orders.</p>
     </div>
    </div>
    <div class="rainbow-flow-frame">
     <div class="rainbow-inner step-card">
-     <span class="step-num" data-i18n="step3Badge">အဆင့် ၃</span>
-     <h3 data-i18n="step3Title">ကော်မရှင် ရယူပါ</h3>
-     <p data-i18n="step3Desc">အော်ဒါတစ်ခု ပြီးမြောက်တိုင်း ကော်မရှင်အမြတ်ငွေကို အကောင့်ထဲ ထည့်ပေးပါသည်။</p>
+     <span class="step-num" data-i18n="step3Badge">3</span>
+     <h3 data-i18n="step3Title">Profit ($100→$20)</h3>
+     <p data-i18n="step3Desc">Receive order commission profit.</p>
     </div>
    </div>
   </div>
@@ -1899,36 +1752,34 @@ th {
   <!-- HOTELS DIRECTORY -->
   <div class="section-header">
    <div class="section-title">
-    <span data-i18n="hotelDir">နိုင်ငံတကာ ဟိုတယ်များ</span>
+    <span data-i18n="hotelDir">Hotels</span>
     <span class="tag" id="hotelCountBadge">0</span>
    </div>
-   <input type="text" id="hotelSearch" class="search-input" data-i18n-ph="hotelSearchPh" placeholder="ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်အဆင့် ရှာရန်..." oninput="renderHotels()">
+   <input type="text" id="hotelSearch" class="search-input" data-i18n-ph="hotelSearchPh" placeholder="Search..." oninput="renderHotels()">
   </div>
-  <p class="small muted" style="margin-bottom:10px" data-i18n="homeHotelBookHint">ဟိုတယ်ကဒ်ကို နှိပ်၍ အသေးစိတ်ကြည့်နိုင်ပြီး လက်ကျန်ငွေဖြင့် တိုက်ရိုက် ဘိုကင်တင်နိုင်ပါသည်။</p>
+  <p class="small muted" style="margin-bottom:10px" data-i18n="homeHotelBookHint">Select any hotel card to view details or book.</p>
   <div id="hotelGrid" class="grid"></div>
   <div id="loadMoreHotelsWrap" class="hidden" style="text-align:center;margin-bottom:18px">
    <button type="button" class="btn btn-secondary" id="loadMoreHotelsBtn" onclick="toggleShowAllHotels()">Show More</button>
   </div>
  </section>
 
- <!-- ==================== CUSTOMER SERVICE PAGE ==================== -->
+ <!-- ==================== CUSTOMER SERVICE PAGE (NO BANK CARD BUTTON FOR USER) ==================== -->
  <section id="supportPage" class="page">
   <div class="panel-card">
    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-    <h2 style="font-size:18px" data-i18n="csHeader">🎧 Trip Booking Service (24/7 အွန်လိုင်း)</h2>
-    <span class="tag" data-i18n="csActiveBadge">● အသုံးပြုနေသည်</span>
+    <h2 style="font-size:18px" data-i18n="csHeader">🎧 Customer Service</h2>
+    <span class="tag" data-i18n="csActiveBadge">● Online</span>
    </div>
    <div class="chat-box">
     <div id="supportMessages" class="chat-messages"></div>
     <div class="chat-input-area">
      <div id="userEmojiPicker" class="emoji-picker-popover hidden"></div>
-     <div id="userBankCardPicker" class="bank-card-picker-popover hidden"></div>
      <button type="button" class="icon-btn" onclick="toggleEmojiPicker('user')" title="Emoji">😊</button>
-     <button type="button" class="icon-btn" onclick="toggleChatBankCardPicker('user')" title="Bank Cards">💳</button>
      <label class="icon-btn" style="margin:0" title="Photo">
       📷 <input type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
      </label>
-     <textarea id="supportInput" class="chat-textarea" rows="1" data-i18n-ph="typeMsgPh" placeholder="စာရိုက်ရန်..." onfocus="handleSupportInputFocus()" oninput="autoGrowTextarea(this)" onkeydown="handleChatTextareaKeydown(event, 'user')"></textarea>
+     <textarea id="supportInput" class="chat-textarea" rows="1" data-i18n-ph="typeMsgPh" placeholder="Message..." onfocus="handleSupportInputFocus()" oninput="autoGrowTextarea(this)" onkeydown="handleChatTextareaKeydown(event, 'user')"></textarea>
      <button type="button" class="btn btn-primary" onclick="sendSupportMessage()">➤</button>
     </div>
    </div>
@@ -1938,32 +1789,32 @@ th {
  <!-- ==================== BOOKING CENTER PAGE ==================== -->
  <section id="bookingPage" class="page">
   <div class="booking-box">
-   <h2 style="font-size:20px;margin-bottom:4px" data-i18n="taskCenter">ဘိုကင် တာဝန်ဌာန</h2>
-   <p class="small muted" data-i18n="clickGetOrderHint">ဟိုတယ်ဘိုကင် တာဝန်ရယူရန် Get Order ကို နှိပ်ပါ။</p>
+   <h2 style="font-size:20px;margin-bottom:4px" data-i18n="taskCenter">Booking Center</h2>
+   <p class="small muted" data-i18n="clickGetOrderHint">Press Get Order to start.</p>
    <div id="orderCycleProfitSummary" class="small" style="margin-top:6px;font-weight:700;color:var(--fb-primary)"></div>
    <div id="tp2323OrderHint" class="small hidden" style="margin-top:6px;font-weight:800;color:#b26a00"></div>
 
    <div class="stats-row">
     <div class="stat-tile">
-     <div class="small muted" data-i18n="accBal">အကောင့် လက်ကျန်ငွေ</div>
+     <div class="small muted" data-i18n="accBal">Balance</div>
      <div class="num" id="taskWallet">$0.00</div>
     </div>
     <div class="stat-tile">
-     <div class="small muted" data-i18n="taskComm">ကျန်ရှိ ၃၀-အော်ဒါ အမြတ်</div>
+     <div class="small muted" data-i18n="taskComm">Pending 30-Order Profit</div>
      <div class="num" id="taskProfit">$0.00</div>
     </div>
     <div class="stat-tile">
-     <div class="small muted" data-i18n="totalProfit">စုစုပေါင်း အမြတ်</div>
+     <div class="small muted" data-i18n="totalProfit">Total Profit</div>
      <div class="num" id="taskTotalProfit">$0.00</div>
     </div>
     <div class="stat-tile">
-     <div class="small muted" data-i18n="dailyLimit">နေ့စဉ် အော်ဒါ</div>
+     <div class="small muted" data-i18n="dailyLimit">Orders</div>
      <div class="num" id="taskOrdersText">0/30</div>
     </div>
    </div>
 
    <div id="orderCircle" class="order-progress-circle"><span>0/30</span></div>
-   <div id="orderRateLockStatus" class="small muted" style="margin-bottom:12px">🔒 Order Rate Lock Ready</div>
+   <div id="orderRateLockStatus" class="small muted" style="margin-bottom:12px">$100 → $20</div>
 
    <button type="button" class="btn btn-primary" style="padding:12px 28px;font-size:15px" onclick="triggerGetOrder()" data-i18n="submitOrderBtn">Get Order</button>
   </div>
@@ -1973,27 +1824,27 @@ th {
  <section id="historyPage" class="page">
   <div class="panel-card">
    <div class="section-header">
-    <h2 style="font-size:18px" data-i18n="histTitle">ငွေလွှဲနှင့် ဘိုကင် မှတ်တမ်း</h2>
+    <h2 style="font-size:18px" data-i18n="histTitle">History</h2>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
      <select id="historyTypeFilter" class="lang-select" onchange="renderHistory()">
-      <option value="all" data-i18n="filterAllTypes">အမျိုးအစား အားလုံး</option>
-      <option value="profit" data-i18n="filterProfitType">ဘိုကင် အမြတ်</option>
-      <option value="bonus" data-i18n="filterBonusType">TP2323 $18 ဘောနပ်စ်</option>
-      <option value="clear_neg" data-i18n="filterClearNegType">Negative ရှင်းလင်းမှု</option>
-      <option value="hotel_book" data-i18n="filterHotelBookType">ဟိုတယ် ဘိုကင်</option>
+      <option value="all" data-i18n="filterAllTypes">All</option>
+      <option value="profit" data-i18n="filterProfitType">Profit</option>
+      <option value="bonus" data-i18n="filterBonusType">Bonus</option>
+      <option value="clear_neg" data-i18n="filterClearNegType">Clear</option>
+      <option value="hotel_book" data-i18n="filterHotelBookType">Hotel</option>
      </select>
-     <input type="text" id="historySearch" class="search-input" data-i18n-ph="histSearchPh" placeholder="ရှာဖွေရန်..." oninput="renderHistory()">
+     <input type="text" id="historySearch" class="search-input" data-i18n-ph="histSearchPh" placeholder="Search..." oninput="renderHistory()">
     </div>
    </div>
    <div class="table-wrap">
     <table>
      <thead>
       <tr>
-       <th data-i18n="thDate">ရက်စွဲနှင့် အချိန်</th>
-       <th data-i18n="thType">အမျိုးအစား</th>
-       <th data-i18n="thDetails">အသေးစိတ်နှင့် သုံးသပ်ချက်</th>
-       <th data-i18n="thAmount">ပမာဏ</th>
-       <th data-i18n="thStatus">အခြေအနေ</th>
+       <th data-i18n="thDate">Time</th>
+       <th data-i18n="thType">Type</th>
+       <th data-i18n="thDetails">Details</th>
+       <th data-i18n="thAmount">Amount</th>
+       <th data-i18n="thStatus">Status</th>
       </tr>
      </thead>
      <tbody id="historyRows"></tbody>
@@ -2005,8 +1856,8 @@ th {
  <!-- ==================== PROFILE PAGE ==================== -->
  <section id="profilePage" class="page">
   <div id="guestAuthBox" class="panel-card" style="text-align:center;padding:28px 18px">
-   <h2 style="margin-bottom:8px" data-i18n="welcomeTrip">Trip Booking မှ ကြိုဆိုပါသည်</h2>
-   <p class="muted" style="margin-bottom:16px" data-i18n="loginPrompt">ကော်မရှင်များ ရယူရန် အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ် ဖွင့်ပါ။</p>
+   <h2 style="margin-bottom:8px" data-i18n="welcomeTrip">Welcome to Trip Booking</h2>
+   <p class="muted" style="margin-bottom:16px" data-i18n="loginPrompt">Login or register to start.</p>
    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
     <button type="button" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">အကောင့်ဝင်ရန်</button>
     <button type="button" class="btn btn-secondary" onclick="openAuth('register')" data-i18n="regTab">အကောင့်ဖွင့်ရန်</button>
@@ -2018,7 +1869,7 @@ th {
     <div class="profile-identity-row">
      <div class="avatar-upload-wrap">
       <img id="profileAvatarImg" src="" alt="Avatar" class="profile-avatar-img">
-      <label class="avatar-camera-btn" title="Change Photo">
+      <label class="avatar-camera-btn" title="Photo">
        📷 <input type="file" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
       </label>
      </div>
@@ -2026,7 +1877,7 @@ th {
       <div class="profile-name-row">
        <h2 id="profileName" style="font-size:19px">Member</h2>
        <button type="button" class="edit-name-btn" onclick="openEditNameModal()">✏️ Edit</button>
-       <span id="profileVipBadge" class="vip-badge">VIP Level 1</span>
+       <span id="profileVipBadge" class="vip-badge">VIP 1</span>
       </div>
       <div id="profileIdentity" class="small muted" style="margin-top:4px"></div>
       <div id="tp2323ProfileStatus" class="small hidden" style="margin-top:5px;font-weight:800;color:#b26a00"></div>
@@ -2034,12 +1885,12 @@ th {
     </div>
 
     <div class="wallet-box">
-     <div class="small muted" data-i18n="walletBal">အကောင့် လက်ကျန်ငွေ</div>
+     <div class="small muted" data-i18n="walletBal">Balance</div>
      <div class="wallet-amount" id="walletBalance">$0.00</div>
      <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button type="button" class="btn btn-success btn-xs" onclick="handleDepositRequest()" data-i18n="depositBtn">ငွေသွင်းရန်</button>
-      <button type="button" class="btn btn-danger btn-xs" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">ငွေထုတ်ရန်</button>
-      <button type="button" class="btn btn-secondary btn-xs" onclick="logout()" data-i18n="logoutBtn">ထွက်ရန်</button>
+      <button type="button" class="btn btn-success btn-xs" onclick="handleDepositRequest()" data-i18n="depositBtn">Deposit</button>
+      <button type="button" class="btn btn-danger btn-xs" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">Withdraw</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="logout()" data-i18n="logoutBtn">Logout</button>
       <button type="button" class="btn btn-primary btn-xs hidden" id="profileAdminPanelBtn" onclick="openAdminControlPanel()">🛡️ Admin</button>
      </div>
     </div>
@@ -2047,16 +1898,16 @@ th {
 
    <div class="panel-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-     <span style="font-weight:700" data-i18n="bookingHistCardTitle">ဘိုကင် မှတ်တမ်း</span>
+     <span style="font-weight:700" data-i18n="bookingHistCardTitle">Orders</span>
      <span style="font-weight:800;color:var(--fb-primary);cursor:pointer" id="profileOrders" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">0/30 ➔</span>
     </div>
 
     <div class="invite-box">
      <div>
-      <div class="small muted" data-i18n="inviteCodeTitle">ဖိတ်ကြားကုဒ်</div>
+      <div class="small muted" data-i18n="inviteCodeTitle">Invite Code</div>
       <div style="font-weight:800;font-size:16px" id="inviteCode">-</div>
       <div class="small muted" style="margin-top:2px">
-       <span data-i18n="refBonus">ဖိတ်ခေါ်မှု အမြတ်</span>: <b id="referralEarned">$0.00</b>
+       <span data-i18n="refBonus">Referral</span>: <b id="referralEarned">$0.00</b>
       </div>
      </div>
      <div style="display:flex;gap:8px">
@@ -2065,7 +1916,7 @@ th {
      </div>
     </div>
     <div class="small muted" style="margin-top:8px">
-     <span data-i18n="inviteLinkLabel">ဖိတ်ကြားလင့်ခ်</span>: <span id="profileInviteLinkText"></span>
+     <span data-i18n="inviteLinkLabel">Invite Link</span>: <span id="profileInviteLinkText"></span>
     </div>
    </div>
   </div>
@@ -2076,7 +1927,7 @@ th {
    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
     <div>
      <h2 style="font-size:18px" data-i18n="adminPanelTitle">🛡️ Admin Control Center</h2>
-     <div id="adminLiveAlertBox" class="small" style="margin-top:4px;font-weight:700;color:var(--fb-primary)">📡 Realtime DB Live Sync Ready</div>
+     <div id="adminLiveAlertBox" class="small" style="margin-top:4px;font-weight:700;color:var(--fb-primary)">📡 Realtime DB Live</div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
      <button type="button" class="btn btn-primary btn-xs" id="adminTabUsersBtn" onclick="switchAdminTab('users')" data-i18n="adminTabUsers">👥 Users &amp; Orders</button>
@@ -2091,28 +1942,28 @@ th {
    <!-- 4-POINT ADMIN SUMMARY -->
    <div class="admin-4pt-grid">
     <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptUsers">1. Registered Users</div>
+     <div class="admin-4pt-label" data-i18n="admin4ptUsers">1. Users</div>
      <div class="admin-4pt-val" id="admin4ptUsersVal">0</div>
     </div>
     <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptBalance">2. Total Balances</div>
+     <div class="admin-4pt-label" data-i18n="admin4ptBalance">2. Balances</div>
      <div class="admin-4pt-val" id="admin4ptBalanceVal">$0.00</div>
     </div>
     <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptOrders">3. Orders Done</div>
+     <div class="admin-4pt-label" data-i18n="admin4ptOrders">3. Orders</div>
      <div class="admin-4pt-val" id="admin4ptOrdersVal">0</div>
     </div>
     <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptRate">4. Profit Cycle ($100→$20)</div>
+     <div class="admin-4pt-label" data-i18n="admin4ptRate">4. Profit ($100→$20)</div>
      <div class="admin-4pt-val" id="admin4ptRateVal">$100 → $20</div>
     </div>
    </div>
 
    <!-- LIVE SYNC STATUS BANNER -->
    <div class="admin-live-banner">
-    <div id="adminSyncStatusText">🔄 Sync: Connecting to Firebase RTDB...</div>
+    <div id="adminSyncStatusText">🔄 Realtime DB</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-     <button type="button" class="btn btn-secondary btn-xs" onclick="forcePushAllToFirebase()">☁️ Force Sync Now</button>
+     <button type="button" class="btn btn-secondary btn-xs" onclick="forcePushAllToFirebase()">☁️ Sync</button>
      <button type="button" class="btn btn-secondary btn-xs" onclick="showPage('homePage', document.querySelectorAll('.bottom-nav button')[0])">🏠 Home</button>
     </div>
    </div>
@@ -2120,22 +1971,22 @@ th {
    <!-- TAB 1: USERS & ORDER CONTROLS -->
    <div id="adminUsersTab">
     <div class="section-header">
-     <h3 style="font-size:16px" data-i18n="adminUsersHeading">အသုံးပြုသူ အကောင့်များနှင့် အော်ဒါ ထိန်းချုပ်မှု</h3>
-     <input type="text" id="adminUserSearch" class="search-input" placeholder="ဖုန်း၊ အမည် သို့မဟုတ် ကုဒ် ရှာရန်..." oninput="renderAdminUsers()">
+     <h3 style="font-size:16px" data-i18n="adminUsersHeading">Users &amp; Orders</h3>
+     <input type="text" id="adminUserSearch" class="search-input" placeholder="Search..." oninput="renderAdminUsers()">
     </div>
     <div class="table-wrap">
      <table>
       <thead>
        <tr>
-        <th>အသုံးပြုသူ</th>
-        <th>ဖုန်း / ID</th>
-        <th>မိမိကုဒ်</th>
-        <th>အသုံးပြုခဲ့သော ကုဒ်</th>
-        <th>လက်ကျန် ($)</th>
-        <th>အော်ဒါ (30)</th>
-        <th>အမြတ်</th>
-        <th>အခြေအနေ</th>
-        <th>လုပ်ဆောင်ချက်</th>
+        <th>User</th>
+        <th>Phone / ID</th>
+        <th>Code</th>
+        <th>Used Code</th>
+        <th>Balance ($)</th>
+        <th>Orders (30)</th>
+        <th>Profit</th>
+        <th>Status</th>
+        <th>Action</th>
        </tr>
       </thead>
       <tbody id="adminUsersRows"></tbody>
@@ -2149,23 +2000,23 @@ th {
      <div class="rainbow-inner">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
        <div>
-        <h3 style="font-size:16px;font-weight:800">📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက် ($100 → $20 အမြတ်ဇယား)</h3>
-        <div class="small muted">ရင်းနှီးငွေ အလိုက် ၃၀-အော်ဒါ စုစုပေါင်းအမြတ် ($100 ရင်းလျှင် $20 အမြတ်) ကို သတ်မှတ်ပြီး အတည်ပြုနိုင်ပါသည်။</div>
+        <h3 style="font-size:16px;font-weight:800">📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက် ($100 → $20)</h3>
+        <div class="small muted">$100 → $20 · 30-Order Profit Table</div>
        </div>
        <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn btn-secondary btn-xs" onclick="resetDefaultProfitTiers()">↺ $100→$20 Default</button>
-        <button type="button" class="btn btn-success btn-xs" onclick="confirmAndApplyProfitTable()">✅ အတည်ပြု အသုံးပြုမည်</button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="resetDefaultProfitTiers()">↺ $100→$20</button>
+        <button type="button" class="btn btn-success btn-xs" onclick="confirmAndApplyProfitTable()">✅ Apply</button>
        </div>
       </div>
       <div class="table-wrap">
        <table>
         <thead>
          <tr>
-          <th>အဆင့် (Tier)</th>
-          <th>အနည်းဆုံး ($)</th>
-          <th>အများဆုံး ($)</th>
-          <th>၃၀-အော်ဒါ အမြတ် ($)</th>
-          <th>အမြတ်နှုန်း (%)</th>
+          <th>Tier</th>
+          <th>Min ($)</th>
+          <th>Max ($)</th>
+          <th>30-Order Profit ($)</th>
+          <th>Rate (%)</th>
          </tr>
         </thead>
         <tbody id="adminProfitTierRows"></tbody>
@@ -2179,18 +2030,18 @@ th {
    <!-- TAB 3: BANK CARDS -->
    <div id="adminCardsTab" class="hidden">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-     <h3 style="font-size:16px">💳 ငွေသွင်း / ငွေထုတ် ဘဏ်ကဒ်များ</h3>
-     <button type="button" class="btn btn-primary btn-xs" onclick="openAddBankCardModal()">+ ဘဏ်ကဒ် ထည့်ရန်</button>
+     <h3 style="font-size:16px">💳 Bank Cards</h3>
+     <button type="button" class="btn btn-primary btn-xs" onclick="openAddBankCardModal()">+ Add</button>
     </div>
     <div class="table-wrap">
      <table>
       <thead>
        <tr>
-        <th>ဘဏ် / ဝန်ဆောင်မှု</th>
-        <th>အကောင့်အမည်</th>
-        <th>အကောင့်နံပါတ်</th>
-        <th>အမျိုးအစား</th>
-        <th>လုပ်ဆောင်ချက်</th>
+        <th>Bank</th>
+        <th>Holder</th>
+        <th>Account</th>
+        <th>Type</th>
+        <th>Action</th>
        </tr>
       </thead>
       <tbody id="adminBankCardsRows"></tbody>
@@ -2202,11 +2053,11 @@ th {
    <div id="adminChatTab" class="hidden">
     <div style="display:grid;grid-template-columns:250px 1fr;gap:12px">
      <div style="border:1px solid var(--fb-border);border-radius:10px;padding:8px;max-height:420px;overflow-y:auto;background:var(--fb-input-bg)">
-      <div class="small" style="font-weight:800;margin-bottom:8px">💬 User Chats</div>
+      <div class="small" style="font-weight:800;margin-bottom:8px">💬 Chats</div>
       <div id="adminChatUserList"></div>
      </div>
      <div class="chat-box">
-      <div style="padding:8px 12px;border-bottom:1px solid var(--fb-border);font-weight:800;font-size:13.5px" id="adminChatActiveHeader">Select a user chat</div>
+      <div style="padding:8px 12px;border-bottom:1px solid var(--fb-border);font-weight:800;font-size:13.5px" id="adminChatActiveHeader">Chat</div>
       <div id="adminChatMessages" class="chat-messages"></div>
       <div class="chat-input-area">
        <div id="adminEmojiPicker" class="emoji-picker-popover hidden"></div>
@@ -2216,7 +2067,7 @@ th {
        <label class="icon-btn" style="margin:0" title="Photo">
         📷 <input type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'admin')">
        </label>
-       <textarea id="adminChatInput" class="chat-textarea" rows="1" placeholder="Admin reply..." oninput="autoGrowTextarea(this)" onkeydown="handleChatTextareaKeydown(event, 'admin')"></textarea>
+       <textarea id="adminChatInput" class="chat-textarea" rows="1" placeholder="Reply..." oninput="autoGrowTextarea(this)" onkeydown="handleChatTextareaKeydown(event, 'admin')"></textarea>
        <button type="button" class="btn btn-primary" onclick="sendAdminChatMessage()">➤</button>
       </div>
      </div>
@@ -2226,36 +2077,35 @@ th {
  </section>
 </div>
 
-<!-- ==================== FOOTER ==================== -->
-<footer class="site-footer">
+<!-- ==================== SINGLE FOOTER ==================== -->
+<footer id="mainSiteFooter" class="site-footer">
  <div class="footer-panel">
   <div class="footer-grid">
    <div class="footer-col">
-    <h4>Trip Booking Platform</h4>
-    <p>နိုင်ငံတကာ ဟိုတယ်ဘိုကင်နှင့် ၃၀-အော်ဒါ ကော်မရှင် ဝန်ဆောင်မှု စနစ်။</p>
+    <h4>Trip Booking</h4>
+    <p>Welcome to Trip Booking · အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း</p>
    </div>
    <div class="footer-col">
-    <h4>ဝန်ဆောင်မှု စည်းမျဉ်းများ</h4>
+    <h4>Rules</h4>
     <ul>
-     <li>• $100 ရင်းနှီးလျှင် ၃၀-အော်ဒါ အမြတ် $20</li>
-     <li>• 24/7 Customer Service &amp; Bank Support</li>
-     <li>• Realtime Database Live Synchronization</li>
+     <li>• $100 → $20 (30 Orders)</li>
+     <li>• 24/7 Service</li>
     </ul>
    </div>
    <div class="footer-col">
-    <h4>ဆက်သွယ်ရန်</h4>
+    <h4>Contact</h4>
     <ul>
-     <li>• Admin Hotline: 09775191427</li>
-     <li>• Support: In-App Live Service Chat</li>
+     <li>• 09775191427</li>
+     <li>• Live Service Chat</li>
     </ul>
    </div>
   </div>
   <div class="footer-bottom-bar">
-   <div>© 2026 Trip Booking. All rights reserved.</div>
+   <div>© 2026 Trip Booking</div>
    <div class="footer-badges">
-    <span class="footer-badge">🏨 Global Hotels</span>
+    <span class="footer-badge">🏨 Hotels</span>
     <span class="footer-badge">⚡ Live Sync</span>
-    <span class="footer-badge">💎 $100 → $20 Cycle</span>
+    <span class="footer-badge">💎 $100 → $20</span>
    </div>
   </div>
  </div>
@@ -2265,23 +2115,23 @@ th {
 <nav class="bottom-nav">
  <button type="button" class="active" onclick="showPage('homePage', this)">
   <span>🏠</span>
-  <span data-i18n="navHome">ပင်မစာမျက်နှာ</span>
+  <span data-i18n="navHome">Home</span>
  </button>
  <button type="button" onclick="showPage('supportPage', this)">
   <span>🎧</span>
-  <span data-i18n="navService">ဝန်ဆောင်မှု</span>
+  <span data-i18n="navService">Service</span>
  </button>
  <button type="button" onclick="showPage('bookingPage', this)">
   <span>📋</span>
-  <span data-i18n="navBooking">ဘိုကင်</span>
+  <span data-i18n="navBooking">Booking</span>
  </button>
  <button type="button" onclick="showPage('historyPage', this)">
   <span>📜</span>
-  <span data-i18n="navHistory">မှတ်တမ်း</span>
+  <span data-i18n="navHistory">History</span>
  </button>
  <button type="button" onclick="showPage('profilePage', this)">
   <span>👤</span>
-  <span data-i18n="navProfile">ကိုယ်ရေး</span>
+  <span data-i18n="navProfile">Profile</span>
  </button>
  <button type="button" id="navAdminBtn" class="hidden" onclick="openAdminControlPanel(this)">
   <span>🛡️</span>
@@ -2289,7 +2139,7 @@ th {
  </button>
 </nav>
 
-<!-- ==================== AUTH MODAL ==================== -->
+<!-- ==================== AUTH MODAL WITH COUNTRY CODES ==================== -->
 <div id="authModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
@@ -2303,28 +2153,42 @@ th {
   <form id="authForm" onsubmit="submitAuth(event)">
    <div id="registerFields" class="hidden">
     <div class="form-group">
-     <label>အမည် (Full Name)</label>
-     <input type="text" id="regName" placeholder="ဥပမာ - Kyaw Kyaw">
+     <label>Name</label>
+     <input type="text" id="regName" placeholder="Name">
     </div>
    </div>
    <div class="form-group">
-    <label>ဖုန်းနံပါတ် (Phone Number)</label>
-    <input type="text" id="authPhone" placeholder="09xxxxxxxxx" required>
+    <label>Country Code &amp; Phone</label>
+    <div class="phone-input-row">
+     <select id="authCountryCode" class="country-code-select" onchange="updateAuthPhoneFormat()">
+      <option value="+95" selected>🇲🇲 +95 (MM)</option>
+      <option value="+66">🇹🇭 +66 (TH)</option>
+      <option value="+86">🇨🇳 +86 (CN)</option>
+      <option value="+856">🇱🇦 +856 (LA)</option>
+      <option value="+65">🇸🇬 +65 (SG)</option>
+      <option value="+60">🇲🇾 +60 (MY)</option>
+      <option value="+81">🇯🇵 +81 (JP)</option>
+      <option value="+82">🇰🇷 +82 (KR)</option>
+      <option value="+1">🇺🇸 +1 (US)</option>
+      <option value="+44">🇬🇧 +44 (UK)</option>
+     </select>
+     <input type="text" id="authPhone" placeholder="09775191427" required>
+    </div>
    </div>
    <div class="form-group">
-    <label>စကားဝှက် (Password)</label>
+    <label>Password</label>
     <div class="password-input-wrap">
      <input type="password" id="authPassword" placeholder="Password" required>
      <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('authPassword', this)">👁️</button>
     </div>
    </div>
    <div id="inviteCodeFieldWrap" class="form-group hidden">
-    <label>ဖိတ်ကြားကုဒ် (Invite Code - Optional / Open)</label>
-    <input type="text" id="regInviteCode" placeholder="Invite code (optional)">
+    <label>Invite Code</label>
+    <input type="text" id="regInviteCode" placeholder="Invite code">
    </div>
    <div id="authError" class="error-text"></div>
    <div style="display:flex;gap:8px;margin-top:12px">
-    <button type="submit" class="btn btn-primary" style="flex:1" id="authSubmitBtn">ဆက်သွားရန်</button>
+    <button type="submit" class="btn btn-primary" style="flex:1" id="authSubmitBtn">OK</button>
    </div>
   </form>
  </div>
@@ -2334,54 +2198,52 @@ th {
 <div id="orderModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0">🏨 ဟိုတယ်ဘိုကင် အော်ဒါ အတည်ပြုချက်</h2>
+   <h2 style="margin:0">🏨 Order</h2>
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeOrderModal()">✕</button>
   </div>
   <div id="orderStep1Review">
    <div class="order-hotel-banner">
     <img id="orderModalHotelImg" src="" alt="Hotel" class="order-hotel-thumb">
     <div>
-     <div style="font-weight:800;font-size:15px" id="orderModalHotelName">Hotel Name</div>
+     <div style="font-weight:800;font-size:15px" id="orderModalHotelName">Hotel</div>
      <div class="small muted" id="orderModalHotelLoc">Location</div>
      <div class="small" style="margin-top:2px;font-weight:700;color:var(--fb-primary)" id="orderModalProgressLabel">Order #1 / 30</div>
     </div>
    </div>
    <div class="order-calc-grid">
     <div class="order-calc-item">
-     <div class="k">လက်ကျန်ငွေ (Balance)</div>
+     <div class="k">Balance</div>
      <div class="v" id="orderModalBalance">$0.00</div>
     </div>
     <div class="order-calc-item">
-     <div class="k">ဤအော်ဒါ အမြတ် (Order Profit)</div>
+     <div class="k">Order Profit</div>
      <div class="v" style="color:var(--fb-success)" id="orderModalProfit">$0.00</div>
     </div>
    </div>
-   <div class="small" style="font-weight:700;margin-bottom:6px">ကြယ်အဆင့် ရွေးချယ်ပါ (Star Rating)</div>
+   <div class="small" style="font-weight:700;margin-bottom:6px">Rating</div>
    <div class="star-picker-row" id="orderStarPicker"></div>
-   <div class="small" style="font-weight:700;margin-bottom:6px">သုံးသပ်ချက် ရွေးချယ်ပါ (Review Comment)</div>
+   <div class="small" style="font-weight:700;margin-bottom:6px">Review</div>
    <div class="review-options-list" id="orderReviewOptions"></div>
    <div class="form-group">
-    <label>ကိုယ်ပိုင် သုံးသပ်ချက် (Optional Custom Review)</label>
-    <input type="text" id="orderCustomReviewInput" placeholder="သုံးသပ်ချက် ရေးရန်...">
+    <label>Custom Review</label>
+    <input type="text" id="orderCustomReviewInput" placeholder="Review...">
    </div>
    <div style="display:flex;gap:8px;justify-content:flex-end">
-    <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">မလုပ်တော့ပါ</button>
-    <button type="button" class="btn btn-primary" onclick="confirmOrderAndReview()">✅ အော်ဒါ အတည်ပြုမည်</button>
+    <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">Cancel</button>
+    <button type="button" class="btn btn-primary" onclick="confirmOrderAndReview()">✅ Confirm</button>
    </div>
   </div>
   <div id="orderStep2Verifying" class="verifying-box hidden">
    <div class="verifying-spinner"></div>
-   <div style="font-weight:800;font-size:16px">ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...</div>
-   <div class="small muted" style="margin-top:4px">ကျေးဇူးပြု၍ ခဏစောင့်ဆိုင်းပါ</div>
+   <div style="font-weight:800;font-size:16px">...</div>
   </div>
   <div id="orderStep3Result" class="hidden">
    <div class="profit-highlight-box">
-    <div class="small" style="font-weight:700">🎉 ဘိုကင် အောင်မြင်စွာ ပြီးမြောက်ပါပြီ</div>
     <div class="big-profit" id="orderResultProfitText">+$0.00</div>
-    <div class="small muted" id="orderResultSubText">လက်ကျန်ငွေထဲ အမြတ်ပေါင်းထည့်ပြီးပါပြီ</div>
+    <div class="small muted" id="orderResultSubText"></div>
    </div>
    <div style="text-align:right">
-    <button type="button" class="btn btn-success" onclick="closeOrderModal()">ပြီးပါပြီ</button>
+    <button type="button" class="btn btn-success" onclick="closeOrderModal()">OK</button>
    </div>
   </div>
  </div>
@@ -2402,7 +2264,7 @@ th {
     <div class="price" id="detailHotelPrice">$0</div>
     <div class="mmk-sub" id="detailHotelMmk">0 ကျပ်</div>
    </div>
-   <button type="button" class="btn btn-primary" id="detailBookNowBtn">🏨 ယခု ဘိုကင်တင်မည်</button>
+   <button type="button" class="btn btn-primary" id="detailBookNowBtn">🏨 Book</button>
   </div>
  </div>
 </div>
@@ -2411,16 +2273,16 @@ th {
 <div id="editNameModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0;font-size:18px">✏️ အမည် ပြင်ဆင်ရန်</h2>
+   <h2 style="margin:0;font-size:18px">✏️ Name</h2>
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeEditNameModal()">✕</button>
   </div>
   <div class="form-group">
-   <label>အမည်သစ်</label>
-   <input type="text" id="editNameInput" placeholder="အမည်သစ် ရိုက်ထည့်ပါ">
+   <label>New Name</label>
+   <input type="text" id="editNameInput" placeholder="Name">
   </div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeEditNameModal()">မလုပ်တော့ပါ</button>
-   <button type="button" class="btn btn-primary" onclick="saveProfileNameEdit()">သိမ်းဆည်းမည်</button>
+   <button type="button" class="btn btn-secondary" onclick="closeEditNameModal()">Cancel</button>
+   <button type="button" class="btn btn-primary" onclick="saveProfileNameEdit()">Save</button>
   </div>
  </div>
 </div>
@@ -2429,21 +2291,21 @@ th {
 <div id="adminUserOrderModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0;font-size:18px" id="adminUserModalTitle">User Order Control</h2>
+   <h2 style="margin:0;font-size:18px" id="adminUserModalTitle">User Control</h2>
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeAdminUserOrderModal()">✕</button>
   </div>
   <div id="adminUserModalSummary" class="small muted" style="margin-bottom:12px"></div>
   <div class="form-group">
-   <label>လက်ကျန်ငွေ ($)</label>
+   <label>Balance ($)</label>
    <input type="number" id="adminEditBalanceInput" step="0.01">
   </div>
   <div class="form-group">
-   <label>ပြီးစီးသည့် အော်ဒါ အရေအတွက် (0 - 30)</label>
+   <label>Orders (0 - 30)</label>
    <input type="number" id="adminEditOrdersInput" min="0" max="30">
   </div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeAdminUserOrderModal()">ပိတ်ရန်</button>
-   <button type="button" class="btn btn-success" onclick="saveAdminUserOrderControl()">💾 သိမ်းဆည်းမည်</button>
+   <button type="button" class="btn btn-secondary" onclick="closeAdminUserOrderModal()">Close</button>
+   <button type="button" class="btn btn-success" onclick="saveAdminUserOrderControl()">💾 Save</button>
   </div>
  </div>
 </div>
@@ -2452,23 +2314,23 @@ th {
 <div id="addBankCardModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0;font-size:18px">💳 ဘဏ်ကဒ် အသစ်ထည့်ရန်</h2>
+   <h2 style="margin:0;font-size:18px">💳 Bank Card</h2>
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeAddBankCardModal()">✕</button>
   </div>
   <div class="form-group">
-   <label>ဘဏ် / ဝန်ဆောင်မှု အမည် (ဥပမာ - KBZPay, WavePay, CB Bank)</label>
+   <label>Bank</label>
    <input type="text" id="newBankNameInput" placeholder="KBZPay">
   </div>
   <div class="form-group">
-   <label>အကောင့်ပိုင်ရှင် အမည်</label>
-   <input type="text" id="newBankHolderInput" placeholder="Account Holder Name">
+   <label>Holder</label>
+   <input type="text" id="newBankHolderInput" placeholder="Name">
   </div>
   <div class="form-group">
-   <label>အကောင့်နံပါတ် / ဖုန်းနံပါတ်</label>
+   <label>Account</label>
    <input type="text" id="newBankAccInput" placeholder="09xxxxxxxxx">
   </div>
   <div class="form-group">
-   <label>အမျိုးအစား</label>
+   <label>Type</label>
    <select id="newBankTypeInput">
     <option value="Deposit & Withdraw">Deposit &amp; Withdraw</option>
     <option value="Deposit Only">Deposit Only</option>
@@ -2476,425 +2338,14 @@ th {
    </select>
   </div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeAddBankCardModal()">မလုပ်တော့ပါ</button>
-   <button type="button" class="btn btn-primary" onclick="saveNewBankCard()">ထည့်သွင်းမည်</button>
-  </div>
- </div>
-</div>
-<!-- ==================== ADMIN / STAFF PAGE ==================== -->
- <section id="staffPage" class="page">
-  <div class="panel-card">
-   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
-    <div>
-     <h2 style="font-size:18px" data-i18n="adminPanelTitle">🛡️ Admin Control Center</h2>
-     <div id="adminLiveAlertBox" class="small" style="margin-top:4px;font-weight:700;color:var(--fb-primary)">📡 Realtime DB Live Sync Ready</div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-     <button type="button" class="btn btn-primary btn-xs" id="adminTabUsersBtn" onclick="switchAdminTab('users')" data-i18n="adminTabUsers">👥 Users &amp; Orders</button>
-     <button type="button" class="btn btn-gold btn-xs" id="adminTabProfitBtn" onclick="switchAdminTab('profit')" data-i18n="adminTabProfit">📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက်</button>
-     <button type="button" class="btn btn-secondary btn-xs" id="adminTabCardsBtn" onclick="switchAdminTab('cards')" data-i18n="adminTabCards">💳 Bank Cards</button>
-     <button type="button" class="btn btn-secondary btn-xs" id="adminTabChatBtn" onclick="switchAdminTab('chat')">
-      💬 CS Chat <span id="adminChatBadge" class="notif-badge hidden">0</span>
-     </button>
-    </div>
-   </div>
-
-   <!-- 4-POINT ADMIN SUMMARY -->
-   <div class="admin-4pt-grid">
-    <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptUsers">1. Registered Users</div>
-     <div class="admin-4pt-val" id="admin4ptUsersVal">0</div>
-    </div>
-    <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptBalance">2. Total Balances</div>
-     <div class="admin-4pt-val" id="admin4ptBalanceVal">$0.00</div>
-    </div>
-    <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptOrders">3. Orders Done</div>
-     <div class="admin-4pt-val" id="admin4ptOrdersVal">0</div>
-    </div>
-    <div class="admin-4pt-card">
-     <div class="admin-4pt-label" data-i18n="admin4ptRate">4. Profit Cycle ($100→$20)</div>
-     <div class="admin-4pt-val" id="admin4ptRateVal">$100 → $20</div>
-    </div>
-   </div>
-
-   <!-- LIVE SYNC STATUS BANNER -->
-   <div class="admin-live-banner">
-    <div id="adminSyncStatusText">🔄 Sync: Connecting to Firebase RTDB...</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-     <button type="button" class="btn btn-secondary btn-xs" onclick="forcePushAllToFirebase()">☁️ Force Sync Now</button>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="showPage('homePage', document.querySelectorAll('.bottom-nav button')[0])">🏠 Home</button>
-    </div>
-   </div>
-
-   <!-- TAB 1: USERS & ORDER CONTROLS -->
-   <div id="adminUsersTab">
-    <div class="section-header">
-     <h3 style="font-size:16px" data-i18n="adminUsersHeading">အသုံးပြုသူ အကောင့်များနှင့် အော်ဒါ ထိန်းချုပ်မှု</h3>
-     <input type="text" id="adminUserSearch" class="search-input" placeholder="ဖုန်း၊ အမည် သို့မဟုတ် ကုဒ် ရှာရန်..." oninput="renderAdminUsers()">
-    </div>
-    <div class="table-wrap">
-     <table>
-      <thead>
-       <tr>
-        <th>အသုံးပြုသူ</th>
-        <th>ဖုန်း / ID</th>
-        <th>မိမိကုဒ်</th>
-        <th>အသုံးပြုခဲ့သော ကုဒ်</th>
-        <th>လက်ကျန် ($)</th>
-        <th>အော်ဒါ (30)</th>
-        <th>အမြတ်</th>
-        <th>အခြေအနေ</th>
-        <th>လုပ်ဆောင်ချက်</th>
-       </tr>
-      </thead>
-      <tbody id="adminUsersRows"></tbody>
-     </table>
-    </div>
-   </div>
-
-   <!-- TAB 2: ORDER DOLLAR PROFIT TABLE ($100 -> $20) -->
-   <div id="adminProfitTab" class="hidden">
-    <div class="rainbow-flow-frame" style="margin-bottom:14px">
-     <div class="rainbow-inner">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-       <div>
-        <h3 style="font-size:16px;font-weight:800">📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက် ($100 → $20 အမြတ်ဇယား)</h3>
-        <div class="small muted">ရင်းနှီးငွေ အလိုက် ၃၀-အော်ဒါ စုစုပေါင်းအမြတ် ($100 ရင်းလျှင် $20 အမြတ်) ကို သတ်မှတ်ပြီး အတည်ပြုနိုင်ပါသည်။</div>
-       </div>
-       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="btn btn-secondary btn-xs" onclick="resetDefaultProfitTiers()">↺ $100→$20 Default</button>
-        <button type="button" class="btn btn-success btn-xs" onclick="confirmAndApplyProfitTable()">✅ အတည်ပြု အသုံးပြုမည်</button>
-       </div>
-      </div>
-      <div class="table-wrap">
-       <table>
-        <thead>
-         <tr>
-          <th>အဆင့် (Tier)</th>
-          <th>အနည်းဆုံး ($)</th>
-          <th>အများဆုံး ($)</th>
-          <th>၃၀-အော်ဒါ အမြတ် ($)</th>
-          <th>အမြတ်နှုန်း (%)</th>
-         </tr>
-        </thead>
-        <tbody id="adminProfitTierRows"></tbody>
-       </table>
-      </div>
-      <div id="profitTableApplyStatus" class="small" style="margin-top:8px;font-weight:700;color:var(--fb-success)"></div>
-     </div>
-    </div>
-   </div>
-
-   <!-- TAB 3: BANK CARDS -->
-   <div id="adminCardsTab" class="hidden">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-     <h3 style="font-size:16px">💳 ငွေသွင်း / ငွေထုတ် ဘဏ်ကဒ်များ</h3>
-     <button type="button" class="btn btn-primary btn-xs" onclick="openAddBankCardModal()">+ ဘဏ်ကဒ် ထည့်ရန်</button>
-    </div>
-    <div class="table-wrap">
-     <table>
-      <thead>
-       <tr>
-        <th>ဘဏ် / ဝန်ဆောင်မှု</th>
-        <th>အကောင့်အမည်</th>
-        <th>အကောင့်နံပါတ်</th>
-        <th>အမျိုးအစား</th>
-        <th>လုပ်ဆောင်ချက်</th>
-       </tr>
-      </thead>
-      <tbody id="adminBankCardsRows"></tbody>
-     </table>
-    </div>
-   </div>
-
-   <!-- TAB 4: ADMIN CS CHAT -->
-   <div id="adminChatTab" class="hidden">
-    <div style="display:grid;grid-template-columns:250px 1fr;gap:12px">
-     <div style="border:1px solid var(--fb-border);border-radius:10px;padding:8px;max-height:420px;overflow-y:auto;background:var(--fb-input-bg)">
-      <div class="small" style="font-weight:800;margin-bottom:8px">💬 User Chats</div>
-      <div id="adminChatUserList"></div>
-     </div>
-     <div class="chat-box">
-      <div style="padding:8px 12px;border-bottom:1px solid var(--fb-border);font-weight:800;font-size:13.5px" id="adminChatActiveHeader">Select a user chat</div>
-      <div id="adminChatMessages" class="chat-messages"></div>
-      <div class="chat-input-area">
-       <div id="adminEmojiPicker" class="emoji-picker-popover hidden"></div>
-       <div id="adminBankCardPicker" class="bank-card-picker-popover hidden"></div>
-       <button type="button" class="icon-btn" onclick="toggleEmojiPicker('admin')" title="Emoji">😊</button>
-       <button type="button" class="icon-btn" onclick="toggleChatBankCardPicker('admin')" title="Bank Cards">💳</button>
-       <label class="icon-btn" style="margin:0" title="Photo">
-        📷 <input type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'admin')">
-       </label>
-       <textarea id="adminChatInput" class="chat-textarea" rows="1" placeholder="Admin reply..." oninput="autoGrowTextarea(this)" onkeydown="handleChatTextareaKeydown(event, 'admin')"></textarea>
-       <button type="button" class="btn btn-primary" onclick="sendAdminChatMessage()">➤</button>
-      </div>
-     </div>
-    </div>
-   </div>
-  </div>
- </section>
-</div>
-
-<!-- ==================== FOOTER ==================== -->
-<footer class="site-footer">
- <div class="footer-panel">
-  <div class="footer-grid">
-   <div class="footer-col">
-    <h4>Trip Booking Platform</h4>
-    <p>နိုင်ငံတကာ ဟိုတယ်ဘိုကင်နှင့် ၃၀-အော်ဒါ ကော်မရှင် ဝန်ဆောင်မှု စနစ်။</p>
-   </div>
-   <div class="footer-col">
-    <h4>ဝန်ဆောင်မှု စည်းမျဉ်းများ</h4>
-    <ul>
-     <li>• $100 ရင်းနှီးလျှင် ၃၀-အော်ဒါ အမြတ် $20</li>
-     <li>• 24/7 Customer Service &amp; Bank Support</li>
-     <li>• Realtime Database Live Synchronization</li>
-    </ul>
-   </div>
-   <div class="footer-col">
-    <h4>ဆက်သွယ်ရန်</h4>
-    <ul>
-     <li>• Admin Hotline: 09775191427</li>
-     <li>• Support: In-App Live Service Chat</li>
-    </ul>
-   </div>
-  </div>
-  <div class="footer-bottom-bar">
-   <div>© 2026 Trip Booking. All rights reserved.</div>
-   <div class="footer-badges">
-    <span class="footer-badge">🏨 Global Hotels</span>
-    <span class="footer-badge">⚡ Live Sync</span>
-    <span class="footer-badge">💎 $100 → $20 Cycle</span>
-   </div>
-  </div>
- </div>
-</footer>
-
-<!-- ==================== BOTTOM NAVIGATION ==================== -->
-<nav class="bottom-nav">
- <button type="button" class="active" onclick="showPage('homePage', this)">
-  <span>🏠</span>
-  <span data-i18n="navHome">ပင်မစာမျက်နှာ</span>
- </button>
- <button type="button" onclick="showPage('supportPage', this)">
-  <span>🎧</span>
-  <span data-i18n="navService">ဝန်ဆောင်မှု</span>
- </button>
- <button type="button" onclick="showPage('bookingPage', this)">
-  <span>📋</span>
-  <span data-i18n="navBooking">ဘိုကင်</span>
- </button>
- <button type="button" onclick="showPage('historyPage', this)">
-  <span>📜</span>
-  <span data-i18n="navHistory">မှတ်တမ်း</span>
- </button>
- <button type="button" onclick="showPage('profilePage', this)">
-  <span>👤</span>
-  <span data-i18n="navProfile">ကိုယ်ရေး</span>
- </button>
- <button type="button" id="navAdminBtn" class="hidden" onclick="openAdminControlPanel(this)">
-  <span>🛡️</span>
-  <span data-i18n="navAdmin">Admin</span>
- </button>
-</nav>
-
-<!-- ==================== AUTH MODAL ==================== -->
-<div id="authModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-   <h2 id="authModalTitle" style="margin:0">အကောင့်ဝင်ရန်</h2>
-   <button type="button" class="btn btn-secondary btn-xs" onclick="closeAuthModal()">✕</button>
-  </div>
-  <div style="display:flex;gap:8px;margin-bottom:14px">
-   <button type="button" class="btn btn-primary" style="flex:1" id="loginTabBtn" onclick="switchAuthTab('login')">အကောင့်ဝင်ရန်</button>
-   <button type="button" class="btn btn-secondary" style="flex:1" id="registerTabBtn" onclick="switchAuthTab('register')">အကောင့်ဖွင့်ရန်</button>
-  </div>
-  <form id="authForm" onsubmit="submitAuth(event)">
-   <div id="registerFields" class="hidden">
-    <div class="form-group">
-     <label>အမည် (Full Name)</label>
-     <input type="text" id="regName" placeholder="ဥပမာ - Kyaw Kyaw">
-    </div>
-   </div>
-   <div class="form-group">
-    <label>ဖုန်းနံပါတ် (Phone Number)</label>
-    <input type="text" id="authPhone" placeholder="09xxxxxxxxx" required>
-   </div>
-   <div class="form-group">
-    <label>စကားဝှက် (Password)</label>
-    <div class="password-input-wrap">
-     <input type="password" id="authPassword" placeholder="Password" required>
-     <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('authPassword', this)">👁️</button>
-    </div>
-   </div>
-   <div id="inviteCodeFieldWrap" class="form-group hidden">
-    <label>ဖိတ်ကြားကုဒ် (Invite Code - Optional / Open)</label>
-    <input type="text" id="regInviteCode" placeholder="Invite code (optional)">
-   </div>
-   <div id="authError" class="error-text"></div>
-   <div style="display:flex;gap:8px;margin-top:12px">
-    <button type="submit" class="btn btn-primary" style="flex:1" id="authSubmitBtn">ဆက်သွားရန်</button>
-   </div>
-  </form>
- </div>
-</div>
-
-<!-- ==================== ORDER & REVIEW MODAL ==================== -->
-<div id="orderModal" class="modal-backdrop hidden">
- <div class="modal-card wide-modal">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0">🏨 ဟိုတယ်ဘိုကင် အော်ဒါ အတည်ပြုချက်</h2>
-   <button type="button" class="btn btn-secondary btn-xs" onclick="closeOrderModal()">✕</button>
-  </div>
-  <div id="orderStep1Review">
-   <div class="order-hotel-banner">
-    <img id="orderModalHotelImg" src="" alt="Hotel" class="order-hotel-thumb">
-    <div>
-     <div style="font-weight:800;font-size:15px" id="orderModalHotelName">Hotel Name</div>
-     <div class="small muted" id="orderModalHotelLoc">Location</div>
-     <div class="small" style="margin-top:2px;font-weight:700;color:var(--fb-primary)" id="orderModalProgressLabel">Order #1 / 30</div>
-    </div>
-   </div>
-   <div class="order-calc-grid">
-    <div class="order-calc-item">
-     <div class="k">လက်ကျန်ငွေ (Balance)</div>
-     <div class="v" id="orderModalBalance">$0.00</div>
-    </div>
-    <div class="order-calc-item">
-     <div class="k">ဤအော်ဒါ အမြတ် (Order Profit)</div>
-     <div class="v" style="color:var(--fb-success)" id="orderModalProfit">$0.00</div>
-    </div>
-   </div>
-   <div class="small" style="font-weight:700;margin-bottom:6px">ကြယ်အဆင့် ရွေးချယ်ပါ (Star Rating)</div>
-   <div class="star-picker-row" id="orderStarPicker"></div>
-   <div class="small" style="font-weight:700;margin-bottom:6px">သုံးသပ်ချက် ရွေးချယ်ပါ (Review Comment)</div>
-   <div class="review-options-list" id="orderReviewOptions"></div>
-   <div class="form-group">
-    <label>ကိုယ်ပိုင် သုံးသပ်ချက် (Optional Custom Review)</label>
-    <input type="text" id="orderCustomReviewInput" placeholder="သုံးသပ်ချက် ရေးရန်...">
-   </div>
-   <div style="display:flex;gap:8px;justify-content:flex-end">
-    <button type="button" class="btn btn-secondary" onclick="closeOrderModal()">မလုပ်တော့ပါ</button>
-    <button type="button" class="btn btn-primary" onclick="confirmOrderAndReview()">✅ အော်ဒါ အတည်ပြုမည်</button>
-   </div>
-  </div>
-  <div id="orderStep2Verifying" class="verifying-box hidden">
-   <div class="verifying-spinner"></div>
-   <div style="font-weight:800;font-size:16px">ဘိုကင် အချက်အလက်များ စစ်ဆေးနေသည်...</div>
-   <div class="small muted" style="margin-top:4px">ကျေးဇူးပြု၍ ခဏစောင့်ဆိုင်းပါ</div>
-  </div>
-  <div id="orderStep3Result" class="hidden">
-   <div class="profit-highlight-box">
-    <div class="small" style="font-weight:700">🎉 ဘိုကင် အောင်မြင်စွာ ပြီးမြောက်ပါပြီ</div>
-    <div class="big-profit" id="orderResultProfitText">+$0.00</div>
-    <div class="small muted" id="orderResultSubText">လက်ကျန်ငွေထဲ အမြတ်ပေါင်းထည့်ပြီးပါပြီ</div>
-   </div>
-   <div style="text-align:right">
-    <button type="button" class="btn btn-success" onclick="closeOrderModal()">ပြီးပါပြီ</button>
-   </div>
-  </div>
- </div>
-</div>
-
-<!-- ==================== HOTEL DETAIL MODAL ==================== -->
-<div id="hotelDetailModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 id="detailHotelName" style="margin:0;font-size:18px">Hotel</h2>
-   <button type="button" class="btn btn-secondary btn-xs" onclick="closeHotelDetailModal()">✕</button>
-  </div>
-  <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
-  <div id="detailHotelMeta" class="small muted" style="margin-bottom:8px"></div>
-  <p id="detailHotelDesc" style="font-size:13.5px;line-height:1.5;margin-bottom:12px"></p>
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-   <div>
-    <div class="price" id="detailHotelPrice">$0</div>
-    <div class="mmk-sub" id="detailHotelMmk">0 ကျပ်</div>
-   </div>
-   <button type="button" class="btn btn-primary" id="detailBookNowBtn">🏨 ယခု ဘိုကင်တင်မည်</button>
-  </div>
- </div>
-</div>
-
-<!-- ==================== EDIT NAME MODAL ==================== -->
-<div id="editNameModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0;font-size:18px">✏️ အမည် ပြင်ဆင်ရန်</h2>
-   <button type="button" class="btn btn-secondary btn-xs" onclick="closeEditNameModal()">✕</button>
-  </div>
-  <div class="form-group">
-   <label>အမည်သစ်</label>
-   <input type="text" id="editNameInput" placeholder="အမည်သစ် ရိုက်ထည့်ပါ">
-  </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeEditNameModal()">မလုပ်တော့ပါ</button>
-   <button type="button" class="btn btn-primary" onclick="saveProfileNameEdit()">သိမ်းဆည်းမည်</button>
-  </div>
- </div>
-</div>
-
-<!-- ==================== ADMIN USER ORDER CONTROL MODAL ==================== -->
-<div id="adminUserOrderModal" class="modal-backdrop hidden">
- <div class="modal-card wide-modal">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0;font-size:18px" id="adminUserModalTitle">User Order Control</h2>
-   <button type="button" class="btn btn-secondary btn-xs" onclick="closeAdminUserOrderModal()">✕</button>
-  </div>
-  <div id="adminUserModalSummary" class="small muted" style="margin-bottom:12px"></div>
-  <div class="form-group">
-   <label>လက်ကျန်ငွေ ($)</label>
-   <input type="number" id="adminEditBalanceInput" step="0.01">
-  </div>
-  <div class="form-group">
-   <label>ပြီးစီးသည့် အော်ဒါ အရေအတွက် (0 - 30)</label>
-   <input type="number" id="adminEditOrdersInput" min="0" max="30">
-  </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeAdminUserOrderModal()">ပိတ်ရန်</button>
-   <button type="button" class="btn btn-success" onclick="saveAdminUserOrderControl()">💾 သိမ်းဆည်းမည်</button>
-  </div>
- </div>
-</div>
-
-<!-- ==================== ADD BANK CARD MODAL ==================== -->
-<div id="addBankCardModal" class="modal-backdrop hidden">
- <div class="modal-card">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-   <h2 style="margin:0;font-size:18px">💳 ဘဏ်ကဒ် အသစ်ထည့်ရန်</h2>
-   <button type="button" class="btn btn-secondary btn-xs" onclick="closeAddBankCardModal()">✕</button>
-  </div>
-  <div class="form-group">
-   <label>ဘဏ် / ဝန်ဆောင်မှု အမည် (ဥပမာ - KBZPay, WavePay, CB Bank)</label>
-   <input type="text" id="newBankNameInput" placeholder="KBZPay">
-  </div>
-  <div class="form-group">
-   <label>အကောင့်ပိုင်ရှင် အမည်</label>
-   <input type="text" id="newBankHolderInput" placeholder="Account Holder Name">
-  </div>
-  <div class="form-group">
-   <label>အကောင့်နံပါတ် / ဖုန်းနံပါတ်</label>
-   <input type="text" id="newBankAccInput" placeholder="09xxxxxxxxx">
-  </div>
-  <div class="form-group">
-   <label>အမျိုးအစား</label>
-   <select id="newBankTypeInput">
-    <option value="Deposit & Withdraw">Deposit &amp; Withdraw</option>
-    <option value="Deposit Only">Deposit Only</option>
-    <option value="Withdraw Only">Withdraw Only</option>
-   </select>
-  </div>
-  <div style="display:flex;gap:8px;justify-content:flex-end">
-   <button type="button" class="btn btn-secondary" onclick="closeAddBankCardModal()">မလုပ်တော့ပါ</button>
-   <button type="button" class="btn btn-primary" onclick="saveNewBankCard()">ထည့်သွင်းမည်</button>
+   <button type="button" class="btn btn-secondary" onclick="closeAddBankCardModal()">Cancel</button>
+   <button type="button" class="btn btn-primary" onclick="saveNewBankCard()">Save</button>
   </div>
  </div>
 </div>
 <script>
 const ADMIN_PHONE = "09775191427";
-const ADMIN_PASS = "123456";
+const ADMIN_PASS = "12344321";
 const DAILY_ORDER_LIMIT = 30;
 const BASE_USD_TO_MMK = 5000;
 const TP2323_PROMO_CODE = "TP2323";
@@ -2920,12 +2371,12 @@ const DEFAULT_PROFIT_TIERS = [
 ];
 
 const DEFAULT_HOTELS = [
- { id: "h1", name: "Marina Bay Sands Sky Suites", country: "Singapore", stars: 5, price: 320, img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop", desc: "Rooftop infinity pool and panoramic skyline suites in central Singapore." },
- { id: "h2", name: "The Peninsula Palace", country: "Thailand", stars: 5, price: 245, img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop", desc: "Riverside luxury suites with spa, fine dining, and private boat transfer." },
- { id: "h3", name: "Shinjuku Grand Horizon", country: "Japan", stars: 4, price: 185, img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop", desc: "Modern high-rise hotel steps away from Shinjuku rail and dining hubs." },
- { id: "h4", name: "Inle Heritage Lake Resort", country: "Myanmar", stars: 4, price: 140, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop", desc: "Scenic lakefront villas surrounded by calm waters and mountain views." },
- { id: "h5", name: "Banyan Tree Cliff Villa", country: "Malaysia", stars: 5, price: 290, img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop", desc: "Private ocean-view villas with plunge pool and serene tropical gardens." },
- { id: "h6", name: "Dongdaemun Park Hotel", country: "South Korea", stars: 4, price: 165, img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&auto=format&fit=crop", desc: "Stylish city rooms with express transit access and rooftop lounge." }
+ { id: "h1", name: "Marina Bay Sands Sky Suites", country: "Singapore", stars: 5, price: 320, img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&auto=format&fit=crop", desc: "Rooftop infinity pool and panoramic skyline suites in central Singapore." },
+ { id: "h2", name: "The Peninsula Palace", country: "Thailand", stars: 5, price: 245, img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1400&auto=format&fit=crop", desc: "Riverside luxury suites with spa, fine dining, and private boat transfer." },
+ { id: "h3", name: "Shinjuku Grand Horizon", country: "Japan", stars: 4, price: 185, img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1400&auto=format&fit=crop", desc: "Modern high-rise hotel steps away from Shinjuku rail and dining hubs." },
+ { id: "h4", name: "Inle Heritage Lake Resort", country: "Myanmar", stars: 4, price: 140, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1400&auto=format&fit=crop", desc: "Scenic lakefront villas surrounded by calm waters and mountain views." },
+ { id: "h5", name: "Banyan Tree Cliff Villa", country: "Malaysia", stars: 5, price: 290, img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1400&auto=format&fit=crop", desc: "Private ocean-view villas with plunge pool and serene tropical gardens." },
+ { id: "h6", name: "Dongdaemun Park Hotel", country: "South Korea", stars: 4, price: 165, img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1400&auto=format&fit=crop", desc: "Stylish city rooms with express transit access and rooftop lounge." }
 ];
 
 const DEFAULT_BANK_CARDS = [
@@ -2961,7 +2412,7 @@ let fxState = {
  previousRate: BASE_USD_TO_MMK,
  history: [],
  lastUpdated: new Date().toISOString(),
- lastFormula: "5-Wave Harmonic",
+ lastFormula: "5-Wave",
  hoverIndex: null,
  lastCalcEdited: "A"
 };
@@ -3000,7 +2451,11 @@ function nowFullDateTime() {
 }
 
 function normalizePhone(raw) {
- return String(raw || "").replace(/[^0-9]/g, "");
+ const digits = String(raw || "").replace(/[^0-9]/g, "");
+ if (digits.startsWith("959") && digits.length >= 10) {
+  return "0" + digits.slice(2);
+ }
+ return digits;
 }
 
 function escapeHtml(str) {
@@ -3043,6 +2498,7 @@ function normalizeUserRecord(u) {
   id,
   name: String(u.name || (isAdmin ? "Admin" : ("Member " + (phone.slice(-4) || "User")))),
   phone,
+  countryCode: String(u.countryCode || "+95"),
   password: String(u.password || ""),
   isAdmin,
   banned: Boolean(u.banned),
@@ -3079,8 +2535,9 @@ function ensureAdminUserExists() {
  if (!admin) {
   admin = normalizeUserRecord({
    id: "u_" + ADMIN_PHONE,
-   name: "Admin Operator",
+   name: "Admin",
    phone: ADMIN_PHONE,
+   countryCode: "+95",
    password: ADMIN_PASS,
    isAdmin: true,
    balance: 1000,
@@ -3090,7 +2547,7 @@ function ensureAdminUserExists() {
  } else {
   admin.isAdmin = true;
   admin.phone = ADMIN_PHONE;
-  if (!admin.password) admin.password = ADMIN_PASS;
+  admin.password = ADMIN_PASS;
  }
  return admin;
 }
@@ -3262,9 +2719,9 @@ function evaluateTp2323BonusOnOrderProgress(user) {
   user.history.unshift({
    time: nowFullDateTime(),
    type: "bonus",
-   details: `TP2323 30-Order Completion Bonus Unlocked (+${formatMoney(unlockAmt)})`,
+   details: `TP2323 (+${formatMoney(unlockAmt)})`,
    amount: unlockAmt,
-   status: "Completed"
+   status: "OK"
   });
  }
 }
@@ -3311,18 +2768,18 @@ function stepFxWaveTick() {
 /* ---------------- LOCAL STORAGE & FIREBASE RTDB DIRECT SYNC ---------------- */
 function saveLocalState() {
  try {
-  localStorage.setItem("tb_v6_app_state", JSON.stringify(appState));
+  localStorage.setItem("tb_v7_app_state", JSON.stringify(appState));
  } catch (_) {}
 }
 
 function loadLocalState() {
  try {
-  const raw = localStorage.getItem("tb_v6_app_state");
+  const raw = localStorage.getItem("tb_v7_app_state");
   if (!raw) return;
   const parsed = JSON.parse(raw);
   if (parsed && typeof parsed === "object") {
    appState.currentUserId = parsed.currentUserId || null;
-   appState.lang = parsed.lang || "my";
+   appState.lang = ["my", "en", "th", "zh"].includes(parsed.lang) ? parsed.lang : "my";
    appState.theme = parsed.theme || "light";
    appState.soundMuted = Boolean(parsed.soundMuted);
    appState.profitTiers = cloneProfitTiers(parsed.profitTiers);
@@ -3360,20 +2817,20 @@ function syncSingleUserToFirebase(user) {
  if (!norm) return Promise.resolve(false);
  saveLocalState();
  if (!firebaseReady || !db) {
-  setAdminSyncStatus("⚠️ Local saved (Firebase RTDB not ready)", true);
+  setAdminSyncStatus("⚠️ Local", true);
   return Promise.resolve(false);
  }
  return db.ref("users/" + norm.id).set(norm)
   .then(() => {
    appState.lastCloudSyncAt = nowTimeStr();
    appState.lastCloudError = "";
-   setAdminSyncStatus("✅ Cloud Synced: users/" + norm.id + " (" + appState.lastCloudSyncAt + ")", false);
+   setAdminSyncStatus("✅ users/" + norm.id + " (" + appState.lastCloudSyncAt + ")", false);
    return true;
   })
   .catch((err) => {
-   const errMsg = (err && (err.code || err.message)) || "Write failed";
+   const errMsg = (err && (err.code || err.message)) || "Write error";
    appState.lastCloudError = errMsg;
-   setAdminSyncStatus("❌ Firebase Write Error (" + errMsg + ") — Check Rules .write", true);
+   setAdminSyncStatus("❌ " + errMsg, true);
    return false;
   });
 }
@@ -3381,7 +2838,7 @@ function syncSingleUserToFirebase(user) {
 function syncAllAccountsEverywhere() {
  saveLocalState();
  if (!firebaseReady || !db) {
-  setAdminSyncStatus("⚠️ Local saved (Firebase RTDB connecting...)", true);
+  setAdminSyncStatus("⚠️ Local", true);
   return Promise.resolve(false);
  }
  const uMap = usersArrayToMap(appState.users);
@@ -3393,12 +2850,12 @@ function syncAllAccountsEverywhere() {
  ]).then(() => {
   appState.lastCloudSyncAt = nowTimeStr();
   appState.lastCloudError = "";
-  setAdminSyncStatus("✅ All Data Synced to trip-boooking-default-rtdb (" + appState.lastCloudSyncAt + ")", false);
+  setAdminSyncStatus("✅ Synced (" + appState.lastCloudSyncAt + ")", false);
   return true;
  }).catch((err) => {
-  const errMsg = (err && (err.code || err.message)) || "Sync failed";
+  const errMsg = (err && (err.code || err.message)) || "Sync error";
   appState.lastCloudError = errMsg;
-  setAdminSyncStatus("❌ Firebase Sync Error: " + errMsg, true);
+  setAdminSyncStatus("❌ " + errMsg, true);
   return false;
  });
 }
@@ -3406,17 +2863,13 @@ function syncAllAccountsEverywhere() {
 function forcePushAllToFirebase() {
  recalculateActiveAndPendingProfitsForAllUsers();
  syncAllAccountsEverywhere().then((ok) => {
-  if (ok) {
-   showSuccessToast("☁️ Firebase RTDB သို့ အချက်အလက်အားလုံး တိုက်ရိုက်ပို့ပြီးပါပြီ။");
-  } else {
-   showSuccessToast("⚠️ Firebase Sync Error: " + (appState.lastCloudError || "Check Rules"));
-  }
+  showSuccessToast(ok ? "☁️ Synced" : ("⚠️ " + (appState.lastCloudError || "Error")));
  });
 }
 
 function initFirebase() {
  if (!window.firebase || !FIREBASE_CONFIG.databaseURL) {
-  setAdminSyncStatus("⚠️ Firebase SDK missing — running local mode", true);
+  setAdminSyncStatus("⚠️ Local", true);
   return;
  }
  try {
@@ -3425,11 +2878,11 @@ function initFirebase() {
   }
   db = firebase.database();
   firebaseReady = true;
-  setAdminSyncStatus("🟢 Connected: trip-boooking-default-rtdb", false);
+  setAdminSyncStatus("🟢 Live", false);
   attachFirebaseListeners();
  } catch (err) {
   firebaseReady = false;
-  setAdminSyncStatus("❌ Firebase Init Error: " + (err && err.message ? err.message : "Unknown"), true);
+  setAdminSyncStatus("❌ " + (err && err.message ? err.message : "Error"), true);
  }
 }
 
@@ -3480,7 +2933,7 @@ function attachFirebaseListeners() {
     if (brandNewUsers.length > 0) {
      const latest = brandNewUsers[brandNewUsers.length - 1];
      playSoundEffect("register");
-     const alertMsg = `🔔 အကောင့်သစ် တက်လာပါပြီ: ${latest.name} (${latest.phone || latest.id})`;
+     const alertMsg = `🔔 ${latest.name} (${latest.phone || latest.id})`;
      const alertBox = document.getElementById("adminLiveAlertBox");
      if (alertBox) alertBox.textContent = alertMsg;
      if (isCurrentUserAdmin()) {
@@ -3498,7 +2951,7 @@ function attachFirebaseListeners() {
    }
   }
  }, (err) => {
-  setAdminSyncStatus("❌ Firebase Read Error: " + (err && err.message ? err.message : "Permission denied"), true);
+  setAdminSyncStatus("❌ " + (err && err.message ? err.message : "Error"), true);
  });
 
  db.ref("profitTiers").on("value", (snap) => {
@@ -3541,7 +2994,7 @@ function attachFirebaseListeners() {
       if (amAdmin && newestMsg.sender === "user") {
        incomingAlert = { uid, text: newestMsg.text || "[Photo]", from: newestMsg.senderName || uid };
       } else if (!amAdmin && me && me.id === uid && newestMsg.sender === "admin") {
-       incomingAlert = { uid, text: newestMsg.text || "[Photo]", from: "Trip Booking Service" };
+       incomingAlert = { uid, text: newestMsg.text || "[Photo]", from: "Service" };
       }
      }
     }
@@ -3562,93 +3015,309 @@ function attachFirebaseListeners() {
 }
 </script>
 <script>
-const I18N_MY = {
- loginBtn: "အကောင့်ဝင်ရန်",
- regTab: "အကောင့်ဖွင့်ရန်",
- heroTitle: "Trip Booking မှ ကြိုဆိုပါသည်",
- heroSub: "နိုင်ငံတကာ ဟိုတယ်ဘိုကင် ဝန်ဆောင်မှု ပလက်ဖောင်း",
- startTaskBtn: "ဘိုကင်တာဝန် စတင်ရန်",
- contactServiceBtn: "Customer Service ဆက်သွယ်ရန်",
- todayUsdRateTitle: "ယနေ့ USD ငွေလဲနှုန်း",
- fxChartTitle: "📈 USD ↔ MMK ငွေကြေးဈေးနှုန်း အတက်အကျ",
- step1Badge: "အဆင့် ၁",
- step1Title: "ငွေဖြည့်သွင်းပါ",
- step1Desc: "ဘိုကင်တာဝန်များ အဆင်ပြေချောမွေ့စွာ လုပ်ဆောင်ရန် လက်ကျန်ငွေ ဖြည့်သွင်းပါ။",
- step2Badge: "အဆင့် ၂",
- step2Title: "Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ",
- step2Desc: "ဟိုတယ်ဘိုကင် တာဝန်များ ရယူပြီး သတ်မှတ်ချက်အတိုင်း ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။",
- step3Badge: "အဆင့် ၃",
- step3Title: "ကော်မရှင် ရယူပါ",
- step3Desc: "အော်ဒါတစ်ခု ပြီးမြောက်တိုင်း ကော်မရှင်အမြတ်ငွေကို အကောင့်ထဲ ထည့်ပေးပါသည်။",
- hotelDir: "နိုင်ငံတကာ ဟိုတယ်များ",
- hotelSearchPh: "ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်အဆင့် ရှာရန်...",
- homeHotelBookHint: "ဟိုတယ်ကဒ်ကို နှိပ်၍ အသေးစိတ်ကြည့်နိုင်ပြီး လက်ကျန်ငွေဖြင့် တိုက်ရိုက် ဘိုကင်တင်နိုင်ပါသည်။",
- csHeader: "🎧 Trip Booking Service (24/7 အွန်လိုင်း)",
- csActiveBadge: "● အသုံးပြုနေသည်",
- typeMsgPh: "စာရိုက်ရန်...",
- taskCenter: "ဘိုကင် တာဝန်ဌာန",
- clickGetOrderHint: "ဟိုတယ်ဘိုကင် တာဝန်ရယူရန် Get Order ကို နှိပ်ပါ။",
- accBal: "အကောင့် လက်ကျန်ငွေ",
- taskComm: "ကျန်ရှိ ၃၀-အော်ဒါ အမြတ်",
- totalProfit: "စုစုပေါင်း အမြတ်",
- dailyLimit: "နေ့စဉ် အော်ဒါ",
- submitOrderBtn: "Get Order",
- histTitle: "ငွေလွှဲနှင့် ဘိုကင် မှတ်တမ်း",
- filterAllTypes: "အမျိုးအစား အားလုံး",
- filterProfitType: "ဘိုကင် အမြတ်",
- filterBonusType: "TP2323 $18 ဘောနပ်စ်",
- filterClearNegType: "Negative ရှင်းလင်းမှု",
- filterHotelBookType: "ဟိုတယ် ဘိုကင်",
- histSearchPh: "ရှာဖွေရန်...",
- thDate: "ရက်စွဲနှင့် အချိန်",
- thType: "အမျိုးအစား",
- thDetails: "အသေးစိတ်နှင့် သုံးသပ်ချက်",
- thAmount: "ပမာဏ",
- thStatus: "အခြေအနေ",
- welcomeTrip: "Trip Booking မှ ကြိုဆိုပါသည်",
- loginPrompt: "ကော်မရှင်များ ရယူရန် အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ် ဖွင့်ပါ။",
- walletBal: "အကောင့် လက်ကျန်ငွေ",
- depositBtn: "ငွေသွင်းရန်",
- withdrawBtn: "ငွေထုတ်ရန်",
- logoutBtn: "ထွက်ရန်",
- bookingHistCardTitle: "ဘိုကင် မှတ်တမ်း",
- inviteCodeTitle: "ဖိတ်ကြားကုဒ်",
- refBonus: "ဖိတ်ခေါ်မှု အမြတ်",
- inviteLinkLabel: "ဖိတ်ကြားလင့်ခ်",
- adminPanelTitle: "🛡️ Admin Control Center",
- adminTabUsers: "👥 Users & Orders",
- adminTabProfit: "📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက်",
- adminTabCards: "💳 Bank Cards",
- admin4ptUsers: "1. Registered Users",
- admin4ptBalance: "2. Total Balances",
- admin4ptOrders: "3. Orders Done",
- admin4ptRate: "4. Profit Cycle ($100→$20)",
- adminUsersHeading: "အသုံးပြုသူ အကောင့်များနှင့် အော်ဒါ ထိန်းချုပ်မှု",
- navHome: "ပင်မစာမျက်နှာ",
- navService: "ဝန်ဆောင်မှု",
- navBooking: "ဘိုကင်",
- navHistory: "မှတ်တမ်း",
- navProfile: "ကိုယ်ရေး",
- navAdmin: "Admin"
+const I18N_MAP = {
+ my: {
+  loginBtn: "အကောင့်ဝင်ရန်",
+  regTab: "အကောင့်ဖွင့်ရန်",
+  heroTitle: "Welcome to Trip Booking",
+  heroSub: "အင်တာနေရှင်နယ် ဟိုတယ်ပလက်ဖောင်း",
+  startTaskBtn: "ဘိုကင်တာဝန် စတင်ရန်",
+  contactServiceBtn: "Customer Service",
+  todayUsdRateTitle: "USD Rate",
+  fxChartTitle: "📈 USD ↔ MMK",
+  step1Badge: "1",
+  step1Title: "Deposit",
+  step1Desc: "Add balance for hotel order tasks.",
+  step2Badge: "2",
+  step2Title: "Get Order",
+  step2Desc: "Complete 30 hotel booking orders.",
+  step3Badge: "3",
+  step3Title: "Profit ($100→$20)",
+  step3Desc: "Receive order commission profit.",
+  hotelDir: "Hotels",
+  hotelSearchPh: "Search...",
+  homeHotelBookHint: "Select any hotel card to view details or book.",
+  csHeader: "🎧 Customer Service",
+  csActiveBadge: "● Online",
+  typeMsgPh: "Message...",
+  taskCenter: "Booking Center",
+  clickGetOrderHint: "Press Get Order to start.",
+  accBal: "Balance",
+  taskComm: "Pending 30-Order Profit",
+  totalProfit: "Total Profit",
+  dailyLimit: "Orders",
+  submitOrderBtn: "Get Order",
+  histTitle: "History",
+  filterAllTypes: "All",
+  filterProfitType: "Profit",
+  filterBonusType: "Bonus",
+  filterClearNegType: "Clear",
+  filterHotelBookType: "Hotel",
+  histSearchPh: "Search...",
+  thDate: "Time",
+  thType: "Type",
+  thDetails: "Details",
+  thAmount: "Amount",
+  thStatus: "Status",
+  welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "Login or register to start.",
+  walletBal: "Balance",
+  depositBtn: "Deposit",
+  withdrawBtn: "Withdraw",
+  logoutBtn: "Logout",
+  bookingHistCardTitle: "Orders",
+  inviteCodeTitle: "Invite Code",
+  refBonus: "Referral",
+  inviteLinkLabel: "Invite Link",
+  adminPanelTitle: "🛡️ Admin Control Center",
+  adminTabUsers: "👥 Users & Orders",
+  adminTabProfit: "📊 အော်ဒါဒေါ်လာ သတ်မှတ်ချက်",
+  adminTabCards: "💳 Bank Cards",
+  admin4ptUsers: "1. Users",
+  admin4ptBalance: "2. Balances",
+  admin4ptOrders: "3. Orders",
+  admin4ptRate: "4. Profit ($100→$20)",
+  adminUsersHeading: "Users & Orders",
+  navHome: "Home",
+  navService: "Service",
+  navBooking: "Booking",
+  navHistory: "History",
+  navProfile: "Profile",
+  navAdmin: "Admin"
+ },
+ en: {
+  loginBtn: "Login",
+  regTab: "Register",
+  heroTitle: "Welcome to Trip Booking",
+  heroSub: "International Hotel Platform",
+  startTaskBtn: "Start Booking Task",
+  contactServiceBtn: "Customer Service",
+  todayUsdRateTitle: "USD Rate",
+  fxChartTitle: "📈 USD ↔ MMK",
+  step1Badge: "1",
+  step1Title: "Deposit",
+  step1Desc: "Add balance for hotel order tasks.",
+  step2Badge: "2",
+  step2Title: "Get Order",
+  step2Desc: "Complete 30 hotel booking orders.",
+  step3Badge: "3",
+  step3Title: "Profit ($100→$20)",
+  step3Desc: "Receive order commission profit.",
+  hotelDir: "Hotels",
+  hotelSearchPh: "Search...",
+  homeHotelBookHint: "Select any hotel card to view details or book.",
+  csHeader: "🎧 Customer Service",
+  csActiveBadge: "● Online",
+  typeMsgPh: "Message...",
+  taskCenter: "Booking Center",
+  clickGetOrderHint: "Press Get Order to start.",
+  accBal: "Balance",
+  taskComm: "Pending 30-Order Profit",
+  totalProfit: "Total Profit",
+  dailyLimit: "Orders",
+  submitOrderBtn: "Get Order",
+  histTitle: "History",
+  filterAllTypes: "All",
+  filterProfitType: "Profit",
+  filterBonusType: "Bonus",
+  filterClearNegType: "Clear",
+  filterHotelBookType: "Hotel",
+  histSearchPh: "Search...",
+  thDate: "Time",
+  thType: "Type",
+  thDetails: "Details",
+  thAmount: "Amount",
+  thStatus: "Status",
+  welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "Login or register to start.",
+  walletBal: "Balance",
+  depositBtn: "Deposit",
+  withdrawBtn: "Withdraw",
+  logoutBtn: "Logout",
+  bookingHistCardTitle: "Orders",
+  inviteCodeTitle: "Invite Code",
+  refBonus: "Referral",
+  inviteLinkLabel: "Invite Link",
+  adminPanelTitle: "🛡️ Admin Control Center",
+  adminTabUsers: "👥 Users & Orders",
+  adminTabProfit: "📊 Order Dollar Table",
+  adminTabCards: "💳 Bank Cards",
+  admin4ptUsers: "1. Users",
+  admin4ptBalance: "2. Balances",
+  admin4ptOrders: "3. Orders",
+  admin4ptRate: "4. Profit ($100→$20)",
+  adminUsersHeading: "Users & Orders",
+  navHome: "Home",
+  navService: "Service",
+  navBooking: "Booking",
+  navHistory: "History",
+  navProfile: "Profile",
+  navAdmin: "Admin"
+ },
+ th: {
+  loginBtn: "เข้าสู่ระบบ",
+  regTab: "สมัครสมาชิก",
+  heroTitle: "Welcome to Trip Booking",
+  heroSub: "แพลตฟอร์มโรงแรมนานาชาติ",
+  startTaskBtn: "เริ่มงานจองโรงแรม",
+  contactServiceBtn: "ฝ่ายบริการลูกค้า",
+  todayUsdRateTitle: "อัตรา USD",
+  fxChartTitle: "📈 USD ↔ MMK",
+  step1Badge: "1",
+  step1Title: "ฝากเงิน",
+  step1Desc: "เติมยอดคงเหลือสำหรับงานจองโรงแรม",
+  step2Badge: "2",
+  step2Title: "รับออเดอร์",
+  step2Desc: "ทำรายการจองโรงแรมให้ครบ 30 ออเดอร์",
+  step3Badge: "3",
+  step3Title: "กำไร ($100→$20)",
+  step3Desc: "รับค่าคอมมิชชันจากการจอง",
+  hotelDir: "โรงแรม",
+  hotelSearchPh: "ค้นหา...",
+  homeHotelBookHint: "แตะการ์ดโรงแรมเพื่อดูรายละเอียดหรือจอง",
+  csHeader: "🎧 ฝ่ายบริการลูกค้า",
+  csActiveBadge: "● ออนไลน์",
+  typeMsgPh: "พิมพ์ข้อความ...",
+  taskCenter: "ศูนย์งานจอง",
+  clickGetOrderHint: "กด Get Order เพื่อเริ่มต้น",
+  accBal: "ยอดคงเหลือ",
+  taskComm: "กำไร 30 ออเดอร์คงเหลือ",
+  totalProfit: "กำไรทั้งหมด",
+  dailyLimit: "ออเดอร์",
+  submitOrderBtn: "Get Order",
+  histTitle: "ประวัติ",
+  filterAllTypes: "ทั้งหมด",
+  filterProfitType: "กำไร",
+  filterBonusType: "โบนัส",
+  filterClearNegType: "เคลียร์",
+  filterHotelBookType: "โรงแรม",
+  histSearchPh: "ค้นหา...",
+  thDate: "เวลา",
+  thType: "ประเภท",
+  thDetails: "รายละเอียด",
+  thAmount: "จำนวน",
+  thStatus: "สถานะ",
+  welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "เข้าสู่ระบบหรือสมัครสมาชิกเพื่อเริ่มต้น",
+  walletBal: "ยอดคงเหลือ",
+  depositBtn: "ฝากเงิน",
+  withdrawBtn: "ถอนเงิน",
+  logoutBtn: "ออกจากระบบ",
+  bookingHistCardTitle: "ออเดอร์",
+  inviteCodeTitle: "รหัสเชิญ",
+  refBonus: "โบนัสแนะนำ",
+  inviteLinkLabel: "ลิงก์เชิญ",
+  adminPanelTitle: "🛡️ Admin Control Center",
+  adminTabUsers: "👥 Users & Orders",
+  adminTabProfit: "📊 ตารางกำไรออเดอร์",
+  adminTabCards: "💳 Bank Cards",
+  admin4ptUsers: "1. Users",
+  admin4ptBalance: "2. Balances",
+  admin4ptOrders: "3. Orders",
+  admin4ptRate: "4. Profit ($100→$20)",
+  adminUsersHeading: "Users & Orders",
+  navHome: "หน้าหลัก",
+  navService: "บริการ",
+  navBooking: "จอง",
+  navHistory: "ประวัติ",
+  navProfile: "โปรไฟล์",
+  navAdmin: "Admin"
+ },
+ zh: {
+  loginBtn: "登录",
+  regTab: "注册",
+  heroTitle: "Welcome to Trip Booking",
+  heroSub: "国际酒店预订平台",
+  startTaskBtn: "开始预订任务",
+  contactServiceBtn: "联系客服",
+  todayUsdRateTitle: "USD 汇率",
+  fxChartTitle: "📈 USD ↔ MMK",
+  step1Badge: "1",
+  step1Title: "充值",
+  step1Desc: "为酒店订单任务充值余额",
+  step2Badge: "2",
+  step2Title: "抢单",
+  step2Desc: "完成 30 单酒店预订任务",
+  step3Badge: "3",
+  step3Title: "利润 ($100→$20)",
+  step3Desc: "获取订单佣金利润",
+  hotelDir: "酒店",
+  hotelSearchPh: "搜索...",
+  homeHotelBookHint: "点击酒店卡片查看详情或预订",
+  csHeader: "🎧 客服中心",
+  csActiveBadge: "● 在线",
+  typeMsgPh: "输入消息...",
+  taskCenter: "预订任务中心",
+  clickGetOrderHint: "点击 Get Order 开始",
+  accBal: "账户余额",
+  taskComm: "剩余 30 单利润",
+  totalProfit: "总利润",
+  dailyLimit: "订单",
+  submitOrderBtn: "Get Order",
+  histTitle: "记录",
+  filterAllTypes: "全部",
+  filterProfitType: "利润",
+  filterBonusType: "奖金",
+  filterClearNegType: "清零",
+  filterHotelBookType: "酒店",
+  histSearchPh: "搜索...",
+  thDate: "时间",
+  thType: "类型",
+  thDetails: "详情",
+  thAmount: "金额",
+  thStatus: "状态",
+  welcomeTrip: "Welcome to Trip Booking",
+  loginPrompt: "请登录或注册后开始",
+  walletBal: "余额",
+  depositBtn: "充值",
+  withdrawBtn: "提现",
+  logoutBtn: "退出",
+  bookingHistCardTitle: "订单",
+  inviteCodeTitle: "邀请码",
+  refBonus: "推荐奖励",
+  inviteLinkLabel: "邀请链接",
+  adminPanelTitle: "🛡️ Admin Control Center",
+  adminTabUsers: "👥 Users & Orders",
+  adminTabProfit: "📊 订单美元利润表",
+  adminTabCards: "💳 Bank Cards",
+  admin4ptUsers: "1. Users",
+  admin4ptBalance: "2. Balances",
+  admin4ptOrders: "3. Orders",
+  admin4ptRate: "4. Profit ($100→$20)",
+  adminUsersHeading: "Users & Orders",
+  navHome: "首页",
+  navService: "客服",
+  navBooking: "预订",
+  navHistory: "记录",
+  navProfile: "我的",
+  navAdmin: "Admin"
+ }
 };
 
+function getDict() {
+ return I18N_MAP[appState.lang] || I18N_MAP.my;
+}
+
 function applyLanguage() {
+ const dict = getDict();
+ const langSel = document.getElementById("language");
+ if (langSel) langSel.value = appState.lang;
  document.querySelectorAll("[data-i18n]").forEach((el) => {
   const key = el.getAttribute("data-i18n");
-  if (Object.prototype.hasOwnProperty.call(I18N_MY, key)) {
-   el.textContent = I18N_MY[key];
+  if (Object.prototype.hasOwnProperty.call(dict, key)) {
+   el.textContent = dict[key];
   }
  });
  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
   const key = el.getAttribute("data-i18n-ph");
-  if (Object.prototype.hasOwnProperty.call(I18N_MY, key)) {
-   el.placeholder = I18N_MY[key];
+  if (Object.prototype.hasOwnProperty.call(dict, key)) {
+   el.placeholder = dict[key];
   }
  });
 }
 
-function changeLanguage() {
- appState.lang = "my";
+function changeLanguage(langCode) {
+ appState.lang = ["my", "en", "th", "zh"].includes(langCode) ? langCode : "my";
  applyLanguage();
  saveLocalState();
 }
@@ -3659,14 +3328,14 @@ let tickerTimer = null;
 
 function buildTickerMessages() {
  const msgs = [
-  { text: "💎 $100 → $20 30-Order Profit Cycle Ready · Trip Booking Live", kind: "dp", real: false },
-  { text: "🏨 Marina Bay Sands & Peninsula Palace Bookings Verified", kind: "wd", real: false },
-  { text: "⚡ Instant Realtime Database Sync Active on Trip Booking", kind: "dp", real: false }
+  { text: "💎 $100 → $20 · Trip Booking", kind: "dp", real: false },
+  { text: "🏨 Marina Bay Sands · Peninsula Palace", kind: "wd", real: false },
+  { text: "⚡ Realtime DB Live", kind: "dp", real: false }
  ];
  appState.users.slice(-6).forEach((u) => {
   if (!u.isAdmin) {
    msgs.push({
-    text: `👤 Member ${u.name} (${u.phone || u.id}) · Balance ${formatMoney(u.balance)} · ${u.ordersToday}/30 Orders`,
+    text: `👤 ${u.name} (${u.phone || u.id}) · ${formatMoney(u.balance)} · ${u.ordersToday}/30`,
     kind: "dp",
     real: true
    });
@@ -3733,10 +3402,10 @@ function renderFxShowcase(overrideIdx) {
   badge.className = "status-pill " + (pct < -0.02 ? "pill-banned" : "pill-online");
  }
  if (detailText) {
-  detailText.textContent = typeof overrideIdx === "number" ? `Sample #${activeIdx + 1}` : "Live 5-Wave Rate";
+  detailText.textContent = typeof overrideIdx === "number" ? `#${activeIdx + 1}` : "Live";
  }
  if (lastUpd) {
-  lastUpd.textContent = `Updated: ${fxState.lastUpdated}`;
+  lastUpd.textContent = fxState.lastUpdated;
  }
 
  const minVal = Math.min(...pts) - 2;
@@ -3816,7 +3485,7 @@ function runBidirectionalConverter(source) {
   }
   const mmk = usd * rate;
   if (inputB) inputB.value = String(Math.round(mmk));
-  if (ansBox) ansBox.textContent = `${formatMoney(usd)} = ${formatMmk(mmk)} (@ ${rate.toFixed(1)})`;
+  if (ansBox) ansBox.textContent = `${formatMoney(usd)} = ${formatMmk(mmk)}`;
  } else {
   fxState.lastCalcEdited = "B";
   const mmk = parseFloat(inputB && inputB.value);
@@ -3827,7 +3496,7 @@ function runBidirectionalConverter(source) {
   }
   const usd = mmk / rate;
   if (inputA) inputA.value = usd.toFixed(2);
-  if (ansBox) ansBox.textContent = `${formatMmk(mmk)} ≈ ${formatMoney(usd)} (@ ${rate.toFixed(1)})`;
+  if (ansBox) ansBox.textContent = `${formatMmk(mmk)} ≈ ${formatMoney(usd)}`;
  }
 }
 
@@ -3872,7 +3541,7 @@ function renderHotels() {
   const mmkPrice = (Number(h.price) || 0) * (fxState.currentRate || BASE_USD_TO_MMK);
   return `
    <div class="card" onclick="openHotelDetailModal('${escapeHtml(h.id)}')">
-    <img src="${escapeHtml(h.img)}" alt="${escapeHtml(h.name)}" class="hotel-img" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop'">
+    <img src="${escapeHtml(h.img)}" alt="${escapeHtml(h.name)}" class="hotel-img" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&auto=format&fit=crop'">
     <div class="card-body">
      <div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px">
@@ -3887,7 +3556,7 @@ function renderHotels() {
        <div class="price">${formatMoney(h.price)} <span class="small muted">/ night</span></div>
        <div class="mmk-sub">${formatMmk(mmkPrice)}</div>
       </div>
-      <button type="button" class="btn btn-primary btn-xs" onclick="event.stopPropagation();bookHotelDirectly('${escapeHtml(h.id)}')">ဘိုကင်တင်ရန်</button>
+      <button type="button" class="btn btn-primary btn-xs" onclick="event.stopPropagation();bookHotelDirectly('${escapeHtml(h.id)}')">Book</button>
      </div>
     </div>
    </div>
@@ -3897,7 +3566,7 @@ function renderHotels() {
  if (loadMoreWrap && loadMoreBtn) {
   if (filtered.length > 6) {
    loadMoreWrap.classList.remove("hidden");
-   loadMoreBtn.textContent = showAllHotels ? "Show Less" : `Show More (${filtered.length - 6} more)`;
+   loadMoreBtn.textContent = showAllHotels ? "Less" : `+${filtered.length - 6}`;
   } else {
    loadMoreWrap.classList.add("hidden");
   }
@@ -3938,33 +3607,36 @@ function bookHotelDirectly(hotelId) {
   openAuth("login");
   return;
  }
- if (me.banned) {
-  showSuccessToast("⛔ သင့်အကောင့်ကို ယာယီပိတ်ထားပါသည်။ Customer Service ကို ဆက်သွယ်ပါ။");
-  return;
- }
+ if (me.banned) return;
  const cost = Number(h.price) || 0;
- if ((Number(me.balance) || 0) < cost) {
-  showSuccessToast(`⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ (${formatMoney(cost)} လိုအပ်သည်)။`);
-  return;
- }
+ if ((Number(me.balance) || 0) < cost) return;
  me.balance = Number(((Number(me.balance) || 0) - cost).toFixed(2));
  recalculateActiveAndPendingProfitsForUser(me);
  me.lastActiveAt = Date.now();
  me.history.unshift({
   time: nowFullDateTime(),
   type: "hotel_book",
-  details: `Hotel Booking: ${h.name} (${h.country})`,
+  details: `${h.name} (${h.country})`,
   amount: -cost,
-  status: "Confirmed"
+  status: "OK"
  });
  syncSingleUserToFirebase(me).then(() => {
   playSoundEffect("order_done");
-  showSuccessToast(`🏨 ${h.name} ဘိုကင် အတည်ပြုပြီးပါပြီ (-${formatMoney(cost)})`);
   renderAll();
  });
 }
 
-/* ---------------- AUTH MODAL & DIRECT users/{id} SYNC ---------------- */
+/* ---------------- AUTH MODAL (COUNTRY CODE + 09775191427 / 12344321 + REGISTER START) ---------------- */
+function updateAuthPhoneFormat() {
+ const cc = document.getElementById("authCountryCode")?.value || "+95";
+ const phInp = document.getElementById("authPhone");
+ if (!phInp) return;
+ if (cc === "+95") phInp.placeholder = "09775191427";
+ else if (cc === "+66") phInp.placeholder = "08xxxxxxxx";
+ else if (cc === "+86") phInp.placeholder = "13xxxxxxxxx";
+ else phInp.placeholder = "Phone number";
+}
+
 function openAuth(mode) {
  unlockAudioNow();
  switchAuthTab(mode === "register" ? "register" : "login");
@@ -3979,6 +3651,7 @@ function closeAuthModal() {
 
 function switchAuthTab(mode) {
  const isReg = mode === "register";
+ const dict = getDict();
  const title = document.getElementById("authModalTitle");
  const loginTab = document.getElementById("loginTabBtn");
  const regTab = document.getElementById("registerTabBtn");
@@ -3986,12 +3659,12 @@ function switchAuthTab(mode) {
  const invWrap = document.getElementById("inviteCodeFieldWrap");
  const submitBtn = document.getElementById("authSubmitBtn");
 
- if (title) title.textContent = isReg ? "အကောင့်သစ် ဖွင့်ရန်" : "အကောင့်ဝင်ရန်";
+ if (title) title.textContent = isReg ? dict.regTab : dict.loginBtn;
  if (loginTab) loginTab.className = isReg ? "btn btn-secondary" : "btn btn-primary";
  if (regTab) regTab.className = isReg ? "btn btn-primary" : "btn btn-secondary";
  if (regFields) regFields.classList.toggle("hidden", !isReg);
  if (invWrap) invWrap.classList.toggle("hidden", !isReg);
- if (submitBtn) submitBtn.textContent = isReg ? "အကောင့်ဖွင့်မည်" : "ဝင်ရောက်မည်";
+ if (submitBtn) submitBtn.textContent = isReg ? dict.regTab : dict.loginBtn;
 }
 
 function togglePasswordVisibility(inputId, btnEl) {
@@ -4010,6 +3683,7 @@ function submitAuth(e) {
  e.preventDefault();
  unlockAudioNow();
  const isRegisterMode = !document.getElementById("registerFields").classList.contains("hidden");
+ const countryCode = document.getElementById("authCountryCode")?.value || "+95";
  const rawPhone = document.getElementById("authPhone").value.trim();
  const phone = normalizePhone(rawPhone);
  const password = document.getElementById("authPassword").value.trim();
@@ -4017,24 +3691,24 @@ function submitAuth(e) {
  if (errEl) errEl.textContent = "";
 
  if (!phone || phone.length < 6) {
-  if (errEl) errEl.textContent = "မှန်ကန်သော ဖုန်းနံပါတ် ရိုက်ထည့်ပါ။";
+  if (errEl) errEl.textContent = "Invalid phone";
   return;
  }
  if (!password) {
-  if (errEl) errEl.textContent = "စကားဝှက် ရိုက်ထည့်ပါ။";
+  if (errEl) errEl.textContent = "Invalid password";
   return;
  }
 
  if (!isRegisterMode) {
   if (phone === ADMIN_PHONE && password === ADMIN_PASS) {
    const admin = ensureAdminUserExists();
+   admin.countryCode = countryCode;
    admin.lastActiveAt = Date.now();
    appState.currentUserId = admin.id;
    lastKnownUserIds.add(admin.id);
    syncSingleUserToFirebase(admin).then(() => {
     closeAuthModal();
     playSoundEffect("register");
-    showSuccessToast("🛡️ Admin Control Center သို့ ဝင်ရောက်ပြီးပါပြီ။");
     renderAll();
     openAdminControlPanel();
    });
@@ -4043,18 +3717,19 @@ function submitAuth(e) {
 
   const found = appState.users.find((u) => normalizePhone(u.phone) === phone);
   if (!found) {
-   if (errEl) errEl.textContent = "ဤဖုန်းနံပါတ်ဖြင့် အကောင့်မရှိသေးပါ။ အကောင့်ဖွင့်ရန် နှိပ်ပါ။";
+   if (errEl) errEl.textContent = "Account not found";
    return;
   }
   if (found.password && found.password !== password) {
-   if (errEl) errEl.textContent = "စကားဝှက် မှားယွင်းနေပါသည်။";
+   if (errEl) errEl.textContent = "Wrong password";
    return;
   }
   if (found.banned) {
-   if (errEl) errEl.textContent = "ဤအကောင့်ကို ပိတ်ထားပါသည်။ Customer Service ကို ဆက်သွယ်ပါ။";
+   if (errEl) errEl.textContent = "Banned";
    return;
   }
 
+  found.countryCode = countryCode;
   found.lastActiveAt = Date.now();
   recalculateActiveAndPendingProfitsForUser(found);
   appState.currentUserId = found.id;
@@ -4062,16 +3737,15 @@ function submitAuth(e) {
   syncSingleUserToFirebase(found).then(() => {
    closeAuthModal();
    playSoundEffect("register");
-   showSuccessToast(`✅ ကြိုဆိုပါသည် ${found.name}`);
    renderAll();
+   showPage("bookingPage", document.querySelectorAll(".bottom-nav button")[2]);
   });
   return;
  }
 
- // REGISTER NEW ACCOUNT -> DIRECTLY WRITE TO users/{id} IN FIREBASE RTDB
  const existing = appState.users.find((u) => normalizePhone(u.phone) === phone);
  if (existing) {
-  if (errEl) errEl.textContent = "ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ဖွင့်ပြီးသား ဖြစ်နေပါသည်။";
+  if (errEl) errEl.textContent = "Phone already exists";
   return;
  }
 
@@ -4083,6 +3757,7 @@ function submitAuth(e) {
   id: newUserId,
   name: regNameVal,
   phone,
+  countryCode,
   password,
   isAdmin: phone === ADMIN_PHONE,
   banned: false,
@@ -4103,9 +3778,9 @@ function submitAuth(e) {
   history: [{
    time: nowFullDateTime(),
    type: "register",
-   details: `New Account Registered (${regNameVal})`,
+   details: `${countryCode} ${phone} · ${regNameVal}`,
    amount: 0,
-   status: "Active"
+   status: "OK"
   }]
  });
 
@@ -4118,8 +3793,8 @@ function submitAuth(e) {
   appState.chats[newUser.id] = [{
    id: "m_" + Date.now(),
    sender: "admin",
-   senderName: "Trip Booking Service",
-   text: `မင်္ဂလာပါ ${newUser.name}၊ Trip Booking မှ ကြိုဆိုပါသည်။ ငွေဖြည့်သွင်းခြင်းနှင့် ဘိုကင်တာဝန်များအတွက် ဤနေရာမှ ဆက်သွယ်နိုင်ပါသည်။`,
+   senderName: "Trip Booking",
+   text: "Welcome to Trip Booking",
    time: nowTimeStr()
   }];
  }
@@ -4129,15 +3804,11 @@ function submitAuth(e) {
  closeAuthModal();
  playSoundEffect("register");
  renderAll();
+ showPage("bookingPage", document.querySelectorAll(".bottom-nav button")[2]);
 
  syncSingleUserToFirebase(newUser).then((ok) => {
-  if (ok) {
-   if (firebaseReady && db) {
-    db.ref("chats/" + newUser.id).set(appState.chats[newUser.id]).catch(() => {});
-   }
-   showSuccessToast(`🎉 အကောင့်သစ် ဖွင့်ပြီးပါပြီ! (${newUser.name} · Cloud Synced)`);
-  } else {
-   showSuccessToast(`⚠️ အကောင့်ဖွင့်ပြီးသော်လည်း Cloud Sync Error: ${appState.lastCloudError || "Check Firebase Rules"}`);
+  if (ok && firebaseReady && db) {
+   db.ref("chats/" + newUser.id).set(appState.chats[newUser.id]).catch(() => {});
   }
  });
 }
@@ -4145,7 +3816,6 @@ function submitAuth(e) {
 function logout() {
  appState.currentUserId = null;
  saveLocalState();
- showSuccessToast("အကောင့်မှ ထွက်လိုက်ပါပြီ။");
  renderAll();
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
@@ -4170,7 +3840,7 @@ function renderBookingCenter() {
    circleEl.style.background = "conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg)";
    circleEl.innerHTML = "<span>0/30</span>";
   }
-  if (sumEl) sumEl.textContent = "$100 ရင်းနှီးလျှင် ၃၀-အော်ဒါ အမြတ် $20 ($100 → $20)";
+  if (sumEl) sumEl.textContent = "$100 → $20 (30 Orders)";
   if (tpHintEl) tpHintEl.classList.add("hidden");
   return;
  }
@@ -4191,13 +3861,13 @@ function renderBookingCenter() {
  }
 
  if (sumEl) {
-  sumEl.textContent = `Balance ${formatMoney(me.balance)} · 30-Order Cycle Target Profit: ${formatMoney(targetCycle)} ($100 → $20 Scale)`;
+  sumEl.textContent = `${formatMoney(me.balance)} · ${formatMoney(targetCycle)} ($100 → $20)`;
  }
 
  if (tpHintEl) {
   if (me.tp2323Claimed && (Number(me.tp2323LockedBonus) || 0) > 0) {
    tpHintEl.classList.remove("hidden");
-   tpHintEl.textContent = `🎁 TP2323 Bonus ${formatMoney(me.tp2323LockedBonus)} unlocks upon completing ${DAILY_ORDER_LIMIT}/30 orders!`;
+   tpHintEl.textContent = `TP2323 ${formatMoney(me.tp2323LockedBonus)} · ${done}/${DAILY_ORDER_LIMIT}`;
   } else {
    tpHintEl.classList.add("hidden");
   }
@@ -4205,9 +3875,9 @@ function renderBookingCenter() {
 }
 
 const REVIEW_PRESETS = [
- "Clean rooms, friendly staff, and fast check-in. Highly recommended for travelers.",
- "Great location with smooth booking experience and comfortable stay.",
- "Excellent service and clean facilities throughout the trip."
+ "Clean rooms and fast check-in.",
+ "Great location and smooth booking.",
+ "Excellent service and comfortable stay."
 ];
 
 function triggerGetOrder() {
@@ -4217,19 +3887,13 @@ function triggerGetOrder() {
   openAuth("login");
   return;
  }
- if (me.banned) {
-  showSuccessToast("⛔ သင့်အကောင့်ကို ပိတ်ထားပါသည်။ Customer Service ကို ဆက်သွယ်ပါ။");
-  return;
- }
+ if (me.banned) return;
  if ((Number(me.balance) || 0) <= 0) {
-  showSuccessToast("⚠️ ဘိုကင်အော်ဒါ တင်ရန် လက်ကျန်ငွေ ($0.00 ထက်ပို) ဖြည့်သွင်းပါ။");
+  openAuth("login");
   return;
  }
  const done = Number(me.ordersToday) || 0;
- if (done >= DAILY_ORDER_LIMIT) {
-  showSuccessToast("✅ ယနေ့ ၃၀/30 ဘိုကင်တာဝန် ပြီးမြောက်ပါပြီ။");
-  return;
- }
+ if (done >= DAILY_ORDER_LIMIT) return;
 
  const nextOrderNum = done + 1;
  const hotel = appState.hotels[(nextOrderNum - 1) % appState.hotels.length] || DEFAULT_HOTELS[0];
@@ -4305,9 +3969,9 @@ function confirmOrderAndReview() {
   me.history.unshift({
    time: nowFullDateTime(),
    type: "profit",
-   details: `Order #${nextOrderNum}/30 · ${selectedOrderHotel.name} (${selectedOrderStars}★) — "${finalReview}"`,
+   details: `#${nextOrderNum}/30 · ${selectedOrderHotel.name} (${selectedOrderStars}★) - ${finalReview}`,
    amount: earnedProfit,
-   status: "Completed"
+   status: "OK"
   });
 
   evaluateTp2323BonusOnOrderProgress(me);
@@ -4319,7 +3983,7 @@ function confirmOrderAndReview() {
    document.getElementById("orderStep3Result").classList.remove("hidden");
    document.getElementById("orderResultProfitText").textContent = `+${formatMoney(earnedProfit)}`;
    document.getElementById("orderResultSubText").textContent =
-    `Completed ${me.ordersToday}/${DAILY_ORDER_LIMIT} orders · New Balance: ${formatMoney(me.balance)}`;
+    `${me.ordersToday}/${DAILY_ORDER_LIMIT} · ${formatMoney(me.balance)}`;
    renderAll();
   });
  }, 650);
@@ -4331,7 +3995,7 @@ function renderHistory() {
  if (!tbody) return;
  const me = getCurrentUser();
  if (!me) {
-  tbody.innerHTML = `<tr><td colspan="5" class="muted">မှတ်တမ်းကြည့်ရန် အကောင့်ဝင်ပါ။</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="5" class="muted">-</td></tr>`;
   return;
  }
 
@@ -4349,7 +4013,7 @@ function renderHistory() {
  });
 
  if (!rows.length) {
-  tbody.innerHTML = `<tr><td colspan="5" class="muted">မှတ်တမ်း မရှိသေးပါ။</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="5" class="muted">-</td></tr>`;
   return;
  }
 
@@ -4363,7 +4027,7 @@ function renderHistory() {
     <td><span class="tag">${escapeHtml(r.type || "record")}</span></td>
     <td class="small">${escapeHtml(r.details || "")}</td>
     <td style="font-weight:800;color:${color}">${amtStr}</td>
-    <td><span class="status-pill pill-online">${escapeHtml(r.status || "Done")}</span></td>
+    <td><span class="status-pill pill-online">${escapeHtml(r.status || "OK")}</span></td>
    </tr>
   `;
  }).join("");
@@ -4385,8 +4049,8 @@ function renderProfilePage() {
 
  document.getElementById("profileAvatarImg").src = me.avatar || DEFAULT_AVATAR_SVG;
  document.getElementById("profileName").textContent = me.name;
- document.getElementById("profileVipBadge").textContent = `VIP Level ${me.vipLevel || 1}`;
- document.getElementById("profileIdentity").textContent = `Phone: ${me.phone || me.id} · ID: ${me.id}`;
+ document.getElementById("profileVipBadge").textContent = `VIP ${me.vipLevel || 1}`;
+ document.getElementById("profileIdentity").textContent = `${me.countryCode || "+95"} ${me.phone || me.id}`;
  document.getElementById("walletBalance").textContent = formatMoney(me.balance);
  document.getElementById("profileOrders").textContent = `${me.ordersToday || 0}/${DAILY_ORDER_LIMIT} ➔`;
  document.getElementById("inviteCode").textContent = me.inviteCode || "-";
@@ -4405,7 +4069,7 @@ function renderProfilePage() {
  if (tpEl) {
   if ((Number(me.tp2323UnlockedBonus) || 0) > 0 || (Number(me.tp2323LockedBonus) || 0) > 0) {
    tpEl.classList.remove("hidden");
-   tpEl.textContent = `TP2323 Bonus: Unlocked ${formatMoney(me.tp2323UnlockedBonus)} · Locked ${formatMoney(me.tp2323LockedBonus)}`;
+   tpEl.textContent = `TP2323: ${formatMoney(me.tp2323UnlockedBonus)} / ${formatMoney(me.tp2323LockedBonus)}`;
   } else {
    tpEl.classList.add("hidden");
   }
@@ -4432,7 +4096,6 @@ function saveProfileNameEdit() {
  me.lastActiveAt = Date.now();
  syncSingleUserToFirebase(me).then(() => {
   closeEditNameModal();
-  showSuccessToast("✅ အမည် ပြင်ဆင်ပြီးပါပြီ။");
   renderAll();
  });
 }
@@ -4445,7 +4108,6 @@ function handleProfileAvatarUpload(ev) {
  reader.onload = () => {
   me.avatar = String(reader.result || DEFAULT_AVATAR_SVG);
   syncSingleUserToFirebase(me).then(() => {
-   showSuccessToast("✅ Profile ဓာတ်ပုံ ပြောင်းလဲပြီးပါပြီ။");
    renderProfilePage();
   });
  };
@@ -4458,7 +4120,7 @@ function handleDepositRequest() {
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
  const inp = document.getElementById("supportInput");
  if (inp && !inp.value.trim()) {
-  inp.value = `ငွေဖြည့်သွင်းလိုပါသည် (${me.name} · ${me.phone || me.id})`;
+  inp.value = `Deposit (${me.name} · ${me.phone})`;
   autoGrowTextarea(inp);
  }
 }
@@ -4469,7 +4131,7 @@ function handleWithdrawRequest() {
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
  const inp = document.getElementById("supportInput");
  if (inp && !inp.value.trim()) {
-  inp.value = `ငွေထုတ်ယူလိုပါသည် (${me.name} · Balance ${formatMoney(me.balance)})`;
+  inp.value = `Withdraw (${me.name} · ${formatMoney(me.balance)})`;
   autoGrowTextarea(inp);
  }
 }
@@ -4477,13 +4139,11 @@ function handleWithdrawRequest() {
 function copyInviteCode() {
  const code = document.getElementById("inviteCode").textContent || "";
  if (navigator.clipboard && code) navigator.clipboard.writeText(code).catch(() => {});
- showSuccessToast(`📋 ဖိတ်ကြားကုဒ် ကူးယူပြီးပါပြီ: ${code}`);
 }
 
 function copyInviteLink() {
  const link = document.getElementById("profileInviteLinkText").textContent || "";
  if (navigator.clipboard && link) navigator.clipboard.writeText(link).catch(() => {});
- showSuccessToast("🔗 ဖိတ်ကြားလင့်ခ် ကူးယူပြီးပါပြီ။");
 }
 </script>
 <script>
@@ -4583,11 +4243,16 @@ function openImageLightbox(src) {
 
 /* ---------------- ADMIN CONTROL PANEL & ORDER DOLLAR PROFIT TABLE ---------------- */
 function openAdminControlPanel(btnEl) {
+ if (!isCurrentUserAdmin()) return;
+ showPage("staffPage", btnEl || document.getElementById("navAdminBtn"));
+}
+
+function renderAdminPanel() {
  if (!isCurrentUserAdmin()) {
-  showSuccessToast("⛔ Admin ဖုန်းနံပါတ် (" + ADMIN_PHONE + ") ဖြင့် ဝင်ရောက်ထားရန် လိုအပ်ပါသည်။");
+  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
   return;
  }
- showPage("staffPage", btnEl || document.getElementById("navAdminBtn"));
+ switchAdminTab("users");
 }
 
 function switchAdminTab(tabName) {
@@ -4657,17 +4322,17 @@ function renderAdminUsers() {
   });
 
  if (!list.length) {
-  tbody.innerHTML = `<tr><td colspan="9" class="muted">အသုံးပြုသူ အကောင့် မရှိသေးပါ။</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="9" class="muted">-</td></tr>`;
   return;
  }
 
  tbody.innerHTML = list.map((u) => {
   const isOnline = (now - (Number(u.lastActiveAt) || 0)) < 120000;
   const statusBadge = u.banned
-   ? `<span class="status-pill pill-banned">⛔ Banned</span>`
+   ? `<span class="status-pill pill-banned">Banned</span>`
    : isOnline
-    ? `<span class="status-pill pill-online">🟢 Online</span>`
-    : `<span class="status-pill pill-offline">⚪ Offline</span>`;
+    ? `<span class="status-pill pill-online">Online</span>`
+    : `<span class="status-pill pill-offline">Offline</span>`;
 
   const cycleTarget = getCycleProfitTargetForUser(u);
   return `
@@ -4682,7 +4347,7 @@ function renderAdminUsers() {
      </div>
     </td>
     <td>
-     <div style="font-weight:700">${escapeHtml(u.phone || "-")}</div>
+     <div style="font-weight:700">${escapeHtml((u.countryCode || "") + " " + (u.phone || "-"))}</div>
      <div class="small muted">${escapeHtml(u.id)}</div>
     </td>
     <td><span class="tag">${escapeHtml(u.inviteCode || "-")}</span></td>
@@ -4696,9 +4361,9 @@ function renderAdminUsers() {
     <td>${statusBadge}</td>
     <td>
      <div style="display:flex;gap:4px;flex-wrap:wrap">
-      <button type="button" class="btn btn-primary btn-xs" onclick="openAdminUserOrderModal('${escapeHtml(u.id)}')">✏️ Edit</button>
+      <button type="button" class="btn btn-primary btn-xs" onclick="openAdminUserOrderModal('${escapeHtml(u.id)}')">Edit</button>
       <button type="button" class="btn btn-secondary btn-xs" onclick="toggleBanUser('${escapeHtml(u.id)}')">${u.banned ? "Unban" : "Ban"}</button>
-      <button type="button" class="btn btn-danger btn-xs" onclick="deleteUserAccount('${escapeHtml(u.id)}')">🗑️</button>
+      <button type="button" class="btn btn-danger btn-xs" onclick="deleteUserAccount('${escapeHtml(u.id)}')">Del</button>
      </div>
     </td>
    </tr>
@@ -4718,7 +4383,7 @@ function renderAdminProfitTierTable() {
     <td><input type="text" id="tierLabel_${idx}" value="${escapeHtml(t.label)}" style="padding:5px 8px;border-radius:6px;border:1px solid var(--fb-border);background:var(--fb-input-bg);color:var(--fb-text);width:130px"></td>
     <td><input type="number" id="tierMin_${idx}" value="${t.minCap}" step="0.01" style="padding:5px 8px;border-radius:6px;border:1px solid var(--fb-border);background:var(--fb-input-bg);color:var(--fb-text);width:95px" oninput="recalcTierPctPreview(${idx})"></td>
     <td><input type="number" id="tierMax_${idx}" value="${t.maxCap}" step="0.01" style="padding:5px 8px;border-radius:6px;border:1px solid var(--fb-border);background:var(--fb-input-bg);color:var(--fb-text);width:95px"></td>
-    <td><input type="number" id="tierProfit_${idx}" value="${t.cycleProfit}" step="0.01" style="padding:5px 8px;border-radius:6px;border:1px solid var(--fb-border);background:var(--fb-input-bg);color:var(--fb-text);width:95px;font-weight:800;color:var(--fb-success)" oninput="recalcTierPctPreview(${idx})"></td>
+    <td><input type="number" id="tierProfit_${idx}" value="${t.cycleProfit}" step="0.01" style="padding:5px 8px;border-radius:6px;border:1px solid var(--fb-border);background:var(--fb-input-bg);color:var(--fb-success);width:95px;font-weight:800" oninput="recalcTierPctPreview(${idx})"></td>
     <td id="tierPct_${idx}" style="font-weight:800;color:var(--fb-primary)">${pct}%</td>
    </tr>
   `;
@@ -4738,7 +4403,7 @@ function resetDefaultProfitTiers() {
  appState.profitTiers = cloneProfitTiers(DEFAULT_PROFIT_TIERS);
  renderAdminProfitTierTable();
  const st = document.getElementById("profitTableApplyStatus");
- if (st) st.textContent = "↺ $100 → $20 Default Profit Tiers loaded. Click 'အတည်ပြု အသုံးပြုမည်' to save.";
+ if (st) st.textContent = "$100 → $20";
 }
 
 function confirmAndApplyProfitTable() {
@@ -4761,12 +4426,7 @@ function confirmAndApplyProfitTable() {
  recalculateActiveAndPendingProfitsForAllUsers();
  syncAllAccountsEverywhere().then((ok) => {
   const st = document.getElementById("profitTableApplyStatus");
-  if (st) {
-   st.textContent = ok
-    ? "✅ အော်ဒါဒေါ်လာ သတ်မှတ်ချက် ($100 → $20 ဇယား) ကို အတည်ပြုပြီး Firebase RTDB သို့ သိမ်းဆည်းပြီးပါပြီ။"
-    : "⚠️ Local သိမ်းပြီးပါပြီ။ Firebase Sync: " + (appState.lastCloudError || "Check Rules");
-  }
-  showSuccessToast("✅ အော်ဒါဒေါ်လာ အမြတ်ဇယား အတည်ပြုပြီးပါပြီ။");
+  if (st) st.textContent = ok ? "OK" : (appState.lastCloudError || "Error");
   renderAll();
  });
 }
@@ -4775,9 +4435,9 @@ function openAdminUserOrderModal(userId) {
  const u = appState.users.find((item) => item.id === userId);
  if (!u) return;
  appState.adminEditingUserId = u.id;
- document.getElementById("adminUserModalTitle").textContent = `✏️ ${u.name} (${u.phone || u.id})`;
+ document.getElementById("adminUserModalTitle").textContent = `${u.name} (${u.phone || u.id})`;
  document.getElementById("adminUserModalSummary").textContent =
-  `Current Orders: ${u.ordersToday || 0}/${DAILY_ORDER_LIMIT} · Total Earned: ${formatMoney(u.totalProfit)}`;
+  `${u.ordersToday || 0}/${DAILY_ORDER_LIMIT} · ${formatMoney(u.totalProfit)}`;
  document.getElementById("adminEditBalanceInput").value = Number(u.balance) || 0;
  document.getElementById("adminEditOrdersInput").value = Number(u.ordersToday) || 0;
  document.getElementById("adminUserOrderModal").classList.remove("hidden");
@@ -4803,9 +4463,9 @@ function saveAdminUserOrderControl() {
    u.history.unshift({
     time: nowFullDateTime(),
     type: diff > 0 ? "deposit" : "clear_neg",
-    details: `Admin Balance Adjustment (${diff >= 0 ? "+" : ""}${formatMoney(diff)})`,
+    details: `Admin (${diff >= 0 ? "+" : ""}${formatMoney(diff)})`,
     amount: diff,
-    status: "Admin Adjusted"
+    status: "OK"
    });
   }
  }
@@ -4816,7 +4476,6 @@ function saveAdminUserOrderControl() {
 
  syncSingleUserToFirebase(u).then(() => {
   closeAdminUserOrderModal();
-  showSuccessToast(`✅ ${u.name} ၏ အချက်အလက်များ သိမ်းဆည်းပြီးပါပြီ။`);
   renderAll();
  });
 }
@@ -4826,7 +4485,6 @@ function toggleBanUser(userId) {
  if (!u) return;
  u.banned = !u.banned;
  syncSingleUserToFirebase(u).then(() => {
-  showSuccessToast(u.banned ? `⛔ ${u.name} ကို Ban လုပ်ပြီးပါပြီ။` : `✅ ${u.name} ကို Unban လုပ်ပြီးပါပြီ။`);
   renderAll();
  });
 }
@@ -4840,7 +4498,6 @@ function deleteUserAccount(userId) {
  if (firebaseReady && db) {
   db.ref("users/" + userId).remove().catch(() => {});
  }
- showSuccessToast(`🗑️ ${u.name} အကောင့်ကို ဖျက်ပြီးပါပြီ။`);
  renderAll();
 }
 
@@ -4849,7 +4506,7 @@ function renderAdminBankCards() {
  const tbody = document.getElementById("adminBankCardsRows");
  if (!tbody) return;
  if (!appState.bankCards.length) {
-  tbody.innerHTML = `<tr><td colspan="5" class="muted">ဘဏ်ကဒ် မရှိသေးပါ။</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="5" class="muted">-</td></tr>`;
   return;
  }
  tbody.innerHTML = appState.bankCards.map((bc) => `
@@ -4858,7 +4515,7 @@ function renderAdminBankCards() {
    <td>${escapeHtml(bc.holderName)}</td>
    <td style="font-weight:700;color:var(--fb-primary)">${escapeHtml(bc.accountNo)}</td>
    <td><span class="tag">${escapeHtml(bc.type)}</span></td>
-   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteBankCard('${escapeHtml(bc.id)}')">Delete</button></td>
+   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteBankCard('${escapeHtml(bc.id)}')">Del</button></td>
   </tr>
  `).join("");
 }
@@ -4894,7 +4551,6 @@ function saveNewBankCard() {
  }
  closeAddBankCardModal();
  renderAdminBankCards();
- showSuccessToast("✅ ဘဏ်ကဒ် ထည့်သွင်းပြီးပါပြီ။");
 }
 
 function deleteBankCard(cardId) {
@@ -4938,7 +4594,7 @@ function appendChatMessage(threadId, sender, senderName, text, imageDataUrl) {
 function renderChatMessagesInto(containerEl, messages, viewerRole) {
  if (!containerEl) return;
  if (!Array.isArray(messages) || !messages.length) {
-  containerEl.innerHTML = `<div class="small muted" style="text-align:center;margin-top:24px">မက်ဆေ့ချ် မရှိသေးပါ။</div>`;
+  containerEl.innerHTML = `<div class="small muted" style="text-align:center;margin-top:24px">-</div>`;
   return;
  }
  containerEl.innerHTML = messages.map((m) => {
@@ -5015,8 +4671,8 @@ function renderAdminChat() {
  }
 
  if (!threadIds.length) {
-  listEl.innerHTML = `<div class="small muted">No active chats</div>`;
-  if (hdrEl) hdrEl.textContent = "Select a user chat";
+  listEl.innerHTML = `<div class="small muted">-</div>`;
+  if (hdrEl) hdrEl.textContent = "Chat";
   boxEl.innerHTML = "";
   return;
  }
@@ -5034,7 +4690,7 @@ function renderAdminChat() {
 
  const activeUid = appState.activeAdminChatUserId;
  const activeUser = appState.users.find((item) => item.id === activeUid);
- if (hdrEl) hdrEl.textContent = activeUser ? `💬 ${activeUser.name} (${activeUser.phone || activeUid})` : `💬 ${activeUid}`;
+ if (hdrEl) hdrEl.textContent = activeUser ? `${activeUser.name} (${activeUser.phone || activeUid})` : activeUid;
  renderChatMessagesInto(boxEl, appState.chats[activeUid] || [], "admin");
 }
 
@@ -5053,7 +4709,7 @@ function sendAdminChatMessage() {
  if (!txt) return;
  inp.value = "";
  inp.style.height = "40px";
- appendChatMessage(uid, "admin", "Trip Booking Service", txt, "");
+ appendChatMessage(uid, "admin", "Trip Booking", txt, "");
 }
 
 function handleChatTextareaKeydown(e, role) {
@@ -5093,7 +4749,8 @@ function insertEmojiIntoChat(role, emoji) {
 }
 
 function toggleChatBankCardPicker(role) {
- const picker = document.getElementById(role === "user" ? "userBankCardPicker" : "adminBankCardPicker");
+ if (role !== "admin") return;
+ const picker = document.getElementById("adminBankCardPicker");
  if (!picker) return;
  const willOpen = picker.classList.contains("hidden");
  document.querySelectorAll(".emoji-picker-popover, .bank-card-picker-popover").forEach((p) => p.classList.add("hidden"));
@@ -5101,7 +4758,7 @@ function toggleChatBankCardPicker(role) {
  picker.innerHTML = (appState.bankCards || []).map((bc) => {
   const line = `${bc.bankName} · ${bc.holderName} · ${bc.accountNo}`;
   return `
-   <button type="button" class="bank-choice-btn" onclick="sendBankCardToChat('${role}', '${escapeHtml(line)}')">
+   <button type="button" class="bank-choice-btn" onclick="sendBankCardToChat('admin', '${escapeHtml(line)}')">
     <span><b>${escapeHtml(bc.bankName)}</b> — ${escapeHtml(bc.accountNo)}</span>
     <span class="tag">Send</span>
    </button>
@@ -5111,12 +4768,10 @@ function toggleChatBankCardPicker(role) {
 }
 
 function sendBankCardToChat(role, cardText) {
+ if (role !== "admin") return;
  document.querySelectorAll(".bank-card-picker-popover").forEach((p) => p.classList.add("hidden"));
- if (role === "user") {
-  const me = getCurrentUser();
-  appendChatMessage(getActiveUserChatThreadId(), "user", me ? me.name : "Guest", "💳 " + cardText, "");
- } else if (appState.activeAdminChatUserId) {
-  appendChatMessage(appState.activeAdminChatUserId, "admin", "Trip Booking Service", "💳 " + cardText, "");
+ if (appState.activeAdminChatUserId) {
+  appendChatMessage(appState.activeAdminChatUserId, "admin", "Trip Booking", "💳 " + cardText, "");
  }
 }
 
@@ -5130,14 +4785,14 @@ function handleChatPhotoUpload(ev, role) {
    const me = getCurrentUser();
    appendChatMessage(getActiveUserChatThreadId(), "user", me ? me.name : "Guest", "", dataUrl);
   } else if (appState.activeAdminChatUserId) {
-   appendChatMessage(appState.activeAdminChatUserId, "admin", "Trip Booking Service", "", dataUrl);
+   appendChatMessage(appState.activeAdminChatUserId, "admin", "Trip Booking", "", dataUrl);
   }
  };
  reader.readAsDataURL(file);
  ev.target.value = "";
 }
 
-/* ---------------- RENDER ALL & SPLASH BOOT ---------------- */
+/* ---------------- RENDER ALL & ROTATING SPLASH HOTEL PHOTO BOOT ---------------- */
 function renderHeaderAuthState() {
  const btn = document.getElementById("headerAuthBtn");
  const navAdmin = document.getElementById("navAdminBtn");
@@ -5148,7 +4803,7 @@ function renderHeaderAuthState() {
  }
  if (!btn) return;
  if (!me) {
-  btn.textContent = I18N_MY.loginBtn;
+  btn.textContent = getDict().loginBtn;
   btn.onclick = () => openAuth("login");
  } else {
   btn.textContent = isCurrentUserAdmin() ? "🛡️ Admin" : `👤 ${me.name}`;
@@ -5174,7 +4829,26 @@ function renderAll() {
  }
 }
 
+function pickRotatingSplashHotelPhoto() {
+ const bgImg = document.getElementById("splashHotelBgImg");
+ const capEl = document.getElementById("splashHotelCaption");
+ const pool = (appState.hotels && appState.hotels.length) ? appState.hotels : DEFAULT_HOTELS;
+ if (!bgImg || !pool.length) return;
+ let idx = 0;
+ try {
+  const prevIdx = parseInt(localStorage.getItem("tb_splash_photo_idx") || "-1", 10);
+  idx = (Number.isFinite(prevIdx) ? prevIdx + 1 : 0) % pool.length;
+  localStorage.setItem("tb_splash_photo_idx", String(idx));
+ } catch (_) {
+  idx = Math.floor(Math.random() * pool.length);
+ }
+ const chosen = pool[idx];
+ bgImg.src = chosen.img;
+ if (capEl) capEl.textContent = `🏨 ${chosen.name} (${chosen.country})`;
+}
+
 function runIntroSplashSequence() {
+ pickRotatingSplashHotelPhoto();
  const splash = document.getElementById("introSplash");
  const stage = document.getElementById("splashStageBox");
  if (!splash || !stage) return;
@@ -5183,15 +4857,15 @@ function runIntroSplashSequence() {
   splash.classList.add("active-anim");
   setTimeout(() => {
    stage.classList.add("converged");
-  }, 120);
+  }, 140);
  });
 
  setTimeout(() => {
   splash.classList.add("fade-out");
   setTimeout(() => {
    splash.classList.add("hidden");
-  }, 700);
- }, 1850);
+  }, 750);
+ }, 2100);
 }
 
 function bootApp() {
