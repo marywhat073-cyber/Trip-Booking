@@ -853,8 +853,8 @@
   }
 
   .country-code-compact {
-   flex: 0 0 78px !important;
-   width: 78px !important;
+   flex: 0 0 84px !important;
+   width: 84px !important;
    padding: 8px 6px !important;
    font-size: 12.5px !important;
   }
@@ -1262,6 +1262,7 @@
    <option value="hr">🇭🇷 Hrvatski (Croatian)</option>
    <option value="sr">🇷🇸 Српски (Serbian)</option>
   </select>
+  <button type="button" id="soundToggleBtn" class="btn btn-secondary" onclick="toggleSoundMute()" title="Sound On/Off">🔊</button>
   <button type="button" class="btn btn-secondary" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
   <button type="button" id="headerAuthBtn" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
  </div>
@@ -1401,6 +1402,7 @@
    </div>
   </div>
  </section>
+
  <!-- 3. BOOKING PAGE -->
  <section id="bookingPage" class="page">
   <div class="stats-grid">
@@ -1496,6 +1498,7 @@
        <h2 id="profileName" style="margin:0;font-size:20px">Member</h2>
        <span id="profileVipBadge" class="vip-badge">VIP Level 1</span>
        <button type="button" class="btn btn-secondary btn-xs" onclick="openEditNameModal()">✏️ Edit Name</button>
+       <button type="button" id="profileAdminPanelBtn" class="btn btn-primary btn-xs hidden" onclick="openAdminControlPanel()">🛡️ Admin Panel</button>
       </div>
       <div class="small muted" id="profileIdentity" style="margin-top:4px"></div>
       <div id="tp2323ProfileStatus" class="tp2323-badge hidden"></div>
@@ -1532,7 +1535,6 @@
    </div>
   </div>
  </section>
-
  <!-- 6. ADMIN & CUSTOMER SERVICE PAGE -->
  <section id="staffPage" class="page">
   <div class="section-card">
@@ -1766,6 +1768,7 @@
   </div>
  </div>
 </footer>
+
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
  <button type="button" class="active" onclick="showPage('homePage', this)">
@@ -1811,160 +1814,83 @@
    <label for="authPhone">ဖုန်းနံပါတ် (သို့မဟုတ်) အီးမေးလ်</label>
    <div id="phoneCountryWrap" class="phone-compact-row hidden">
     <select id="authCountryCode" class="country-code-compact" aria-label="Country Code">
-     <option value="+95" selected>+95 🇲🇲</option>
-     <option value="+66">+66 🇹🇭</option>
-     <!-- အာရှနှင့် ကော့ကေးဆပ်ဒေသ -->
-<option value="+84">+84 VN</option>
-<option value="+855">+855 KH</option>
-<option value="+63">+63 PH</option>
-<option value="+62">+62 ID</option>
-<option value="+673">+673 BN</option>
-<option value="+670">+670 TL</option>
-<option value="+91">+91 IN</option>
-<option value="+92">+92 PK</option>
-<option value="+880">+880 BD</option>
-<option value="+94">+94 LK</option>
-<option value="+977">+977 NP</option>
-<option value="+975">+975 BT</option>
-<option value="+960">+960 MV</option>
-<option value="+93">+93 AF</option>
-<option value="+98">+98 IR</option>
-<option value="+964">+964 IQ</option>
-<option value="+966">+966 SA</option>
-<option value="+971">+971 AE</option>
-<option value="+974">+974 QA</option>
-<option value="+965">+965 KW</option>
-<option value="+973">+973 BH</option>
-<option value="+968">+968 OM</option>
-<option value="+962">+962 JO</option>
-<option value="+961">+961 LB</option>
-<option value="+963">+963 SY</option>
-<option value="+972">+972 IL</option>
-<option value="+90">+90 TR</option>
-<option value="+995">+995 GE</option>
-<option value="+374">+374 AM</option>
-<option value="+994">+994 AZ</option>
-<option value="+7">+7 KZ</option>
-<option value="+998">+998 UZ</option>
-<option value="+993">+993 TM</option>
-<option value="+996">+996 KG</option>
-<option value="+992">+992 TJ</option>
-<option value="+976">+976 MN</option>
-<option value="+852">+852 HK</option>
-<option value="+853">+853 MO</option>
-<option value="+886">+886 TW</option>
-
-<!-- ဥရောပနိုင်ငံများ -->
-<option value="+49">+49 DE</option>
-<option value="+33">+33 FR</option>
-<option value="+39">+39 IT</option>
-<option value="+34">+34 ES</option>
-<option value="+351">+351 PT</option>
-<option value="+31">+31 NL</option>
-<option value="+32">+32 BE</option>
-<option value="+41">+41 CH</option>
-<option value="+43">+43 AT</option>
-<option value="+353">+353 IE</option>
-<option value="+46">+46 SE</option>
-<option value="+47">+47 NO</option>
-<option value="+45">+45 DK</option>
-<option value="+358">+358 FI</option>
-<option value="+354">+354 IS</option>
-<option value="+48">+48 PL</option>
-<option value="+420">+420 CZ</option>
-<option value="+421">+421 SK</option>
-<option value="+36">+36 HU</option>
-<option value="+40">+40 RO</option>
-<option value="+359">+359 BG</option>
-<option value="+30">+30 GR</option>
-<option value="+385">+385 HR</option>
-<option value="+386">+386 SI</option>
-<option value="+387">+387 BA</option>
-<option value="+381">+381 RS</option>
-<option value="+382">+382 ME</option>
-<option value="+389">+389 MK</option>
-<option value="+355">+355 AL</option>
-<option value="+380">+380 UA</option>
-<option value="+375">+375 BY</option>
-<option value="+373">+373 MD</option>
-<option value="+372">+372 EE</option>
-<option value="+371">+371 LV</option>
-<option value="+370">+370 LT</option>
-<option value="+352">+352 LU</option>
-<option value="+356">+356 MT</option>
-<option value="+357">+357 CY</option>
-
-<!-- အမေရိကနှင့် ကာရေဘီယံ -->
-<option value="+52">+52 MX</option>
-<option value="+55">+55 BR</option>
-<option value="+54">+54 AR</option>
-<option value="+56">+56 CL</option>
-<option value="+57">+57 CO</option>
-<option value="+51">+51 PE</option>
-<option value="+58">+58 VE</option>
-<option value="+593">+593 EC</option>
-<option value="+591">+591 BO</option>
-<option value="+595">+595 PY</option>
-<option value="+598">+598 UY</option>
-<option value="+592">+592 GY</option>
-<option value="+597">+597 SR</option>
-<option value="+502">+502 GT</option>
-<option value="+503">+503 SV</option>
-<option value="+504">+504 HN</option>
-<option value="+505">+505 NI</option>
-<option value="+506">+506 CR</option>
-<option value="+507">+507 PA</option>
-<option value="+509">+509 HT</option>
-<option value="+53">+53 CU</option>
-
-<!-- အာဖရိကနိုင်ငံများ -->
-<option value="+27">+27 ZA</option>
-<option value="+234">+234 NG</option>
-<option value="+254">+254 KE</option>
-<option value="+255">+255 TZ</option>
-<option value="+256">+256 UG</option>
-<option value="+250">+250 RW</option>
-<option value="+251">+251 ET</option>
-<option value="+20">+20 EG</option>
-<option value="+212">+212 MA</option>
-<option value="+213">+213 DZ</option>
-<option value="+216">+216 TN</option>
-<option value="+218">+218 LY</option>
-<option value="+233">+233 GH</option>
-<option value="+225">+225 CI</option>
-<option value="+221">+221 SN</option>
-<option value="+237">+237 CM</option>
-<option value="+243">+243 CD</option>
-<option value="+242">+242 CG</option>
-<option value="+244">+244 AO</option>
-<option value="+258">+258 MZ</option>
-<option value="+260">+260 ZM</option>
-<option value="+263">+263 ZW</option>
-<option value="+267">+267 BW</option>
-<option value="+264">+264 NA</option>
-<option value="+261">+261 MG</option>
-<option value="+230">+230 MU</option>
-<option value="+252">+252 SO</option>
-<option value="+249">+249 SD</option>
-<option value="+211">+211 SS</option>
-
-<!-- အိုရှန်းနီးယား (ပစိဖိတ်) -->
-<option value="+61">+61 AU</option>
-<option value="+64">+64 NZ</option>
-<option value="+679">+679 FJ</option>
-<option value="+675">+675 PG</option>
-<option value="+685">+685 WS</option>
-<option value="+676">+676 TO</option>
-<option value="+678">+678 VU</option>
-<option value="+677">+677 SB</option>
-     <option value="+86">+86 🇨🇳</option>
-     <option value="+1">+1 🇺🇸</option>
-     <option value="+44">+44 🇬🇧</option>
-     <option value="+65">+65 🇸🇬</option>
-     <option value="+60">+60 🇲🇾</option>
-     <option value="+81">+81 🇯🇵</option>
-     <option value="+82">+82 🇰🇷</option>
-     <option value="+856">+856 🇱🇦</option>
+     <!-- Priority: Myanmar, Thailand, English, Chinese -->
+     <option value="+95" selected>+95 🇲🇲 မြန်မာ</option>
+     <option value="+66">+66 🇹🇭 ထိုင်း</option>
+     <option value="+1">+1 🇺🇸 အင်္ဂလိပ် (US)</option>
+     <option value="+44">+44 🇬🇧 အင်္ဂလိပ် (UK)</option>
+     <option value="+86">+86 🇨🇳 တရုတ်</option>
+     <option disabled>──────────</option>
+     <!-- Other countries sorted neatly below -->
+     <option value="+60">+60 🇲🇾 Malaysia</option>
+     <option value="+62">+62 🇮🇩 Indonesia</option>
+     <option value="+63">+63 🇵🇭 Philippines</option>
+     <option value="+65">+65 🇸🇬 Singapore</option>
+     <option value="+81">+81 🇯🇵 Japan</option>
+     <option value="+82">+82 🇰🇷 South Korea</option>
+     <option value="+84">+84 🇻🇳 Vietnam</option>
+     <option value="+91">+91 🇮🇳 India</option>
+     <option value="+92">+92 🇵🇰 Pakistan</option>
+     <option value="+94">+94 🇱🇰 Sri Lanka</option>
+     <option value="+98">+98 🇮🇷 Iran</option>
+     <option value="+212">+212 🇲🇦 Morocco</option>
+     <option value="+213">+213 🇩🇿 Algeria</option>
+     <option value="+216">+216 🇹🇳 Tunisia</option>
+     <option value="+218">+218 🇱🇾 Libya</option>
+     <option value="+234">+234 🇳🇬 Nigeria</option>
+     <option value="+254">+254 🇰🇪 Kenya</option>
+     <option value="+27">+27 🇿🇦 South Africa</option>
+     <option value="+31">+31 🇳🇱 Netherlands</option>
+     <option value="+32">+32 🇧🇪 Belgium</option>
+     <option value="+33">+33 🇫🇷 France</option>
+     <option value="+34">+34 🇪🇸 Spain</option>
+     <option value="+36">+36 🇭🇺 Hungary</option>
+     <option value="+39">+39 🇮🇹 Italy</option>
+     <option value="+40">+40 🇷🇴 Romania</option>
+     <option value="+41">+41 🇨🇭 Switzerland</option>
+     <option value="+43">+43 🇦🇹 Austria</option>
+     <option value="+45">+45 🇩🇰 Denmark</option>
+     <option value="+46">+46 🇸🇪 Sweden</option>
+     <option value="+47">+47 🇳🇴 Norway</option>
+     <option value="+48">+48 🇵🇱 Poland</option>
+     <option value="+49">+49 🇩🇪 Germany</option>
+     <option value="+52">+52 🇲🇽 Mexico</option>
+     <option value="+54">+54 🇦🇷 Argentina</option>
+     <option value="+55">+55 🇧🇷 Brazil</option>
+     <option value="+56">+56 🇨🇱 Chile</option>
+     <option value="+57">+57 🇨🇴 Colombia</option>
+     <option value="+58">+58 🇻🇪 Venezuela</option>
+     <option value="+61">+61 🇦🇺 Australia</option>
+     <option value="+64">+64 🇳🇿 New Zealand</option>
+     <option value="+880">+880 🇧🇩 Bangladesh</option>
+     <option value="+886">+886 🇹🇼 Taiwan</option>
+     <option value="+966">+966 🇸🇦 Saudi Arabia</option>
+     <option value="+971">+971 🇦🇪 UAE</option>
+     <option value="+972">+972 🇮🇱 Israel</option>
+     <option value="+974">+974 🇶🇦 Qatar</option>
+     <option value="+975">+975 🇧🇹 Bhutan</option>
+     <option value="+976">+976 🇲🇳 Mongolia</option>
+     <option value="+977">+977 🇳🇵 Nepal</option>
+     <option value="+992">+992 🇹🇯 Tajikistan</option>
+     <option value="+993">+993 🇹🇲 Turkmenistan</option>
+     <option value="+994">+994 🇦🇿 Azerbaijan</option>
+     <option value="+995">+995 🇬🇪 Georgia</option>
+     <option value="+996">+996 🇰🇬 Kyrgyzstan</option>
+     <option value="+998">+998 🇺🇿 Uzbekistan</option>
+     <option value="+852">+852 🇭🇰 Hong Kong</option>
+     <option value="+853">+853 🇲🇴 Macau</option>
+     <option value="+855">+855 🇰🇭 Cambodia</option>
+     <option value="+20">+20 🇪🇬 Egypt</option>
+<option value="+51">+51 🇵🇪 Peru</option>
+<option value="+53">+53 🇨🇺 Cuba</option>
+<option value="+351">+351 🇵🇹 Portugal</option>
+<option value="+353">+353 🇮🇪 Ireland</option>
+<option value="+358">+358 🇫🇮 Finland</option>
+<option value="+380">+380 🇺🇦 Ukraine</option>
+<option value="+420">+420 🇨🇿 Czechia</option>
+<option value="+673">+673 🇧🇳 Brunei</option>
+<option value="+679">+679 🇫🇯 Fiji</option>
+     <option value="+856">+856 🇱🇦 Laos</option>
     </select>
     <input id="authPhone" class="phone-long-input" type="text" placeholder="ဖုန်းနံပါတ် (သို့မဟုတ်) အီးမေးလ်">
    </div>
@@ -2174,997 +2100,962 @@
    <button type="button" class="btn btn-primary" onclick="closeProfitSuccessModal()" data-i18n="psmContinueBtn">Continue</button>
   </div>
  </div>
-</div>
-<script>
+</div> 
+ <script>
 const $ = (id) => document.getElementById(id);
+
+const FIREBASE_DB_URL = "https://trip-booking-62b6a-default-rtdb.asia-southeast1.firebasedatabase.app";
+const USERS_STORAGE_KEY = "tb_users_v2";
+const SESSION_USER_KEY = "tb_session_user_v2";
+const HOTELS_STORAGE_KEY = "tb_hotels_v2";
+const VIPS_STORAGE_KEY = "tb_vips_v2";
+const BANKS_STORAGE_KEY = "tb_bank_cards_v2";
+const CHATS_STORAGE_KEY = "tb_chats_v2";
+const FX_STATE_STORAGE_KEY = "tb_fx_state_v2";
+const SOUND_MUTE_STORAGE_KEY = "tb_sound_muted_v1";
 
 const ADMIN_PHONE_MAIN = "09775191427";
 const ADMIN_PHONE_PLUS95 = "+959775191427";
 const ADMIN_PASS_MAIN = "12344321";
+
 const TP2323_BONUS_AMOUNT = 18;
 const TP2323_UNLOCK_ORDERS = 30;
-
-const DEFAULT_FX_RATE = 5000;
-const FX_UP_SPAN = 500; // e.g. base 5000 -> up to ~5500, down to ~4999
-const FX_MIN_RATE = 100;
-const FX_MAX_RATE = 999999;
-
-const FX_STORAGE_KEY = "trip_booking_fx_rate_v1";
-const FX_HISTORY_STORAGE_KEY = "trip_booking_fx_history_v1";
-const FX_CONVERTER_DIR_KEY = "trip_booking_fx_dir_v1";
-const USERS_STORAGE_KEY = "trip_booking_users_v1";
-const HOTELS_STORAGE_KEY = "trip_booking_hotels_v1";
-const VIPS_STORAGE_KEY = "trip_booking_vips_v1";
-const BANKS_STORAGE_KEY = "trip_booking_banks_v1";
-const CHATS_STORAGE_KEY = "trip_booking_chats_v1";
-const SESSION_USER_KEY = "trip_booking_session_user_v1";
-const SPLASH_PHOTO_IDX_KEY = "trip_booking_splash_photo_idx_v1";
-
-const DEFAULT_VIP_TIERS = [
- { level: 1, name: "VIP Level 1", dailyLimit: 30, profitRate: 0.012, maxWithdraw: 5000 },
- { level: 2, name: "VIP Level 2", dailyLimit: 30, profitRate: 0.018, maxWithdraw: 15000 },
- { level: 3, name: "VIP Level 3", dailyLimit: 30, profitRate: 0.025, maxWithdraw: 50000 }
-];
-
-const DEFAULT_HOTELS = [
- { id: 1, name: "Marina Bay Sands Luxury", country: "Singapore", stars: 5, price: 320, img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop", desc: "Iconic rooftop infinity pool and skyline suite experience in central Singapore." },
- { id: 2, name: "Aman Kyoto Forest Resort", country: "Japan", stars: 5, price: 450, img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800&auto=format&fit=crop", desc: "Serene pine forest pavilions with traditional hot spring baths in Kyoto." },
- { id: 3, name: "The Siam Riverfront Suites", country: "Thailand", stars: 5, price: 240, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&auto=format&fit=crop", desc: "Art-deco riverfront sanctuary along the Chao Phraya with private jetty." },
- { id: 4, name: "Four Seasons Resort Bali", country: "Indonesia", stars: 5, price: 380, img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop", desc: "Lush valley villas overlooking tropical rainforest and terraced gardens." },
- { id: 5, name: "Park Hyatt Seoul Sky", country: "South Korea", stars: 5, price: 290, img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&auto=format&fit=crop", desc: "Floor-to-ceiling glass rooms in Gangnam with panoramic city views." },
- { id: 6, name: "Banyan Tree Lijiang", country: "China", stars: 5, price: 260, img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop", desc: "Traditional Naxi courtyards set against snow-capped Jade Dragon mountain." },
- { id: 7, name: "Pullman Saigon Centre", country: "Vietnam", stars: 4, price: 145, img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&auto=format&fit=crop", desc: "Modern city comfort in Ho Chi Minh City with rooftop lounge." },
- { id: 8, name: "Shangri-La Kuala Lumpur", country: "Malaysia", stars: 5, price: 210, img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&auto=format&fit=crop", desc: "Refined hospitality with tropical pool gardens near KL Tower." },
- { id: 9, name: "Sedona Hotel Lakeview", country: "Myanmar", stars: 5, price: 185, img: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&auto=format&fit=crop", desc: "Peaceful lakefront suites and landscaped gardens in Yangon." },
- { id: 10, name: "Taj Lake Palace Udaipur", country: "India", stars: 5, price: 390, img: "https://images.unsplash.com/photo-1549294413-26f195200c16?w=800&auto=format&fit=crop", desc: "White marble heritage palace floating gracefully on Lake Pichola." },
- { id: 11, name: "Atlantis The Royal Palm", country: "UAE", stars: 5, price: 540, img: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?w=800&auto=format&fit=crop", desc: "Ultra-luxury beachfront resort with sky pools and fine dining." },
- { id: 12, name: "The Ritz-Carlton Vienna", country: "Austria", stars: 5, price: 410, img: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&auto=format&fit=crop", desc: "Historic palais architecture paired with modern European elegance." }
-];
-
-const SPLASH_HOTEL_PHOTOS = [
- "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&auto=format&fit=crop",
- "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&auto=format&fit=crop",
- "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1600&auto=format&fit=crop",
- "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600&auto=format&fit=crop",
- "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1600&auto=format&fit=crop",
- "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1600&auto=format&fit=crop",
- "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1600&auto=format&fit=crop"
-];
+const BIG_ORDER_THRESHOLD_USD = 250;
 
 const BANK_TYPES = ["KPay", "Wave", "AYA Pay", "Banking"];
 const MAX_CARDS_PER_BANK = 10;
 
-const DEFAULT_BANK_CARDS = {
- KPay: [
-  { id: "kpay_1", type: "KPay", holderName: "Aung Kyaw Min", accountNumber: "09775191427", createdAt: Date.now() - 86400000 * 3 },
-  { id: "kpay_2", type: "KPay", holderName: "Su Myat Noe", accountNumber: "09420118890", createdAt: Date.now() - 86400000 * 2 }
- ],
- Wave: [
-  { id: "wave_1", type: "Wave", holderName: "Kyaw Zin Htet", accountNumber: "09965432109", createdAt: Date.now() - 86400000 * 2 }
- ],
- "AYA Pay": [
-  { id: "aya_1", type: "AYA Pay", holderName: "Hnin Wai Lwin", accountNumber: "09781122334", createdAt: Date.now() - 86400000 }
- ],
- Banking: [
-  { id: "bank_1", type: "Banking", holderName: "Trip Booking Holdings Co., Ltd.", accountNumber: "0012-3004-5567-8901", createdAt: Date.now() - 86400000 * 4 }
- ]
-};
+const SPLASH_HOTEL_PHOTOS = [
+ "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1455587734955-081b22074882?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1600&auto=format&fit=crop",
+ "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=1600&auto=format&fit=crop"
+];
+
+const DEFAULT_VIP_TIERS = [
+ { level: 1, name: "VIP 1 · Standard", dailyLimit: 30, profitRate: 0.012, maxWithdraw: 2000 },
+ { level: 2, name: "VIP 2 · Silver", dailyLimit: 30, profitRate: 0.018, maxWithdraw: 5000 },
+ { level: 3, name: "VIP 3 · Gold", dailyLimit: 30, profitRate: 0.025, maxWithdraw: 15000 }
+];
+
+const DEFAULT_HOTELS = [
+ { id: 1, name: "Shangri-La Yangon", country: "Myanmar", stars: 5, price: 140, img: SPLASH_HOTEL_PHOTOS[0], desc: "Luxury city hotel overlooking Kandawgyi Lake with full business and leisure amenities." },
+ { id: 2, name: "Mandarin Oriental Bangkok", country: "Thailand", stars: 5, price: 320, img: SPLASH_HOTEL_PHOTOS[1], desc: "Iconic riverside hotel along the Chao Phraya River in Bangkok." },
+ { id: 3, name: "Marina Bay Sands", country: "Singapore", stars: 5, price: 420, img: SPLASH_HOTEL_PHOTOS[2], desc: "Landmark integrated resort with sky deck and panoramic city views." },
+ { id: 4, name: "The Peninsula Tokyo", country: "Japan", stars: 5, price: 480, img: SPLASH_HOTEL_PHOTOS[3], desc: "Five-star hospitality in Marunouchi near the Imperial Palace gardens." },
+ { id: 5, name: "Four Seasons Resort Bali", country: "Indonesia", stars: 5, price: 390, img: SPLASH_HOTEL_PHOTOS[4], desc: "Serene tropical villas surrounded by lush valley greenery." },
+ { id: 6, name: "Park Hyatt Seoul", country: "South Korea", stars: 5, price: 290, img: SPLASH_HOTEL_PHOTOS[5], desc: "Modern architectural luxury in Gangnam with refined dining." },
+ { id: 7, name: "Lotte Hotel Hanoi", country: "Vietnam", stars: 5, price: 165, img: SPLASH_HOTEL_PHOTOS[6], desc: "High-rise luxury tower offering sweeping views across Hanoi." },
+ { id: 8, name: "The Ritz-Carlton Langkawi", country: "Malaysia", stars: 5, price: 260, img: SPLASH_HOTEL_PHOTOS[7], desc: "Rainforest and beachfront resort with private pool villas." },
+ { id: 9, name: "Fairmont Peace Hotel", country: "China", stars: 5, price: 245, img: SPLASH_HOTEL_PHOTOS[8], desc: "Historic Art Deco landmark along the famous Shanghai Bund." },
+ { id: 10, name: "Conrad Maldives Rangali", country: "Maldives", stars: 5, price: 540, img: SPLASH_HOTEL_PHOTOS[9], desc: "Overwater sanctuary and island resort with crystal clear lagoons." }
+];
 
 const QUICK_REVIEW_TEMPLATES = [
- "Clean rooms, friendly staff, and smooth check-in experience.",
- "Great location with fast service and comfortable stay.",
- "High standard hotel with relaxing ambiance and timely support."
+ "Excellent room cleanliness, smooth check-in, and helpful hotel staff.",
+ "Great location, quiet atmosphere, and fast booking confirmation.",
+ "Comfortable stay with high service standards and timely support."
 ];
 
 const CHAT_EMOJIS = [
- "😊", "😄", "😁", "🥰", "😍", "🤩", "😎", "👍", "👌", "🙏",
- "👏", "🎉", "🔥", "⭐", "🌟", "💎", "💯", "✅", "❤️", "💙",
- "🏨", "🛎️", "✈️", "🌴", "💰", "💵", "💳", "📲", "📞", "🕒"
+ "😊", "😄", "😁", "🥰", "😍", "🤩", "😎", "🥳", "🤗", "🙏", "👍", "👌", "👏", "🙌", "💪", "❤️",
+ "💙", "💚", "💛", "🧡", "💜", "🖤", "🤍", "💯", "✨", "⭐", "🌟", "🔥", "🎉", "🎊", "🏆", "💎",
+ "💰", "💵", "💳", "🏦", "📈", "📊", "🏨", "🛎️", "🧳", "✈️", "🌴", "🌊", "🌞", "🌅", "🍽️", "🥂",
+ "✅", "☑️", "✔️", "❗", "❓", "⏳", "⏰", "📌", "📍", "💬", "📞", "📲", "🔒", "🔑", "🛡️", "🎁"
 ];
 
-let appState = {
+let firebaseReady = false;
+let db = null;
+let isSyncingFromCloud = false;
+let audioCtxInstance = null;
+
+const appState = {
  currentUser: null,
  users: [],
- hotels: [...DEFAULT_HOTELS],
- vipTiers: DEFAULT_VIP_TIERS.map((v) => ({ ...v })),
- bankCards: cloneDefaultBankCards(),
+ hotels: DEFAULT_HOTELS.slice(),
+ vipTiers: DEFAULT_VIP_TIERS.slice(),
+ bankCards: { KPay: [], Wave: [], "AYA Pay": [], Banking: [] },
  chats: {},
- fxRate: DEFAULT_FX_RATE,
- fxHistory: [],
- converterDir: "usd_to_mmk",
+ activeCsUserId: null,
  activeAdminTab: "users",
  activeBankType: "KPay",
  editingBankId: null,
- activeCsUserId: null,
- showAllHotels: false,
  selectedHotelId: null,
  rulesTargetUserId: null,
- centerOrder: null,
- lowBalanceInfo: null,
- lastProfitReceipt: null,
- lastToastMessageId: null,
- toastDismissTimer: null,
+ showAllHotels: false,
+ soundMuted: false,
+ deviceInfo: { label: "Web Browser", os: "Web", browser: "Browser" },
+ locationInfo: { text: "Asia/Yangon", country: "", city: "", region: "Asia/Yangon" },
  regToastTimer: null,
- deviceInfo: { label: "Web Browser", os: "Unknown", browser: "Browser" },
- locationInfo: { text: "Checking location...", country: "", city: "", region: "" },
- lastHeartbeatWriteAt: 0
+ csToastTimer: null,
+ tickerIndex: 0
 };
 
-let db = null;
-let firebaseReady = false;
-let isSyncingFromCloud = false;
-let fxTickTimer = null;
-let fxTickCounter = 0;
-
-function cloneDefaultBankCards() {
- const out = {};
- BANK_TYPES.forEach((t) => {
-  out[t] = (DEFAULT_BANK_CARDS[t] || []).map((c) => ({ ...c }));
- });
- return out;
-}
-
-function normalizeBankCardsMap(raw) {
- const normalized = cloneDefaultBankCards();
- if (!raw || typeof raw !== "object") return normalized;
- BANK_TYPES.forEach((type) => {
-  const list = Array.isArray(raw[type])
-   ? raw[type]
-   : (raw[type] && typeof raw[type] === "object" ? Object.values(raw[type]) : []);
-  normalized[type] = list
-   .filter((item) => item && typeof item === "object")
-   .slice(0, MAX_CARDS_PER_BANK)
-   .map((item, idx) => ({
-    id: String(item.id || `${type.toLowerCase().replace(/\s+/g, "_")}_${idx}_${Date.now()}`),
-    type,
-    holderName: String(item.holderName || "").trim(),
-    accountNumber: String(item.accountNumber || "").trim(),
-    createdAt: Number(item.createdAt) || Date.now()
-   }))
-   .filter((item) => item.holderName && item.accountNumber);
- });
- return normalized;
-}
-
-function sanitizeFxBaseRate(val) {
- const num = Number(val);
- if (!Number.isFinite(num) || num <= 0) return DEFAULT_FX_RATE;
- return Math.min(FX_MAX_RATE, Math.max(FX_MIN_RATE, Number(num.toFixed(2))));
-}
-
-function clampFxTickRate(val, baseRate) {
- const base = sanitizeFxBaseRate(baseRate);
- const floorVal = Math.max(1, Number(Math.min(base - 1, base * 0.9998).toFixed(2)));
- const ceilVal = Number((base + FX_UP_SPAN).toFixed(2));
- const num = Number(val);
- if (!Number.isFinite(num)) return base;
- return Math.min(ceilVal, Math.max(floorVal, Number(num.toFixed(2))));
-}
-
-function computeFiveHarmonicRate(baseRate, stepIndex) {
- const base = sanitizeFxBaseRate(baseRate);
- const floorVal = Math.max(1, Number(Math.min(base - 1, base * 0.9998).toFixed(2)));
- const ceilVal = Number((base + FX_UP_SPAN).toFixed(2));
- const span = Math.max(10, ceilVal - floorVal);
- const t = stepIndex * 0.14;
-
- const h1 = Math.sin(t * 0.65) * 0.24;
- const h2 = Math.cos(t * 1.37 + 0.5) * 0.16;
- const h3 = Math.sin(t * 2.41 + 1.2) * 0.10;
- const h4 = Math.cos(t * 4.13 + 2.1) * 0.06;
- const h5 = Math.sin(t * 7.25 + 0.8) * 0.035;
-
- const cyclePhase = (stepIndex % 48) / 48;
- let impulse = 0;
- if (cyclePhase >= 0.45 && cyclePhase < 0.72) {
-  const u = (cyclePhase - 0.45) / 0.27;
-  impulse = Math.sin(u * Math.PI) * 0.46;
- } else if (cyclePhase >= 0.72 && cyclePhase < 0.86) {
-  const d = (cyclePhase - 0.72) / 0.14;
-  impulse = (1 - d) * 0.24 - Math.sin(d * Math.PI) * 0.28;
- } else {
-  impulse = ((Math.sin(t * 0.27) + 1) * 0.5) * 0.22 - 0.04;
+/* ---------------- 4-TYPE SOUND EFFECTS ENGINE (WEB AUDIO API) ---------------- */
+function loadSoundMutePreference() {
+ try {
+  appState.soundMuted = localStorage.getItem(SOUND_MUTE_STORAGE_KEY) === "1";
+ } catch (_) {
+  appState.soundMuted = false;
  }
-
- const normPos = Math.min(1, Math.max(0, 0.22 + h1 + h2 + h3 + h4 + h5 + impulse));
- const rawRate = floorVal + normPos * span;
- return clampFxTickRate(rawRate, base);
+ updateSoundToggleButton();
 }
 
-function seedFxHistoryForBase(baseRate, count = 48) {
- const base = sanitizeFxBaseRate(baseRate);
+function toggleSoundMute() {
+ appState.soundMuted = !appState.soundMuted;
+ try {
+  localStorage.setItem(SOUND_MUTE_STORAGE_KEY, appState.soundMuted ? "1" : "0");
+ } catch (_) {}
+ updateSoundToggleButton();
+ if (!appState.soundMuted) {
+  playSoundEffect("register");
+ }
+}
+
+function updateSoundToggleButton() {
+ const btn = $("soundToggleBtn");
+ if (!btn) return;
+ btn.textContent = appState.soundMuted ? "🔇" : "🔊";
+ btn.title = appState.soundMuted ? "Sound Muted (Tap to Unmute)" : "Sound On (Tap to Mute)";
+}
+
+function getAudioContext() {
+ if (appState.soundMuted) return null;
+ const Ctx = window.AudioContext || window.webkitAudioContext;
+ if (!Ctx) return null;
+ if (!audioCtxInstance) {
+  audioCtxInstance = new Ctx();
+ }
+ if (audioCtxInstance.state === "suspended") {
+  audioCtxInstance.resume().catch(() => {});
+ }
+ return audioCtxInstance;
+}
+
+function playToneSequence(notes) {
+ const ctx = getAudioContext();
+ if (!ctx) return;
+ const startAt = ctx.currentTime + 0.01;
+
+ notes.forEach((n) => {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = n.type || "sine";
+  osc.frequency.setValueAtTime(n.freq, startAt + n.delay);
+
+  const vol = n.gain || 0.14;
+  gain.gain.setValueAtTime(0.0001, startAt + n.delay);
+  gain.gain.exponentialRampToValueAtTime(vol, startAt + n.delay + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startAt + n.delay + n.duration);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(startAt + n.delay);
+  osc.stop(startAt + n.delay + n.duration + 0.03);
+ });
+}
+
+// soundKind: "register" | "big_order" | "deposit" | "withdraw"
+function playSoundEffect(soundKind) {
+ if (appState.soundMuted) return;
+ if (soundKind === "register") {
+  // Bright celebratory chime for successful account registration
+  playToneSequence([
+   { freq: 523.25, delay: 0.00, duration: 0.14, type: "triangle", gain: 0.15 },
+   { freq: 659.25, delay: 0.11, duration: 0.14, type: "triangle", gain: 0.15 },
+   { freq: 783.99, delay: 0.22, duration: 0.16, type: "triangle", gain: 0.16 },
+   { freq: 1046.50, delay: 0.34, duration: 0.32, type: "sine", gain: 0.17 }
+  ]);
+ } else if (soundKind === "big_order") {
+  // Rich high-value / big order alert & completion chord
+  playToneSequence([
+   { freq: 440.00, delay: 0.00, duration: 0.16, type: "triangle", gain: 0.16 },
+   { freq: 554.37, delay: 0.10, duration: 0.16, type: "triangle", gain: 0.16 },
+   { freq: 659.25, delay: 0.20, duration: 0.18, type: "triangle", gain: 0.17 },
+   { freq: 880.00, delay: 0.32, duration: 0.22, type: "sine", gain: 0.18 },
+   { freq: 1108.73, delay: 0.45, duration: 0.38, type: "sine", gain: 0.18 }
+  ]);
+ } else if (soundKind === "deposit") {
+  // Crisp upward credit/deposit confirmation tone
+  playToneSequence([
+   { freq: 587.33, delay: 0.00, duration: 0.13, type: "sine", gain: 0.15 },
+   { freq: 783.99, delay: 0.11, duration: 0.15, type: "sine", gain: 0.16 },
+   { freq: 987.77, delay: 0.23, duration: 0.28, type: "triangle", gain: 0.16 }
+  ]);
+ } else if (soundKind === "withdraw") {
+  // Smooth calm payout/withdrawal completion tone
+  playToneSequence([
+   { freq: 783.99, delay: 0.00, duration: 0.14, type: "sine", gain: 0.14 },
+   { freq: 659.25, delay: 0.12, duration: 0.14, type: "sine", gain: 0.14 },
+   { freq: 523.25, delay: 0.24, duration: 0.16, type: "triangle", gain: 0.15 },
+   { freq: 783.99, delay: 0.38, duration: 0.30, type: "sine", gain: 0.16 }
+  ]);
+ }
+}
+
+/* ---------------- FX 5-WAVE ENGINE (1 USD = 5,000 MMK -> up to +500) ---------------- */
+const FX_BASE_RATE = 5000.0;
+const FX_MIN_RATE = 4999.0;
+const FX_MAX_RATE = 5500.0;
+const FX_MAX_POINTS = 72;
+const FX_WAVE_TABLE = [
+ { weight: 0.32, freq: 0.014, phase: 0.0, amp: 145 },
+ { weight: 0.26, freq: 0.031, phase: 1.2, amp: 110 },
+ { weight: 0.18, freq: 0.067, phase: 2.4, amp: 80 },
+ { weight: 0.14, freq: 0.135, phase: 3.7, amp: 55 },
+ { weight: 0.10, freq: 0.270, phase: 5.1, amp: 35 }
+];
+
+const fxState = {
+ baseRate: FX_BASE_RATE,
+ customBaseRate: null,
+ currentRate: FX_BASE_RATE,
+ previousRate: FX_BASE_RATE,
+ stepIndex: 0,
+ history: [],
+ hoverIndex: null,
+ lastUpdatedAt: Date.now(),
+ converterDirection: "USD_TO_MMK"
+};
+
+function clampFxRate(val) {
+ const n = Number(val);
+ if (!Number.isFinite(n)) return FX_BASE_RATE;
+ return Math.min(FX_MAX_RATE, Math.max(FX_MIN_RATE, Number(n.toFixed(2))));
+}
+
+function getEffectiveFxAnchor() {
+ if (fxState.customBaseRate !== null && Number.isFinite(Number(fxState.customBaseRate))) {
+  return clampFxRate(fxState.customBaseRate);
+ }
+ return FX_BASE_RATE;
+}
+
+function computeFiveWaveOffset(stepIdx) {
+ let raw = 0;
+ FX_WAVE_TABLE.forEach((w) => {
+  raw += w.weight * w.amp * Math.sin(stepIdx * w.freq + w.phase);
+ });
+ const micro = Math.sin(stepIdx * 0.53) * 12;
+ const offset = raw + micro;
+ return Math.max(0, Math.min(500, offset));
+}
+
+function generateInitialFxHistory(count = FX_MAX_POINTS) {
+ const anchor = getEffectiveFxAnchor();
  const now = Date.now();
- const pts = [];
+ const list = [];
  for (let i = count - 1; i >= 0; i--) {
-  const idx = Math.max(0, fxTickCounter - i);
-  const val = i === 0 ? base : computeFiveHarmonicRate(base, idx);
-  pts.push({
-   rate: val,
-   baseRate: base,
-   ts: now - i * 1000
-  });
+  const s = Math.max(0, fxState.stepIndex - i);
+  const waveUp = computeFiveWaveOffset(s);
+  const rate = clampFxRate(anchor + waveUp * 0.45);
+  list.push({ rate, ts: now - i * 1000, step: s });
  }
- return pts;
+ return list;
 }
 
 function loadFxState() {
- let savedBase = null;
  try {
-  const raw = localStorage.getItem(FX_STORAGE_KEY);
-  if (raw !== null) {
-   const parsed = JSON.parse(raw);
-   savedBase = typeof parsed === "object" && parsed !== null ? parsed.rate : parsed;
-  }
- } catch (_) {}
-
- appState.fxRate = sanitizeFxBaseRate(savedBase ?? DEFAULT_FX_RATE);
-
- try {
-  const dir = localStorage.getItem(FX_CONVERTER_DIR_KEY);
-  if (dir === "usd_to_mmk" || dir === "mmk_to_usd") {
-   appState.converterDir = dir;
-  }
- } catch (_) {}
-
- try {
-  const histRaw = localStorage.getItem(FX_HISTORY_STORAGE_KEY);
-  const histArr = JSON.parse(histRaw || "[]");
-  if (Array.isArray(histArr) && histArr.length >= 2) {
-   appState.fxHistory = histArr
-    .slice(-60)
-    .map((pt) => ({
-     rate: clampFxTickRate(pt.rate, appState.fxRate),
-     baseRate: appState.fxRate,
-     ts: Number(pt.ts) || Date.now()
+  const raw = JSON.parse(localStorage.getItem(FX_STATE_STORAGE_KEY) || "null");
+  if (raw && typeof raw === "object") {
+   fxState.customBaseRate = raw.customBaseRate !== undefined && raw.customBaseRate !== null ? clampFxRate(raw.customBaseRate) : null;
+   fxState.stepIndex = Number(raw.stepIndex) || 0;
+   fxState.currentRate = clampFxRate(raw.currentRate || FX_BASE_RATE);
+   fxState.previousRate = clampFxRate(raw.previousRate || fxState.currentRate);
+   fxState.lastUpdatedAt = Number(raw.lastUpdatedAt) || Date.now();
+   if (Array.isArray(raw.history) && raw.history.length >= 6) {
+    fxState.history = raw.history.slice(-FX_MAX_POINTS).map((p) => ({
+     rate: clampFxRate(p.rate),
+     ts: Number(p.ts) || Date.now(),
+     step: Number(p.step) || 0
     }));
-   fxTickCounter = appState.fxHistory.length;
-   return;
+   }
   }
  } catch (_) {}
 
- fxTickCounter = 48;
- appState.fxHistory = seedFxHistoryForBase(appState.fxRate, 48);
+ if (!fxState.history.length) {
+  fxState.history = generateInitialFxHistory(FX_MAX_POINTS);
+  fxState.currentRate = fxState.history[fxState.history.length - 1].rate;
+  fxState.previousRate = fxState.history[fxState.history.length - 2]?.rate || fxState.currentRate;
+ }
 }
 
-function saveFxStateToStorage() {
+function persistFxState() {
  try {
-  localStorage.setItem(FX_STORAGE_KEY, JSON.stringify({
-   rate: appState.fxRate,
-   updatedAt: Date.now()
+  localStorage.setItem(FX_STATE_STORAGE_KEY, JSON.stringify({
+   customBaseRate: fxState.customBaseRate,
+   currentRate: fxState.currentRate,
+   previousRate: fxState.previousRate,
+   stepIndex: fxState.stepIndex,
+   lastUpdatedAt: fxState.lastUpdatedAt,
+   history: fxState.history.slice(-FX_MAX_POINTS)
   }));
-  localStorage.setItem(FX_HISTORY_STORAGE_KEY, JSON.stringify(appState.fxHistory.slice(-60)));
-  localStorage.setItem(FX_CONVERTER_DIR_KEY, appState.converterDir);
  } catch (_) {}
 }
 
 function getCurrentLiveFxRate() {
- const last = appState.fxHistory[appState.fxHistory.length - 1];
- return clampFxTickRate(last ? last.rate : appState.fxRate, appState.fxRate);
+ return clampFxRate(fxState.currentRate);
 }
 
-function setAdminFxBaseRate(newBaseRaw, options = {}) {
- const nextBase = sanitizeFxBaseRate(newBaseRaw);
- const prevBase = appState.fxRate;
- appState.fxRate = nextBase;
-
- if (Math.abs(nextBase - prevBase) > 0.0001) {
-  fxTickCounter += 1;
-  appState.fxHistory = seedFxHistoryForBase(nextBase, 48);
- } else if (!Array.isArray(appState.fxHistory) || appState.fxHistory.length < 2) {
-  appState.fxHistory = seedFxHistoryForBase(nextBase, 48);
+function getActiveRateForUser(userObj) {
+ if (userObj && userObj.activeOrder && Number(userObj.activeOrder.lockedRate) > 0) {
+  return clampFxRate(userObj.activeOrder.lockedRate);
  }
-
- saveFxStateToStorage();
- if (!options.skipCloud && firebaseReady && db && !isSyncingFromCloud) {
-  db.ref("fxRate").set({
-   rate: nextBase,
-   updatedAt: Date.now()
-  }).catch(() => {});
- }
- syncFxControlsAndDisplay();
+ return getCurrentLiveFxRate();
 }
 
-function advanceLiveFxTick() {
- fxTickCounter += 1;
- const base = sanitizeFxBaseRate(appState.fxRate);
- const nextRate = computeFiveHarmonicRate(base, fxTickCounter);
- appState.fxHistory.push({
-  rate: nextRate,
-  baseRate: base,
-  ts: Date.now()
- });
- if (appState.fxHistory.length > 60) {
-  appState.fxHistory.shift();
+function tickFiveWaveFx() {
+ fxState.stepIndex += 1;
+ fxState.previousRate = fxState.currentRate;
+ const anchor = getEffectiveFxAnchor();
+ const waveUp = computeFiveWaveOffset(fxState.stepIndex);
+ const target = clampFxRate(anchor + waveUp * 0.42);
+ const smoothed = clampFxRate(fxState.currentRate * 0.55 + target * 0.45);
+
+ fxState.currentRate = smoothed;
+ fxState.lastUpdatedAt = Date.now();
+ fxState.history.push({ rate: smoothed, ts: fxState.lastUpdatedAt, step: fxState.stepIndex });
+ if (fxState.history.length > FX_MAX_POINTS) {
+  fxState.history.shift();
  }
- saveFxStateToStorage();
+ persistFxState();
  updateFxChartAndReadout();
 }
 
 function startLiveFxTicker() {
- if (fxTickTimer) clearInterval(fxTickTimer);
- fxTickTimer = setInterval(() => {
-  advanceLiveFxTick();
- }, 1000);
+ updateFxChartAndReadout();
+ setInterval(tickFiveWaveFx, 1000);
 }
 
-function initFirebase() {
- try {
-  if (typeof window.FIREBASE_CONFIG === "object" && window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey) {
-   if (!firebase.apps.length) {
-    firebase.initializeApp(window.FIREBASE_CONFIG);
-   }
-   db = firebase.database();
-   firebaseReady = true;
-   attachFirebaseListeners();
-  }
- } catch (_) {
-  firebaseReady = false;
+function setAdminFxRate(newRateVal) {
+ const clamped = clampFxRate(newRateVal);
+ fxState.customBaseRate = clamped;
+ fxState.previousRate = fxState.currentRate;
+ fxState.currentRate = clamped;
+ fxState.lastUpdatedAt = Date.now();
+ fxState.history.push({ rate: clamped, ts: fxState.lastUpdatedAt, step: fxState.stepIndex });
+ if (fxState.history.length > FX_MAX_POINTS) {
+  fxState.history.shift();
  }
+ persistFxState();
+ if (firebaseReady && db && !isSyncingFromCloud) {
+  db.ref("fxRate").set(clamped).catch(() => {});
+ }
+ syncFxControlsAndDisplay();
+ updateFxChartAndReadout();
 }
 
+/* ---------------- FIREBASE & PERMANENT ADMIN ACCOUNT ---------------- */
 function ensurePermanentAdminAccount(list) {
  const arr = Array.isArray(list) ? list.slice() : [];
- const idx = arr.findIndex((u) => {
-  const p = String(u?.phone || "").trim();
-  return u?.id === "usr_admin_09775191427" || p === ADMIN_PHONE_MAIN || p === ADMIN_PHONE_PLUS95;
- });
- const existing = idx >= 0 ? arr[idx] : {};
- const adminRec = normalizeUserRecord({
+ const adminIdx = arr.findIndex(
+  (u) =>
+   u &&
+   (u.id === "usr_admin_09775191427" ||
+    String(u.phone || "").trim() === ADMIN_PHONE_MAIN ||
+    String(u.phone || "").trim() === ADMIN_PHONE_PLUS95)
+ );
+
+ const existing = adminIdx >= 0 ? arr[adminIdx] : {};
+ const adminRecord = normalizeUserRecord({
   ...existing,
-  id: existing.id || "usr_admin_09775191427",
+  id: "usr_admin_09775191427",
   name: existing.name || "System Admin",
   phone: ADMIN_PHONE_MAIN,
   password: ADMIN_PASS_MAIN,
   inviteCode: existing.inviteCode || "TP2323",
   vipLevel: Math.max(3, Number(existing.vipLevel) || 3),
   isAdmin: true,
-  banned: false
+  banned: false,
+  tp2323Eligible: false,
+  tp2323LockedBonus: 0,
+  tp2323UnlockedBonus: 0
  });
- if (idx >= 0) arr[idx] = adminRec;
- else arr.unshift(adminRec);
+
+ if (adminIdx >= 0) arr[adminIdx] = adminRecord;
+ else arr.unshift(adminRecord);
+
  return arr;
 }
 
-function mergeUserLists(localList, cloudList) {
- const map = new Map();
- const put = (u) => {
-  if (!u || typeof u !== "object") return;
-  const key = String(u.id || u.phone || "").trim();
-  if (!key) return;
-  const existing = map.get(key);
-  if (!existing) {
-   map.set(key, normalizeUserRecord(u));
-  } else {
-   const a = Number(existing.lastActiveAt || existing.createdAt || 0);
-   const b = Number(u.lastActiveAt || u.createdAt || 0);
-   map.set(key, b >= a ? { ...existing, ...normalizeUserRecord(u) } : { ...normalizeUserRecord(u), ...existing });
+function initFirebase() {
+ try {
+  if (!window.firebase || !FIREBASE_DB_URL) return;
+  if (!firebase.apps.length) {
+   firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
   }
- };
- (Array.isArray(localList) ? localList : []).forEach(put);
- (Array.isArray(cloudList) ? cloudList : []).forEach(put);
- return ensurePermanentAdminAccount(Array.from(map.values()));
-}
+  db = firebase.database();
+  firebaseReady = true;
 
-function syncAllAccountsEverywhere(options = {}) {
- const localUsers = readUsersFromLocal();
- appState.users = mergeUserLists(localUsers, appState.users);
- persistUsersToLocal();
-
- if (appState.currentUser) {
-  const fresh = appState.users.find((u) => u.id === appState.currentUser.id || u.phone === appState.currentUser.phone);
-  if (fresh) {
-   appState.currentUser = normalizeUserRecord(fresh);
-   try { localStorage.setItem(SESSION_USER_KEY, JSON.stringify(appState.currentUser)); } catch (_) {}
-  }
- }
-
- if (!options.skipCloud && firebaseReady && db && !isSyncingFromCloud) {
-  const payload = {};
-  appState.users.forEach((u) => {
-   payload[u.id] = normalizeUserRecord(u);
-  });
-  db.ref("users").update(payload).catch(() => {});
- }
-
- updateAdminFourPointSummary();
- renderAdminUsers();
- renderCsClientList();
-}
-
-function forceSyncNow() {
- syncAllAccountsEverywhere();
- if (firebaseReady && db) {
-  db.ref("users").once("value").then((snap) => {
+  db.ref("users").on("value", (snap) => {
    const val = snap.val();
-   if (val && typeof val === "object") {
-    appState.users = mergeUserLists(appState.users, Object.values(val));
-    persistUsersToLocal();
-    updateAdminFourPointSummary();
-    renderAdminUsers();
-    renderCsClientList();
+   if (!val) return;
+   const cloudList = Array.isArray(val) ? val : Object.values(val);
+   if (!cloudList.length) return;
+   isSyncingFromCloud = true;
+   appState.users = ensurePermanentAdminAccount(cloudList.map(normalizeUserRecord));
+   persistUsersToLocal();
+   if (appState.currentUser) {
+    const updatedMe = appState.users.find((u) => u.id === appState.currentUser.id);
+    if (updatedMe) {
+     appState.currentUser = normalizeUserRecord(updatedMe);
+     try { localStorage.setItem(SESSION_USER_KEY, JSON.stringify(appState.currentUser)); } catch (_) {}
+    }
    }
-  }).catch(() => {});
- }
- showRegistrationToast("Sync ပြီးပါပြီ", "အကောင့်စာရင်းများ အားလုံး Sync လုပ်ပြီးပါပြီ");
-}
-
-function attachFirebaseListeners() {
- if (!firebaseReady || !db) return;
-
- db.ref("fxRate").on("value", (snap) => {
-  const val = snap.val();
-  const rateVal = val && typeof val === "object" ? val.rate : val;
-  if (rateVal !== undefined && rateVal !== null) {
-   isSyncingFromCloud = true;
-   setAdminFxBaseRate(rateVal, { skipCloud: true });
    isSyncingFromCloud = false;
-  }
- });
+   renderAll();
+  });
 
- db.ref("users").on("value", (snap) => {
-  const val = snap.val();
-  if (!val || typeof val !== "object") return;
-  isSyncingFromCloud = true;
-  appState.users = mergeUserLists(appState.users, Object.values(val));
-  persistUsersToLocal();
-  if (appState.currentUser) {
-   const match = appState.users.find((u) => u.id === appState.currentUser.id);
-   if (match) {
-    appState.currentUser = normalizeUserRecord(match);
-    try { localStorage.setItem(SESSION_USER_KEY, JSON.stringify(appState.currentUser)); } catch (_) {}
-   }
-  }
-  updateAdminFourPointSummary();
-  renderAll();
-  isSyncingFromCloud = false;
- });
-
- db.ref("hotels").on("value", (snap) => {
-  const val = snap.val();
-  if (Array.isArray(val) && val.length) {
-   isSyncingFromCloud = true;
-   appState.hotels = val;
-   try { localStorage.setItem(HOTELS_STORAGE_KEY, JSON.stringify(appState.hotels)); } catch (_) {}
-   renderHotels();
-   renderAdminHotelsAndVips();
-   isSyncingFromCloud = false;
-  }
- });
-
- db.ref("vipTiers").on("value", (snap) => {
-  const val = snap.val();
-  if (Array.isArray(val) && val.length) {
-   isSyncingFromCloud = true;
-   appState.vipTiers = val;
-   try { localStorage.setItem(VIPS_STORAGE_KEY, JSON.stringify(appState.vipTiers)); } catch (_) {}
-   renderAdminHotelsAndVips();
-   isSyncingFromCloud = false;
-  }
- });
-
- db.ref("bankCards").on("value", (snap) => {
-  const val = snap.val();
-  if (val && typeof val === "object") {
-   isSyncingFromCloud = true;
-   appState.bankCards = normalizeBankCardsMap(val);
-   try { localStorage.setItem(BANKS_STORAGE_KEY, JSON.stringify(appState.bankCards)); } catch (_) {}
-   renderAdminBankCardsTab();
-   isSyncingFromCloud = false;
-  }
- });
-
- db.ref("chats").on("value", (snap) => {
-  const val = snap.val();
-  if (val && typeof val === "object") {
+  db.ref("chats").on("value", (snap) => {
+   const val = snap.val();
+   if (!val || typeof val !== "object") return;
    isSyncingFromCloud = true;
    appState.chats = val;
    try { localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(appState.chats)); } catch (_) {}
+   isSyncingFromCloud = false;
    renderSupportMessages();
    renderAdminChatMessages();
+   renderCsClientList();
    updateAdminUnreadBadge();
-   isSyncingFromCloud = false;
-  }
- });
+  });
+
+  db.ref("fxRate").on("value", (snap) => {
+   const val = Number(snap.val());
+   if (Number.isFinite(val) && val > 0) {
+    isSyncingFromCloud = true;
+    fxState.customBaseRate = clampFxRate(val);
+    fxState.currentRate = clampFxRate(val);
+    persistFxState();
+    isSyncingFromCloud = false;
+    syncFxControlsAndDisplay();
+    updateFxChartAndReadout();
+   }
+  });
+ } catch (_) {
+  firebaseReady = false;
+ }
 }
 
-/* Dynamic Hotel Photo Splash Screen + Converging Text + Perimeter 7-Color Rainbow Light */
+function syncAllAccountsEverywhere() {
+ appState.users = ensurePermanentAdminAccount(appState.users);
+ persistUsersToLocal();
+ if (firebaseReady && db && !isSyncingFromCloud) {
+  db.ref("users").set(appState.users).catch(() => {});
+ }
+}
+
+function forceSyncNow() {
+ appState.users = ensurePermanentAdminAccount(appState.users);
+ syncAllAccountsEverywhere();
+ persistFxState();
+ persistHotelsAndVips();
+ persistBankCards();
+ persistChats();
+ renderAll();
+ showRegistrationToast("Sync ပြီးပါပြီ", "ဒေတာများကို တိုက်ရိုက် ညှိနှိုင်းပြီးပါပြီ။");
+}
+
+/* ---------------- HOTEL SPLASH INTRO CONTROLLER ---------------- */
 function runHotelSplashIntro() {
  const splash = $("introSplash");
- const stage = $("introStageBox");
  const bgImg = $("introHotelBgImg");
- if (!splash || !stage || !bgImg) return;
+ const stageBox = $("introStageBox");
+ if (!splash) return;
 
- let nextIdx = 0;
- try {
-  const prevIdx = Number(localStorage.getItem(SPLASH_PHOTO_IDX_KEY));
-  nextIdx = Number.isFinite(prevIdx) ? (prevIdx + 1) % SPLASH_HOTEL_PHOTOS.length : 0;
-  localStorage.setItem(SPLASH_PHOTO_IDX_KEY, String(nextIdx));
- } catch (_) {
-  nextIdx = Math.floor(Math.random() * SPLASH_HOTEL_PHOTOS.length);
- }
+ const chosenPhoto = SPLASH_HOTEL_PHOTOS[Math.floor(Math.random() * SPLASH_HOTEL_PHOTOS.length)] || SPLASH_HOTEL_PHOTOS[0];
+ if (bgImg) bgImg.src = chosenPhoto;
 
- const chosenPhoto = SPLASH_HOTEL_PHOTOS[nextIdx] || SPLASH_HOTEL_PHOTOS[0];
- const preloader = new Image();
- preloader.onload = () => {
-  bgImg.src = chosenPhoto;
- };
- preloader.onerror = () => {
-  bgImg.src = SPLASH_HOTEL_PHOTOS[0];
- };
- preloader.src = chosenPhoto;
- bgImg.src = chosenPhoto;
-
- splash.classList.remove("fade-out", "active-anim");
- stage.classList.remove("converged");
+ splash.classList.remove("fade-out");
+ splash.classList.add("active-anim");
+ if (stageBox) stageBox.classList.remove("converged");
 
  requestAnimationFrame(() => {
-  splash.classList.add("active-anim");
   setTimeout(() => {
-   stage.classList.add("converged");
-  }, 120);
+   if (stageBox) stageBox.classList.add("converged");
+  }, 110);
  });
 
  setTimeout(() => {
   splash.classList.add("fade-out");
   setTimeout(() => {
    splash.classList.add("hidden");
-  }, 700);
- }, 2350);
-}
-
-function updateAdminFourPointSummary() {
- const users = appState.users || [];
- const totalCount = users.length;
- const onlineCount = users.filter((u) => isUserOnlineNow(u)).length;
- const liveOrderCount = users.filter((u) => isUserPlacingOrderNow(u)).length;
- const totalBal = users.reduce((sum, u) => sum + (Number(u.balance) || 0), 0);
- const totalProfitBox = users.reduce((sum, u) => sum + (Number(u.pendingProfit) || 0), 0);
- const ruledCount = users.filter((u) => getActiveOrderRules(u).length > 0).length;
- const bannedCount = users.filter((u) => Boolean(u.banned)).length;
-
- if ($("admin4ptTotalUsers")) $("admin4ptTotalUsers").textContent = String(totalCount);
- if ($("admin4ptActiveLive")) $("admin4ptActiveLive").textContent = `${onlineCount} / ${liveOrderCount}`;
- if ($("admin4ptBalances")) {
-  $("admin4ptBalances").textContent = `${formatUsd(totalBal)} / ${formatUsd(totalProfitBox)}`;
- }
- if ($("admin4ptRulesBanned")) $("admin4ptRulesBanned").textContent = `${ruledCount} / ${bannedCount}`;
- if ($("totalUsersBadge")) $("totalUsersBadge").textContent = String(totalCount);
+  }, 680);
+ }, 2300);
 }
 </script>
 <script>
-const I18N_BASE = {
- en: {
-  loginBtn: "Login", createAcc: "Register", logoutBtn: "Logout", myProfile: "My Profile",
-  loginTitle: "Account Access", loginTab: "Login", regTab: "Register",
-  fullNameLabel: "Full Name",
-  heroTitle: "Welcome to Trip Booking",
-  heroSub: "International Hotel Booking Platform",
-  startTaskBtn: "Start Booking Tasks", contactServiceBtn: "Contact Customer Service",
-  todayUsdRateTitle: "Today's USD Rate", mmkUnit: "MMK",
-  fxChartTitle: "📈 USD ↔ MMK Live Rate Trend",
-  step1Badge: "STEP 1", step1Title: "Deposit Funds", step1Desc: "Top up balance to start booking tasks smoothly.",
-  step2Badge: "STEP 2", step2Title: "Tap Get Order & Book", step2Desc: "Claim hotel booking tasks and complete them properly.",
-  step3Badge: "STEP 3", step3Title: "Earn Commission", step3Desc: "Receive commission credited after each completed order.",
-  hotelDir: "International Hotels", hotelSearchPh: "Search hotel, country, or stars...",
-  homeHotelBookHint: "Tap any hotel card to view details or book directly with your balance.",
-  csHeader: "🎧 Trip Booking Service (24/7 Online)", csActiveBadge: "● Active",
-  typeMsgPh: "Type a message...",
-  accBal: "Account Balance", taskComm: "Task Commission", totalProfit: "Total Profit",
-  dailyLimit: "Daily Orders", taskCenter: "Booking Task Center",
-  clickGetOrderHint: "Tap Get Order to receive a hotel booking task.",
-  submitOrderBtn: "Get Order",
-  histTitle: "Transaction & Booking History", filterAllTypes: "All Types",
-  filterProfitType: "Booking Profit", filterBonusType: "TP2323 $18 Bonus",
-  filterPendingReleaseType: "30-Order Profit", filterClearNegType: "Negative Settlement",
-  filterHotelBookType: "Hotel Booking", histSearchPh: "Search...",
-  thDate: "Date & Time", thType: "Type", thDetails: "Details & Review", thAmount: "Amount", thStatus: "Status",
-  welcomeTrip: "Welcome to Trip Booking",
-  loginPrompt: "Login or register a new account to start earning commissions.",
-  depositBtn: "Deposit", withdrawBtn: "Withdraw", walletBal: "Account Balance",
-  bookingHistCardTitle: "Booking History", inviteCodeTitle: "Referral Code", refBonus: "Referral Earned",
-  inviteLinkLabel: "Invite Link",
-  footerTermsTitle: "📜 Terms & Rules",
-  footerRule1: "Complete booking orders with locked exchange rates and follow platform rules.",
-  footerRule2: "Duplicate accounts and abusive activity are prevented automatically.",
-  footerFaqTitle: "❓ FAQ",
-  footerFaq1: "Order exchange rate locks at the moment an order starts until completion.",
-  footerFaq2: "New account registrations automatically record device type and location for Admin review.",
-  footerSecurityTitle: "🛡️ Security & Assurance",
-  footerSecDesc: "Protected account records, real-time sync, and 24/7 customer support.",
-  badgeVerified: "✔ Verified Platform", badge247: "🕒 24/7 Service", badgeEncrypted: "🔒 Secure Sync",
-  adminPanelTitle: "🛡️ Admin & Trip Booking Service Control", usersWord: "Users",
-  adminUserSearchPh: "Search name, phone, device, location...",
-  filterAllUsers: "All Accounts", filterLiveOrder: "🔴 Placing Order (LIVE)",
-  filterOnlineUsers: "🟢 Online / Active", filterNegUsers: "⚠️ Negative Balance",
-  filterRuledUsers: "🎯 Has Order Rules", filterBannedUsers: "🚫 Suspended Accounts",
-  saveChangesBtn: "Save All Changes", thName: "Name / Status", thPhoneEmail: "Phone / Email",
-  thPass: "Password", thRef: "My Code", thInvitedBy: "Invited By", thVip: "VIP Level",
-  thBal: "Balance ($)", thNeg: "Negative ($)", thProfitBox: "Profit Box ($)",
-  thOrderRulesCol: "Order Rules", thOrders: "Orders", thAccountControlCol: "Account",
-  resetBtn: "Reset", banBtn: "Suspend", unbanBtn: "Activate", deleteBtn: "Delete",
-  hotelsRatesHead: "Hotels & Commission Rates", saveRatesBtn: "Save Rates & Hotels",
-  thLevel: "Level", thDailyLimit: "Daily Limit", thProfitRate: "Profit Rate", thMaxLimit: "Max Withdraw ($)",
-  thHotelName: "Hotel Name", thCountry: "Country", thStars: "Stars", thPrice: "Price ($)", thAction: "Action",
-  csClientSearchPh: "Search user...", selectUserChat: "Select a user to chat",
-  replyCsPh: "Reply to user...",
-  navHome: "Home", navService: "Service", navBooking: "Booking", navHistory: "History", navProfile: "Profile",
-  closeBtn: "Close", bookHotelNowBtn: "Book Now",
-  ormAddRuleTitle: "Add / Configure Order Rule", ormOrderNumLabel: "Order Number (1–30)",
-  ormModeLabel: "Rule Mode", ormModeNone: "Normal (No Special Rule)",
-  ormModeCustomProfit: "Custom Profit ($)", ormModeNegative: "Negative Balance ($)",
-  ormProfitValLabel: "Custom Profit ($)", ormNegValLabel: "Negative Amount ($)",
-  ormSaveRuleBtn: "Save Rule", ormClearRuleBtn: "Set Normal for Order #",
-  ormColOrder: "Order #", ormColMode: "Mode", ormColValue: "Value ($)", ormColStatus: "Status",
-  ormClearAllBtn: "Clear All Rules",
-  comTitle: "🛎️ Booking Order", comHotelPrice: "Hotel Price:", comLockedRate: "Locked Rate:",
-  comEstProfit: "Est. Profit:", comWalletBal: "Balance:", comStarLabel: "Rating (1–5 Stars)",
-  comQuickReviewLabel: "Quick Review Templates", comCustomReviewLabel: "Review Comment",
-  comReviewPh: "Write a review for this hotel...", comCancelBtn: "Cancel", comSubmitBtn: "Submit Order",
-  comVerifyingMsg: "Verifying booking & settling commission...", comPleaseWait: "Please wait a moment...",
-  lbmTitle: "⚠️ Insufficient Balance", lbmCurrentBal: "Current Balance:",
-  lbmRequiredBal: "Required / Shortage:", lbmContactCsBtn: "Contact Customer Service",
-  psmTitle: "🎉 Order Completed!", psmProfitEarned: "Profit Earned:", psmLockedRate: "Locked Rate:",
-  psmNewBal: "New Balance:", psmOrdersVal: "Order Progress:", psmContinueBtn: "Continue"
- },
+const LANG_DICTS = {
  my: {
-  loginBtn: "အကောင့်ဝင်ရန်", createAcc: "အကောင့်ဖွင့်ရန်", logoutBtn: "ထွက်ရန်", myProfile: "ကျွန်ုပ်၏ ပရိုဖိုင်",
-  loginTitle: "အကောင့်ဝင်ရန် / ဖွင့်ရန်", loginTab: "အကောင့်ဝင်ရန်", regTab: "အကောင့်ဖွင့်ရန်",
+  loginBtn: "အကောင့်ဝင်ရန်",
+  loginTitle: "အကောင့်ဝင်ရန်",
+  loginTab: "အကောင့်ဝင်ရန်",
+  regTab: "အကောင့်ဖွင့်ရန်",
+  createAcc: "အကောင့်ဖွင့်ရန်",
   fullNameLabel: "အမည် အပြည့်အစုံ",
-  heroTitle: "Welcome to Trip Booking",
-  heroSub: "International Hotel Booking Platform",
-  startTaskBtn: "ဘိုကင်တာဝန် စတင်ရန်", contactServiceBtn: "ဝန်ဆောင်မှု ဆက်သွယ်ရန်",
-  todayUsdRateTitle: "ယနေ့ ဒေါ်လာဈေးနှုန်း", mmkUnit: "ကျပ်",
+  myProfile: "မိမိပရိုဖိုင်",
+  logoutBtn: "ထွက်ရန်",
+  heroTitle: "Trip Booking မှ ကြိုဆိုပါသည်",
+  heroSub: "နိုင်ငံတကာ ဟိုတယ်ဘိုကင် ဝန်ဆောင်မှု ပလက်ဖောင်း",
+  startTaskBtn: "ဘိုကင်တာဝန် စတင်ရန်",
+  contactServiceBtn: "Customer Service ဆက်သွယ်ရန်",
+  todayUsdRateTitle: "ယနေ့ USD ငွေလဲနှုန်း",
+  mmkUnit: "ကျပ်",
   fxChartTitle: "📈 USD ↔ MMK ငွေကြေးဈေးနှုန်း အတက်အကျ",
-  step1Badge: "အဆင့် ၁", step1Title: "ငွေဖြည့်သွင်းခြင်း", step1Desc: "ဘိုကင်တာဝန်များ အဆင်ပြေစွာ လုပ်ဆောင်ရန် လက်ကျန်ငွေ ဖြည့်သွင်းပါ။",
-  step2Badge: "အဆင့် ၂", step2Title: "Get Order နှိပ်၍ ဘိုကင်တင်ခြင်း", step2Desc: "ဟိုတယ်ဘိုကင် တာဝန်များကို ရယူပြီး စနစ်တကျ ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။",
-  step3Badge: "အဆင့် ၃", step3Title: "ကော်မရှင် ရယူခြင်း", step3Desc: "တာဝန်ပြီးမြောက်တိုင်း သတ်မှတ်ကော်မရှင်ကို အကောင့်ထဲ ထည့်သွင်းပေးပါသည်။",
-  hotelDir: "နိုင်ငံတကာ ဟိုတယ်များ", hotelSearchPh: "ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်အဆင့် ရှာရန်...",
-  homeHotelBookHint: "ဟိုတယ်အသေးစိတ် ကြည့်ရန် သို့မဟုတ် လက်ကျန်ငွေဖြင့် ဘိုကင်တင်ရန် ကဒ်ကို နှိပ်ပါ။",
-  csHeader: "🎧 Trip Booking Service (၂၄ နာရီ ဝန်ဆောင်မှု)", csActiveBadge: "● အွန်လိုင်းရှိသည်",
+  step1Badge: "အဆင့် ၁",
+  step1Title: "ငွေဖြည့်သွင်းပါ",
+  step1Desc: "ဘိုကင်တာဝန်များ အဆင်ပြေချောမွေ့စွာ လုပ်ဆောင်ရန် လက်ကျန်ငွေ ဖြည့်သွင်းပါ။",
+  step2Badge: "အဆင့် ၂",
+  step2Title: "Get Order နှိပ်ပြီး ဘိုကင်တင်ပါ",
+  step2Desc: "ဟိုတယ်ဘိုကင် တာဝန်များ ရယူပြီး သတ်မှတ်ချက်အတိုင်း ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။",
+  step3Badge: "အဆင့် ၃",
+  step3Title: "ကော်မရှင် ရယူပါ",
+  step3Desc: "အော်ဒါတစ်ခု ပြီးမြောက်တိုင်း ကော်မရှင်အမြတ်ငွေကို အကောင့်ထဲ ထည့်ပေးပါသည်။",
+  hotelDir: "နိုင်ငံတကာ ဟိုတယ်များ",
+  hotelSearchPh: "ဟိုတယ်၊ နိုင်ငံ သို့မဟုတ် ကြယ်အဆင့် ရှာရန်...",
+  homeHotelBookHint: "ဟိုတယ်ကဒ်ကို နှိပ်၍ အသေးစိတ်ကြည့်နိုင်ပြီး လက်ကျန်ငွေဖြင့် တိုက်ရိုက် ဘိုကင်တင်နိုင်ပါသည်။",
+  csHeader: "🎧 Trip Booking Service (24/7 အွန်လိုင်း)",
+  csActiveBadge: "● အသုံးပြုနေသည်",
   typeMsgPh: "စာရိုက်ရန်...",
-  accBal: "လက်ကျန်ငွေ", taskComm: "တာဝန် ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်",
-  dailyLimit: "နေ့စဉ် အော်ဒါ", taskCenter: "ဘိုကင်တာဝန် ဗဟို",
-  clickGetOrderHint: "ဟိုတယ်ဘိုကင် တာဝန်ရယူရန် Get Order ခလုတ်ကို နှိပ်ပါ။",
+  accBal: "အကောင့် လက်ကျန်ငွေ",
+  taskComm: "တာဝန် ကော်မရှင်",
+  totalProfit: "စုစုပေါင်း အမြတ်",
+  dailyLimit: "နေ့စဉ် အော်ဒါ",
+  taskCenter: "ဘိုကင် တာဝန်ဌာန",
+  clickGetOrderHint: "ဟိုတယ်ဘိုကင် တာဝန်ရယူရန် Get Order ကို နှိပ်ပါ။",
   submitOrderBtn: "Get Order",
-  histTitle: "ငွေစာရင်း နှင့် ဘိုကင် မှတ်တမ်း", filterAllTypes: "အမျိုးအစား အားလုံး",
-  filterProfitType: "ဘိုကင် အမြတ်", filterBonusType: "TP2323 $18 ဘောနပ်စ်",
-  filterPendingReleaseType: "၃၀-ပြည့် အမြတ်", filterClearNegType: "လက်ကျန် ညှိနှိုင်းမှု",
-  filterHotelBookType: "ဟိုတယ် ဘိုကင်", histSearchPh: "ရှာဖွေရန်...",
-  thDate: "ရက်စွဲ နှင့် အချိန်", thType: "အမျိုးအစား", thDetails: "အသေးစိတ် နှင့် သုံးသပ်ချက်", thAmount: "ပမာဏ", thStatus: "အခြေအနေ",
-  welcomeTrip: "Welcome to Trip Booking",
+  histTitle: "ငွေလွှဲနှင့် ဘိုကင် မှတ်တမ်း",
+  filterAllTypes: "အမျိုးအစား အားလုံး",
+  filterProfitType: "ဘိုကင် အမြတ်",
+  filterBonusType: "TP2323 $18 ဘောနပ်စ်",
+  filterPendingReleaseType: "၃၀-အော်ဒါ အမြတ်",
+  filterClearNegType: "Negative ရှင်းလင်းမှု",
+  filterHotelBookType: "ဟိုတယ် ဘိုကင်",
+  histSearchPh: "ရှာဖွေရန်...",
+  thDate: "ရက်စွဲနှင့် အချိန်",
+  thType: "အမျိုးအစား",
+  thDetails: "အသေးစိတ်နှင့် သုံးသပ်ချက်",
+  thAmount: "ပမာဏ",
+  thStatus: "အခြေအနေ",
+  welcomeTrip: "Trip Booking မှ ကြိုဆိုပါသည်",
   loginPrompt: "ကော်မရှင်များ ရယူရန် အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ် ဖွင့်ပါ။",
-  depositBtn: "ငွေသွင်းရန်", withdrawBtn: "ငွေထုတ်ရန်", walletBal: "လက်ကျန်ငွေ",
-  bookingHistCardTitle: "ဘိုကင် မှတ်တမ်း", inviteCodeTitle: "ဖိတ်ကြားကုဒ်", refBonus: "ဖိတ်ခေါ်မှု အမြတ်",
+  walletBal: "အကောင့် လက်ကျန်ငွေ",
+  depositBtn: "ငွေသွင်းရန်",
+  withdrawBtn: "ငွေထုတ်ရန်",
+  bookingHistCardTitle: "ဘိုကင် မှတ်တမ်း",
+  inviteCodeTitle: "ဖိတ်ကြားကုဒ်",
+  refBonus: "ဖိတ်ခေါ်မှု အမြတ်",
   inviteLinkLabel: "ဖိတ်ကြားလင့်ခ်",
-  footerTermsTitle: " စည်းမျဉ်း နှင့် သတ်မှတ်ချက်များ",
+  adminPanelTitle: "🛡️ Admin & Trip Booking Service ထိန်းချုပ်ခန်း",
+  usersWord: "အသုံးပြုသူများ",
+  adminUserSearchPh: "အမည်၊ ဖုန်း၊ စက်ပစ္စည်း၊ တည်နေရာ ရှာရန်...",
+  filterAllUsers: "အကောင့် အားလုံး",
+  filterLiveOrder: "🔴 အော်ဒါတင်နေသူ (LIVE)",
+  filterOnlineUsers: "🟢 အွန်လိုင်း ရှိနေသူများ",
+  filterNegUsers: "⚠️ Negative လက်ကျန်ရှိသူ",
+  filterRuledUsers: "🎯 Order Rules သတ်မှတ်ထားသူ",
+  filterBannedUsers: "🚫 ရပ်ဆိုင်းထားသော အကောင့်များ",
+  saveChangesBtn: "ပြောင်းလဲမှုများ သိမ်းဆည်းရန်",
+  thName: "အမည် / အခြေအနေ",
+  thPhoneEmail: "ဖုန်းနံပါတ် / အီးမေးလ်",
+  thPass: "စကားဝှက်",
+  thRef: "မိမိကုဒ်",
+  thInvitedBy: "ဖိတ်ခေါ်သူကုဒ်",
+  thVip: "VIP အဆင့်",
+  thBal: "လက်ကျန် ($)",
+  thNeg: "Negative ($)",
+  thProfitBox: "Profit Box ($)",
+  thOrderRulesCol: "Order Rules",
+  thOrders: "အော်ဒါ",
+  thAccountControlCol: "ထိန်းချုပ်မှု",
+  resetBtn: "Reset",
+  banBtn: "Suspend",
+  unbanBtn: "Activate",
+  deleteBtn: "Delete",
+  hotelsRatesHead: "ဟိုတယ်များနှင့် VIP ကော်မရှင် နှုန်းထားများ",
+  saveRatesBtn: "နှုန်းထားနှင့် ဟိုတယ်များ သိမ်းဆည်းရန်",
+  thLevel: "အဆင့်",
+  thDailyLimit: "နေ့စဉ် အကန့်အသတ်",
+  thProfitRate: "အမြတ်နှုန်း",
+  thMaxLimit: "အများဆုံး ထုတ်ယူ ($)",
+  thHotelName: "ဟိုတယ် အမည်",
+  thCountry: "နိုင်ငံ",
+  thStars: "ကြယ်အဆင့်",
+  thPrice: "ဈေးနှုန်း ($)",
+  thAction: "လုပ်ဆောင်ချက်",
+  csClientSearchPh: "အသုံးပြုသူ ရှာရန်...",
+  selectUserChat: "စကားပြောရန် အသုံးပြုသူ ရွေးချယ်ပါ",
+  replyCsPh: "စာပြန်ရန်...",
+  footerTermsTitle: "📜 စည်းမျဉ်း နှင့် သတ်မှတ်ချက်များ",
   footerRule1: "သတ်မှတ်ထားသော ငွေလဲနှုန်းဖြင့် ဘိုကင်တာဝန်များကို စည်းကမ်းအတိုင်း ပြီးမြောက်အောင် ဆောင်ရွက်ပါ။",
   footerRule2: "အကောင့်ထပ်တူဖွင့်ခြင်းနှင့် စည်းမျဉ်းဖောက်ဖျက်မှုများကို စနစ်မှ အလိုအလျောက် တားဆီးပါသည်။",
-  footerFaqTitle: "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
+  footerFaqTitle: "❓ မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
   footerFaq1: "အော်ဒါစတင်ချိန်မှ ပြီးဆုံးချိန်အထိ ငွေလဲနှုန်းကို Lock ချထားပေးပါသည်။",
-  footerFaq2: "အကောင့်ဖွင့်/ဝင်ချိန်တိုင်း တည်နေရာနှင့် စက်ပစ္စည်းအမျိုးအစားကို Admin ဘက်မှ ကြည့်ရှုနိုင်ရန် မှတ်တမ်းတင်ပါသည်။",
-  footerSecurityTitle: "လုံခြုံရေး နှင့် အာမခံချက်",
+  footerFaq2: "အကောင့်ဖွင့်/ဝင်ချိန်တိုင်း စက်ပစ္စည်းအမျိုးအစားနှင့် တည်နေရာကို Admin ဘက်မှ ကြည့်ရှုနိုင်ရန် မှတ်တမ်းတင်ပါသည်။",
+  footerSecurityTitle: "🛡️ လုံခြုံရေး နှင့် အာမခံချက်",
   footerSecDesc: "အကောင့်မှတ်တမ်းများ လုံခြုံမှု၊ အချိန်နှင့်တစ်ပြေးညီ ချိတ်ဆက်မှု နှင့် ၂၄ နာရီ ဝန်ဆောင်မှု။",
-  badgeVerified: "✔ အတည်ပြုထားသော ပလက်ဖောင်း", badge247: " ၂၄ နာရီ ဝန်ဆောင်မှု", badgeEncrypted: " လုံခြုံသော စနစ်",
-  adminPanelTitle: " Admin နှင့် Trip Booking Service ထိန်းချုပ်ခန်း", usersWord: "အသုံးပြုသူများ",
-  adminUserSearchPh: "အမည်၊ ဖုန်း၊ စက်ပစ္စည်း၊ တည်နေရာ ရှာရန်...",
-  filterAllUsers: "အကောင့် အားလုံး", filterLiveOrder: "🔴 အော်ဒါတင်နေသူများ (LIVE)",
-  filterOnlineUsers: "🟢 အွန်လိုင်း / အသုံးပြုနေသူများ", filterNegUsers: "⚠️ လက်ကျန်နုတ်ပြနေသူများ",
-  filterRuledUsers: "🎯 Order Rule ရှိသူများ", filterBannedUsers: "🚫 ရပ်ဆိုင်းထားသော အကောင့်များ",
-  saveChangesBtn: "ပြောင်းလဲမှုများ သိမ်းရန်", thName: "အမည် / အခြေအနေ", thPhoneEmail: "ဖုန်း / အီးမေးလ်",
-  thPass: "စကားဝှက်", thRef: "မိမိကုဒ်", thInvitedBy: "ဖိတ်ခေါ်သူကုဒ်", thVip: "VIP အဆင့်",
-  thBal: "လက်ကျန် ($)", thNeg: "အနုတ်လက်ကျန် ($)", thProfitBox: "Profit Box ($)",
-  thOrderRulesCol: "Order Rules", thOrders: "အော်ဒါများ", thAccountControlCol: "အကောင့် ထိန်းချုပ်မှု",
-  resetBtn: "Reset", banBtn: "ရပ်ဆိုင်းရန်", unbanBtn: "ပြန်ဖွင့်ရန်", deleteBtn: "ဖျက်ရန်",
-  hotelsRatesHead: "ဟိုတယ်များ နှင့် ကော်မရှင် နှုန်းထားများ", saveRatesBtn: "နှုန်းထားနှင့် ဟိုတယ်များ သိမ်းရန်",
-  thLevel: "အဆင့်", thDailyLimit: "နေ့စဉ်ကန့်သတ်", thProfitRate: "ကော်မရှင်နှုန်း", thMaxLimit: "အများဆုံးထုတ်ငွေ ($)",
-  thHotelName: "ဟိုတယ်အမည်", thCountry: "နိုင်ငံ", thStars: "ကြယ်", thPrice: "ဈေးနှုန်း ($)", thAction: "လုပ်ဆောင်ချက်",
-  csClientSearchPh: "အသုံးပြုသူ ရှာရန်...", selectUserChat: "စကားပြောရန် အသုံးပြုသူ ရွေးပါ",
-  replyCsPh: "စာပြန်ရန်...",
-  navHome: "ပင်မ", navService: "ဝန်ဆောင်မှု", navBooking: "ဘိုကင်", navHistory: "မှတ်တမ်း", navProfile: "ပရိုဖိုင်",
-  closeBtn: "ပိတ်ရန်", bookHotelNowBtn: "ယခုဘိုကင်တင်ရန်",
-  ormAddRuleTitle: "Order Rule ထည့်ရန် / ပြင်ရန်", ormOrderNumLabel: "အော်ဒါ အမှတ်စဉ် (၁–၃၀)",
-  ormModeLabel: "Rule အမျိုးအစား", ormModeNone: "ပုံမှန် (Rule မရှိ)",
-  ormModeCustomProfit: "သတ်မှတ်ကော်မရှင် ($)", ormModeNegative: "အနုတ်လက်ကျန် ($)",
-  ormProfitValLabel: "ကော်မရှင် ပမာဏ ($)", ormNegValLabel: "အနုတ်လက်ကျန် ပမာဏ ($)",
-  ormSaveRuleBtn: "Rule သိမ်းရန်", ormClearRuleBtn: "ဤအော်ဒါကို ပုံမှန်ထားရန်",
-  ormColOrder: "အော်ဒါ #", ormColMode: "အမျိုးအစား", ormColValue: "ပမာဏ ($)", ormColStatus: "အခြေအနေ",
-  ormClearAllBtn: "Rule အားလုံးဖျက်ရန်",
-  comTitle: "🛎️ ဘိုကင် အော်ဒါ", comHotelPrice: "ဟိုတယ်ဈေးနှုန်း:", comLockedRate: "Lock ချထားသော ဈေးနှုန်း:",
-  comEstProfit: "ခန့်မှန်းအမြတ်:", comWalletBal: "လက်ကျန်ငွေ:", comStarLabel: "ကြယ်အဆင့် (၁–၅ ကြယ်)",
-  comQuickReviewLabel: "အမြန်သုံးသပ်ချက်များ", comCustomReviewLabel: "သုံးသပ်ချက် စာသား",
-  comReviewPh: "ဟိုတယ်အတွက် သုံးသပ်ချက် ရေးပါ...", comCancelBtn: "မလုပ်တော့ပါ", comSubmitBtn: "အော်ဒါတင်ရန်",
-  comVerifyingMsg: "ဘိုကင်အချက်အလက် စစ်ဆေးပြီး ကော်မရှင်တွက်ချက်နေပါသည်...", comPleaseWait: "ခေတ္တစောင့်ဆိုင်းပါ...",
-  lbmTitle: "⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ", lbmCurrentBal: "လက်ရှိလက်ကျန်:",
-  lbmRequiredBal: "လိုအပ်ငွေ / ကွာဟချက်:", lbmContactCsBtn: "ဝန်ဆောင်မှု ဆက်သွယ်ရန်",
-  psmTitle: "🎉 အော်ဒါ ပြီးမြောက်ပါပြီ!", psmProfitEarned: "ရရှိသောအမြတ်:", psmLockedRate: "Lock ဈေးနှုန်း:",
-  psmNewBal: "လက်ကျန်သစ်:", psmOrdersVal: "အော်ဒါအရေအတွက်:", psmContinueBtn: "ဆက်လက်လုပ်ဆောင်ရန်"
+  badgeVerified: "✔ အတည်ပြုထားသော ပလက်ဖောင်း",
+  badge247: "🕒 ၂၄ နာရီ ဝန်ဆောင်မှု",
+  badgeEncrypted: "🔒 လုံခြုံသော စနစ်",
+  navHome: "ပင်မ",
+  navService: "ဝန်ဆောင်မှု",
+  navBooking: "ဘိုကင်",
+  navHistory: "မှတ်တမ်း",
+  navProfile: "ပရိုဖိုင်",
+  closeBtn: "ပိတ်ရန်",
+  bookHotelNowBtn: "ယခု ဘိုကင်တင်မည်",
+  ormAddRuleTitle: "Order Rule ထည့်ရန် / ပြင်ဆင်ရန်",
+  ormOrderNumLabel: "အော်ဒါ အမှတ်စဉ် (၁–၃၀)",
+  ormModeLabel: "Rule အမျိုးအစား",
+  ormModeNone: "ပုံမှန် (Rule မရှိ)",
+  ormModeCustomProfit: "သတ်မှတ် အမြတ် ($)",
+  ormModeNegative: "Negative လက်ကျန် ($)",
+  ormProfitValLabel: "သတ်မှတ် အမြတ် ($)",
+  ormNegValLabel: "Negative ပမာဏ ($)",
+  ormSaveRuleBtn: "Rule သိမ်းဆည်းရန်",
+  ormClearRuleBtn: "ဤအော်ဒါကို ပုံမှန်ထားရန်",
+  ormColOrder: "အော်ဒါ #",
+  ormColMode: "အမျိုးအစား",
+  ormColValue: "တန်ဖိုး ($)",
+  ormColStatus: "အခြေအနေ",
+  ormClearAllBtn: "Rules အားလုံး ဖျက်ရန်",
+  comTitle: "🛎️ ဘိုကင် အော်ဒါ",
+  comHotelPrice: "ဟိုတယ် ဈေးနှုန်း:",
+  comLockedRate: "Lock နှုန်း:",
+  comEstProfit: "ခန့်မှန်း အမြတ်:",
+  comWalletBal: "လက်ကျန်ငွေ:",
+  comStarLabel: "အဆင့်သတ်မှတ်ချက် (၁–၅ ကြယ်)",
+  comQuickReviewLabel: "အမြန် သုံးသပ်ချက်များ",
+  comCustomReviewLabel: "သုံးသပ်ချက် စာသား",
+  comReviewPh: "ဤဟိုတယ်အတွက် သုံးသပ်ချက် ရေးပါ...",
+  comCancelBtn: "မလုပ်တော့ပါ",
+  comSubmitBtn: "အော်ဒါ တင်သွင်းမည်",
+  comVerifyingMsg: "ဘိုကင်နှင့် ကော်မရှင်ကို စစ်ဆေးတွက်ချက်နေပါသည်...",
+  comPleaseWait: "ခဏစောင့်ဆိုင်းပေးပါ...",
+  lbmTitle: "⚠️ လက်ကျန်ငွေ မလုံလောက်ပါ",
+  lbmCurrentBal: "လက်ရှိ လက်ကျန်ငွေ:",
+  lbmRequiredBal: "လိုအပ်ငွေ / လိုငွေ:",
+  lbmContactCsBtn: "Customer Service ဆက်သွယ်ရန်",
+  psmTitle: "🎉 အော်ဒါ ပြီးမြောက်ပါပြီ!",
+  psmProfitEarned: "ရရှိသော အမြတ်:",
+  psmLockedRate: "Lock နှုန်း:",
+  psmNewBal: "လက်ကျန်ငွေသစ်:",
+  psmProgress: "အော်ဒါ ပြီးစီးမှု:",
+  psmContinueBtn: "ဆက်လက်လုပ်ဆောင်ရန်"
  }
 };
 
 function getDict() {
  const lang = $("language")?.value || localStorage.getItem("tb_lang") || "my";
- if (I18N_BASE[lang]) return I18N_BASE[lang];
- const base = lang.split("-")[0];
- return I18N_BASE[base] || I18N_BASE.en;
+ return LANG_DICTS[lang] || LANG_DICTS.my;
 }
 
 function changeLanguage(langCode) {
- const safeCode = langCode || "my";
- localStorage.setItem("tb_lang", safeCode);
- if ($("language") && $("language").value !== safeCode) {
-  $("language").value = safeCode;
+ const code = LANG_DICTS[langCode] ? langCode : "my";
+ try { localStorage.setItem("tb_lang", code); } catch (_) {}
+ if ($("language") && $("language").value !== code) {
+  $("language").value = code;
  }
- const d = getDict();
+ const dict = LANG_DICTS[code];
+
  document.querySelectorAll("[data-i18n]").forEach((el) => {
-  const k = el.getAttribute("data-i18n");
-  if (k && d[k] !== undefined) el.textContent = d[k];
+  const key = el.getAttribute("data-i18n");
+  if (dict[key] !== undefined) el.textContent = dict[key];
  });
+
  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
-  const k = el.getAttribute("data-i18n-ph");
-  if (k && d[k] !== undefined) el.placeholder = d[k];
+  const key = el.getAttribute("data-i18n-ph");
+  if (dict[key] !== undefined) el.setAttribute("placeholder", dict[key]);
  });
+
  renderAll();
 }
 
-function formatNumber(n, dec = 2) {
- const num = Number(n);
- if (!Number.isFinite(num)) return (0).toFixed(dec);
- return num.toLocaleString("en-US", {
+/* ---------------- LIVE TICKER ---------------- */
+const TICKER_ITEMS = [
+ { kind: "profit", text: "💎 VIP Commission Settled · +$18.00 (90,000 ကျပ်)" },
+ { kind: "dp", text: "💵 Deposit Confirmed · +$250.00 via KPay" },
+ { kind: "wd", text: "🏦 Withdrawal Completed · -$180.00 via Wave" },
+ { kind: "profit", text: "🏨 Order #14/30 Completed · +$6.40 Commission" },
+ { kind: "bonus", text: "🎁 TP2323 Invite Bonus $18 · Unlocks at 30 Completed Orders" }
+];
+
+function renderActivityTicker() {
+ const slide = $("activityTickerSlide");
+ if (!slide) return;
+ const item = TICKER_ITEMS[appState.tickerIndex % TICKER_ITEMS.length];
+ appState.tickerIndex += 1;
+
+ slide.classList.add("exit-to-top");
+ setTimeout(() => {
+  slide.className = "ticker-slide enter-from-bottom";
+  if (item.kind === "dp") slide.classList.add("ticker-kind-dp");
+  else if (item.kind === "wd") slide.classList.add("ticker-kind-wd");
+  else if (item.kind === "bonus") slide.classList.add("real-user-highlight");
+  slide.textContent = item.text;
+
+  requestAnimationFrame(() => {
+   requestAnimationFrame(() => {
+    slide.classList.remove("enter-from-bottom");
+   });
+  });
+ }, 220);
+}
+
+/* ---------------- CURRENCY FORMATTERS & FX CHART ---------------- */
+function formatNumber(num, dec = 2) {
+ const n = Number(num) || 0;
+ return n.toLocaleString("en-US", {
   minimumFractionDigits: dec,
   maximumFractionDigits: dec
  });
 }
 
-function formatUsd(n) {
- return "$" + formatNumber(n, 2);
+function formatUsd(num) {
+ return "$" + formatNumber(Number(num) || 0, 2);
 }
 
-function formatMmk(n) {
- const unit = getDict().mmkUnit || "MMK";
- return `${Math.round(Number(n) || 0).toLocaleString("en-US")} ${unit}`;
+function formatMmk(mmkVal) {
+ return `${formatNumber(Math.round(Number(mmkVal) || 0), 0)} ${getDict().mmkUnit || "ကျပ်"}`;
 }
 
 function formatExactTimestamp(ts) {
  const d = new Date(Number(ts) || Date.now());
- const pad = (x) => String(x).padStart(2, "0");
- return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
-
-function getActiveRateForUser(userObj) {
- if (userObj && userObj.activeOrder && Number(userObj.activeOrder.lockedRate) > 0) {
-  return clampFxTickRate(userObj.activeOrder.lockedRate, appState.fxRate);
- }
- return getCurrentLiveFxRate();
-}
-
-function syncFxControlsAndDisplay() {
- const base = sanitizeFxBaseRate(appState.fxRate);
- const floorVal = Math.max(1, Number(Math.min(base - 1, base * 0.9998).toFixed(2)));
- const ceilVal = Number((base + FX_UP_SPAN).toFixed(2));
- const unit = getDict().mmkUnit || "MMK";
-
- const rateInp = $("adminFxRateInput");
- if (rateInp && document.activeElement !== rateInp) {
-  rateInp.value = String(base);
- }
- const statusEl = $("adminCurrentRateStatus");
- if (statusEl) {
-  statusEl.textContent = `Base: ${base.toLocaleString()} ${unit} (${floorVal.toLocaleString()} – ${ceilVal.toLocaleString()})`;
- }
- updateFxChartAndReadout();
-}
-
-function updateFxChartAndReadout() {
- const rate = getActiveRateForUser(appState.currentUser);
- const base = sanitizeFxBaseRate(appState.fxRate);
- const floorVal = Math.max(1, Number(Math.min(base - 1, base * 0.9998).toFixed(2)));
- const ceilVal = Number((base + FX_UP_SPAN).toFixed(2));
- const unit = getDict().mmkUnit || "MMK";
-
- if ($("todayFxRateValue")) {
-  $("todayFxRateValue").textContent = `1 USD = ${formatNumber(rate, 2)} ${unit}`;
- }
- if ($("todayFxDateInfo")) {
-  const lockedNote = appState.currentUser?.activeOrder?.lockedRate ? " · 🔒 Order Rate Locked" : " · 1s 5-Wave Live";
-  $("todayFxDateInfo").textContent = `${formatExactTimestamp(Date.now())}${lockedNote}`;
- }
-
- const liveNumEl = $("fxCurrentRateDisplay");
- if (liveNumEl) {
-  liveNumEl.textContent = `1 USD = ${formatNumber(rate, 2)} ${unit}`;
-  liveNumEl.classList.remove("is-up", "is-down", "is-flat");
-  if (rate > base + 0.05) liveNumEl.classList.add("is-up");
-  else if (rate < base - 0.05) liveNumEl.classList.add("is-down");
-  else liveNumEl.classList.add("is-flat");
- }
-
- const diffFromBase = rate - base;
- const pctFromBase = base > 0 ? (diffFromBase / base) * 100 : 0;
- const badgeEl = $("fxChangeBadge");
- if (badgeEl) {
-  const sign = diffFromBase >= 0 ? "+" : "";
-  badgeEl.textContent = `${sign}${formatNumber(diffFromBase, 2)} (${sign}${formatNumber(pctFromBase, 2)}%)`;
-  badgeEl.className = `status-pill ${diffFromBase >= 0 ? "pill-online" : "pill-banned"}`;
- }
-
- const trendEl = $("fxDayTrendBadge");
- if (trendEl) {
-  const prevPt = appState.fxHistory[appState.fxHistory.length - 2];
-  const prevRate = prevPt ? Number(prevPt.rate) : base;
-  if (rate - prevRate > 25) trendEl.textContent = "🚀 Strong Rally";
-  else if (rate - prevRate < -25) trendEl.textContent = "📉 Sharp Pullback";
-  else if (rate >= prevRate) trendEl.textContent = "↗ 5-Wave Up";
-  else trendEl.textContent = "↘ 5-Wave Down";
- }
-
- if ($("fxFormulaReadout")) {
-  $("fxFormulaReadout").textContent = `Base ${base.toLocaleString()} · Range ${floorVal.toLocaleString()} – ${ceilVal.toLocaleString()} ${unit}`;
- }
- if ($("fxLastUpdatedLabel")) {
-  $("fxLastUpdatedLabel").textContent = `Updated: ${formatExactTimestamp(Date.now())}`;
- }
-
- renderFiveWaveSvgChart(floorVal, ceilVal);
- runBidirectionalConverter(appState.converterDir === "mmk_to_usd" ? "B" : "A", true);
-}
-
-function renderFiveWaveSvgChart(minBound, maxBound) {
- const lineEl = $("fxTrendLine");
- const areaEl = $("fxTrendArea");
- const dotEl = $("fxTrendDot");
- if (!lineEl || !areaEl || !dotEl) return;
-
- const series = Array.isArray(appState.fxHistory) && appState.fxHistory.length >= 2
-  ? appState.fxHistory
-  : seedFxHistoryForBase(appState.fxRate, 48);
-
- const w = 600;
- const h = 138;
- const padX = 12;
- const padY = 14;
- const innerW = w - padX * 2;
- const innerH = h - padY * 2;
- const span = Math.max(1, Number(maxBound) - Number(minBound));
-
- const coords = series.map((pt, i) => {
-  const x = padX + (i / Math.max(1, series.length - 1)) * innerW;
-  const clamped = Math.min(maxBound, Math.max(minBound, Number(pt.rate) || appState.fxRate));
-  const ratio = (clamped - minBound) / span;
-  const y = padY + (1 - ratio) * innerH;
-  return { x: Number(x.toFixed(1)), y: Number(y.toFixed(1)), rate: clamped, ts: pt.ts };
+ return d.toLocaleString("en-GB", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit"
  });
-
- const last = coords[coords.length - 1];
- const prev = coords[coords.length - 2];
- const isRising = last.rate >= prev.rate;
- const strokeColor = isRising ? "#2e7d32" : "#c62828";
-
- lineEl.setAttribute("stroke", strokeColor);
- dotEl.setAttribute("fill", strokeColor);
- if ($("fxGradStopTop")) $("fxGradStopTop").setAttribute("stop-color", strokeColor);
- if ($("fxGradStopBot")) $("fxGradStopBot").setAttribute("stop-color", strokeColor);
-
- lineEl.setAttribute("points", coords.map((p) => `${p.x},${p.y}`).join(" "));
- const areaPts = [
-  `${coords[0].x},${h - 8}`,
-  ...coords.map((p) => `${p.x},${p.y}`),
-  `${last.x},${h - 8}`
- ];
- areaEl.setAttribute("points", areaPts.join(" "));
- dotEl.setAttribute("cx", String(last.x));
- dotEl.setAttribute("cy", String(last.y));
-}
-
-function handleFxChartHover(evt) {
- const svg = $("fxTrendSvg");
- const series = appState.fxHistory || [];
- if (!svg || series.length < 2) return;
- const rect = svg.getBoundingClientRect();
- if (!rect.width) return;
- const relX = Math.max(0, Math.min(1, (evt.clientX - rect.left) / rect.width));
- const idx = Math.min(series.length - 1, Math.round(relX * (series.length - 1)));
- const pt = series[idx];
- if (!pt) return;
- const xSvg = 12 + (idx / Math.max(1, series.length - 1)) * 576;
- const line = $("fxCrosshairLine");
- if (line) {
-  line.setAttribute("x1", String(xSvg));
-  line.setAttribute("x2", String(xSvg));
-  line.setAttribute("opacity", "0.85");
- }
- if ($("fxPointDetailText")) {
-  $("fxPointDetailText").textContent = `${formatExactTimestamp(pt.ts)} · 1 USD = ${formatNumber(pt.rate, 2)} ${getDict().mmkUnit || "MMK"}`;
- }
-}
-
-function handleFxChartTouch(evt) {
- const t = evt.touches?.[0];
- if (t) handleFxChartHover({ clientX: t.clientX });
-}
-
-function resetFxChartHover() {
- const line = $("fxCrosshairLine");
- if (line) line.setAttribute("opacity", "0");
- if ($("fxPointDetailText")) $("fxPointDetailText").textContent = "1s 5-Wave Live Tick";
 }
 
 function swapConverterDirection() {
- appState.converterDir = appState.converterDir === "usd_to_mmk" ? "mmk_to_usd" : "usd_to_mmk";
- saveFxStateToStorage();
- runBidirectionalConverter(appState.converterDir === "mmk_to_usd" ? "B" : "A", false);
+ fxState.converterDirection = fxState.converterDirection === "USD_TO_MMK" ? "MMK_TO_USD" : "USD_TO_MMK";
+ const aVal = Number($("calcInputA")?.value) || 0;
+ const bVal = Number($("calcInputB")?.value) || 0;
+ if ($("calcInputA") && $("calcInputB")) {
+  $("calcInputA").value = bVal;
+  $("calcInputB").value = aVal;
+ }
+ runBidirectionalConverter("A");
 }
 
-function runBidirectionalConverter(side, preserveCurrentValue = false) {
- const rate = getActiveRateForUser(appState.currentUser);
+function runBidirectionalConverter(sourceSide) {
+ const rate = getCurrentLiveFxRate();
+ const unit = getDict().mmkUnit || "ကျပ်";
  const inpA = $("calcInputA");
  const inpB = $("calcInputB");
  const ansBox = $("calcAnswerBox");
  if (!inpA || !inpB || !ansBox) return;
 
- if (side === "A") {
-  appState.converterDir = "usd_to_mmk";
-  const usdVal = Math.max(0, Number(inpA.value) || 0);
-  const mmkVal = usdVal * rate;
-  if (!preserveCurrentValue || document.activeElement !== inpB) {
-   inpB.value = usdVal ? String(Math.round(mmkVal)) : "0";
+ if (fxState.converterDirection === "USD_TO_MMK") {
+  if (sourceSide === "A") {
+   const usd = Math.max(0, Number(inpA.value) || 0);
+   const mmk = usd * rate;
+   inpB.value = mmk ? mmk.toFixed(0) : "0";
+   ansBox.textContent = `${formatUsd(usd)} = ${formatNumber(mmk, 0)} ${unit}`;
+  } else {
+   const mmk = Math.max(0, Number(inpB.value) || 0);
+   const usd = rate > 0 ? mmk / rate : 0;
+   inpA.value = usd ? usd.toFixed(2) : "0.00";
+   ansBox.textContent = `${formatNumber(mmk, 0)} ${unit} = ${formatUsd(usd)}`;
   }
-  ansBox.textContent = `${formatUsd(usdVal)} = ${formatMmk(mmkVal)}`;
  } else {
-  appState.converterDir = "mmk_to_usd";
-  const mmkVal = Math.max(0, Number(inpB.value) || 0);
-  const usdVal = rate > 0 ? mmkVal / rate : 0;
-  if (!preserveCurrentValue || document.activeElement !== inpA) {
-   inpA.value = mmkVal ? String(Number(usdVal.toFixed(4))) : "0";
+  if (sourceSide === "A") {
+   const mmk = Math.max(0, Number(inpA.value) || 0);
+   const usd = rate > 0 ? mmk / rate : 0;
+   inpB.value = usd ? usd.toFixed(2) : "0.00";
+   ansBox.textContent = `${formatNumber(mmk, 0)} ${unit} = ${formatUsd(usd)}`;
+  } else {
+   const usd = Math.max(0, Number(inpB.value) || 0);
+   const mmk = usd * rate;
+   inpA.value = mmk ? mmk.toFixed(0) : "0";
+   ansBox.textContent = `${formatUsd(usd)} = ${formatNumber(mmk, 0)} ${unit}`;
   }
-  ansBox.textContent = `${formatMmk(mmkVal)} = ${formatUsd(usdVal)}`;
  }
- saveFxStateToStorage();
 }
 
-function renderActivityTicker() {
- const slide = $("activityTickerSlide");
- if (!slide) return;
+function syncFxControlsAndDisplay() {
  const rate = getCurrentLiveFxRate();
- const items = [
-  `🏨 Marina Bay Sands Luxury · ${formatUsd(320)} (${formatMmk(320 * rate)})`,
-  `💎 VIP Commission Settled · +${formatUsd(18.00)} (${formatMmk(18.00 * rate)})`,
-  `🌍 International Booking Verified · Live Rate 1 USD = ${formatNumber(rate, 2)} ${getDict().mmkUnit || "MMK"}`,
-  `🛎️ Aman Kyoto Forest Resort · ${formatUsd(450)} (${formatMmk(450 * rate)})`
- ];
- const idx = Math.floor(Date.now() / 4200) % items.length;
- slide.innerHTML = `<span class="ticker-kind-dp">●</span> <span>${items[idx]}</span>`;
+ const unit = getDict().mmkUnit || "ကျပ်";
+ if ($("todayFxRateValue")) $("todayFxRateValue").textContent = `1 USD = ${formatNumber(rate, 1)} ${unit}`;
+ if ($("todayFxDateInfo")) {
+  const anchor = getEffectiveFxAnchor();
+  $("todayFxDateInfo").textContent = `Base: ${formatNumber(anchor, 0)} ${unit} · Range: 4,999 – 5,500 ${unit}`;
+ }
+ if ($("adminFxRateInput")) $("adminFxRateInput").value = String(rate);
+ if ($("adminCurrentRateStatus")) {
+  const anchor = getEffectiveFxAnchor();
+  $("adminCurrentRateStatus").textContent = `Base: ${formatNumber(anchor, 0)} ${unit} · Live: ${formatNumber(rate, 1)} ${unit}`;
+ }
+ runBidirectionalConverter("A");
 }
 
+function stepAdminFxRate(delta) {
+ const inp = $("adminFxRateInput");
+ if (!inp) return;
+ const next = clampFxRate((Number(inp.value) || FX_BASE_RATE) + Number(delta || 0));
+ inp.value = String(next);
+ setAdminFxRate(next);
+}
+
+function applyAdminFxRateFromButton() {
+ const inp = $("adminFxRateInput");
+ if (!inp) return;
+ setAdminFxRate(Number(inp.value) || FX_BASE_RATE);
+ showRegistrationToast("ငွေလဲနှုန်း ပြင်ပြီးပါပြီ", `1 USD = ${formatNumber(getCurrentLiveFxRate(), 1)} ${getDict().mmkUnit || "ကျပ်"}`);
+}
+
+function updateFxChartAndReadout() {
+ const rate = getCurrentLiveFxRate();
+ const prev = Number(fxState.previousRate) || rate;
+ const unit = getDict().mmkUnit || "ကျပ်";
+ const diffPct = prev > 0 ? ((rate - prev) / prev) * 100 : 0;
+
+ const numEl = $("fxCurrentRateDisplay");
+ const badgeEl = $("fxChangeBadge");
+ const lineEl = $("fxTrendLine");
+ const areaEl = $("fxTrendArea");
+ const dotEl = $("fxTrendDot");
+ const stopTop = $("fxGradStopTop");
+
+ if ($("todayFxRateValue")) $("todayFxRateValue").textContent = `1 USD = ${formatNumber(rate, 1)} ${unit}`;
+ if (numEl) {
+  numEl.textContent = `1 USD = ${formatNumber(rate, 1)} ${unit}`;
+  numEl.classList.remove("is-up", "is-down", "is-flat");
+  if (rate > prev) numEl.classList.add("is-up");
+  else if (rate < prev) numEl.classList.add("is-down");
+  else numEl.classList.add("is-flat");
+ }
+
+ if (badgeEl) {
+  const sign = diffPct >= 0 ? "+" : "";
+  badgeEl.textContent = `${sign}${diffPct.toFixed(2)}%`;
+  badgeEl.className = `status-pill ${diffPct >= 0 ? "pill-online" : "pill-banned"}`;
+ }
+
+ const pts = fxState.history.length ? fxState.history : [{ rate, ts: Date.now() }];
+ const minV = Math.min(...pts.map((p) => p.rate), FX_MIN_RATE);
+ const maxV = Math.max(...pts.map((p) => p.rate), rate + 25);
+ const span = Math.max(10, maxV - minV);
+
+ const w = 600;
+ const topPad = 14;
+ const botPad = 14;
+ const plotH = 138 - topPad - botPad;
+
+ const coords = pts.map((p, i) => {
+  const x = pts.length === 1 ? w : (i / (pts.length - 1)) * w;
+  const ratio = (p.rate - minV) / span;
+  const y = topPad + plotH * (1 - ratio);
+  return { x: Number(x.toFixed(1)), y: Number(y.toFixed(1)), rate: p.rate, ts: p.ts };
+ });
+
+ const polyStr = coords.map((c) => `${c.x},${c.y}`).join(" ");
+ const areaStr = coords.length
+  ? `${coords[0].x},134 ${polyStr} ${coords[coords.length - 1].x},134`
+  : "";
+
+ const strokeColor = rate >= prev ? "#2e7d32" : "#c62828";
+ if (lineEl) {
+  lineEl.setAttribute("points", polyStr);
+  lineEl.setAttribute("stroke", strokeColor);
+ }
+ if (areaEl) areaEl.setAttribute("points", areaStr);
+ if (stopTop) stopTop.setAttribute("stop-color", strokeColor);
+
+ const activeCoord =
+  fxState.hoverIndex !== null && coords[fxState.hoverIndex]
+   ? coords[fxState.hoverIndex]
+   : coords[coords.length - 1];
+
+ if (dotEl && activeCoord) {
+  dotEl.setAttribute("cx", String(activeCoord.x));
+  dotEl.setAttribute("cy", String(activeCoord.y));
+  dotEl.setAttribute("fill", strokeColor);
+ }
+
+ if ($("fxPointDetailText") && activeCoord) {
+  $("fxPointDetailText").textContent = `1 USD = ${formatNumber(activeCoord.rate, 1)} ${unit} · ${formatExactTimestamp(activeCoord.ts).slice(-8)}`;
+ }
+ if ($("fxFormulaReadout")) {
+  $("fxFormulaReadout").textContent = `5-Wave Harmonic · Step #${fxState.stepIndex}`;
+ }
+ if ($("fxLastUpdatedLabel")) {
+  $("fxLastUpdatedLabel").textContent = `Updated: ${formatExactTimestamp(fxState.lastUpdatedAt).slice(-8)}`;
+ }
+ runBidirectionalConverter("A");
+}
+
+function handleFxChartHover(ev) {
+ const svg = $("fxTrendSvg");
+ if (!svg || !fxState.history.length) return;
+ const rect = svg.getBoundingClientRect();
+ const relX = Math.max(0, Math.min(rect.width, ev.clientX - rect.left));
+ const idx = Math.round((relX / Math.max(1, rect.width)) * (fxState.history.length - 1));
+ fxState.hoverIndex = Math.max(0, Math.min(fxState.history.length - 1, idx));
+ const cross = $("fxCrosshairLine");
+ if (cross) {
+  const svgX = (fxState.hoverIndex / Math.max(1, fxState.history.length - 1)) * 600;
+  cross.setAttribute("x1", String(svgX));
+  cross.setAttribute("x2", String(svgX));
+  cross.setAttribute("opacity", "0.75");
+ }
+ updateFxChartAndReadout();
+}
+
+function handleFxChartTouch(ev) {
+ const touch = ev.touches?.[0];
+ if (!touch) return;
+ handleFxChartHover({ clientX: touch.clientX });
+}
+
+function resetFxChartHover() {
+ fxState.hoverIndex = null;
+ const cross = $("fxCrosshairLine");
+ if (cross) cross.setAttribute("opacity", "0");
+ updateFxChartAndReadout();
+}
+
+/* ---------------- HOTELS DIRECTORY ---------------- */
 function renderHotels() {
  const grid = $("hotelGrid");
  if (!grid) return;
  const q = ($("hotelSearch")?.value || "").trim().toLowerCase();
- const rate = getActiveRateForUser(appState.currentUser);
  const list = (appState.hotels || []).filter((h) => {
   if (!q) return true;
-  return `${h.name} ${h.country} ${h.stars}`.toLowerCase().includes(q);
+  return `${h.name} ${h.country} ${h.stars} ${h.price}`.toLowerCase().includes(q);
  });
 
  if ($("hotelCountBadge")) $("hotelCountBadge").textContent = String(list.length);
 
- const visible = appState.showAllHotels ? list : list.slice(0, 6);
- grid.innerHTML = visible.map((h) => {
+ const limit = appState.showAllHotels ? list.length : Math.min(list.length, 6);
+ const shown = list.slice(0, limit);
+ const rate = getActiveRateForUser(appState.currentUser);
+
+ grid.innerHTML = shown.map((h) => {
   const starsStr = "★".repeat(Math.min(5, Math.max(1, Number(h.stars) || 5)));
+  const mmkApprox = formatMmk((Number(h.price) || 0) * rate);
   return `
    <div class="card" onclick="openHotelModal(${h.id})">
-    <img src="${h.img}" alt="${h.name}" class="hotel-img" loading="lazy" onerror="this.src='${SPLASH_HOTEL_PHOTOS[0]}'">
+    <img src="${h.img}" alt="${h.name}" class="hotel-img" loading="lazy">
     <div class="card-body">
      <div>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px">
        <span class="tag">${h.country}</span>
        <span class="gold-stars">${starsStr}</span>
       </div>
-      <div style="font-weight:700;font-size:15px;line-height:1.35">${h.name}</div>
+      <div style="font-weight:700;font-size:15px">${h.name}</div>
      </div>
-     <div>
-      <div class="price">${formatUsd(h.price)}</div>
-      <span class="mmk-sub">≈ ${formatMmk((Number(h.price) || 0) * rate)}</span>
-     </div>
+     <div class="price">${formatUsd(h.price)} <span class="mmk-sub">≈ ${mmkApprox}</span></div>
     </div>
    </div>
   `;
@@ -3175,7 +3066,7 @@ function renderHotels() {
  if (moreWrap && moreBtn) {
   if (list.length > 6) {
    moreWrap.classList.remove("hidden");
-   moreBtn.textContent = appState.showAllHotels ? "Show Less" : `Show All (${list.length})`;
+   moreBtn.textContent = appState.showAllHotels ? "Show Less" : `Show More (${list.length - 6})`;
   } else {
    moreWrap.classList.add("hidden");
   }
@@ -3187,22 +3078,7 @@ function toggleShowAllHotels() {
  renderHotels();
 }
 
-function applyAdminFxRateFromButton() {
- const val = Number($("adminFxRateInput")?.value);
- if (!Number.isFinite(val) || val < FX_MIN_RATE || val > FX_MAX_RATE) {
-  showRegistrationToast("မှားယွင်းနေပါသည်", `နှုန်းထားကို ${FX_MIN_RATE} မှ ${FX_MAX_RATE} အတွင်း ထည့်ပါ`);
-  return;
- }
- setAdminFxBaseRate(val);
- showRegistrationToast("ဈေးနှုန်း ပြောင်းပြီးပါပြီ", `Base နှုန်းသစ်: 1 USD = ${formatNumber(appState.fxRate, 2)} ${getDict().mmkUnit || "MMK"}`);
-}
-
-function stepAdminFxRate(delta) {
- const cur = Number($("adminFxRateInput")?.value) || appState.fxRate;
- setAdminFxBaseRate(cur + Number(delta || 0));
-}
-</script>
-<script>
+/* ---------------- DEVICE, LOCATION & USER NORMALIZATION ---------------- */
 function getDeviceSummary() {
  const ua = navigator.userAgent || "";
  let os = "Web";
@@ -3298,7 +3174,7 @@ function normalizeUserRecord(u) {
  rec.name = String(rec.name || (isAdminAcct ? "System Admin" : "Member")).trim();
  rec.phone = isAdminAcct ? ADMIN_PHONE_MAIN : phoneRaw;
  rec.password = isAdminAcct ? ADMIN_PASS_MAIN : String(rec.password || "");
- rec.inviteCode = String(rec.inviteCode || ("TB" + Math.floor(10000 + Math.random() * 89999))).trim().toUpperCase();
+ rec.inviteCode = String(rec.inviteCode || (isAdminAcct ? "TP2323" : "TB" + Math.floor(10000 + Math.random() * 89999))).trim().toUpperCase();
  rec.invitedBy = String(rec.invitedBy || "").trim().toUpperCase();
  rec.vipLevel = Math.min(3, Math.max(1, Number(rec.vipLevel) || (isAdminAcct ? 3 : 1)));
  rec.balance = Number.isFinite(Number(rec.balance)) ? Number(rec.balance) : 0;
@@ -3318,15 +3194,15 @@ function normalizeUserRecord(u) {
  rec.history = Array.isArray(rec.history) ? rec.history.slice() : [];
  rec.activeOrder = rec.activeOrder && typeof rec.activeOrder === "object" ? { ...rec.activeOrder } : null;
 
- // TP2323 & TP2323-line $18 bonus tracking (locked until 30 orders completed)
- rec.tp2323Eligible = Boolean(rec.tp2323Eligible);
- rec.tp2323LockedBonus = Math.max(0, Number(rec.tp2323LockedBonus) || 0);
- rec.tp2323UnlockedBonus = Math.max(0, Number(rec.tp2323UnlockedBonus) || 0);
+ rec.tp2323Eligible = isAdminAcct ? false : Boolean(rec.tp2323Eligible);
+ rec.tp2323LockedBonus = isAdminAcct ? 0 : Math.max(0, Number(rec.tp2323LockedBonus) || 0);
+ rec.tp2323UnlockedBonus = isAdminAcct ? 0 : Math.max(0, Number(rec.tp2323UnlockedBonus) || 0);
  rec.tp2323Withdrawn = Boolean(rec.tp2323Withdrawn);
 
  return rec;
 }
 
+/* ---------------- TP2323 & DOWNLINE $18 BONUS (30 ORDERS UNLOCK) ---------------- */
 function getTp2323RootCodes() {
  const set = new Set(["TP2323"]);
  (appState.users || []).forEach((u) => {
@@ -3340,8 +3216,7 @@ function getTp2323RootCodes() {
 }
 
 function isEligibleForTp2323Bonus(userObj, explicitInviteCode = "") {
- if (!userObj) return false;
- if (userObj.isAdmin) return false;
+ if (!userObj || userObj.isAdmin) return false;
  if (userObj.tp2323Eligible) return true;
  const codeToCheck = String(explicitInviteCode || userObj.invitedBy || "").trim().toUpperCase();
  if (!codeToCheck) return false;
@@ -3380,6 +3255,7 @@ function getEffectiveAvailableBalance(userObj) {
  return Math.max(0, baseBal + unlockedBonus);
 }
 
+/* ---------------- AUTH & FIELD-SPECIFIC ERROR HIGHLIGHT ---------------- */
 function clearAuthFieldErrors() {
  [$("authPhone"), $("authLoginId"), $("authPassword"), $("authName"), $("authInvite")].forEach((el) => {
   if (el) el.classList.remove("input-error-box");
@@ -3454,7 +3330,6 @@ function submitAuth() {
    return;
   }
 
-  // Always allow ADMIN login with 09775191427 / 12344321
   const normId = normalizePhoneCompare(rawId);
   const isAdminAttempt =
    rawId === ADMIN_PHONE_MAIN ||
@@ -3468,7 +3343,7 @@ function submitAuth() {
     return;
    }
    if (passwordVal !== ADMIN_PASS_MAIN) {
-    highlightAuthField(passInputEl, "စကားဝှက် မှားယွင်းနေပါသည်။ (စကားဝှက်ကို ပြန်စစ်ပါ)");
+    highlightAuthField(passInputEl, "စကားဝှက် မှားယွင်းနေပါသည်။");
     return;
    }
    appState.users = ensurePermanentAdminAccount(appState.users);
@@ -3508,7 +3383,6 @@ function submitAuth() {
   return;
  }
 
- // Register flow
  const nameEl = $("authName");
  const phoneEl = $("authPhone");
  const passEl = $("authPassword");
@@ -3584,9 +3458,16 @@ function completeLogin(userObj, isNewRegistration = false) {
  appState.currentUser = normalized;
  try { localStorage.setItem(SESSION_USER_KEY, JSON.stringify(normalized)); } catch (_) {}
  closeAuth();
- renderAll();
 
+ if (normalized.isAdmin) {
+  openAdminControlPanel();
+  showRegistrationToast("Admin ထိန်းချုပ်ခန်း ဝင်ရောက်ပြီးပါပြီ", "အကောင့်များ၊ ဟိုတယ်များ၊ ဘဏ်ကဒ်များနှင့် Service Chat ကို စီမံနိုင်ပါပြီ။");
+  return;
+ }
+
+ renderAll();
  if (isNewRegistration) {
+  playSoundEffect("register");
   const bonusNote = normalized.tp2323Eligible
    ? " · TP2323 $18 ဘောနပ်စ် (အော်ဒါ ၃၀ ပြည့်မှ ထုတ်ယူနိုင်)"
    : "";
@@ -3594,6 +3475,15 @@ function completeLogin(userObj, isNewRegistration = false) {
  } else {
   showRegistrationToast("ကြိုဆိုပါတယ်", `${normalized.name} ဖြင့် အကောင့်ဝင်ပြီးပါပြီ`);
  }
+}
+
+function openAdminControlPanel() {
+ if (!appState.currentUser || !appState.currentUser.isAdmin) return;
+ document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+ $("staffPage")?.classList.add("active");
+ document.querySelectorAll(".bottom-nav button").forEach((b) => b.classList.remove("active"));
+ renderAll();
+ window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function logout() {
@@ -3607,22 +3497,14 @@ function logout() {
 }
 
 function handleLogoClick() {
- showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
  if (appState.currentUser && appState.currentUser.isAdmin) {
-  const staffPage = $("staffPage");
-  if (staffPage && !staffPage.classList.contains("active")) {
-   document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
-   staffPage.classList.add("active");
-   updateAdminFourPointSummary();
-   renderAdminUsers();
-   renderAdminHotelsAndVips();
-   renderAdminBankCardsTab();
-   renderCsClientList();
-   renderAdminChatMessages();
-  }
+  openAdminControlPanel();
+  return;
  }
+ showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
 }
 
+/* ---------------- BOOKING & ORDERS ---------------- */
 function getActiveOrderRules(userObj) {
  if (!userObj || !Array.isArray(userObj.orderRules)) return [];
  return userObj.orderRules.filter((r) => r && Number(r.orderNum) >= 1 && Number(r.orderNum) <= 30 && r.mode && r.mode !== "none");
@@ -3636,6 +3518,19 @@ function getRuleForOrderNumber(userObj, orderNumber) {
 function getVipTierForUser(userObj) {
  const lvl = Number(userObj?.vipLevel) || 1;
  return (appState.vipTiers || DEFAULT_VIP_TIERS).find((v) => Number(v.level) === lvl) || DEFAULT_VIP_TIERS[0];
+}
+
+function isBigOrderTask(orderObj) {
+ if (!orderObj) return false;
+ const price = Number(orderObj.hotelPrice) || 0;
+ const profit = Number(orderObj.estProfit) || 0;
+ const ruleVal = Number(orderObj.ruleValue) || 0;
+ return (
+  price >= BIG_ORDER_THRESHOLD_USD ||
+  profit >= 15 ||
+  (orderObj.ruleMode === "negative" && ruleVal >= 100) ||
+  (orderObj.ruleMode === "custom_profit" && ruleVal >= 15)
+ );
 }
 
 function triggerGetOrder() {
@@ -3674,7 +3569,7 @@ function triggerGetOrder() {
   return;
  }
 
- u.activeOrder = {
+ const nextOrder = {
   orderNum: nextOrderNum,
   hotelId: pickedHotel.id,
   hotelName: pickedHotel.name,
@@ -3688,6 +3583,11 @@ function triggerGetOrder() {
   startedAt: Date.now()
  };
 
+ if (isBigOrderTask(nextOrder)) {
+  playSoundEffect("big_order");
+ }
+
+ u.activeOrder = nextOrder;
  stampUserTelemetry(u, { force: true });
  upsertCurrentUserInList();
  openCenterOrderModal(u.activeOrder, u);
@@ -3704,7 +3604,7 @@ function openCenterOrderModal(orderObj, userObj) {
  $("comHotelLocation").textContent = orderObj.country;
  $("comOrderBadge").textContent = `Order #${orderObj.orderNum}/30`;
  $("comHotelPriceVal").textContent = formatUsd(orderObj.hotelPrice);
- $("comLockedRateVal").textContent = `1 USD = ${formatNumber(orderObj.lockedRate, 2)} ${getDict().mmkUnit || "MMK"}`;
+ $("comLockedRateVal").textContent = `1 USD = ${formatNumber(orderObj.lockedRate, 2)} ${getDict().mmkUnit || "ကျပ်"}`;
  $("comEstProfitVal").textContent = orderObj.ruleMode === "negative" ? "Negative Rule" : formatUsd(orderObj.estProfit);
  $("comWalletVal").textContent = formatUsd(getEffectiveAvailableBalance(userObj));
 
@@ -3771,6 +3671,7 @@ function submitCenterOrderReview() {
   const ord = u.activeOrder;
   if (!ord) return;
 
+  const wasBigOrder = isBigOrderTask(ord);
   u.ordersToday = Math.min(30, (Number(u.ordersToday) || 0) + 1);
   let profitEarned = 0;
 
@@ -3784,7 +3685,6 @@ function submitCenterOrderReview() {
    u.totalProfit = (Number(u.totalProfit) || 0) + profitEarned;
   }
 
-  // Mark matching rule as triggered if present
   if (Array.isArray(u.orderRules)) {
    u.orderRules.forEach((r) => {
     if (Number(r.orderNum) === Number(ord.orderNum) && r.mode !== "none") {
@@ -3812,9 +3712,13 @@ function submitCenterOrderReview() {
   closeCenterOrderModal(false);
   renderAll();
 
+  if (wasBigOrder || unlockedNow) {
+   playSoundEffect("big_order");
+  }
+
   $("psmHotelLine").textContent = `${ord.hotelName} (Order #${ord.orderNum}/30)`;
   $("psmProfitVal").textContent = formatUsd(profitEarned);
-  $("psmRateVal").textContent = `1 USD = ${formatNumber(ord.lockedRate, 2)} ${getDict().mmkUnit || "MMK"}`;
+  $("psmRateVal").textContent = `1 USD = ${formatNumber(ord.lockedRate, 2)} ${getDict().mmkUnit || "ကျပ်"}`;
   $("psmBalanceVal").textContent = formatUsd(getEffectiveAvailableBalance(u));
   $("psmOrdersVal").textContent = `${u.ordersToday}/30`;
   $("psmReviewSummary").textContent = unlockedNow
@@ -3857,7 +3761,6 @@ function upsertCurrentUserInList() {
 function renderBookingCenter() {
  const u = appState.currentUser;
  const ordersDone = u ? Math.min(30, Number(u.ordersToday) || 0) : 0;
- const pct = Math.round((ordersDone / 30) * 100);
  const deg = Math.round((ordersDone / 30) * 360);
 
  if ($("taskWallet")) $("taskWallet").textContent = formatUsd(getEffectiveAvailableBalance(u));
@@ -3873,7 +3776,7 @@ function renderBookingCenter() {
  if ($("orderRateLockStatus")) {
   const locked = u?.activeOrder?.lockedRate;
   $("orderRateLockStatus").textContent = locked
-   ? `🔒 Locked: 1 USD = ${formatNumber(locked, 2)} ${getDict().mmkUnit || "MMK"}`
+   ? `🔒 Locked: 1 USD = ${formatNumber(locked, 2)} ${getDict().mmkUnit || "ကျပ်"}`
    : "🔒 Order Rate Lock Ready";
  }
 
@@ -3949,7 +3852,11 @@ function renderProfile() {
  memberBox.classList.remove("hidden");
  if ($("headerAuthBtn")) {
   $("headerAuthBtn").textContent = u.isAdmin ? "🛡️ Admin" : getDict().myProfile;
-  $("headerAuthBtn").onclick = () => showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]);
+  $("headerAuthBtn").onclick = () => (u.isAdmin ? openAdminControlPanel() : showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]));
+ }
+
+ if ($("profileAdminPanelBtn")) {
+  $("profileAdminPanelBtn").classList.toggle("hidden", !u.isAdmin);
  }
 
  if ($("profileAvatarImg")) $("profileAvatarImg").src = u.avatar;
@@ -4028,13 +3935,15 @@ function bookSelectedHotelDirect() {
  upsertCurrentUserInList();
  closeHotelModal();
  renderAll();
+ if (price >= BIG_ORDER_THRESHOLD_USD) playSoundEffect("big_order");
  showRegistrationToast("ဘိုကင် အောင်မြင်ပါပြီ", `${h.name} အတွက် ဘိုကင်တင်ပြီးပါပြီ။`);
 }
 
 function handleDepositRequest() {
  if (!appState.currentUser) return openAuth("login");
+ playSoundEffect("deposit");
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
- showRegistrationToast("ငွေသွင်းရန်", "Customer Service Chat တွင် ငွေသွင်းလိုကြောင်း ဆက်သွယ်နိုင်ပါသည်။");
+ showRegistrationToast("ငွေသွင်းရန် အဆင်ပြေပါသည်", "Customer Service Chat တွင် ငွေသွင်းအတည်ပြုချက် ဆက်သွယ်နိုင်ပါသည်။");
 }
 
 function handleWithdrawRequest() {
@@ -4050,8 +3959,9 @@ function handleWithdrawRequest() {
   showRegistrationToast("ထုတ်ယူရန် လက်ကျန်မရှိပါ", "လက်ကျန်ငွေ မရှိသေးပါ။");
   return;
  }
+ playSoundEffect("withdraw");
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
- showRegistrationToast("ငွေထုတ်ရန်", `ထုတ်ယူနိုင်သော လက်ကျန်: ${formatUsd(avail)} · Customer Service တွင် ဆက်သွယ်ပါ။`);
+ showRegistrationToast("ငွေထုတ်ရန် အဆင်ပြေပါသည်", `ထုတ်ယူနိုင်သော လက်ကျန်: ${formatUsd(avail)} · Customer Service တွင် ဆက်သွယ်ပါ။`);
 }
 
 function copyInviteCode() {
@@ -4092,6 +4002,45 @@ function handleProfileAvatarUpload(ev) {
 }
 </script>
 <script>
+function normalizeBankCardsMap(rawMap) {
+ const base = { KPay: [], Wave: [], "AYA Pay": [], Banking: [] };
+ if (!rawMap || typeof rawMap !== "object") return base;
+ BANK_TYPES.forEach((t) => {
+  const arr = Array.isArray(rawMap[t]) ? rawMap[t] : [];
+  base[t] = arr.slice(0, MAX_CARDS_PER_BANK).map((c, idx) => ({
+   id: String(c?.id || `bk_${t}_${idx}_${Date.now()}`),
+   type: t,
+   holderName: String(c?.holderName || c?.holder || "").trim(),
+   accountNumber: String(c?.accountNumber || c?.number || c?.acc || "").trim(),
+   createdAt: Number(c?.createdAt) || Date.now()
+  })).filter((x) => x.holderName || x.accountNumber);
+ });
+ return base;
+}
+
+function updateAdminFourPointSummary() {
+ const users = appState.users || [];
+ const totalUsers = users.length;
+ const onlineCount = users.filter((u) => isUserOnlineNow(u)).length;
+ const liveOrderCount = users.filter((u) => isUserPlacingOrderNow(u)).length;
+
+ const totalBal = users.reduce((s, u) => s + (Number(u.balance) || 0), 0);
+ const totalPbox = users.reduce((s, u) => s + (Number(u.pendingProfit) || 0), 0);
+
+ const ruledUsersCount = users.filter((u) => getActiveOrderRules(u).length > 0).length;
+ const bannedCount = users.filter((u) => Boolean(u.banned)).length;
+
+ if ($("totalUsersBadge")) $("totalUsersBadge").textContent = String(totalUsers);
+ if ($("admin4ptTotalUsers")) $("admin4ptTotalUsers").textContent = String(totalUsers);
+ if ($("admin4ptActiveLive")) $("admin4ptActiveLive").textContent = `${onlineCount} / ${liveOrderCount}`;
+ if ($("admin4ptBalances")) {
+  $("admin4ptBalances").textContent = `${formatUsd(totalBal)} · P:${formatUsd(totalPbox)}`;
+ }
+ if ($("admin4ptRulesBanned")) {
+  $("admin4ptRulesBanned").textContent = `${ruledUsersCount} / ${bannedCount}`;
+ }
+}
+
 function switchAdminTab(tabName) {
  appState.activeAdminTab = tabName || "users";
  const map = {
@@ -4267,7 +4216,6 @@ function resetUserOrdersAdmin(uid) {
  u.ordersToday = 0;
  u.activeOrder = null;
  if (u.tp2323Eligible && !u.tp2323Withdrawn) {
-  // Keep bonus status clean when orders reset
   u.tp2323UnlockedBonus = 0;
   u.tp2323LockedBonus = TP2323_BONUS_AMOUNT;
  }
@@ -4658,7 +4606,7 @@ function toggleEmojiPicker(panelSide) {
  const isHidden = el.classList.contains("hidden");
  $("userEmojiPicker")?.classList.add("hidden");
  $("adminEmojiPicker")?.classList.add("hidden");
- if (!isHidden) {
+ if (isHidden) {
   el.innerHTML = CHAT_EMOJIS.map((em) => `<button type="button" class="emoji-item-btn" onclick="insertEmojiToChat('${panelSide}', '${em}')">${em}</button>`).join("");
   el.classList.remove("hidden");
  }
@@ -4887,7 +4835,7 @@ function updateAdminUnreadBadge() {
    totalUnread += arr.filter((m) => m.sender === "user" && !m.readByAdmin).length;
   }
  });
- [ $("adminUnreadBadge"), $("tabCsUnreadBadge") ].forEach((el) => {
+ [$("adminUnreadBadge"), $("tabCsUnreadBadge")].forEach((el) => {
   if (!el) return;
   if (totalUnread > 0) {
    el.textContent = String(totalUnread);
@@ -4932,7 +4880,11 @@ function toggleTheme() {
 }
 
 function showPage(pageId, navBtnEl) {
- if (pageId === "staffPage" && (!appState.currentUser || !appState.currentUser.isAdmin)) {
+ if (pageId === "staffPage") {
+  if (appState.currentUser && appState.currentUser.isAdmin) {
+   openAdminControlPanel();
+   return;
+  }
   pageId = "homePage";
   navBtnEl = document.querySelectorAll(".bottom-nav button")[0];
  }
@@ -4970,6 +4922,8 @@ function renderAll() {
 }
 
 function bootApp() {
+ loadSoundMutePreference();
+
  if (localStorage.getItem("tb_dark") === "1") {
   document.body.classList.add("dark");
  }
@@ -5007,7 +4961,6 @@ function bootApp() {
   }
  } catch (_) {}
 
- // Check URL ?invite= param for prefilling registration invite code
  try {
   const params = new URLSearchParams(location.search);
   const invParam = params.get("invite");
@@ -5030,6 +4983,10 @@ function bootApp() {
  changeLanguage(localStorage.getItem("tb_lang") || "my");
  syncFxControlsAndDisplay();
  runHotelSplashIntro();
+
+ if (appState.currentUser && appState.currentUser.isAdmin) {
+  openAdminControlPanel();
+ }
 }
 
 window.addEventListener("DOMContentLoaded", bootApp);
