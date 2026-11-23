@@ -60,7 +60,6 @@ body {
  padding-bottom: calc(var(--nav-height) + 12px);
 }
 
-/* 3.5-Second Glowing Rainbow Frame Splash Over Rotating Hotel Backdrop (Matched to image_40ea9f.png) */
 @property --splash-spin {
  syntax: "<angle>";
  initial-value: 0deg;
@@ -166,8 +165,444 @@ body {
  font-weight: 600;
  color: #cbd5e1;
 }
- <body>
-<!-- 3.5-Second Intro Splash Screen Over Rotating Hotel Backdrop -->
+
+.hidden {
+ display: none !important;
+ visibility: hidden !important;
+ pointer-events: none !important;
+}
+
+.topbar {
+ position: sticky;
+ top: 0;
+ z-index: 100;
+ background: var(--fb-card);
+ border-bottom: 1px solid var(--fb-border);
+ box-shadow: var(--fb-shadow);
+}
+
+.topbar-inner {
+ max-width: 1180px;
+ margin: 0 auto;
+ padding: 10px 14px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 10px;
+ flex-wrap: wrap;
+}
+
+.brand-logo-wrap {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ cursor: pointer;
+}
+
+.brand-emblem-svg {
+ width: 34px;
+ height: 34px;
+}
+
+.brand-wordmark {
+ font-weight: 800;
+ font-size: 17px;
+}
+
+.top-controls {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ flex-wrap: wrap;
+}
+
+.btn {
+ border: none;
+ border-radius: 8px;
+ padding: 9px 14px;
+ font-weight: 700;
+ cursor: pointer;
+ font-size: 13px;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 6px;
+}
+
+.btn-xs {
+ padding: 5px 10px;
+ font-size: 12px;
+ border-radius: 6px;
+}
+
+.btn-primary { background: var(--fb-primary); color: #fff; }
+.btn-secondary { background: var(--fb-secondary); color: var(--fb-text); }
+.btn-success { background: var(--fb-success); color: #fff; }
+.btn-danger { background: var(--fb-danger); color: #fff; }
+.btn-gold { background: var(--fb-gold); color: #fff; }
+
+input, select, textarea {
+ border: 1px solid var(--fb-border);
+ border-radius: 8px;
+ padding: 8px 10px;
+ background: var(--fb-card);
+ color: var(--fb-text);
+ font-family: inherit;
+ font-size: 13px;
+}
+
+.container {
+ max-width: 1180px;
+ margin: 14px auto;
+ padding: 0 14px;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+.card {
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 12px;
+ padding: 16px;
+ box-shadow: var(--fb-shadow);
+ margin-bottom: 14px;
+}
+
+.hero {
+ position: relative;
+ border-radius: 14px;
+ overflow: hidden;
+ min-height: 210px;
+ display: flex;
+ align-items: flex-end;
+ background-size: cover;
+ background-position: center;
+ margin-bottom: 14px;
+}
+
+.hero::before {
+ content: "";
+ position: absolute;
+ inset: 0;
+ background: linear-gradient(180deg, rgba(10, 15, 28, 0.25), rgba(10, 15, 28, 0.82));
+}
+
+.hero-content {
+ position: relative;
+ z-index: 2;
+ padding: 20px;
+ color: #fff;
+ width: 100%;
+}
+
+.fx-top-grid, .steps-grid, .stats-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+ gap: 12px;
+ margin-bottom: 14px;
+}
+
+.today-rate-card, .step-card, .stat-box, .fx-chart-card {
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 12px;
+ padding: 14px;
+ box-shadow: var(--fb-shadow);
+}
+
+.today-rate-header, .fx-chart-header, .section-head {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 8px;
+ flex-wrap: wrap;
+}
+
+.today-rate-value, .fx-rate-big {
+ font-size: 20px;
+ font-weight: 800;
+}
+
+.fx-rate-big.is-down { color: var(--fb-danger); }
+.fx-rate-big.is-up { color: var(--fb-success); }
+
+.converter-box { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.converter-row { display: flex; align-items: center; gap: 8px; }
+.converter-row label { width: 70px; font-weight: 700; font-size: 12px; }
+.converter-row input { flex: 1; }
+.quick-presets-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.quick-preset-btn {
+ border: 1px solid var(--fb-border);
+ background: var(--fb-secondary);
+ color: var(--fb-text);
+ border-radius: 6px;
+ padding: 4px 8px;
+ font-size: 11px;
+ font-weight: 700;
+ cursor: pointer;
+}
+.converter-answer { font-weight: 800; color: var(--fb-primary); }
+
+.fx-3d-stage {
+ position: relative;
+ height: 170px;
+ border-radius: 10px;
+ background: rgba(15, 23, 42, 0.04);
+ overflow: hidden;
+ margin: 10px 0;
+}
+body.dark .fx-3d-stage { background: rgba(2, 6, 23, 0.45); }
+.fx-3d-canvas { width: 100%; height: 100%; display: block; }
+.fx-chart-footer {
+ display: flex;
+ justify-content: space-between;
+ gap: 8px;
+ flex-wrap: wrap;
+ font-size: 12px;
+ color: var(--fb-muted);
+}
+
+.step-badge, .tag {
+ display: inline-block;
+ padding: 3px 8px;
+ border-radius: 999px;
+ font-size: 11px;
+ font-weight: 700;
+ background: var(--fb-secondary);
+ color: var(--fb-text);
+}
+
+.hotel-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+ gap: 12px;
+}
+.hotel-img { width: 100%; height: 145px; object-fit: cover; border-radius: 8px; }
+.card-body { display: flex; flex-direction: column; justify-content: space-between; gap: 8px; margin-top: 8px; }
+.gold-stars { color: #f59e0b; }
+.price { font-weight: 800; color: var(--fb-primary); }
+.mmk-sub { font-size: 11px; color: var(--fb-muted); font-weight: 600; }
+.small { font-size: 12px; }
+.muted { color: var(--fb-muted); }
+
+.status-pill, .notif-badge {
+ display: inline-flex;
+ align-items: center;
+ padding: 2px 8px;
+ border-radius: 999px;
+ font-size: 11px;
+ font-weight: 700;
+}
+.pill-online { background: rgba(46, 125, 50, 0.14); color: var(--fb-success); }
+.pill-live, .pill-banned, .notif-badge { background: rgba(198, 40, 40, 0.15); color: var(--fb-danger); }
+.pill-offline { background: var(--fb-secondary); color: var(--fb-muted); }
+.pill-triggered { background: rgba(217, 119, 6, 0.16); color: var(--fb-gold); }
+
+.activity-ticker-wrap { max-width: 1180px; margin: 10px auto 0; padding: 0 14px; }
+.activity-ticker-bar {
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ padding: 8px 12px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ overflow: hidden;
+}
+.ticker-badge { font-weight: 700; font-size: 12px; white-space: nowrap; }
+.ticker-viewport { flex: 1; overflow: hidden; height: 20px; position: relative; }
+.ticker-slide { transition: transform 0.6s ease, opacity 0.6s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ticker-slide.exit-to-top { transform: translateY(-100%); opacity: 0; }
+.ticker-slide.enter-from-bottom { transform: translateY(100%); opacity: 0; transition: none; }
+
+.suspended-banner {
+ max-width: 1180px;
+ margin: 10px auto 0;
+ padding: 10px 14px;
+ background: rgba(198, 40, 40, 0.14);
+ border: 1px solid var(--fb-danger);
+ color: var(--fb-danger);
+ border-radius: 10px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ gap: 10px;
+}
+
+.reg-success-toast, .cs-incoming-toast {
+ position: fixed;
+ top: 72px;
+ right: 16px;
+ z-index: 9500;
+ max-width: 340px;
+ background: var(--fb-card);
+ border: 1px solid var(--fb-primary);
+ border-radius: 12px;
+ padding: 12px 14px;
+ box-shadow: var(--fb-shadow);
+ cursor: pointer;
+ transition: opacity 0.35s ease;
+}
+.reg-success-toast.fade-out, .cs-incoming-toast.fade-out { opacity: 0; }
+.reg-toast-title, .cs-toast-sender { font-weight: 800; }
+.reg-toast-sub, .cs-toast-preview { font-size: 12px; color: var(--fb-muted); margin-top: 4px; }
+.cs-toast-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--fb-primary); }
+
+.image-lightbox {
+ position: fixed;
+ inset: 0;
+ z-index: 9800;
+ background: rgba(0, 0, 0, 0.85);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 16px;
+}
+.image-lightbox img { max-width: 95vw; max-height: 88vh; border-radius: 10px; }
+
+.support-full-messages, .chat-messages {
+ max-height: 340px;
+ overflow-y: auto;
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+ padding: 10px;
+ border: 1px solid var(--fb-border);
+ border-radius: 10px;
+ margin-bottom: 10px;
+}
+.msg-bubble { max-width: 82%; padding: 8px 12px; border-radius: 12px; background: var(--fb-secondary); }
+.msg-me { align-self: flex-end; background: var(--fb-primary); color: #fff; }
+.msg-meta { font-size: 10px; opacity: 0.78; margin-bottom: 3px; }
+.msg-photo-thumb { max-width: 180px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
+.msg-actions-bar { display: none; gap: 6px; margin-top: 6px; }
+.msg-actions-bar.visible { display: flex; }
+.msg-mini-btn { border: none; border-radius: 5px; padding: 2px 7px; font-size: 11px; cursor: pointer; background: rgba(0,0,0,0.2); color: inherit; }
+
+.chat-composer { display: flex; gap: 6px; align-items: flex-end; }
+.chat-textarea { flex: 1; resize: none; min-height: 40px; }
+.emoji-picker-panel { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border: 1px solid var(--fb-border); border-radius: 8px; margin-bottom: 8px; background: var(--fb-card); }
+.emoji-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding: 3px; }
+
+.task-center-box { text-align: center; }
+.task-progress-summary { max-width: 420px; margin: 0 auto 12px; }
+.task-progress-track { height: 8px; border-radius: 999px; background: var(--fb-secondary); overflow: hidden; margin-top: 6px; }
+.task-progress-fill { height: 100%; width: 0%; background: var(--fb-primary); transition: width 0.3s ease; }
+.progress-ring-wrap { display: flex; justify-content: center; margin: 14px 0; }
+.progress-ring {
+ width: 112px;
+ height: 112px;
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-weight: 800;
+ background: conic-gradient(var(--fb-primary) calc(var(--pct, 0) * 1%), var(--fb-secondary) 0);
+ position: relative;
+}
+.progress-ring::before {
+ content: "";
+ position: absolute;
+ inset: 10px;
+ border-radius: 50%;
+ background: var(--fb-card);
+}
+.progress-ring span { position: relative; z-index: 1; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-align: left; font-size: 12px; }
+
+.profile-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.profile-avatar-wrap { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; cursor: pointer; border: 2px solid var(--fb-primary); }
+.profile-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.wallet-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+.admin-live-banner { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px; border-radius: 8px; background: var(--fb-secondary); margin-bottom: 10px; }
+.admin-cs-grid { display: grid; grid-template-columns: 260px 1fr; gap: 12px; }
+@media (max-width: 760px) { .admin-cs-grid { grid-template-columns: 1fr; } }
+.cs-client-item { padding: 8px 10px; border-radius: 8px; cursor: pointer; border-bottom: 1px solid var(--fb-border); }
+.cs-client-item.active { background: var(--fb-secondary); }
+
+.bottom-nav {
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ height: var(--nav-height);
+ background: var(--fb-card);
+ border-top: 1px solid var(--fb-border);
+ display: grid;
+ grid-template-columns: repeat(5, 1fr);
+ z-index: 200;
+}
+.bottom-nav button {
+ border: none;
+ background: none;
+ color: var(--fb-muted);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ gap: 2px;
+ cursor: pointer;
+ font-size: 11px;
+ font-weight: 700;
+}
+.bottom-nav button.active { color: var(--fb-primary); }
+
+.modal-backdrop {
+ position: fixed;
+ inset: 0;
+ z-index: 9000;
+ background: rgba(0, 0, 0, 0.58);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 14px;
+}
+.modal-card {
+ width: 100%;
+ max-width: 440px;
+ max-height: 88vh;
+ overflow-y: auto;
+ background: var(--fb-card);
+ border: 1px solid var(--fb-border);
+ border-radius: 14px;
+ padding: 18px;
+ box-shadow: var(--fb-shadow);
+}
+.modal-card.wide-modal { max-width: 680px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
+.modal-header h3 { margin: 0; }
+.close-x { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--fb-text); }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-weight: 700; font-size: 12px; margin-bottom: 5px; }
+.field input, .field select, .field textarea { width: 100%; }
+.phone-inline-group { display: flex; gap: 8px; }
+.phone-code-compact { width: 110px !important; flex-shrink: 0; }
+.phone-number-expanded { flex: 1; }
+.pass-wrap { position: relative; display: flex; align-items: center; }
+.pass-eye-btn { position: absolute; right: 8px; background: none; border: none; cursor: pointer; }
+.terms-agree-row { display: flex !important; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600 !important; }
+.terms-agree-row input { width: auto !important; }
+.error-text { color: var(--fb-danger); font-size: 12px; font-weight: 700; min-height: 16px; }
+.input-error-box { border-color: var(--fb-danger) !important; }
+
+.order-meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 12px 0; padding: 10px; border-radius: 8px; background: var(--fb-secondary); font-size: 12px; }
+.star-picker-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.star-pick-btn { border: 1px solid var(--fb-border); background: var(--fb-secondary); color: var(--fb-text); border-radius: 6px; padding: 5px 9px; font-size: 12px; cursor: pointer; }
+.star-pick-btn.selected { background: var(--fb-gold); color: #fff; border-color: var(--fb-gold); }
+.review-chips-list { display: flex; flex-direction: column; gap: 6px; }
+.review-option { text-align: left; border: 1px solid var(--fb-border); background: var(--fb-secondary); color: var(--fb-text); border-radius: 8px; padding: 7px 10px; font-size: 12px; cursor: pointer; }
+.review-option.selected { border-color: var(--fb-primary); background: rgba(24, 119, 242, 0.12); font-weight: 700; }
+.verifying-box { text-align: center; padding: 24px 10px; }
+.spinner-ring { width: 34px; height: 34px; border: 4px solid var(--fb-secondary); border-top-color: var(--fb-primary); border-radius: 50%; animation: spinAnim 0.8s linear infinite; margin: 0 auto 10px; }
+@keyframes spinAnim { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
 <div id="introSplash">
  <div class="splash-rainbow-frame">
   <div class="splash-inner-card">
@@ -177,13 +612,11 @@ body {
  </div>
 </div>
 
-<!-- Registration Success Toast -->
 <div id="regSuccessToast" class="reg-success-toast hidden">
  <div id="regToastTitle" class="reg-toast-title">ဂုဏ်ယူပါတယ်</div>
  <div id="regToastSub" class="reg-toast-sub">Congratulations! Your account has been created successfully.</div>
 </div>
 
-<!-- Incoming Customer Service Message Toast -->
 <div id="csIncomingToast" class="cs-incoming-toast hidden" onclick="handleCsToastClick()">
  <div class="cs-toast-top">
   <span data-i18n="newCsAlertTitle">📩 NEW CUSTOMER SERVICE MESSAGE</span>
@@ -193,35 +626,18 @@ body {
  <div id="csToastPreview" class="cs-toast-preview"></div>
 </div>
 
-<!-- Image Lightbox -->
 <div id="imageLightbox" class="image-lightbox hidden" onclick="closeImageLightbox()">
  <img id="lightboxImgEl" src="" alt="Preview" onclick="event.stopPropagation()">
 </div>
 
-<!-- Top Navigation Header with Custom Glowing Hotel + Globe Emblem Logo -->
 <header class="topbar">
  <div class="topbar-inner">
   <div class="brand-logo-wrap" onclick="handleLogoClick()">
    <svg class="brand-emblem-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-    <defs>
-     <linearGradient id="tbGlobeGrad" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#1877f2"/>
-      <stop offset="55%" stop-color="#0ea5e9"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
-     </linearGradient>
-     <linearGradient id="tbGoldRoof" x1="16" y1="14" x2="48" y2="42" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#d97706"/>
-     </linearGradient>
-    </defs>
-    <circle cx="32" cy="32" r="27" stroke="url(#tbGlobeGrad)" stroke-width="3" fill="rgba(24, 119, 242, 0.08)"/>
-    <ellipse cx="32" cy="32" rx="14" ry="26.5" stroke="url(#tbGlobeGrad)" stroke-width="1.6" stroke-dasharray="3 2"/>
-    <path d="M7.5 34C18.5 39 45.5 39 56.5 34" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M18 39V25L32 15L46 25V39" fill="rgba(255,255,255,0.92)" stroke="url(#tbGoldRoof)" stroke-width="2.5" stroke-linejoin="round"/>
-    <path d="M14 26L32 13L50 26" stroke="url(#tbGoldRoof)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M32 18.2L33.1 20.5L35.6 20.8L33.8 22.5L34.2 25L32 23.8L29.8 25L30.2 22.5L28.4 20.8L30.9 20.5L32 18.2Z" fill="#f59e0b"/>
+    <circle cx="32" cy="32" r="27" stroke="#1877f2" stroke-width="3" fill="rgba(24, 119, 242, 0.08)"/>
+    <path d="M18 39V25L32 15L46 25V39" fill="rgba(255,255,255,0.92)" stroke="#d97706" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M14 26L32 13L50 26" stroke="#d97706" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
     <rect x="29" y="31" width="6" height="8" rx="1" fill="#1877f2"/>
-    <path d="M51 14L55.5 11.5L53 16L54 18.5L51.5 17.5L49 19L49.5 16.3L47.5 14.5L50.2 14.2L51 14Z" fill="#fbbf24"/>
    </svg>
    <span class="brand-wordmark">Trip Booking</span>
   </div>
@@ -238,13 +654,11 @@ body {
  </div>
 </header>
 
-<!-- Account Suspension Banner -->
 <div id="suspendedAccountNotice" class="suspended-banner hidden">
  <span id="suspendedReasonText"></span>
  <button type="button" class="btn btn-danger btn-xs" onclick="openSupportFromSuspension()">🎧 Customer Service</button>
 </div>
 
-<!-- Slow Bottom-to-Top Single-Item Activity Ticker -->
 <div class="activity-ticker-wrap">
  <div class="activity-ticker-bar">
   <span class="ticker-badge" data-i18n="tickerBadgeLabel">🔔 Live Notice</span>
@@ -267,7 +681,6 @@ body {
    </div>
   </div>
 
-  <!-- Today's USD Rate & Converter Box with Quick Presets -->
   <div class="fx-top-grid">
    <div class="today-rate-card">
     <div>
@@ -308,7 +721,6 @@ body {
    </div>
   </div>
 
-  <!-- Smooth Single-Line 3D LIVE FX Trend Canvas -->
   <div class="fx-chart-card">
    <div class="fx-chart-header">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -335,7 +747,6 @@ body {
    </div>
   </div>
 
-  <!-- 3-Step Guide -->
   <div class="steps-grid">
    <div class="step-card">
     <span class="step-badge" data-i18n="step1Badge">STEP 1</span>
@@ -354,7 +765,6 @@ body {
    </div>
   </div>
 
-  <!-- International Hotels Directory -->
   <div class="card">
    <div class="section-head">
     <h2 class="section-title">
@@ -370,28 +780,27 @@ body {
    </div>
   </div>
  </section>
- <!-- CUSTOMER SERVICE PAGE (Full-Height + Multi-Line Composer + Offline Draft Protection) -->
+
+ <!-- CUSTOMER SERVICE PAGE -->
  <section id="supportPage" class="page">
-  <div class="support-full-wrap">
-   <div class="card support-full-card">
-    <div class="section-head" style="margin-bottom:8px">
-     <h2 class="section-title" data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</h2>
-     <span class="tag" style="color:var(--fb-success)" data-i18n="csActiveBadge">● Active</span>
-    </div>
-    <div id="supportMessages" class="support-full-messages"></div>
-    <div id="userEmojiPicker" class="emoji-picker-panel hidden"></div>
-    <div class="chat-composer">
-     <button type="button" class="btn btn-secondary btn-xs" onclick="toggleEmojiPicker('user')" title="Emoji">😊</button>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="$('userChatPhotoInput').click()" title="Photo">📷</button>
-     <input id="userChatPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
-     <textarea id="supportInput" class="chat-textarea" rows="1" data-i18n-ph="typeMsgPh" placeholder="Type a message (Shift+Enter for new line)..." onfocus="handleSupportInputFocus()" oninput="saveDraftText('user_cs_draft', this.value)" onkeydown="handleChatTextareaKeydown(event, 'user')"></textarea>
-     <button type="button" class="btn btn-primary btn-xs" onclick="sendSupportMessage()">➤</button>
-    </div>
+  <div class="card">
+   <div class="section-head" style="margin-bottom:8px">
+    <h2 class="section-title" data-i18n="csHeader">🎧 Trip Booking Service (24/7 Online)</h2>
+    <span class="tag" style="color:var(--fb-success)" data-i18n="csActiveBadge">● Active</span>
+   </div>
+   <div id="supportMessages" class="support-full-messages"></div>
+   <div id="userEmojiPicker" class="emoji-picker-panel hidden"></div>
+   <div class="chat-composer">
+    <button type="button" class="btn btn-secondary btn-xs" onclick="toggleEmojiPicker('user')" title="Emoji">😊</button>
+    <button type="button" class="btn btn-secondary btn-xs" onclick="$('userChatPhotoInput').click()" title="Photo">📷</button>
+    <input id="userChatPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
+    <textarea id="supportInput" class="chat-textarea" rows="1" data-i18n-ph="typeMsgPh" placeholder="Type a message (Shift+Enter for new line)..." onfocus="handleSupportInputFocus()" oninput="saveDraftText('user_cs_draft', this.value)" onkeydown="handleChatTextareaKeydown(event, 'user')"></textarea>
+    <button type="button" class="btn btn-primary btn-xs" onclick="sendSupportMessage()">➤</button>
    </div>
   </div>
  </section>
 
- <!-- BOOKING TASK CENTER PAGE (Clean Order Progress Without Profit Forecast Spoiler) -->
+ <!-- BOOKING TASK CENTER PAGE -->
  <section id="bookingPage" class="page">
   <div class="stats-grid">
    <div class="stat-box">
@@ -426,7 +835,6 @@ body {
    </div>
 
    <div id="tp2323OrderHint" class="tag hidden" style="margin-bottom:8px"></div>
-   <div id="pendingProfitNoticeBox" class="hidden" style="margin-bottom:8px;font-weight:700;color:var(--fb-primary)"></div>
    <div id="lastCompletedOrderBox" class="hidden" style="margin-bottom:8px"></div>
    <div class="progress-ring-wrap">
     <div id="orderCircle" class="progress-ring">
@@ -447,8 +855,6 @@ body {
       <option value="all" data-i18n="filterAllTypes">All Types</option>
       <option value="profit" data-i18n="filterProfitType">Booking Profit</option>
       <option value="bonus" data-i18n="filterBonusType">TP2323 Welcome Bonus</option>
-      <option value="pending_release" data-i18n="filterPendingReleaseType">30-Order Profit</option>
-      <option value="clear_neg" data-i18n="filterClearNegType">Negative Settlement</option>
       <option value="hotel_book" data-i18n="filterHotelBookType">Hotel Booking</option>
      </select>
      <input id="historySearch" type="text" data-i18n-ph="histSearchPh" placeholder="Search..." oninput="renderHistory()">
@@ -473,64 +879,60 @@ body {
 
  <!-- PROFILE PAGE -->
  <section id="profilePage" class="page">
-  <div id="guestAuthBox" class="card profile-expanded-card" style="text-align:center;justify-content:center;padding:32px 18px">
-   <div>
-    <h2 style="margin:0 0 8px" data-i18n="welcomeTrip">Welcome to Trip Booking</h2>
-    <p class="muted" style="margin:0 0 18px" data-i18n="loginPrompt">Login or register a new account to start earning commissions.</p>
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-     <button type="button" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
-     <button type="button" class="btn btn-secondary" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
-    </div>
+  <div id="guestAuthBox" class="card" style="text-align:center;padding:32px 18px">
+   <h2 style="margin:0 0 8px" data-i18n="welcomeTrip">Welcome to Trip Booking</h2>
+   <p class="muted" style="margin:0 0 18px" data-i18n="loginPrompt">Login or register a new account to start earning commissions.</p>
+   <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <button type="button" class="btn btn-primary" onclick="openAuth('login')" data-i18n="loginBtn">Login</button>
+    <button type="button" class="btn btn-secondary" onclick="openAuth('register')" data-i18n="createAcc">Register</button>
    </div>
   </div>
 
-  <div id="memberProfileBox" class="card profile-expanded-card hidden">
-   <div>
-    <div class="profile-top">
-     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <div class="profile-avatar-wrap" onclick="$('profileAvatarInput').click()" title="Change Avatar">
-       <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop" alt="Avatar">
-      </div>
-      <input id="profileAvatarInput" type="file" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
-      <div>
-       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-        <h2 id="profileName" style="margin:0;font-size:19px">Member</h2>
-        <button type="button" class="btn btn-secondary btn-xs" onclick="openEditNameModal()">✏️</button>
-        <span id="profileVipBadge" class="tag">VIP Level 1</span>
-        <span id="tp2323ProfileStatus" class="tag hidden" style="color:var(--fb-gold)">🎁 TP2323</span>
-       </div>
-       <div id="profileIdentity" class="small muted" style="margin-top:3px"></div>
-      </div>
+  <div id="memberProfileBox" class="card hidden">
+   <div class="profile-top">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+     <div class="profile-avatar-wrap" onclick="$('profileAvatarInput').click()" title="Change Avatar">
+      <img id="profileAvatarImg" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop" alt="Avatar">
      </div>
-     <button type="button" class="btn btn-danger btn-xs" onclick="logout()" data-i18n="logoutBtn">Logout</button>
-    </div>
-
-    <div class="stats-grid" style="margin-top:16px">
-     <div class="stat-box">
-      <div class="stat-label" data-i18n="walletBal">Account Balance</div>
-      <div id="walletBalance" class="stat-val">$0.00</div>
-     </div>
-     <div class="stat-box">
-      <div class="stat-label" data-i18n="bookingHistCardTitle">Booking History</div>
-      <div id="profileOrders" class="stat-val" style="cursor:pointer;color:var(--fb-primary)" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">0/30 ➔</div>
-     </div>
-     <div class="stat-box">
-      <div class="stat-label" data-i18n="inviteCodeTitle">Referral Code</div>
+     <input id="profileAvatarInput" type="file" accept="image/*" class="hidden" onchange="handleProfileAvatarUpload(event)">
+     <div>
       <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-       <span id="inviteCode" class="stat-val" style="font-size:15px">TB00000</span>
-       <button type="button" class="btn btn-secondary btn-xs" onclick="copyInviteCode()" data-i18n="copyBtn">Copy</button>
+       <h2 id="profileName" style="margin:0;font-size:19px">Member</h2>
+       <button type="button" class="btn btn-secondary btn-xs" onclick="openEditNameModal()">✏️</button>
+       <span id="profileVipBadge" class="tag">VIP Level 1</span>
+       <span id="tp2323ProfileStatus" class="tag hidden" style="color:var(--fb-gold)">🎁 TP2323</span>
       </div>
-     </div>
-     <div class="stat-box">
-      <div class="stat-label" data-i18n="refBonus">Referral Earned</div>
-      <div id="referralEarned" class="stat-val">$0.00</div>
+      <div id="profileIdentity" class="small muted" style="margin-top:3px"></div>
      </div>
     </div>
+    <button type="button" class="btn btn-danger btn-xs" onclick="logout()" data-i18n="logoutBtn">Logout</button>
+   </div>
 
-    <div class="wallet-actions">
-     <button type="button" class="btn btn-success" onclick="handleDepositRequest()" data-i18n="depositBtn">Deposit</button>
-     <button type="button" class="btn btn-gold" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">Withdraw</button>
+   <div class="stats-grid" style="margin-top:16px">
+    <div class="stat-box">
+     <div class="stat-label" data-i18n="walletBal">Account Balance</div>
+     <div id="walletBalance" class="stat-val">$0.00</div>
     </div>
+    <div class="stat-box">
+     <div class="stat-label" data-i18n="bookingHistCardTitle">Booking History</div>
+     <div id="profileOrders" class="stat-val" style="cursor:pointer;color:var(--fb-primary)" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])">0/30 ➔</div>
+    </div>
+    <div class="stat-box">
+     <div class="stat-label" data-i18n="inviteCodeTitle">Referral Code</div>
+     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <span id="inviteCode" class="stat-val" style="font-size:15px">TB00000</span>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="copyInviteCode()" data-i18n="copyBtn">Copy</button>
+     </div>
+    </div>
+    <div class="stat-box">
+     <div class="stat-label" data-i18n="refBonus">Referral Earned</div>
+     <div id="referralEarned" class="stat-val">$0.00</div>
+    </div>
+   </div>
+
+   <div class="wallet-actions">
+    <button type="button" class="btn btn-success" onclick="handleDepositRequest()" data-i18n="depositBtn">Deposit</button>
+    <button type="button" class="btn btn-gold" onclick="handleWithdrawRequest()" data-i18n="withdrawBtn">Withdraw</button>
    </div>
 
    <div style="margin-top:18px;padding-top:12px;border-top:1px solid var(--fb-border);display:flex;align-items:center;gap:8px;flex-wrap:wrap" class="small muted">
@@ -540,6 +942,7 @@ body {
    </div>
   </div>
  </section>
+
  <!-- ADMIN & SERVICE STAFF PAGE -->
  <section id="staffPage" class="page">
   <div class="card">
@@ -681,30 +1084,29 @@ body {
  </section>
 </main>
 
-<!-- Clean Fixed Bottom Navigation -->
 <nav class="bottom-nav" aria-label="Primary Navigation">
  <button type="button" class="active" onclick="showPage('homePage', this)">
-  <span class="nav-ico">🏠</span>
-  <span class="nav-txt" data-i18n="navHome">Home</span>
+  <span>🏠</span>
+  <span data-i18n="navHome">Home</span>
  </button>
  <button type="button" onclick="showPage('supportPage', this)">
-  <span class="nav-ico">🎧</span>
-  <span class="nav-txt" data-i18n="navService">Service</span>
+  <span>🎧</span>
+  <span data-i18n="navService">Service</span>
  </button>
  <button type="button" onclick="showPage('bookingPage', this)">
-  <span class="nav-ico">📋</span>
-  <span class="nav-txt" data-i18n="navBooking">Booking</span>
+  <span>📋</span>
+  <span data-i18n="navBooking">Booking</span>
  </button>
  <button type="button" onclick="showPage('historyPage', this)">
-  <span class="nav-ico">📜</span>
-  <span class="nav-txt" data-i18n="navHistory">History</span>
+  <span>📜</span>
+  <span data-i18n="navHistory">History</span>
  </button>
  <button type="button" onclick="handleBottomProfileClick(this)">
-  <span class="nav-ico">👤</span>
-  <span class="nav-txt" data-i18n="navProfile">Profile</span>
+  <span>👤</span>
+  <span data-i18n="navProfile">Profile</span>
  </button>
 </nav>
- <!-- Auth Modal (Login & Register with Compact Country Code + Terms Checkbox + Multilingual Name Support) -->
+<!-- Auth Modal -->
 <div id="authModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
@@ -713,8 +1115,8 @@ body {
   </div>
 
   <div id="regExtraFields" class="field hidden">
-   <label data-i18n="fullNameLabel">Full Name</label>
-   <input id="regName" type="text" data-i18n-ph="fullNamePh" placeholder="Enter your full name" oninput="saveDraftText('reg_name_draft', this.value)">
+   <label data-i18n="fullNameLabel">Full Name (Any Native Script)</label>
+   <input id="regName" type="text" data-i18n-ph="fullNamePh" placeholder="Enter full name (Myanmar, English, 中文, ไทย...)" oninput="saveDraftText('reg_name_draft', this.value)">
   </div>
 
   <div class="field">
@@ -739,7 +1141,7 @@ body {
    <input id="regRefInput" type="text" placeholder="TP2323" oninput="saveDraftText('reg_ref_draft', this.value)">
    <label class="terms-agree-row">
     <input id="regAgreeTermsCheckbox" type="checkbox" onchange="if(this.checked && $('authError')) $('authError').textContent=''">
-    <span data-i18n="agreeTermsText">သတ်မှတ်ထားသော စည်းမျဉ်းစည်းကမ်းများ လိုက်နာပါသည်။</span>
+    <span data-i18n="agreeTermsText">I agree to the platform terms and conditions.</span>
    </label>
   </div>
 
@@ -752,18 +1154,14 @@ body {
  </div>
 </div>
 
-<!-- Admin Booking Profit Table Modal ($100 to $10,000, 30-Order Exact Profit) -->
+<!-- Admin Booking Profit Table Modal -->
 <div id="profitTableModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div class="modal-header">
    <h3 data-i18n="profitTableModalTitle">📊 Booking Profit Table ($100 – $10,000)</h3>
    <button type="button" class="close-x" onclick="closeModal('profitTableModal')">✕</button>
   </div>
-
-  <p class="small muted" style="margin:0 0 12px" data-i18n="profitTableDesc">
-   Configure principal tiers from $100 to $10,000. Without lucky rules, completing 30 orders on $100 grants exact $20 profit ($120 total), with varying per-order commissions (e.g. 0.21, 0.49).
-  </p>
-
+  <p class="small muted" style="margin:0 0 12px" data-i18n="profitTableDesc"></p>
   <div class="table-wrap" style="margin-bottom:14px">
    <table>
     <thead>
@@ -778,7 +1176,6 @@ body {
     <tbody id="adminProfitTableRows"></tbody>
    </table>
   </div>
-
   <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center">
    <button type="button" class="btn btn-secondary btn-xs" onclick="resetProfitTableDefaults()" data-i18n="resetProfitTableBtn">Reset Defaults ($100 = +$20)</button>
    <button type="button" class="btn btn-success btn-xs" onclick="saveProfitTableAdmin()" data-i18n="saveProfitTableBtn">Save Profit Table</button>
@@ -796,12 +1193,13 @@ body {
   <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
   <div id="detailHotelBody"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-   <button type="button" id="detailBookNowBtn" class="btn btn-primary" style="flex:1" onclick="bookSelectedHomeHotel()">Book Hotel</button>
+   <button type="button" id="detailBookNowBtn" class="btn btn-primary" style="flex:1" onclick="bookSelectedHomeHotel()">Book Now</button>
    <button type="button" class="btn btn-secondary" onclick="closeModal('hotelDetailModal')" data-i18n="closeBtn">Close</button>
   </div>
  </div>
 </div>
- <!-- Center Order Modal -->
+
+<!-- Center Order Modal -->
 <div id="centerOrderModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div class="modal-header">
@@ -874,7 +1272,7 @@ body {
  </div>
 </div>
 
-<!-- Low Balance / Special Order Modal -->
+<!-- Low Balance Modal -->
 <div id="lowBalanceModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
@@ -1031,7 +1429,7 @@ body {
   <button type="button" class="btn btn-primary" style="width:100%" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
  </div>
 </div>
- <script>
+<script>
 const firebaseConfig = {
  apiKey: "AIzaSyA2u0RXYfB4O39tU7b35H9Z-L_eQ5k3m1w",
  authDomain: "trip-booking-62b4d.firebaseapp.com",
@@ -1054,7 +1452,6 @@ try {
 
 const $ = id => document.getElementById(id);
 
-/* Draft Protection Helpers (Persists across page changes & offline reloads) */
 function saveDraftText(draftKey, val) {
  try {
   localStorage.setItem("tb_draft_" + draftKey, String(val ?? ""));
@@ -1094,7 +1491,6 @@ function autoResizeTextarea(el) {
  el.style.height = Math.min(110, Math.max(40, el.scrollHeight)) + "px";
 }
 
-/* Sound Effects (Order Complete / Alert) + English Female Voice on Account Creation */
 let sharedAudioCtx = null;
 function getAudioContextSafe() {
  try {
@@ -1268,7 +1664,6 @@ function applyRotatingPlatformBackdrops() {
  if (heroEl) heroEl.style.backgroundImage = `url("${imgUrl}")`;
 }
 
-/* 3.5-Second Auto-Dismiss Splash Over Rotating Platform Hotel Image */
 let splashDismissTimerId = null;
 let splashFadeTimerId = null;
 
@@ -1297,7 +1692,8 @@ function runIntroSplash() {
   }, 420);
  }, 3500);
 }
-   const DEMO_BOOKING_HOTELS = [
+
+const DEMO_BOOKING_HOTELS = [
  { id: "H001", name: "The Peninsula Bangkok", country: "Thailand", price: 96, stars: 5, image: VERIFIED_HOTEL_IMAGES[0] },
  { id: "H002", name: "Marina Bay Sands Luxury", country: "Singapore", price: 99, stars: 5, image: VERIFIED_HOTEL_IMAGES[1] },
  { id: "H003", name: "Park Hyatt Tokyo", country: "Japan", price: 95, stars: 5, image: VERIFIED_HOTEL_IMAGES[2] },
@@ -2141,7 +2537,6 @@ const I18N = {
   taskCenter: "Booking Task Center", getOrderBtn: "Get Order",
   histTitle: "Transaction & Booking History", histSearchPh: "Search...",
   filterAllTypes: "All Types", filterProfitType: "Booking Profit", filterBonusType: "TP2323 Welcome Bonus",
-  filterPendingReleaseType: "30-Order Profit", filterClearNegType: "Negative Settlement",
   filterHotelBookType: "Hotel Booking",
   thDate: "Date & Time", thType: "Type", thDetails: "Details & Review", thAmount: "Amount", thStatus: "Status",
   welcomeTrip: "Welcome to Trip Booking", loginPrompt: "Login or register a new account to start earning commissions.",
@@ -2218,7 +2613,6 @@ const I18N = {
   taskCenter: "ဘိုကင်တာဝန် ဗဟိုဌာန", getOrderBtn: "အော်ဒါရယူရန်",
   histTitle: "ငွေစာရင်းနှင့် ဘိုကင်မှတ်တမ်း", histSearchPh: "ရှာဖွေရန်...",
   filterAllTypes: "အမျိုးအစား အားလုံး", filterProfitType: "ဘိုကင်အမြတ်", filterBonusType: "TP2323 ကြိုဆိုဆုကြေး",
-  filterPendingReleaseType: "အော်ဒါ ၃၀ ပြည့် အမြတ်", filterClearNegType: "လက်ကျန်နုတ်ယူမှု ရှင်းလင်းချက်",
   filterHotelBookType: "ဟိုတယ်ဘိုကင်",
   thDate: "ရက်စွဲနှင့် အချိန်", thType: "အမျိုးအစား", thDetails: "အသေးစိတ်နှင့် သုံးသပ်ချက်", thAmount: "ပမာဏ", thStatus: "အခြေအနေ",
   welcomeTrip: "Trip Booking မှ ကြိုဆိုပါသည်", loginPrompt: "ကော်မရှင်များ ရယူရန် အကောင့်ဝင်ပါ သို့မဟုတ် အကောင့်အသစ် ဖွင့်ပါ။",
@@ -2295,7 +2689,6 @@ const I18N = {
   taskCenter: "预订任务中心", getOrderBtn: "获取订单",
   histTitle: "资金与预订记录", histSearchPh: "搜索...",
   filterAllTypes: "全部类型", filterProfitType: "预订佣金", filterBonusType: "TP2323 迎新奖励",
-  filterPendingReleaseType: "30单结算利润", filterClearNegType: "负余额清零",
   filterHotelBookType: "酒店预订",
   thDate: "日期时间", thType: "类型", thDetails: "详情与评价", thAmount: "金额", thStatus: "状态",
   welcomeTrip: "欢迎来到 Trip Booking", loginPrompt: "请登录或注册账号以开始赚取佣金。",
@@ -2372,7 +2765,6 @@ const I18N = {
   taskCenter: "ศูนย์งานจอง", getOrderBtn: "รับออเดอร์",
   histTitle: "ประวัติธุรกรรมและการจอง", histSearchPh: "ค้นหา...",
   filterAllTypes: "ทุกประเภท", filterProfitType: "กำไรจากการจอง", filterBonusType: "โบนัสต้อนรับ TP2323",
-  filterPendingReleaseType: "กำไรครบ 30 ออเดอร์", filterClearNegType: "ล้างยอดติดลบ",
   filterHotelBookType: "จองโรงแรม",
   thDate: "วันและเวลา", thType: "ประเภท", thDetails: "รายละเอียดและรีวิว", thAmount: "จำนวนเงิน", thStatus: "สถานะ",
   welcomeTrip: "ยินดีต้อนรับสู่ Trip Booking", loginPrompt: "เข้าสู่ระบบหรือสมัครสมาชิกเพื่อเริ่มรับค่าคอมมิชชั่น",
@@ -2413,8 +2805,7 @@ const I18N = {
   mustAgreeTermsErr: "กรุณาทำเครื่องหมายยอมรับข้อกำหนดและเงื่อนไขก่อนสมัครสมาชิก"
  }
 };
-
-let currentLang = "en";
+ let currentLang = "en";
 
 function getDict() {
  return I18N[currentLang] || I18N.en;
@@ -2424,8 +2815,6 @@ function getTxTypeLabel(type) {
  const d = getDict();
  if (type === "profit") return d.filterProfitType;
  if (type === "bonus") return d.filterBonusType;
- if (type === "pending_release") return d.filterPendingReleaseType;
- if (type === "clear_neg") return d.filterClearNegType;
  if (type === "hotel_book") return d.filterHotelBookType;
  return type || "Transaction";
 }
@@ -2671,12 +3060,9 @@ function buildActivityTickerEntries() {
   const nm = sampleNames[i % sampleNames.length];
   const amt = sampleAmounts[i % sampleAmounts.length];
   const isWithdraw = i % 2 === 0;
-  const kindTag = isWithdraw
-   ? `<span class="ticker-kind-wd">[Withdraw]</span>`
-   : `<span class="ticker-kind-dp">[Deposit]</span>`;
   const verb = isWithdraw ? "withdrew" : "deposited";
   entries.push({
-   html: `${kindTag} <b>${nm}</b> ${verb} <b>$${amt}</b>`,
+   html: `<b>${nm}</b> ${verb} <b>$${amt}</b>`,
    isReal: false
   });
  }
@@ -2686,7 +3072,6 @@ function buildActivityTickerEntries() {
 function applyTickerEntryToSlide(slideEl, entry) {
  if (!slideEl || !entry) return;
  slideEl.innerHTML = entry.html;
- slideEl.classList.toggle("real-user-highlight", Boolean(entry.isReal));
 }
 
 function renderActivityTicker() {
@@ -2863,7 +3248,7 @@ async function directBookHotel(idx) {
 
 let authMode = "login";
 
-/* Normalize Unicode names (Myanmar, English, Chinese, Thai, etc.) without restricting native scripts */
+/* Supports all native scripts & Unicode characters (Myanmar, English, Chinese, Thai, etc.) */
 function normalizeNativeFullName(rawName) {
  const normalized = String(rawName || "").normalize("NFC").replace(/\s+/g, " ").trim();
  return normalized || "Member";
@@ -3011,7 +3396,6 @@ async function submitAuth() {
    profit: 0,
    total_profit: 0,
    profit_box: 0,
-   pending_admin_profit: 0,
    referral_earned: 0,
    orders: 0,
    order_rules: [],
@@ -3516,7 +3900,8 @@ async function confirmCenterOrder() {
   $("profitSuccessModal").classList.remove("hidden");
  }
 }
-  function renderHistory() {
+
+function renderHistory() {
  const tbody = $("historyRows");
  if (!tbody) return;
  if (!currentUser) {
@@ -3609,6 +3994,7 @@ function renderProfileAndBooking() {
 
  const displayName = normalizeNativeFullName(currentUser.name);
  if ($("profileName")) $("profileName").textContent = displayName;
+ if ($("profileAvatarImg") && currentUser.avatar) $("profileAvatarImg").src = currentUser.avatar;
  if ($("profileIdentity")) $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"}`;
  if ($("profileVipBadge")) $("profileVipBadge").textContent = currentUser.vip_level || "VIP Level 1";
  if ($("tp2323ProfileStatus")) {
@@ -3622,6 +4008,26 @@ function renderProfileAndBooking() {
  const baseUrl = window.location.href.split("#")[0].split("?")[0];
  const invLink = `${baseUrl}?ref=${encodeURIComponent(currentUser.invite_code || "TB00000")}`;
  if ($("profileInviteLinkText")) $("profileInviteLinkText").textContent = invLink;
+}
+
+async function handleProfileAvatarUpload(e) {
+ const file = e.target?.files?.[0];
+ e.target.value = "";
+ if (!file || !currentUser) return;
+ const reader = new FileReader();
+ reader.onload = async () => {
+  const dataUrl = String(reader.result || "");
+  if (!dataUrl) return;
+  currentUser.avatar = dataUrl;
+  currentUser.updated_at = Date.now();
+  if ($("profileAvatarImg")) $("profileAvatarImg").src = dataUrl;
+  const uIdx = allUsers.findIndex(u => String(u.id) === String(currentUser.id));
+  if (uIdx >= 0) allUsers[uIdx].avatar = dataUrl;
+  saveCachedUsersLocal(allUsers);
+  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
+  if (db) await db.ref("users/" + currentUser.id).update({ avatar: dataUrl, updated_at: currentUser.updated_at }).catch(() => {});
+ };
+ reader.readAsDataURL(file);
 }
 
 function copyInviteCode() {
@@ -3818,13 +4224,13 @@ function handleMessageBubbleClick(e, msgKey) {
 function buildChatMessageBubbleHtml(m, idx, viewerRole) {
  const msgKey = getMsgUniqueKey(m, idx);
  const isMine = (viewerRole === "user" && m.sender === "user") || (viewerRole === "admin" && m.sender === "support");
- const cls = isMine ? "msg-bubble msg-me" : "msg-bubble msg-other";
+ const cls = isMine ? "msg-bubble msg-me" : "msg-bubble";
  const senderName = m.sender === "support" ? "🎧 Trip Booking Service" : (m.sender_name || "Customer");
  const barVisible = activeMsgActionBarKey.key === msgKey;
 
  let bodyHtml = "";
  if (m.deleted) {
-  bodyHtml = `<div class="msg-deleted-note">🚫 Message deleted</div>`;
+  bodyHtml = `<div>🚫 Message deleted</div>`;
  } else {
   if (m.image) {
    bodyHtml += `<img class="msg-photo-thumb" src="${m.image}" alt="Photo" onclick="event.stopPropagation(); openImageLightbox('${m.image}')">`;
@@ -3847,7 +4253,7 @@ function buildChatMessageBubbleHtml(m, idx, viewerRole) {
  const actionsBarHtml = (!m.deleted) ? `
   <div class="msg-actions-bar ${barVisible ? "visible" : ""}" onclick="event.stopPropagation()">
    ${isMine && m.text ? `<button type="button" class="msg-mini-btn" onclick="openEditChatMessageModal('${msgKey}')">✏️ Edit</button>` : ""}
-   <button type="button" class="msg-mini-btn danger" onclick="deleteChatMessageByKey('${msgKey}')">🗑️ Delete</button>
+   <button type="button" class="msg-mini-btn" onclick="deleteChatMessageByKey('${msgKey}')">🗑️ Delete</button>
   </div>
  ` : "";
 
