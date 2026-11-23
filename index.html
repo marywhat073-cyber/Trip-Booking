@@ -462,12 +462,13 @@ body.dark .fx-3d-stage { background: rgba(2, 6, 23, 0.45); }
 .image-lightbox img { max-width: 95vw; max-height: 88vh; border-radius: 10px; }
 
 .support-full-messages, .chat-messages {
- max-height: 340px;
+ max-height: 520px;
+ min-height: 260px;
  overflow-y: auto;
  display: flex;
  flex-direction: column;
  gap: 8px;
- padding: 10px;
+ padding: 12px;
  border: 1px solid var(--fb-border);
  border-radius: 10px;
  margin-bottom: 10px;
@@ -481,7 +482,7 @@ body.dark .fx-3d-stage { background: rgba(2, 6, 23, 0.45); }
 .msg-mini-btn { border: none; border-radius: 5px; padding: 2px 7px; font-size: 11px; cursor: pointer; background: rgba(0,0,0,0.2); color: inherit; }
 
 .chat-composer { display: flex; gap: 6px; align-items: flex-end; }
-.chat-textarea { flex: 1; resize: none; min-height: 40px; }
+.chat-textarea { flex: 1; resize: none; min-height: 76px; padding: 10px 12px; line-height: 1.45; }
 .emoji-picker-panel { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; border: 1px solid var(--fb-border); border-radius: 8px; margin-bottom: 8px; background: var(--fb-card); }
 .emoji-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding: 3px; }
 
