@@ -60,7 +60,7 @@ body {
  padding-bottom: calc(var(--nav-height) + 12px);
 }
 
-/* 5-Second Glowing Rainbow Frame Splash Screen (Matched to image_3ffdc6.png) */
+/* 3.5-Second Glowing Rainbow Frame Splash Over Rotating Hotel Backdrop (Matched to image_40ea9f.png) */
 @property --splash-spin {
  syntax: "<angle>";
  initial-value: 0deg;
@@ -78,15 +78,15 @@ body {
  background-size: cover;
  background-position: center;
  background-repeat: no-repeat;
- transition: opacity 0.55s ease, visibility 0.55s ease;
+ transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 #introSplash::before {
  content: "";
  position: absolute;
  inset: 0;
- background: rgba(9, 14, 26, 0.82);
- backdrop-filter: blur(4px);
+ background: rgba(9, 14, 26, 0.52);
+ backdrop-filter: blur(2px);
 }
 
 #introSplash.fade-out {
@@ -147,7 +147,7 @@ body {
  width: 100%;
  padding: 26px 22px;
  border-radius: 15px;
- background: linear-gradient(145deg, #161b26, #1d222d);
+ background: linear-gradient(145deg, rgba(22, 27, 38, 0.94), rgba(29, 34, 45, 0.94));
  text-align: center;
  color: #ffffff;
 }
@@ -166,1397 +166,8 @@ body {
  font-weight: 600;
  color: #cbd5e1;
 }
-
-/* Custom Glowing Hotel + Globe Emblem Brand Logo */
-.brand-logo-wrap {
- display: inline-flex;
- align-items: center;
- gap: 9px;
- cursor: pointer;
- user-select: none;
-}
-
-.brand-emblem-svg {
- width: 34px;
- height: 34px;
- flex-shrink: 0;
- filter: drop-shadow(0 0 7px rgba(245, 158, 11, 0.55));
-}
-
-.brand-wordmark {
- font-size: 18px;
- font-weight: 800;
- letter-spacing: 0.2px;
- background: linear-gradient(90deg, #1877f2, #f59e0b);
- -webkit-background-clip: text;
- -webkit-text-fill-color: transparent;
-}
-
-body.dark .brand-wordmark {
- background: linear-gradient(90deg, #60a5fa, #fbbf24);
- -webkit-background-clip: text;
- -webkit-text-fill-color: transparent;
-}
-
-/* Top Header */
-.topbar {
- position: sticky;
- top: 0;
- z-index: 900;
- background: var(--fb-card);
- border-bottom: 1px solid var(--fb-border);
- box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
- width: 100%;
-}
-
-.topbar-inner {
- max-width: 1240px;
- margin: 0 auto;
- padding: 8px 14px;
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- flex-wrap: wrap;
-}
-
-.top-controls {
- display: flex;
- align-items: center;
- gap: 8px;
- flex-wrap: wrap;
-}
-
-select, input, textarea {
- font-family: inherit;
- font-size: 14px;
- color: var(--fb-text);
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 8px;
- padding: 8px 10px;
- outline: none;
- transition: border-color 0.2s ease, box-shadow 0.2s ease;
- max-width: 100%;
-}
-
-select:focus, input:focus, textarea:focus {
- border-color: var(--fb-primary);
- box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.15);
-}
-
-.input-error-box {
- border-color: var(--fb-danger) !important;
- box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.2) !important;
-}
-
-.btn {
- display: inline-flex;
- align-items: center;
- justify-content: center;
- gap: 6px;
- border: none;
- border-radius: 8px;
- padding: 8px 14px;
- font-size: 13.5px;
- font-weight: 600;
- cursor: pointer;
- transition: background 0.18s ease, transform 0.12s ease, opacity 0.18s ease;
- user-select: none;
- white-space: nowrap;
-}
-
-.btn:active {
- transform: scale(0.98);
-}
-
-.btn-primary {
- background: var(--fb-primary);
- color: #ffffff;
-}
-.btn-primary:hover {
- background: var(--fb-primary-hover);
-}
-
-.btn-secondary {
- background: var(--fb-secondary);
- color: var(--fb-text);
-}
-.btn-secondary:hover {
- background: var(--fb-secondary-hover);
-}
-
-.btn-success {
- background: #2e7d32;
- color: #ffffff;
-}
-.btn-success:hover {
- background: #256628;
-}
-
-.btn-danger {
- background: #c62828;
- color: #ffffff;
-}
-.btn-danger:hover {
- background: #ad1f1f;
-}
-
-.btn-gold {
- background: #d97706;
- color: #ffffff;
-}
-.btn-gold:hover {
- background: #b45309;
-}
-
-.btn-xs {
- padding: 5px 9px;
- font-size: 12px;
- border-radius: 6px;
-}
-
-/* Compact Inline Country Code + Phone Input Row */
-.phone-inline-group {
- display: flex;
- align-items: stretch;
- gap: 6px;
- width: 100%;
- min-width: 0;
-}
-
-.phone-code-compact {
- width: 108px;
- min-width: 108px;
- max-width: 116px;
- padding: 8px 6px;
- font-size: 12.5px;
- font-weight: 600;
- flex-shrink: 0;
-}
-
-.phone-number-expanded {
- flex: 1 1 auto;
- min-width: 0;
- width: 100%;
-}
-
-/* Suspension Notice Banner */
-.suspended-banner {
- max-width: 1240px;
- margin: 10px auto 0;
- padding: 10px 14px;
- border-radius: 10px;
- background: rgba(198, 40, 40, 0.12);
- border: 1px solid rgba(198, 40, 40, 0.4);
- color: var(--fb-danger);
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- flex-wrap: wrap;
-}
-
-/* Slow Bottom-to-Top Single-Line Activity Ticker */
-.activity-ticker-wrap {
- max-width: 1240px;
- margin: 8px auto 0;
- padding: 0 14px;
-}
-
-.activity-ticker-bar {
- display: flex;
- align-items: center;
- gap: 10px;
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 999px;
- padding: 5px 12px;
- box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
- overflow: hidden;
-}
-
-.ticker-badge {
- background: var(--fb-primary);
- color: #ffffff;
- font-size: 11px;
- font-weight: 700;
- padding: 2px 8px;
- border-radius: 999px;
- white-space: nowrap;
- flex-shrink: 0;
-}
-
-.ticker-viewport {
- position: relative;
- flex: 1;
- height: 22px;
- overflow: hidden;
- min-width: 0;
-}
-
-.ticker-slide {
- position: absolute;
- left: 0;
- right: 0;
- top: 0;
- height: 22px;
- line-height: 22px;
- white-space: nowrap;
- overflow: hidden;
- text-overflow: ellipsis;
- font-size: 12.5px;
- transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.95s ease;
- transform: translateY(0);
- opacity: 1;
-}
-
-.ticker-slide.enter-from-bottom {
- transform: translateY(100%);
- opacity: 0;
- transition: none;
-}
-
-.ticker-slide.exit-to-top {
- transform: translateY(-100%);
- opacity: 0;
-}
-
-.ticker-slide.real-user-highlight {
- font-weight: 600;
- color: var(--fb-primary);
-}
-
-.ticker-kind-wd {
- color: #c62828;
- font-weight: 700;
- margin-right: 4px;
-}
-
-.ticker-kind-dp {
- color: #2e7d32;
- font-weight: 700;
- margin-right: 4px;
-}
-
-/* Main Pages Container */
-.container {
- max-width: 1240px;
- margin: 0 auto;
- padding: 12px 14px 16px;
- min-height: calc(100vh - var(--nav-height) - 96px);
-}
-
-.page {
- display: none;
-}
-
-.page.active {
- display: block;
-}
-
-/* Full-Height Support Page Layout */
-.support-full-wrap {
- display: flex;
- flex-direction: column;
- min-height: calc(100vh - var(--nav-height) - 115px);
-}
-
-.support-full-card {
- flex: 1;
- display: flex;
- flex-direction: column;
- padding: 14px;
- margin-bottom: 0;
-}
-
-.support-full-messages {
- flex: 1;
- min-height: 360px;
- max-height: calc(100vh - var(--nav-height) - 270px);
- overflow-y: auto;
- padding: 12px;
- border-radius: 10px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- display: flex;
- flex-direction: column;
- gap: 8px;
-}
-
-/* Hero Banner with Rotating Hotel Backdrop */
-.hero {
- position: relative;
- border-radius: 14px;
- overflow: hidden;
- padding: 28px 22px;
- color: #ffffff;
- background-size: cover;
- background-position: center;
- background-repeat: no-repeat;
- box-shadow: var(--fb-shadow);
- margin-bottom: 14px;
-}
-
-.hero::before {
- content: "";
- position: absolute;
- inset: 0;
- background: linear-gradient(120deg, rgba(13, 23, 42, 0.82), rgba(24, 119, 242, 0.52));
-}
-
-.hero-content {
- position: relative;
- z-index: 2;
- max-width: 700px;
-}
-
-.hero h1 {
- margin: 0 0 6px;
- font-size: 24px;
- font-weight: 800;
-}
-
-.hero p {
- margin: 0 0 16px;
- font-size: 14.5px;
- opacity: 0.95;
-}
-
-/* Today Rate & Converter Row */
-.fx-top-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
- gap: 14px;
- margin-bottom: 14px;
-}
-
-.today-rate-card {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px;
- box-shadow: var(--fb-shadow);
- display: flex;
- flex-direction: column;
- justify-content: space-between;
- gap: 10px;
-}
-
-.today-rate-header {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- flex-wrap: wrap;
-}
-
-.today-rate-value {
- font-size: 22px;
- font-weight: 800;
- color: var(--fb-primary);
-}
-
-.converter-box {
- display: flex;
- flex-direction: column;
- gap: 8px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 10px;
-}
-
-.converter-row {
- display: flex;
- align-items: center;
- gap: 8px;
- flex-wrap: wrap;
-}
-
-.converter-row label {
- font-size: 12px;
- font-weight: 700;
- min-width: 58px;
- color: var(--fb-muted);
-}
-
-.converter-row input {
- flex: 1;
- min-width: 110px;
- font-weight: 700;
-}
-
-.quick-presets-row {
- display: flex;
- align-items: center;
- gap: 6px;
- flex-wrap: wrap;
- margin-top: 2px;
-}
-
-.quick-preset-btn {
- border: 1px solid var(--fb-border);
- background: var(--fb-card);
- color: var(--fb-text);
- border-radius: 6px;
- padding: 3px 8px;
- font-size: 11.5px;
- font-weight: 700;
- cursor: pointer;
- transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.quick-preset-btn:hover {
- border-color: var(--fb-primary);
- background: rgba(24, 119, 242, 0.08);
- color: var(--fb-primary);
-}
-
-.converter-answer {
- font-size: 13px;
- font-weight: 700;
- color: var(--fb-success);
- padding-top: 2px;
-}
-
-/* Smooth Single-Line 3D LIVE FX Trend Canvas */
-.fx-chart-card {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px;
- box-shadow: var(--fb-shadow);
- margin-bottom: 14px;
-}
-
-.fx-chart-header {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- flex-wrap: wrap;
- margin-bottom: 10px;
-}
-
-.fx-rate-big {
- font-size: 20px;
- font-weight: 800;
- transition: color 0.2s ease;
-}
-
-.fx-rate-big.is-up {
- color: #2e7d32;
-}
-
-.fx-rate-big.is-down {
- color: #c62828;
-}
-
-.fx-rate-big.is-flat {
- color: var(--fb-primary);
-}
-
-.fx-3d-stage {
- position: relative;
- width: 100%;
- height: 175px;
- border-radius: 12px;
- background: linear-gradient(160deg, rgba(15, 23, 42, 0.95), rgba(23, 33, 51, 0.9));
- border: 1px solid rgba(148, 163, 184, 0.22);
- box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 22px rgba(0, 0, 0, 0.2);
- overflow: hidden;
- cursor: crosshair;
-}
-
-.fx-3d-canvas {
- display: block;
- width: 100%;
- height: 100%;
-}
-
-.fx-chart-footer {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- flex-wrap: wrap;
- margin-top: 8px;
- font-size: 12px;
- color: var(--fb-muted);
-}
-
-/* 3-Step Guide */
-.steps-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
- gap: 12px;
- margin-bottom: 16px;
-}
-
-.step-card {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px;
- box-shadow: var(--fb-shadow);
-}
-
-.step-badge {
- display: inline-block;
- font-size: 11px;
- font-weight: 800;
- padding: 3px 8px;
- border-radius: 999px;
- background: rgba(24, 119, 242, 0.12);
- color: var(--fb-primary);
- margin-bottom: 6px;
-}
-
-/* Cards & Hotel Grid */
-.card {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px;
- box-shadow: var(--fb-shadow);
- margin-bottom: 14px;
-}
-
-.section-head {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- flex-wrap: wrap;
- margin-bottom: 12px;
-}
-
-.section-title {
- margin: 0;
- font-size: 18px;
- font-weight: 700;
- display: flex;
- align-items: center;
- gap: 8px;
-}
-
-.hotel-grid {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
- gap: 14px;
-}
-
-.hotel-grid .card {
- margin-bottom: 0;
- padding: 0;
- overflow: hidden;
- display: flex;
- flex-direction: column;
- cursor: pointer;
- transition: transform 0.16s ease, box-shadow 0.16s ease;
-}
-
-.hotel-grid .card:hover {
- transform: translateY(-3px);
- box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-.hotel-img {
- width: 100%;
- height: 150px;
- object-fit: cover;
- display: block;
- background: var(--fb-secondary);
-}
-
-.card-body {
- padding: 12px;
- display: flex;
- flex-direction: column;
- justify-content: space-between;
- flex: 1;
- gap: 8px;
-}
-
-.tag {
- display: inline-block;
- font-size: 11px;
- font-weight: 600;
- padding: 2px 8px;
- border-radius: 999px;
- background: var(--fb-secondary);
- color: var(--fb-text);
-}
-
-.gold-stars {
- color: #f59e0b;
- font-size: 13px;
- letter-spacing: 1px;
-}
-
-.price {
- font-size: 15px;
- font-weight: 800;
- color: var(--fb-primary);
-}
-
-.mmk-sub {
- display: block;
- font-size: 11px;
- font-weight: 600;
- color: var(--fb-muted);
- margin-top: 1px;
-}
-
-/* Booking Task Center */
-.stats-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
- gap: 12px;
- margin-bottom: 14px;
-}
-
-.stat-box {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 12px;
- box-shadow: var(--fb-shadow);
-}
-
-.stat-label {
- font-size: 12px;
- color: var(--fb-muted);
- margin-bottom: 4px;
-}
-
-.stat-val {
- font-size: 18px;
- font-weight: 800;
-}
-
-.task-progress-summary {
- max-width: 520px;
- margin: 0 auto 14px;
- text-align: left;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 10px 12px;
-}
-
-.task-progress-track {
- width: 100%;
- height: 10px;
- border-radius: 999px;
- background: var(--fb-secondary);
- overflow: hidden;
- margin-top: 6px;
-}
-
-.task-progress-fill {
- height: 100%;
- width: 0%;
- background: linear-gradient(90deg, var(--fb-primary), #22c55e);
- transition: width 0.3s ease;
-}
-
-.task-center-box {
- text-align: center;
- padding: 22px 16px;
-}
-
-.progress-ring-wrap {
- display: flex;
- justify-content: center;
- margin: 14px 0 18px;
-}
-
-.progress-ring {
- width: 112px;
- height: 112px;
- border-radius: 50%;
- display: flex;
- align-items: center;
- justify-content: center;
- background: conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg 360deg);
- position: relative;
-}
-
-.progress-ring::before {
- content: "";
- position: absolute;
- width: 86px;
- height: 86px;
- border-radius: 50%;
- background: var(--fb-card);
-}
-
-.progress-ring span {
- position: relative;
- z-index: 2;
- font-weight: 800;
- font-size: 15px;
-}
-
-/* Tables */
-.table-wrap {
- width: 100%;
- overflow-x: auto;
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- background: var(--fb-card);
-}
-
-table {
- width: 100%;
- border-collapse: collapse;
- min-width: 640px;
-}
-
-th, td {
- padding: 9px 10px;
- border-bottom: 1px solid var(--fb-border);
- text-align: left;
- vertical-align: middle;
-}
-
-th {
- background: var(--fb-bg);
- font-size: 12px;
- font-weight: 700;
- color: var(--fb-muted);
-}
-
-/* Expanded Full-Space Profile & Wallet */
-.profile-expanded-card {
- padding: 20px;
- min-height: calc(100vh - var(--nav-height) - 135px);
- display: flex;
- flex-direction: column;
- justify-content: space-between;
-}
-
-.profile-top {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 12px;
- flex-wrap: wrap;
-}
-
-.profile-avatar-wrap {
- position: relative;
- width: 68px;
- height: 68px;
- border-radius: 50%;
- overflow: hidden;
- border: 2px solid var(--fb-primary);
- cursor: pointer;
- flex-shrink: 0;
-}
-
-.profile-avatar-wrap img {
- width: 100%;
- height: 100%;
- object-fit: cover;
-}
-
-.wallet-actions {
- display: flex;
- gap: 10px;
- flex-wrap: wrap;
- margin-top: 12px;
-}
-
-/* Chat & Multi-Line Composer */
-.chat-messages {
- height: 340px;
- overflow-y: auto;
- padding: 12px;
- border-radius: 10px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- display: flex;
- flex-direction: column;
- gap: 8px;
-}
-
-.chat-msg-row {
- display: flex;
- flex-direction: column;
- max-width: 82%;
-}
-
-.chat-bubble {
- padding: 8px 12px;
- border-radius: 12px;
- font-size: 13.5px;
- line-height: 1.45;
- word-break: break-word;
- position: relative;
-}
-
-.chat-bubble-text {
- white-space: pre-line;
-}
-
-.chat-bubble.staff-editable {
- cursor: pointer;
-}
-
-.chat-bubble-meta {
- font-size: 10.5px;
- opacity: 0.78;
- margin-bottom: 3px;
-}
-
-.chat-img-msg {
- max-width: 210px;
- max-height: 210px;
- border-radius: 8px;
- margin-top: 6px;
- cursor: pointer;
- display: block;
-}
-
-.msg-action-bar {
- display: inline-flex;
- gap: 6px;
- margin-top: 4px;
- align-self: flex-end;
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 8px;
- padding: 3px 6px;
- box-shadow: var(--fb-shadow);
- z-index: 20;
-}
-
-.msg-act-btn {
- border: none;
- background: transparent;
- color: var(--fb-text);
- font-size: 11.5px;
- font-weight: 600;
- cursor: pointer;
- padding: 2px 6px;
- border-radius: 5px;
-}
-
-.msg-act-btn:hover {
- background: var(--fb-secondary);
-}
-
-.msg-act-btn.del {
- color: var(--fb-danger);
-}
-
-.chat-composer {
- display: flex;
- align-items: flex-end;
- gap: 8px;
- margin-top: 10px;
-}
-
-.chat-textarea {
- flex: 1;
- min-width: 0;
- min-height: 40px;
- max-height: 110px;
- resize: vertical;
- line-height: 1.38;
- padding: 8px 10px;
-}
-
-.emoji-picker-panel {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
- gap: 4px;
- padding: 8px;
- margin-top: 8px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- max-height: 140px;
- overflow-y: auto;
-}
-
-.emoji-item-btn {
- border: none;
- background: transparent;
- font-size: 18px;
- cursor: pointer;
- padding: 4px;
- border-radius: 6px;
-}
-
-.emoji-item-btn:hover {
- background: var(--fb-secondary);
-}
-
-/* Admin CS Split Layout */
-.admin-cs-grid {
- display: grid;
- grid-template-columns: 290px 1fr;
- gap: 12px;
-}
-
-@media (max-width: 768px) {
- .admin-cs-grid {
-  grid-template-columns: 1fr;
- }
-}
-
-/* Modals */
-.modal-backdrop {
- position: fixed;
- inset: 0;
- z-index: 2000;
- background: rgba(0, 0, 0, 0.58);
- display: flex;
- align-items: center;
- justify-content: center;
- padding: 12px;
- overflow-y: auto;
-}
-
-.modal-card {
- width: 100%;
- max-width: 440px;
- max-height: 90vh;
- overflow-y: auto;
- overflow-x: hidden;
- background: var(--fb-card);
- color: var(--fb-text);
- border: 1px solid var(--fb-border);
- border-radius: 14px;
- padding: 18px;
- box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
-}
-
-.modal-card.wide-modal {
- max-width: 740px;
-}
-
-.modal-header {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- margin-bottom: 14px;
-}
-
-.modal-header h3 {
- margin: 0;
- font-size: 17px;
-}
-
-.close-x {
- border: none;
- background: var(--fb-secondary);
- color: var(--fb-text);
- width: 30px;
- height: 30px;
- border-radius: 50%;
- font-size: 15px;
- font-weight: 700;
- cursor: pointer;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- flex-shrink: 0;
-}
-
-.field {
- margin-bottom: 12px;
- min-width: 0;
-}
-
-.field label {
- display: block;
- font-size: 12.5px;
- font-weight: 600;
- margin-bottom: 5px;
-}
-
-.field input, .field select, .field textarea {
- width: 100%;
-}
-
-.pass-wrap {
- position: relative;
- display: flex;
- align-items: center;
- width: 100%;
-}
-
-.pass-wrap input {
- width: 100%;
- padding-right: 38px;
-}
-
-.pass-eye-btn {
- position: absolute;
- right: 8px;
- border: none;
- background: transparent;
- cursor: pointer;
- font-size: 15px;
- padding: 2px;
-}
-
-.terms-agree-row {
- display: flex !important;
- align-items: flex-start;
- gap: 8px;
- margin-top: 10px;
- font-size: 12.5px;
- font-weight: 500 !important;
- cursor: pointer;
- line-height: 1.4;
-}
-
-.terms-agree-row input[type="checkbox"] {
- width: 16px !important;
- height: 16px !important;
- min-width: 16px;
- margin-top: 2px;
- cursor: pointer;
- accent-color: var(--fb-primary);
-}
-
-.error-text {
- color: var(--fb-danger);
- font-size: 12.5px;
- font-weight: 600;
- min-height: 18px;
- margin-top: 4px;
-}
-
-.small {
- font-size: 12px;
-}
-
-.muted {
- color: var(--fb-muted);
-}
-
-/* Status Pills & Badges */
-.status-pill {
- display: inline-flex;
- align-items: center;
- gap: 4px;
- padding: 2px 8px;
- border-radius: 999px;
- font-size: 11px;
- font-weight: 700;
-}
-
-.pill-live {
- background: rgba(198, 40, 40, 0.14);
- color: #c62828;
- border: 1px solid rgba(198, 40, 40, 0.35);
-}
-
-.pill-online {
- background: rgba(46, 125, 50, 0.14);
- color: #2e7d32;
- border: 1px solid rgba(46, 125, 50, 0.35);
-}
-
-.pill-offline {
- background: rgba(100, 116, 139, 0.14);
- color: var(--fb-muted);
- border: 1px solid var(--fb-border);
-}
-
-.pill-banned {
- background: rgba(185, 28, 28, 0.18);
- color: #dc2626;
- border: 1px solid rgba(220, 38, 38, 0.45);
-}
-
-.pill-pending {
- background: rgba(217, 119, 6, 0.15);
- color: #b45309;
-}
-
-.pill-triggered {
- background: rgba(46, 125, 50, 0.15);
- color: #2e7d32;
-}
-
-.notif-badge {
- background: #c62828;
- color: #ffffff;
- font-size: 11px;
- font-weight: 700;
- padding: 1px 6px;
- border-radius: 999px;
- min-width: 18px;
- text-align: center;
-}
-
-/* Order Modal Extras */
-.order-meta-grid {
- display: grid;
- grid-template-columns: repeat(2, 1fr);
- gap: 8px;
- background: var(--fb-bg);
- border: 1px solid var(--fb-border);
- border-radius: 10px;
- padding: 10px;
- margin: 12px 0;
- font-size: 13px;
-}
-
-.star-picker-row {
- display: flex;
- gap: 6px;
- flex-wrap: wrap;
-}
-
-.star-pick-btn {
- border: 1px solid var(--fb-border);
- background: var(--fb-bg);
- color: var(--fb-text);
- border-radius: 8px;
- padding: 6px 10px;
- font-size: 12.5px;
- font-weight: 700;
- cursor: pointer;
-}
-
-.star-pick-btn.selected {
- background: #f59e0b;
- color: #111827;
- border-color: #d97706;
-}
-
-.review-chips-list {
- display: flex;
- flex-direction: column;
- gap: 6px;
-}
-
-.review-option {
- text-align: left;
- border: 1px solid var(--fb-border);
- background: var(--fb-bg);
- color: var(--fb-text);
- border-radius: 8px;
- padding: 8px 10px;
- font-size: 12.5px;
- cursor: pointer;
-}
-
-.review-option.selected {
- border-color: var(--fb-primary);
- background: rgba(24, 119, 242, 0.12);
- font-weight: 600;
-}
-
-.verifying-box {
- text-align: center;
- padding: 28px 12px;
-}
-
-.spinner-ring {
- width: 38px;
- height: 38px;
- border: 4px solid var(--fb-border);
- border-top-color: var(--fb-primary);
- border-radius: 50%;
- margin: 0 auto 12px;
- animation: spinAnim 0.85s linear infinite;
-}
-
-@keyframes spinAnim {
- to { transform: rotate(360deg); }
-}
-
-/* Admin Live Order Banner */
-.admin-live-banner {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- flex-wrap: wrap;
- padding: 10px 12px;
- border-radius: 10px;
- margin-bottom: 12px;
- background: rgba(24, 119, 242, 0.08);
- border: 1px solid rgba(24, 119, 242, 0.25);
-}
-
-/* Registration Success Toast */
-.reg-success-toast {
- position: fixed;
- top: 68px;
- left: 50%;
- transform: translateX(-50%);
- z-index: 3500;
- background: linear-gradient(135deg, #1b5e20, #2e7d32);
- color: #ffffff;
- padding: 12px 22px;
- border-radius: 14px;
- box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
- text-align: center;
- min-width: 260px;
- max-width: 90vw;
- transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-.reg-success-toast.fade-out {
- opacity: 0;
- transform: translateX(-50%) translateY(-10px);
-}
-
-.reg-toast-title {
- font-size: 16px;
- font-weight: 800;
- margin-bottom: 2px;
-}
-
-.reg-toast-sub {
- font-size: 13px;
- opacity: 0.96;
-}
-
-/* Incoming CS Toast */
-.cs-incoming-toast {
- position: fixed;
- top: 68px;
- right: 14px;
- z-index: 3400;
- width: 320px;
- max-width: calc(100vw - 28px);
- background: var(--fb-card);
- color: var(--fb-text);
- border: 1px solid var(--fb-primary);
- border-left: 5px solid var(--fb-primary);
- border-radius: 12px;
- padding: 11px 13px;
- box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
- cursor: pointer;
- transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.cs-incoming-toast.fade-out {
- opacity: 0;
- transform: translateY(-8px);
-}
-
-.cs-toast-top {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 8px;
- font-size: 11px;
- font-weight: 800;
- color: var(--fb-primary);
- margin-bottom: 4px;
-}
-
-.cs-toast-sender {
- font-size: 12.5px;
- font-weight: 700;
- margin-bottom: 2px;
-}
-
-.cs-toast-preview {
- font-size: 12.5px;
- color: var(--fb-muted);
- white-space: nowrap;
- overflow: hidden;
- text-overflow: ellipsis;
-}
-
-/* Lightbox */
-.image-lightbox {
- position: fixed;
- inset: 0;
- z-index: 4000;
- background: rgba(0, 0, 0, 0.88);
- display: flex;
- align-items: center;
- justify-content: center;
- padding: 16px;
-}
-
-.image-lightbox img {
- max-width: 95vw;
- max-height: 88vh;
- border-radius: 10px;
- box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-}
-
-/* Clean Fixed Bottom Navigation */
-.bottom-nav {
- position: fixed;
- bottom: 0;
- left: 0;
- right: 0;
- height: var(--nav-height);
- z-index: 1000;
- background: var(--fb-card);
- border-top: 1px solid var(--fb-border);
- box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
- display: flex;
- align-items: center;
- justify-content: space-around;
- padding: 0 4px;
-}
-
-.bottom-nav button {
- flex: 1;
- height: 100%;
- border: none;
- background: transparent;
- color: var(--fb-muted);
- display: flex;
- flex-direction: column;
- align-items: center;
- justify-content: center;
- gap: 3px;
- font-size: 11px;
- font-weight: 600;
- line-height: 1.1;
- cursor: pointer;
- padding: 4px 2px;
- min-width: 0;
-}
-
-.bottom-nav button .nav-ico {
- font-size: 16px;
- line-height: 1;
- display: block;
-}
-
-.bottom-nav button .nav-txt {
- font-size: 11px;
- line-height: 1.15;
- display: block;
- white-space: nowrap;
- overflow: hidden;
- text-overflow: ellipsis;
- max-width: 100%;
-}
-
-.bottom-nav button.active {
- color: var(--fb-primary);
- font-weight: 700;
-}
-
-.hidden {
- display: none !important;
-}
-</style>
-</head>
-<body>
-<!-- 5-Second Intro Splash Screen (Matched to image_3ffdc6.png) -->
+ <body>
+<!-- 3.5-Second Intro Splash Screen Over Rotating Hotel Backdrop -->
 <div id="introSplash">
  <div class="splash-rainbow-frame">
   <div class="splash-inner-card">
@@ -1569,7 +180,7 @@ th {
 <!-- Registration Success Toast -->
 <div id="regSuccessToast" class="reg-success-toast hidden">
  <div id="regToastTitle" class="reg-toast-title">ဂုဏ်ယူပါတယ်</div>
- <div id="regToastSub" class="reg-toast-sub">သင့်အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်</div>
+ <div id="regToastSub" class="reg-toast-sub">Congratulations! Your account has been created successfully.</div>
 </div>
 
 <!-- Incoming Customer Service Message Toast -->
@@ -1642,8 +253,7 @@ th {
   </div>
  </div>
 </div>
-
-<main class="container">
+ <main class="container">
  <!-- HOME PAGE -->
  <section id="homePage" class="page active">
   <div id="homeHeroBanner" class="hero">
@@ -1760,7 +370,6 @@ th {
    </div>
   </div>
  </section>
-
  <!-- CUSTOMER SERVICE PAGE (Full-Height + Multi-Line Composer + Offline Draft Protection) -->
  <section id="supportPage" class="page">
   <div class="support-full-wrap">
@@ -1931,13 +540,12 @@ th {
    </div>
   </div>
  </section>
-
  <!-- ADMIN & SERVICE STAFF PAGE -->
  <section id="staffPage" class="page">
   <div class="card">
    <div class="section-head">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
+     <h2 class="section-title" data-i18n="adminPanelTitle"> Admin & Trip Booking Service Control</h2>
      <span class="tag"><span id="totalUsersBadge">0</span> <span data-i18n="usersWord">Users</span></span>
      <span id="adminUnreadBadge" class="notif-badge hidden">0</span>
     </div>
@@ -2072,22 +680,23 @@ th {
   </div>
  </section>
 </main>
+
 <!-- Clean Fixed Bottom Navigation -->
 <nav class="bottom-nav" aria-label="Primary Navigation">
  <button type="button" class="active" onclick="showPage('homePage', this)">
-  <span class="nav-ico">🏠</span>
+  <span class="nav-ico"></span>
   <span class="nav-txt" data-i18n="navHome">Home</span>
  </button>
  <button type="button" onclick="showPage('supportPage', this)">
-  <span class="nav-ico">🎧</span>
+  <span class="nav-ico"></span>
   <span class="nav-txt" data-i18n="navService">Service</span>
  </button>
  <button type="button" onclick="showPage('bookingPage', this)">
-  <span class="nav-ico">📋</span>
+  <span class="nav-ico"></span>
   <span class="nav-txt" data-i18n="navBooking">Booking</span>
  </button>
  <button type="button" onclick="showPage('historyPage', this)">
-  <span class="nav-ico">📜</span>
+  <span class="nav-ico"></span>
   <span class="nav-txt" data-i18n="navHistory">History</span>
  </button>
  <button type="button" onclick="handleBottomProfileClick(this)">
@@ -2095,8 +704,7 @@ th {
   <span class="nav-txt" data-i18n="navProfile">Profile</span>
  </button>
 </nav>
-
-<!-- Auth Modal (Login & Register with Compact Country Code + Terms Checkbox) -->
+ <!-- Auth Modal (Login & Register with Compact Country Code + Terms Checkbox + Multilingual Name Support) -->
 <div id="authModal" class="modal-backdrop hidden">
  <div class="modal-card">
   <div class="modal-header">
@@ -2192,9 +800,8 @@ th {
    <button type="button" class="btn btn-secondary" onclick="closeModal('hotelDetailModal')" data-i18n="closeBtn">Close</button>
   </div>
  </div>
-</div>
-
-<!-- Center Order Modal -->
+</div> 
+ <!-- Center Order Modal -->
 <div id="centerOrderModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div class="modal-header">
@@ -2424,7 +1031,7 @@ th {
   <button type="button" class="btn btn-primary" style="width:100%" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
  </div>
 </div>
-<script>
+ <script>
 const firebaseConfig = {
  apiKey: "AIzaSyA2u0RXYfB4O39tU7b35H9Z-L_eQ5k3m1w",
  authDomain: "trip-booking-62b4d.firebaseapp.com",
@@ -2487,7 +1094,7 @@ function autoResizeTextarea(el) {
  el.style.height = Math.min(110, Math.max(40, el.scrollHeight)) + "px";
 }
 
-/* Sound Effects (Order Complete / Alert) + English Female Voice on Account Creation (No Mute Button) */
+/* Sound Effects (Order Complete / Alert) + English Female Voice on Account Creation */
 let sharedAudioCtx = null;
 function getAudioContextSafe() {
  try {
@@ -2636,13 +1243,21 @@ const VERIFIED_HOTEL_IMAGES = [
  "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&auto=format&fit=crop"
 ];
 
+function getHotelBackdropPool() {
+ const pool = Array.isArray(allHotels)
+  ? allHotels.map(h => h && h.image).filter(Boolean)
+  : [];
+ return pool.length ? pool : VERIFIED_HOTEL_IMAGES;
+}
+
 function getRotatingHotelBackdropImage() {
+ const pool = getHotelBackdropPool();
  const counterKey = "tb_entry_visit_count";
  let visitNum = Number(localStorage.getItem(counterKey) || "0");
  visitNum = (visitNum + 1) % 1000000;
  localStorage.setItem(counterKey, String(visitNum));
- const idx = Math.abs(visitNum - 1) % VERIFIED_HOTEL_IMAGES.length;
- return VERIFIED_HOTEL_IMAGES[idx];
+ const idx = Math.abs(visitNum - 1) % pool.length;
+ return pool[idx];
 }
 
 function applyRotatingPlatformBackdrops() {
@@ -2653,7 +1268,36 @@ function applyRotatingPlatformBackdrops() {
  if (heroEl) heroEl.style.backgroundImage = `url("${imgUrl}")`;
 }
 
-const DEMO_BOOKING_HOTELS = [
+/* 3.5-Second Auto-Dismiss Splash Over Rotating Platform Hotel Image */
+let splashDismissTimerId = null;
+let splashFadeTimerId = null;
+
+function runIntroSplash() {
+ applyRotatingPlatformBackdrops();
+ const splash = $("introSplash");
+ if (!splash) return;
+
+ if (splashDismissTimerId) clearTimeout(splashDismissTimerId);
+ if (splashFadeTimerId) clearTimeout(splashFadeTimerId);
+
+ splash.style.display = "flex";
+ splash.style.opacity = "1";
+ splash.style.visibility = "visible";
+ splash.style.pointerEvents = "auto";
+ splash.classList.remove("hidden", "fade-out");
+
+ splashDismissTimerId = setTimeout(() => {
+  splash.classList.add("fade-out");
+  splash.style.opacity = "0";
+  splash.style.pointerEvents = "none";
+  splashFadeTimerId = setTimeout(() => {
+   splash.classList.add("hidden");
+   splash.style.display = "none";
+   splash.style.visibility = "hidden";
+  }, 420);
+ }, 3500);
+}
+   const DEMO_BOOKING_HOTELS = [
  { id: "H001", name: "The Peninsula Bangkok", country: "Thailand", price: 96, stars: 5, image: VERIFIED_HOTEL_IMAGES[0] },
  { id: "H002", name: "Marina Bay Sands Luxury", country: "Singapore", price: 99, stars: 5, image: VERIFIED_HOTEL_IMAGES[1] },
  { id: "H003", name: "Park Hyatt Tokyo", country: "Japan", price: 95, stars: 5, image: VERIFIED_HOTEL_IMAGES[2] },
@@ -3464,7 +2108,7 @@ const I18N = {
   splashMainTitle: "Welcome To Trip Booking",
   splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "Login", logoutBtn: "Logout", switchAuth: "Switch Login / Register",
-  fullNameLabel: "Full Name", fullNamePh: "Enter your full name",
+  fullNameLabel: "Full Name (Any Native Script)", fullNamePh: "Enter full name (Myanmar, English, 中文, ไทย...)",
   identityLabel: "Phone Number or Email", identityPh: "09xxxxxxxxx or email@example.com",
   passwordLabel: "Password", passwordPh: "Enter password",
   refCodeLabel: "Referral Code (Optional, e.g. TP2323)",
@@ -3541,7 +2185,7 @@ const I18N = {
   splashMainTitle: "Welcome To Trip Booking",
   splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "အကောင့်ဝင်ရန်", logoutBtn: "ထွက်ရန်", switchAuth: "အကောင့်ဝင်ရန် / အသစ်ဖွင့်ရန် ပြောင်းမည်",
-  fullNameLabel: "အမည်ပြည့်စုံ", fullNamePh: "သင့်အမည်ပြည့်စုံ ထည့်ပါ",
+  fullNameLabel: "အမည်ပြည့်စုံ (မိခင်ဘာသာစကား / မြန်မာ / English)", fullNamePh: "မိခင်ဘာသာစကား သို့မဟုတ် အမည်ပြည့်စုံ ထည့်ပါ",
   identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်", identityPh: "09xxxxxxxxx သို့မဟုတ် email@example.com",
   passwordLabel: "စကားဝှက်", passwordPh: "စကားဝှက် ထည့်ပါ",
   refCodeLabel: "ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)",
@@ -3611,14 +2255,14 @@ const I18N = {
   confirmServiceBtn: "အတည်ပြုမည် (ဝန်ဆောင်မှု)", alertTitleDefault: "အသိပေးချက်",
   tickerBadgeLabel: "🔔 အသိပေးချက်",
   resetBtn: "Reset", banBtn: "ရပ်ဆိုင်းမည်", unbanBtn: "ပြန်ဖွင့်မည်", deleteBtn: "ဖျက်မည်",
-  regSuccessTitle: "ဂုဏ်ယူပါတယ်", regSuccessSub: "သင့်အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်",
+  regSuccessTitle: "ဂုဏ်ယူပါတယ်", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "အကောင့်ဖွင့်ရန် စည်းမျဉ်းစည်းကမ်းများကို အမှန်ခြစ်ပေးပါ။"
  },
  zh: {
   splashMainTitle: "Welcome To Trip Booking",
   splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "登录", logoutBtn: "退出登录", switchAuth: "切换 登录 / 注册",
-  fullNameLabel: "姓名", fullNamePh: "请输入您的姓名",
+  fullNameLabel: "姓名（支持母语 / 中文 / 缅文 / 英文等）", fullNamePh: "请输入姓名（支持任意母语文字）",
   identityLabel: "手机号或邮箱", identityPh: "09xxxxxxxxx 或 email@example.com",
   passwordLabel: "密码", passwordPh: "请输入密码",
   refCodeLabel: "邀请码（选填，如 TP2323）",
@@ -3695,7 +2339,7 @@ const I18N = {
   splashMainTitle: "Welcome To Trip Booking",
   splashSubTitle: "Internitial Hotel Platform",
   loginBtn: "เข้าสู่ระบบ", logoutBtn: "ออกจากระบบ", switchAuth: "สลับ เข้าสู่ระบบ / สมัครสมาชิก",
-  fullNameLabel: "ชื่อ-นามสกุล", fullNamePh: "กรอกชื่อ-นามสกุลของคุณ",
+  fullNameLabel: "ชื่อ-นามสกุล (รองรับทุกภาษาแม่)", fullNamePh: "กรอกชื่อด้วยภาษาแม่ของคุณ (ไทย, เมียนมา, จีน, อังกฤษ...)",
   identityLabel: "เบอร์โทรศัพท์ หรือ อีเมล", identityPh: "09xxxxxxxxx หรือ email@example.com",
   passwordLabel: "รหัสผ่าน", passwordPh: "กรอกรหัสผ่าน",
   refCodeLabel: "รหัสคำเชิญ (ไม่บังคับ เช่น TP2323)",
@@ -3893,20 +2537,6 @@ function openImageLightbox(src) {
 function closeImageLightbox() {
  $("imageLightbox").classList.add("hidden");
  $("lightboxImgEl").src = "";
-}
-
-/* 5-Second Intro Splash (Matched to image_3ffdc6.png) */
-function runIntroSplash() {
- applyRotatingPlatformBackdrops();
- const splash = $("introSplash");
- if (!splash) return;
-
- setTimeout(() => {
-  splash.classList.add("fade-out");
-  setTimeout(() => {
-   splash.classList.add("hidden");
-  }, 550);
- }, 5000);
 }
 
 function showRegistrationSuccessToast() {
@@ -4233,6 +2863,12 @@ async function directBookHotel(idx) {
 
 let authMode = "login";
 
+/* Normalize Unicode names (Myanmar, English, Chinese, Thai, etc.) without restricting native scripts */
+function normalizeNativeFullName(rawName) {
+ const normalized = String(rawName || "").normalize("NFC").replace(/\s+/g, " ").trim();
+ return normalized || "Member";
+}
+
 function updateAuthModalTexts() {
  const d = getDict();
  const isReg = authMode === "register";
@@ -4339,7 +2975,7 @@ async function submitAuth() {
    return;
   }
 
-  const nameVal = ($("regName")?.value || "").trim() || "Member";
+  const nameVal = normalizeNativeFullName($("regName")?.value);
   const ccVal = $("regCountryCode")?.value || "+95";
   const canonicalId = buildCanonicalUserIdentity(rawId, ccVal);
   const strippedNum = stripLeadingZerosFromPhone(rawId);
@@ -4425,7 +3061,7 @@ async function submitAuth() {
   const idMatchesExact = (
    storedCanonical === rawId ||
    storedStripped === loginStripped ||
-   storedCanonical.endsWith(loginStripped) && loginStripped.length >= 6
+   (storedCanonical.endsWith(loginStripped) && loginStripped.length >= 6)
   );
   return idMatchesExact && String(u.password || "") === pass;
  });
@@ -4880,189 +3516,147 @@ async function confirmCenterOrder() {
   $("profitSuccessModal").classList.remove("hidden");
  }
 }
-
-/* Booking Center Progress Without Profit Forecast Spoiler */
-function renderBookingCenter() {
- const d = getDict();
- const bal = currentUser ? Number(currentUser.balance) || 0 : 0;
- const prof = currentUser ? Number(currentUser.profit) || 0 : 0;
- const totProf = currentUser ? Number(currentUser.total_profit) || 0 : 0;
- const orders = currentUser ? Number(currentUser.orders) || 0 : 0;
- const limit = currentUser ? (Number(getVipTierObj(currentUser.vip_level).daily_limit) || DEFAULT_ORDERS_LIMIT) : DEFAULT_ORDERS_LIMIT;
- const remaining = Math.max(0, limit - orders);
- const pct = Math.min(100, Math.round((orders / Math.max(1, limit)) * 100));
-
- if ($("taskWallet")) $("taskWallet").innerHTML = formatUsdWithMmk(bal);
- if ($("taskProfit")) $("taskProfit").innerHTML = formatUsdWithMmk(prof);
- if ($("taskTotalProfit")) $("taskTotalProfit").innerHTML = formatUsdWithMmk(totProf);
- if ($("taskOrdersText")) $("taskOrdersText").textContent = `${orders}/${limit}`;
-
- if ($("taskRemainingLabel")) $("taskRemainingLabel").textContent = `${d.remainingOrdersLabel}: ${remaining}`;
- if ($("taskProgressPctLabel")) $("taskProgressPctLabel").textContent = `${pct}% (${orders}/${limit})`;
- if ($("taskProgressBarFill")) $("taskProgressBarFill").style.width = `${pct}%`;
-
- const deg = Math.min(360, Math.round((orders / Math.max(1, limit)) * 360));
- const ring = $("orderCircle");
- if (ring) {
-  ring.style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg 360deg)`;
-  const span = ring.querySelector("span");
-  if (span) span.textContent = `${orders}/${limit}`;
- }
-
- const tpHint = $("tp2323OrderHint");
- if (tpHint) {
-  if (currentUser && String(currentUser.invited_by || "").toUpperCase() === "TP2323") {
-   tpHint.textContent = "🎁 TP2323 Welcome Bonus Active";
-   tpHint.classList.remove("hidden");
-  } else {
-   tpHint.classList.add("hidden");
-  }
- }
-
- const pbBox = $("pendingProfitNoticeBox");
- if (pbBox) {
-  const pbVal = currentUser ? Number(currentUser.profit_box) || 0 : 0;
-  if (pbVal > 0) {
-   pbBox.textContent = `📦 Profit Box: $${pbVal.toFixed(2)}`;
-   pbBox.classList.remove("hidden");
-  } else {
-   pbBox.classList.add("hidden");
-  }
- }
-
- const lastBox = $("lastCompletedOrderBox");
- if (lastBox) {
-  const info = currentUser?.last_completed_order_info;
-  if (info && info.hotelName) {
-   lastBox.innerHTML = `<span class="tag">Last: ${info.hotelName} (#${info.orderNum}/${info.dailyLimit}) +$${Number(info.commission || 0).toFixed(2)}</span>`;
-   lastBox.classList.remove("hidden");
-  } else {
-   lastBox.classList.add("hidden");
-  }
- }
-}
-
 function renderHistory() {
  const tbody = $("historyRows");
  if (!tbody) return;
+ if (!currentUser) {
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:18px" class="muted">Please login to view your history.</td></tr>`;
+  return;
+ }
+
  const typeFilter = $("historyTypeFilter")?.value || "all";
  const q = ($("historySearch")?.value || "").trim().toLowerCase();
- const list = Array.isArray(currentUser?.history) ? currentUser.history : [];
+ const list = Array.isArray(currentUser.history) ? currentUser.history : [];
 
  const filtered = list.filter(item => {
   if (typeFilter !== "all" && item.type !== typeFilter) return false;
   if (!q) return true;
-  return (
-   String(item.hotel_name || "").toLowerCase().includes(q) ||
-   String(item.review || "").toLowerCase().includes(q) ||
-   String(item.type || "").toLowerCase().includes(q) ||
-   String(item.time || "").toLowerCase().includes(q)
-  );
+  const hay = `${item.hotel_name || ""} ${item.review || ""} ${item.type || ""} ${item.status || ""} ${item.time || ""}`.toLowerCase();
+  return hay.includes(q);
  });
 
  if (!filtered.length) {
-  tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center;padding:18px">No history records found.</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:18px" class="muted">No records found.</td></tr>`;
   return;
  }
 
  tbody.innerHTML = filtered.map(item => {
   const amt = Number(item.amount) || 0;
-  const amtColor = amt >= 0 ? "var(--fb-success)" : "var(--fb-danger)";
+  const amtColor = amt > 0 ? "var(--fb-success)" : (amt < 0 ? "var(--fb-danger)" : "var(--fb-text)");
   return `
    <tr>
     <td class="small">${item.time || ""}</td>
     <td><span class="tag">${getTxTypeLabel(item.type)}</span></td>
     <td>
-     <div style="font-weight:600">${item.hotel_name || "-"}</div>
+     <div style="font-weight:700">${item.hotel_name || ""}</div>
      <div class="small muted">${item.review || ""}</div>
     </td>
     <td style="font-weight:700;color:${amtColor}">${formatUsdWithMmk(amt, true)}</td>
-    <td><span class="status-pill pill-triggered">${item.status || "Completed"}</span></td>
+    <td><span class="status-pill pill-online">${item.status || "Completed"}</span></td>
    </tr>
   `;
  }).join("");
 }
 
-function renderProfile() {
- const guestBox = $("guestAuthBox");
- const memberBox = $("memberProfileBox");
- if (!guestBox || !memberBox) return;
+function renderProfileAndBooking() {
+ const d = getDict();
+ const isLoggedInMember = Boolean(currentUser && !isAdminSession);
+ if ($("guestAuthBox")) $("guestAuthBox").classList.toggle("hidden", isLoggedInMember);
+ if ($("memberProfileBox")) $("memberProfileBox").classList.toggle("hidden", !isLoggedInMember);
 
- if (!currentUser || isAdminSession) {
-  guestBox.classList.remove("hidden");
-  memberBox.classList.add("hidden");
-  return;
+ const tier = getVipTierObj(currentUser?.vip_level);
+ const dailyLimit = Number(tier.daily_limit) || DEFAULT_ORDERS_LIMIT;
+ const curOrders = Math.min(dailyLimit, Number(currentUser?.orders) || 0);
+ const remOrders = Math.max(0, dailyLimit - curOrders);
+ const pct = Math.min(100, Math.round((curOrders / Math.max(1, dailyLimit)) * 100));
+
+ if ($("taskWallet")) $("taskWallet").innerHTML = formatUsdWithMmk(currentUser?.balance || 0);
+ if ($("taskProfit")) $("taskProfit").innerHTML = formatUsdWithMmk(currentUser?.profit || 0);
+ if ($("taskTotalProfit")) $("taskTotalProfit").innerHTML = formatUsdWithMmk(currentUser?.total_profit || 0);
+ if ($("taskOrdersText")) $("taskOrdersText").textContent = `${curOrders}/${dailyLimit}`;
+
+ if ($("taskRemainingLabel")) $("taskRemainingLabel").textContent = `${d.remainingOrdersLabel}: ${remOrders}`;
+ if ($("taskProgressPctLabel")) $("taskProgressPctLabel").textContent = `${pct}%`;
+ if ($("taskProgressBarFill")) $("taskProgressBarFill").style.width = `${pct}%`;
+
+ if ($("orderCircle")) {
+  $("orderCircle").style.setProperty("--pct", String(pct));
+  $("orderCircle").innerHTML = `<span>${curOrders}/${dailyLimit}</span>`;
  }
 
- guestBox.classList.add("hidden");
- memberBox.classList.remove("hidden");
-
- if ($("profileName")) $("profileName").textContent = currentUser.name || "Member";
- if ($("profileIdentity")) {
-  $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"}`;
+ const lastOrd = currentUser?.last_completed_order_info;
+ const lastBox = $("lastCompletedOrderBox");
+ if (lastBox) {
+  if (isLoggedInMember && lastOrd && lastOrd.orderNum) {
+   lastBox.classList.remove("hidden");
+   lastBox.innerHTML = `<span class="tag">✓ Last: #${lastOrd.orderNum} — ${lastOrd.hotelName} (${formatUsdPlainWithMmk(lastOrd.commission)})</span>`;
+  } else {
+   lastBox.classList.add("hidden");
+  }
  }
+
+ const tpBox = $("tp2323OrderHint");
+ if (tpBox) {
+  if (isLoggedInMember && String(currentUser.invited_by || "").toUpperCase() === "TP2323") {
+   tpBox.classList.remove("hidden");
+   tpBox.textContent = "🎁 TP2323 Referral Active";
+  } else {
+   tpBox.classList.add("hidden");
+  }
+ }
+
+ if (!isLoggedInMember) return;
+
+ const displayName = normalizeNativeFullName(currentUser.name);
+ if ($("profileName")) $("profileName").textContent = displayName;
+ if ($("profileIdentity")) $("profileIdentity").textContent = `${currentUser.identity || ""} • ${currentUser.vip_level || "VIP Level 1"}`;
  if ($("profileVipBadge")) $("profileVipBadge").textContent = currentUser.vip_level || "VIP Level 1";
  if ($("tp2323ProfileStatus")) {
   $("tp2323ProfileStatus").classList.toggle("hidden", String(currentUser.invited_by || "").toUpperCase() !== "TP2323");
  }
- if ($("walletBalance")) $("walletBalance").innerHTML = formatUsdWithMmk(currentUser.balance);
- const orders = Number(currentUser.orders) || 0;
- const limit = Number(getVipTierObj(currentUser.vip_level).daily_limit) || DEFAULT_ORDERS_LIMIT;
- if ($("profileOrders")) $("profileOrders").textContent = `${orders}/${limit} ➔`;
+ if ($("walletBalance")) $("walletBalance").innerHTML = formatUsdWithMmk(currentUser.balance || 0);
+ if ($("profileOrders")) $("profileOrders").textContent = `${curOrders}/${dailyLimit} ➔`;
  if ($("inviteCode")) $("inviteCode").textContent = currentUser.invite_code || "TB00000";
- if ($("referralEarned")) $("referralEarned").innerHTML = formatUsdWithMmk(currentUser.referral_earned);
- if ($("profileAvatarImg") && currentUser.avatar) $("profileAvatarImg").src = currentUser.avatar;
+ if ($("referralEarned")) $("referralEarned").innerHTML = formatUsdWithMmk(currentUser.referral_earned || 0);
 
- const baseUrl = `${window.location.origin}${window.location.pathname}`;
- const refLink = `${baseUrl}?ref=${encodeURIComponent(currentUser.invite_code || "TP2323")}`;
- if ($("profileInviteLinkText")) $("profileInviteLinkText").textContent = refLink;
+ const baseUrl = window.location.href.split("#")[0].split("?")[0];
+ const invLink = `${baseUrl}?ref=${encodeURIComponent(currentUser.invite_code || "TB00000")}`;
+ if ($("profileInviteLinkText")) $("profileInviteLinkText").textContent = invLink;
 }
 
 function copyInviteCode() {
- const code = currentUser?.invite_code || "TP2323";
+ const code = $("inviteCode")?.textContent || "";
+ if (!code) return;
  navigator.clipboard?.writeText(code).catch(() => {});
- showAlert(`✅ Copied referral code: <b>${code}</b>`);
+ showAlert(`✅ Copied Referral Code: <b>${code}</b>`);
 }
 
 function copyInviteLink() {
- const linkText = $("profileInviteLinkText")?.textContent || window.location.href;
- navigator.clipboard?.writeText(linkText).catch(() => {});
- showAlert(`✅ Copied invite link!`);
+ const link = $("profileInviteLinkText")?.textContent || "";
+ if (!link) return;
+ navigator.clipboard?.writeText(link).catch(() => {});
+ showAlert(`✅ Copied Invite Link:<br><span class="small">${link}</span>`);
 }
 
 function openEditNameModal() {
  if (!currentUser) return;
- if ($("editProfileNameInput")) $("editProfileNameInput").value = currentUser.name || "";
+ if ($("editProfileNameInput")) $("editProfileNameInput").value = normalizeNativeFullName(currentUser.name);
  $("editNameModal").classList.remove("hidden");
 }
 
 async function saveProfileNameEdit() {
  if (!currentUser) return;
- const newName = ($("editProfileNameInput")?.value || "").trim();
- if (!newName) return;
+ const newName = normalizeNativeFullName($("editProfileNameInput")?.value);
  currentUser.name = newName;
  currentUser.updated_at = Date.now();
  const idx = allUsers.findIndex(u => String(u.id) === String(currentUser.id));
  if (idx >= 0) allUsers[idx].name = newName;
  saveCachedUsersLocal(allUsers);
  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
- if (db) await db.ref("users/" + currentUser.id).update({ name: newName, updated_at: currentUser.updated_at }).catch(() => {});
+ if (db) await db.ref("users/" + currentUser.id).update({ name: newName, updated_at: Date.now() }).catch(() => {});
  closeModal("editNameModal");
- renderAllViews();
-}
-
-async function handleProfileAvatarUpload(e) {
- const file = e.target?.files?.[0];
- if (!file || !currentUser) return;
- const reader = new FileReader();
- reader.onload = async () => {
-  const dataUrl = String(reader.result || "");
-  currentUser.avatar = dataUrl;
-  if ($("profileAvatarImg")) $("profileAvatarImg").src = dataUrl;
-  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
-  if (db) await db.ref("users/" + currentUser.id).update({ avatar: dataUrl }).catch(() => {});
- };
- reader.readAsDataURL(file);
+ renderProfileAndBooking();
+ renderActivityTicker();
 }
 
 function handleDepositRequest() {
@@ -5073,9 +3667,12 @@ function handleDepositRequest() {
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
  const inp = $("supportInput");
  if (inp) {
-  inp.value = "Hello Service,\nI would like to deposit funds into my account.";
-  saveDraftText("user_cs_draft", inp.value);
-  autoResizeTextarea(inp);
+  const prefill = `Hello Trip Booking Service, I would like to deposit funds to my account (${currentUser.identity || currentUser.id}).`;
+  if (!inp.value.trim()) {
+   inp.value = prefill;
+   saveDraftText("user_cs_draft", prefill);
+   autoResizeTextarea(inp);
+  }
   inp.focus();
  }
 }
@@ -5085,91 +3682,84 @@ function handleWithdrawRequest() {
   openAuth("login");
   return;
  }
- if (currentUser.is_banned) {
+ if (Number(currentUser.negative_balance) > 0 || Number(currentUser.balance) < 0) {
   playAlertChimeSound();
-  showAlert("🚫 Your account is suspended. Please contact Customer Service.");
+  openLowBalanceModal("⚠️ Cannot withdraw while account has a negative balance. Please contact Customer Service.", Math.abs(Number(currentUser.negative_balance) || Number(currentUser.balance) || 0));
   return;
  }
  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1]);
  const inp = $("supportInput");
  if (inp) {
-  inp.value = `Hello Service,\nI would like to withdraw from my balance ($${Number(currentUser.balance || 0).toFixed(2)}).`;
-  saveDraftText("user_cs_draft", inp.value);
-  autoResizeTextarea(inp);
+  const prefill = `Hello Trip Booking Service, I would like to request a withdrawal for my account (${currentUser.identity || currentUser.id}). Current balance: ${formatUsdPlainWithMmk(currentUser.balance || 0)}.`;
+  if (!inp.value.trim()) {
+   inp.value = prefill;
+   saveDraftText("user_cs_draft", prefill);
+   autoResizeTextarea(inp);
+  }
   inp.focus();
  }
 }
 
-/* Multi-Line Chat Keydown (Enter sends, Shift+Enter inserts new line) */
-function handleChatTextareaKeydown(e, role) {
- saveDraftText("user_cs_draft", $("supportInput")?.value || "");
- saveAdminCsDraft();
- if (role === "user") autoResizeTextarea($("supportInput"));
- if (role === "support") autoResizeTextarea($("adminChatInput"));
-
- if (e.key === "Enter" && !e.shiftKey) {
-  e.preventDefault();
-  if (role === "user") sendSupportMessage();
-  else sendAdminChatReply();
- }
-}
-
-function toggleEmojiPicker(target) {
- const panelId = target === "user" ? "userEmojiPicker" : "adminEmojiPicker";
+function toggleEmojiPicker(targetType) {
+ const panelId = targetType === "user" ? "userEmojiPicker" : "adminEmojiPicker";
  const panel = $(panelId);
  if (!panel) return;
- if (!panel.dataset.built) {
-  panel.innerHTML = EMOJI_LIST.map(em =>
-   `<button type="button" class="emoji-item-btn" onclick="insertEmojiIntoChat('${target}', '${em}')">${em}</button>`
-  ).join("");
-  panel.dataset.built = "1";
- }
- panel.classList.toggle("hidden");
+ const willOpen = panel.classList.contains("hidden");
+ document.querySelectorAll(".emoji-picker-panel").forEach(p => p.classList.add("hidden"));
+ if (!willOpen) return;
+
+ panel.innerHTML = EMOJI_LIST.map(em =>
+  `<button type="button" class="emoji-btn" onclick="insertEmojiIntoTarget('${targetType}', '${em}')">${em}</button>`
+ ).join("");
+ panel.classList.remove("hidden");
 }
 
-function insertEmojiIntoChat(target, emojiStr) {
- const inp = target === "user" ? $("supportInput") : $("adminChatInput");
+function insertEmojiIntoTarget(targetType, emojiStr) {
+ const inp = targetType === "user" ? $("supportInput") : $("adminChatInput");
  if (!inp) return;
- inp.value = (inp.value || "") + emojiStr;
- if (target === "user") saveDraftText("user_cs_draft", inp.value);
- else saveAdminCsDraft();
- autoResizeTextarea(inp);
+ const start = inp.selectionStart ?? inp.value.length;
+ const end = inp.selectionEnd ?? inp.value.length;
+ inp.value = inp.value.slice(0, start) + emojiStr + inp.value.slice(end);
  inp.focus();
+ inp.selectionStart = inp.selectionEnd = start + emojiStr.length;
+ autoResizeTextarea(inp);
+ if (targetType === "user") {
+  saveDraftText("user_cs_draft", inp.value);
+ } else {
+  saveAdminCsDraft();
+ }
 }
 
-function handleChatPhotoUpload(e, senderRole) {
- const file = e.target?.files?.[0];
- if (!file) return;
- const reader = new FileReader();
- reader.onload = async () => {
-  const imgData = String(reader.result || "");
-  if (senderRole === "user") {
-   await pushChatMessage({ text: "", image: imgData, sender: "user" });
-  } else {
-   await pushChatMessage({ text: "", image: imgData, sender: "support", targetUserId: selectedCsUserId });
-  }
-  e.target.value = "";
- };
- reader.readAsDataURL(file);
+function handleChatTextareaKeydown(e, targetType) {
+ if (e.key === "Enter" && !e.shiftKey) {
+  e.preventDefault();
+  if (targetType === "user") sendSupportMessage();
+  else sendAdminChatReply();
+ } else {
+  setTimeout(() => autoResizeTextarea(e.target), 0);
+ }
 }
 
-async function handleSupportInputFocus() {
+function handleSupportInputFocus() {
  if (!currentUser || isAdminSession) return;
- await markUserMessagesReadByUser(currentUser.id);
+ markUserMessagesReadByClient(currentUser.id);
 }
 
-async function markUserMessagesReadByUser(uid) {
+async function markUserMessagesReadByClient(uid) {
  if (!uid) return;
  let changed = false;
  allMessages.forEach(m => {
   if (String(m.user_id) === String(uid) && m.sender === "support" && !m.read_by_user) {
    m.read_by_user = true;
    changed = true;
+   if (db && m.fbKey) {
+    db.ref("messages/" + m.fbKey).update({ read_by_user: true }).catch(() => {});
+   }
   }
  });
  if (changed) {
   saveCachedMessagesLocal(allMessages);
-  renderSupportChat();
+  renderSupportMessages();
  }
 }
 
@@ -5180,366 +3770,363 @@ async function markUserMessagesReadByAdmin(uid) {
   if (String(m.user_id) === String(uid) && m.sender === "user" && !m.read_by_admin) {
    m.read_by_admin = true;
    changed = true;
+   if (db && m.fbKey) {
+    db.ref("messages/" + m.fbKey).update({ read_by_admin: true }).catch(() => {});
+   }
   }
  });
  if (changed) {
   saveCachedMessagesLocal(allMessages);
-  renderAdminBadges();
-  renderCsClientList();
+  updateAdminUnreadBadges();
  }
 }
 
-async function pushChatMessage({ text = "", image = "", sender = "user", targetUserId = null }) {
- if (sender === "user") {
-  if (!currentUser) {
-   openAuth("login");
-   return;
+function updateAdminUnreadBadges() {
+ const unreadCount = allMessages.filter(m => m.sender === "user" && !m.read_by_admin && !m.deleted).length;
+ [$("adminUnreadBadge"), $("tabCsUnreadBadge")].forEach(el => {
+  if (!el) return;
+  if (unreadCount > 0) {
+   el.textContent = String(unreadCount);
+   el.classList.remove("hidden");
+  } else {
+   el.classList.add("hidden");
   }
- } else if (!isAdminSession) {
-  return;
+ });
+}
+
+function getMsgUniqueKey(m, idx) {
+ return String(m.fbKey || m.id || idx);
+}
+
+function handleMessageBubbleClick(e, msgKey) {
+ if (e.target.closest("button") || e.target.closest("img")) return;
+ if (activeMsgActionBarKey.timerId) clearTimeout(activeMsgActionBarKey.timerId);
+ if (activeMsgActionBarKey.key === msgKey) {
+  activeMsgActionBarKey.key = null;
+ } else {
+  activeMsgActionBarKey.key = msgKey;
+  activeMsgActionBarKey.timerId = setTimeout(() => {
+   activeMsgActionBarKey.key = null;
+   renderSupportMessages();
+   renderAdminChatMessages();
+  }, 4500);
+ }
+ renderSupportMessages();
+ renderAdminChatMessages();
+}
+
+function buildChatMessageBubbleHtml(m, idx, viewerRole) {
+ const msgKey = getMsgUniqueKey(m, idx);
+ const isMine = (viewerRole === "user" && m.sender === "user") || (viewerRole === "admin" && m.sender === "support");
+ const cls = isMine ? "msg-bubble msg-me" : "msg-bubble msg-other";
+ const senderName = m.sender === "support" ? "🎧 Trip Booking Service" : (m.sender_name || "Customer");
+ const barVisible = activeMsgActionBarKey.key === msgKey;
+
+ let bodyHtml = "";
+ if (m.deleted) {
+  bodyHtml = `<div class="msg-deleted-note">🚫 Message deleted</div>`;
+ } else {
+  if (m.image) {
+   bodyHtml += `<img class="msg-photo-thumb" src="${m.image}" alt="Photo" onclick="event.stopPropagation(); openImageLightbox('${m.image}')">`;
+  }
+  if (m.text) {
+   const safeText = String(m.text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>");
+   bodyHtml += `<div style="line-height:1.45;word-break:break-word">${safeText}</div>`;
+  }
  }
 
- const uid = sender === "user" ? currentUser.id : targetUserId;
+ const editedTag = (!m.deleted && m.edited) ? ` · edited` : "";
+ const readReceipt = (isMine && !m.deleted)
+  ? ((viewerRole === "user" ? m.read_by_admin : m.read_by_user) ? ` · Seen ✓✓` : ` · Sent ✓`)
+  : "";
+
+ const actionsBarHtml = (!m.deleted) ? `
+  <div class="msg-actions-bar ${barVisible ? "visible" : ""}" onclick="event.stopPropagation()">
+   ${isMine && m.text ? `<button type="button" class="msg-mini-btn" onclick="openEditChatMessageModal('${msgKey}')">✏️ Edit</button>` : ""}
+   <button type="button" class="msg-mini-btn danger" onclick="deleteChatMessageByKey('${msgKey}')">🗑️ Delete</button>
+  </div>
+ ` : "";
+
+ return `
+  <div class="${cls}" onclick="handleMessageBubbleClick(event, '${msgKey}')">
+   <div class="msg-meta">${senderName} • ${m.time || ""}${editedTag}${readReceipt}</div>
+   ${bodyHtml}
+   ${actionsBarHtml}
+  </div>
+ `;
+}
+
+function renderSupportMessages() {
+ const box = $("supportMessages");
+ if (!box) return;
+ if (!currentUser && !isAdminSession) {
+  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">Please <a href="#" onclick="event.preventDefault(); openAuth('login')">login</a> to chat with Trip Booking Service.</div>`;
+  return;
+ }
+ const uid = currentUser ? currentUser.id : selectedCsUserId;
  if (!uid) {
-  showAlert("Please select a customer first.");
+  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">No active conversation.</div>`;
   return;
  }
 
- const cleanText = String(text || "").replace(/\r\n/g, "\n").trim();
- if (!cleanText && !image) return;
+ const msgs = allMessages.filter(m => String(m.user_id) === String(uid));
+ if (!msgs.length) {
+  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">Start a conversation with Trip Booking Service (24/7).</div>`;
+  return;
+ }
+ box.innerHTML = msgs.map((m, i) => buildChatMessageBubbleHtml(m, i, isAdminSession ? "admin" : "user")).join("");
+ box.scrollTop = box.scrollHeight;
+}
+
+async function sendSupportMessage() {
+ if (!currentUser) {
+  openAuth("login");
+  return;
+ }
+ const inp = $("supportInput");
+ const txt = (inp?.value || "").trim();
+ if (!txt) return;
 
  const nowTs = Date.now();
  const msgObj = {
-  id: "MSG" + nowTs + "_" + Math.floor(Math.random() * 1000),
-  user_id: String(uid),
-  sender,
-  text: cleanText,
-  image: image || "",
+  id: "MSG" + nowTs,
+  user_id: currentUser.id,
+  sender: "user",
+  sender_name: normalizeNativeFullName(currentUser.name),
+  text: txt,
   time: formatExactTimestamp(new Date(nowTs)),
   created_at: nowTs,
-  read_by_user: sender === "user",
-  read_by_admin: sender === "support"
+  read_by_user: true,
+  read_by_admin: false
  };
 
  allMessages.push(msgObj);
  saveCachedMessagesLocal(allMessages);
- renderSupportChat();
- if (isAdminSession) {
-  renderCsClientList();
-  renderAdminChatMessages();
-  renderAdminBadges();
- }
-
- if (db) {
-  await db.ref(`messages/${uid}/${msgObj.id}`).set(msgObj).catch(() => {});
- }
-}
-
-async function sendSupportMessage() {
- const inp = $("supportInput");
- const txt = (inp?.value || "").trim();
- if (!txt) return;
  if (inp) {
   inp.value = "";
   autoResizeTextarea(inp);
  }
  clearDraftText("user_cs_draft");
- await pushChatMessage({ text: txt, sender: "user" });
+ document.querySelectorAll(".emoji-picker-panel").forEach(p => p.classList.add("hidden"));
+ renderSupportMessages();
+ updateAdminUnreadBadges();
+
+ if (db) {
+  const pushRef = db.ref("messages").push();
+  msgObj.fbKey = pushRef.key;
+  await pushRef.set(msgObj).catch(() => {});
+ }
 }
 
-async function sendAdminChatReply() {
- const inp = $("adminChatInput");
- const txt = (inp?.value || "").trim();
- if (!txt) return;
- if (!selectedCsUserId) {
-  showAlert("Please select a user from the list first.");
+async function handleChatPhotoUpload(e, senderRole) {
+ const file = e.target?.files?.[0];
+ e.target.value = "";
+ if (!file) return;
+ if (!currentUser && !isAdminSession) {
+  openAuth("login");
   return;
  }
- if (inp) {
-  inp.value = "";
-  autoResizeTextarea(inp);
- }
- clearDraftText("admin_cs_" + selectedCsUserId);
- await pushChatMessage({ text: txt, sender: "support", targetUserId: selectedCsUserId });
-}
-
-function clearActiveMsgActionBar() {
- if (activeMsgActionBarKey.timerId) {
-  clearTimeout(activeMsgActionBarKey.timerId);
-  activeMsgActionBarKey.timerId = null;
- }
- activeMsgActionBarKey.key = null;
- document.querySelectorAll(".msg-action-bar").forEach(el => el.remove());
-}
-
-function toggleMessageActionBar(anchorEl, msgId, uid, currentText) {
- const key = `${uid}__${msgId}`;
- if (activeMsgActionBarKey.key === key) {
-  clearActiveMsgActionBar();
+ const uid = senderRole === "user" ? currentUser?.id : selectedCsUserId;
+ if (!uid) {
+  showAlert("Please select a user first.");
   return;
  }
- clearActiveMsgActionBar();
- activeMsgActionBarKey.key = key;
 
- const bar = document.createElement("div");
- bar.className = "msg-action-bar";
- bar.onclick = e => e.stopPropagation();
-
- const editBtn = document.createElement("button");
- editBtn.type = "button";
- editBtn.className = "msg-act-btn";
- editBtn.textContent = "✏️ Edit";
- editBtn.onclick = () => {
-  clearActiveMsgActionBar();
-  openEditChatMessageModal(uid, msgId, currentText);
+ const reader = new FileReader();
+ reader.onload = async () => {
+  const dataUrl = String(reader.result || "");
+  if (!dataUrl) return;
+  const nowTs = Date.now();
+  const msgObj = {
+   id: "MSG" + nowTs,
+   user_id: uid,
+   sender: senderRole,
+   sender_name: senderRole === "support" ? "Trip Booking Service" : normalizeNativeFullName(currentUser?.name || "Customer"),
+   text: "",
+   image: dataUrl,
+   time: formatExactTimestamp(new Date(nowTs)),
+   created_at: nowTs,
+   read_by_user: senderRole === "user",
+   read_by_admin: senderRole === "support"
+  };
+  allMessages.push(msgObj);
+  saveCachedMessagesLocal(allMessages);
+  renderSupportMessages();
+  renderAdminChatMessages();
+  updateAdminUnreadBadges();
+  if (db) {
+   const pushRef = db.ref("messages").push();
+   msgObj.fbKey = pushRef.key;
+   await pushRef.set(msgObj).catch(() => {});
+  }
  };
-
- const delBtn = document.createElement("button");
- delBtn.type = "button";
- delBtn.className = "msg-act-btn del";
- delBtn.textContent = "🗑️ Delete";
- delBtn.onclick = () => {
-  clearActiveMsgActionBar();
-  deleteChatMessage(uid, msgId);
- };
-
- bar.appendChild(editBtn);
- bar.appendChild(delBtn);
- anchorEl.parentElement?.appendChild(bar);
-
- activeMsgActionBarKey.timerId = setTimeout(() => {
-  clearActiveMsgActionBar();
- }, 4500);
+ reader.readAsDataURL(file);
 }
 
-function openEditChatMessageModal(uid, msgId, currentText) {
- if (!isAdminSession) return;
- editingMsgId = { uid: String(uid), msgId: String(msgId) };
- if ($("editChatMsgTextarea")) $("editChatMsgTextarea").value = currentText || "";
+function openEditChatMessageModal(msgKey) {
+ const found = allMessages.find((m, i) => getMsgUniqueKey(m, i) === msgKey);
+ if (!found || found.deleted) return;
+ editingMsgId = msgKey;
+ if ($("editChatMsgTextarea")) $("editChatMsgTextarea").value = found.text || "";
  $("editChatMsgModal").classList.remove("hidden");
 }
 
 async function saveEditedChatMessage() {
- if (!isAdminSession || !editingMsgId) return;
- const { uid, msgId } = editingMsgId;
- const nextTxt = ($("editChatMsgTextarea")?.value || "").trim();
- if (!nextTxt) return;
-
- const target = allMessages.find(m => String(m.user_id) === uid && String(m.id) === msgId);
- if (target) {
-  target.text = nextTxt;
-  target.edited_at = Date.now();
+ if (!editingMsgId) return;
+ const newTxt = ($("editChatMsgTextarea")?.value || "").trim();
+ const idx = allMessages.findIndex((m, i) => getMsgUniqueKey(m, i) === editingMsgId);
+ if (idx >= 0) {
+  allMessages[idx].text = newTxt;
+  allMessages[idx].edited = true;
+  saveCachedMessagesLocal(allMessages);
+  if (db && allMessages[idx].fbKey) {
+   await db.ref("messages/" + allMessages[idx].fbKey).update({ text: newTxt, edited: true }).catch(() => {});
+  }
  }
- saveCachedMessagesLocal(allMessages);
- if (db) {
-  await db.ref(`messages/${uid}/${msgId}`).update({ text: nextTxt, edited_at: Date.now() }).catch(() => {});
- }
- closeModal("editChatMsgModal");
  editingMsgId = null;
- renderSupportChat();
+ activeMsgActionBarKey.key = null;
+ closeModal("editChatMsgModal");
+ renderSupportMessages();
  renderAdminChatMessages();
 }
 
-async function deleteChatMessage(uid, msgId) {
- if (!isAdminSession) return;
- allMessages = allMessages.filter(m => !(String(m.user_id) === String(uid) && String(m.id) === String(msgId)));
+async function deleteChatMessageByKey(msgKey) {
+ const idx = allMessages.findIndex((m, i) => getMsgUniqueKey(m, i) === msgKey);
+ if (idx < 0) return;
+ const target = allMessages[idx];
+ const fbKey = target.fbKey;
+ allMessages.splice(idx, 1);
  saveCachedMessagesLocal(allMessages);
- if (db) {
-  await db.ref(`messages/${uid}/${msgId}`).remove().catch(() => {});
- }
- renderSupportChat();
+ activeMsgActionBarKey.key = null;
+ renderSupportMessages();
  renderAdminChatMessages();
- renderCsClientList();
- renderAdminBadges();
-}
-
-function escapeHtmlPreservingLines(str) {
- return String(str || "")
-  .replace(/&/g, "&amp;")
-  .replace(/</g, "&lt;")
-  .replace(/>/g, "&gt;")
-  .replace(/"/g, "&quot;")
-  .replace(/'/g, "&#39;")
-  .replace(/\n/g, "<br>");
-}
-
-function buildSingleChatBubbleHtml(m, isMine) {
- const bg = isMine ? "var(--fb-primary)" : "var(--fb-card)";
- const color = isMine ? "#ffffff" : "var(--fb-text)";
- const border = isMine ? "none" : "1px solid var(--fb-border)";
- const align = isMine ? "flex-end" : "flex-start";
- const senderTag = m.sender === "support" ? "🎧 Service" : "👤 User";
- const safeAttrText = String(m.text || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
- const staffEditableClass = isAdminSession ? "staff-editable" : "";
- const staffClickAttr = isAdminSession
-  ? `onclick="event.stopPropagation(); toggleMessageActionBar(this, '${m.id}', '${m.user_id}', '${safeAttrText}')"`
-  : "";
- const imgHtml = m.image
-  ? `<img class="chat-img-msg" src="${m.image}" alt="Attachment" onclick="event.stopPropagation(); openImageLightbox('${m.image}')">`
-  : "";
- const textHtml = m.text ? `<div class="chat-bubble-text">${escapeHtmlPreservingLines(m.text)}</div>` : "";
- const editedLabel = m.edited_at ? ` · edited` : "";
-
- return `
-  <div class="chat-msg-row" style="align-self:${align}">
-   <div class="chat-bubble ${staffEditableClass}" style="background:${bg};color:${color};border:${border}" ${staffClickAttr}>
-    <div class="chat-bubble-meta">${senderTag} • ${m.time || ""}${editedLabel}</div>
-    ${textHtml}
-    ${imgHtml}
-   </div>
-  </div>
- `;
-}
-
-function renderSupportChat() {
- const box = $("supportMessages");
- if (!box) return;
- if (!currentUser) {
-  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">Please login to chat with Trip Booking Service.</div>`;
-  return;
+ updateAdminUnreadBadges();
+ if (db && fbKey) {
+  await db.ref("messages/" + fbKey).remove().catch(() => {});
  }
- const uid = String(currentUser.id);
- const userMsgs = allMessages
-  .filter(m => String(m.user_id) === uid)
-  .sort((a, b) => (Number(a.created_at) || 0) - (Number(b.created_at) || 0));
-
- if (!userMsgs.length) {
-  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">Welcome to Trip Booking Service. How can we help you today?</div>`;
-  return;
- }
- box.innerHTML = userMsgs.map(m => buildSingleChatBubbleHtml(m, m.sender === "user")).join("");
- box.scrollTop = box.scrollHeight;
 }
 
 function switchAdminTab(tabName) {
- $("adminUsersTab")?.classList.toggle("hidden", tabName !== "users");
- $("adminHotelsTab")?.classList.toggle("hidden", tabName !== "hotels");
- $("adminCsTab")?.classList.toggle("hidden", tabName !== "cs");
+ const isUsers = tabName === "users";
+ const isHotels = tabName === "hotels";
+ const isCs = tabName === "cs";
 
- $("adminTabBtnUsers")?.classList.toggle("btn-primary", tabName === "users");
- $("adminTabBtnUsers")?.classList.toggle("btn-secondary", tabName !== "users");
- $("adminTabBtnHotels")?.classList.toggle("btn-primary", tabName === "hotels");
- $("adminTabBtnHotels")?.classList.toggle("btn-secondary", tabName !== "hotels");
- $("adminTabBtnCs")?.classList.toggle("btn-primary", tabName === "cs");
- $("adminTabBtnCs")?.classList.toggle("btn-secondary", tabName !== "cs");
+ if ($("adminUsersTab")) $("adminUsersTab").classList.toggle("hidden", !isUsers);
+ if ($("adminHotelsTab")) $("adminHotelsTab").classList.toggle("hidden", !isHotels);
+ if ($("adminCsTab")) $("adminCsTab").classList.toggle("hidden", !isCs);
 
- if (tabName === "users") renderAdminUsers();
- if (tabName === "hotels") renderAdminHotelsAndVips();
- if (tabName === "cs") {
+ if ($("adminTabBtnUsers")) $("adminTabBtnUsers").className = `btn ${isUsers ? "btn-primary" : "btn-secondary"} btn-xs`;
+ if ($("adminTabBtnHotels")) $("adminTabBtnHotels").className = `btn ${isHotels ? "btn-primary" : "btn-secondary"} btn-xs`;
+ if ($("adminTabBtnCs")) $("adminTabBtnCs").className = `btn ${isCs ? "btn-primary" : "btn-secondary"} btn-xs`;
+
+ if (isUsers) renderAdminUsers();
+ if (isHotels) renderAdminHotelsAndVips();
+ if (isCs) {
   renderCsClientList();
   renderAdminChatMessages();
-  restoreAdminCsDraftForUser(selectedCsUserId);
- }
-}
-
-function renderAdminBadges() {
- if ($("totalUsersBadge")) $("totalUsersBadge").textContent = String(allUsers.length);
- const unreadCount = allMessages.filter(m => m.sender === "user" && !m.read_by_admin).length;
- const topBadge = $("adminUnreadBadge");
- const tabBadge = $("tabCsUnreadBadge");
- [topBadge, tabBadge].forEach(b => {
-  if (!b) return;
-  if (unreadCount > 0) {
-   b.textContent = String(unreadCount);
-   b.classList.remove("hidden");
-  } else {
-   b.classList.add("hidden");
-  }
- });
-}
-
-function renderAdminLiveBanner() {
- const liveUsers = allUsers.filter(isUserPlacingLiveOrder);
- const onlineUsers = allUsers.filter(u => getUserPresenceInfo(u).state === "online");
- if ($("adminLiveBannerText")) {
-  if (liveUsers.length > 0) {
-   const names = liveUsers.map(u => `${u.name} (#${u.live_order_num || "?"})`).join(", ");
-   $("adminLiveBannerText").innerHTML = `🔴 <b>LIVE ORDER IN PROGRESS:</b> ${names}`;
-  } else {
-   $("adminLiveBannerText").innerHTML = `🟢 <b>Live Monitor Active</b> — No active order right now`;
-  }
- }
- if ($("adminLiveCountsText")) {
-  $("adminLiveCountsText").textContent = `Online: ${onlineUsers.length} | Total Users: ${allUsers.length}`;
  }
 }
 
 function renderAdminUsers() {
  const tbody = $("adminUsersRows");
  if (!tbody) return;
- renderAdminLiveBanner();
- renderAdminBadges();
 
- const d = getDict();
  const q = ($("adminUserSearch")?.value || "").trim().toLowerCase();
  const filterVal = $("adminUserFilter")?.value || "all";
 
+ if ($("totalUsersBadge")) $("totalUsersBadge").textContent = String(allUsers.length);
+
+ const liveCount = allUsers.filter(u => isUserPlacingLiveOrder(u)).length;
+ const onlineCount = allUsers.filter(u => getUserPresenceInfo(u).state === "online").length;
+ const negCount = allUsers.filter(u => Number(u.negative_balance) > 0 || Number(u.balance) < 0).length;
+ const bannedCount = allUsers.filter(u => Boolean(u.is_banned)).length;
+
+ if ($("adminLiveBannerText")) {
+  $("adminLiveBannerText").textContent = `🔴 Live Ordering: ${liveCount} · 🟢 Online: ${onlineCount} · ⚠️ Negative: ${negCount} · 🚫 Suspended: ${bannedCount}`;
+ }
+ if ($("adminLiveCountsText")) {
+  $("adminLiveCountsText").textContent = `Total Accounts: ${allUsers.length}`;
+ }
+
  const filtered = allUsers.filter(u => {
-  const pInfo = getUserPresenceInfo(u);
   const isLive = isUserPlacingLiveOrder(u);
+  const pres = getUserPresenceInfo(u);
+  const hasNeg = Number(u.negative_balance) > 0 || Number(u.balance) < 0;
   const rules = getUserOrderRules(u);
-  const bal = Number(u.balance) || 0;
-  const neg = Number(u.negative_balance) || 0;
+  const isBanned = Boolean(u.is_banned);
 
   if (filterVal === "live_order" && !isLive) return false;
-  if (filterVal === "online" && pInfo.state !== "online") return false;
-  if (filterVal === "negative" && !(bal < 0 || neg > 0)) return false;
+  if (filterVal === "online" && pres.state !== "online") return false;
+  if (filterVal === "negative" && !hasNeg) return false;
   if (filterVal === "has_rules" && !rules.length) return false;
-  if (filterVal === "banned" && !u.is_banned) return false;
+  if (filterVal === "banned" && !isBanned) return false;
 
   if (!q) return true;
-  return (
-   String(u.name || "").toLowerCase().includes(q) ||
-   String(u.identity || "").toLowerCase().includes(q) ||
-   String(u.invite_code || "").toLowerCase().includes(q) ||
-   String(u.invited_by || "").toLowerCase().includes(q)
-  );
+  const hay = `${u.name || ""} ${u.identity || ""} ${u.invite_code || ""} ${u.invited_by || ""} ${u.vip_level || ""}`.toLowerCase();
+  return hay.includes(q);
  });
 
- tbody.innerHTML = filtered.map((u, idx) => {
-  const pInfo = getUserPresenceInfo(u);
+ if (!filtered.length) {
+  tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:18px" class="muted">No matching users found.</td></tr>`;
+  return;
+ }
+
+ const d = getDict();
+
+ tbody.innerHTML = filtered.map((u, i) => {
+  const pres = getUserPresenceInfo(u);
   const isLive = isUserPlacingLiveOrder(u);
   const rules = getUserOrderRules(u);
-  const vipOptions = allVipTiers.map(v =>
+  const activeRulesCount = rules.filter(r => !r.triggered).length;
+  const tier = getVipTierObj(u.vip_level);
+  const dailyLimit = Number(tier.daily_limit) || DEFAULT_ORDERS_LIMIT;
+  const unreadForUser = allMessages.filter(m => String(m.user_id) === String(u.id) && m.sender === "user" && !m.read_by_admin && !m.deleted).length;
+
+  const vipOpts = allVipTiers.map(v =>
    `<option value="${v.level}" ${u.vip_level === v.level ? "selected" : ""}>${v.level}</option>`
   ).join("");
 
-  const statusHtml = u.is_banned
-   ? `<span class="status-pill pill-banned">🚫 Suspended</span>`
-   : isLive
-    ? `<span class="status-pill pill-live">🔴 LIVE #${u.live_order_num || ""}</span>`
-    : pInfo.state === "online"
-     ? `<span class="status-pill pill-online">🟢 Online</span>`
-     : `<span class="status-pill pill-offline">⚪ ${pInfo.label}</span>`;
-
-  const banBtnHtml = u.is_banned
-   ? `<button type="button" class="btn btn-success btn-xs" onclick="unbanUserAdmin('${u.id}')">${d.unbanBtn}</button>`
-   : `<button type="button" class="btn btn-gold btn-xs" onclick="openSuspendUserModal('${u.id}')">${d.banBtn}</button>`;
-
   return `
    <tr data-uid="${u.id}">
-    <td>${idx + 1}</td>
+    <td>${i + 1}</td>
     <td>
-     <div style="font-weight:700">${u.name || "Member"}</div>
-     <div style="margin-top:3px">${statusHtml}</div>
+     <div style="font-weight:700">${u.name || "Member"} ${u.is_banned ? `<span class="status-pill pill-banned">🚫 Suspended</span>` : ""}</div>
+     <div style="margin-top:3px;display:flex;gap:4px;flex-wrap:wrap;align-items:center">
+      <span class="status-pill ${pres.state === "online" ? "pill-online" : "pill-offline"}">● ${pres.label}</span>
+      ${isLive ? `<span class="status-pill pill-live">🔴 Order #${u.live_order_num || ""}</span>` : ""}
+     </div>
     </td>
     <td class="small">${u.identity || ""}</td>
-    <td><input type="text" data-field="password" value="${u.password || ""}" style="width:96px"></td>
+    <td><input type="text" data-field="password" value="${u.password || ""}" style="width:94px"></td>
     <td class="small"><b>${u.invite_code || ""}</b></td>
     <td class="small">${u.invited_by || "—"}</td>
-    <td><select data-field="vip_level">${vipOptions}</select></td>
-    <td><input type="number" step="0.01" data-field="balance" value="${Number(u.balance || 0).toFixed(2)}" style="width:88px"></td>
-    <td><input type="number" step="0.01" data-field="negative_balance" value="${Number(u.negative_balance || 0).toFixed(2)}" style="width:82px"></td>
-    <td><input type="number" step="0.01" data-field="profit_box" value="${Number(u.profit_box || 0).toFixed(2)}" style="width:82px"></td>
     <td>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="openOrderRulesModal('${u.id}')">🎯 Rules (${rules.length})</button>
+     <select data-field="vip_level" style="min-width:112px">${vipOpts}</select>
     </td>
-    <td><input type="number" min="0" data-field="orders" value="${Number(u.orders || 0)}" style="width:62px"></td>
+    <td><input type="number" step="0.01" data-field="balance" value="${Number(u.balance || 0).toFixed(2)}" style="width:88px"></td>
+    <td><input type="number" step="0.01" min="0" data-field="negative_balance" value="${Number(u.negative_balance || 0).toFixed(2)}" style="width:82px"></td>
+    <td><input type="number" step="0.01" min="0" data-field="profit_box" value="${Number(u.profit_box || 0).toFixed(2)}" style="width:82px"></td>
+    <td>
+     <button type="button" class="btn btn-secondary btn-xs" onclick="openOrderRulesModal('${u.id}')">🎯 Rules (${activeRulesCount}/${rules.length})</button>
+    </td>
+    <td>
+     <div style="display:flex;align-items:center;gap:4px">
+      <input type="number" min="0" max="${dailyLimit}" data-field="orders" value="${Number(u.orders || 0)}" style="width:54px">
+      <span class="small muted">/${dailyLimit}</span>
+     </div>
+    </td>
     <td>
      <div style="display:flex;gap:4px;flex-wrap:wrap">
-      <button type="button" class="btn btn-secondary btn-xs" onclick="openResetOrdersConfirm('${u.id}')">${d.resetBtn}</button>
-      ${banBtnHtml}
-      <button type="button" class="btn btn-danger btn-xs" onclick="openDeleteUserConfirm('${u.id}')">${d.deleteBtn}</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="openCsDirectForUser('${u.id}')">💬${unreadForUser > 0 ? ` (${unreadForUser})` : ""}</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="confirmResetUserOrders('${u.id}')">${d.resetBtn}</button>
+      ${u.is_banned
+        ? `<button type="button" class="btn btn-success btn-xs" onclick="toggleBanUser('${u.id}', false)">${d.unbanBtn}</button>`
+        : `<button type="button" class="btn btn-gold btn-xs" onclick="openSuspendUserModal('${u.id}')">${d.banBtn}</button>`}
+      <button type="button" class="btn btn-danger btn-xs" onclick="confirmDeleteUserAccount('${u.id}')">${d.deleteBtn}</button>
      </div>
     </td>
    </tr>
@@ -5552,54 +4139,52 @@ async function saveAllUsersAdmin() {
  const nowTs = Date.now();
  for (const tr of rows) {
   const uid = tr.getAttribute("data-uid");
-  const uObj = allUsers.find(x => String(x.id) === String(uid));
-  if (!uObj) continue;
+  const u = allUsers.find(item => String(item.id) === String(uid));
+  if (!u) continue;
 
-  const passVal = tr.querySelector('[data-field="password"]')?.value ?? uObj.password;
-  const vipVal = tr.querySelector('[data-field="vip_level"]')?.value ?? uObj.vip_level;
+  const passVal = tr.querySelector('[data-field="password"]')?.value ?? u.password;
+  const vipVal = tr.querySelector('[data-field="vip_level"]')?.value ?? u.vip_level;
   const balVal = Number(tr.querySelector('[data-field="balance"]')?.value);
-  const negVal = Number(tr.querySelector('[data-field="negative_balance"]')?.value);
-  const pbVal = Number(tr.querySelector('[data-field="profit_box"]')?.value);
-  const ordVal = parseInt(tr.querySelector('[data-field="orders"]')?.value, 10);
+  const negVal = Math.max(0, Number(tr.querySelector('[data-field="negative_balance"]')?.value) || 0);
+  const pboxVal = Math.max(0, Number(tr.querySelector('[data-field="profit_box"]')?.value) || 0);
+  const ordVal = Math.max(0, Number(tr.querySelector('[data-field="orders"]')?.value) || 0);
 
-  uObj.password = passVal;
-  uObj.vip_level = vipVal;
-  if (Number.isFinite(balVal)) uObj.balance = Number(balVal.toFixed(2));
-  if (Number.isFinite(negVal)) uObj.negative_balance = Math.max(0, Number(negVal.toFixed(2)));
-  if (Number.isFinite(pbVal)) uObj.profit_box = Math.max(0, Number(pbVal.toFixed(2)));
-  if (Number.isFinite(ordVal) && ordVal >= 0) uObj.orders = ordVal;
-  uObj.updated_at = nowTs;
+  u.password = String(passVal);
+  u.vip_level = String(vipVal);
+  if (Number.isFinite(balVal)) u.balance = Number(balVal.toFixed(2));
+  u.negative_balance = Number(negVal.toFixed(2));
+  u.profit_box = Number(pboxVal.toFixed(2));
+  u.orders = ordVal;
+  u.updated_at = nowTs;
 
-  if (currentUser && String(currentUser.id) === String(uid)) {
-   Object.assign(currentUser, uObj);
+  if (currentUser && String(currentUser.id) === String(u.id)) {
+   Object.assign(currentUser, u);
    localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
   }
-
   if (db) {
-   await db.ref("users/" + uid).update({
-    password: uObj.password,
-    vip_level: uObj.vip_level,
-    balance: uObj.balance,
-    negative_balance: uObj.negative_balance,
-    profit_box: uObj.profit_box,
-    orders: uObj.orders,
+   await db.ref("users/" + u.id).update({
+    password: u.password,
+    vip_level: u.vip_level,
+    balance: u.balance,
+    negative_balance: u.negative_balance,
+    profit_box: u.profit_box,
+    orders: u.orders,
     updated_at: nowTs
    }).catch(() => {});
   }
  }
-
  saveCachedUsersLocal(allUsers);
  renderAllViews();
- showAlert("✅ All user updates saved and synced!");
+ showAlert("✅ All user updates saved & synced!");
 }
 
 function openOrderRulesModal(uid) {
- const uObj = allUsers.find(x => String(x.id) === String(uid));
- if (!uObj) return;
+ const u = allUsers.find(item => String(item.id) === String(uid));
+ if (!u) return;
  editingRulesUserId = String(uid);
- workingRulesBuffer = getUserOrderRules(uObj).map(r => ({ ...r }));
- if ($("orderRulesModalTitle")) $("orderRulesModalTitle").textContent = `🎯 Order Rules — ${uObj.name}`;
- if ($("orderRulesUserSummary")) $("orderRulesUserSummary").textContent = `${uObj.identity} • Orders: ${uObj.orders || 0}`;
+ workingRulesBuffer = getUserOrderRules(u).map(r => ({ ...r }));
+ if ($("orderRulesModalTitle")) $("orderRulesModalTitle").textContent = `🎯 Order Rules — ${u.name || "Member"}`;
+ if ($("orderRulesUserSummary")) $("orderRulesUserSummary").textContent = `${u.identity || ""} | Balance: $${Number(u.balance || 0).toFixed(2)} | Current Orders: ${Number(u.orders || 0)}`;
  if ($("ruleInputOrderNum")) $("ruleInputOrderNum").value = "";
  if ($("ruleInputNeg")) $("ruleInputNeg").value = "";
  if ($("ruleInputProfitBox")) $("ruleInputProfitBox").value = "";
@@ -5611,32 +4196,32 @@ function renderOrderRulesList() {
  const tbody = $("orderRulesListBody");
  if (!tbody) return;
  if (!workingRulesBuffer.length) {
-  tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center">No order rules set.</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:12px" class="muted">No rules configured.</td></tr>`;
   return;
  }
  tbody.innerHTML = workingRulesBuffer.map((r, idx) => `
   <tr>
    <td><b>#${r.target_order}</b></td>
-   <td style="color:var(--fb-danger)">$${Number(r.negative_balance || 0).toFixed(2)}</td>
-   <td style="color:var(--fb-success)">$${Number(r.profit_box || 0).toFixed(2)}</td>
-   <td><span class="status-pill ${r.triggered ? "pill-triggered" : "pill-pending"}">${r.triggered ? "Triggered" : "Pending"}</span></td>
-   <td><button type="button" class="btn btn-danger btn-xs" onclick="removeOrderRuleAt(${idx})">✕</button></td>
+   <td style="color:var(--fb-danger);font-weight:700">$${Number(r.negative_balance || 0).toFixed(2)}</td>
+   <td style="color:var(--fb-success);font-weight:700">$${Number(r.profit_box || 0).toFixed(2)}</td>
+   <td><span class="status-pill ${r.triggered ? "pill-triggered" : "pill-online"}">${r.triggered ? "Triggered" : "Pending"}</span></td>
+   <td><button type="button" class="btn btn-danger btn-xs" onclick="removeWorkingRule(${idx})">✕</button></td>
   </tr>
  `).join("");
 }
 
 function addOrderRuleToUser() {
- const ordNum = parseInt($("ruleInputOrderNum")?.value, 10);
- const negAmt = Math.abs(Number($("ruleInputNeg")?.value) || 0);
- const pbAmt = Math.max(0, Number($("ruleInputProfitBox")?.value) || 0);
- if (!Number.isFinite(ordNum) || ordNum < 1) {
-  showAlert("Please enter a valid Order # (1 or higher).");
+ const ordNum = Number($("ruleInputOrderNum")?.value);
+ const negAmt = Math.max(0, Number($("ruleInputNeg")?.value) || 0);
+ const pboxAmt = Math.max(0, Number($("ruleInputProfitBox")?.value) || 0);
+ if (!ordNum || ordNum < 1) {
+  showAlert("Please enter a valid Order # (>= 1).");
   return;
  }
  workingRulesBuffer.push({
   target_order: ordNum,
-  negative_balance: negAmt,
-  profit_box: pbAmt,
+  negative_balance: Number(negAmt.toFixed(2)),
+  profit_box: Number(pboxAmt.toFixed(2)),
   triggered: false
  });
  workingRulesBuffer.sort((a, b) => a.target_order - b.target_order);
@@ -5646,123 +4231,128 @@ function addOrderRuleToUser() {
  renderOrderRulesList();
 }
 
-function removeOrderRuleAt(idx) {
+function removeWorkingRule(idx) {
  workingRulesBuffer.splice(idx, 1);
  renderOrderRulesList();
 }
 
 async function saveOrderRulesForUser() {
  if (!editingRulesUserId) return;
- const uObj = allUsers.find(x => String(x.id) === String(editingRulesUserId));
- if (!uObj) return;
- uObj.order_rules = workingRulesBuffer.map(r => ({ ...r }));
- uObj.updated_at = Date.now();
- if (currentUser && String(currentUser.id) === String(editingRulesUserId)) {
-  currentUser.order_rules = [...uObj.order_rules];
+ const u = allUsers.find(item => String(item.id) === String(editingRulesUserId));
+ if (!u) return;
+ u.order_rules = workingRulesBuffer.map(r => ({ ...r }));
+ u.updated_at = Date.now();
+ if (currentUser && String(currentUser.id) === String(u.id)) {
+  currentUser.order_rules = u.order_rules;
   localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
  }
  saveCachedUsersLocal(allUsers);
- if (db) {
-  await db.ref("users/" + editingRulesUserId).update({
-   order_rules: uObj.order_rules,
-   updated_at: uObj.updated_at
-  }).catch(() => {});
- }
+ if (db) await db.ref("users/" + u.id).update({ order_rules: u.order_rules, updated_at: u.updated_at }).catch(() => {});
  closeModal("orderRulesModal");
  renderAdminUsers();
  showAlert("✅ Order rules saved!");
 }
 
-function openResetOrdersConfirm(uid) {
- const uObj = allUsers.find(x => String(x.id) === String(uid));
- if (!uObj) return;
- if ($("resetConfirmTitle")) $("resetConfirmTitle").textContent = "Reset Daily Orders";
- if ($("resetConfirmDetails")) $("resetConfirmDetails").textContent = `Reset completed orders to 0 for ${uObj.name} (${uObj.identity})?`;
+function openResetConfirmModal(titleTxt, detailsTxt, onConfirmFn) {
+ if ($("resetConfirmTitle")) $("resetConfirmTitle").textContent = titleTxt;
+ if ($("resetConfirmDetails")) $("resetConfirmDetails").innerHTML = detailsTxt;
  const btn = $("resetConfirmProceedBtn");
  if (btn) {
   btn.onclick = async () => {
-   uObj.orders = 0;
-   uObj.profit = 0;
-   uObj.updated_at = Date.now();
-   if (currentUser && String(currentUser.id) === String(uid)) {
-    currentUser.orders = 0;
-    currentUser.profit = 0;
-    localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
-   }
-   saveCachedUsersLocal(allUsers);
-   if (db) await db.ref("users/" + uid).update({ orders: 0, profit: 0, updated_at: uObj.updated_at }).catch(() => {});
    closeModal("resetConfirmModal");
-   renderAllViews();
+   await onConfirmFn();
   };
  }
  $("resetConfirmModal").classList.remove("hidden");
 }
 
+function confirmResetUserOrders(uid) {
+ const u = allUsers.find(item => String(item.id) === String(uid));
+ if (!u) return;
+ openResetConfirmModal(
+  "Reset User Orders",
+  `Reset orders count to 0 for <b>${u.name || "Member"}</b> (${u.identity || ""})?`,
+  async () => {
+   u.orders = 0;
+   u.updated_at = Date.now();
+   if (currentUser && String(currentUser.id) === String(u.id)) {
+    currentUser.orders = 0;
+    localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
+   }
+   saveCachedUsersLocal(allUsers);
+   if (db) await db.ref("users/" + u.id).update({ orders: 0, updated_at: u.updated_at }).catch(() => {});
+   renderAllViews();
+   showAlert("✅ User orders reset to 0.");
+  }
+ );
+}
+
 function openSuspendUserModal(uid) {
- const uObj = allUsers.find(x => String(x.id) === String(uid));
- if (!uObj) return;
+ const u = allUsers.find(item => String(item.id) === String(uid));
+ if (!u) return;
  suspendingUserId = String(uid);
- if ($("suspendUserTargetInfo")) $("suspendUserTargetInfo").textContent = `${uObj.name} (${uObj.identity})`;
- if ($("suspendReasonInput")) $("suspendReasonInput").value = uObj.ban_reason || "";
+ if ($("suspendUserTargetInfo")) $("suspendUserTargetInfo").textContent = `${u.name || "Member"} (${u.identity || ""})`;
+ if ($("suspendReasonInput")) $("suspendReasonInput").value = u.ban_reason || "";
  $("suspendUserModal").classList.remove("hidden");
 }
 
 async function confirmSuspendUser() {
  if (!suspendingUserId) return;
- const uObj = allUsers.find(x => String(x.id) === String(suspendingUserId));
- if (!uObj) return;
+ const u = allUsers.find(item => String(item.id) === String(suspendingUserId));
+ if (!u) return;
  const reason = ($("suspendReasonInput")?.value || "").trim();
- uObj.is_banned = true;
- uObj.ban_reason = reason;
- uObj.updated_at = Date.now();
- saveCachedUsersLocal(allUsers);
- if (db) {
-  await db.ref("users/" + suspendingUserId).update({
-   is_banned: true,
-   ban_reason: reason,
-   updated_at: uObj.updated_at
-  }).catch(() => {});
- }
- closeModal("suspendUserModal");
- suspendingUserId = null;
- renderAdminUsers();
-}
-
-async function unbanUserAdmin(uid) {
- const uObj = allUsers.find(x => String(x.id) === String(uid));
- if (!uObj) return;
- uObj.is_banned = false;
- uObj.ban_reason = "";
- uObj.updated_at = Date.now();
- if (currentUser && String(currentUser.id) === String(uid)) {
-  currentUser.is_banned = false;
-  currentUser.ban_reason = "";
+ u.is_banned = true;
+ u.ban_reason = reason;
+ u.updated_at = Date.now();
+ if (currentUser && String(currentUser.id) === String(u.id)) {
+  currentUser.is_banned = true;
+  currentUser.ban_reason = reason;
   localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
   syncSuspensionBanner();
  }
  saveCachedUsersLocal(allUsers);
- if (db) {
-  await db.ref("users/" + uid).update({ is_banned: false, ban_reason: "", updated_at: uObj.updated_at }).catch(() => {});
+ if (db) await db.ref("users/" + u.id).update({ is_banned: true, ban_reason: reason, updated_at: u.updated_at }).catch(() => {});
+ suspendingUserId = null;
+ closeModal("suspendUserModal");
+ renderAdminUsers();
+ showAlert("🚫 Account suspended.");
+}
+
+async function toggleBanUser(uid, banState) {
+ const u = allUsers.find(item => String(item.id) === String(uid));
+ if (!u) return;
+ u.is_banned = Boolean(banState);
+ if (!banState) u.ban_reason = "";
+ u.updated_at = Date.now();
+ if (currentUser && String(currentUser.id) === String(u.id)) {
+  currentUser.is_banned = u.is_banned;
+  currentUser.ban_reason = u.ban_reason;
+  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
+  syncSuspensionBanner();
  }
+ saveCachedUsersLocal(allUsers);
+ if (db) await db.ref("users/" + u.id).update({ is_banned: u.is_banned, ban_reason: u.ban_reason, updated_at: u.updated_at }).catch(() => {});
  renderAdminUsers();
 }
 
-function openDeleteUserConfirm(uid) {
- const uObj = allUsers.find(x => String(x.id) === String(uid));
- if (!uObj) return;
- if ($("resetConfirmTitle")) $("resetConfirmTitle").textContent = "Delete Account";
- if ($("resetConfirmDetails")) $("resetConfirmDetails").textContent = `Permanently delete ${uObj.name} (${uObj.identity})?`;
- const btn = $("resetConfirmProceedBtn");
- if (btn) {
-  btn.onclick = async () => {
-   allUsers = allUsers.filter(x => String(x.id) !== String(uid));
+function confirmDeleteUserAccount(uid) {
+ const u = allUsers.find(item => String(item.id) === String(uid));
+ if (!u) return;
+ openResetConfirmModal(
+  "Delete Account",
+  `Permanently delete account <b>${u.name || "Member"}</b> (${u.identity || ""})?`,
+  async () => {
+   allUsers = allUsers.filter(item => String(item.id) !== String(uid));
    saveCachedUsersLocal(allUsers);
+   if (currentUser && String(currentUser.id) === String(uid)) {
+    logout();
+   }
    if (db) await db.ref("users/" + uid).remove().catch(() => {});
-   closeModal("resetConfirmModal");
    renderAdminUsers();
-  };
- }
- $("resetConfirmModal").classList.remove("hidden");
+   renderActivityTicker();
+   showAlert("🗑️ Account deleted.");
+  }
+ );
 }
 
 function renderAdminHotelsAndVips() {
@@ -5771,10 +4361,10 @@ function renderAdminHotelsAndVips() {
   vipBody.innerHTML = allVipTiers.map((v, idx) => `
    <tr>
     <td><b>${v.level}</b></td>
-    <td><input type="text" data-vip-idx="${idx}" data-vip-field="name" value="${v.name || ""}" style="width:120px"></td>
-    <td><input type="number" min="1" data-vip-idx="${idx}" data-vip-field="daily_limit" value="${Number(v.daily_limit || 30)}" style="width:74px"></td>
-    <td><input type="number" step="0.0001" data-vip-idx="${idx}" data-vip-field="profit_rate" value="${Number(v.profit_rate || 0.0065)}" style="width:94px"></td>
-    <td><input type="number" min="0" data-vip-idx="${idx}" data-vip-field="max_withdraw" value="${Number(v.max_withdraw || 1000)}" style="width:96px"></td>
+    <td>${v.name}</td>
+    <td><input type="number" min="1" max="100" data-vip-idx="${idx}" data-vip-field="daily_limit" value="${v.daily_limit}" style="width:68px"></td>
+    <td><input type="number" step="0.0005" min="0" data-vip-idx="${idx}" data-vip-field="profit_rate" value="${v.profit_rate}" style="width:86px"></td>
+    <td><input type="number" min="0" data-vip-idx="${idx}" data-vip-field="max_withdraw" value="${v.max_withdraw}" style="width:94px"></td>
    </tr>
   `).join("");
  }
@@ -5784,14 +4374,19 @@ function renderAdminHotelsAndVips() {
   hBody.innerHTML = allHotels.map((h, idx) => `
    <tr>
     <td>${h.id || "H" + (idx + 1)}</td>
-    <td><input type="text" data-h-idx="${idx}" data-h-field="name" value="${h.name || ""}"></td>
+    <td><input type="text" data-h-idx="${idx}" data-h-field="name" value="${h.name || ""}" style="min-width:150px"></td>
     <td><input type="text" data-h-idx="${idx}" data-h-field="country" value="${h.country || ""}" style="width:110px"></td>
-    <td><input type="number" min="1" max="5" data-h-idx="${idx}" data-h-field="stars" value="${Number(h.stars || 5)}" style="width:60px"></td>
-    <td><input type="number" min="1" data-h-idx="${idx}" data-h-field="price" value="${Number(h.price || 90)}" style="width:78px"></td>
-    <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteHotelAdmin(${idx})">✕</button></td>
+    <td><input type="number" min="1" max="5" data-h-idx="${idx}" data-h-field="stars" value="${h.stars || 5}" style="width:58px"></td>
+    <td><input type="number" min="1" max="9999" data-h-idx="${idx}" data-h-field="price" value="${h.price || 95}" style="width:78px"></td>
+    <td><button type="button" class="btn btn-danger btn-xs" onclick="removeHotelRow(${idx})">✕</button></td>
    </tr>
   `).join("");
  }
+}
+
+function removeHotelRow(idx) {
+ allHotels.splice(idx, 1);
+ renderAdminHotelsAndVips();
 }
 
 function openAddHotelModal() {
@@ -5804,298 +4399,331 @@ function openAddHotelModal() {
 
 async function addHotelToDatabase() {
  const name = ($("newHName")?.value || "").trim();
- const country = ($("newHCountry")?.value || "").trim() || "International";
+ const country = ($("newHCountry")?.value || "").trim();
  const price = Number($("newHPrice")?.value) || 92;
  const stars = Number($("newHStars")?.value) || 5;
- if (!name) return;
- const newH = {
+ if (!name || !country) {
+  showAlert("Please enter both Hotel Name and Country.");
+  return;
+ }
+ const nextImg = VERIFIED_HOTEL_IMAGES[allHotels.length % VERIFIED_HOTEL_IMAGES.length];
+ allHotels.push({
   id: "H" + String(allHotels.length + 1).padStart(3, "0"),
   name,
   country,
   price,
   stars,
-  image: VERIFIED_HOTEL_IMAGES[allHotels.length % VERIFIED_HOTEL_IMAGES.length]
- };
- allHotels.push(newH);
- if (db) await db.ref("hotels").set(allHotels).catch(() => {});
+  image: nextImg
+ });
  closeModal("addHotelModal");
  renderAdminHotelsAndVips();
  renderHotels();
-}
-
-async function deleteHotelAdmin(idx) {
- allHotels.splice(idx, 1);
  if (db) await db.ref("hotels").set(allHotels).catch(() => {});
- renderAdminHotelsAndVips();
- renderHotels();
+ showAlert("✅ Hotel added!");
 }
 
 async function saveHotelsAndVipsAdmin() {
  document.querySelectorAll("#adminVipRows [data-vip-idx]").forEach(el => {
   const idx = Number(el.getAttribute("data-vip-idx"));
   const field = el.getAttribute("data-vip-field");
-  if (!allVipTiers[idx] || !field) return;
-  allVipTiers[idx][field] = field === "name" ? el.value : Number(el.value);
+  if (allVipTiers[idx] && field) allVipTiers[idx][field] = Number(el.value) || 0;
  });
  document.querySelectorAll("#adminHotelsRows [data-h-idx]").forEach(el => {
   const idx = Number(el.getAttribute("data-h-idx"));
   const field = el.getAttribute("data-h-field");
-  if (!allHotels[idx] || !field) return;
-  allHotels[idx][field] = (field === "name" || field === "country") ? el.value : Number(el.value);
+  if (allHotels[idx] && field) {
+   allHotels[idx][field] = (field === "stars" || field === "price") ? (Number(el.value) || 0) : el.value;
+  }
  });
  if (db) {
   await db.ref("vip_tiers").set(allVipTiers).catch(() => {});
   await db.ref("hotels").set(allHotels).catch(() => {});
  }
- renderHotels();
- showAlert("✅ Saved VIP tiers & hotels!");
+ applyRotatingPlatformBackdrops();
+ renderAllViews();
+ showAlert("✅ Hotels & VIP tiers saved!");
 }
 
 function renderCsClientList() {
- const wrap = $("csClientList");
- if (!wrap) return;
+ const listEl = $("csClientList");
+ if (!listEl) return;
  const q = ($("csClientSearch")?.value || "").trim().toLowerCase();
+ const users = allUsers.filter(u =>
+  !q ||
+  String(u.name || "").toLowerCase().includes(q) ||
+  String(u.identity || "").toLowerCase().includes(q)
+ );
 
- const userIdsFromMsgs = [...new Set(allMessages.map(m => String(m.user_id)))];
- const combinedIds = [...new Set([...allUsers.map(u => String(u.id)), ...userIdsFromMsgs])];
-
- const items = combinedIds.map(uid => {
-  const uObj = allUsers.find(u => String(u.id) === uid);
-  const uMsgs = allMessages.filter(m => String(m.user_id) === uid).sort((a, b) => (Number(b.created_at) || 0) - (Number(a.created_at) || 0));
-  const unread = uMsgs.filter(m => m.sender === "user" && !m.read_by_admin).length;
-  const lastMsg = uMsgs[0];
-  return {
-   uid,
-   name: uObj?.name || `Customer (${uid})`,
-   identity: uObj?.identity || uid,
-   unread,
-   lastText: lastMsg?.text || (lastMsg?.image ? "📷 Photo" : "No messages yet"),
-   lastTs: Number(lastMsg?.created_at || uObj?.updated_at || 0)
-  };
- }).filter(item => {
-  if (!q) return true;
-  return item.name.toLowerCase().includes(q) || item.identity.toLowerCase().includes(q);
- }).sort((a, b) => (b.unread - a.unread) || (b.lastTs - a.lastTs));
-
- if (!selectedCsUserId && items.length > 0) {
-  selectedCsUserId = items[0].uid;
+ if (!selectedCsUserId && users.length) {
+  selectedCsUserId = String(users[0].id);
  }
 
- wrap.innerHTML = items.map(it => {
-  const activeStyle = String(selectedCsUserId) === it.uid ? "border-color:var(--fb-primary);background:rgba(24,119,242,0.08)" : "";
-  const badge = it.unread > 0 ? `<span class="notif-badge">${it.unread}</span>` : "";
+ listEl.innerHTML = users.map(u => {
+  const isSel = String(u.id) === String(selectedCsUserId);
+  const unread = allMessages.filter(m => String(m.user_id) === String(u.id) && m.sender === "user" && !m.read_by_admin && !m.deleted).length;
   return `
-   <div class="card" style="padding:9px 11px;margin-bottom:8px;cursor:pointer;${activeStyle}" onclick="selectCsUser('${it.uid}')">
+   <div class="cs-client-item ${isSel ? "active" : ""}" onclick="selectCsUser('${u.id}')">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
-     <div style="font-weight:700;font-size:13.5px">${it.name}</div>
-     ${badge}
+     <span style="font-weight:700">${u.name || "Member"}</span>
+     ${unread > 0 ? `<span class="notif-badge">${unread}</span>` : ""}
     </div>
-    <div class="small muted">${it.identity}</div>
-    <div class="small muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px">${it.lastText}</div>
+    <div class="small muted">${u.identity || ""}</div>
    </div>
   `;
  }).join("");
 }
 
-async function selectCsUser(uid) {
+function selectCsUser(uid) {
  selectedCsUserId = String(uid);
- const uObj = allUsers.find(u => String(u.id) === selectedCsUserId);
+ const u = allUsers.find(item => String(item.id) === String(uid));
  if ($("csActiveUserTitle")) {
-  $("csActiveUserTitle").textContent = `💬 ${uObj?.name || "Customer"} (${uObj?.identity || selectedCsUserId})`;
+  $("csActiveUserTitle").textContent = u ? `💬 ${u.name || "Member"} (${u.identity || ""})` : "Select a user to chat";
  }
- await markUserMessagesReadByAdmin(selectedCsUserId);
- restoreAdminCsDraftForUser(selectedCsUserId);
+ markUserMessagesReadByAdmin(uid);
+ restoreAdminCsDraftForUser(uid);
  renderCsClientList();
  renderAdminChatMessages();
+}
+
+function openCsDirectForUser(uid) {
+ showPage("staffPage");
+ switchAdminTab("cs");
+ selectCsUser(uid);
 }
 
 function renderAdminChatMessages() {
  const box = $("adminChatMessages");
  if (!box) return;
  if (!selectedCsUserId) {
-  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">Select a customer to view messages.</div>`;
+  box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">Select a user from the left list.</div>`;
   return;
  }
- const list = allMessages
-  .filter(m => String(m.user_id) === String(selectedCsUserId))
-  .sort((a, b) => (Number(a.created_at) || 0) - (Number(b.created_at) || 0));
-
- if (!list.length) {
+ const msgs = allMessages.filter(m => String(m.user_id) === String(selectedCsUserId));
+ if (!msgs.length) {
   box.innerHTML = `<div class="muted" style="text-align:center;padding:24px">No messages yet.</div>`;
   return;
  }
- box.innerHTML = list.map(m => buildSingleChatBubbleHtml(m, m.sender === "support")).join("");
+ box.innerHTML = msgs.map((m, i) => buildChatMessageBubbleHtml(m, i, "admin")).join("");
  box.scrollTop = box.scrollHeight;
 }
 
+async function sendAdminChatReply() {
+ if (!selectedCsUserId) {
+  showAlert("Please select a user first.");
+  return;
+ }
+ const inp = $("adminChatInput");
+ const txt = (inp?.value || "").trim();
+ if (!txt) return;
+
+ const nowTs = Date.now();
+ const msgObj = {
+  id: "MSG" + nowTs,
+  user_id: selectedCsUserId,
+  sender: "support",
+  sender_name: "Trip Booking Service",
+  text: txt,
+  time: formatExactTimestamp(new Date(nowTs)),
+  created_at: nowTs,
+  read_by_user: false,
+  read_by_admin: true
+ };
+
+ allMessages.push(msgObj);
+ saveCachedMessagesLocal(allMessages);
+ if (inp) {
+  inp.value = "";
+  autoResizeTextarea(inp);
+ }
+ clearDraftText("admin_cs_" + selectedCsUserId);
+ document.querySelectorAll(".emoji-picker-panel").forEach(p => p.classList.add("hidden"));
+ renderAdminChatMessages();
+ renderCsClientList();
+
+ if (db) {
+  const pushRef = db.ref("messages").push();
+  msgObj.fbKey = pushRef.key;
+  await pushRef.set(msgObj).catch(() => {});
+ }
+}
+
 function renderAllViews() {
+ updateHeaderAuthButton();
+ syncSuspensionBanner();
  renderTodayRateAndConverterBox();
  renderFxTrendChart();
  renderHotels();
- renderBookingCenter();
+ renderProfileAndBooking();
  renderHistory();
- renderProfile();
- renderSupportChat();
- renderActivityTicker();
- syncSuspensionBanner();
- if (isAdminSession) {
-  renderAdminBadges();
-  if (!$("adminUsersTab")?.classList.contains("hidden")) renderAdminUsers();
-  if (!$("adminHotelsTab")?.classList.contains("hidden")) renderAdminHotelsAndVips();
-  if (!$("adminCsTab")?.classList.contains("hidden")) {
-   renderCsClientList();
-   renderAdminChatMessages();
-  }
+ renderSupportMessages();
+ updateAdminUnreadBadges();
+ if (isAdminSession && $("staffPage")?.classList.contains("active")) {
+  renderAdminUsers();
+  renderAdminHotelsAndVips();
+  renderCsClientList();
+  renderAdminChatMessages();
  }
 }
 
 function forceSyncNow() {
  fetchOfficialExchangeRate();
- if (db) {
-  db.ref().once("value").then(snap => {
-   if (snap && snap.exists()) applyFirebaseRootSnapshot(snap.val());
-   renderAllViews();
-   showAlert("✅ Synced with database!");
-  }).catch(() => renderAllViews());
- } else {
-  renderAllViews();
-  showAlert("✅ Local state synced!");
- }
+ renderAllViews();
+ showAlert("✅ Synchronized!");
 }
 
-function applyFirebaseRootSnapshot(rootVal) {
- if (!rootVal || typeof rootVal !== "object") return;
+function attachRealtimeListeners() {
+ if (!db) return;
 
- if (rootVal.platform_settings) {
-  const ps = rootVal.platform_settings;
-  if (ps.rate_date_key) {
-   LAST_RATE_DAY_KEY = ps.rate_date_key;
+ db.ref("platform_settings").on("value", snap => {
+  if (!snap || !snap.exists()) return;
+  const val = snap.val() || {};
+  if (val.rate_date_key && val.rate_date_key !== LAST_RATE_DAY_KEY) {
+   LAST_RATE_DAY_KEY = val.rate_date_key;
    localStorage.setItem("tb_last_rate_day", LAST_RATE_DAY_KEY);
   }
-  if (Number(ps.today_open_mmk_per_usd) > 0) {
-   TODAY_OPEN_MMK_PER_USD = Number(ps.today_open_mmk_per_usd);
+  if (Number(val.today_open_mmk_per_usd) > 0) {
+   TODAY_OPEN_MMK_PER_USD = Number(val.today_open_mmk_per_usd);
    localStorage.setItem("tb_today_open_mmk", String(TODAY_OPEN_MMK_PER_USD));
   }
-  if (Number(ps.mmk_per_usd) > 0) {
-   setPlatformMmkRate(Number(ps.mmk_per_usd), false, false);
+  if (Number(val.mmk_per_usd) > 0 && Number(val.mmk_per_usd) !== MMK_PER_USD) {
+   setPlatformMmkRate(Number(val.mmk_per_usd), false, false);
   }
- }
+ });
 
- if (Array.isArray(rootVal.profit_tiers) && rootVal.profit_tiers.length) {
-  allProfitTiers = rootVal.profit_tiers;
- }
+ db.ref("profit_tiers").on("value", snap => {
+  if (!snap || !snap.exists()) return;
+  const val = snap.val();
+  if (Array.isArray(val) && val.length) {
+   allProfitTiers = val;
+   if (!$("profitTableModal")?.classList.contains("hidden")) renderAdminProfitTable();
+  }
+ });
 
- if (Array.isArray(rootVal.hotels) && rootVal.hotels.length) {
-  allHotels = rootVal.hotels;
- }
+ db.ref("hotels").on("value", snap => {
+  if (!snap || !snap.exists()) return;
+  const val = snap.val();
+  const arr = Array.isArray(val) ? val : Object.values(val || {});
+  if (arr.length) {
+   allHotels = arr;
+   applyRotatingPlatformBackdrops();
+   renderHotels();
+   if (isAdminSession && !$("adminHotelsTab")?.classList.contains("hidden")) renderAdminHotelsAndVips();
+  }
+ });
 
- if (Array.isArray(rootVal.vip_tiers) && rootVal.vip_tiers.length) {
-  allVipTiers = rootVal.vip_tiers;
- }
+ db.ref("vip_tiers").on("value", snap => {
+  if (!snap || !snap.exists()) return;
+  const val = snap.val();
+  const arr = Array.isArray(val) ? val : Object.values(val || {});
+  if (arr.length) {
+   allVipTiers = arr;
+   renderProfileAndBooking();
+   if (isAdminSession && !$("adminHotelsTab")?.classList.contains("hidden")) renderAdminHotelsAndVips();
+  }
+ });
 
- if (rootVal.users && typeof rootVal.users === "object") {
-  const fbUsers = Object.keys(rootVal.users).map(k => ({ id: k, ...rootVal.users[k] }));
-  const mergedMap = new Map();
-  allUsers.forEach(u => mergedMap.set(String(u.id), u));
-  fbUsers.forEach(u => {
-   const prev = mergedMap.get(String(u.id));
-   mergedMap.set(String(u.id), { ...(prev || {}), ...u });
-  });
-  allUsers = Array.from(mergedMap.values()).sort((a, b) => (Number(b.created_at) || 0) - (Number(a.created_at) || 0));
-  saveCachedUsersLocal(allUsers);
-
-  if (currentUser) {
-   const updatedMe = allUsers.find(u => String(u.id) === String(currentUser.id));
-   if (updatedMe) {
-    currentUser = { ...currentUser, ...updatedMe };
-    localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
+ db.ref("users").on("value", snap => {
+  if (!snap || !snap.exists()) return;
+  const raw = snap.val() || {};
+  const list = Array.isArray(raw) ? raw.filter(Boolean) : Object.entries(raw).map(([k, v]) => ({ id: k, ...v }));
+  if (list.length) {
+   allUsers = list;
+   saveCachedUsersLocal(allUsers);
+   if (currentUser && !isAdminSession) {
+    const freshMe = allUsers.find(u => String(u.id) === String(currentUser.id));
+    if (freshMe) {
+     currentUser = { ...freshMe, is_online: true };
+     localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
+     syncSuspensionBanner();
+    }
    }
+   renderActivityTicker();
+   renderProfileAndBooking();
+   renderHistory();
+   if (isAdminSession && $("staffPage")?.classList.contains("active")) renderAdminUsers();
   }
- }
+ });
 
- if (rootVal.messages && typeof rootVal.messages === "object") {
-  const flatMsgs = [];
-  Object.keys(rootVal.messages).forEach(uid => {
-   const bucket = rootVal.messages[uid];
-   if (bucket && typeof bucket === "object") {
-    Object.keys(bucket).forEach(mid => {
-     flatMsgs.push({ id: mid, user_id: String(uid), ...bucket[mid] });
-    });
-   }
-  });
-  flatMsgs.sort((a, b) => (Number(a.created_at) || 0) - (Number(b.created_at) || 0));
+ db.ref("messages").on("value", snap => {
+  if (!snap || !snap.exists()) return;
+  const raw = snap.val() || {};
+  const list = Object.entries(raw).map(([k, v]) => ({ fbKey: k, ...v }));
+  list.sort((a, b) => (Number(a.created_at) || 0) - (Number(b.created_at) || 0));
 
-  const latestMsg = flatMsgs[flatMsgs.length - 1];
-  const latestKey = latestMsg ? `${latestMsg.user_id}__${latestMsg.id}` : null;
-  if (initialMessagesHydrated && latestMsg && latestKey !== lastNotifiedIncomingMsgKey) {
-   lastNotifiedIncomingMsgKey = latestKey;
-   showIncomingCsNotification(latestMsg);
-  } else if (latestKey) {
-   lastNotifiedIncomingMsgKey = latestKey;
-  }
+  const prevKeys = new Set(allMessages.map(m => m.fbKey || m.id));
+  const newlyArrived = initialMessagesHydrated
+   ? list.filter(m => !prevKeys.has(m.fbKey || m.id))
+   : [];
+
+  allMessages = list;
+  saveCachedMessagesLocal(allMessages);
   initialMessagesHydrated = true;
 
-  allMessages = flatMsgs;
-  saveCachedMessagesLocal(allMessages);
- }
-}
+  renderSupportMessages();
+  renderAdminChatMessages();
+  renderCsClientList();
+  updateAdminUnreadBadges();
 
-function attachFirebaseListeners() {
- if (!db) return;
- db.ref().on("value", snap => {
-  if (!snap || !snap.exists()) return;
-  applyFirebaseRootSnapshot(snap.val());
-  renderAllViews();
+  for (const nm of newlyArrived) {
+   const nKey = String(nm.fbKey || nm.id || "");
+   if (nKey && nKey !== lastNotifiedIncomingMsgKey) {
+    lastNotifiedIncomingMsgKey = nKey;
+    showIncomingCsNotification(nm);
+   }
+  }
  });
 }
 
-document.addEventListener("click", () => {
- clearActiveMsgActionBar();
-});
-
-window.addEventListener("resize", () => {
- renderFxTrendChart();
-});
-
-(async function initApp() {
+document.addEventListener("DOMContentLoaded", () => {
  if (localStorage.getItem("tb_theme_dark") === "1") {
   document.body.classList.add("dark");
  }
+
  populateCountryCodeSelect();
+
+ const savedLang = localStorage.getItem("tb_lang");
+ const browserLang = (navigator.language || "en").slice(0, 2).toLowerCase();
+ const initLang = savedLang || (["my", "zh", "th", "en"].includes(browserLang) ? browserLang : "en");
+ currentLang = ["en", "my", "zh", "th"].includes(initLang) ? initLang : "en";
+ if ($("language")) $("language").value = currentLang;
 
  allUsers = loadCachedUsersLocal();
  allMessages = loadCachedMessagesLocal();
 
- const savedSession = localStorage.getItem("tb_session_user");
- if (savedSession) {
-  try {
-   const parsed = JSON.parse(savedSession);
-   if (parsed && parsed.id) {
-    currentUser = parsed;
-    const match = allUsers.find(u => String(u.id) === String(parsed.id));
-    if (match) currentUser = { ...match, ...parsed };
+ try {
+  const sessRaw = localStorage.getItem("tb_session_user");
+  if (sessRaw) {
+   const sessObj = JSON.parse(sessRaw);
+   if (sessObj && sessObj.id) {
+    const matched = allUsers.find(u => String(u.id) === String(sessObj.id));
+    currentUser = matched ? { ...matched, is_online: true } : { ...sessObj, is_online: true };
    }
-  } catch (_) {}
- }
-
- updateHeaderAuthButton();
- syncSuspensionBanner();
- if (currentUser && !isAdminSession) startUserHeartbeatLoop();
-
- const savedLang = localStorage.getItem("tb_lang") || "en";
- changeLanguage(savedLang);
+  }
+ } catch (_) {}
 
  if ($("supportInput")) {
-  $("supportInput").value = loadDraftText("user_cs_draft");
-  autoResizeTextarea($("supportInput"));
+  const savedCsDraft = loadDraftText("user_cs_draft");
+  if (savedCsDraft) {
+   $("supportInput").value = savedCsDraft;
+   autoResizeTextarea($("supportInput"));
+  }
  }
 
- initFxTrendChart();
- await fetchOfficialExchangeRate();
- startSlowBottomToTopTicker();
- attachFirebaseListeners();
+ const urlParams = new URLSearchParams(window.location.search);
+ const refParam = (urlParams.get("ref") || "").trim();
+ if (refParam) {
+  saveDraftText("reg_ref_draft", refParam.toUpperCase());
+  if ($("regRefInput")) $("regRefInput").value = refParam.toUpperCase();
+ }
+
  runIntroSplash();
-})();
+ changeLanguage(currentLang);
+ initFxTrendChart();
+ fetchOfficialExchangeRate();
+ startSlowBottomToTopTicker();
+ attachRealtimeListeners();
+ if (currentUser && !isAdminSession) startUserHeartbeatLoop();
+});
 </script>
 </body>
 </html>
