@@ -66,7 +66,16 @@
    pointer-events: none !important;
   }
 
-  /* Splash */
+  /* Platform gated until 3.5s splash completes & removes itself */
+  body.splash-active .topbar,
+  body.splash-active .activity-ticker-wrap,
+  body.splash-active main.page,
+  body.splash-active nav.bottom-nav {
+   opacity: 0;
+   pointer-events: none;
+  }
+
+  /* Splash Screen (Shown BEFORE platform, removed completely when platform opens) */
   @property --splash-spin {
    syntax: "<angle>";
    initial-value: 0deg;
@@ -76,27 +85,27 @@
   #introSplash {
    position: fixed;
    inset: 0;
-   z-index: 9999;
+   z-index: 99999;
    display: flex;
    align-items: center;
    justify-content: center;
    padding: 18px;
+   background-color: #0b1120;
    background-size: cover;
    background-position: center;
-   transition: opacity 0.4s ease, visibility 0.4s ease;
+   background-repeat: no-repeat;
+   transition: opacity 0.25s ease;
   }
 
   #introSplash::before {
    content: "";
    position: absolute;
    inset: 0;
-   background: rgba(9, 14, 26, 0.56);
-   backdrop-filter: blur(2px);
+   background: rgba(9, 14, 26, 0.52);
   }
 
   #introSplash.fade-out {
    opacity: 0;
-   visibility: hidden;
    pointer-events: none;
   }
 
@@ -126,7 +135,7 @@
    width: 100%;
    padding: 26px 22px;
    border-radius: 15px;
-   background: linear-gradient(145deg, rgba(22, 27, 38, 0.95), rgba(29, 34, 45, 0.95));
+   background: linear-gradient(145deg, rgba(22, 27, 38, 0.94), rgba(29, 34, 45, 0.94));
    text-align: center;
    color: #ffffff;
   }
@@ -391,7 +400,7 @@
   }
   .converter-answer { font-weight: 800; color: var(--primary); }
 
-  /* 3D Live FX Stage (Smooth 185fps / requestAnimationFrame Canvas) */
+  /* 3D Live FX Stage */
   .fx-3d-stage {
    position: relative;
    height: 195px;
@@ -466,10 +475,6 @@
   .msg-bubble { max-width: 82%; padding: 9px 13px; border-radius: 12px; background: var(--secondary); word-break: break-word; }
   .msg-me { align-self: flex-end; background: var(--primary); color: #fff; }
   .msg-meta { font-size: 10px; opacity: 0.78; margin-bottom: 3px; }
-  .msg-photo-thumb { max-width: 190px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
-  .msg-actions-bar { display: none; gap: 6px; margin-top: 6px; }
-  .msg-actions-bar.visible { display: flex; }
-  .msg-mini-btn { border: none; border-radius: 5px; padding: 2px 7px; font-size: 11px; cursor: pointer; background: rgba(0, 0, 0, 0.2); color: inherit; }
 
   .chat-composer {
    display: flex;
@@ -761,8 +766,9 @@
   }
  </style>
 </head>
-<body>
+<body class="splash-active">
 
+<!-- Pre-Platform 3.5s Splash (Removed completely when platform opens) -->
 <div id="introSplash">
  <div class="splash-rainbow-frame">
   <div class="splash-inner-card">
@@ -806,11 +812,6 @@
    <div class="ticker-marquee-track" id="activityTickerTrack"></div>
   </div>
  </div>
-</div>
-
-<div id="suspendedBanner" class="suspended-banner hidden">
- <span id="suspendedBannerText">Account is currently suspended.</span>
- <button type="button" class="btn btn-danger btn-xs" onclick="openSupportFromSuspension()">Customer Service</button>
 </div>
 
 <div id="regSuccessToast" class="reg-success-toast hidden" onclick="this.classList.add('hidden')">
@@ -1285,24 +1286,22 @@
   <span data-i18n="navProfile">Profile</span>
  </button>
 </nav>
-<!-- 1. AUTH MODAL (LOGIN / REGISTER) -->
+
+<!-- AUTH MODAL -->
 <div id="authModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('authModal')">
  <div class="modal-card">
   <div class="modal-header">
    <h3 id="authTitle">Login</h3>
    <button type="button" class="close-x" onclick="closeModal('authModal')">✕</button>
   </div>
-
   <div class="auth-mode-tabs">
    <button type="button" id="tabLoginBtn" class="auth-tab-btn active" onclick="setAuthMode('login')">Login</button>
    <button type="button" id="tabRegisterBtn" class="auth-tab-btn" onclick="setAuthMode('register')">Register</button>
   </div>
-
   <div id="regExtraFields" class="field hidden">
    <label for="regName" data-i18n="fullNameLabel">Full Name (Any Native Script)</label>
-   <input type="text" id="regName" data-i18n-ph="fullNamePh" placeholder="Enter full name (English, Myanmar, 中文, ไทย...)" oninput="saveDraftText('reg_name_draft',this.value)">
+   <input type="text" id="regName" data-i18n-ph="fullNamePh" placeholder="Enter full name" oninput="saveDraftText('reg_name_draft',this.value)">
   </div>
-
   <div class="field">
    <label for="authIdentity" data-i18n="identityLabel">Country Code & Phone Number (or Email)</label>
    <div class="phone-inline-group">
@@ -1311,7 +1310,6 @@
    </div>
    <div class="small muted" id="phoneRuleHint" style="margin-top:4px"></div>
   </div>
-
   <div class="field">
    <label for="authPassword" data-i18n="passwordLabel">Password</label>
    <div class="pass-wrap">
@@ -1321,7 +1319,6 @@
     </button>
    </div>
   </div>
-
   <div id="regRefField" class="field hidden">
    <label for="regRefInput" data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
    <input type="text" id="regRefInput" placeholder="TP2323" oninput="saveDraftText('reg_ref_draft',this.value)">
@@ -1330,7 +1327,6 @@
     <span data-i18n="agreeTermsText">I agree to the platform terms and conditions.</span>
    </label>
   </div>
-
   <div class="error-text" id="authError"></div>
   <div class="auth-submit-row">
    <button type="button" class="btn btn-primary" id="authSubmitBtn" style="width:100%" onclick="submitAuth()">Login</button>
@@ -1338,14 +1334,14 @@
  </div>
 </div>
 
-<!-- 2. ADMIN 2ND STEP PIN MODAL (1245) -->
+<!-- ADMIN PIN MODAL (1245) -->
 <div id="adminPinModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeAdminPinModal()">
  <div class="modal-card">
   <div class="modal-header">
    <h3>Admin 2nd Step Verification (PIN)</h3>
    <button type="button" class="close-x" onclick="closeAdminPinModal()">✕</button>
   </div>
-  <p class="small muted" style="margin:0 0 10px">Step 1 account verified. Enter the 4-digit Admin Security PIN to unlock #staffPage.</p>
+  <p class="small muted" style="margin:0 0 10px">Enter the 4-digit Admin Security PIN to unlock #staffPage.</p>
   <div class="field">
    <label for="adminPinInput">4-Digit Admin PIN</label>
    <input type="password" id="adminPinInput" maxlength="6" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')verifyAdminSecondStepPin()">
@@ -1358,7 +1354,7 @@
  </div>
 </div>
 
-<!-- 3. BOOKING PROFIT TABLE MODAL (+ ADD TIER) -->
+<!-- PROFIT TABLE MODAL (+ ADD TIER) -->
 <div id="profitTableModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('profitTableModal')">
  <div class="modal-card wide-modal">
   <div class="modal-header">
@@ -1378,7 +1374,7 @@
       <th>Orders</th>
       <th>Cycle Profit ($)</th>
       <th>Total Return</th>
-      <th>Varied Sample (#1–#5)</th>
+      <th>Varied Sample (#1-#5)</th>
       <th>Action</th>
      </tr>
     </thead>
@@ -1392,14 +1388,13 @@
  </div>
 </div>
 
-<!-- 4. ORDER EXECUTION MODAL -->
+<!-- ORDER EXECUTION MODAL -->
 <div id="centerOrderModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeCenterOrderModal()">
  <div class="modal-card">
   <div class="modal-header">
    <h3 id="centerOrderTitle">Booking Order</h3>
    <button type="button" class="close-x" onclick="closeCenterOrderModal()">✕</button>
   </div>
-
   <div id="centerOrderFormBody">
    <div style="display:flex;gap:12px;align-items:center">
     <img id="centerOrderImg" src="" alt="Hotel" style="width:84px;height:68px;object-fit:cover;border-radius:8px">
@@ -1409,14 +1404,12 @@
      <span class="tag" id="centerOrderStepBadge">Order #1</span>
     </div>
    </div>
-
    <div class="order-meta-grid">
     <div><span class="muted" data-i18n="orderPriceLabel">Order Price</span>: <b id="centerOrderPrice">$0.00</b></div>
     <div><span class="muted" data-i18n="commissionLabel">Commission</span>: <b id="centerOrderComm" style="color:var(--success)">+$0.00</b></div>
     <div><span class="muted" data-i18n="stayNightsLabel">Stay Duration</span>: <b id="centerOrderNights">2 Nights</b></div>
     <div><span class="muted" data-i18n="hotelRoomTypeLabel">Room Type</span>: <b id="centerOrderRoomType">Deluxe Suite</b></div>
    </div>
-
    <div class="field">
     <label data-i18n="rateHotelLabel">Star Rating</label>
     <div class="star-picker-row" id="centerStarPicker">
@@ -1427,24 +1420,20 @@
      <button type="button" class="star-pick-btn selected" data-star="5" onclick="selectOrderStar(5)">5 Stars</button>
     </div>
    </div>
-
    <div class="field">
     <label data-i18n="chooseReviewLabel">Select 1 of 5 Quick Reviews</label>
     <div class="review-chips-list" id="centerReviewChips"></div>
    </div>
-
    <div class="field">
     <label for="centerCustomReviewInput" data-i18n="customReviewLabel">Or Write Your Own Custom Review</label>
     <textarea id="centerCustomReviewInput" rows="2" data-i18n-ph="customReviewPh" placeholder="Write custom hotel review..." oninput="onCustomReviewInput()"></textarea>
    </div>
-
    <div class="error-text" id="centerReviewWarn"></div>
    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
     <button type="button" class="btn btn-secondary btn-xs" onclick="closeCenterOrderModal()" data-i18n="cancelBtn">Cancel</button>
     <button type="button" class="btn btn-primary btn-xs" id="centerSubmitOrderBtn" onclick="confirmCenterOrder()" data-i18n="submitOrderBtn">Complete Order</button>
    </div>
   </div>
-
   <div id="centerOrderVerifyingBody" class="verifying-box hidden">
    <div class="spinner-ring"></div>
    <div style="font-weight:700" data-i18n="verifyingBookingText">Verifying booking details...</div>
@@ -1452,26 +1441,18 @@
  </div>
 </div>
 
-<!-- 5. PROFIT SUCCESS MODAL -->
+<!-- PROFIT SUCCESS / DETAIL / ADD HOTEL / EDIT NAME / ALERT -->
 <div id="profitSuccessModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('profitSuccessModal')">
  <div class="modal-card" style="text-align:center">
-  <div class="modal-header">
-   <h3>Order Completed</h3>
-   <button type="button" class="close-x" onclick="closeModal('profitSuccessModal')">✕</button>
-  </div>
+  <div class="modal-header"><h3>Order Completed</h3><button type="button" class="close-x" onclick="closeModal('profitSuccessModal')">✕</button></div>
   <div style="font-size:24px;font-weight:800;color:var(--success);margin:10px 0" id="profitSuccessAmountText">+$0.00</div>
   <p class="small muted" id="profitSuccessProgressText"></p>
   <button type="button" class="btn btn-primary btn-xs" onclick="closeModal('profitSuccessModal')" data-i18n="okBtn">OK</button>
  </div>
 </div>
-
-<!-- 6. HOTEL DETAIL MODAL -->
 <div id="hotelDetailModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('hotelDetailModal')">
  <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="detailHotelName">Hotel</h3>
-   <button type="button" class="close-x" onclick="closeModal('hotelDetailModal')">✕</button>
-  </div>
+  <div class="modal-header"><h3 id="detailHotelName">Hotel</h3><button type="button" class="close-x" onclick="closeModal('hotelDetailModal')">✕</button></div>
   <img id="detailHotelImg" src="" alt="Hotel" style="width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:10px">
   <div id="detailHotelBody"></div>
   <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
@@ -1480,14 +1461,9 @@
   </div>
  </div>
 </div>
-
-<!-- 7. ADD HOTEL MODAL -->
 <div id="addHotelModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('addHotelModal')">
  <div class="modal-card">
-  <div class="modal-header">
-   <h3 data-i18n="addHotelModalHead">Add New Hotel</h3>
-   <button type="button" class="close-x" onclick="closeModal('addHotelModal')">✕</button>
-  </div>
+  <div class="modal-header"><h3 data-i18n="addHotelModalHead">Add New Hotel</h3><button type="button" class="close-x" onclick="closeModal('addHotelModal')">✕</button></div>
   <div class="field"><label data-i18n="hotelNameLabel">Hotel Name</label><input type="text" id="newHName"></div>
   <div class="field"><label data-i18n="countryLabel">Country</label><input type="text" id="newHCountry"></div>
   <div class="field"><label data-i18n="priceLabel">Price ($)</label><input type="number" id="newHPrice" value="95"></div>
@@ -1498,14 +1474,9 @@
   </div>
  </div>
 </div>
-
-<!-- 8. EDIT PROFILE NAME MODAL -->
 <div id="editNameModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('editNameModal')">
  <div class="modal-card">
-  <div class="modal-header">
-   <h3 data-i18n="editNameModalTitle">Edit Profile Name</h3>
-   <button type="button" class="close-x" onclick="closeModal('editNameModal')">✕</button>
-  </div>
+  <div class="modal-header"><h3 data-i18n="editNameModalTitle">Edit Profile Name</h3><button type="button" class="close-x" onclick="closeModal('editNameModal')">✕</button></div>
   <div class="field"><label data-i18n="fullNameLabel">Full Name</label><input type="text" id="editProfileNameInput"></div>
   <div style="display:flex;gap:8px;justify-content:flex-end">
    <button type="button" class="btn btn-secondary btn-xs" onclick="closeModal('editNameModal')" data-i18n="cancelBtn">Cancel</button>
@@ -1513,23 +1484,14 @@
   </div>
  </div>
 </div>
-
-<!-- 9. ALERT & IMAGE LIGHTBOX -->
 <div id="alertModal" class="modal-backdrop hidden" onclick="if(event.target===this)closeModal('alertModal')">
  <div class="modal-card">
-  <div class="modal-header">
-   <h3 id="alertTitle">Notification</h3>
-   <button type="button" class="close-x" onclick="closeModal('alertModal')">✕</button>
-  </div>
+  <div class="modal-header"><h3 id="alertTitle">Notification</h3><button type="button" class="close-x" onclick="closeModal('alertModal')">✕</button></div>
   <div id="alertBody"></div>
   <div style="display:flex;justify-content:flex-end;margin-top:14px">
    <button type="button" class="btn btn-primary btn-xs" onclick="closeModal('alertModal')" data-i18n="okBtn">OK</button>
   </div>
  </div>
-</div>
-
-<div id="imageLightbox" class="image-lightbox hidden" onclick="closeImageLightbox()">
- <img id="lightboxImg" src="" alt="Preview">
 </div>
 <script>
 const firebaseConfig = {
@@ -1549,7 +1511,7 @@ try {
   db = app.database();
  }
 } catch (err) {
- console.warn("Firebase init fallback to local mode:", err);
+ console.warn("Firebase fallback to local mode:", err);
 }
 
 const $ = id => document.getElementById(id);
@@ -1738,7 +1700,7 @@ function onCountryCodeChanged() {
  }
 }
 
-/* ==================== 599 HOTELS WITH NON-DUPLICATE PHOTO URLs ==================== */
+/* ==================== 599 HOTELS WITH UNIQUE PHOTO URLs ==================== */
 const BASE_HOTEL_PHOTOS = [
  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop",
  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop",
@@ -1811,39 +1773,53 @@ function generate599UniqueHotels() {
  return list;
 }
 
-function getRotatingBackdropUrl() {
- const pool = Array.isArray(allHotels) && allHotels.length ? allHotels.map(h => h.image).filter(Boolean) : BASE_HOTEL_PHOTOS;
- const key = "tb_backdrop_visit_count";
- let n = Number(localStorage.getItem(key) || "0");
- n = (n + 1) % 1000000;
- localStorage.setItem(key, String(n));
- return pool[Math.abs(n - 1) % pool.length];
+/* ==================== ROTATING HOTEL PHOTO PER ENTRY & 3.5s SPLASH BEFORE PLATFORM ==================== */
+function getNextRotatingHotelPhoto() {
+ const pool = Array.isArray(allHotels) && allHotels.length
+  ? allHotels.map(h => h.image).filter(Boolean)
+  : BASE_HOTEL_PHOTOS;
+ const key = "tb_splash_visit_photo_index";
+ const prevIdx = Number(localStorage.getItem(key) || "-1");
+ const nextIdx = (prevIdx + 1) % pool.length;
+ localStorage.setItem(key, String(nextIdx));
+ return pool[nextIdx];
 }
 
 function applyRotatingPlatformBackdrops() {
- const url = getRotatingBackdropUrl();
- if ($("introSplash")) $("introSplash").style.backgroundImage = `url("${url}")`;
- if ($("homeHeroBanner")) $("homeHeroBanner").style.backgroundImage = `url("${url}")`;
+ const splashPhoto = getNextRotatingHotelPhoto();
+ const heroPhoto = BASE_HOTEL_PHOTOS[1] || splashPhoto;
+ if ($("introSplash")) {
+  $("introSplash").style.backgroundImage = `url("${splashPhoto}")`;
+ }
+ if ($("homeHeroBanner")) {
+  $("homeHeroBanner").style.backgroundImage = `url("${heroPhoto}")`;
+ }
 }
 
-let splashDismissTimerId = null;
-let splashFadeTimerId = null;
-function runIntroSplash() {
+let splashTimerId = null;
+function runPrePlatformSplash3500ms() {
  applyRotatingPlatformBackdrops();
+ document.body.classList.add("splash-active");
  const splash = $("introSplash");
- if (!splash) return;
- if (splashDismissTimerId) clearTimeout(splashDismissTimerId);
- if (splashFadeTimerId) clearTimeout(splashFadeTimerId);
- splash.style.display = "flex"; splash.style.opacity = "1"; splash.style.visibility = "visible"; splash.style.pointerEvents = "auto";
+ if (!splash) {
+  document.body.classList.remove("splash-active");
+  return;
+ }
+ if (splashTimerId) clearTimeout(splashTimerId);
  splash.classList.remove("hidden", "fade-out");
- splashDismissTimerId = setTimeout(() => {
-  splash.classList.add("fade-out"); splash.style.opacity = "0"; splash.style.pointerEvents = "none";
-  splashFadeTimerId = setTimeout(() => {
-   splash.classList.add("hidden"); splash.style.display = "none"; splash.style.visibility = "hidden";
-  }, 420);
- }, 3200);
+ splash.style.display = "flex";
+ splash.style.opacity = "1";
+
+ // After exactly 3.5 seconds (3500ms), enter platform and completely remove splash overlay
+ splashTimerId = setTimeout(() => {
+  document.body.classList.remove("splash-active");
+  if (splash && splash.parentNode) {
+   splash.parentNode.removeChild(splash);
+  }
+ }, 3500);
 }
 
+/* ==================== PROFIT TABLE, VARIED COMMISSION, AUTH, ADMIN 9 MODULES ==================== */
 const DEFAULT_PROFIT_TIERS = [
  { principal: 100, orders_count: 30, cycle_profit: 20 },
  { principal: 250, orders_count: 30, cycle_profit: 50 },
@@ -1854,10 +1830,7 @@ const DEFAULT_PROFIT_TIERS = [
  { principal: 10000, orders_count: 30, cycle_profit: 2000 }
 ];
 const DEFAULT_ORDERS_LIMIT = 30;
-const SYMBOL_PICKS = [
- ":)", ";)", ":D", "^_^", "*_*", ":-)", "OK", "VIP", "FX", "24H",
- "+$", "100%", "★", "☆", "◆", "◇", "▲", "▼", "■", "□"
-];
+const SYMBOL_PICKS = [":)", ";)", ":D", "^_^", "*_*", ":-)", "OK", "VIP", "FX", "24H", "+$", "100%", "★", "☆", "◆", "◇", "▲", "▼", "■", "□"];
 
 let allUsers = [];
 let allMessages = [];
@@ -1872,7 +1845,6 @@ let selectedHomeHotel = null;
 let pendingCenterOrder = null;
 let selectedOrderStar = 5;
 let selectedOrderReview = "";
-let selectedLogUserId = null;
 
 let MMK_PER_USD = Number(localStorage.getItem("tb_mmk_per_usd")) || 5000;
 let LAST_RATE_DAY_KEY = localStorage.getItem("tb_last_rate_day") || "";
@@ -1884,36 +1856,24 @@ let fxRafId = null;
 let converterDirection = "USD_TO_MMK";
 let fxRhythmState = { phase: "down", phaseTicksLeft: 5, waveSeed: (Date.now() % 997) + 13 };
 
-/* ==================== VARIED COMMISSION (#1-#29 & #30 EXACT REMAINDER) ==================== */
 function getMatchedProfitTier(balanceVal, ordersCount = 30) {
  const bal = Math.max(0, Number(balanceVal) || 0);
  const cnt = Math.max(1, Number(ordersCount) || 30);
  const sorted = [...allProfitTiers].sort((a, b) => Number(a.principal) - Number(b.principal));
- if (!sorted.length) {
-  return { principal: 100, orders_count: cnt, cycle_profit: Number((bal * 0.2).toFixed(2)) };
- }
+ if (!sorted.length) return { principal: 100, orders_count: cnt, cycle_profit: Number((bal * 0.2).toFixed(2)) };
  let chosen = sorted[0];
- for (const tier of sorted) {
-  if (bal >= Number(tier.principal)) chosen = tier;
- }
+ for (const tier of sorted) { if (bal >= Number(tier.principal)) chosen = tier; }
  const tierPrincipal = Math.max(1, Number(chosen.principal) || 100);
  const baseCycleProfit = Number(chosen.cycle_profit) || 20;
  const ratioToTier = bal > 0 ? (bal / tierPrincipal) : 1;
- const scaledCycleProfit = Math.abs(bal - tierPrincipal) < 0.005
-  ? baseCycleProfit
-  : Number((baseCycleProfit * Math.min(1.5, Math.max(0.25, ratioToTier))).toFixed(2));
- return {
-  principal: tierPrincipal,
-  orders_count: Number(chosen.orders_count) || cnt,
-  cycle_profit: scaledCycleProfit
- };
+ const scaledCycleProfit = Math.abs(bal - tierPrincipal) < 0.005 ? baseCycleProfit : Number((baseCycleProfit * Math.min(1.5, Math.max(0.25, ratioToTier))).toFixed(2));
+ return { principal: tierPrincipal, orders_count: Number(chosen.orders_count) || cnt, cycle_profit: scaledCycleProfit };
 }
 
 function computeVariedScheduleForCycle(cycleProfit, ordersCount = 30, seedSalt = 1) {
  const totalTarget = Math.max(0, Number(cycleProfit) || 0);
  const count = Math.max(1, Number(ordersCount) || 30);
  if (count === 1) return [Number(totalTarget.toFixed(2))];
-
  const rawWeights = [];
  for (let i = 1; i < count; i++) {
   const wave = Math.sin(i * 1.43 + seedSalt * 0.77) * 0.38 + Math.cos(i * 2.27 - seedSalt * 0.51) * 0.26;
@@ -1922,7 +1882,6 @@ function computeVariedScheduleForCycle(cycleProfit, ordersCount = 30, seedSalt =
  }
  const weightSum = rawWeights.reduce((a, b) => a + b, 0) || 1;
  const scale = totalTarget / weightSum;
-
  const schedule = [];
  let earnedBeforeFinal = 0;
  for (let i = 0; i < count - 1; i++) {
@@ -1931,8 +1890,7 @@ function computeVariedScheduleForCycle(cycleProfit, ordersCount = 30, seedSalt =
   schedule.push(safeAmt);
   earnedBeforeFinal = Number((earnedBeforeFinal + safeAmt).toFixed(2));
  }
- const finalRemainder = Number(Math.max(0, totalTarget - earnedBeforeFinal).toFixed(2));
- schedule.push(finalRemainder);
+ schedule.push(Number(Math.max(0, totalTarget - earnedBeforeFinal).toFixed(2)));
  return schedule;
 }
 
@@ -1943,106 +1901,68 @@ function getVariedOrderCommission(userObj, orderNumber, balanceVal, alreadyEarne
  const cycleTarget = Number(tier.cycle_profit) || 0;
  const seedSalt = userObj?.id ? String(userObj.id).split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0) : 7;
  const schedule = computeVariedScheduleForCycle(cycleTarget, cnt, seedSalt);
-
  if (orderNum === cnt) {
   let alreadyEarned = 0;
-  if (typeof alreadyEarnedOverride === "number" && Number.isFinite(alreadyEarnedOverride)) {
-   alreadyEarned = alreadyEarnedOverride;
-  } else if (userObj) {
+  if (typeof alreadyEarnedOverride === "number" && Number.isFinite(alreadyEarnedOverride)) alreadyEarned = alreadyEarnedOverride;
+  else if (userObj) {
    const hist = Array.isArray(userObj.order_history) ? userObj.order_history : [];
    const cycleHist = hist.filter(h => Number(h.order_num) >= 1 && Number(h.order_num) < cnt && h.status !== "cancelled");
    alreadyEarned = cycleHist.reduce((sum, item) => sum + (Number(item.commission) || 0), 0);
-   if (alreadyEarned <= 0 && (Number(userObj.profit) || 0) > 0) {
-    alreadyEarned = Number(userObj.profit) || 0;
-   }
+   if (alreadyEarned <= 0 && (Number(userObj.profit) || 0) > 0) alreadyEarned = Number(userObj.profit) || 0;
   }
   return Number(Math.max(0, cycleTarget - alreadyEarned).toFixed(2));
  }
  return schedule[orderNum - 1];
 }
 
-/* ==================== PROFIT TABLE & addProfitTierRow() ==================== */
-function openProfitTableModal() {
- if (!canAccessAdminPanel()) return showAlert("Admin authorization required.");
- renderAdminProfitTable();
- $("profitTableModal")?.classList.remove("hidden");
-}
-
+function openProfitTableModal() { if (!canAccessAdminPanel()) return showAlert("Admin authorization required."); renderAdminProfitTable(); $("profitTableModal")?.classList.remove("hidden"); }
 function addProfitTierRow() {
  if (!canAccessAdminPanel()) return;
  const lastTier = allProfitTiers[allProfitTiers.length - 1];
  const nextPrincipal = lastTier ? Math.max(100, (Number(lastTier.principal) || 100) * 2) : 100;
- const nextProfit = Number((nextPrincipal * 0.2).toFixed(2));
- allProfitTiers.push({ principal: nextPrincipal, orders_count: DEFAULT_ORDERS_LIMIT, cycle_profit: nextProfit });
+ allProfitTiers.push({ principal: nextPrincipal, orders_count: DEFAULT_ORDERS_LIMIT, cycle_profit: Number((nextPrincipal * 0.2).toFixed(2)) });
  renderAdminProfitTable();
 }
-
-function removeProfitTierRow(idx) {
- if (!canAccessAdminPanel()) return;
- if (allProfitTiers.length <= 1) return showAlert("At least 1 profit tier must remain.");
- allProfitTiers.splice(idx, 1);
- renderAdminProfitTable();
-}
-
+function removeProfitTierRow(idx) { if (!canAccessAdminPanel() || allProfitTiers.length <= 1) return; allProfitTiers.splice(idx, 1); renderAdminProfitTable(); }
 function renderAdminProfitTable() {
  const tbody = $("adminProfitTableRows");
  if (!tbody) return;
  tbody.innerHTML = allProfitTiers.map((t, idx) => {
-  const p = Number(t.principal) || 100;
-  const c = Number(t.orders_count) || 30;
-  const prof = Number(t.cycle_profit) || 0;
-  const totalRet = Number((p + prof).toFixed(2));
+  const p = Number(t.principal) || 100, c = Number(t.orders_count) || 30, prof = Number(t.cycle_profit) || 0;
   const sample5 = computeVariedScheduleForCycle(prof, c, idx + 3).slice(0, 5).map(v => `$${v.toFixed(2)}`).join(", ");
-  return `
-   <tr>
-    <td><input type="number" min="1" max="1000000" step="1" data-pt-idx="${idx}" data-pt-field="principal" value="${p}" style="width:94px;font-weight:700" onchange="syncProfitTierInput(${idx}, 'principal', this.value)"></td>
-    <td><input type="number" min="1" max="100" step="1" data-pt-idx="${idx}" data-pt-field="orders_count" value="${c}" style="width:64px" onchange="syncProfitTierInput(${idx}, 'orders_count', this.value)"></td>
-    <td><input type="number" min="0" step="0.01" data-pt-idx="${idx}" data-pt-field="cycle_profit" value="${prof.toFixed(2)}" style="width:96px;color:var(--success);font-weight:700" onchange="syncProfitTierInput(${idx}, 'cycle_profit', this.value)"></td>
-    <td><b>$${totalRet.toFixed(2)}</b></td>
-    <td class="small muted">${sample5} ...</td>
-    <td><button type="button" class="btn btn-danger btn-xs" onclick="removeProfitTierRow(${idx})">Remove</button></td>
-   </tr>
-  `;
+  return `<tr>
+   <td><input type="number" min="1" step="1" value="${p}" style="width:94px;font-weight:700" onchange="syncProfitTierInput(${idx},'principal',this.value)"></td>
+   <td><input type="number" min="1" max="100" step="1" value="${c}" style="width:64px" onchange="syncProfitTierInput(${idx},'orders_count',this.value)"></td>
+   <td><input type="number" min="0" step="0.01" value="${prof.toFixed(2)}" style="width:96px;color:var(--success);font-weight:700" onchange="syncProfitTierInput(${idx},'cycle_profit',this.value)"></td>
+   <td><b>$${(p + prof).toFixed(2)}</b></td>
+   <td class="small muted">${sample5} ...</td>
+   <td><button type="button" class="btn btn-danger btn-xs" onclick="removeProfitTierRow(${idx})">Remove</button></td>
+  </tr>`;
  }).join("");
 }
-
-function syncProfitTierInput(idx, field, val) {
- if (!allProfitTiers[idx]) return;
- allProfitTiers[idx][field] = Number(val) || 0;
- renderAdminProfitTable();
-}
-function resetProfitTableDefaults() {
- allProfitTiers = JSON.parse(JSON.stringify(DEFAULT_PROFIT_TIERS));
- renderAdminProfitTable();
-}
+function syncProfitTierInput(idx, field, val) { if (allProfitTiers[idx]) { allProfitTiers[idx][field] = Number(val) || 0; renderAdminProfitTable(); } }
+function resetProfitTableDefaults() { allProfitTiers = JSON.parse(JSON.stringify(DEFAULT_PROFIT_TIERS)); renderAdminProfitTable(); }
 function recalculateNextOrderCommissionsFromProfitTable() {
  allUsers.forEach(u => {
   const nextOrderNum = Math.min(DEFAULT_ORDERS_LIMIT, (Number(u.orders_completed) || 0) + 1);
   u.next_order_commission = getVariedOrderCommission(u, nextOrderNum, u.balance);
-  u.matched_profit_tier = getMatchedProfitTier(u.balance, DEFAULT_ORDERS_LIMIT);
  });
  saveCachedUsersLocal(allUsers);
  if (currentUser) {
-  const updatedMe = allUsers.find(u => u.id === currentUser.id);
-  if (updatedMe) { currentUser = updatedMe; localStorage.setItem("tb_session_user", JSON.stringify(currentUser)); }
+  const me = allUsers.find(u => u.id === currentUser.id);
+  if (me) { currentUser = me; localStorage.setItem("tb_session_user", JSON.stringify(currentUser)); }
  }
 }
 async function saveProfitTableAdmin() {
  if (!canAccessAdminPanel()) return;
- document.querySelectorAll("#adminProfitTableRows [data-pt-idx]").forEach(el => {
-  const idx = Number(el.getAttribute("data-pt-idx"));
-  const field = el.getAttribute("data-pt-field");
-  if (allProfitTiers[idx] && field) allProfitTiers[idx][field] = Number(el.value) || 0;
- });
  allProfitTiers.sort((a, b) => (Number(a.principal) || 0) - (Number(b.principal) || 0));
  if (db) await db.ref("profit_tiers").set(allProfitTiers).catch(() => {});
  recalculateNextOrderCommissionsFromProfitTable();
  renderAllViews();
  closeModal("profitTableModal");
- showAlert("Booking Profit Table saved and next order commissions recalculated.");
+ showAlert("Booking Profit Table saved.");
 }
 
-/* ==================== ADMIN AUTH & 2ND STEP PIN (1245) ==================== */
 function isAdminAccountRecord(userObj) {
  if (!userObj) return false;
  const roleStr = String(userObj.role || "").toLowerCase();
@@ -2050,20 +1970,15 @@ function isAdminAccountRecord(userObj) {
  const phoneStr = normalizeDigitsToEnglish(String(userObj.phone || userObj.identity || "")).replace(/\D/g, "");
  return roleStr === "admin" || roleStr === "staff" || codeStr === "ADMIN" || phoneStr === ADMIN_PHONE;
 }
-function canAccessAdminPanel() {
- return Boolean(isAdminSession && currentUser && isAdminAccountRecord(currentUser));
-}
+function canAccessAdminPanel() { return Boolean(isAdminSession && currentUser && isAdminAccountRecord(currentUser)); }
 function enforceAdminRoleVisibility() {
  const allowed = canAccessAdminPanel();
- const gateCard = $("adminAccessGateCard");
- const protectedBox = $("adminProtectedContent");
- if (gateCard) gateCard.classList.toggle("hidden", allowed);
- if (protectedBox) protectedBox.classList.toggle("hidden", !allowed);
+ $("adminAccessGateCard")?.classList.toggle("hidden", allowed);
+ $("adminProtectedContent")?.classList.toggle("hidden", !allowed);
 }
 function openAdminPinModal(fromStaffPage = false) {
  pendingAdminPinForPage = Boolean(fromStaffPage);
- const inp = $("adminPinInput");
- const err = $("adminPinError");
+ const inp = $("adminPinInput"), err = $("adminPinError");
  if (inp) { inp.value = ""; inp.classList.remove("input-error-box"); }
  if (err) err.textContent = "";
  $("adminPinModal")?.classList.remove("hidden");
@@ -2071,23 +1986,16 @@ function openAdminPinModal(fromStaffPage = false) {
 }
 function closeAdminPinModal() {
  closeModal("adminPinModal");
- if (!canAccessAdminPanel() && pendingAdminPinForPage) {
-  pendingAdminPinForPage = false;
-  switchPage("homePage");
- }
+ if (!canAccessAdminPanel() && pendingAdminPinForPage) { pendingAdminPinForPage = false; switchPage("homePage"); }
 }
 function verifyAdminSecondStepPin() {
- const inp = $("adminPinInput");
- const err = $("adminPinError");
+ const inp = $("adminPinInput"), err = $("adminPinError");
  if (String(inp?.value || "").trim() !== ADMIN_SECOND_STEP_PIN) {
   inp?.classList.add("input-error-box");
-  if (err) err.textContent = "Invalid 2nd Step PIN. Access denied.";
+  if (err) err.textContent = "Invalid 2nd Step PIN.";
   return;
  }
- if (!currentUser || !isAdminAccountRecord(currentUser)) {
-  if (err) err.textContent = "Admin credentials not verified.";
-  return;
- }
+ if (!currentUser || !isAdminAccountRecord(currentUser)) return;
  isAdminSession = true;
  adminStep1CredentialsVerified = false;
  closeModal("adminPinModal");
@@ -2095,14 +2003,8 @@ function verifyAdminSecondStepPin() {
  renderAllViews();
  switchPage("staffPage");
 }
-function lockAdminSession() {
- isAdminSession = false;
- adminStep1CredentialsVerified = false;
- enforceAdminRoleVisibility();
- switchPage("homePage");
-}
+function lockAdminSession() { isAdminSession = false; adminStep1CredentialsVerified = false; enforceAdminRoleVisibility(); switchPage("homePage"); }
 
-/* ==================== PHONE, DIGIT SCRIPT, CARRIER & SVG EYE ==================== */
 function togglePassVisibility(inputId, btnEl) {
  const inp = $(inputId);
  if (!inp) return;
@@ -2111,13 +2013,8 @@ function togglePassVisibility(inputId, btnEl) {
  if (btnEl) btnEl.innerHTML = showNow ? SVG_EYE_OFF : SVG_EYE_OPEN;
 }
 function detectDigitScript(rawStr) {
- const str = String(rawStr || "");
- const hasEn = /[0-9]/.test(str);
- const hasMm = /[၀-၉]/.test(str);
- if (hasEn && hasMm) return "MIXED";
- if (hasMm) return "MYANMAR";
- if (hasEn) return "ENGLISH";
- return "NONE";
+ const s = String(rawStr || ""), hasEn = /[0-9]/.test(s), hasMm = /[၀-၉]/.test(s);
+ return (hasEn && hasMm) ? "MIXED" : (hasMm ? "MYANMAR" : (hasEn ? "ENGLISH" : "NONE"));
 }
 function normalizeDigitsToEnglish(rawStr) {
  const map = { "၀": "0", "၁": "1", "၂": "2", "၃": "3", "၄": "4", "၅": "5", "၆": "6", "၇": "7", "၈": "8", "၉": "9" };
@@ -2126,21 +2023,16 @@ function normalizeDigitsToEnglish(rawStr) {
 function validatePhoneByCountry(countryCode, rawInput) {
  const cleaned = String(rawInput || "").trim();
  if (!cleaned) return { ok: false, reason: "Please enter a phone number or email." };
- if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleaned)) {
-  return { ok: true, isEmail: true, digitScript: "ENGLISH", canonicalKey: "EMAIL:" + cleaned.toLowerCase() };
- }
+ if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleaned)) return { ok: true, isEmail: true, digitScript: "ENGLISH", canonicalKey: "EMAIL:" + cleaned.toLowerCase() };
  const script = detectDigitScript(cleaned);
- if (script === "MIXED") return { ok: false, reason: "Do not mix English digits (0-9) and Myanmar digits (၀-၉)." };
- if (script === "NONE") return { ok: false, reason: "Please enter a valid phone number or email address." };
-
+ if (script === "MIXED") return { ok: false, reason: "Do not mix English and Myanmar digits." };
+ if (script === "NONE") return { ok: false, reason: "Enter a valid phone number or email." };
  const ascii = normalizeDigitsToEnglish(cleaned).replace(/[\s\-().]/g, "");
  if (countryCode === "+95") {
   const localNum = ascii.startsWith("+95") ? "0" + ascii.slice(3) : (ascii.startsWith("95") ? "0" + ascii.slice(2) : ascii);
   if (!/^09\d{7,9}$/.test(localNum)) return { ok: false, reason: "Invalid Myanmar (+95) phone format." };
   const after09 = localNum.slice(2);
-  const standardPrefixes = ["7", "9", "4", "8", "2", "6"];
-  const isSpecialOrVip = /^(\d)\1{3,}|12345|56789|777|888|999|666|444|222/.test(after09);
-  if (!standardPrefixes.includes(after09[0]) && !isSpecialOrVip) {
+  if (!["7", "9", "4", "8", "2", "6"].includes(after09[0]) && !/^(\d)\1{3,}|12345|56789|777|888|999|666|444|222/.test(after09)) {
    return { ok: false, reason: `Unsupported Myanmar 09 prefix (09${after09[0]}...).` };
   }
   return { ok: true, isEmail: false, digitScript: script, canonicalKey: `${countryCode}:${localNum}` };
@@ -2178,22 +2070,15 @@ function setAuthMode(mode) {
 }
 function openAuth(mode = "login") {
  setAuthMode(mode);
- const idInp = $("authIdentity");
- const passInp = $("authPassword");
- if (idInp) {
-  idInp.value = mode === "register" ? loadDraftText("reg_id_draft") : loadDraftText("login_id_draft");
-  idInp.classList.remove("input-error-box");
- }
+ const idInp = $("authIdentity"), passInp = $("authPassword");
+ if (idInp) { idInp.value = mode === "register" ? loadDraftText("reg_id_draft") : loadDraftText("login_id_draft"); idInp.classList.remove("input-error-box"); }
  if (passInp) { passInp.value = ""; passInp.type = "password"; passInp.classList.remove("input-error-box"); }
  if ($("authPassEyeBtn")) $("authPassEyeBtn").innerHTML = SVG_EYE_OPEN;
  if ($("regName")) $("regName").value = loadDraftText("reg_name_draft");
  if ($("regRefInput")) $("regRefInput").value = loadDraftText("reg_ref_draft");
  $("authModal")?.classList.remove("hidden");
 }
-function submitAuth() {
- if (currentAuthMode === "register") handleRegisterSubmit();
- else handleLoginSubmit();
-}
+function submitAuth() { if (currentAuthMode === "register") handleRegisterSubmit(); else handleLoginSubmit(); }
 
 function handleRegisterSubmit() {
  const errEl = $("authError");
@@ -2203,60 +2088,31 @@ function handleRegisterSubmit() {
  const passVal = String($("authPassword")?.value || "");
  const refCode = String($("regRefInput")?.value || "").trim();
  const agreed = Boolean($("regAgreeTermsCheckbox")?.checked);
-
  if (!nameVal) { if (errEl) errEl.textContent = "Please enter your full name."; return; }
  const phoneCheck = validatePhoneByCountry(countryCode, rawId);
  if (!phoneCheck.ok) { $("authIdentity")?.classList.add("input-error-box"); if (errEl) errEl.textContent = phoneCheck.reason; return; }
  if (passVal.length < 4) { $("authPassword")?.classList.add("input-error-box"); if (errEl) errEl.textContent = "Password must be at least 4 characters."; return; }
- if (!agreed) { if (errEl) errEl.textContent = "Please agree to the platform terms and conditions."; return; }
-
- // Allow 1-digit-different numbers as separate accounts; reject only exact canonical match
+ if (!agreed) { if (errEl) errEl.textContent = "Please agree to the terms."; return; }
  if (allUsers.some(u => getAccountCanonicalPhoneKey(u) === phoneCheck.canonicalKey)) {
   $("authIdentity")?.classList.add("input-error-box");
-  if (errEl) errEl.textContent = "This phone number or email is already registered.";
+  if (errEl) errEl.textContent = "Already registered.";
   return;
  }
-
  const newUserId = "U" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10);
  const userCode = "TB" + Math.floor(10000 + Math.random() * 89999);
- const clientEnv = collectClientLocationAndDeviceInfo(countryCode);
-
  const newUser = {
-  id: newUserId,
-  code: userCode,
-  name: nameVal,
-  identity: rawId,
-  phone: rawId,
-  country_code: countryCode,
-  digit_script: phoneCheck.digitScript,
-  password: passVal,
-  role: "user",
-  vip_level: "VIP Level 1",
-  balance: 100,
-  profit: 0,
-  total_profit: 0,
-  referral_earned: 0,
-  referral_code: userCode,
-  referred_by: refCode,
-  orders_completed: 0,
-  order_history: [],
-  order_rules: [],
-  suspended: false,
-  avatar: getRotatingBackdropUrl(),
-  last_active_at: Date.now(),
-  location_device_log: clientEnv
+  id: newUserId, code: userCode, name: nameVal, identity: rawId, phone: rawId, country_code: countryCode,
+  digit_script: phoneCheck.digitScript, password: passVal, role: "user", vip_level: "VIP Level 1",
+  balance: 100, profit: 0, total_profit: 0, referral_earned: 0, referral_code: userCode, referred_by: refCode,
+  orders_completed: 0, order_history: [], order_rules: [], suspended: false,
+  avatar: BASE_HOTEL_PHOTOS[2], last_active_at: Date.now(),
+  location_device_log: collectClientLocationAndDeviceInfo(countryCode)
  };
-
  allUsers.push(newUser);
  saveCachedUsersLocal(allUsers);
  if (db) db.ref("users/" + newUserId).set(newUser).catch(() => {});
-
- clearDraftText("reg_name_draft");
- clearDraftText("reg_id_draft");
- clearDraftText("reg_ref_draft");
-
- currentUser = newUser;
- isAdminSession = false;
+ clearDraftText("reg_name_draft"); clearDraftText("reg_id_draft"); clearDraftText("reg_ref_draft");
+ currentUser = newUser; isAdminSession = false;
  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
  closeModal("authModal");
  enforceAdminRoleVisibility();
@@ -2269,67 +2125,33 @@ function handleLoginSubmit() {
  const countryCode = $("regCountryCode")?.value || "+95";
  const rawId = String($("authIdentity")?.value || "").trim();
  const passVal = String($("authPassword")?.value || "");
-
- if (!rawId || !passVal) { if (errEl) errEl.textContent = "Please enter your phone/email and password."; return; }
-
+ if (!rawId || !passVal) { if (errEl) errEl.textContent = "Enter phone/email and password."; return; }
  const inputScript = detectDigitScript(rawId);
- if (inputScript === "MIXED") {
-  $("authIdentity")?.classList.add("input-error-box");
-  if (errEl) errEl.textContent = "Do not mix English and Myanmar digits.";
-  return;
- }
-
+ if (inputScript === "MIXED") { $("authIdentity")?.classList.add("input-error-box"); if (errEl) errEl.textContent = "Do not mix digits."; return; }
  const loginCheck = validatePhoneByCountry(countryCode, rawId);
  const found = allUsers.find(u => {
-  const sameId =
-   (loginCheck.ok && getAccountCanonicalPhoneKey(u) === loginCheck.canonicalKey) ||
-   String(u.identity || "").trim() === rawId ||
-   String(u.phone || "").trim() === rawId;
+  const sameId = (loginCheck.ok && getAccountCanonicalPhoneKey(u) === loginCheck.canonicalKey) || String(u.identity || "").trim() === rawId || String(u.phone || "").trim() === rawId;
   return sameId && String(u.password || "") === passVal;
  });
-
- if (!found) {
-  $("authIdentity")?.classList.add("input-error-box");
-  $("authPassword")?.classList.add("input-error-box");
-  if (errEl) errEl.textContent = "Invalid credentials.";
-  return;
- }
-
+ if (!found) { $("authIdentity")?.classList.add("input-error-box"); $("authPassword")?.classList.add("input-error-box"); if (errEl) errEl.textContent = "Invalid credentials."; return; }
  if (!loginCheck.isEmail && found.digit_script && found.digit_script !== "NONE" && inputScript !== "NONE" && found.digit_script !== inputScript) {
-  $("authIdentity")?.classList.add("input-error-box");
-  if (errEl) errEl.textContent = "Digit script mismatch (English 0-9 vs Myanmar ၀-၉).";
-  return;
+  $("authIdentity")?.classList.add("input-error-box"); if (errEl) errEl.textContent = "Digit script mismatch."; return;
  }
-
  const updatedEnv = collectClientLocationAndDeviceInfo(found.country_code || countryCode, found.location_device_log);
- const prevLog = found.location_device_log;
- if (prevLog && (prevLog.country !== updatedEnv.country || prevLog.deviceType !== updatedEnv.deviceType)) {
-  updatedEnv.securityFlag = `Changed (${prevLog.country || "-"}/${prevLog.deviceType || "-"} -> ${updatedEnv.country}/${updatedEnv.deviceType})`;
+ if (found.location_device_log && (found.location_device_log.country !== updatedEnv.country || found.location_device_log.deviceType !== updatedEnv.deviceType)) {
+  updatedEnv.securityFlag = `Changed (${found.location_device_log.country}/${found.location_device_log.deviceType} -> ${updatedEnv.country}/${updatedEnv.deviceType})`;
  }
  found.location_device_log = updatedEnv;
  found.last_active_at = Date.now();
  saveCachedUsersLocal(allUsers);
  if (db) db.ref("users/" + found.id).update({ last_active_at: found.last_active_at, location_device_log: found.location_device_log }).catch(() => {});
-
  currentUser = found;
  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
  closeModal("authModal");
-
- if (isAdminAccountRecord(found)) {
-  adminStep1CredentialsVerified = true;
-  isAdminSession = false;
-  enforceAdminRoleVisibility();
-  renderAllViews();
-  openAdminPinModal(true);
- } else {
-  isAdminSession = false;
-  adminStep1CredentialsVerified = false;
-  enforceAdminRoleVisibility();
-  renderAllViews();
- }
+ if (isAdminAccountRecord(found)) { adminStep1CredentialsVerified = true; isAdminSession = false; enforceAdminRoleVisibility(); renderAllViews(); openAdminPinModal(true); }
+ else { isAdminSession = false; adminStep1CredentialsVerified = false; enforceAdminRoleVisibility(); renderAllViews(); }
 }
 
-/* ==================== LOCATION & DEVICE LOG ==================== */
 function inferCountryFromTimezoneOrCode(countryCode) {
  const ccObj = COUNTRY_CODES_LIST.find(c => c.code === countryCode);
  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
@@ -2337,35 +2159,22 @@ function inferCountryFromTimezoneOrCode(countryCode) {
  if (/Yangon|Rangoon/i.test(tz)) return { country: "Myanmar", city: "Yangon", code: "MM-06" };
  if (/Shanghai|Beijing/i.test(tz)) return { country: "China", city: "Shanghai", code: "CN-SH" };
  if (/Vientiane/i.test(tz)) return { country: "Laos", city: "Luang Prabang / Vientiane", code: "LA-LP" };
- if (ccObj) return { country: ccObj.country, city: "Not Disclosed by Browser", code: ccObj.iso };
- return { country: "Unknown", city: "Not Disclosed by Browser", code: "N/A" };
+ return ccObj ? { country: ccObj.country, city: "Not Disclosed by Browser", code: ccObj.iso } : { country: "Unknown", city: "Not Disclosed by Browser", code: "N/A" };
 }
 function parseBrowserDeviceInfo() {
  const ua = navigator.userAgent || "";
- let deviceType = "Desktop";
- if (/iPad|Tablet|PlayBook|Silk/i.test(ua)) deviceType = "Tablet";
- else if (/Mobi|Android|iPhone|iPod|Windows Phone/i.test(ua)) deviceType = "Mobile";
- let modelOrOs = "Browser Environment";
- if (/iPhone/i.test(ua)) modelOrOs = "iPhone (iOS)";
- else if (/Android/i.test(ua)) modelOrOs = "Android Device";
- else if (/Windows NT/i.test(ua)) modelOrOs = "Windows PC";
- else if (/Mac OS X/i.test(ua)) modelOrOs = "Mac";
+ let deviceType = /iPad|Tablet|PlayBook|Silk/i.test(ua) ? "Tablet" : (/Mobi|Android|iPhone|iPod|Windows Phone/i.test(ua) ? "Mobile" : "Desktop");
+ let modelOrOs = /iPhone/i.test(ua) ? "iPhone (iOS)" : (/Android/i.test(ua) ? "Android Device" : (/Windows NT/i.test(ua) ? "Windows PC" : (/Mac OS X/i.test(ua) ? "Mac" : "Browser Environment")));
  let browser = /Edg\//i.test(ua) ? "Edge" : (/Chrome\//i.test(ua) ? "Chrome" : (/Safari\//i.test(ua) ? "Safari" : "Browser"));
  return { deviceType, deviceDetail: `${modelOrOs} - ${browser}` };
 }
 function collectClientLocationAndDeviceInfo(countryCode = "+95", existingLog = null) {
- const geo = inferCountryFromTimezoneOrCode(countryCode);
- const dev = parseBrowserDeviceInfo();
- const prev = existingLog || {};
+ const geo = inferCountryFromTimezoneOrCode(countryCode), dev = parseBrowserDeviceInfo(), prev = existingLog || {};
  return {
-  country: prev.country || geo.country,
-  city: prev.city || geo.city,
+  country: prev.country || geo.country, city: prev.city || geo.city,
   streetDistrict: prev.streetDistrict || "Unavailable without Location Permission",
-  locationCode: prev.locationCode || geo.code,
-  deviceType: dev.deviceType,
-  deviceDetail: dev.deviceDetail,
-  securityFlag: prev.securityFlag || "",
-  updatedAt: formatExactTimestamp(new Date())
+  locationCode: prev.locationCode || geo.code, deviceType: dev.deviceType, deviceDetail: dev.deviceDetail,
+  securityFlag: prev.securityFlag || "", updatedAt: formatExactTimestamp(new Date())
  };
 }
 function formatLastActiveRelative(ts) {
@@ -2375,39 +2184,26 @@ function formatLastActiveRelative(ts) {
  const mins = Math.floor(diffSec / 60);
  if (mins < 60) return `${mins}m ago`;
  const hrs = Math.floor(mins / 60);
- if (hrs < 24) return `${hrs}h ago`;
- return `${Math.floor(hrs / 24)}d ago`;
+ return hrs < 24 ? `${hrs}h ago` : `${Math.floor(hrs / 24)}d ago`;
 }
-function selectLocationDeviceRow(userId) {
- selectedLogUserId = userId;
- renderAdminUsersTable();
- renderLocationDeviceLogTable();
-}
+function selectLocationDeviceRow(userId) { selectedLogUserId = userId; renderAdminUsersTable(); renderLocationDeviceLogTable(); }
 function renderLocationDeviceLogTable() {
  if (!canAccessAdminPanel()) return;
- const tbody = $("locationDeviceLogBody");
- const countrySel = $("locLogCountryFilter");
- const devFilter = $("locLogDeviceFilter")?.value || "ALL";
+ const tbody = $("locationDeviceLogBody"), countrySel = $("locLogCountryFilter"), devFilter = $("locLogDeviceFilter")?.value || "ALL";
  const searchQ = String($("locLogSearchInput")?.value || "").trim().toLowerCase();
  if (!tbody) return;
-
  const rowsData = allUsers.map(u => {
   const log = u.location_device_log || collectClientLocationAndDeviceInfo(u.country_code || "+95");
   return {
-   user: u,
-   accountCode: `${u.name || "User"} (${u.code || u.referral_code || u.id})`,
-   country: log.country || "Unknown",
-   city: log.city || "N/A",
+   user: u, accountCode: `${u.name || "User"} (${u.code || u.referral_code || u.id})`,
+   country: log.country || "Unknown", city: log.city || "N/A",
    streetDistrict: log.streetDistrict || "Unavailable without Location Permission",
-   locationCode: log.locationCode || "N/A",
-   deviceType: log.deviceType || "Desktop",
-   deviceDetail: log.deviceDetail || "Browser",
-   securityFlag: log.securityFlag || "",
+   locationCode: log.locationCode || "N/A", deviceType: log.deviceType || "Desktop",
+   deviceDetail: log.deviceDetail || "Browser", securityFlag: log.securityFlag || "",
    lastActiveText: formatLastActiveRelative(u.last_active_at),
    updatedAt: log.updatedAt || formatExactTimestamp(u.last_active_at || Date.now())
   };
  });
-
  if (countrySel) {
   const prevC = countrySel.value || "ALL";
   const uniqueC = [...new Set(rowsData.map(r => r.country).filter(Boolean))];
@@ -2415,392 +2211,142 @@ function renderLocationDeviceLogTable() {
   countrySel.value = uniqueC.includes(prevC) ? prevC : "ALL";
  }
  const selC = countrySel?.value || "ALL";
- const filtered = rowsData.filter(r => {
-  if (selC !== "ALL" && r.country !== selC) return false;
-  if (devFilter !== "ALL" && r.deviceType !== devFilter) return false;
-  if (searchQ && !`${r.accountCode} ${r.country} ${r.city} ${r.locationCode} ${r.deviceType} ${r.deviceDetail}`.toLowerCase().includes(searchQ)) return false;
-  return true;
- });
-
+ const filtered = rowsData.filter(r => (selC === "ALL" || r.country === selC) && (devFilter === "ALL" || r.deviceType === devFilter) && (!searchQ || `${r.accountCode} ${r.country} ${r.city} ${r.locationCode} ${r.deviceType} ${r.deviceDetail}`.toLowerCase().includes(searchQ)));
  tbody.innerHTML = filtered.map(r => {
-  const isSel = r.user.id === selectedLogUserId;
   const isOnline = r.lastActiveText === "Online";
   const flagBadge = r.securityFlag ? `<span class="security-flag-pill">FLAG: ${r.securityFlag}</span>` : "";
-  return `
-   <tr class="${isSel ? "selected-log-row" : ""}" onclick="selectLocationDeviceRow('${r.user.id}')">
-    <td><b>${r.accountCode}</b></td>
-    <td>${r.country} / ${r.city}</td>
-    <td>${r.streetDistrict}</td>
-    <td>${r.locationCode}</td>
-    <td>${r.deviceType}</td>
-    <td>${r.deviceDetail}</td>
-    <td><span class="status-pill ${isOnline ? "pill-online" : "pill-offline"}">${r.lastActiveText}</span> ${flagBadge}</td>
-   </tr>
-  `;
+  return `<tr class="${r.user.id === selectedLogUserId ? "selected-log-row" : ""}" onclick="selectLocationDeviceRow('${r.user.id}')">
+   <td><b>${r.accountCode}</b></td><td>${r.country} / ${r.city}</td><td>${r.streetDistrict}</td>
+   <td>${r.locationCode}</td><td>${r.deviceType}</td><td>${r.deviceDetail}</td>
+   <td><span class="status-pill ${isOnline ? "pill-online" : "pill-offline"}">${r.lastActiveText}</span> ${flagBadge}</td>
+  </tr>`;
  }).join("");
-
  const detailBox = $("selectedLocationDeviceDetail");
  if (detailBox) {
   const activeRow = filtered.find(r => r.user.id === selectedLogUserId) || filtered[0];
   if (activeRow) {
    detailBox.classList.remove("hidden");
-   detailBox.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-     <b>Selected Account Detail: ${activeRow.accountCode}</b>
-     <span class="small muted">Recorded: ${activeRow.updatedAt} (${activeRow.lastActiveText})</span>
-    </div>
-    <div class="loc-detail-grid">
-     <div><span class="muted">Country / City:</span> <b>${activeRow.country} / ${activeRow.city}</b></div>
-     <div><span class="muted">Street / District:</span> <b>${activeRow.streetDistrict}</b></div>
-     <div><span class="muted">Location Code:</span> <b>${activeRow.locationCode}</b></div>
-     <div><span class="muted">Device Type:</span> <b>${activeRow.deviceType}</b></div>
-     <div><span class="muted">Device / Browser:</span> <b>${activeRow.deviceDetail}</b></div>
-     <div><span class="muted">Security Flag:</span> <b>${activeRow.securityFlag || "Normal"}</b></div>
-    </div>
-   `;
-  } else {
-   detailBox.classList.add("hidden");
-  }
+   detailBox.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><b>Selected Account Detail: ${activeRow.accountCode}</b><span class="small muted">Recorded: ${activeRow.updatedAt} (${activeRow.lastActiveText})</span></div><div class="loc-detail-grid"><div><span class="muted">Country / City:</span> <b>${activeRow.country} / ${activeRow.city}</b></div><div><span class="muted">Street / District:</span> <b>${activeRow.streetDistrict}</b></div><div><span class="muted">Location Code:</span> <b>${activeRow.locationCode}</b></div><div><span class="muted">Device Type:</span> <b>${activeRow.deviceType}</b></div><div><span class="muted">Device / Browser:</span> <b>${activeRow.deviceDetail}</b></div><div><span class="muted">Security Flag:</span> <b>${activeRow.securityFlag || "Normal"}</b></div></div>`;
+  } else detailBox.classList.add("hidden");
  }
 }
 
-/* ==================== MULTI-LANGUAGE (EN/MY/ZH/TH + WORLD COUNTRIES) ==================== */
 const I18N = {
  en: {
-  splashMainTitle: "Welcome To Trip Booking",
-  splashSubTitle: "International Hotel Platform",
-  brandTagline: "Global Hotel & Stay",
-  tickerBadgeLabel: "24H LIVE",
-  heroTitle: "Explore World-Class Hotels",
-  heroSub: "Real-time exchange rates, instant hotel booking tasks, and multi-language support.",
-  startBookingBtn: "Start Booking Task",
-  myAccountBtn: "My Account",
-  todayFxTitle: "Today USD / MMK Rate",
-  liveFxChartTitle: "3D Live USD/MMK Trend (Smooth)",
-  featuredHotelsTitle: "Featured Hotels",
-  showAllBtn: "Show All",
-  step1Title: "Create Account",
-  step1Desc: "Register with country code, valid phone or email, and native name.",
-  step2Title: "Complete Booking Orders",
-  step2Desc: "Submit hotel ratings and reviews across 30 daily booking orders.",
-  step3Title: "Earn Cycle Profit",
-  step3Desc: "Receive varied commissions per order and complete exact cycle profit.",
-  walletBalanceLabel: "Wallet Balance",
-  cycleProfitLabel: "Current Cycle Profit",
-  totalProfitLabel: "Total Earned Profit",
-  ordersProgressLabel: "Orders Completed",
-  bookingTaskCenterTitle: "Hotel Booking Task Center",
-  startNextOrderBtn: "Start Next Booking Order",
-  customerServiceTitle: "Customer Service",
-  chatInputPh: "Write your message to Customer Service...",
-  sendBtn: "Send",
-  orderHistoryTitle: "Booking Order History",
-  colOrderNum: "Order #",
-  colHotel: "Hotel",
-  colPrice: "Price",
-  colComm: "Commission",
-  colStatus: "Status",
-  logoutBtn: "Logout",
-  referralEarnedLabel: "Referral Earned",
-  referralCodeLabel: "My Referral Code",
-  depositBtn: "Deposit",
-  withdrawBtn: "Withdraw",
-  copyRefBtn: "Copy Referral Code",
-  bookingProfitBtn: "Open Profit Table",
-  profitTableModalTitle: "Booking Profit Table",
-  profitTableDesc: "Configure Principal ($), Orders count (30), and Cycle Profit ($). Order #30 settles the exact remaining profit.",
-  resetProfitTableBtn: "Reset Defaults ($100 = +$20)",
-  saveProfitTableBtn: "Save Profit Table",
-  loginTabBtn: "Login",
-  registerTabBtn: "Register",
-  fullNameLabel: "Full Name (Any Native Script)",
-  fullNamePh: "Enter full name (English, Myanmar, 中文, ไทย...)",
-  identityLabel: "Country Code & Phone Number (or Email)",
-  identityPh: "09xxxxxxxxx or email@example.com",
-  passwordLabel: "Password",
-  passwordPh: "Enter password",
-  refCodeLabel: "Referral Code (Optional, e.g. TP2323)",
-  agreeTermsText: "I agree to the platform terms and conditions.",
-  orderPriceLabel: "Order Price",
-  commissionLabel: "Commission",
-  stayNightsLabel: "Stay Duration",
-  hotelRoomTypeLabel: "Room Type",
-  rateHotelLabel: "Star Rating",
-  chooseReviewLabel: "Select 1 of 5 Quick Reviews",
-  customReviewLabel: "Or Write Your Own Custom Review",
-  customReviewPh: "Write custom hotel review...",
-  submitOrderBtn: "Complete Order",
-  cancelBtn: "Cancel",
-  verifyingBookingText: "Verifying booking details...",
-  okBtn: "OK",
-  closeBtn: "Close",
-  editNameModalTitle: "Edit Profile Name",
-  saveBtn: "Save",
-  addHotelModalHead: "Add New Hotel",
-  hotelNameLabel: "Hotel Name",
-  countryLabel: "Country",
-  priceLabel: "Price ($)",
-  starsLabel: "Stars",
-  addBtn: "Add",
-  navHome: "Home",
-  navTask: "Task",
-  navHistory: "History",
-  navService: "Service",
-  navProfile: "Profile",
-  midnightResetNote: "Resets daily at 00:00",
-  newCsAlertTitle: "NEW CUSTOMER SERVICE MESSAGE"
+  splashMainTitle: "Welcome To Trip Booking", splashSubTitle: "International Hotel Platform", brandTagline: "Global Hotel & Stay",
+  tickerBadgeLabel: "24H LIVE", heroTitle: "Explore World-Class Hotels", heroSub: "Real-time exchange rates, instant hotel booking tasks, and multi-language support.",
+  startBookingBtn: "Start Booking Task", myAccountBtn: "My Account", todayFxTitle: "Today USD / MMK Rate",
+  liveFxChartTitle: "3D Live USD/MMK Trend (Smooth)", featuredHotelsTitle: "Featured Hotels", showAllBtn: "Show All",
+  step1Title: "Create Account", step1Desc: "Register with country code, valid phone or email, and native name.",
+  step2Title: "Complete Booking Orders", step2Desc: "Submit hotel ratings and reviews across 30 daily booking orders.",
+  step3Title: "Earn Cycle Profit", step3Desc: "Receive varied commissions per order and complete exact cycle profit.",
+  walletBalanceLabel: "Wallet Balance", cycleProfitLabel: "Current Cycle Profit", totalProfitLabel: "Total Earned Profit",
+  ordersProgressLabel: "Orders Completed", bookingTaskCenterTitle: "Hotel Booking Task Center", startNextOrderBtn: "Start Next Booking Order",
+  customerServiceTitle: "Customer Service", chatInputPh: "Write your message to Customer Service...", sendBtn: "Send",
+  orderHistoryTitle: "Booking Order History", colOrderNum: "Order #", colHotel: "Hotel", colPrice: "Price", colComm: "Commission", colStatus: "Status",
+  logoutBtn: "Logout", referralEarnedLabel: "Referral Earned", referralCodeLabel: "My Referral Code",
+  depositBtn: "Deposit", withdrawBtn: "Withdraw", copyRefBtn: "Copy Referral Code", bookingProfitBtn: "Open Profit Table",
+  profitTableModalTitle: "Booking Profit Table", profitTableDesc: "Configure Principal ($), Orders count (30), and Cycle Profit ($). Order #30 settles the exact remaining profit.",
+  resetProfitTableBtn: "Reset Defaults ($100 = +$20)", saveProfitTableBtn: "Save Profit Table",
+  loginTabBtn: "Login", registerTabBtn: "Register", fullNameLabel: "Full Name (Any Native Script)",
+  fullNamePh: "Enter full name", identityLabel: "Country Code & Phone Number (or Email)", identityPh: "09xxxxxxxxx or email@example.com",
+  passwordLabel: "Password", passwordPh: "Enter password", refCodeLabel: "Referral Code (Optional, e.g. TP2323)",
+  agreeTermsText: "I agree to the platform terms and conditions.", orderPriceLabel: "Order Price", commissionLabel: "Commission",
+  stayNightsLabel: "Stay Duration", hotelRoomTypeLabel: "Room Type", rateHotelLabel: "Star Rating",
+  chooseReviewLabel: "Select 1 of 5 Quick Reviews", customReviewLabel: "Or Write Your Own Custom Review",
+  customReviewPh: "Write custom hotel review...", submitOrderBtn: "Complete Order", cancelBtn: "Cancel",
+  verifyingBookingText: "Verifying booking details...", okBtn: "OK", closeBtn: "Close",
+  editNameModalTitle: "Edit Profile Name", saveBtn: "Save", addHotelModalHead: "Add New Hotel",
+  hotelNameLabel: "Hotel Name", countryLabel: "Country", priceLabel: "Price ($)", starsLabel: "Stars", addBtn: "Add",
+  navHome: "Home", navTask: "Task", navHistory: "History", navService: "Service", navProfile: "Profile",
+  midnightResetNote: "Resets daily at 00:00", newCsAlertTitle: "NEW CUSTOMER SERVICE MESSAGE"
  },
  my: {
-  splashMainTitle: "Trip Booking မှ ကြိုဆိုပါသည်",
-  splashSubTitle: "နိုင်ငံတကာ ဟိုတယ် ဘွတ်ကင် ပလက်ဖောင်း",
-  brandTagline: "ကမ္ဘာလုံးဆိုင်ရာ ဟိုတယ် ဝန်ဆောင်မှု",
-  tickerBadgeLabel: "၂၄ နာရီ တိုက်ရိုက်",
-  heroTitle: "ကမ္ဘာ့အဆင့်မီ ဟိုတယ်များကို ရှာဖွေပါ",
-  heroSub: "ငွေလဲနှုန်း တိုက်ရိုက်ကြည့်ရှုခြင်း၊ ဟိုတယ် ဘွတ်ကင် အော်ဒါများနှင့် ဘာသာစကားမျိုးစုံ ပံ့ပိုးမှု။",
-  startBookingBtn: "ဘွတ်ကင် အော်ဒါ စတင်မည်",
-  myAccountBtn: "ကျွန်ုပ်၏ အကောင့်",
-  todayFxTitle: "ယနေ့ USD / MMK ငွေလဲနှုန်း",
-  liveFxChartTitle: "၃D တိုက်ရိုက် USD/MMK လမ်းကြောင်း",
-  featuredHotelsTitle: "ထင်ရှားသော ဟိုတယ်များ",
-  showAllBtn: "အားလုံးကြည့်ရန်",
-  step1Title: "အကောင့် ဖွင့်ပါ",
-  step1Desc: "နိုင်ငံကုဒ်၊ မှန်ကန်သော ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်နှင့် မိခင်ဘာသာ အမည်ဖြင့် မှတ်ပုံတင်ပါ။",
-  step2Title: "ဘွတ်ကင် အော်ဒါများ ပြီးမြောက်အောင် လုပ်ပါ",
-  step2Desc: "နေ့စဉ် ဘွတ်ကင် အော်ဒါ (၃၀) အတွက် ကြယ်အဆင့်နှင့် သုံးသပ်ချက်များ ပေးပို့ပါ။",
-  step3Title: "အမြတ်ငွေ ရယူပါ",
-  step3Desc: "အော်ဒါတစ်ခုချင်းအလိုက် အမြတ်ကွဲပြားစွာ ရရှိပြီး စုစုပေါင်း စက်ဝန်းအမြတ်ကို အတိအကျ ရယူပါ။",
-  walletBalanceLabel: "လက်ကျန်ငွေ",
-  cycleProfitLabel: "လက်ရှိ စက်ဝန်းအမြတ်",
-  totalProfitLabel: "စုစုပေါင်း ရရှိပြီး အမြတ်",
-  ordersProgressLabel: "ပြီးစီးသည့် အော်ဒါများ",
-  bookingTaskCenterTitle: "ဟိုတယ် ဘွတ်ကင် လုပ်ငန်းစဉ်",
-  startNextOrderBtn: "နောက်ထပ် ဘွတ်ကင် အော်ဒါ စတင်မည်",
-  customerServiceTitle: "ဝန်ဆောင်မှု ဌာန (Customer Service)",
-  chatInputPh: "ဝန်ဆောင်မှုဌာနသို့ စာရိုက်ပို့ရန်...",
-  sendBtn: "ပို့မည်",
-  orderHistoryTitle: "ဘွတ်ကင် အော်ဒါ မှတ်တမ်း",
-  colOrderNum: "အော်ဒါ #",
-  colHotel: "ဟိုတယ်",
-  colPrice: "တန်ဖိုး",
-  colComm: "ကော်မရှင်",
-  colStatus: "အခြေအနေ",
-  logoutBtn: "ထွက်မည်",
-  referralEarnedLabel: "မိတ်ဆက် အမြတ်ငွေ",
-  referralCodeLabel: "ကျွန်ုပ်၏ မိတ်ဆက်ကုဒ်",
-  depositBtn: "ငွေသွင်းရန်",
-  withdrawBtn: "ငွေထုတ်ရန်",
-  copyRefBtn: "မိတ်ဆက်ကုဒ် ကူးယူရန်",
-  bookingProfitBtn: "အမြတ်ဇယား ဖွင့်ရန်",
-  profitTableModalTitle: "ဘွတ်ကင် အမြတ် ဇယား",
-  profitTableDesc: "အရင်း ($), အော်ဒါ အရေအတွက် (၃၀) နှင့် စက်ဝန်းအမြတ် ($) ကို သတ်မှတ်ပါ။ Order #30 တွင် ကျန်ရှိအမြတ်ကို အတိအကျ တွက်ပေးသည်။",
-  resetProfitTableBtn: "မူလအတိုင်း ပြန်ထားရန် ($100 = +$20)",
-  saveProfitTableBtn: "အမြတ်ဇယား သိမ်းမည်",
-  loginTabBtn: "အကောင့်ဝင်ရန်",
-  registerTabBtn: "အကောင့်ဖွင့်ရန်",
-  fullNameLabel: "အမည် အပြည့်အစုံ",
-  fullNamePh: "အမည် ထည့်သွင်းပါ (မြန်မာ၊ English、中文、ไทย...)",
-  identityLabel: "နိုင်ငံကုဒ် နှင့် ဖုန်းနံပါတ် (သို့မဟုတ် အီးမေးလ်)",
-  identityPh: "09xxxxxxxxx / ၀၉xxxxxxxxx သို့မဟုတ် email@example.com",
-  passwordLabel: "စကားဝှက်",
-  passwordPh: "စကားဝှက် ထည့်သွင်းပါ",
-  refCodeLabel: "မိတ်ဆက်ကုဒ် (ထည့်လိုလျှင် ဥပမာ TP2323)",
-  agreeTermsText: "ပလက်ဖောင်း၏ စည်းမျဉ်းစည်းကမ်းများကို သဘောတူညီပါသည်။",
-  orderPriceLabel: "အော်ဒါ တန်ဖိုး",
-  commissionLabel: "ကော်မရှင်",
-  stayNightsLabel: "တည်းခိုရက်",
-  hotelRoomTypeLabel: "အခန်း အမျိုးအစား",
-  rateHotelLabel: "ကြယ်အဆင့် သတ်မှတ်ရန်",
-  chooseReviewLabel: "သုံးသပ်ချက် (၅) ခုမှ တစ်ခု ရွေးချယ်ပါ",
-  customReviewLabel: "သို့မဟုတ် ကိုယ်ပိုင် သုံးသပ်ချက် ရေးပါ",
-  customReviewPh: "ဟိုတယ်နှင့် ပတ်သက်၍ သုံးသပ်ချက် ရေးပါ...",
-  submitOrderBtn: "အော်ဒါ ပြီးမြောက်မည်",
-  cancelBtn: "မလုပ်တော့ပါ",
-  verifyingBookingText: "ဘွတ်ကင် အချက်အလက်များကို စစ်ဆေးနေပါသည်...",
-  okBtn: "အိုကေ",
-  closeBtn: "ပိတ်မည်",
-  editNameModalTitle: "အမည် ပြင်ဆင်ရန်",
-  saveBtn: "သိမ်းဆည်းမည်",
-  addHotelModalHead: "ဟိုတယ် အသစ်ထည့်ရန်",
-  hotelNameLabel: "ဟိုတယ် အမည်",
-  countryLabel: "နိုင်ငံ",
-  priceLabel: "ဈေးနှုန်း ($)",
-  starsLabel: "ကြယ်အဆင့်",
-  addBtn: "ထည့်မည်",
-  navHome: "ပင်မ",
-  navTask: "လုပ်ငန်း",
-  navHistory: "မှတ်တမ်း",
-  navService: "ဝန်ဆောင်မှု",
-  navProfile: "ကိုယ်ရေး",
-  midnightResetNote: "ည ၁၂:၀၀ နာရီတိုင်း ပြန်လည်ညှိသည်",
-  newCsAlertTitle: "ဝန်ဆောင်မှုဌာနမှ စာအသစ် ရောက်ရှိပါသည်"
+  splashMainTitle: "Trip Booking မှ ကြိုဆိုပါသည်", splashSubTitle: "နိုင်ငံတကာ ဟိုတယ် ဘွတ်ကင် ပလက်ဖောင်း", brandTagline: "ကမ္ဘာလုံးဆိုင်ရာ ဟိုတယ် ဝန်ဆောင်မှု",
+  tickerBadgeLabel: "၂၄ နာရီ တိုက်ရိုက်", heroTitle: "ကမ္ဘာ့အဆင့်မီ ဟိုတယ်များကို ရှာဖွေပါ", heroSub: "ငွေလဲနှုန်း တိုက်ရိုက်ကြည့်ရှုခြင်း၊ ဟိုတယ် ဘွတ်ကင် အော်ဒါများနှင့် ဘာသာစကားမျိုးစုံ ပံ့ပိုးမှု။",
+  startBookingBtn: "ဘွတ်ကင် အော်ဒါ စတင်မည်", myAccountBtn: "ကျွန်ုပ်၏ အကောင့်", todayFxTitle: "ယနေ့ USD / MMK ငွေလဲနှုန်း",
+  liveFxChartTitle: "၃D တိုက်ရိုက် USD/MMK လမ်းကြောင်း", featuredHotelsTitle: "ထင်ရှားသော ဟိုတယ်များ", showAllBtn: "အားလုံးကြည့်ရန်",
+  step1Title: "အကောင့် ဖွင့်ပါ", step1Desc: "နိုင်ငံကုဒ်၊ မှန်ကန်သော ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်နှင့် မိခင်ဘာသာ အမည်ဖြင့် မှတ်ပုံတင်ပါ။",
+  step2Title: "ဘွတ်ကင် အော်ဒါများ ပြီးမြောက်အောင် လုပ်ပါ", step2Desc: "နေ့စဉ် ဘွတ်ကင် အော်ဒါ (၃၀) အတွက် ကြယ်အဆင့်နှင့် သုံးသပ်ချက်များ ပေးပို့ပါ။",
+  step3Title: "အမြတ်ငွေ ရယူပါ", step3Desc: "အော်ဒါတစ်ခုချင်းအလိုက် အမြတ်ကွဲပြားစွာ ရရှိပြီး စုစုပေါင်း စက်ဝန်းအမြတ်ကို အတိအကျ ရယူပါ။",
+  walletBalanceLabel: "လက်ကျန်ငွေ", cycleProfitLabel: "လက်ရှိ စက်ဝန်းအမြတ်", totalProfitLabel: "စုစုပေါင်း ရရှိပြီး အမြတ်",
+  ordersProgressLabel: "ပြီးစီးသည့် အော်ဒါများ", bookingTaskCenterTitle: "ဟိုတယ် ဘွတ်ကင် လုပ်ငန်းစဉ်", startNextOrderBtn: "နောက်ထပ် ဘွတ်ကင် အော်ဒါ စတင်မည်",
+  customerServiceTitle: "ဝန်ဆောင်မှု ဌာန (Customer Service)", chatInputPh: "ဝန်ဆောင်မှုဌာနသို့ စာရိုက်ပို့ရန်...", sendBtn: "ပို့မည်",
+  orderHistoryTitle: "ဘွတ်ကင် အော်ဒါ မှတ်တမ်း", colOrderNum: "အော်ဒါ #", colHotel: "ဟိုတယ်", colPrice: "တန်ဖိုး", colComm: "ကော်မရှင်", colStatus: "အခြေအနေ",
+  logoutBtn: "ထွက်မည်", referralEarnedLabel: "မိတ်ဆက် အမြတ်ငွေ", referralCodeLabel: "ကျွန်ုပ်၏ မိတ်ဆက်ကုဒ်",
+  depositBtn: "ငွေသွင်းရန်", withdrawBtn: "ငွေထုတ်ရန်", copyRefBtn: "မိတ်ဆက်ကုဒ် ကူးယူရန်", bookingProfitBtn: "အမြတ်ဇယား ဖွင့်ရန်",
+  profitTableModalTitle: "ဘွတ်ကင် အမြတ် ဇယား", profitTableDesc: "အရင်း ($), အော်ဒါ အရေအတွက် (၃၀) နှင့် စက်ဝန်းအမြတ် ($) ကို သတ်မှတ်ပါ။",
+  resetProfitTableBtn: "မူလအတိုင်း ပြန်ထားရန် ($100 = +$20)", saveProfitTableBtn: "အမြတ်ဇယား သိမ်းမည်",
+  loginTabBtn: "အကောင့်ဝင်ရန်", registerTabBtn: "အကောင့်ဖွင့်ရန်", fullNameLabel: "အမည် အပြည့်အစုံ",
+  fullNamePh: "အမည် ထည့်သွင်းပါ", identityLabel: "နိုင်ငံကုဒ် နှင့် ဖုန်းနံပါတ် (သို့မဟုတ် အီးမေးလ်)", identityPh: "09xxxxxxxxx / ၀၉xxxxxxxxx",
+  passwordLabel: "စကားဝှက်", passwordPh: "စကားဝှက် ထည့်သွင်းပါ", refCodeLabel: "မိတ်ဆက်ကုဒ် (ထည့်လိုလျှင် ဥပမာ TP2323)",
+  agreeTermsText: "ပလက်ဖောင်း၏ စည်းမျဉ်းစည်းကမ်းများကို သဘောတူညီပါသည်။", orderPriceLabel: "အော်ဒါ တန်ဖိုး", commissionLabel: "ကော်မရှင်",
+  stayNightsLabel: "တည်းခိုရက်", hotelRoomTypeLabel: "အခန်း အမျိုးအစား", rateHotelLabel: "ကြယ်အဆင့် သတ်မှတ်ရန်",
+  chooseReviewLabel: "သုံးသပ်ချက် (၅) ခုမှ တစ်ခု ရွေးချယ်ပါ", customReviewLabel: "သို့မဟုတ် ကိုယ်ပိုင် သုံးသပ်ချက် ရေးပါ",
+  customReviewPh: "ဟိုတယ်နှင့် ပတ်သက်၍ သုံးသပ်ချက် ရေးပါ...", submitOrderBtn: "အော်ဒါ ပြီးမြောက်မည်", cancelBtn: "မလုပ်တော့ပါ",
+  verifyingBookingText: "ဘွတ်ကင် အချက်အလက်များကို စစ်ဆေးနေပါသည်...", okBtn: "အိုကေ", closeBtn: "ပိတ်မည်",
+  editNameModalTitle: "အမည် ပြင်ဆင်ရန်", saveBtn: "သိမ်းဆည်းမည်", addHotelModalHead: "ဟိုတယ် အသစ်ထည့်ရန်",
+  hotelNameLabel: "ဟိုတယ် အမည်", countryLabel: "နိုင်ငံ", priceLabel: "ဈေးနှုန်း ($)", starsLabel: "ကြယ်အဆင့်", addBtn: "ထည့်မည်",
+  navHome: "ပင်မ", navTask: "လုပ်ငန်း", navHistory: "မှတ်တမ်း", navService: "ဝန်ဆောင်မှု", navProfile: "ကိုယ်ရေး",
+  midnightResetNote: "ည ၁၂:၀၀ နာရီတိုင်း ပြန်လည်ညှိသည်", newCsAlertTitle: "ဝန်ဆောင်မှုဌာနမှ စာအသစ် ရောက်ရှိပါသည်"
  },
  zh: {
-  splashMainTitle: "欢迎来到 Trip Booking",
-  splashSubTitle: "国际酒店预订平台",
-  brandTagline: "全球酒店与住宿服务",
-  tickerBadgeLabel: "24H 实时",
-  heroTitle: "探索世界级酒店",
-  heroSub: "实时汇率、酒店预订任务与多语言支持。",
-  startBookingBtn: "开始预订任务",
-  myAccountBtn: "我的账户",
-  todayFxTitle: "今日 USD / MMK 汇率",
-  liveFxChartTitle: "3D 实时 USD/MMK 走势",
-  featuredHotelsTitle: "精选酒店",
-  showAllBtn: "查看全部",
-  step1Title: "创建账户",
-  step1Desc: "使用国家区号、有效手机或邮箱及母语姓名注册。",
-  step2Title: "完成预订订单",
-  step2Desc: "在每日 30 笔预订订单中提交星级评分与评价。",
-  step3Title: "赚取周期利润",
-  step3Desc: "每单获得差异化佣金，第 30 单精准结算周期总利润。",
-  walletBalanceLabel: "钱包余额",
-  cycleProfitLabel: "当前周期利润",
-  totalProfitLabel: "累计利润",
-  ordersProgressLabel: "已完成订单",
-  bookingTaskCenterTitle: "酒店预订任务中心",
-  startNextOrderBtn: "开始下一笔订单",
-  customerServiceTitle: "在线客服",
-  chatInputPh: "输入发送给客服的消息...",
-  sendBtn: "发送",
-  orderHistoryTitle: "订单记录",
-  colOrderNum: "订单号",
-  colHotel: "酒店",
-  colPrice: "价格",
-  colComm: "佣金",
-  colStatus: "状态",
-  logoutBtn: "退出登录",
-  referralEarnedLabel: "推荐收益",
-  referralCodeLabel: "我的推荐码",
-  depositBtn: "充值",
-  withdrawBtn: "提现",
-  copyRefBtn: "复制推荐码",
-  bookingProfitBtn: "打开利润表",
-  profitTableModalTitle: "预订利润配置表",
-  profitTableDesc: "设置本金 ($)、订单数 (30) 与周期利润 ($)。第 30 单精确补齐剩余利润。",
-  resetProfitTableBtn: "恢复默认 ($100 = +$20)",
-  saveProfitTableBtn: "保存利润表",
-  loginTabBtn: "登录",
-  registerTabBtn: "注册",
-  fullNameLabel: "姓名（支持任意母语）",
-  fullNamePh: "输入姓名（中文、English、မြန်မာ、ไทย...）",
-  identityLabel: "国家区号与手机号（或邮箱）",
-  identityPh: "09xxxxxxxxx 或 email@example.com",
-  passwordLabel: "密码",
-  passwordPh: "输入密码",
-  refCodeLabel: "推荐码（可选，如 TP2323）",
-  agreeTermsText: "我同意平台服务条款与规则。",
-  orderPriceLabel: "订单金额",
-  commissionLabel: "佣金",
-  stayNightsLabel: "入住晚数",
-  hotelRoomTypeLabel: "房型",
-  rateHotelLabel: "星级评分",
-  chooseReviewLabel: "选择 5 条快捷评价之一",
-  customReviewLabel: "或输入自定义评价",
-  customReviewPh: "输入酒店评价...",
-  submitOrderBtn: "提交订单",
-  cancelBtn: "取消",
-  verifyingBookingText: "正在核实预订信息...",
-  okBtn: "确定",
-  closeBtn: "关闭",
-  editNameModalTitle: "修改姓名",
-  saveBtn: "保存",
-  addHotelModalHead: "添加新酒店",
-  hotelNameLabel: "酒店名称",
-  countryLabel: "国家",
-  priceLabel: "价格 ($)",
-  starsLabel: "星级",
-  addBtn: "添加",
-  navHome: "首页",
-  navTask: "任务",
-  navHistory: "记录",
-  navService: "客服",
-  navProfile: "我的",
-  midnightResetNote: "每日 00:00 重置",
-  newCsAlertTitle: "收到新的客服消息"
+  splashMainTitle: "欢迎来到 Trip Booking", splashSubTitle: "国际酒店预订平台", brandTagline: "全球酒店与住宿服务",
+  tickerBadgeLabel: "24H 实时", heroTitle: "探索世界级酒店", heroSub: "实时汇率、酒店预订任务与多语言支持。",
+  startBookingBtn: "开始预订任务", myAccountBtn: "我的账户", todayFxTitle: "今日 USD / MMK 汇率",
+  liveFxChartTitle: "3D 实时 USD/MMK 走势", featuredHotelsTitle: "精选酒店", showAllBtn: "查看全部",
+  step1Title: "创建账户", step1Desc: "使用国家区号、有效手机或邮箱及母语姓名注册。",
+  step2Title: "完成预订订单", step2Desc: "在每日 30 笔预订订单中提交星级评分与评价。",
+  step3Title: "赚取周期利润", step3Desc: "每单获得差异化佣金，第 30 单精准结算周期总利润。",
+  walletBalanceLabel: "钱包余额", cycleProfitLabel: "当前周期利润", totalProfitLabel: "累计利润",
+  ordersProgressLabel: "已完成订单", bookingTaskCenterTitle: "酒店预订任务中心", startNextOrderBtn: "开始下一笔订单",
+  customerServiceTitle: "在线客服", chatInputPh: "输入发送给客服的消息...", sendBtn: "发送",
+  orderHistoryTitle: "订单记录", colOrderNum: "订单号", colHotel: "酒店", colPrice: "价格", colComm: "佣金", colStatus: "状态",
+  logoutBtn: "退出登录", referralEarnedLabel: "推荐收益", referralCodeLabel: "我的推荐码",
+  depositBtn: "充值", withdrawBtn: "提现", copyRefBtn: "复制推荐码", bookingProfitBtn: "打开利润表",
+  profitTableModalTitle: "预订利润配置表", profitTableDesc: "设置本金 ($)、订单数 (30) 与周期利润 ($)。",
+  resetProfitTableBtn: "恢复默认 ($100 = +$20)", saveProfitTableBtn: "保存利润表",
+  loginTabBtn: "登录", registerTabBtn: "注册", fullNameLabel: "姓名（支持任意母语）",
+  fullNamePh: "输入姓名", identityLabel: "国家区号与手机号（或邮箱）", identityPh: "09xxxxxxxxx 或 email@example.com",
+  passwordLabel: "密码", passwordPh: "输入密码", refCodeLabel: "推荐码（可选，如 TP2323）",
+  agreeTermsText: "我同意平台服务条款与规则。", orderPriceLabel: "订单金额", commissionLabel: "佣金",
+  stayNightsLabel: "入住晚数", hotelRoomTypeLabel: "房型", rateHotelLabel: "星级评分",
+  chooseReviewLabel: "选择 5 条快捷评价之一", customReviewLabel: "或输入自定义评价",
+  customReviewPh: "输入酒店评价...", submitOrderBtn: "提交订单", cancelBtn: "取消",
+  verifyingBookingText: "正在核实预订信息...", okBtn: "确定", closeBtn: "关闭",
+  editNameModalTitle: "修改姓名", saveBtn: "保存", addHotelModalHead: "添加新酒店",
+  hotelNameLabel: "酒店名称", countryLabel: "国家", priceLabel: "价格 ($)", starsLabel: "星级", addBtn: "添加",
+  navHome: "首页", navTask: "任务", navHistory: "记录", navService: "客服", navProfile: "我的",
+  midnightResetNote: "每日 00:00 重置", newCsAlertTitle: "收到新的客服消息"
  },
  th: {
-  splashMainTitle: "ยินดีต้อนรับสู่ Trip Booking",
-  splashSubTitle: "แพลตฟอร์มจองโรงแรมระดับนานาชาติ",
-  brandTagline: "บริการโรงแรมและที่พักทั่วโลก",
-  tickerBadgeLabel: "สด 24 ชม.",
-  heroTitle: "สำรวจโรงแรมระดับโลก",
-  heroSub: "อัตราแลกเปลี่ยนเรียลไทม์ ภารกิจจองโรงแรม และรองรับหลายภาษา",
-  startBookingBtn: "เริ่มภารกิจจอง",
-  myAccountBtn: "บัญชีของฉัน",
-  todayFxTitle: "อัตรา USD / MMK วันนี้",
-  liveFxChartTitle: "แนวโน้ม USD/MMK 3D สด",
-  featuredHotelsTitle: "โรงแรมแนะนำ",
-  showAllBtn: "ดูทั้งหมด",
-  step1Title: "สร้างบัญชี",
-  step1Desc: "ลงทะเบียนด้วยรหัสประเทศ เบอร์โทรหรืออีเมลที่ถูกต้อง และชื่อภาษาแม่",
-  step2Title: "ทำรายการจองให้ครบ",
-  step2Desc: "ให้คะแนนและรีวิวโรงแรมครบ 30 ออเดอร์ต่อวัน",
-  step3Title: "รับกำไรรอบการจอง",
-  step3Desc: "รับค่าคอมมิชชันหลากหลายในแต่ละออเดอร์ และครบยอดกำไรในออเดอร์ที่ 30",
-  walletBalanceLabel: "ยอดเงินในกระเป๋า",
-  cycleProfitLabel: "กำไรรอบปัจจุบัน",
-  totalProfitLabel: "กำไรสะสมทั้งหมด",
-  ordersProgressLabel: "ออเดอร์ที่เสร็จสิ้น",
-  bookingTaskCenterTitle: "ศูนย์ภารกิจจองโรงแรม",
-  startNextOrderBtn: "เริ่มออเดอร์ถัดไป",
-  customerServiceTitle: "ฝ่ายบริการลูกค้า",
-  chatInputPh: "พิมพ์ข้อความถึงฝ่ายบริการลูกค้า...",
-  sendBtn: "ส่ง",
-  orderHistoryTitle: "ประวัติการจอง",
-  colOrderNum: "ลำดับที่",
-  colHotel: "โรงแรม",
-  colPrice: "ราคา",
-  colComm: "คอมมิชชัน",
-  colStatus: "สถานะ",
-  logoutBtn: "ออกจากระบบ",
-  referralEarnedLabel: "รายได้จากการแนะนำ",
-  referralCodeLabel: "รหัสแนะนำของฉัน",
-  depositBtn: "ฝากเงิน",
-  withdrawBtn: "ถอนเงิน",
-  copyRefBtn: "คัดลอกรหัสแนะนำ",
-  bookingProfitBtn: "เปิดตารางกำไร",
-  profitTableModalTitle: "ตารางกำไรการจอง",
-  profitTableDesc: "ตั้งค่าเงินต้น ($) จำนวนออเดอร์ (30) และกำไรรอบ ($) ออเดอร์ที่ 30 จะสรุปยอดกำไรส่วนที่เหลือพอดี",
-  resetProfitTableBtn: "รีเซ็ตค่าเริ่มต้น ($100 = +$20)",
-  saveProfitTableBtn: "บันทึกตารางกำไร",
-  loginTabBtn: "เข้าสู่ระบบ",
-  registerTabBtn: "สมัครสมาชิก",
-  fullNameLabel: "ชื่อ-นามสกุล (ภาษาแม่ใดก็ได้)",
-  fullNamePh: "กรอกชื่อ (ไทย, English, မြန်မာ, 中文...)",
-  identityLabel: "รหัสประเทศและเบอร์โทรศัพท์ (หรืออีเมล)",
-  identityPh: "09xxxxxxxxx หรือ email@example.com",
-  passwordLabel: "รหัสผ่าน",
-  passwordPh: "กรอกรหัสผ่าน",
-  refCodeLabel: "รหัสผู้แนะนำ (ไม่บังคับ เช่น TP2323)",
-  agreeTermsText: "ฉันยอมรับข้อกำหนดและเงื่อนไขของแพลตฟอร์ม",
-  orderPriceLabel: "มูลค่าออเดอร์",
-  commissionLabel: "คอมมิชชัน",
-  stayNightsLabel: "จำนวนคืน",
-  hotelRoomTypeLabel: "ประเภทห้องพัก",
-  rateHotelLabel: "ให้คะแนนดาว",
-  chooseReviewLabel: "เลือก 1 ใน 5 รีวิวสำเร็จรูป",
-  customReviewLabel: "หรือเขียนรีวิวของคุณเอง",
-  customReviewPh: "เขียนรีวิวโรงแรม...",
-  submitOrderBtn: "ยืนยันออเดอร์",
-  cancelBtn: "ยกเลิก",
-  verifyingBookingText: "กำลังตรวจสอบรายละเอียดการจอง...",
-  okBtn: "ตกลง",
-  closeBtn: "ปิด",
-  editNameModalTitle: "แก้ไขชื่อโปรไฟล์",
-  saveBtn: "บันทึก",
-  addHotelModalHead: "เพิ่มโรงแรมใหม่",
-  hotelNameLabel: "ชื่อโรงแรม",
-  countryLabel: "ประเทศ",
-  priceLabel: "ราคา ($)",
-  starsLabel: "ระดับดาว",
-  addBtn: "เพิ่ม",
-  navHome: "หน้าแรก",
-  navTask: "ภารกิจ",
-  navHistory: "ประวัติ",
-  navService: "บริการ",
-  navProfile: "โปรไฟล์",
-  midnightResetNote: "รีเซ็ตทุกวันเวลา 00:00",
-  newCsAlertTitle: "มีข้อความใหม่จากฝ่ายบริการลูกค้า"
+  splashMainTitle: "ยินดีต้อนรับสู่ Trip Booking", splashSubTitle: "แพลตฟอร์มจองโรงแรมระดับนานาชาติ", brandTagline: "บริการโรงแรมและที่พักทั่วโลก",
+  tickerBadgeLabel: "สด 24 ชม.", heroTitle: "สำรวจโรงแรมระดับโลก", heroSub: "อัตราแลกเปลี่ยนเรียลไทม์ ภารกิจจองโรงแรม และรองรับหลายภาษา",
+  startBookingBtn: "เริ่มภารกิจจอง", myAccountBtn: "บัญชีของฉัน", todayFxTitle: "อัตรา USD / MMK วันนี้",
+  liveFxChartTitle: "แนวโน้ม USD/MMK 3D สด", featuredHotelsTitle: "โรงแรมแนะนำ", showAllBtn: "ดูทั้งหมด",
+  step1Title: "สร้างบัญชี", step1Desc: "ลงทะเบียนด้วยรหัสประเทศ เบอร์โทรหรืออีเมลที่ถูกต้อง และชื่อภาษาแม่",
+  step2Title: "ทำรายการจองให้ครบ", step2Desc: "ให้คะแนนและรีวิวโรงแรมครบ 30 ออเดอร์ต่อวัน",
+  step3Title: "รับกำไรรอบการจอง", step3Desc: "รับค่าคอมมิชชันหลากหลายในแต่ละออเดอร์ และครบยอดกำไรในออเดอร์ที่ 30",
+  walletBalanceLabel: "ยอดเงินในกระเป๋า", cycleProfitLabel: "กำไรรอบปัจจุบัน", totalProfitLabel: "กำไรสะสมทั้งหมด",
+  ordersProgressLabel: "ออเดอร์ที่เสร็จสิ้น", bookingTaskCenterTitle: "ศูนย์ภารกิจจองโรงแรม", startNextOrderBtn: "เริ่มออเดอร์ถัดไป",
+  customerServiceTitle: "ฝ่ายบริการลูกค้า", chatInputPh: "พิมพ์ข้อความถึงฝ่ายบริการลูกค้า...", sendBtn: "ส่ง",
+  orderHistoryTitle: "ประวัติการจอง", colOrderNum: "ลำดับที่", colHotel: "โรงแรม", colPrice: "ราคา", colComm: "คอมมิชชัน", colStatus: "สถานะ",
+  logoutBtn: "ออกจากระบบ", referralEarnedLabel: "รายได้จากการแนะนำ", referralCodeLabel: "รหัสแนะนำของฉัน",
+  depositBtn: "ฝากเงิน", withdrawBtn: "ถอนเงิน", copyRefBtn: "คัดลอกรหัสแนะนำ", bookingProfitBtn: "เปิดตารางกำไร",
+  profitTableModalTitle: "ตารางกำไรการจอง", profitTableDesc: "ตั้งค่าเงินต้น ($) จำนวนออเดอร์ (30) และกำไรรอบ ($) ออเดอร์ที่ 30 จะสรุปยอดกำไรส่วนที่เหลือพอดี",
+  resetProfitTableBtn: "รีเซ็ตค่าเริ่มต้น ($100 = +$20)", saveProfitTableBtn: "บันทึกตารางกำไร",
+  loginTabBtn: "เข้าสู่ระบบ", registerTabBtn: "สมัครสมาชิก", fullNameLabel: "ชื่อ-นามสกุล (ภาษาแม่ใดก็ได้)",
+  fullNamePh: "กรอกชื่อ", identityLabel: "รหัสประเทศและเบอร์โทรศัพท์ (หรืออีเมล)", identityPh: "09xxxxxxxxx หรือ email@example.com",
+  passwordLabel: "รหัสผ่าน", passwordPh: "กรอกรหัสผ่าน", refCodeLabel: "รหัสผู้แนะนำ (ไม่บังคับ เช่น TP2323)",
+  agreeTermsText: "ฉันยอมรับข้อกำหนดและเงื่อนไขของแพลตฟอร์ม", orderPriceLabel: "มูลค่าออเดอร์", commissionLabel: "คอมมิชชัน",
+  stayNightsLabel: "จำนวนคืน", hotelRoomTypeLabel: "ประเภทห้องพัก", rateHotelLabel: "ให้คะแนนดาว",
+  chooseReviewLabel: "เลือก 1 ใน 5 รีวิวสำเร็จรูป", customReviewLabel: "หรือเขียนรีวิวของคุณเอง",
+  customReviewPh: "เขียนรีวิวโรงแรม...", submitOrderBtn: "ยืนยันออเดอร์", cancelBtn: "ยกเลิก",
+  verifyingBookingText: "กำลังตรวจสอบรายละเอียดการจอง...", okBtn: "ตกลง", closeBtn: "ปิด",
+  editNameModalTitle: "แก้ไขชื่อโปรไฟล์", saveBtn: "บันทึก", addHotelModalHead: "เพิ่มโรงแรมใหม่",
+  hotelNameLabel: "ชื่อโรงแรม", countryLabel: "ประเทศ", priceLabel: "ราคา ($)", starsLabel: "ระดับดาว", addBtn: "เพิ่ม",
+  navHome: "หน้าแรก", navTask: "ภารกิจ", navHistory: "ประวัติ", navService: "บริการ", navProfile: "โปรไฟล์",
+  midnightResetNote: "รีเซ็ตทุกวันเวลา 00:00", newCsAlertTitle: "มีข้อความใหม่จากฝ่ายบริการลูกค้า"
  }
 };
 
@@ -2808,25 +2354,13 @@ function getDict() {
  const lang = $("language")?.value || "en";
  if (I18N[lang]) return I18N[lang];
  const worldItem = WORLD_COUNTRIES_LANGUAGES.find(w => w.code === lang);
- if (!worldItem) return I18N.en;
- return {
-  ...I18N.en,
-  splashMainTitle: `${I18N.en.splashMainTitle} (${worldItem.nativeName})`,
-  brandTagline: worldItem.label
- };
+ return worldItem ? { ...I18N.en, splashMainTitle: `${I18N.en.splashMainTitle} (${worldItem.nativeName})`, brandTagline: worldItem.label } : I18N.en;
 }
 function applyTranslations() {
- const d = getDict();
- const lang = $("language")?.value || "en";
+ const d = getDict(), lang = $("language")?.value || "en";
  document.documentElement.lang = lang;
- document.querySelectorAll("[data-i18n]").forEach(el => {
-  const key = el.getAttribute("data-i18n");
-  if (key && d[key] !== undefined) el.textContent = d[key];
- });
- document.querySelectorAll("[data-i18n-ph]").forEach(el => {
-  const key = el.getAttribute("data-i18n-ph");
-  if (key && d[key] !== undefined) el.placeholder = d[key];
- });
+ document.querySelectorAll("[data-i18n]").forEach(el => { const k = el.getAttribute("data-i18n"); if (k && d[k] !== undefined) el.textContent = d[k]; });
+ document.querySelectorAll("[data-i18n-ph]").forEach(el => { const k = el.getAttribute("data-i18n-ph"); if (k && d[k] !== undefined) el.placeholder = d[k]; });
  if ($("tabLoginBtn")) $("tabLoginBtn").textContent = d.loginTabBtn;
  if ($("tabRegisterBtn")) $("tabRegisterBtn").textContent = d.registerTabBtn;
  if ($("authTitle")) $("authTitle").textContent = currentAuthMode === "register" ? d.registerTabBtn : d.loginTabBtn;
@@ -2837,40 +2371,21 @@ function changeLanguage(langCode) {
  if (sel && langCode) sel.value = langCode;
  const activeLang = sel?.value || "en";
  localStorage.setItem("tb_lang", activeLang);
- if (currentUser) {
-  currentUser.preferred_language = activeLang;
-  localStorage.setItem("tb_session_user", JSON.stringify(currentUser));
-  if (db) db.ref("users/" + currentUser.id).update({ preferred_language: activeLang }).catch(() => {});
- }
+ if (currentUser) { currentUser.preferred_language = activeLang; localStorage.setItem("tb_session_user", JSON.stringify(currentUser)); if (db) db.ref("users/" + currentUser.id).update({ preferred_language: activeLang }).catch(() => {}); }
  applyTranslations();
  renderTodayRateAndConverterBox();
  populate24hTickerItems();
 }
 
-/* ==================== SMOOTH 3D LIVE FX CHART (requestAnimationFrame) ==================== */
-function toggleTheme() {
- document.body.classList.toggle("dark");
- localStorage.setItem("tb_theme", document.body.classList.contains("dark") ? "dark" : "light");
-}
+function toggleTheme() { document.body.classList.toggle("dark"); localStorage.setItem("tb_theme", document.body.classList.contains("dark") ? "dark" : "light"); }
 function closeModal(id) { $(id)?.classList.add("hidden"); }
-function showAlert(htmlMsg, titleText = "Notification") {
- if ($("alertTitle")) $("alertTitle").textContent = titleText;
- if ($("alertBody")) $("alertBody").innerHTML = htmlMsg;
- $("alertModal")?.classList.remove("hidden");
-}
+function showAlert(htmlMsg, titleText = "Notification") { if ($("alertTitle")) $("alertTitle").textContent = titleText; if ($("alertBody")) $("alertBody").innerHTML = htmlMsg; $("alertModal")?.classList.remove("hidden"); }
 function handleLogoClick() { switchPage("homePage"); }
 
 function switchPage(pageId) {
  if (pageId === "staffPage") {
-  if (!currentUser || !isAdminAccountRecord(currentUser)) {
-   showAlert("Admin account login is required.");
-   openAuth("login");
-   return;
-  }
-  if (!isAdminSession) {
-   openAdminPinModal(true);
-   return;
-  }
+  if (!currentUser || !isAdminAccountRecord(currentUser)) { showAlert("Admin account login is required."); openAuth("login"); return; }
+  if (!isAdminSession) { openAdminPinModal(true); return; }
  }
  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
  $(pageId)?.classList.add("active");
@@ -2884,9 +2399,7 @@ function getFxFloorAndCeiling(baseRate) {
  const base = Number(baseRate) > 0 ? Number(baseRate) : 5000;
  return { floor: Math.max(1, Number((base - 45).toFixed(2))), ceiling: Number((base + 480).toFixed(2)) };
 }
-function getTodayDateKey(d = new Date()) {
- return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
+function getTodayDateKey(d = new Date()) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
 function formatExactTimestamp(dateObj = new Date()) {
  const d = dateObj instanceof Date ? dateObj : new Date(dateObj);
  return `${getTodayDateKey(d)} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(d.getSeconds()).padStart(2, "0")}`;
@@ -2897,29 +2410,21 @@ function formatShortTimeOnly(dateObj = new Date()) {
 }
 function formatMmkNumber(num) {
  const val = Number(num) || 0;
- const hasDec = Math.abs(val % 1) > 0.005;
- return val.toLocaleString("en-US", { minimumFractionDigits: hasDec ? 2 : 0, maximumFractionDigits: 2 });
+ return val.toLocaleString("en-US", { minimumFractionDigits: Math.abs(val % 1) > 0.005 ? 2 : 0, maximumFractionDigits: 2 });
 }
 function formatUsdWithMmk(usdAmount, showSign = false) {
- const amt = Number(usdAmount) || 0;
- const sign = showSign && amt > 0 ? "+" : (amt < 0 ? "-" : "");
- const absUsd = Math.abs(amt);
+ const amt = Number(usdAmount) || 0, sign = showSign && amt > 0 ? "+" : (amt < 0 ? "-" : ""), absUsd = Math.abs(amt);
  return `${sign}$${absUsd.toFixed(2)} <span class="mmk-sub">≈ ${sign}${formatMmkNumber(absUsd * CURRENT_LIVE_FX_RATE)} MMK</span>`;
 }
 function ensureDailyMidnightRateSync(now = new Date()) {
  const todayKey = getTodayDateKey(now);
- if (!LAST_RATE_DAY_KEY || LAST_RATE_DAY_KEY !== todayKey) {
-  LAST_RATE_DAY_KEY = todayKey;
-  localStorage.setItem("tb_last_rate_day", LAST_RATE_DAY_KEY);
- }
+ if (!LAST_RATE_DAY_KEY || LAST_RATE_DAY_KEY !== todayKey) { LAST_RATE_DAY_KEY = todayKey; localStorage.setItem("tb_last_rate_day", LAST_RATE_DAY_KEY); }
 }
 function setPlatformMmkRate(newRate, syncFirebase = true) {
  const rateVal = Number(newRate);
  if (!Number.isFinite(rateVal) || rateVal <= 0) return;
- MMK_PER_USD = rateVal;
- CURRENT_LIVE_FX_RATE = rateVal;
- localStorage.setItem("tb_mmk_per_usd", String(MMK_PER_USD));
- localStorage.setItem("tb_current_live_fx", String(CURRENT_LIVE_FX_RATE));
+ MMK_PER_USD = rateVal; CURRENT_LIVE_FX_RATE = rateVal;
+ localStorage.setItem("tb_mmk_per_usd", String(MMK_PER_USD)); localStorage.setItem("tb_current_live_fx", String(CURRENT_LIVE_FX_RATE));
  if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) $("adminFxRateInput").value = String(MMK_PER_USD);
  if ($("adminCurrentRateReadout")) $("adminCurrentRateReadout").textContent = `Current Base: 1 USD = ${formatMmkNumber(MMK_PER_USD)} MMK`;
  if (syncFirebase && db) db.ref("platform_settings").update({ mmk_per_usd: MMK_PER_USD, updated_at: Date.now() }).catch(() => {});
@@ -2932,55 +2437,41 @@ function stepAdminFxRate(delta) {
 }
 function applyAdminFxRateFromButton() {
  const val = Number($("adminFxRateInput")?.value);
- if (!Number.isFinite(val) || val < 100) return showAlert("Please enter a valid USD/MMK rate.");
+ if (!Number.isFinite(val) || val < 100) return showAlert("Enter a valid rate.");
  setPlatformMmkRate(val, true);
  showAlert(`Rate updated: 1 USD = ${formatMmkNumber(val)} MMK`);
 }
 
 function initSmooth3dFxChart() {
  ensureDailyMidnightRateSync(new Date());
- const now = Date.now();
- const { floor, ceiling } = getFxFloorAndCeiling(MMK_PER_USD);
+ const now = Date.now(), { floor, ceiling } = getFxFloorAndCeiling(MMK_PER_USD);
  fxHistoryPoints = [];
  for (let i = 35; i >= 0; i--) {
   const t = new Date(now - i * 1000);
-  const wave = Math.sin(i * 0.45) * 18 + Math.cos(i * 1.1) * 9;
-  const r = Math.min(ceiling, Math.max(floor, Number((MMK_PER_USD + 80 + wave).toFixed(2))));
+  const r = Math.min(ceiling, Math.max(floor, Number((MMK_PER_USD + 80 + Math.sin(i * 0.45) * 18 + Math.cos(i * 1.1) * 9).toFixed(2))));
   fxHistoryPoints.push({ rate: r, smoothRate: r, timestamp: formatExactTimestamp(t), timeShort: formatShortTimeOnly(t) });
  }
  CURRENT_LIVE_FX_RATE = fxHistoryPoints[fxHistoryPoints.length - 1].rate;
  DISPLAY_SMOOTH_FX_RATE = CURRENT_LIVE_FX_RATE;
-
  if (fxTickTimer) clearInterval(fxTickTimer);
  fxTickTimer = setInterval(() => {
   const now2 = new Date();
   ensureDailyMidnightRateSync(now2);
   fxRhythmState.waveSeed = (fxRhythmState.waveSeed * 1664525 + 1013904223) % 4294967296;
   const rA = (fxRhythmState.waveSeed % 1000) / 1000;
-  if (fxRhythmState.phaseTicksLeft <= 0) {
-   fxRhythmState.phase = fxRhythmState.phase === "down" ? "up" : "down";
-   fxRhythmState.phaseTicksLeft = 2 + Math.floor(rA * 4);
-  }
+  if (fxRhythmState.phaseTicksLeft <= 0) { fxRhythmState.phase = fxRhythmState.phase === "down" ? "up" : "down"; fxRhythmState.phaseTicksLeft = 2 + Math.floor(rA * 4); }
   fxRhythmState.phaseTicksLeft -= 1;
   const delta = fxRhythmState.phase === "down" ? -(0.35 + rA * 3.5) : (5 + rA * 42);
   CURRENT_LIVE_FX_RATE = Math.min(ceiling, Math.max(floor, Number((CURRENT_LIVE_FX_RATE + delta).toFixed(2))));
   localStorage.setItem("tb_current_live_fx", String(CURRENT_LIVE_FX_RATE));
-  fxHistoryPoints.push({
-   rate: CURRENT_LIVE_FX_RATE,
-   smoothRate: fxHistoryPoints[fxHistoryPoints.length - 1]?.smoothRate || CURRENT_LIVE_FX_RATE,
-   timestamp: formatExactTimestamp(now2),
-   timeShort: formatShortTimeOnly(now2)
-  });
+  fxHistoryPoints.push({ rate: CURRENT_LIVE_FX_RATE, smoothRate: fxHistoryPoints[fxHistoryPoints.length - 1]?.smoothRate || CURRENT_LIVE_FX_RATE, timestamp: formatExactTimestamp(now2), timeShort: formatShortTimeOnly(now2) });
   if (fxHistoryPoints.length > 36) fxHistoryPoints.shift();
   renderTodayRateAndConverterBox();
  }, 1000);
-
  if (fxRafId) cancelAnimationFrame(fxRafId);
  const renderLoop = () => {
   DISPLAY_SMOOTH_FX_RATE += (CURRENT_LIVE_FX_RATE - DISPLAY_SMOOTH_FX_RATE) * 0.14;
-  fxHistoryPoints.forEach(pt => {
-   pt.smoothRate += (pt.rate - pt.smoothRate) * 0.18;
-  });
+  fxHistoryPoints.forEach(pt => { pt.smoothRate += (pt.rate - pt.smoothRate) * 0.18; });
   drawSmooth3dFxCanvas();
   fxRafId = requestAnimationFrame(renderLoop);
  };
@@ -2988,116 +2479,44 @@ function initSmooth3dFxChart() {
 }
 
 function drawSmooth3dFxCanvas() {
- const canvas = $("fx3dCanvas");
- const stage = $("fx3dStage");
- if (!canvas || !stage || !fxHistoryPoints.length) return;
+ const canvas = $("fx3dCanvas"), stage = $("fx3dStage");
+ if (!canvas || !stage || !fxHistoryPoints.length || document.body.classList.contains("splash-active")) return;
  if ($("homePage") && !$("homePage").classList.contains("active")) return;
- const rect = stage.getBoundingClientRect();
- const width = Math.max(260, Math.floor(rect.width));
- const height = Math.max(150, Math.floor(rect.height));
+ const rect = stage.getBoundingClientRect(), width = Math.max(260, Math.floor(rect.width)), height = Math.max(150, Math.floor(rect.height));
  const dpr = Math.min(window.devicePixelRatio || 1, 2);
- if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
-  canvas.width = Math.floor(width * dpr);
-  canvas.height = Math.floor(height * dpr);
- }
+ if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) { canvas.width = Math.floor(width * dpr); canvas.height = Math.floor(height * dpr); }
  const ctx = canvas.getContext("2d");
  if (!ctx) return;
- ctx.save();
- ctx.scale(dpr, dpr);
- ctx.clearRect(0, 0, width, height);
-
- const vals = fxHistoryPoints.map(p => p.smoothRate);
- const minV = Math.min(...vals);
- const maxV = Math.max(...vals);
- const span = Math.max(0.5, maxV - minV);
- const last = vals[vals.length - 1];
- const prev = vals[vals.length - 2] ?? last;
- const isDown = last < prev;
- const mainCol = isDown ? "#ef4444" : "#22c55e";
- const depthCol = isDown ? "rgba(239, 68, 68, 0.24)" : "rgba(34, 197, 94, 0.24)";
-
- const padL = 14, padR = 16, topY = 20, botY = height - 22;
- const h = Math.max(24, botY - topY);
- const w = Math.max(30, width - padL - padR);
- const stepX = w / Math.max(1, vals.length - 1);
-
- // Subtle grid
- ctx.strokeStyle = "rgba(148, 163, 184, 0.16)";
- ctx.lineWidth = 1;
- for (let g = 0; g <= 3; g++) {
-  const gy = topY + (h / 3) * g;
-  ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + w, gy); ctx.stroke();
- }
-
- // 3D extruded ribbon / depth layer
- const depthOffsetX = 6;
- const depthOffsetY = -6;
- ctx.strokeStyle = depthCol;
- ctx.lineWidth = 3;
- ctx.beginPath();
- vals.forEach((v, i) => {
-  const x = padL + i * stepX + depthOffsetX;
-  const y = botY - ((v - minV) / span) * h + depthOffsetY;
-  if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
- });
+ ctx.save(); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, width, height);
+ const vals = fxHistoryPoints.map(p => p.smoothRate), minV = Math.min(...vals), maxV = Math.max(...vals), span = Math.max(0.5, maxV - minV);
+ const last = vals[vals.length - 1], prev = vals[vals.length - 2] ?? last, isDown = last < prev;
+ const mainCol = isDown ? "#ef4444" : "#22c55e", depthCol = isDown ? "rgba(239, 68, 68, 0.24)" : "rgba(34, 197, 94, 0.24)";
+ const padL = 14, padR = 16, topY = 20, botY = height - 22, h = Math.max(24, botY - topY), w = Math.max(30, width - padL - padR), stepX = w / Math.max(1, vals.length - 1);
+ ctx.strokeStyle = "rgba(148, 163, 184, 0.16)"; ctx.lineWidth = 1;
+ for (let g = 0; g <= 3; g++) { const gy = topY + (h / 3) * g; ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + w, gy); ctx.stroke(); }
+ ctx.strokeStyle = depthCol; ctx.lineWidth = 3; ctx.beginPath();
+ vals.forEach((v, i) => { const x = padL + i * stepX + 6, y = botY - ((v - minV) / span) * h - 6; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
  ctx.stroke();
-
- // Area fill
  const grad = ctx.createLinearGradient(0, topY, 0, botY);
- grad.addColorStop(0, isDown ? "rgba(239, 68, 68, 0.28)" : "rgba(34, 197, 94, 0.28)");
- grad.addColorStop(1, "rgba(0, 0, 0, 0)");
- ctx.fillStyle = grad;
- ctx.beginPath();
- vals.forEach((v, i) => {
-  const x = padL + i * stepX;
-  const y = botY - ((v - minV) / span) * h;
-  if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
- });
- ctx.lineTo(padL + w, botY);
- ctx.lineTo(padL, botY);
- ctx.closePath();
- ctx.fill();
-
- // Primary smooth curve
- ctx.strokeStyle = mainCol;
- ctx.lineWidth = 2.6;
- ctx.lineJoin = "round";
- ctx.beginPath();
- vals.forEach((v, i) => {
-  const x = padL + i * stepX;
-  const y = botY - ((v - minV) / span) * h;
-  if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
- });
+ grad.addColorStop(0, isDown ? "rgba(239, 68, 68, 0.28)" : "rgba(34, 197, 94, 0.28)"); grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+ ctx.fillStyle = grad; ctx.beginPath();
+ vals.forEach((v, i) => { const x = padL + i * stepX, y = botY - ((v - minV) / span) * h; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+ ctx.lineTo(padL + w, botY); ctx.lineTo(padL, botY); ctx.closePath(); ctx.fill();
+ ctx.strokeStyle = mainCol; ctx.lineWidth = 2.6; ctx.lineJoin = "round"; ctx.beginPath();
+ vals.forEach((v, i) => { const x = padL + i * stepX, y = botY - ((v - minV) / span) * h; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
  ctx.stroke();
-
- // Live tip node
- const tipX = padL + (vals.length - 1) * stepX;
- const tipY = botY - ((last - minV) / span) * h;
- ctx.fillStyle = mainCol;
- ctx.beginPath();
- ctx.arc(tipX, tipY, 4.5, 0, Math.PI * 2);
- ctx.fill();
-
+ const tipX = padL + (vals.length - 1) * stepX, tipY = botY - ((last - minV) / span) * h;
+ ctx.fillStyle = mainCol; ctx.beginPath(); ctx.arc(tipX, tipY, 4.5, 0, Math.PI * 2); ctx.fill();
  ctx.restore();
-
  if ($("fxRangeReadout")) $("fxRangeReadout").textContent = `Low: ${formatMmkNumber(minV)} · High: ${formatMmkNumber(maxV)}`;
- if ($("fxTrendDeltaBadge")) {
-  $("fxTrendDeltaBadge").className = `status-pill ${isDown ? "pill-live" : "pill-online"}`;
-  $("fxTrendDeltaBadge").textContent = isDown ? "3D ▼ DOWN" : "3D ▲ UP";
- }
+ if ($("fxTrendDeltaBadge")) { $("fxTrendDeltaBadge").className = `status-pill ${isDown ? "pill-live" : "pill-online"}`; $("fxTrendDeltaBadge").textContent = isDown ? "3D ▼ DOWN" : "3D ▲ UP"; }
 }
 function handleFxCanvasHover(ev) {
- const stage = $("fx3dStage");
- if (!stage || !fxHistoryPoints.length) return;
- const r = stage.getBoundingClientRect();
- const ratio = Math.max(0, Math.min(1, (ev.clientX - r.left) / Math.max(1, r.width)));
- const idx = Math.min(fxHistoryPoints.length - 1, Math.floor(ratio * fxHistoryPoints.length));
- const pt = fxHistoryPoints[idx];
- if (pt && $("fxHoverReadout")) $("fxHoverReadout").textContent = `${pt.timestamp} — 1 USD = ${formatMmkNumber(pt.smoothRate)} MMK`;
+ const stage = $("fx3dStage"); if (!stage || !fxHistoryPoints.length) return;
+ const r = stage.getBoundingClientRect(), idx = Math.min(fxHistoryPoints.length - 1, Math.floor(Math.max(0, Math.min(1, (ev.clientX - r.left) / Math.max(1, r.width))) * fxHistoryPoints.length));
+ if (fxHistoryPoints[idx] && $("fxHoverReadout")) $("fxHoverReadout").textContent = `${fxHistoryPoints[idx].timestamp} — 1 USD = ${formatMmkNumber(fxHistoryPoints[idx].smoothRate)} MMK`;
 }
-function clearFxCanvasHover() {
- if ($("fxHoverReadout")) $("fxHoverReadout").textContent = "Hover chart to inspect tick";
-}
+function clearFxCanvasHover() { if ($("fxHoverReadout")) $("fxHoverReadout").textContent = "Hover chart to inspect tick"; }
 
 function renderTodayRateAndConverterBox() {
  const d = getDict();
@@ -3105,32 +2524,17 @@ function renderTodayRateAndConverterBox() {
  if ($("todayFxDateInfo")) $("todayFxDateInfo").textContent = `${LAST_RATE_DAY_KEY || getTodayDateKey()} · ${d.midnightResetNote}`;
  runBidirectionalConverter(converterDirection === "USD_TO_MMK" ? "A" : "B");
 }
-function swapConverterDirection() {
- converterDirection = converterDirection === "USD_TO_MMK" ? "MMK_TO_USD" : "USD_TO_MMK";
- renderTodayRateAndConverterBox();
-}
+function swapConverterDirection() { converterDirection = converterDirection === "USD_TO_MMK" ? "MMK_TO_USD" : "USD_TO_MMK"; renderTodayRateAndConverterBox(); }
 function applyQuickUsdPreset(usdAmt) { if ($("calcInputA")) $("calcInputA").value = String(usdAmt); runBidirectionalConverter("A"); }
 function applyQuickMmkPreset(mmkAmt) { if ($("calcInputB")) $("calcInputB").value = String(mmkAmt); runBidirectionalConverter("B"); }
 function runBidirectionalConverter(side) {
  const aInp = $("calcInputA"), bInp = $("calcInputB"), ansBox = $("calcAnswerBox");
  if (!aInp || !bInp || !ansBox) return;
  const rate = CURRENT_LIVE_FX_RATE > 0 ? CURRENT_LIVE_FX_RATE : 5000;
- if (side === "A") {
-  converterDirection = "USD_TO_MMK";
-  const usd = Math.max(0, Number(aInp.value) || 0);
-  const mmk = usd * rate;
-  bInp.value = String(Number(mmk.toFixed(2)));
-  ansBox.textContent = `${usd} USD = ${formatMmkNumber(mmk)} MMK`;
- } else {
-  converterDirection = "MMK_TO_USD";
-  const mmk = Math.max(0, Number(bInp.value) || 0);
-  const usd = mmk / rate;
-  aInp.value = usd.toFixed(2);
-  ansBox.textContent = `${formatMmkNumber(mmk)} MMK = $${usd.toFixed(2)} USD`;
- }
+ if (side === "A") { converterDirection = "USD_TO_MMK"; const usd = Math.max(0, Number(aInp.value) || 0), mmk = usd * rate; bInp.value = String(Number(mmk.toFixed(2))); ansBox.textContent = `${usd} USD = ${formatMmkNumber(mmk)} MMK`; }
+ else { converterDirection = "MMK_TO_USD"; const mmk = Math.max(0, Number(bInp.value) || 0), usd = mmk / rate; aInp.value = usd.toFixed(2); ansBox.textContent = `${formatMmkNumber(mmk)} MMK = $${usd.toFixed(2)} USD`; }
 }
 
-/* ==================== 24H SLOW RIGHT-TO-LEFT TICKER (2XXX ACCOUNTS) ==================== */
 function populate24hTickerItems() {
  const track = $("activityTickerTrack");
  if (!track) return;
@@ -3138,54 +2542,25 @@ function populate24hTickerItems() {
  const sampleHotels = ["Grand Palace Bangkok", "Emerald Bay Yangon", "Skyline Suites Tokyo", "Royal Orchid Seoul", "Crown Imperial KL"];
  const entries = [];
  for (let i = 0; i < 16; i++) {
-  const acc = `Account #${sampleNames[i % sampleNames.length]}`;
-  const htl = sampleHotels[i % sampleHotels.length];
-  const amt = (45 + ((i * 37) % 450)).toFixed(2);
-  if (i % 4 === 0) {
-   entries.push(`<span class="ticker-item-chip">[ORDER] ${acc} completed booking at ${htl} (+$${(4 + (i % 9) * 0.65).toFixed(2)})</span>`);
-  } else if (i % 4 === 1) {
-   entries.push(`<span class="ticker-item-chip">[DEPOSIT] ${acc} deposited $${amt}</span>`);
-  } else if (i % 4 === 2) {
-   entries.push(`<span class="ticker-item-chip">[WITHDRAW] ${acc} withdrew $${amt}</span>`);
-  } else {
-   entries.push(`<span class="ticker-item-chip">[VIP UPGRADE] ${acc} upgraded to VIP Level ${2 + (i % 4)}</span>`);
-  }
+  const acc = `Account #${sampleNames[i % sampleNames.length]}`, htl = sampleHotels[i % sampleHotels.length], amt = (45 + ((i * 37) % 450)).toFixed(2);
+  if (i % 4 === 0) entries.push(`<span class="ticker-item-chip">[ORDER] ${acc} completed booking at ${htl} (+$${(4 + (i % 9) * 0.65).toFixed(2)})</span>`);
+  else if (i % 4 === 1) entries.push(`<span class="ticker-item-chip">[DEPOSIT] ${acc} deposited $${amt}</span>`);
+  else if (i % 4 === 2) entries.push(`<span class="ticker-item-chip">[WITHDRAW] ${acc} withdrew $${amt}</span>`);
+  else entries.push(`<span class="ticker-item-chip">[VIP UPGRADE] ${acc} upgraded to VIP Level ${2 + (i % 4)}</span>`);
  }
  track.innerHTML = entries.join("");
 }
 
-/* ==================== HOTELS (NO TOTAL COUNT DISPLAYED ON UI) ==================== */
 function renderHotels() {
  const grid = $("hotelGrid");
  if (!grid) return;
  const q = String($("hotelSearchInput")?.value || "").trim().toLowerCase();
- const baseList = q
-  ? allHotels.filter(h => `${h.name} ${h.country}`.toLowerCase().includes(q))
-  : allHotels;
+ const baseList = q ? allHotels.filter(h => `${h.name} ${h.country}`.toLowerCase().includes(q)) : allHotels;
  const displayList = showAllHotels ? baseList : baseList.slice(0, 8);
- grid.innerHTML = displayList.map(h => `
-  <div class="card" style="margin:0;padding:10px">
-   <img class="hotel-img" src="${h.image}" alt="${h.name}" loading="lazy">
-   <div class="card-body">
-    <div>
-     <div style="font-weight:700">${h.name}</div>
-     <div class="small muted">${h.country} · <span class="gold-stars">${"★".repeat(h.stars || 5)}</span></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center">
-     <span class="price">${formatUsdWithMmk(h.price)}</span>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="openHotelDetail('${h.id}')">Details</button>
-    </div>
-   </div>
-  </div>
- `).join("");
- if ($("toggleShowAllHotelsBtn")) {
-  $("toggleShowAllHotelsBtn").textContent = showAllHotels ? "Show Less" : getDict().showAllBtn;
- }
+ grid.innerHTML = displayList.map(h => `<div class="card" style="margin:0;padding:10px"><img class="hotel-img" src="${h.image}" alt="${h.name}" loading="lazy"><div class="card-body"><div><div style="font-weight:700">${h.name}</div><div class="small muted">${h.country} · <span class="gold-stars">${"★".repeat(h.stars || 5)}</span></div></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="price">${formatUsdWithMmk(h.price)}</span><button type="button" class="btn btn-secondary btn-xs" onclick="openHotelDetail('${h.id}')">Details</button></div></div></div>`).join("");
+ if ($("toggleShowAllHotelsBtn")) $("toggleShowAllHotelsBtn").textContent = showAllHotels ? "Show Less" : getDict().showAllBtn;
 }
-function toggleShowAllHotels() {
- showAllHotels = !showAllHotels;
- renderHotels();
-}
+function toggleShowAllHotels() { showAllHotels = !showAllHotels; renderHotels(); }
 function openHotelDetail(hotelId) {
  const h = allHotels.find(x => x.id === hotelId);
  if (!h) return;
@@ -3195,46 +2570,30 @@ function openHotelDetail(hotelId) {
  if ($("detailHotelBody")) $("detailHotelBody").innerHTML = `<p><b>Country:</b> ${h.country}</p><p><b>Rating:</b> ${h.stars || 5} Stars</p><p><b>Rate:</b> ${formatUsdWithMmk(h.price)}</p>`;
  $("hotelDetailModal")?.classList.remove("hidden");
 }
-function bookSelectedHomeHotel() {
- closeModal("hotelDetailModal");
- switchPage("taskPage");
- startBookingTask(selectedHomeHotel);
-}
-function openAddHotelModal() {
- if (!canAccessAdminPanel()) return showAlert("Admin authorization required.");
- $("addHotelModal")?.classList.remove("hidden");
-}
+function bookSelectedHomeHotel() { closeModal("hotelDetailModal"); switchPage("taskPage"); startBookingTask(selectedHomeHotel); }
+function openAddHotelModal() { if (!canAccessAdminPanel()) return showAlert("Admin authorization required."); $("addHotelModal")?.classList.remove("hidden"); }
 function addHotelToDatabase() {
  if (!canAccessAdminPanel()) return;
- const name = String($("newHName")?.value || "").trim();
- const country = String($("newHCountry")?.value || "").trim();
- const price = Number($("newHPrice")?.value) || 95;
- const stars = Number($("newHStars")?.value) || 5;
+ const name = String($("newHName")?.value || "").trim(), country = String($("newHCountry")?.value || "").trim(), price = Number($("newHPrice")?.value) || 95, stars = Number($("newHStars")?.value) || 5;
  if (!name || !country) return;
- const idx = allHotels.length;
- const item = { id: "H" + String(idx + 1).padStart(3, "0"), name, country, price, stars, image: getUniquePhotoUrlForIndex(idx + 25) };
+ const idx = allHotels.length, item = { id: "H" + String(idx + 1).padStart(3, "0"), name, country, price, stars, image: getUniquePhotoUrlForIndex(idx + 25) };
  allHotels.push(item);
  if (db) db.ref("hotels/" + item.id).set(item).catch(() => {});
- closeModal("addHotelModal");
- renderHotels();
+ closeModal("addHotelModal"); renderHotels();
 }
 
-/* ==================== ORDER TASK, HISTORY, FINANCE, REFERRALS & ADMIN ==================== */
 function startBookingTask(forcedHotel = null) {
  if (!currentUser) return openAuth("login");
- if (currentUser.suspended) return showAlert("Your account is suspended. Please contact Customer Service.");
+ if (currentUser.suspended) return showAlert("Account suspended.");
  const completed = Number(currentUser.orders_completed) || 0;
- if (completed >= DEFAULT_ORDERS_LIMIT) return showAlert("You have completed all 30 orders in this cycle.");
- const nextOrderNum = completed + 1;
- const rules = Array.isArray(currentUser.order_rules) ? currentUser.order_rules : [];
+ if (completed >= DEFAULT_ORDERS_LIMIT) return showAlert("All 30 orders completed.");
+ const nextOrderNum = completed + 1, rules = Array.isArray(currentUser.order_rules) ? currentUser.order_rules : [];
  const matchedRule = rules.find(r => Number(r.order_num) === nextOrderNum);
  const hotel = forcedHotel || allHotels[completed % allHotels.length] || allHotels[0];
  const orderPrice = matchedRule && Number(matchedRule.price) > 0 ? Number(matchedRule.price) : hotel.price;
  const comm = getVariedOrderCommission(currentUser, nextOrderNum, currentUser.balance);
-
  pendingCenterOrder = { orderNum: nextOrderNum, hotel, price: orderPrice, commission: comm };
- selectedOrderStar = 5;
- selectedOrderReview = "Clean rooms, fast check-in, and smooth booking experience.";
+ selectedOrderStar = 5; selectedOrderReview = "Clean rooms, fast check-in, and smooth booking experience.";
  if ($("centerOrderTitle")) $("centerOrderTitle").textContent = `Booking Order #${nextOrderNum} / ${DEFAULT_ORDERS_LIMIT}`;
  if ($("centerOrderStepBadge")) $("centerOrderStepBadge").textContent = `Order #${nextOrderNum}`;
  if ($("centerOrderImg")) $("centerOrderImg").src = hotel.image;
@@ -3242,44 +2601,19 @@ function startBookingTask(forcedHotel = null) {
  if ($("centerOrderCountry")) $("centerOrderCountry").textContent = hotel.country;
  if ($("centerOrderPrice")) $("centerOrderPrice").innerHTML = formatUsdWithMmk(orderPrice);
  if ($("centerOrderComm")) $("centerOrderComm").innerHTML = formatUsdWithMmk(comm, true);
- if ($("centerOrderNights")) $("centerOrderNights").textContent = "2 Nights";
- if ($("centerOrderRoomType")) $("centerOrderRoomType").textContent = "Deluxe Suite";
- const quickReviews = [
-  "Clean rooms, fast check-in, and smooth booking experience.",
-  "Great hotel location with friendly front-desk service.",
-  "Comfortable stay and accurate room details.",
-  "Quiet atmosphere and well-maintained facilities.",
-  "Reliable reservation flow and prompt confirmation."
- ];
- if ($("centerReviewChips")) {
-  $("centerReviewChips").innerHTML = quickReviews.map((txt, idx) =>
-   `<button type="button" class="review-option ${idx === 0 ? "selected" : ""}" onclick="pickQuickReview(this, '${txt.replace(/'/g, "\\'")}')">${txt}</button>`
-  ).join("");
- }
+ const quickReviews = ["Clean rooms, fast check-in, and smooth booking experience.", "Great hotel location with friendly front-desk service.", "Comfortable stay and accurate room details.", "Quiet atmosphere and well-maintained facilities.", "Reliable reservation flow and prompt confirmation."];
+ if ($("centerReviewChips")) $("centerReviewChips").innerHTML = quickReviews.map((txt, idx) => `<button type="button" class="review-option ${idx === 0 ? "selected" : ""}" onclick="pickQuickReview(this, '${txt.replace(/'/g, "\\'")}')">${txt}</button>`).join("");
  if ($("centerCustomReviewInput")) $("centerCustomReviewInput").value = "";
- $("centerOrderFormBody")?.classList.remove("hidden");
- $("centerOrderVerifyingBody")?.classList.add("hidden");
+ $("centerOrderFormBody")?.classList.remove("hidden"); $("centerOrderVerifyingBody")?.classList.add("hidden");
  $("centerOrderModal")?.classList.remove("hidden");
 }
 function closeCenterOrderModal() { closeModal("centerOrderModal"); pendingCenterOrder = null; }
-function selectOrderStar(s) {
- selectedOrderStar = s;
- document.querySelectorAll("#centerStarPicker .star-pick-btn").forEach(b => b.classList.toggle("selected", Number(b.dataset.star) === s));
-}
-function pickQuickReview(btn, txt) {
- selectedOrderReview = txt;
- document.querySelectorAll("#centerReviewChips .review-option").forEach(b => b.classList.remove("selected"));
- btn.classList.add("selected");
- if ($("centerCustomReviewInput")) $("centerCustomReviewInput").value = "";
-}
-function onCustomReviewInput() {
- const v = String($("centerCustomReviewInput")?.value || "").trim();
- if (v) { selectedOrderReview = v; document.querySelectorAll("#centerReviewChips .review-option").forEach(b => b.classList.remove("selected")); }
-}
+function selectOrderStar(s) { selectedOrderStar = s; document.querySelectorAll("#centerStarPicker .star-pick-btn").forEach(b => b.classList.toggle("selected", Number(b.dataset.star) === s)); }
+function pickQuickReview(btn, txt) { selectedOrderReview = txt; document.querySelectorAll("#centerReviewChips .review-option").forEach(b => b.classList.remove("selected")); btn.classList.add("selected"); if ($("centerCustomReviewInput")) $("centerCustomReviewInput").value = ""; }
+function onCustomReviewInput() { const v = String($("centerCustomReviewInput")?.value || "").trim(); if (v) { selectedOrderReview = v; document.querySelectorAll("#centerReviewChips .review-option").forEach(b => b.classList.remove("selected")); } }
 function confirmCenterOrder() {
  if (!currentUser || !pendingCenterOrder) return;
- $("centerOrderFormBody")?.classList.add("hidden");
- $("centerOrderVerifyingBody")?.classList.remove("hidden");
+ $("centerOrderFormBody")?.classList.add("hidden"); $("centerOrderVerifyingBody")?.classList.remove("hidden");
  const ord = pendingCenterOrder;
  setTimeout(() => {
   const earnedNow = Number(ord.commission) || 0;
@@ -3288,36 +2622,17 @@ function confirmCenterOrder() {
   currentUser.total_profit = Number(((Number(currentUser.total_profit) || 0) + earnedNow).toFixed(2));
   currentUser.balance = Number(((Number(currentUser.balance) || 0) + earnedNow).toFixed(2));
   currentUser.order_history = Array.isArray(currentUser.order_history) ? currentUser.order_history : [];
-  currentUser.order_history.unshift({
-   order_num: ord.orderNum,
-   hotel_name: ord.hotel.name,
-   price: ord.price,
-   commission: earnedNow,
-   stars: selectedOrderStar,
-   review: selectedOrderReview,
-   status: "Completed",
-   time: formatExactTimestamp(new Date())
-  });
-  if (currentUser.orders_completed >= DEFAULT_ORDERS_LIMIT) {
-   currentUser.orders_completed = 0;
-   currentUser.profit = 0;
-  }
-  saveUserRecord(currentUser);
-  closeCenterOrderModal();
-  renderAllViews();
-  playOrderCompleteSound();
+  currentUser.order_history.unshift({ order_num: ord.orderNum, hotel_name: ord.hotel.name, price: ord.price, commission: earnedNow, stars: selectedOrderStar, review: selectedOrderReview, status: "Completed", time: formatExactTimestamp(new Date()) });
+  if (currentUser.orders_completed >= DEFAULT_ORDERS_LIMIT) { currentUser.orders_completed = 0; currentUser.profit = 0; }
+  saveUserRecord(currentUser); closeCenterOrderModal(); renderAllViews(); playOrderCompleteSound();
   if ($("profitSuccessAmountText")) $("profitSuccessAmountText").textContent = `+$${earnedNow.toFixed(2)} Earned`;
   if ($("profitSuccessProgressText")) $("profitSuccessProgressText").textContent = `Order #${ord.orderNum} completed (${selectedOrderStar} stars).`;
   $("profitSuccessModal")?.classList.remove("hidden");
  }, 420);
 }
 
-function saveCachedUsersLocal(list) {
- try { localStorage.setItem("tb_cached_users", JSON.stringify(list || [])); } catch (_) {}
-}
-function loadCachedUsersLocal() {
- try { const raw = localStorage.getItem("tb_cached_users"); return raw ? JSON.parse(raw) : []; } catch (_) { return []; }
-}
+function saveCachedUsersLocal(list) { try { localStorage.setItem("tb_cached_users", JSON.stringify(list || [])); } catch (_) {} }
+function loadCachedUsersLocal() { try { const raw = localStorage.getItem("tb_cached_users"); return raw ? JSON.parse(raw) : []; } catch (_) { return []; } }
 function saveUserRecord(u) {
  if (!u) return;
  const idx = allUsers.findIndex(x => x.id === u.id);
@@ -3328,8 +2643,7 @@ function saveUserRecord(u) {
 }
 
 function renderTaskWorkspace() {
- const comp = currentUser ? (Number(currentUser.orders_completed) || 0) : 0;
- const pct = Math.min(100, Math.round((comp / DEFAULT_ORDERS_LIMIT) * 100));
+ const comp = currentUser ? (Number(currentUser.orders_completed) || 0) : 0, pct = Math.min(100, Math.round((comp / DEFAULT_ORDERS_LIMIT) * 100));
  if ($("taskWallet")) $("taskWallet").innerHTML = formatUsdWithMmk(currentUser?.balance || 0);
  if ($("taskProfit")) $("taskProfit").innerHTML = formatUsdWithMmk(currentUser?.profit || 0);
  if ($("taskTotalProfit")) $("taskTotalProfit").innerHTML = formatUsdWithMmk(currentUser?.total_profit || 0);
@@ -3344,27 +2658,12 @@ function renderHistory() {
  const tbody = $("orderHistoryBody");
  if (tbody) {
   const hist = currentUser && Array.isArray(currentUser.order_history) ? currentUser.order_history : [];
-  tbody.innerHTML = hist.length ? hist.map(h => `
-   <tr>
-    <td>#${h.order_num}</td>
-    <td>${h.hotel_name}</td>
-    <td>${formatUsdWithMmk(h.price)}</td>
-    <td style="color:var(--success);font-weight:700">${formatUsdWithMmk(h.commission, true)}</td>
-    <td><span class="status-pill pill-online">${h.status || "Completed"}</span></td>
-   </tr>
-  `).join("") : `<tr><td colspan="5" class="muted">No orders yet.</td></tr>`;
+  tbody.innerHTML = hist.length ? hist.map(h => `<tr><td>#${h.order_num}</td><td>${h.hotel_name}</td><td>${formatUsdWithMmk(h.price)}</td><td style="color:var(--success);font-weight:700">${formatUsdWithMmk(h.commission, true)}</td><td><span class="status-pill pill-online">${h.status || "Completed"}</span></td></tr>`).join("") : `<tr><td colspan="5" class="muted">No orders yet.</td></tr>`;
  }
  const finBody = $("userFinanceHistoryBody");
  if (finBody) {
   const list = currentUser ? allFinanceRecords.filter(r => r.userId === currentUser.id) : [];
-  finBody.innerHTML = list.length ? list.map(r => `
-   <tr>
-    <td><b>${String(r.type || "").toUpperCase()}</b></td>
-    <td>${formatUsdWithMmk(r.amount)}</td>
-    <td><span class="status-pill pill-online">${r.status || "Completed"}</span></td>
-    <td>${r.time || ""}</td>
-   </tr>
-  `).join("") : `<tr><td colspan="4" class="muted">No deposit or withdraw records yet.</td></tr>`;
+  finBody.innerHTML = list.length ? list.map(r => `<tr><td><b>${String(r.type || "").toUpperCase()}</b></td><td>${formatUsdWithMmk(r.amount)}</td><td><span class="status-pill pill-online">${r.status || "Completed"}</span></td><td>${r.time || ""}</td></tr>`).join("") : `<tr><td colspan="4" class="muted">No deposit or withdraw records yet.</td></tr>`;
  }
 }
 
@@ -3372,7 +2671,7 @@ function renderProfile() {
  if ($("profileName")) $("profileName").textContent = currentUser ? currentUser.name : "Guest User";
  if ($("profileIdentity")) $("profileIdentity").textContent = currentUser ? `${currentUser.identity} • ${currentUser.vip_level || "VIP Level 1"}` : "Not logged in";
  if ($("profileCodeBadge")) $("profileCodeBadge").textContent = currentUser ? `Account Code: ${currentUser.code || currentUser.referral_code || currentUser.id}` : "";
- if ($("profileAvatarImg")) $("profileAvatarImg").src = currentUser?.avatar || getRotatingBackdropUrl();
+ if ($("profileAvatarImg")) $("profileAvatarImg").src = currentUser?.avatar || BASE_HOTEL_PHOTOS[3];
  if ($("walletBalance")) $("walletBalance").innerHTML = formatUsdWithMmk(currentUser?.balance || 0);
  if ($("referralEarned")) $("referralEarned").innerHTML = formatUsdWithMmk(currentUser?.referral_earned || 0);
  if ($("myReferralCode")) $("myReferralCode").textContent = currentUser?.referral_code || "-";
@@ -3384,293 +2683,122 @@ function populateAdminSelects() {
  if (!canAccessAdminPanel()) return;
  const opts = allUsers.map(u => `<option value="${u.id}">${u.name} (${u.code || u.id})</option>`).join("");
  ["ruleTargetUserSelect", "balanceEditUserSelect", "passwordEditUserSelect", "adminFinUserSelect"].forEach(id => {
-  const el = $(id);
-  if (!el) return;
-  const prev = el.value;
-  el.innerHTML = opts;
+  const el = $(id); if (!el) return; const prev = el.value; el.innerHTML = opts;
   if (prev && allUsers.some(u => u.id === prev)) el.value = prev;
  });
 }
-
 function addOrderRuleAdmin() {
  if (!canAccessAdminPanel()) return;
- const uid = $("ruleTargetUserSelect")?.value;
- const orderNum = Number($("ruleTriggerOrderInput")?.value);
- const priceVal = Number($("ruleTargetPriceInput")?.value);
+ const uid = $("ruleTargetUserSelect")?.value, orderNum = Number($("ruleTriggerOrderInput")?.value), priceVal = Number($("ruleTargetPriceInput")?.value);
  const u = allUsers.find(x => x.id === uid);
  if (!u || !orderNum || orderNum < 1 || orderNum > 30 || !priceVal) return showAlert("Enter valid user, Order # (1-30), and Price ($).");
- u.order_rules = Array.isArray(u.order_rules) ? u.order_rules : [];
- u.order_rules = u.order_rules.filter(r => Number(r.order_num) !== orderNum);
+ u.order_rules = (Array.isArray(u.order_rules) ? u.order_rules : []).filter(r => Number(r.order_num) !== orderNum);
  u.order_rules.push({ order_num: orderNum, price: priceVal });
  saveUserRecord(u);
  if ($("adminOrderRulesSummary")) $("adminOrderRulesSummary").textContent = `${u.name} rules: ${u.order_rules.map(r => `#${r.order_num}=$${r.price}`).join(", ")}`;
  renderAdminUsersTable();
  showAlert(`Order rule set for ${u.name}: Order #${orderNum} -> $${priceVal.toFixed(2)}`);
 }
-
 function applyCustomBalanceAdmin() {
  if (!canAccessAdminPanel()) return;
- const uid = $("balanceEditUserSelect")?.value;
- const newBal = Number($("customBalanceInput")?.value);
- const u = allUsers.find(x => x.id === uid);
- if (!u || !Number.isFinite(newBal)) return showAlert("Enter a valid balance amount.");
- u.balance = Number(newBal.toFixed(2));
- saveUserRecord(u);
- renderAllViews();
- showAlert(`Updated ${u.name} balance to $${u.balance.toFixed(2)}.`);
+ const uid = $("balanceEditUserSelect")?.value, newBal = Number($("customBalanceInput")?.value), u = allUsers.find(x => x.id === uid);
+ if (!u || !Number.isFinite(newBal)) return showAlert("Enter valid balance.");
+ u.balance = Number(newBal.toFixed(2)); saveUserRecord(u); renderAllViews(); showAlert(`Balance set to $${u.balance.toFixed(2)}.`);
 }
-
 function applyCustomPasswordAdmin() {
  if (!canAccessAdminPanel()) return;
- const uid = $("passwordEditUserSelect")?.value;
- const newPass = String($("customPasswordInput")?.value || "").trim();
- const u = allUsers.find(x => x.id === uid);
- if (!u || newPass.length < 4) return showAlert("Enter a password with at least 4 characters.");
- u.password = newPass;
- saveUserRecord(u);
- if ($("customPasswordInput")) $("customPasswordInput").value = "";
- showAlert(`Updated password for ${u.name}.`);
+ const uid = $("passwordEditUserSelect")?.value, newPass = String($("customPasswordInput")?.value || "").trim(), u = allUsers.find(x => x.id === uid);
+ if (!u || newPass.length < 4) return showAlert("Password must be at least 4 characters.");
+ u.password = newPass; saveUserRecord(u); if ($("customPasswordInput")) $("customPasswordInput").value = ""; showAlert(`Password updated for ${u.name}.`);
 }
-
 function renderAdminReferralsTable() {
  if (!canAccessAdminPanel()) return;
- const tbody = $("adminReferralCodesBody");
- if (!tbody) return;
- tbody.innerHTML = allUsers.map(u => `
-  <tr>
-   <td><b>${u.name}</b></td>
-   <td>${u.referral_code || u.code || "-"}</td>
-   <td>${u.referred_by ? `<span class="tag">${u.referred_by}</span>` : `<span class="muted">None</span>`}</td>
-  </tr>
- `).join("");
+ const tbody = $("adminReferralCodesBody"); if (!tbody) return;
+ tbody.innerHTML = allUsers.map(u => `<tr><td><b>${u.name}</b></td><td>${u.referral_code || u.code || "-"}</td><td>${u.referred_by ? `<span class="tag">${u.referred_by}</span>` : `<span class="muted">None</span>`}</td></tr>`).join("");
 }
-
 function recordDepositWithdrawAdmin() {
  if (!canAccessAdminPanel()) return;
- const uid = $("adminFinUserSelect")?.value;
- const finType = $("adminFinTypeSelect")?.value || "deposit";
- const amt = Number($("adminFinAmountInput")?.value);
- const u = allUsers.find(x => x.id === uid);
- if (!u || !Number.isFinite(amt) || amt <= 0) return showAlert("Enter a valid amount.");
- if (finType === "deposit") {
-  u.balance = Number(((Number(u.balance) || 0) + amt).toFixed(2));
- } else {
-  u.balance = Number(Math.max(0, (Number(u.balance) || 0) - amt).toFixed(2));
- }
- const rec = {
-  id: "FIN" + Date.now(),
-  userId: u.id,
-  userLabel: `${u.name} (${u.code || u.id})`,
-  type: finType,
-  amount: amt,
-  status: "Approved",
-  time: formatExactTimestamp(new Date())
- };
+ const uid = $("adminFinUserSelect")?.value, finType = $("adminFinTypeSelect")?.value || "deposit", amt = Number($("adminFinAmountInput")?.value), u = allUsers.find(x => x.id === uid);
+ if (!u || !Number.isFinite(amt) || amt <= 0) return showAlert("Enter valid amount.");
+ u.balance = finType === "deposit" ? Number(((Number(u.balance) || 0) + amt).toFixed(2)) : Number(Math.max(0, (Number(u.balance) || 0) - amt).toFixed(2));
+ const rec = { id: "FIN" + Date.now(), userId: u.id, userLabel: `${u.name} (${u.code || u.id})`, type: finType, amount: amt, status: "Approved", time: formatExactTimestamp(new Date()) };
  allFinanceRecords.unshift(rec);
  try { localStorage.setItem("tb_finance_records", JSON.stringify(allFinanceRecords)); } catch (_) {}
  if (db) db.ref("finance_records/" + rec.id).set(rec).catch(() => {});
- saveUserRecord(u);
- if ($("adminFinAmountInput")) $("adminFinAmountInput").value = "";
- renderAllViews();
+ saveUserRecord(u); if ($("adminFinAmountInput")) $("adminFinAmountInput").value = ""; renderAllViews();
  showAlert(`${finType.toUpperCase()} ($${amt.toFixed(2)}) recorded for ${u.name}.`);
 }
-
 function renderAdminFinanceTable() {
  if (!canAccessAdminPanel()) return;
- const tbody = $("adminFinanceRecordsBody");
- if (!tbody) return;
- tbody.innerHTML = allFinanceRecords.length ? allFinanceRecords.map(r => `
-  <tr>
-   <td><b>${r.userLabel || r.userId}</b></td>
-   <td>${String(r.type || "").toUpperCase()}</td>
-   <td>${formatUsdWithMmk(r.amount)}</td>
-   <td><span class="status-pill pill-online">${r.status || "Approved"}</span></td>
-   <td>${r.time || ""}</td>
-  </tr>
- `).join("") : `<tr><td colspan="5" class="muted">No deposit/withdraw records yet.</td></tr>`;
+ const tbody = $("adminFinanceRecordsBody"); if (!tbody) return;
+ tbody.innerHTML = allFinanceRecords.length ? allFinanceRecords.map(r => `<tr><td><b>${r.userLabel || r.userId}</b></td><td>${String(r.type || "").toUpperCase()}</td><td>${formatUsdWithMmk(r.amount)}</td><td><span class="status-pill pill-online">${r.status || "Approved"}</span></td><td>${r.time || ""}</td></tr>`).join("") : `<tr><td colspan="5" class="muted">No records yet.</td></tr>`;
 }
-
 function renderAdminUsersTable() {
  if (!canAccessAdminPanel()) return;
- const tbody = $("adminUsersBody");
- if (!tbody) return;
+ const tbody = $("adminUsersBody"); if (!tbody) return;
  const q = String($("adminUserSearchInput")?.value || "").trim().toLowerCase();
  const list = allUsers.filter(u => !q || `${u.name} ${u.identity} ${u.code || ""} ${u.referral_code || ""}`.toLowerCase().includes(q));
- tbody.innerHTML = list.map(u => `
-  <tr class="${u.id === selectedLogUserId ? "selected-log-row" : ""}" onclick="selectLocationDeviceRow('${u.id}')">
-   <td><b>${u.name}</b> <span class="small muted">(${u.code || u.referral_code || u.id})</span></td>
-   <td>${u.country_code || ""} ${u.identity}</td>
-   <td>$${(Number(u.balance) || 0).toFixed(2)}</td>
-   <td>$${(Number(u.profit) || 0).toFixed(2)} (${u.orders_completed || 0}/30)</td>
-   <td>${(u.order_rules || []).length} rules</td>
-   <td onclick="event.stopPropagation()">
-    <button type="button" class="btn btn-secondary btn-xs" onclick="adjustUserBalance('${u.id}', 100)">+$100</button>
-    <button type="button" class="btn btn-danger btn-xs" onclick="toggleSuspendUser('${u.id}')">${u.suspended ? "Unsuspend" : "Suspend"}</button>
-   </td>
-  </tr>
- `).join("");
+ tbody.innerHTML = list.map(u => `<tr class="${u.id === selectedLogUserId ? "selected-log-row" : ""}" onclick="selectLocationDeviceRow('${u.id}')"><td><b>${u.name}</b> <span class="small muted">(${u.code || u.referral_code || u.id})</span></td><td>${u.country_code || ""} ${u.identity}</td><td>$${(Number(u.balance) || 0).toFixed(2)}</td><td>$${(Number(u.profit) || 0).toFixed(2)} (${u.orders_completed || 0}/30)</td><td>${(u.order_rules || []).length} rules</td><td onclick="event.stopPropagation()"><button type="button" class="btn btn-secondary btn-xs" onclick="adjustUserBalance('${u.id}',100)">+$100</button><button type="button" class="btn btn-danger btn-xs" onclick="toggleSuspendUser('${u.id}')">${u.suspended ? "Unsuspend" : "Suspend"}</button></td></tr>`).join("");
 }
-function adjustUserBalance(uid, delta) {
- if (!canAccessAdminPanel()) return;
- const u = allUsers.find(x => x.id === uid);
- if (!u) return;
- u.balance = Number(((Number(u.balance) || 0) + delta).toFixed(2));
- saveUserRecord(u);
- renderAllViews();
-}
-function toggleSuspendUser(uid) {
- if (!canAccessAdminPanel()) return;
- const u = allUsers.find(x => x.id === uid);
- if (!u) return;
- u.suspended = !u.suspended;
- saveUserRecord(u);
- renderAllViews();
-}
+function adjustUserBalance(uid, delta) { if (!canAccessAdminPanel()) return; const u = allUsers.find(x => x.id === uid); if (u) { u.balance = Number(((Number(u.balance) || 0) + delta).toFixed(2)); saveUserRecord(u); renderAllViews(); } }
+function toggleSuspendUser(uid) { if (!canAccessAdminPanel()) return; const u = allUsers.find(x => x.id === uid); if (u) { u.suspended = !u.suspended; saveUserRecord(u); renderAllViews(); } }
 
 function showRegistrationSuccessCelebration() {
  const toast = $("regSuccessToast");
- if (toast) {
-  toast.classList.remove("hidden", "fade-out");
-  setTimeout(() => { toast.classList.add("fade-out"); setTimeout(() => toast.classList.add("hidden"), 350); }, 3800);
- }
+ if (toast) { toast.classList.remove("hidden", "fade-out"); setTimeout(() => { toast.classList.add("fade-out"); setTimeout(() => toast.classList.add("hidden"), 350); }, 3800); }
  speakCongratulationsFemaleEnglish();
 }
-function logoutUser() {
- currentUser = null;
- isAdminSession = false;
- localStorage.removeItem("tb_session_user");
- enforceAdminRoleVisibility();
- switchPage("homePage");
- renderAllViews();
-}
+function logoutUser() { currentUser = null; isAdminSession = false; localStorage.removeItem("tb_session_user"); enforceAdminRoleVisibility(); switchPage("homePage"); renderAllViews(); }
 function triggerProfileAvatarUpload() { $("profileAvatarInput")?.click(); }
-function handleProfileAvatarChange(ev) {
- const file = ev.target?.files?.[0];
- if (!file || !currentUser) return;
- const reader = new FileReader();
- reader.onload = () => { currentUser.avatar = reader.result; saveUserRecord(currentUser); renderProfile(); };
- reader.readAsDataURL(file);
-}
-function openEditNameModal() {
- if (!currentUser) return openAuth("login");
- if ($("editProfileNameInput")) $("editProfileNameInput").value = currentUser.name || "";
- $("editNameModal")?.classList.remove("hidden");
-}
-function saveProfileNameEdit() {
- const v = String($("editProfileNameInput")?.value || "").trim();
- if (v && currentUser) { currentUser.name = v; saveUserRecord(currentUser); }
- closeModal("editNameModal");
- renderProfile();
-}
-function requestDeposit() {
- if (!currentUser) return openAuth("login");
- showAlert("Please message Customer Service with your deposit receipt.");
- switchPage("servicePage");
-}
-function requestWithdraw() {
- if (!currentUser) return openAuth("login");
- showAlert("Withdrawal request noted. Contact Customer Service for payout confirmation.");
- switchPage("servicePage");
-}
-function copyReferralCode() {
- const code = currentUser?.referral_code || "TP2323";
- navigator.clipboard?.writeText(code).catch(() => {});
- showAlert(`Referral code copied: <b>${code}</b>`);
-}
+function handleProfileAvatarChange(ev) { const f = ev.target?.files?.[0]; if (!f || !currentUser) return; const r = new FileReader(); r.onload = () => { currentUser.avatar = r.result; saveUserRecord(currentUser); renderProfile(); }; r.readAsDataURL(f); }
+function openEditNameModal() { if (!currentUser) return openAuth("login"); if ($("editProfileNameInput")) $("editProfileNameInput").value = currentUser.name || ""; $("editNameModal")?.classList.remove("hidden"); }
+function saveProfileNameEdit() { const v = String($("editProfileNameInput")?.value || "").trim(); if (v && currentUser) { currentUser.name = v; saveUserRecord(currentUser); } closeModal("editNameModal"); renderProfile(); }
+function requestDeposit() { if (!currentUser) return openAuth("login"); showAlert("Please message Customer Service with your deposit receipt."); switchPage("servicePage"); }
+function requestWithdraw() { if (!currentUser) return openAuth("login"); showAlert("Withdrawal request noted. Contact Customer Service."); switchPage("servicePage"); }
+function copyReferralCode() { const code = currentUser?.referral_code || "TP2323"; navigator.clipboard?.writeText(code).catch(() => {}); showAlert(`Referral code copied: <b>${code}</b>`); }
 
 function sendSupportMessage() {
  if (!currentUser) return openAuth("login");
- const txt = String($("supportChatInput")?.value || "").trim();
- if (!txt) return;
+ const txt = String($("supportChatInput")?.value || "").trim(); if (!txt) return;
  const msg = { id: "M" + Date.now(), userId: currentUser.id, sender: currentUser.name, fromAdmin: false, text: txt, time: formatExactTimestamp(new Date()) };
- allMessages.push(msg);
- if (db) db.ref("messages/" + msg.id).set(msg).catch(() => {});
- $("supportChatInput").value = "";
- clearDraftText("user_cs_msg");
- renderSupportMessages();
+ allMessages.push(msg); if (db) db.ref("messages/" + msg.id).set(msg).catch(() => {});
+ $("supportChatInput").value = ""; clearDraftText("user_cs_msg"); renderSupportMessages();
 }
 function renderSupportMessages() {
- const box = $("supportFullMessages");
- if (!box) return;
+ const box = $("supportFullMessages"); if (!box) return;
  const list = currentUser ? allMessages.filter(m => m.userId === currentUser.id) : [];
- box.innerHTML = list.map(m => `
-  <div class="msg-bubble ${m.fromAdmin ? "" : "msg-me"}">
-   <div class="msg-meta">${m.sender} · ${m.time}</div>
-   <div>${m.text || ""}</div>
-  </div>
- `).join("") || `<div class="small muted">No messages yet.</div>`;
+ box.innerHTML = list.map(m => `<div class="msg-bubble ${m.fromAdmin ? "" : "msg-me"}"><div class="msg-meta">${m.sender} · ${m.time}</div><div>${m.text || ""}</div></div>`).join("") || `<div class="small muted">No messages yet.</div>`;
 }
 function renderAdminCsPanel() {
  if (!canAccessAdminPanel()) return;
- const listEl = $("adminCsClientList");
- if (!listEl) return;
- listEl.innerHTML = allUsers.map(u => `
-  <div class="cs-client-item ${u.id === selectedCsUserId ? "active" : ""}" onclick="selectCsClient('${u.id}')">
-   <b>${u.name}</b> <span class="small muted">(${u.code || u.id})</span>
-  </div>
- `).join("");
- const msgBox = $("adminCsMessages");
- if (!msgBox) return;
+ const listEl = $("adminCsClientList"); if (!listEl) return;
+ listEl.innerHTML = allUsers.map(u => `<div class="cs-client-item ${u.id === selectedCsUserId ? "active" : ""}" onclick="selectCsClient('${u.id}')"><b>${u.name}</b> <span class="small muted">(${u.code || u.id})</span></div>`).join("");
+ const msgBox = $("adminCsMessages"); if (!msgBox) return;
  const msgs = selectedCsUserId ? allMessages.filter(m => m.userId === selectedCsUserId) : [];
- msgBox.innerHTML = msgs.map(m => `
-  <div class="msg-bubble ${m.fromAdmin ? "msg-me" : ""}">
-   <div class="msg-meta">${m.sender} · ${m.time}</div>
-   <div>${m.text || ""}</div>
-  </div>
- `).join("") || `<div class="small muted">Select a user thread to reply.</div>`;
+ msgBox.innerHTML = msgs.map(m => `<div class="msg-bubble ${m.fromAdmin ? "msg-me" : ""}"><div class="msg-meta">${m.sender} · ${m.time}</div><div>${m.text || ""}</div></div>`).join("") || `<div class="small muted">Select a user thread to reply.</div>`;
 }
-function selectCsClient(uid) {
- selectedCsUserId = uid;
- restoreAdminCsDraftForUser(uid);
- renderAdminCsPanel();
-}
+function selectCsClient(uid) { selectedCsUserId = uid; restoreAdminCsDraftForUser(uid); renderAdminCsPanel(); }
 function sendAdminReplyMessage() {
  if (!canAccessAdminPanel() || !selectedCsUserId) return;
- const txt = String($("adminChatInput")?.value || "").trim();
- if (!txt) return;
+ const txt = String($("adminChatInput")?.value || "").trim(); if (!txt) return;
  const msg = { id: "M" + Date.now(), userId: selectedCsUserId, sender: "Customer Service", fromAdmin: true, text: txt, time: formatExactTimestamp(new Date()) };
- allMessages.push(msg);
- if (db) db.ref("messages/" + msg.id).set(msg).catch(() => {});
- $("adminChatInput").value = "";
- saveAdminCsDraft();
- renderAdminCsPanel();
+ allMessages.push(msg); if (db) db.ref("messages/" + msg.id).set(msg).catch(() => {});
+ $("adminChatInput").value = ""; saveAdminCsDraft(); renderAdminCsPanel();
 }
 function toggleEmojiPicker(target) {
- const panel = target === "admin" ? $("adminEmojiPicker") : $("userEmojiPicker");
- if (!panel) return;
+ const panel = target === "admin" ? $("adminEmojiPicker") : $("userEmojiPicker"); if (!panel) return;
  panel.classList.toggle("hidden");
- if (!panel.innerHTML) {
-  panel.innerHTML = SYMBOL_PICKS.map(em => `<button type="button" class="emoji-btn" onclick="insertEmoji('${target}', '${em}')">${em}</button>`).join("");
- }
+ if (!panel.innerHTML) panel.innerHTML = SYMBOL_PICKS.map(em => `<button type="button" class="emoji-btn" onclick="insertEmoji('${target}','${em}')">${em}</button>`).join("");
 }
-function insertEmoji(target, em) {
- const inp = target === "admin" ? $("adminChatInput") : $("supportChatInput");
- if (!inp) return;
- inp.value = (inp.value || "") + em;
- autoResizeTextarea(inp);
- inp.focus();
-}
-function handleUserChatPhotoSelected() { showAlert("Photo attachment selected for Customer Service."); }
-function handleAdminChatPhotoSelected() { showAlert("Photo attachment selected for reply."); }
-function closeImageLightbox() { $("imageLightbox")?.classList.add("hidden"); }
+function insertEmoji(target, em) { const inp = target === "admin" ? $("adminChatInput") : $("supportChatInput"); if (!inp) return; inp.value = (inp.value || "") + em; autoResizeTextarea(inp); inp.focus(); }
+function handleUserChatPhotoSelected() { showAlert("Photo selected."); }
+function handleAdminChatPhotoSelected() { showAlert("Photo selected."); }
 function handleCsToastClick() { $("csIncomingToast")?.classList.add("hidden"); switchPage("servicePage"); }
-function openSupportFromSuspension() { switchPage("servicePage"); }
 
 function renderAllViews() {
- enforceAdminRoleVisibility();
- renderTodayRateAndConverterBox();
- renderHotels();
- renderTaskWorkspace();
- renderHistory();
- renderProfile();
- renderSupportMessages();
+ enforceAdminRoleVisibility(); renderTodayRateAndConverterBox(); renderHotels(); renderTaskWorkspace(); renderHistory(); renderProfile(); renderSupportMessages();
  if (canAccessAdminPanel()) {
-  populateAdminSelects();
-  renderAdminUsersTable();
-  renderLocationDeviceLogTable();
-  renderAdminReferralsTable();
-  renderAdminFinanceTable();
-  renderAdminCsPanel();
+  populateAdminSelects(); renderAdminUsersTable(); renderLocationDeviceLogTable(); renderAdminReferralsTable(); renderAdminFinanceTable(); renderAdminCsPanel();
   if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) $("adminFxRateInput").value = String(MMK_PER_USD);
   if ($("adminCurrentRateReadout")) $("adminCurrentRateReadout").textContent = `Current Base: 1 USD = ${formatMmkNumber(MMK_PER_USD)} MMK`;
  }
@@ -3678,119 +2806,45 @@ function renderAllViews() {
 
 function initFirebaseListeners() {
  if (!db) return;
- db.ref("platform_settings").on("value", snap => {
-  const val = snap.val();
-  if (val && Number(val.mmk_per_usd) > 0) {
-   MMK_PER_USD = Number(val.mmk_per_usd);
-   localStorage.setItem("tb_mmk_per_usd", String(MMK_PER_USD));
-   renderAllViews();
-  }
- });
- db.ref("profit_tiers").on("value", snap => {
-  const val = snap.val();
-  if (Array.isArray(val) && val.length) {
-   allProfitTiers = val;
-   recalculateNextOrderCommissionsFromProfitTable();
-   renderAllViews();
-  }
- });
- db.ref("hotels").on("value", snap => {
-  const val = snap.val();
-  if (val && typeof val === "object") {
-   const arr = Object.values(val).filter(Boolean);
-   if (arr.length) allHotels = arr;
-   renderHotels();
-  }
- });
+ db.ref("platform_settings").on("value", snap => { const val = snap.val(); if (val && Number(val.mmk_per_usd) > 0) { MMK_PER_USD = Number(val.mmk_per_usd); localStorage.setItem("tb_mmk_per_usd", String(MMK_PER_USD)); renderAllViews(); } });
+ db.ref("profit_tiers").on("value", snap => { const val = snap.val(); if (Array.isArray(val) && val.length) { allProfitTiers = val; recalculateNextOrderCommissionsFromProfitTable(); renderAllViews(); } });
+ db.ref("hotels").on("value", snap => { const val = snap.val(); if (val && typeof val === "object") { const arr = Object.values(val).filter(Boolean); if (arr.length) allHotels = arr; renderHotels(); } });
  db.ref("users").on("value", snap => {
   const val = snap.val();
   if (val && typeof val === "object") {
-   allUsers = Object.values(val).filter(Boolean);
-   saveCachedUsersLocal(allUsers);
-   if (currentUser) {
-    const freshMe = allUsers.find(u => u.id === currentUser.id);
-    if (freshMe) { currentUser = freshMe; localStorage.setItem("tb_session_user", JSON.stringify(currentUser)); }
-   }
+   allUsers = Object.values(val).filter(Boolean); saveCachedUsersLocal(allUsers);
+   if (currentUser) { const freshMe = allUsers.find(u => u.id === currentUser.id); if (freshMe) { currentUser = freshMe; localStorage.setItem("tb_session_user", JSON.stringify(currentUser)); } }
    renderAllViews();
   }
  });
- db.ref("messages").on("value", snap => {
-  const val = snap.val();
-  if (val && typeof val === "object") {
-   allMessages = Object.values(val).filter(Boolean);
-   renderSupportMessages();
-   if (canAccessAdminPanel()) renderAdminCsPanel();
-  }
- });
- db.ref("finance_records").on("value", snap => {
-  const val = snap.val();
-  if (val && typeof val === "object") {
-   allFinanceRecords = Object.values(val).filter(Boolean).sort((a, b) => (b.time || "").localeCompare(a.time || ""));
-   renderAllViews();
-  }
- });
+ db.ref("messages").on("value", snap => { const val = snap.val(); if (val && typeof val === "object") { allMessages = Object.values(val).filter(Boolean); renderSupportMessages(); if (canAccessAdminPanel()) renderAdminCsPanel(); } });
+ db.ref("finance_records").on("value", snap => { const val = snap.val(); if (val && typeof val === "object") { allFinanceRecords = Object.values(val).filter(Boolean).sort((a, b) => (b.time || "").localeCompare(a.time || "")); renderAllViews(); } });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
  if (localStorage.getItem("tb_theme") === "dark") document.body.classList.add("dark");
- populateWorldLanguagesSelect();
- populateCountryCodeSelect();
-
+ populateWorldLanguagesSelect(); populateCountryCodeSelect();
  const savedLang = localStorage.getItem("tb_lang");
- if (savedLang && $("language")) {
-  const optExists = Array.from($("language").options).some(o => o.value === savedLang);
-  if (optExists) $("language").value = savedLang;
- }
-
- try {
-  const finRaw = localStorage.getItem("tb_finance_records");
-  if (finRaw) allFinanceRecords = JSON.parse(finRaw) || [];
- } catch (_) {}
-
+ if (savedLang && $("language") && Array.from($("language").options).some(o => o.value === savedLang)) $("language").value = savedLang;
+ try { const finRaw = localStorage.getItem("tb_finance_records"); if (finRaw) allFinanceRecords = JSON.parse(finRaw) || []; } catch (_) {}
  const cachedUsers = loadCachedUsersLocal();
  const seedAdmin = {
-  id: "U_ADMIN_09775191427",
-  code: "TP2323",
-  name: "System Admin",
-  identity: ADMIN_PHONE,
-  phone: ADMIN_PHONE,
-  country_code: "+95",
-  digit_script: "ENGLISH",
-  password: ADMIN_PASS,
-  role: "admin",
-  referral_code: "TP2323",
-  referred_by: "",
-  balance: 1000,
-  profit: 0,
-  total_profit: 0,
-  orders_completed: 0,
-  order_history: [],
-  order_rules: [],
-  last_active_at: Date.now(),
-  location_device_log: collectClientLocationAndDeviceInfo("+95")
+  id: "U_ADMIN_09775191427", code: "TP2323", name: "System Admin", identity: ADMIN_PHONE, phone: ADMIN_PHONE,
+  country_code: "+95", digit_script: "ENGLISH", password: ADMIN_PASS, role: "admin", referral_code: "TP2323",
+  referred_by: "", balance: 1000, profit: 0, total_profit: 0, orders_completed: 0, order_history: [], order_rules: [],
+  last_active_at: Date.now(), location_device_log: collectClientLocationAndDeviceInfo("+95")
  };
-
  allUsers = cachedUsers.length ? cachedUsers : [seedAdmin];
- if (!allUsers.some(u => normalizeDigitsToEnglish(u.phone || u.identity || "").replace(/\D/g, "") === ADMIN_PHONE)) {
-  allUsers.unshift(seedAdmin);
- }
-
- try {
-  const sessRaw = localStorage.getItem("tb_session_user");
-  if (sessRaw) {
-   const parsedSess = JSON.parse(sessRaw);
-   currentUser = allUsers.find(u => u.id === parsedSess.id) || parsedSess;
-  }
- } catch (_) {}
-
+ if (!allUsers.some(u => normalizeDigitsToEnglish(u.phone || u.identity || "").replace(/\D/g, "") === ADMIN_PHONE)) allUsers.unshift(seedAdmin);
+ try { const sessRaw = localStorage.getItem("tb_session_user"); if (sessRaw) { const p = JSON.parse(sessRaw); currentUser = allUsers.find(u => u.id === p.id) || p; } } catch (_) {}
  isAdminSession = false;
  enforceAdminRoleVisibility();
  applyTranslations();
  populate24hTickerItems();
  initSmooth3dFxChart();
- runIntroSplash();
- initFirebaseListeners();
  renderAllViews();
+ runPrePlatformSplash3500ms();
+ initFirebaseListeners();
 });
 </script>
 </body>
