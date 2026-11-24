@@ -1741,16 +1741,15 @@
        <option value="has_rules" data-i18n="filterRuledUsers">🎯 Has Order Rules</option>
        <option value="banned" data-i18n="filterBannedUsers">🚫 Suspended Accounts</option>
       </select>
-     </div>
      <button type="button" class="btn btn-success btn-xs" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">Save All Changes</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px;">
   <button type="button" id="btnAccountInfoSection" class="btn btn-primary btn-xs" onclick="toggleAccountInfoPanel()">
     📋 အကောင့်အချက်အလက်ဆိုင်ရာ
   </button>
-</div>
-
-<div id="adminAccountInfoPanel" style="display:none;margin-bottom:14px;border:1px solid rgba(148,163,184,0.35);border-radius:10px;padding:10px;">
+  <button type="button" id="btnBankAccountsSection" class="btn btn-secondary btn-xs" onclick="toggleAdminBankPanel()">🏦 ဘဏ်အကောင့်</button>
+  </div>
+     <div id="adminAccountInfoPanel" style="display:none;margin-bottom:14px;border:1px solid rgba(148,163,184,0.35);border-radius:10px;padding:10px;">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
     <strong>အကောင့်အချက်အလက်၊ Device၊ တည်နေရာ နှင့် ဝင်/ထွက် မှတ်တမ်းဇယား</strong>
     <button type="button" class="btn btn-secondary btn-xs" onclick="renderAdminAccountInfoTable()">🔄 Refresh</button>
@@ -1776,6 +1775,39 @@
     </table>
   </div>
 </div>
+     <div id="adminBankAccountsPanel" style="display:none;margin-bottom:14px;border:1px solid rgba(148,163,184,0.35);border-radius:10px;padding:12px;background:var(--fb-card);">
+     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+      <div>
+       <strong>🏦 မြန်မာပြည် ဘဏ် & Pay အကောင့်များ</strong>
+       <span id="bankModeBadge" class="tag" style="margin-left:8px;">🔒 ပုံသေ (Locked)</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+       <button type="button" id="btnBankEditMode" class="btn btn-secondary btn-xs" onclick="setBankEditMode(true)">✏️ Edit</button>
+       <button type="button" id="btnBankConfirmMode" class="btn btn-primary btn-xs" onclick="confirmAndLockBankAccounts()">✅ အတည်ပြု</button>
+      </div>
+     </div>
+     <div id="bankCategoryTabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+     <div id="bankAddAccountForm" style="display:none;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px;border:1px dashed rgba(148,163,184,0.45);border-radius:8px;">
+      <select id="newBankTypeSelect" style="min-width:150px;"></select>
+      <input id="newBankAccountName" type="text" placeholder="အကောင့်အမည် (ဥပမာ - KPay 1)" style="flex:1;min-width:160px;">
+      <input id="newBankAccountNumber" type="text" placeholder="ဘဏ်နံပါတ် / ဖုန်းနံပါတ်" style="flex:1;min-width:160px;">
+      <button type="button" class="btn btn-primary btn-xs" onclick="addBankAccountItem()">+ Add Account</button>
+     </div>
+     <div class="table-wrap" style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;">
+       <thead>
+        <tr>
+         <th>#</th>
+         <th>ဘဏ်အမျိုးအစား</th>
+         <th>အကောင့်အမည်</th>
+         <th>ဘဏ်နံပါတ်</th>
+         <th>လုပ်ဆောင်ချက်</th>
+        </tr>
+       </thead>
+       <tbody id="adminBankAccountsTbody"></tbody>
+      </table>
+     </div>
+    </div>
     <div class="table-wrap">
      <table>
       <thead>
@@ -1799,7 +1831,7 @@
      </table>
     </div>
    </div>
-
+   <div id="csBankCardPicker" class="emoji-picker-panel hidden"></div>
    <div id="adminHotelsTab" class="hidden">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
      <h3 style="margin:0;font-size:16px" data-i18n="hotelsRatesHead">Hotels & Commission Rates</h3>
@@ -1847,11 +1879,11 @@
      </div>
      <div style="min-width:0">
       <div id="csActiveUserTitle" style="font-weight:700;margin-bottom:8px" data-i18n="selectUserChat">Select a user to chat</div>
-      <div id="adminChatMessages" class="chat-box"></div>
+     <div id="adminChatMessages" class="chat-box"></div>
       <div id="adminEmojiPicker" class="emoji-picker-panel hidden"></div>
-      <div class="support-composer-bar">
-       <button type="button" class="btn btn-secondary" onclick="toggleEmojiPicker('support')" title="Emoji">😊</button>
-       <button type="button" class="btn btn-secondary" onclick="$('adminChatPhotoInput').click()" title="Photo">📷</button>
+      <div id="csBankCardPicker" class="emoji-picker-panel hidden"></div>
+    <button type="button" class="btn btn-secondary" onclick="toggleCsBankCardPicker(event)" title="ဘဏ်ကဒ်">💳 ဘဏ်ကဒ်</button>
+       <button type="button" class="btn btn-secondary" onclick="$('adminChatPhotoInput').click()" title="Photo">📎</button>
        <input id="adminChatPhotoInput" type="file" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'support')">
        <input id="adminChatInput" type="text" data-i18n-ph="replyCsPh" placeholder="Reply..." onkeydown="if(event.key==='Enter') sendAdminChatReply()">
        <button type="button" class="btn btn-primary" onclick="sendAdminChatReply()">➤</button>
@@ -3856,7 +3888,7 @@ function startRealtimeListeners() {
   allMessages = nextMsgs;
   updateAdminBadges();
   if (currentUser) loadUserMessages(currentUser.id);
-  if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+  if (selectedCsUserId) load(selectedCsUserId);
   if (isAdminSession) renderCsClientList();
  });
 
@@ -5145,7 +5177,7 @@ function toggleMessageActionBar(msgKey, evt) {
 
 function refreshVisibleChatBoxes() {
  if (currentUser) loadUserMessages(currentUser.id);
- if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+ if (selectedCsUserId) load(selectedCsUserId);
 }
 
 function openEditMessageModal(msgKey, evt) {
@@ -5544,7 +5576,7 @@ function deleteUserAccount(uid) {
    if (db) await db.ref("users/" + uid).remove().catch(() => {});
    if (selectedCsUserId === String(uid)) {
     selectedCsUserId = null;
-    $("adminChatMessages").innerHTML = "";
+    $("").innerHTML = "";
    }
    renderAdminUsers();
    renderCsClientList();
@@ -5777,11 +5809,11 @@ async function selectCsUser(uid) {
  });
  updateAdminBadges();
  renderCsClientList();
- loadAdminChatMessages(selectedCsUserId);
+ load(selectedCsUserId);
 }
 
-function loadAdminChatMessages(uid) {
- const box = $("adminChatMessages");
+function load(uid) {
+ const box = $("");
  if (!box) return;
  const msgs = allMessages.filter(m => String(m.user_id) === String(uid));
  box.innerHTML = buildChatBubblesHtml(msgs, "support");
@@ -5825,7 +5857,7 @@ function renderAllViews() {
   renderAdminHotels();
   renderCsClientList();
   renderAdminLiveBanner();
-  if (selectedCsUserId) loadAdminChatMessages(selectedCsUserId);
+  if (selectedCsUserId) load(selectedCsUserId);
  }
 }
 
@@ -6285,6 +6317,481 @@ function initAccountLoginLogoutTracking() {
       recordAccountActivity("login");
     }
   });
+}
+ const MAX_ACCOUNTS_PER_BANK = 5;
+const BANK_ACCOUNTS_STORAGE_KEY = "tb_mm_bank_accounts_v1";
+const RTDB_BANK_ACCOUNTS_PATH = "mm_bank_accounts";
+
+const MM_BANK_TYPES = [
+  "KBZ Pay",
+  "Wave Money",
+  "AYA Pay",
+  "CB Pay",
+  "OK$",
+  "KBZ Bank",
+  "AYA Bank",
+  "CB Bank",
+  "Yoma Bank",
+  "MAB Bank",
+  "UAB Bank",
+  "A Bank"
+];
+
+let bankAccountsState = {
+  isEditing: false,
+  selectedBankType: MM_BANK_TYPES[0],
+  accounts: []
+};
+
+function getBankDbSafe() {
+  if (typeof db !== "undefined" && db) return db;
+  if (typeof window !== "undefined" && window.db) return window.db;
+  if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length) {
+    return firebase.database();
+  }
+  return null;
+}
+
+function loadBankAccountsFromLocal() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(BANK_ACCOUNTS_STORAGE_KEY) || "null");
+    if (Array.isArray(raw)) {
+      bankAccountsState.accounts = raw;
+    }
+  } catch (e) {}
+}
+
+function saveBankAccountsToLocalAndDb() {
+  try {
+    localStorage.setItem(BANK_ACCOUNTS_STORAGE_KEY, JSON.stringify(bankAccountsState.accounts));
+  } catch (e) {}
+
+  const database = getBankDbSafe();
+  if (database) {
+    database.ref(RTDB_BANK_ACCOUNTS_PATH).set(bankAccountsState.accounts).catch(() => {});
+  }
+}
+
+function initBankAccountsSync() {
+  loadBankAccountsFromLocal();
+  renderBankCategoryTabs();
+  renderAdminBankAccountsTable();
+
+  const database = getBankDbSafe();
+  if (database) {
+    database.ref(RTDB_BANK_ACCOUNTS_PATH).on("value", (snap) => {
+      const val = snap.val();
+      if (Array.isArray(val)) {
+        bankAccountsState.accounts = val;
+        try {
+          localStorage.setItem(BANK_ACCOUNTS_STORAGE_KEY, JSON.stringify(val));
+        } catch (e) {}
+        renderAdminBankAccountsTable();
+      }
+    });
+  }
+}
+
+function toggleAdminBankPanel() {
+  const panel = document.getElementById("adminBankAccountsPanel");
+  if (!panel) return;
+  const isHidden = panel.style.display === "none" || !panel.style.display;
+  panel.style.display = isHidden ? "block" : "none";
+  if (isHidden) {
+    initBankAccountsSync();
+    updateBankModeUi();
+  }
+}
+
+function setBankEditMode(editing) {
+  bankAccountsState.isEditing = !!editing;
+  updateBankModeUi();
+  renderAdminBankAccountsTable();
+}
+
+function confirmAndLockBankAccounts() {
+  bankAccountsState.isEditing = false;
+  saveBankAccountsToLocalAndDb();
+  updateBankModeUi();
+  renderAdminBankAccountsTable();
+}
+
+function updateBankModeUi() {
+  const badge = document.getElementById("bankModeBadge");
+  const form = document.getElementById("bankAddAccountForm");
+  const selectEl = document.getElementById("newBankTypeSelect");
+
+  if (badge) {
+    badge.textContent = bankAccountsState.isEditing ? "✏️ ပြင်ဆင်နေဆဲ (Edit Mode)" : "🔒 ပုံသေ (Locked)";
+  }
+  if (form) {
+    form.style.display = bankAccountsState.isEditing ? "flex" : "none";
+  }
+  if (selectEl) {
+    selectEl.innerHTML = MM_BANK_TYPES.map(
+      (b) => `<option value="${b}" ${b === bankAccountsState.selectedBankType ? "selected" : ""}>${b}</option>`
+    ).join("");
+  }
+}
+
+function selectBankCategoryTab(bankType) {
+  bankAccountsState.selectedBankType = bankType;
+  const selectEl = document.getElementById("newBankTypeSelect");
+  if (selectEl) selectEl.value = bankType;
+  renderBankCategoryTabs();
+  renderAdminBankAccountsTable();
+}
+
+function renderBankCategoryTabs() {
+  const wrap = document.getElementById("bankCategoryTabs");
+  if (!wrap) return;
+  wrap.innerHTML = MM_BANK_TYPES.map((bankType) => {
+    const activeClass = bankAccountsState.selectedBankType === bankType ? "btn-primary" : "btn-secondary";
+    const count = bankAccountsState.accounts.filter((a) => a.bankType === bankType).length;
+    return `<button type="button" class="btn ${activeClass} btn-xs" onclick="selectBankCategoryTab('${bankType}')">${bankType} (${count}/${MAX_ACCOUNTS_PER_BANK})</button>`;
+  }).join("");
+}
+
+function addBankAccountItem() {
+  if (!bankAccountsState.isEditing) {
+    alert("အရင်ဆုံး Edit ခလုတ်ကို နှိပ်ပြီးမှ အကောင့်ထည့်ပါ။");
+    return;
+  }
+
+  const selectEl = document.getElementById("newBankTypeSelect");
+  const nameEl = document.getElementById("newBankAccountName");
+  const numEl = document.getElementById("newBankAccountNumber");
+
+  const bankType = (selectEl?.value || bankAccountsState.selectedBankType || MM_BANK_TYPES[0]).trim();
+  const accountName = (nameEl?.value || "").trim();
+  const accountNumber = (numEl?.value || "").trim();
+
+  if (!accountName || !accountNumber) {
+    alert("ဘဏ်အကောင့်အမည် နဲ့ ဘဏ်နံပါတ် နှစ်ခုလုံး ဖြည့်ပေးပါ။");
+    return;
+  }
+
+  const existingForBank = bankAccountsState.accounts.filter((a) => a.bankType === bankType);
+  if (existingForBank.length >= MAX_ACCOUNTS_PER_BANK) {
+    alert(`${bankType} အတွက် အများဆုံး ${MAX_ACCOUNTS_PER_BANK} ခုသာ ချိတ်ဆက်ခွင့် ရှိပါသည်။`);
+    return;
+  }
+
+  bankAccountsState.accounts.push({
+    id: "bank_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    bankType,
+    accountName,
+    accountNumber
+  });
+
+  if (nameEl) nameEl.value = "";
+  if (numEl) numEl.value = "";
+
+  bankAccountsState.selectedBankType = bankType;
+  saveBankAccountsToLocalAndDb();
+  renderBankCategoryTabs();
+  renderAdminBankAccountsTable();
+}
+
+function editBankAccountItem(id) {
+  if (!bankAccountsState.isEditing) return;
+  const item = bankAccountsState.accounts.find((a) => a.id === id);
+  if (!item) return;
+
+  const nextName = prompt("အကောင့်အမည် အသစ်ထည့်ပါ:", item.accountName);
+  if (nextName === null) return;
+  const nextNum = prompt("ဘဏ်နံပါတ် အသစ်ထည့်ပါ:", item.accountNumber);
+  if (nextNum === null) return;
+
+  item.accountName = nextName.trim() || item.accountName;
+  item.accountNumber = nextNum.trim() || item.accountNumber;
+  saveBankAccountsToLocalAndDb();
+  renderAdminBankAccountsTable();
+}
+
+function deleteBankAccountItem(id) {
+  if (!bankAccountsState.isEditing) return;
+  bankAccountsState.accounts = bankAccountsState.accounts.filter((a) => a.id !== id);
+  saveBankAccountsToLocalAndDb();
+  renderBankCategoryTabs();
+  renderAdminBankAccountsTable();
+}
+
+function renderAdminBankAccountsTable() {
+  const tbody = document.getElementById("adminBankAccountsTbody");
+  if (!tbody) return;
+
+  const filtered = bankAccountsState.accounts.filter(
+    (a) => a.bankType === bankAccountsState.selectedBankType
+  );
+
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">${bankAccountsState.selectedBankType} အကောင့် မရှိသေးပါ</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered
+    .map((item, idx) => {
+      const actionHtml = bankAccountsState.isEditing
+        ? `<button type="button" class="btn btn-secondary btn-xs" onclick="editBankAccountItem('${item.id}')">Edit</button>
+           <button type="button" class="btn btn-danger btn-xs" onclick="deleteBankAccountItem('${item.id}')">Delete</button>`
+        : `<span class="muted">ပုံသေ</span>`;
+
+      return `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${item.bankType}</td>
+          <td>${item.accountName}</td>
+          <td>${item.accountNumber}</td>
+          <td>${actionHtml}</td>
+        </tr>
+      `;
+    })
+    .join("");
+}
+
+let csPickerSelectedBank = null;
+
+function toggleCsBankCardPicker(event) {
+  if (event) event.stopPropagation();
+  loadBankAccountsFromLocal();
+
+  const picker = document.getElementById("csBankCardPicker");
+  if (!picker) return;
+
+  const isHidden = picker.classList.contains("hidden");
+  if (!isHidden) {
+    picker.classList.add("hidden");
+    return;
+  }
+
+  csPickerSelectedBank = null;
+  renderCsBankCardPickerStep1();
+  picker.classList.remove("hidden");
+}
+
+function renderCsBankCardPickerStep1() {
+  const picker = document.getElementById("csBankCardPicker");
+  if (!picker) return;
+
+  const activeBanks = MM_BANK_TYPES.filter((b) =>
+    bankAccountsState.accounts.some((a) => a.bankType === b)
+  );
+
+  if (!activeBanks.length) {
+    picker.innerHTML = `<div class="muted" style="padding:6px;">ဘဏ်အကောင့် မထည့်ရသေးပါ (Admin ဘက်က "ဘဏ်အကောင့်" မှာ ထည့်ပါ)</div>`;
+    return;
+  }
+
+  picker.innerHTML =
+    `<div style="font-weight:700;margin-bottom:6px;">💳 ဘဏ်အမျိုးအစား ရွေးချယ်ပါ</div>` +
+    `<div style="display:flex;gap:6px;flex-wrap:wrap;">` +
+    activeBanks
+      .map(
+        (b) => `<button type="button" class="btn btn-secondary btn-xs" onclick="selectCsBankForSend('${b}')">${b}</button>`
+      )
+      .join("") +
+    `</div>`;
+}
+
+function selectCsBankForSend(bankType) {
+  csPickerSelectedBank = bankType;
+  const picker = document.getElementById("csBankCardPicker");
+  if (!picker) return;
+
+  const list = bankAccountsState.accounts.filter((a) => a.bankType === bankType);
+  picker.innerHTML =
+    `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">` +
+    `<strong>${bankType} အကောင့်များ</strong>` +
+    `<button type="button" class="btn btn-secondary btn-xs" onclick="renderCsBankCardPickerStep1()">← နောက်သို့</button>` +
+    `</div>` +
+    `<div style="display:flex;gap:6px;flex-wrap:wrap;">` +
+    list
+      .map(
+        (acc) =>
+          `<button type="button" class="btn btn-primary btn-xs" onclick="autoSendSelectedBankAccount('${acc.id}')">${acc.accountName} (${acc.accountNumber})</button>`
+      )
+      .join("") +
+    `</div>`;
+}
+
+function autoSendSelectedBankAccount(accountId) {
+  const acc = bankAccountsState.accounts.find((a) => a.id === accountId);
+  if (!acc) return;
+
+  const formattedMsg = `💳 ${acc.bankType}\nအကောင့်အမည်: ${acc.accountName}\nနံပါတ်: ${acc.accountNumber}`;
+
+  const inputEl = document.getElementById("adminChatInput");
+  if (inputEl) {
+    inputEl.value = formattedMsg;
+  }
+
+  if (typeof sendAdminChatReply === "function") {
+    sendAdminChatReply();
+  } else {
+    const userChatBox = document.getElementById("supportMessages");
+    if (userChatBox) {
+      userChatBox.innerHTML += `<div class="chat-msg cs">${formattedMsg.replace(/\n/g, "<br>")}</div>`;
+      userChatBox.scrollTop = userChatBox.scrollHeight;
+    }
+    if (inputEl) inputEl.value = "";
+  }
+
+  const picker = document.getElementById("csBankCardPicker");
+  if (picker) picker.classList.add("hidden");
+}
+ const ADMIN_SOUND_SETTINGS_KEY = "tb_admin_sound_enabled_v1";
+
+let adminAudioCtx = null;
+let adminSoundEnabled = true;
+
+try {
+  const savedSoundPref = localStorage.getItem(ADMIN_SOUND_SETTINGS_KEY);
+  if (savedSoundPref !== null) {
+    adminSoundEnabled = savedSoundPref === "true";
+  }
+} catch (e) {}
+
+function getAdminAudioContext() {
+  if (!adminSoundEnabled) return null;
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return null;
+  if (!adminAudioCtx) {
+    adminAudioCtx = new AudioCtx();
+  }
+  if (adminAudioCtx.state === "suspended") {
+    adminAudioCtx.resume().catch(() => {});
+  }
+  return adminAudioCtx;
+}
+
+function playToneSequence(notes, defaultType = "sine") {
+  const ctx = getAdminAudioContext();
+  if (!ctx) return;
+
+  let cursor = ctx.currentTime;
+  notes.forEach((n) => {
+    const freq = typeof n === "number" ? n : n.freq;
+    const duration = typeof n === "number" ? 0.14 : (n.duration || 0.14);
+    const delay = typeof n === "number" ? 0.03 : (n.delay ?? 0.03);
+    const type = (typeof n === "object" && n.type) || defaultType;
+    const gainVal = (typeof n === "object" && n.gain) || 0.16;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, cursor);
+
+    gain.gain.setValueAtTime(0.0001, cursor);
+    gain.gain.exponentialRampToValueAtTime(gainVal, cursor + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, cursor + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(cursor);
+    osc.stop(cursor + duration + 0.02);
+
+    cursor += duration + delay;
+  });
+}
+
+// 1. User မက်ဆေ့ချ် အသစ်ဝင်လာသည့်အခါ (New User Chat Message)
+function playSoundNewChatMessage() {
+  playToneSequence([
+    { freq: 784, duration: 0.11, delay: 0.03, type: "sine", gain: 0.16 },
+    { freq: 1046.5, duration: 0.16, delay: 0.02, type: "sine", gain: 0.18 }
+  ]);
+}
+
+// 2. Order အသစ်တင်လာသည့်အခါ / Live Order (New Order Placed)
+function playSoundNewOrder() {
+  playToneSequence([
+    { freq: 587.33, duration: 0.1, delay: 0.03, type: "triangle", gain: 0.18 },
+    { freq: 783.99, duration: 0.1, delay: 0.03, type: "triangle", gain: 0.18 },
+    { freq: 1046.5, duration: 0.18, delay: 0.02, type: "triangle", gain: 0.2 }
+  ]);
+}
+
+// 3. Account အသစ် ဖွင့်/မှတ်ပုံတင်သည့်အခါ (New Account Registered)
+function playSoundNewAccount() {
+  playToneSequence([
+    { freq: 523.25, duration: 0.1, delay: 0.03, type: "sine", gain: 0.15 },
+    { freq: 659.25, duration: 0.1, delay: 0.03, type: "sine", gain: 0.15 },
+    { freq: 783.99, duration: 0.1, delay: 0.03, type: "sine", gain: 0.15 },
+    { freq: 1046.5, duration: 0.2, delay: 0.02, type: "sine", gain: 0.17 }
+  ]);
+}
+
+// 4. User Login ဝင်လာသည့်အခါ (User Login)
+function playSoundUserLogin() {
+  playToneSequence([
+    { freq: 659.25, duration: 0.1, delay: 0.03, type: "sine", gain: 0.14 },
+    { freq: 880, duration: 0.14, delay: 0.02, type: "sine", gain: 0.15 }
+  ]);
+}
+
+// 5. User Logout / ထွက်သွားသည့်အခါ (User Logout)
+function playSoundUserLogout() {
+  playToneSequence([
+    { freq: 659.25, duration: 0.12, delay: 0.04, type: "sine", gain: 0.14 },
+    { freq: 440, duration: 0.18, delay: 0.02, type: "sine", gain: 0.13 }
+  ]);
+}
+
+// 6. Negative Balance / သတိပေးချက် သတိထားရမည့်အခြေအနေ (Warning / Negative Balance)
+function playSoundWarningAlert() {
+  playToneSequence([
+    { freq: 440, duration: 0.14, delay: 0.05, type: "sawtooth", gain: 0.12 },
+    { freq: 369.99, duration: 0.18, delay: 0.05, type: "sawtooth", gain: 0.12 },
+    { freq: 329.63, duration: 0.22, delay: 0.02, type: "sawtooth", gain: 0.12 }
+  ]);
+}
+
+// 7. Save / အတည်ပြု အောင်မြင်သည့်အခါ (Success / Saved)
+function playSoundSuccessConfirm() {
+  playToneSequence([
+    { freq: 880, duration: 0.09, delay: 0.03, type: "sine", gain: 0.15 },
+    { freq: 1174.66, duration: 0.16, delay: 0.02, type: "sine", gain: 0.16 }
+  ]);
+}
+
+// 8. Error / ဖျက်သိမ်းခြင်း / ငြင်းပယ်ခြင်း အသံ (Error / Delete / Reject)
+function playSoundErrorAlert() {
+  playToneSequence([
+    { freq: 311.13, duration: 0.15, delay: 0.05, type: "square", gain: 0.1 },
+    { freq: 233.08, duration: 0.2, delay: 0.02, type: "square", gain: 0.1 }
+  ]);
+}
+
+const ADMIN_SOUND_MAP = {
+  chat: playSoundNewChatMessage,
+  order: playSoundNewOrder,
+  register: playSoundNewAccount,
+  login: playSoundUserLogin,
+  logout: playSoundUserLogout,
+  warning: playSoundWarningAlert,
+  success: playSoundSuccessConfirm,
+  error: playSoundErrorAlert
+};
+
+function triggerAdminSound(eventName) {
+  const fn = ADMIN_SOUND_MAP[eventName];
+  if (typeof fn === "function") {
+    fn();
+  }
+}
+
+function toggleAdminSoundEnabled() {
+  adminSoundEnabled = !adminSoundEnabled;
+  try {
+    localStorage.setItem(ADMIN_SOUND_SETTINGS_KEY, String(adminSoundEnabled));
+  } catch (e) {}
+  if (adminSoundEnabled) {
+    playSoundSuccessConfirm();
+  }
+  return adminSoundEnabled;
 }
 </script>
 </body>
