@@ -3881,11 +3881,12 @@ function startRealtimeListeners() {
    const newestMsg = incomingUserMsgs[incomingUserMsgs.length - 1];
    playNotificationBeep();
    if (newestMsg) showLiveCsNotification(newestMsg);
+   triggerAdminSound("chat");
   }
   lastSeenUserMsgCount = incomingUserMsgs.length;
   initialMsgSnapshotLoaded = true;
 
-  allMessages = nextMsgs;
+ allMessages = typeof loadPersistedCsMessages === "function" ? loadPersistedCsMessages(nextMsgs) : nextMsgs;
   updateAdminBadges();
   if (currentUser) loadUserMessages(currentUser.id);
   if (selectedCsUserId) load(selectedCsUserId);
@@ -5755,14 +5756,18 @@ function renderCsClientList() {
  if (!listEl) return;
  const q = ($("csClientSearch")?.value || "").trim().toLowerCase();
 
- const users = allUsers.filter(u => {
-  if (!q) return true;
-  return `${u.name || ""} ${u.identity || ""} ${u.phone || ""} ${u.email || ""}`.toLowerCase().includes(q);
- });
+const mergedClients = typeof getAllCsClientsWithHistory === "function"
+    ? getAllCsClientsWithHistory(allMessages, allUsers)
+    : allUsers;
 
- listEl.innerHTML = users.map(u => {
-  const uid = String(u.id);
-  const unreadCount = allMessages.filter(m => String(m.user_id) === uid && m.sender === "user" && !m.read_by_admin).length;
+  const users = mergedClients.filter(u => {
+    const idStr = String(u.id || u.uid || u.userId || "");
+    if (!q) return true;
+    return `${u.name || ""} ${u.identity || ""} ${u.phone || ""} ${u.email || ""} ${idStr}`.toLowerCase().includes(q);
+  });
+
+  listEl.innerHTML = users.map(u => {
+    const uid = String(u.id || u.uid || u.userId);
   const isSelected = String(selectedCsUserId) === uid;
   const pres = getUserPresenceInfo(u);
   const dot = pres.state === "online" ? "🟢" : "⚪";
