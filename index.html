@@ -406,35 +406,40 @@
   overflow: hidden;
   display: flex;
   align-items: center;
- }
+}
 
- .ticker-slide-item {
-  width: 100%;
-  display: flex;
+.ticker-slide-item {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  width: max-content;
+  padding-left: 100%;
   font-size: 12.5px;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transform: translateY(0);
-  opacity: 1;
-  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.95s ease;
- }
+  will-change: transform;
+  /* ညာဘက်ကနေ ဘယ်ဘက်ကို တော်တော်နှေးနှေး ရွေ့စေရန် (ပိုနှေးချင်ရင် 240s ပြောင်းပါ) */
+  animation: slowRightToLeftMarquee 150s linear infinite;
+}
 
- .ticker-slide-item.enter-from-bottom {
-  transform: translateY(26px);
-  opacity: 0;
-  transition: none;
- }
+.ticker-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 18px;
+}
 
- .ticker-slide-item.exit-to-top {
-  transform: translateY(-26px);
-  opacity: 0;
- }
+.ticker-sep {
+  opacity: 0.55;
+  margin: 0 6px;
+}
 
- .ticker-slide-item.real-user-highlight {
-  color: var(--fb-success);
+@keyframes slowRightToLeftMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
   font-weight: 700;
  }
 
@@ -1406,12 +1411,12 @@
  </div>
 </header>
 
-<!-- Live Activity Ticker — Slow Bottom-to-Top Single-Item Cycle -->
-<div class="ticker-wrap">
- <span class="ticker-label">🔔 အသိပေးချက်</span>
- <div class="ticker-viewport">
-  <div id="activityTickerSlide" class="ticker-slide-item"></div>
- </div>
+<!-- Live Activity Ticker – Slow Right-to-Left -->
+<div class="ticker-wrap" id="liveActivityTicker">
+  <span class="ticker-label" id="tickerLabel">🔔 အသိပေးချက်</span>
+  <div class="ticker-viewport">
+    <div id="activityTickerSlide" class="ticker-slide-item"></div>
+  </div>
 </div>
 
 <div class="container">
@@ -1739,7 +1744,38 @@
      </div>
      <button type="button" class="btn btn-success btn-xs" onclick="saveAllUsersAdmin()" data-i18n="saveChangesBtn">Save All Changes</button>
     </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px;">
+  <button type="button" id="btnAccountInfoSection" class="btn btn-primary btn-xs" onclick="toggleAccountInfoPanel()">
+    📋 အကောင့်အချက်အလက်ဆိုင်ရာ
+  </button>
+</div>
 
+<div id="adminAccountInfoPanel" style="display:none;margin-bottom:14px;border:1px solid rgba(148,163,184,0.35);border-radius:10px;padding:10px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+    <strong>အကောင့်အချက်အလက်၊ Device၊ တည်နေရာ နှင့် ဝင်/ထွက် မှတ်တမ်းဇယား</strong>
+    <button type="button" class="btn btn-secondary btn-xs" onclick="renderAdminAccountInfoTable()">🔄 Refresh</button>
+  </div>
+  <div class="table-wrap" style="overflow-x:auto;">
+    <table id="adminAccountInfoTable" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>အကောင့် (Name / Phone)</th>
+          <th>Device</th>
+          <th>တည်နေရာ (Lat, Lng)</th>
+          <th>တည်နေရာ Update အချိန်</th>
+          <th>နောက်ဆုံး ဝင်ခဲ့သည့်အချိန်</th>
+          <th>ဆင်းသွားသည့်အချိန် / မိနစ်</th>
+        </tr>
+      </thead>
+      <tbody id="adminAccountInfoTbody">
+        <tr>
+          <td colspan="7" style="text-align:center;">ခလုတ်နှိပ်ပြီး မှတ်တမ်းကြည့်ပါ</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
     <div class="table-wrap">
      <table>
       <thead>
@@ -2635,58 +2671,151 @@ function buildTickerItemHtml(item) {
  `;
 }
 
-function paintCurrentTickerSlide(animateFromBottom = true) {
- const slideEl = $("activityTickerSlide");
- if (!slideEl) return;
- if (!tickerItemsList.length) {
-  slideEl.className = "ticker-slide-item";
-  slideEl.innerHTML = `<span class="muted">အသိပေးချက်များ စောင့်ဆိုင်းနေပါသည်...</span>`;
-  return;
- }
+const TICKER_LABELS_4LANG = {
+  my: "🔔 အသိပေးချက်",
+  en: "🔔 Notification",
+  th: "🔔 การแจ้งเตือน",
+  zh: "🔔 通知"
+};
 
- const item = tickerItemsList[tickerCurrentIndex % tickerItemsList.length];
- slideEl.classList.toggle("real-user-highlight", Boolean(item.isReal));
+const TICKER_ACTION_TEXTS = {
+  withdraw: {
+    my: "ငွေထုတ်ယူခဲ့သည်",
+    en: "WITHDREW",
+    th: "ถอนเงินสำเร็จ",
+    zh: "已提现"
+  },
+  deposit: {
+    my: "ငွေသွင်းခဲ့သည်",
+    en: "DEPOSITED",
+    th: "ฝากเงินสำเร็จ",
+    zh: "已充值"
+  },
+  vip: {
+    my: "VIP ဆုကြေးရရှိခဲ့သည်",
+    en: "CLAIMED VIP BONUS",
+    th: "รับโบนัส VIP",
+    zh: "领取 VIP 奖励"
+  },
+  level: {
+    my: "အဆင့်မြင့်တက်ခဲ့သည်",
+    en: "UPGRADED TO",
+    th: "เลื่อนระดับเป็น",
+    zh: "升级至"
+  }
+};
 
- if (!animateFromBottom) {
-  slideEl.classList.remove("enter-from-bottom", "exit-to-top");
-  slideEl.innerHTML = buildTickerItemHtml(item);
-  return;
- }
+function getActiveTickerLang() {
+  const langSelect = document.getElementById("language");
+  const raw = (
+    (langSelect && langSelect.value) ||
+    window.currentLang ||
+    localStorage.getItem("lang") ||
+    "my"
+  ).toLowerCase();
 
- slideEl.classList.add("exit-to-top");
- setTimeout(() => {
-  slideEl.innerHTML = buildTickerItemHtml(item);
-  slideEl.classList.remove("exit-to-top");
-  slideEl.classList.add("enter-from-bottom");
-  requestAnimationFrame(() => {
-   requestAnimationFrame(() => {
-    slideEl.classList.remove("enter-from-bottom");
-   });
-  });
- }, 1100);
+  if (raw.startsWith("zh")) return "zh";
+  if (raw.startsWith("th")) return "th";
+  if (raw.startsWith("en")) return "en";
+  return "my";
 }
 
-function rebuildTickerListAndPaint(animate = false) {
- if (!mock1000Accounts.length) mock1000Accounts = build1000MockAccounts();
- tickerItemsList = [...realUserDepositFeed, ...mock1000Accounts.slice(0, 80)];
- if (tickerCurrentIndex >= tickerItemsList.length) tickerCurrentIndex = 0;
- paintCurrentTickerSlide(animate);
+function buildSingleMarqueeEntryHtml(item, index, lang) {
+  const acts = TICKER_ACTION_TEXTS;
+  const amountNum = Number(item.amount || 149.01);
+  const amountText = `$${amountNum.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })}`;
+
+  const mmkVal = item.mmkVal || `${Math.round(amountNum * 8987).toLocaleString()} MMK`;
+  const mode = index % 4;
+
+  let actionBadge = "";
+  let extraInfo = `<b>${amountText}</b> <span class="muted">(${mmkVal})</span>`;
+
+  if (mode === 0) {
+    actionBadge = `<span class="ticker-badge ticker-b-withdraw">${acts.withdraw[lang]}</span>`;
+  } else if (mode === 1) {
+    actionBadge = `<span class="ticker-badge ticker-b-deposit">${acts.deposit[lang]}</span>`;
+  } else if (mode === 2) {
+    actionBadge = `<span class="ticker-badge ticker-b-vip">${acts.vip[lang]}</span>`;
+    extraInfo = `<b>+$${Math.max(10, Math.round(amountNum * 0.15))}.00</b>`;
+  } else {
+    actionBadge = `<span class="ticker-badge ticker-b-level">${acts.level[lang]}</span>`;
+    extraInfo = `<b>VIP ${(index % 5) + 1}</b>`;
+  }
+
+  const realClass = item.isReal ? " real-user-highlight" : "";
+  return `
+    <span class="ticker-entry${realClass}">
+      <span><b>${item.id || "ID-100073"}</b></span>
+      <span>·</span>
+      <span><b>${item.name || "Su Thein"}</b></span>
+      <span>·</span>
+      <span class="tag" style="padding:1px 6px;font-size:10px">${item.code || "TB8891"}</span>
+      ${actionBadge}
+      ${extraInfo}
+    </span>
+  `;
+}
+
+function paintCurrentTickerSlide() {
+  const slideEl = document.getElementById("activityTickerSlide") || (typeof $ === "function" ? $("activityTickerSlide") : null);
+  if (!slideEl) return;
+
+  const lang = getActiveTickerLang();
+  const labelEl = document.getElementById("tickerLabel") || document.querySelector(".ticker-label");
+  if (labelEl && TICKER_LABELS_4LANG[lang]) {
+    labelEl.textContent = TICKER_LABELS_4LANG[lang];
+  }
+
+  slideEl.className = "ticker-slide-item";
+
+  if (!tickerItemsList.length) {
+    slideEl.innerHTML = `<span class="ticker-entry"><span class="muted">...</span></span>`;
+    return;
+  }
+
+  slideEl.innerHTML = tickerItemsList
+    .map((item, idx) => buildSingleMarqueeEntryHtml(item, idx, lang))
+    .join('<span class="ticker-sep">•</span>');
+}
+
+function rebuildTickerListAndPaint() {
+  if (typeof mock1000Accounts !== "undefined" && !mock1000Accounts.length) {
+    if (typeof buildMultiCultureMockAccounts === "function") {
+      mock1000Accounts = buildMultiCultureMockAccounts();
+    } else if (typeof build1000MockAccounts === "function") {
+      mock1000Accounts = build1000MockAccounts();
+    }
+  }
+
+  const realFeed = typeof realUserDepositFeed !== "undefined" ? realUserDepositFeed : [];
+  const mockFeed = typeof mock1000Accounts !== "undefined" ? mock1000Accounts.slice(0, 80) : [];
+  tickerItemsList = [...realFeed, ...mockFeed];
+
+  if (typeof tickerCycleTimerId !== "undefined" && tickerCycleTimerId) {
+    clearInterval(tickerCycleTimerId);
+    tickerCycleTimerId = null;
+  }
+
+  paintCurrentTickerSlide();
 }
 
 function startSlowBottomToTopTicker() {
- rebuildTickerListAndPaint(false);
- if (tickerCycleTimerId) clearInterval(tickerCycleTimerId);
- tickerCycleTimerId = setInterval(() => {
-  if (!tickerItemsList.length) return;
-  tickerCurrentIndex = (tickerCurrentIndex + 1) % tickerItemsList.length;
-  paintCurrentTickerSlide(true);
- }, 5800);
+  rebuildTickerListAndPaint();
 }
 
-function renderActivityTicker() {
- rebuildTickerListAndPaint(false);
+function renderActivityTicker(lang) {
+  if (lang) {
+    if (typeof window !== "undefined") window.currentLang = lang;
+    try {
+      localStorage.setItem("lang", lang);
+    } catch (e) {}
+  }
+  rebuildTickerListAndPaint();
 }
-
 // Dynamic Green (Up) / Red (Down) USD <-> MMK Trend Chart
 let fxChartPoints = [];
 let fxChartTimerId = null;
@@ -3902,8 +4031,9 @@ function changeLanguage(lang) {
   if (dict[key] !== undefined) el.placeholder = dict[key];
  });
 
- drawFxChartSvg(fxChartPoints);
- updateFxSummaryText(fxChartPoints[fxChartPoints.length - 1]);
+if (typeof renderActivityTicker === "function") {
+  renderActivityTicker(validLang);
+}
  renderAllViews();
  enforceSuspendedAccountGuard();
 }
@@ -5734,7 +5864,428 @@ document.addEventListener("DOMContentLoaded", () => {
  startRealtimeListeners();
  startUserHeartbeatLoop();
  fetchOfficialExchangeRate();
+ initAutoLanguageAndPhoneCode();
 });
+const AUTO_LOCALE_STATE = {
+  userLockedLang: false,
+  userLockedCountry: false,
+  lastCoords: null
+};
+
+const REGION_TO_LOCALE = [
+  { name: "Laos", code: "+856", flag: "🇱🇦", lang: "lo", lat: [13.9, 22.5], lng: [100.0, 107.7], tzPrefix: "Asia/Vientiane" },
+  { name: "Thailand", code: "+66", flag: "🇹🇭", lang: "th", lat: [5.6, 20.5], lng: [97.3, 105.6], tzPrefix: "Asia/Bangkok" },
+  { name: "Myanmar", code: "+95", flag: "🇲🇲", lang: "my", lat: [9.5, 28.5], lng: [92.1, 101.2], tzPrefix: "Asia/Yangon" },
+  { name: "China", code: "+86", flag: "🇨🇳", lang: "zh", lat: [18.0, 53.5], lng: [73.5, 134.8], tzPrefix: "Asia/Shanghai" }
+];
+
+function resolveSupportedLang(desiredLang) {
+  if (typeof I18N === "object" && I18N) {
+    if (I18N[desiredLang]) return desiredLang;
+    if (desiredLang === "lo" && I18N["en"]) return "en";
+    return Object.keys(I18N)[0] || "en";
+  }
+  return desiredLang || "en";
+}
+
+function detectLocaleByCoords(lat, lng) {
+  return REGION_TO_LOCALE.find(
+    (r) => lat >= r.lat[0] && lat <= r.lat[1] && lng >= r.lng[0] && lng <= r.lng[1]
+  ) || null;
+}
+
+function detectLocaleByTimezone() {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    if (tz.includes("Vientiane")) return REGION_TO_LOCALE[0];
+    if (tz.includes("Bangkok")) return REGION_TO_LOCALE[1];
+    if (tz.includes("Yangon")) return REGION_TO_LOCALE[2];
+    if (tz.includes("Shanghai") || tz.includes("Beijing")) return REGION_TO_LOCALE[3];
+  } catch (e) {}
+  return REGION_TO_LOCALE[2];
+}
+
+function applyAutoCountryAndLang(localeObj) {
+  if (!localeObj) return;
+
+  const countryEl = document.getElementById("countryCode");
+  if (countryEl && !AUTO_LOCALE_STATE.userLockedCountry && countryEl.value !== localeObj.code) {
+    countryEl.value = localeObj.code;
+    if (typeof onCountrySelectChange === "function") {
+      onCountrySelectChange(localeObj.code, false);
+    }
+  }
+
+  const langEl = document.getElementById("language");
+  const targetLang = resolveSupportedLang(localeObj.lang);
+  if (langEl && !AUTO_LOCALE_STATE.userLockedLang && langEl.value !== targetLang) {
+    langEl.value = targetLang;
+    if (typeof changeLanguage === "function") {
+      changeLanguage(targetLang);
+    }
+  }
+}
+
+function initAutoLanguageAndPhoneCode() {
+  applyAutoCountryAndLang(detectLocaleByTimezone());
+
+  const langEl = document.getElementById("language");
+  if (langEl) {
+    langEl.addEventListener("change", () => {
+      AUTO_LOCALE_STATE.userLockedLang = true;
+    });
+  }
+
+  const countryEl = document.getElementById("countryCode");
+  if (countryEl) {
+    countryEl.addEventListener("change", () => {
+      AUTO_LOCALE_STATE.userLockedCountry = true;
+    });
+  }
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        AUTO_LOCALE_STATE.lastCoords = { lat: latitude, lng: longitude };
+        const matched = detectLocaleByCoords(latitude, longitude);
+        if (matched) applyAutoCountryAndLang(matched);
+      },
+      () => {},
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+    );
+  }
+}
+ const DEVICE_TRACKER_STATE = {
+  deviceType: "unknown", // "mobile" | "tablet" | "desktop"
+  watchId: null,
+  latestLocation: null   // { lat, lng, accuracy, updatedAt }
+};
+
+function detectPlatformDeviceType() {
+  const ua = navigator.userAgent || "";
+  const width = window.innerWidth || screen.width || 1024;
+
+  if (/iPad|tablet|playbook|silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua) && width >= 600)) {
+    return "tablet";
+  }
+  if (/Mobi|Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) || width < 600) {
+    return "mobile";
+  }
+  return "desktop";
+}
+
+function startContinuousDeviceAndLocationTracking() {
+  DEVICE_TRACKER_STATE.deviceType = detectPlatformDeviceType();
+
+  if (typeof AUTO_LOCALE_STATE === "object" && AUTO_LOCALE_STATE) {
+    AUTO_LOCALE_STATE.deviceType = DEVICE_TRACKER_STATE.deviceType;
+  }
+
+  if (!("geolocation" in navigator)) {
+    return;
+  }
+
+  if (DEVICE_TRACKER_STATE.watchId !== null) {
+    navigator.geolocation.clearWatch(DEVICE_TRACKER_STATE.watchId);
+  }
+
+  DEVICE_TRACKER_STATE.watchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      const { latitude, longitude, accuracy } = pos.coords;
+      const locPayload = {
+        lat: latitude,
+        lng: longitude,
+        accuracy: accuracy,
+        updatedAt: new Date().toISOString()
+      };
+
+      DEVICE_TRACKER_STATE.latestLocation = locPayload;
+
+      if (typeof AUTO_LOCALE_STATE === "object" && AUTO_LOCALE_STATE) {
+        AUTO_LOCALE_STATE.lastCoords = { lat: latitude, lng: longitude };
+      }
+
+      if (typeof detectLocaleByCoords === "function" && typeof applyAutoCountryAndLang === "function") {
+        const matched = detectLocaleByCoords(latitude, longitude);
+        if (matched) {
+          applyAutoCountryAndLang(matched);
+        }
+      }
+    },
+    () => {
+      // Location ခွင့်မပြုရင် သို့မဟုတ် မရရင် လက်ရှိ state အတိုင်း ဆက်ထားမည်
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 5000,
+      timeout: 15000
+    }
+  );
+}
+ const ACCOUNT_ACTIVITY_LOG_KEY = "tb_account_activity_logs_v1";
+const RTDB_ACTIVITY_PATH = "account_activity_logs";
+let rtdbLiveLogsCache = {};
+let isRtdbListenerAttached = false;
+
+function getRtdbInstanceSafe() {
+  if (typeof db !== "undefined" && db) return db;
+  if (typeof window !== "undefined" && window.db) return window.db;
+  if (typeof rtdb !== "undefined" && rtdb) return rtdb;
+  if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length) {
+    return firebase.database();
+  }
+  return null;
+}
+
+function sanitizeFirebaseKey(rawKey) {
+  return String(rawKey || "unknown").replace(/[.#$/[\]]/g, "_");
+}
+
+function syncAccountActivityToFirebase(payload) {
+  const database = getRtdbInstanceSafe();
+  if (!database || !payload || !payload.accountKey) return;
+
+  const safeKey = sanitizeFirebaseKey(payload.accountKey);
+  database.ref(`${RTDB_ACTIVITY_PATH}/${safeKey}`)
+    .set(payload)
+    .catch(() => {});
+}
+
+function startFirebaseAccountActivityListener() {
+  const database = getRtdbInstanceSafe();
+  if (!database || isRtdbListenerAttached) return;
+  isRtdbListenerAttached = true;
+
+  database.ref(RTDB_ACTIVITY_PATH).on("value", (snapshot) => {
+    rtdbLiveLogsCache = snapshot.val() || {};
+
+    const panel = document.getElementById("adminAccountInfoPanel");
+    if (panel && panel.style.display !== "none") {
+      renderAdminAccountInfoTable();
+    }
+  });
+}
+
+function getAccountActivityLogs() {
+  try {
+    return JSON.parse(localStorage.getItem(ACCOUNT_ACTIVITY_LOG_KEY) || "{}");
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveAccountActivityLogs(logs) {
+  try {
+    localStorage.setItem(ACCOUNT_ACTIVITY_LOG_KEY, JSON.stringify(logs));
+  } catch (e) {}
+}
+
+function formatDateTimeMinute(isoOrDate) {
+  if (!isoOrDate) return "-";
+  const d = new Date(isoOrDate);
+  if (Number.isNaN(d.getTime())) return "-";
+  return d.toLocaleString("en-GB", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
+
+function resolveActiveAccountInfo() {
+  if (typeof isAdminSession !== "undefined" && isAdminSession) {
+    return {
+      key: "admin_session",
+      name: "Admin",
+      phone: "-",
+      displayLabel: "Admin"
+    };
+  }
+
+  let userObj = typeof currentUser !== "undefined" && currentUser ? currentUser : null;
+  const savedUid = localStorage.getItem("tb_session_uid");
+
+  if (!userObj && savedUid && Array.isArray(typeof allUsers !== "undefined" ? allUsers : null)) {
+    userObj = allUsers.find((u) => String(u.id) === String(savedUid)) || null;
+  }
+
+  const name =
+    userObj?.name ||
+    userObj?.fullName ||
+    userObj?.username ||
+    userObj?.displayName ||
+    "";
+
+  const phone =
+    userObj?.phone ||
+    userObj?.mobile ||
+    userObj?.phoneNumber ||
+    userObj?.email ||
+    "";
+
+  const uid = userObj?.id || savedUid || "";
+
+  if (name || phone) {
+    const cleanName = String(name || "").trim();
+    const cleanPhone = String(phone || "").trim();
+    const label =
+      cleanName && cleanPhone
+        ? `${cleanName} (${cleanPhone})`
+        : cleanName || cleanPhone;
+    const key = uid ? `uid_${uid}` : `${cleanName}_${cleanPhone}`;
+    return {
+      key: key,
+      name: cleanName || "-",
+      phone: cleanPhone || "-",
+      displayLabel: label
+    };
+  }
+
+  return {
+    key: uid ? `uid_${uid}` : "guest_session",
+    name: "Guest",
+    phone: "-",
+    displayLabel: uid ? `Guest (ID: ${uid})` : "Guest"
+  };
+}
+
+function recordAccountActivity(eventType = "heartbeat") {
+  const accInfo = resolveActiveAccountInfo();
+  const logs = getAccountActivityLogs();
+  const nowIso = new Date().toISOString();
+
+  const deviceType =
+    (typeof DEVICE_TRACKER_STATE === "object" && DEVICE_TRACKER_STATE?.deviceType) ||
+    (typeof detectPlatformDeviceType === "function" ? detectPlatformDeviceType() : "desktop");
+
+  const locObj =
+    (typeof DEVICE_TRACKER_STATE === "object" && DEVICE_TRACKER_STATE?.latestLocation) ||
+    (typeof AUTO_LOCALE_STATE === "object" && AUTO_LOCALE_STATE?.lastCoords
+      ? { ...AUTO_LOCALE_STATE.lastCoords, updatedAt: nowIso }
+      : null);
+
+  const prev = logs[accInfo.key] || {
+    accountKey: accInfo.key,
+    account: accInfo.displayLabel,
+    name: accInfo.name,
+    phone: accInfo.phone,
+    deviceType: deviceType,
+    lat: null,
+    lng: null,
+    locationUpdatedAt: null,
+    lastLoginAt: nowIso,
+    lastLogoutAt: null
+  };
+
+  prev.account = accInfo.displayLabel;
+  prev.name = accInfo.name;
+  prev.phone = accInfo.phone;
+
+  if (eventType === "login") {
+    prev.lastLoginAt = nowIso;
+    prev.lastLogoutAt = null;
+  } else if (eventType === "logout") {
+    prev.lastLogoutAt = nowIso;
+  } else if (!prev.lastLoginAt) {
+    prev.lastLoginAt = nowIso;
+  }
+
+  prev.deviceType = deviceType || prev.deviceType;
+
+  if (locObj && typeof locObj.lat === "number" && typeof locObj.lng === "number") {
+    prev.lat = locObj.lat;
+    prev.lng = locObj.lng;
+    prev.locationUpdatedAt = locObj.updatedAt || nowIso;
+  }
+
+  logs[accInfo.key] = prev;
+  saveAccountActivityLogs(logs);
+  syncAccountActivityToFirebase(prev);
+}
+
+function toggleAccountInfoPanel() {
+  const panel = document.getElementById("adminAccountInfoPanel");
+  if (!panel) return;
+  const isHidden = panel.style.display === "none" || !panel.style.display;
+  panel.style.display = isHidden ? "block" : "none";
+  if (isHidden) {
+    recordAccountActivity("view");
+    renderAdminAccountInfoTable();
+  }
+}
+
+function renderAdminAccountInfoTable() {
+  const tbody = document.getElementById("adminAccountInfoTbody");
+  if (!tbody) return;
+
+  startFirebaseAccountActivityListener();
+  const localLogs = getAccountActivityLogs();
+  const rows = Object.values({ ...localLogs, ...rtdbLiveLogsCache });
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">မှတ်တမ်း မရှိသေးပါ</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows
+    .map((item, idx) => {
+      const accountText =
+        item.account ||
+        (item.name && item.phone && item.phone !== "-"
+          ? `${item.name} (${item.phone})`
+          : item.name || item.phone || "Guest");
+
+      const coordsText =
+        typeof item.lat === "number" && typeof item.lng === "number"
+          ? `${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`
+          : "တည်နေရာ မရသေးပါ";
+
+      const logoutText = item.lastLogoutAt
+        ? formatDateTimeMinute(item.lastLogoutAt)
+        : "အွန်လိုင်း / မဆင်းသေးပါ";
+
+      return `
+        <tr>
+          <td>${idx + 1}</td>
+          <td>${accountText}</td>
+          <td>${String(item.deviceType || "unknown").toUpperCase()}</td>
+          <td>${coordsText}</td>
+          <td>${formatDateTimeMinute(item.locationUpdatedAt)}</td>
+          <td>${formatDateTimeMinute(item.lastLoginAt)}</td>
+          <td>${logoutText}</td>
+        </tr>
+      `;
+    })
+    .join("");
+}
+
+function initAccountLoginLogoutTracking() {
+  recordAccountActivity("login");
+  startFirebaseAccountActivityListener();
+
+  setInterval(() => {
+    recordAccountActivity("heartbeat");
+    const panel = document.getElementById("adminAccountInfoPanel");
+    if (panel && panel.style.display !== "none") {
+      renderAdminAccountInfoTable();
+    }
+  }, 5000);
+
+  window.addEventListener("beforeunload", () => {
+    recordAccountActivity("logout");
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      recordAccountActivity("logout");
+    } else if (document.visibilityState === "visible") {
+      recordAccountActivity("login");
+    }
+  });
+}
 </script>
 </body>
 </html>
