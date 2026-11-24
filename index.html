@@ -616,6 +616,36 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
   min-height: 54px;
  }
 }
+ .brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px 5px 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #f8fafc;
+  line-height: 1;
+}
 </style>
 </head>
 <body>
@@ -648,21 +678,36 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
 
 <header class="topbar">
  <div class="topbar-inner">
-  <div class="brand-logo-wrap" onclick="handleLogoClick()">
-   <svg class="brand-emblem-svg" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-    <circle cx="32" cy="32" r="27" stroke="#1877f2" stroke-width="3" fill="rgba(24, 119, 242, 0.08)"/>
-    <path d="M18 39V25L32 15L46 25V39" fill="rgba(255,255,255,0.92)" stroke="#d97706" stroke-width="2.5" stroke-linejoin="round"/>
-    <path d="M14 26L32 13L50 26" stroke="#d97706" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="29" y="31" width="6" height="8" rx="1" fill="#1877f2"/>
-   </svg>
-   <span class="brand-wordmark">Trip Booking</span>
-  </div>
+  <div class="brand-logo-wrap brand-logo" onclick="handleLogoClick()" aria-label="Trip Booking">
+      <span class="brand-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+        </svg>
+      </span>
+      <span class="brand-wordmark brand-title">Trip Booking</span>
+    </div>
   <div class="top-controls">
    <select id="language" aria-label="Language" onchange="changeLanguage(this.value)">
     <option value="en">English</option>
-    <option value="my">မြန်မာ</option>
-    <option value="zh">中文</option>
-    <option value="th">ไทย</option>
+      <option value="my">မြန်မာ</option>
+      <option value="zh">中文</option>
+      <option value="th">ไทย</option>
+      <option value="lo">ລາວ (Laos)</option>
+      <option value="ko">한국어 (South Korea)</option>
+      <option value="ja">日本語 (Japan)</option>
+      <option value="vi">Tiếng Việt (Vietnam)</option>
+      <option value="ms">Bahasa Melayu (Malaysia)</option>
+      <option value="id">Bahasa Indonesia (Indonesia)</option>
+      <option value="km">ខ្មែរ (Cambodia)</option>
+      <option value="hi">हिन्दी (India)</option>
+      <option value="fr">Français (France)</option>
+      <option value="de">Deutsch (Germany)</option>
+      <option value="es">Español (Spain)</option>
+      <option value="ru">Русский (Russia)</option>
+      <option value="ar">العربية (Arabic)</option>
+      <option value="pt">Português (Portuguese)</option>
+      <option value="it">Italiano (Italy)</option>
+      <option value="tl">Tagalog (Philippines)</option>
    </select>
    <button type="button" class="btn btn-secondary btn-xs" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
    <button type="button" id="headerAuthBtn" class="btn btn-primary btn-xs" onclick="openAuth('login')">Login</button>
@@ -677,7 +722,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
 
 <div class="activity-ticker-wrap">
  <div class="activity-ticker-bar">
-  <span class="ticker-badge" data-i18n="tickerBadgeLabel">🔔 Live Notice</span>
+  <span class="ticker-badge" data-i18n="tickerBadgeLabel"> Live Notice</span>
   <div class="ticker-viewport">
    <div id="activityTickerSlide" class="ticker-slide"></div>
   </div>
@@ -689,7 +734,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
   <div id="homeHeroBanner" class="hero">
    <div class="hero-content">
     <h1 data-i18n="heroTitle">Welcome to Trip Booking</h1>
-    <p data-i18n="heroSub">Internitial Hotel Platform</p>
+    <p data-i18n="heroSub">Internitial Trip Booking Hotel Platform</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
      <button type="button" class="btn btn-primary" onclick="showPage('bookingPage', document.querySelectorAll('.bottom-nav button')[2])" data-i18n="startTaskBtn">Start Booking Tasks</button>
      <button type="button" class="btn btn-secondary" onclick="showPage('supportPage', document.querySelectorAll('.bottom-nav button')[1])" data-i18n="contactServiceBtn">Contact Customer Service</button>
@@ -711,7 +756,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
 
    <div class="today-rate-card">
     <div class="today-rate-header">
-     <span style="font-weight:700;font-size:15px" data-i18n="converterCardTitle">🧮 USD ↔ MMK Converter</span>
+     <span style="font-weight:700;font-size:15px" data-i18n="converterCardTitle">USD ↔ MMK Converter</span>
      <button type="button" class="btn btn-secondary btn-xs" onclick="swapConverterDirection()" data-i18n="swapBtn">🔁 Swap</button>
     </div>
     <div class="converter-box">
@@ -740,8 +785,8 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
   <div class="fx-chart-card">
    <div class="fx-chart-header">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <span style="font-weight:700;font-size:15px" data-i18n="fxChartTitle">📈 USD ↔ MMK 3D Live Rate Trend</span>
-     <span class="status-pill pill-live">● 3D LIVE</span>
+     <span style="font-weight:700;font-size:15px" data-i18n="fxChartTitle"> USD ↔ MMK  Rate Trend</span>
+     <span class="status-pill pill-live">●Currency change rate</span>
      <span id="fxChangeBadge" class="status-pill pill-online">0.00%</span>
      <span id="fxDayTrendBadge" class="status-pill pill-offline">— Unchanged Today</span>
     </div>
@@ -870,7 +915,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
      <select id="historyTypeFilter" onchange="renderHistory()">
       <option value="all" data-i18n="filterAllTypes">All Types</option>
       <option value="profit" data-i18n="filterProfitType">Booking Profit</option>
-      <option value="bonus" data-i18n="filterBonusType">TP2323 Welcome Bonus</option>
+      <option value="bonus" data-i18n="filterBonusType"> Welcome Bonus</option>
       <option value="hotel_book" data-i18n="filterHotelBookType">Hotel Booking</option>
      </select>
      <input id="historySearch" type="text" data-i18n-ph="histSearchPh" placeholder="Search..." oninput="renderHistory()">
@@ -964,14 +1009,14 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
   <div class="card">
    <div class="section-head">
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <h2 class="section-title" data-i18n="adminPanelTitle">🛡️ Admin & Trip Booking Service Control</h2>
+     <h2 class="section-title" data-i18n="adminPanelTitle"> Admin & Trip Booking Service Control</h2>
      <span class="tag"><span id="totalUsersBadge">0</span> <span data-i18n="usersWord">Users</span></span>
      <span id="adminUnreadBadge" class="notif-badge hidden">0</span>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
      <button type="button" id="adminTabBtnUsers" class="btn btn-primary btn-xs" onclick="switchAdminTab('users')" data-i18n="adminTabUsers">Users</button>
      <button type="button" id="adminTabBtnHotels" class="btn btn-secondary btn-xs" onclick="switchAdminTab('hotels')" data-i18n="adminTabHotels">Hotels & VIP</button>
-     <button type="button" class="btn btn-gold btn-xs" onclick="openProfitTableModal()" data-i18n="profitTableBtn">📊 Profit Table ($100–$10,000)</button>
+     <button type="button" class="btn btn-gold btn-xs" onclick="openProfitTableModal()" data-i18n="bookingProfitBtn">💰 ဘွတ်ကင် အမြတ်</button>
      <button type="button" id="adminTabBtnCs" class="btn btn-secondary btn-xs" onclick="switchAdminTab('cs')">
       <span data-i18n="adminTabCs">Customer Service</span>
       <span id="tabCsUnreadBadge" class="notif-badge hidden">0</span>
@@ -1153,7 +1198,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
   </div>
 
   <div id="regRefField" class="field hidden">
-   <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. TP2323)</label>
+   <label data-i18n="refCodeLabel">Referral Code (Optional, e.g. Tpxxxx)</label>
    <input id="regRefInput" type="text" placeholder="TP2323" oninput="saveDraftText('reg_ref_draft', this.value)">
    <label class="terms-agree-row">
     <input id="regAgreeTermsCheckbox" type="checkbox" onchange="if(this.checked && $('authError')) $('authError').textContent=''">
@@ -1163,9 +1208,10 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
 
   <div id="authError" class="error-text"></div>
 
-  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-   <button type="button" id="authSubmitBtn" class="btn btn-primary" style="flex:1" onclick="submitAuth()">Login</button>
-   <button type="button" class="btn btn-secondary" onclick="toggleAuthMode()" data-i18n="switchAuth">Switch Login / Register</button>
+  <div style="display:flex;gap:8px;margin-top:12px;align-items:stretch;">
+  <button type="button" id="authSubmitBtn" class="btn btn-primary" style="flex:1;min-width:0;" onclick="submitAuth()">Login</button>
+  <button type="button" id="authToggleBtn" class="btn btn-secondary" style="flex:1;min-width:0;" onclick="toggleAuthMode()" data-i18n="switchAuth">Switch Login / Register</button>
+</div>
   </div>
  </div>
 </div>
@@ -1174,7 +1220,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
 <div id="profitTableModal" class="modal-backdrop hidden">
  <div class="modal-card wide-modal">
   <div class="modal-header">
-   <h3 data-i18n="profitTableModalTitle">📊 Booking Profit Table ($100 – $10,000)</h3>
+   <h3 data-i18n="profitTableModalTitle"> Booking Profit Table ($100 – $10,000)</h3>
    <button type="button" class="close-x" onclick="closeModal('profitTableModal')">✕</button>
   </div>
   <p class="small muted" style="margin:0 0 12px" data-i18n="profitTableDesc"></p>
@@ -1193,7 +1239,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
    </table>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;align-items:center">
-   <button type="button" class="btn btn-secondary btn-xs" onclick="resetProfitTableDefaults()" data-i18n="resetProfitTableBtn">Reset Defaults ($100 = +$20)</button>
+   <button type="button" class="btn btn-primary btn-xs" onclick="addProfitTierRow()">+ Add Tier</button>
    <button type="button" class="btn btn-success btn-xs" onclick="saveProfitTableAdmin()" data-i18n="saveProfitTableBtn">Save Profit Table</button>
   </div>
  </div>
@@ -1220,7 +1266,7 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
  <div class="modal-card wide-modal">
   <div class="modal-header">
    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-    <h3 id="centerOrderTitle">🏨 Booking Task</h3>
+    <h3 id="centerOrderTitle">Booking Task</h3>
     <span id="centerOrderStepBadge" class="tag"></span>
    </div>
    <button type="button" class="close-x" onclick="closeCenterOrderModal()">✕</button>
@@ -1346,10 +1392,54 @@ th, td { padding: 8px 10px; border-bottom: 1px solid var(--fb-border); text-alig
     <tbody id="orderRulesListBody"></tbody>
    </table>
   </div>
+  
   <button type="button" class="btn btn-success" style="width:100%" onclick="saveOrderRulesForUser()">Save Rules</button>
  </div>
 </div>
+<!-- Account Detail / Location & Device Modal -->
+<div id="userInfoModal" class="modal-backdrop hidden">
+  <div class="modal-card wide-modal">
+    <div class="modal-header">
+      <h3 id="userInfoModalTitle">အကောင့်အချက်အလက်</h3>
+      <button type="button" class="close-x" onclick="closeModal('userInfoModal')">✕</button>
+    </div>
 
+    <div id="userInfoSummary" class="small muted" style="margin-bottom:10px;"></div>
+    <div id="userInfoSecurityFlags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;"></div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <input id="userInfoSearchInput" type="text" placeholder="အကောင့် / ကုဒ် / နိုင်ငံ / မြို့ / စက် ရှာရန်..." style="flex:1;min-width:180px;">
+      <select id="userInfoDeviceFilter">
+        <option value="all">စက်အမျိုးအစား အားလုံး</option>
+        <option value="Mobile">📱 ဖုန်း (Mobile)</option>
+        <option value="Desktop">💻 ကွန်ပျူတာ (Desktop)</option>
+        <option value="Tablet">📲 တက်ဘလက် (Tablet)</option>
+      </select>
+      <select id="userInfoCountryFilter">
+        <option value="all">နိုင်ငံ အားလုံး</option>
+      </select>
+    </div>
+
+    <div id="userInfoDetailCard" style="padding:12px;border-radius:10px;border:1px solid var(--fb-border);margin-bottom:14px;"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>အကောင့် / ကုဒ်</th>
+            <th>Status</th>
+            <th>နိုင်ငံ / မြို့</th>
+            <th>လမ်း / ရပ်ကွက်</th>
+            <th>တည်နေရာကုဒ်</th>
+            <th>စက်အမျိုးအစား</th>
+            <th>စက် / ဖုန်း အသေးစိတ်</th>
+          </tr>
+        </thead>
+        <tbody id="userInfoRows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <!-- Reset / Delete Confirm Modal -->
 <div id="resetConfirmModal" class="modal-backdrop hidden">
  <div class="modal-card">
@@ -1894,8 +1984,27 @@ async function saveProfitTableAdmin() {
  }
  closeModal("profitTableModal");
  showAlert("✅ Booking Profit Table ($100–$10,000) saved!");
-}
 
+}
+function addProfitTierRow() {
+ if (!Array.isArray(window.allProfitTiers)) {
+  window.allProfitTiers = [];
+ }
+ const lastTier = window.allProfitTiers[window.allProfitTiers.length - 1];
+ const nextPrincipal = lastTier ? (Number(lastTier.principal) || 100) * 2 : 100;
+ const nextOrders = lastTier ? (Number(lastTier.orders_count) || 30) : 30;
+ const nextProfit = lastTier ? Number(((Number(lastTier.cycle_profit) || 0) * 1.5).toFixed(2)) : 10;
+
+ window.allProfitTiers.push({
+  principal: nextPrincipal,
+  orders_count: nextOrders,
+  cycle_profit: nextProfit
+ });
+
+ if (typeof renderAdminProfitTable === "function") {
+  renderAdminProfitTable();
+ }
+}
 function getFxFloorAndCeiling(baseRate) {
  const base = Number(baseRate) > 0 ? Number(baseRate) : 5000;
  const floor = Math.max(1, Number((base - 3).toFixed(2)));
@@ -2523,7 +2632,7 @@ const I18N = {
   fullNameLabel: "Full Name (Any Native Script)", fullNamePh: "Enter full name (Myanmar, English, 中文, ไทย...)",
   identityLabel: "Phone Number or Email", identityPh: "09xxxxxxxxx or email@example.com",
   passwordLabel: "Password", passwordPh: "Enter password",
-  refCodeLabel: "Referral Code (Optional, e.g. TP2323)",
+  refCodeLabel: "Referral Code (Optional, e.g. TPxxxx)",
   agreeTermsText: "I agree to the platform terms and conditions.",
   createAcc: "Register",
   heroTitle: "Welcome to Trip Booking", heroSub: "Internitial Hotel Platform",
@@ -2552,7 +2661,7 @@ const I18N = {
   remainingOrdersLabel: "Remaining Orders",
   taskCenter: "Booking Task Center", getOrderBtn: "Get Order",
   histTitle: "Transaction & Booking History", histSearchPh: "Search...",
-  filterAllTypes: "All Types", filterProfitType: "Booking Profit", filterBonusType: "TP2323 Welcome Bonus",
+  filterAllTypes: "All Types", filterProfitType: "Booking Profit", filterBonusType: " Welcome Bonus",
   filterHotelBookType: "Hotel Booking",
   thDate: "Date & Time", thType: "Type", thDetails: "Details & Review", thAmount: "Amount", thStatus: "Status",
   welcomeTrip: "Welcome to Trip Booking", loginPrompt: "Login or register a new account to start earning commissions.",
@@ -2562,6 +2671,7 @@ const I18N = {
   adminPanelTitle: "🛡️ Admin & Trip Booking Service Control", usersWord: "Users",
   adminTabUsers: "Users", adminTabHotels: "Hotels & VIP", adminTabCs: "Customer Service",
   profitTableBtn: "📊 Profit Table ($100–$10,000)",
+  bookingProfitBtn: "💰 Booking Profit ($100–$10,000)",
   profitTableModalTitle: "📊 Booking Profit Table ($100 – $10,000)",
   profitTableDesc: "Configure principal tiers from $100 to $10,000. Without lucky rules, completing 30 orders on $100 grants exact $20 profit ($120 total), with varying per-order commissions (e.g. 0.21, 0.49).",
   resetProfitTableBtn: "Reset Defaults ($100 = +$20)",
@@ -2599,16 +2709,16 @@ const I18N = {
   fullNameLabel: "အမည်ပြည့်စုံ (မိခင်ဘာသာစကား / မြန်မာ / English)", fullNamePh: "မိခင်ဘာသာစကား သို့မဟုတ် အမည်ပြည့်စုံ ထည့်ပါ",
   identityLabel: "ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်", identityPh: "09xxxxxxxxx သို့မဟုတ် email@example.com",
   passwordLabel: "စကားဝှက်", passwordPh: "စကားဝှက် ထည့်ပါ",
-  refCodeLabel: "ဖိတ်ကြားကုဒ် (ဥပမာ - TP2323)",
+  refCodeLabel: "ဖိတ်ကြားကုဒ် (ဥပမာ - TPxxxx)",
   agreeTermsText: "သတ်မှတ်ထားသော စည်းမျဉ်းစည်းကမ်းများ လိုက်နာပါသည်။",
   createAcc: "အကောင့်ဖွင့်ရန်",
   heroTitle: "Trip Booking မှ ကြိုဆိုပါသည်", heroSub: "Internitial Hotel Platform",
   startTaskBtn: "ဘိုကင်တာဝန်များ စတင်ရန်", contactServiceBtn: "ဝန်ဆောင်မှုသို့ ဆက်သွယ်ရန်",
   todayUsdRateTitle: "ဒီနေ့ ဒေါ်လာပေါက်ဈေး",
-  midnightResetNote: "ည ၁၂:၀၀ နာရီတွင် အလိုအလျောက် ပြန်ညှိသည်",
+  midnightResetNote: "ည ၁၂:၀၀ နာရီတွင် အလိုအလျောက် ပြောင်းလဲ့သည်။",
   dayUpBadge: "ယနေ့ တက်ဈေး", dayDownBadge: "ယနေ့ ကျဈေး", dayFlatBadge: "ယနေ့ ပုံမှန်ဈေး",
-  fxChartTitle: "📈 USD ↔ MMK 3D ငွေကြေးအတတ်အကျ လိုင်းဂရပ်",
-  converterCardTitle: "🧮 USD ↔ MMK ငွေကြေးတွက်စက်",
+  fxChartTitle:  USD ↔ MMK 3D ငွေကြေးအတတ်အကျ လိုင်းဂရပ်",
+  converterCardTitle: " USD ↔ MMK ငွေကြေးတွက်စက်",
   swapBtn: "🔁 ပြောင်းပြန်လှန်မည်",
   convUsdToMmk: "USD ➔ MMK",
   convMmkToUsd: "MMK ➔ USD",
@@ -2621,9 +2731,9 @@ const I18N = {
   bookHotelBtn: "ဘိုကင်တင်မည်",
   bookHotelSuccess: "ဟိုတယ်ဘိုကင် တင်ခြင်း အောင်မြင်ပါသည်။",
   insufficientBalanceError: "အကောင့်လက်ကျန် မရှိပါ သို့မဟုတ် မလုံလောက်ပါ။ အော်ဒါတင် လုပ်ဆောင်၍ မရပါ။",
-  csHeader: "🎧 Trip Booking ဝန်ဆောင်မှု (၂၄/၇ ဖွင့်လှစ်သည်)", csActiveBadge: "● အွန်လိုင်းရှိသည်",
+  csHeader: " Trip Booking ဝန်ဆောင်မှု (၂၄/၇ ဖွင့်လှစ်သည်)", csActiveBadge: "● အွန်လိုင်းရှိသည်",
   typeMsgPh: "မက်ဆေ့ချ် ရိုက်ထည့်ပါ (စာကြောင်းသစ်အတွက် Shift+Enter)...",
-  newCsAlertTitle: "📩 ဝန်ဆောင်မှု မက်ဆေ့ချ် အသစ်",
+  newCsAlertTitle: " ဝန်ဆောင်မှု မက်ဆေ့ချ် အသစ်",
   accBal: "အကောင့်လက်ကျန်", taskComm: "တာဝန်ကော်မရှင်", totalProfit: "စုစုပေါင်း အမြတ်", dailyLimit: "နေ့စဉ် အော်ဒါ",
   remainingOrdersLabel: "ကျန်ရှိအော်ဒါအရေအတွက်",
   taskCenter: "ဘိုကင်တာဝန် ဗဟိုဌာန", getOrderBtn: "အော်ဒါရယူရန်",
@@ -2635,10 +2745,11 @@ const I18N = {
   walletBal: "အကောင့်လက်ကျန်", bookingHistCardTitle: "ဘိုကင်မှတ်တမ်း", inviteCodeTitle: "ဖိတ်ကြားကုဒ်",
   copyBtn: "ကူးယူရန်", refBonus: "ဖိတ်ခေါ်မှုမှ ရရှိငွေ", inviteLinkLabel: "ဖိတ်ကြားလင့်ခ်", copyLinkBtn: "လင့်ခ်ကူးယူရန်",
   depositBtn: "ငွေသွင်းရန်", withdrawBtn: "ငွေထုတ်ရန်",
-  adminPanelTitle: "🛡️ Admin နှင့် Trip Booking ဝန်ဆောင်မှု ထိန်းချုပ်ခန်း", usersWord: "အသုံးပြုသူများ",
+  adminPanelTitle: " Admin နှင့် Trip Booking ဝန်ဆောင်မှု ထိန်းချုပ်ခန်း", usersWord: "အသုံးပြုသူများ",
   adminTabUsers: "အသုံးပြုသူများ", adminTabHotels: "ဟိုတယ်နှင့် VIP", adminTabCs: "ဝန်ဆောင်မှု ချတ်",
-  profitTableBtn: "📊 ဘိုကင်အမြတ်ဇယား ($100–$10,000)",
-  profitTableModalTitle: "📊 ဘိုကင်အမြတ်ဇယား ($100 – $10,000)",
+  profitTableBtn: " ဘိုကင်အမြတ်ဇယား ($100–$10,000)",
+  bookingProfitBtn: " ဘွတ်ကင် အမြတ်",
+  profitTableModalTitle: "ဘိုကင်အမြတ်ဇယား ($100 – $10,000)",
   profitTableDesc: "$100 မှ $10,000 အထိ သတ်မှတ်နိုင်ပါသည်။ Lucky rule မပါပါက $100 ရင်းပြီး ၃၀ ကြိမ်ပြည့်ပါက အမြတ် $20 ($120 စုစုပေါင်း) ရရှိမည်ဖြစ်ပြီး အော်ဒါတစ်ခုချင်းစီရဲ့ အမြတ် (ဥပမာ 0.21, 0.49) မတူညီဘဲ ခွဲဝေပေးပါမည်။",
   resetProfitTableBtn: "မူလနှုန်းထား ပြန်ညှိမည် ($100 = +$20)",
   saveProfitTableBtn: "ဘိုကင်အမြတ်ဇယား သိမ်းမည်",
@@ -2663,7 +2774,7 @@ const I18N = {
   customReviewLabel: "သို့မဟုတ် ကိုယ်ပိုင်သုံးသပ်ချက် ရေးပါ", customReviewPh: "သုံးသပ်ချက် ရေးပါ...",
   submitOrderBtn: "အော်ဒါ အတည်ပြုမည်", verifyingBookingText: "ဘိုကင်အချက်အလက်များ စစ်ဆေးနေပါသည်...",
   confirmServiceBtn: "အတည်ပြုမည် (ဝန်ဆောင်မှု)", alertTitleDefault: "အသိပေးချက်",
-  tickerBadgeLabel: "🔔 အသိပေးချက်",
+  tickerBadgeLabel: " အသိပေးချက်",
   resetBtn: "Reset", banBtn: "ရပ်ဆိုင်းမည်", unbanBtn: "ပြန်ဖွင့်မည်", deleteBtn: "ဖျက်မည်",
   regSuccessTitle: "ဂုဏ်ယူပါတယ်", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "အကောင့်ဖွင့်ရန် စည်းမျဉ်းစည်းကမ်းများကို အမှန်ခြစ်ပေးပါ။"
@@ -2675,7 +2786,7 @@ const I18N = {
   fullNameLabel: "姓名（支持母语 / 中文 / 缅文 / 英文等）", fullNamePh: "请输入姓名（支持任意母语文字）",
   identityLabel: "手机号或邮箱", identityPh: "09xxxxxxxxx 或 email@example.com",
   passwordLabel: "密码", passwordPh: "请输入密码",
-  refCodeLabel: "邀请码（选填，如 TP2323）",
+  refCodeLabel: "邀请码（选填，如 TPxxxx）",
   agreeTermsText: "我同意平台规定的条款和条件。",
   createAcc: "注册账号",
   heroTitle: "欢迎来到 Trip Booking", heroSub: "Internitial Hotel Platform",
@@ -2683,8 +2794,8 @@ const I18N = {
   todayUsdRateTitle: "今日美元汇率",
   midnightResetNote: "每日 00:00 自动重置",
   dayUpBadge: "今日上涨", dayDownBadge: "今日下跌", dayFlatBadge: "今日持平",
-  fxChartTitle: "📈 USD ↔ MMK 3D 实时汇率走势",
-  converterCardTitle: "🧮 USD ↔ MMK 汇率换算器",
+  fxChartTitle: " USD ↔ MMK 3D 实时汇率走势",
+  converterCardTitle: " USD ↔ MMK 汇率换算器",
   swapBtn: "🔁 双向切换",
   convUsdToMmk: "USD ➔ MMK",
   convMmkToUsd: "MMK ➔ USD",
@@ -2697,9 +2808,9 @@ const I18N = {
   bookHotelBtn: "立即预订",
   bookHotelSuccess: "酒店预订成功！",
   insufficientBalanceError: "账户余额不足，无法提交订单，请先充值。",
-  csHeader: "🎧 Trip Booking 客服中心（24/7 在线）", csActiveBadge: "● 在线服务",
+  csHeader: " Trip Booking 客服中心（24/7 在线）", csActiveBadge: "● 在线服务",
   typeMsgPh: "输入消息（Shift+Enter 换行）...",
-  newCsAlertTitle: "📩 新客服消息",
+  newCsAlertTitle: " 新客服消息",
   accBal: "账户余额", taskComm: "任务佣金", totalProfit: "累计利润", dailyLimit: "每日订单",
   remainingOrdersLabel: "剩余订单数",
   taskCenter: "预订任务中心", getOrderBtn: "获取订单",
@@ -2711,10 +2822,11 @@ const I18N = {
   walletBal: "账户余额", bookingHistCardTitle: "预订记录", inviteCodeTitle: "邀请码",
   copyBtn: "复制", refBonus: "邀请奖励", inviteLinkLabel: "邀请链接", copyLinkBtn: "复制链接",
   depositBtn: "充值", withdrawBtn: "提现",
-  adminPanelTitle: "🛡️ 管理后台与客服控制台", usersWord: "用户",
+  adminPanelTitle: " 管理后台与客服控制台", usersWord: "用户",
   adminTabUsers: "用户管理", adminTabHotels: "酒店与VIP", adminTabCs: "客服聊天",
-  profitTableBtn: "📊 预订利润表 ($100–$10,000)",
-  profitTableModalTitle: "📊 预订利润表 ($100 – $10,000)",
+  profitTableBtn: " 预订利润表 ($100–$10,000)",
+  bookingProfitBtn: " 预订利润 ($100–$10,000)",
+  profitTableModalTitle: " 预订利润表 ($100 – $10,000)",
   profitTableDesc: "设置 $100 至 $10,000 本金档位。无幸运规则时，$100 完成 30 单获利 $20（共 $120），每单佣金各不相同（如 0.21、0.49）。",
   resetProfitTableBtn: "恢复默认 ($100 = +$20)",
   saveProfitTableBtn: "保存利润表",
@@ -2739,7 +2851,7 @@ const I18N = {
   customReviewLabel: "或填写自定义评价", customReviewPh: "请输入您的评价...",
   submitOrderBtn: "确认完成订单", verifyingBookingText: "正在核对预订信息...",
   confirmServiceBtn: "确认（联系客服）", alertTitleDefault: "系统提示",
-  tickerBadgeLabel: "🔔 实时动态",
+  tickerBadgeLabel: " 实时动态",
   resetBtn: "重置", banBtn: "封禁", unbanBtn: "解封", deleteBtn: "删除",
   regSuccessTitle: "恭喜您", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "请先勾选同意条款和条件后再注册。"
@@ -2751,7 +2863,7 @@ const I18N = {
   fullNameLabel: "ชื่อ-นามสกุล (รองรับทุกภาษาแม่)", fullNamePh: "กรอกชื่อด้วยภาษาแม่ของคุณ (ไทย, เมียนมา, จีน, อังกฤษ...)",
   identityLabel: "เบอร์โทรศัพท์ หรือ อีเมล", identityPh: "09xxxxxxxxx หรือ email@example.com",
   passwordLabel: "รหัสผ่าน", passwordPh: "กรอกรหัสผ่าน",
-  refCodeLabel: "รหัสคำเชิญ (ไม่บังคับ เช่น TP2323)",
+  refCodeLabel: "รหัสคำเชิญ (ไม่บังคับ เช่น TPxxxx)",
   agreeTermsText: "ฉันยอมรับข้อกำหนดและเงื่อนไขของแพลตฟอร์ม",
   createAcc: "สมัครสมาชิก",
   heroTitle: "ยินดีต้อนรับสู่ Trip Booking", heroSub: "Internitial Hotel Platform",
@@ -2759,8 +2871,8 @@ const I18N = {
   todayUsdRateTitle: "อัตราแลกเปลี่ยน USD วันนี้",
   midnightResetNote: "รีเซ็ตอัตโนมัติเวลา 00:00",
   dayUpBadge: "ขึ้นวันนี้", dayDownBadge: "ลงวันนี้", dayFlatBadge: "คงที่วันนี้",
-  fxChartTitle: "📈 กราฟแนวโน้ม USD ↔ MMK 3D แบบเรียลไทม์",
-  converterCardTitle: "🧮 เครื่องคำนวณ USD ↔ MMK",
+  fxChartTitle: " กราฟแนวโน้ม USD ↔ MMK 3D แบบเรียลไทม์",
+  converterCardTitle: " เครื่องคำนวณ USD ↔ MMK",
   swapBtn: "🔁 สลับทิศทาง",
   convUsdToMmk: "USD ➔ MMK",
   convMmkToUsd: "MMK ➔ USD",
@@ -2773,9 +2885,9 @@ const I18N = {
   bookHotelBtn: "จองเลย",
   bookHotelSuccess: "จองโรงแรมสำเร็จแล้ว",
   insufficientBalanceError: "ยอดเงินคงเหลือไม่เพียงพอ ไม่สามารถทำรายการสั่งจองได้",
-  csHeader: "🎧 ฝ่ายบริการ Trip Booking (เปิด 24/7)", csActiveBadge: "● ออนไลน์",
+  csHeader: " ฝ่ายบริการ Trip Booking (เปิด 24/7)", csActiveBadge: "● ออนไลน์",
   typeMsgPh: "พิมพ์ข้อความ (Shift+Enter ขึ้นบรรทัดใหม่)...",
-  newCsAlertTitle: "📩 ข้อความใหม่จากฝ่ายบริการ",
+  newCsAlertTitle: " ข้อความใหม่จากฝ่ายบริการ",
   accBal: "ยอดเงินคงเหลือ", taskComm: "ค่าคอมมิชชั่นงาน", totalProfit: "กำไรรวม", dailyLimit: "ออเดอร์รายวัน",
   remainingOrdersLabel: "ออเดอร์ที่เหลือ",
   taskCenter: "ศูนย์งานจอง", getOrderBtn: "รับออเดอร์",
@@ -2787,10 +2899,11 @@ const I18N = {
   walletBal: "ยอดเงินคงเหลือ", bookingHistCardTitle: "ประวัติการจอง", inviteCodeTitle: "รหัสเชิญ",
   copyBtn: "คัดลอก", refBonus: "รายได้จากการเชิญ", inviteLinkLabel: "ลิงก์เชิญ", copyLinkBtn: "คัดลอกลิงก์",
   depositBtn: "ฝากเงิน", withdrawBtn: "ถอนเงิน",
-  adminPanelTitle: "🛡️ แผงควบคุมแอดมินและบริการลูกค้า", usersWord: "ผู้ใช้",
+  adminPanelTitle: " แผงควบคุมแอดมินและบริการลูกค้า", usersWord: "ผู้ใช้",
   adminTabUsers: "ผู้ใช้", adminTabHotels: "โรงแรมและ VIP", adminTabCs: "แชตบริการลูกค้า",
-  profitTableBtn: "📊 ตารางกำไร ($100–$10,000)",
-  profitTableModalTitle: "📊 ตารางกำไรการจอง ($100 – $10,000)",
+  profitTableBtn: " ตารางกำไร ($100–$10,000)",
+  bookingProfitBtn: " กำไรการจอง ($100–$10,000)",
+  profitTableModalTitle: " ตารางกำไรการจอง ($100 – $10,000)",
   profitTableDesc: "ตั้งค่าเงินทุนตั้งแต่ $100 ถึง $10,000 หากไม่มีกฎพิเศษ ครบ 30 ออเดอร์บนทุน $100 จะได้กำไร $20 (รวม $120) โดยแต่ละออเดอร์ได้กำไรต่างกัน (เช่น 0.21, 0.49)",
   resetProfitTableBtn: "คืนค่าเริ่มต้น ($100 = +$20)",
   saveProfitTableBtn: "บันทึกตารางกำไร",
@@ -2815,7 +2928,7 @@ const I18N = {
   customReviewLabel: "หรือเขียนรีวิวของคุณเอง", customReviewPh: "เขียนรีวิว...",
   submitOrderBtn: "ยืนยันออเดอร์", verifyingBookingText: "กำลังตรวจสอบข้อมูลการจอง...",
   confirmServiceBtn: "ยืนยัน (ติดต่อบริการ)", alertTitleDefault: "แจ้งเตือน",
-  tickerBadgeLabel: "🔔 แจ้งเตือนสด",
+  tickerBadgeLabel: "แจ้งเตือนสด",
   resetBtn: "รีเซ็ต", banBtn: "ระงับ", unbanBtn: "ปลดระงับ", deleteBtn: "ลบ",
   regSuccessTitle: "ยินดีด้วย", regSuccessSub: "Congratulations! Your account has been created successfully.",
   mustAgreeTermsErr: "กรุณาทำเครื่องหมายยอมรับข้อกำหนดและเงื่อนไขก่อนสมัครสมาชิก"
@@ -2835,22 +2948,67 @@ function getTxTypeLabel(type) {
  return type || "Transaction";
 }
 
-function changeLanguage(lang) {
+async function translateDynamicText(text, targetLang) {
+ if (!text || !targetLang || ["en", "my", "zh", "th"].includes(targetLang)) return text;
+ const cacheKey = `tb_auto_tr_${targetLang}_${text}`;
+ const cached = localStorage.getItem(cacheKey);
+ if (cached) return cached;
+
+ try {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${encodeURIComponent(targetLang)}&dt=t&q=${encodeURIComponent(text)}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const translated = data?.[0]?.map(item => item[0]).join("") || text;
+  localStorage.setItem(cacheKey, translated);
+  return translated;
+ } catch (err) {
+  return text;
+ }
+}
+
+async function changeLanguage(lang) {
  const supported = ["en", "my", "zh", "th"];
- currentLang = supported.includes(lang) ? lang : "en";
- localStorage.setItem("tb_lang", lang);
- document.documentElement.lang = lang || "en";
- if ($("language")) $("language").value = lang || "en";
+ const chosenLang = lang || localStorage.getItem("tb_lang") || "en";
+ currentLang = supported.includes(chosenLang) ? chosenLang : "en";
+
+ localStorage.setItem("tb_lang", chosenLang);
+ document.documentElement.lang = chosenLang;
+ if ($("language")) $("language").value = chosenLang;
 
  const d = getDict();
- document.querySelectorAll("[data-i18n]").forEach(el => {
+ const isDirectSupported = supported.includes(chosenLang);
+
+ const i18nEls = Array.from(document.querySelectorAll("[data-i18n]"));
+ for (const el of i18nEls) {
   const key = el.getAttribute("data-i18n");
-  if (key && d[key] !== undefined) el.textContent = d[key];
- });
- document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+  if (!key) continue;
+  if (isDirectSupported && d[key] !== undefined) {
+   el.textContent = d[key];
+  } else {
+   const sourceText = (typeof I18N !== "undefined" && I18N.en && I18N.en[key] !== undefined)
+    ? I18N.en[key]
+    : el.textContent;
+   el.textContent = await translateDynamicText(sourceText, chosenLang);
+  }
+ }
+
+ const phEls = Array.from(document.querySelectorAll("[data-i18n-ph]"));
+ for (const el of phEls) {
   const key = el.getAttribute("data-i18n-ph");
-  if (key && d[key] !== undefined) el.placeholder = d[key];
- });
+  if (!key) continue;
+  if (isDirectSupported && d[key] !== undefined) {
+   el.placeholder = d[key];
+  } else {
+   const sourcePh = (typeof I18N !== "undefined" && I18N.en && I18N.en[key] !== undefined)
+    ? I18N.en[key]
+    : el.placeholder;
+   el.placeholder = await translateDynamicText(sourcePh, chosenLang);
+  }
+ }
+
+ if (typeof updateAuthModalTexts === "function") updateAuthModalTexts();
+ if (typeof renderAllViews === "function") renderAllViews();
+}
 
  updateAuthModalTexts();
  renderAllViews();
@@ -3306,23 +3464,94 @@ function toggleAuthMode() {
  updateAuthModalTexts();
  if ($("authError")) $("authError").textContent = "";
 }
+function syncAuthButtonsUI() {
+  const submitBtn = document.getElementById("authSubmitBtn");
+  const toggleBtn = document.getElementById("authToggleBtn");
+  const d = typeof getDict === "function" ? getDict() : {};
+  const isRegister = authMode === "register";
 
+  if (submitBtn) {
+    submitBtn.textContent = isRegister
+      ? (d.createAcc || "အကောင့်ဖွင့်ရန်")
+      : (d.loginBtn || "အကောင့်ဝင်ရန်");
+    submitBtn.className = isRegister ? "btn btn-primary" : "btn btn-secondary";
+  }
+
+  if (toggleBtn) {
+    toggleBtn.className = isRegister ? "btn btn-secondary" : "btn btn-primary";
+  }
+}
+  
 function togglePassVisibility(inputId, btnEl) {
  const inp = $(inputId);
  if (!inp) return;
  if (inp.type === "password") {
   inp.type = "text";
-  if (btnEl) btnEl.textContent = "🙈";
+if (btnEl) btnEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
  } else {
   inp.type = "password";
-  if (btnEl) btnEl.textContent = "👁️";
+  if (btnEl) btnEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
  }
 }
 
 function isExactAdminLogin(idVal, passVal) {
  return String(idVal || "") === "09775191427" && String(passVal || "") === "12344321";
 }
+const ADMIN_SECOND_STEP_PIN = "1245"; 
+let pendingAdminAuth = null;
 
+function openAdminPinStep(rawId, pass) {
+  pendingAdminAuth = { rawId, pass, expiresAt: Date.now() + 3 * 60 * 1000 };
+  const errEl = $("authError");
+  if (errEl) errEl.textContent = "";
+
+  // Modal / prompt ထဲမှာ ဂဏန်း ၄ လုံး PIN ထည့်ခိုင်းတဲ့ modal ရှိရင် ဖွင့်မယ်၊ မရှိရင် prompt နဲ့ စစ်မယ်
+  const pinModal = $("adminPinModal");
+  const pinInp = $("adminPinInput");
+  if (pinModal && pinInp) {
+    pinInp.value = "";
+    pinModal.classList.remove("hidden");
+    pinInp.focus();
+  } else {
+    verifyAdminSecondStepPin();
+  }
+}
+
+function verifyAdminSecondStepPin(manualPin = null) {
+  if (!pendingAdminAuth || Date.now() > pendingAdminAuth.expiresAt) {
+    pendingAdminAuth = null;
+    const errEl = $("authError");
+    if (errEl) errEl.textContent = "Admin login session expired. Please log in again.";
+    return;
+  }
+
+  const pinInp = $("adminPinInput");
+  const enteredPin = String(manualPin !== null ? manualPin : (pinInp ? pinInp.value : window.prompt("Enter 4-digit Admin PIN:") || "")).trim();
+
+  if (!/^\d{4}$/.test(enteredPin) || enteredPin !== ADMIN_SECOND_STEP_PIN) {
+    const errEl = $("authError");
+    if (errEl) errEl.textContent = "Invalid 4-digit Admin PIN.";
+    if (pinInp) {
+      pinInp.classList.add("input-error-box");
+      pinInp.value = "";
+      pinInp.focus();
+    }
+    return;
+  }
+
+  pendingAdminAuth = null;
+  const pinModal = $("adminPinModal");
+  if (pinModal) pinModal.classList.add("hidden");
+
+  clearDraftText("login_id_draft");
+  isAdminSession = true;
+  currentUser = null;
+  localStorage.removeItem("tb_session_user");
+  closeModal("authModal");
+  updateHeaderAuthButton();
+  syncSuspensionBanner();
+  showPage("staffPage");
+}
 function stripLeadingZerosFromPhone(rawVal) {
  const trimmed = String(rawVal || "").trim();
  if (!trimmed || trimmed.includes("@")) return trimmed;
@@ -3340,7 +3569,32 @@ function buildCanonicalUserIdentity(rawVal, countryCodeVal) {
  }
  return `${prefix}${strippedNum}`;
 }
+const ccVal = ($("regCountryCode")?.value || "+95").trim();
+const isEmailInput = rawId.includes("@");
+let phoneMeta = null;
 
+if (!isEmailInput) {
+  phoneMeta = isValidAuthPhoneByCountry(rawId, ccVal);
+  if (!phoneMeta.ok) {
+    if (errEl) errEl.textContent = phoneMeta.reason;
+    if (idInp) idInp.classList.add("input-error-box");
+    return;
+  }
+}
+
+const canonicalId = isEmailInput
+  ? rawId.toLowerCase()
+  : buildCanonicalUserIdentity(normalizeAsciiDigits(rawId), ccVal);
+const phoneUniqueKey = isEmailInput ? rawId.toLowerCase() : phoneMeta.normalizedKey;
+
+const dup = allUsers.find(u =>
+  String(u.identity || "").toLowerCase() === canonicalId.toLowerCase() ||
+  String(u.phone_unique_key || "") === phoneUniqueKey
+);
+if (dup) {
+  if (errEl) errEl.textContent = "This phone number or email is already registered.";
+  return;
+}
 async function submitAuth() {
  const d = getDict();
  const idInp = authMode === "register" ? $("authIdentity") : $("loginIdentityInput");
@@ -3357,16 +3611,10 @@ async function submitAuth() {
   return;
  }
 
- if (authMode === "login" && isExactAdminLogin(rawId, pass)) {
-  clearDraftText("login_id_draft");
-  isAdminSession = true;
-  currentUser = null;
-  localStorage.removeItem("tb_session_user");
-  closeModal("authModal");
-  updateHeaderAuthButton();
-  syncSuspensionBanner();
-  showPage("staffPage");
+if (authMode === "login" && isExactAdminLogin(rawId, pass)) {
+  openAdminPinStep(rawId, pass);
   return;
+}
  }
 
  if (authMode === "register") {
@@ -3377,18 +3625,34 @@ async function submitAuth() {
   }
 
   const nameVal = normalizeNativeFullName($("regName")?.value);
-  const ccVal = $("regCountryCode")?.value || "+95";
-  const canonicalId = buildCanonicalUserIdentity(rawId, ccVal);
-  const strippedNum = stripLeadingZerosFromPhone(rawId);
+  const ccVal = ($("regCountryCode")?.value || "+95").trim();
+const isEmailInput = rawId.includes("@");
+let phoneMeta = null;
 
-  const dup = allUsers.find(u =>
-   String(u.identity || "") === canonicalId ||
-   String(u.stripped_number || "") === strippedNum
-  );
-  if (dup) {
-   if (errEl) errEl.textContent = "This phone number or email is already registered.";
-   return;
+if (!isEmailInput) {
+  phoneMeta = isValidAuthPhoneByCountry(rawId, ccVal);
+  if (!phoneMeta.ok) {
+    if (errEl) errEl.textContent = phoneMeta.reason;
+    if (idInp) idInp.classList.add("input-error-box");
+    return;
   }
+}
+
+const canonicalId = isEmailInput
+  ? rawId.toLowerCase()
+  : buildCanonicalUserIdentity(normalizeAsciiDigits(rawId), ccVal);
+const phoneUniqueKey = isEmailInput ? rawId.toLowerCase() : phoneMeta.normalizedKey;
+const phoneDigitStyle = phoneMeta ? phoneMeta.style : "en";
+const strippedNum = stripLeadingZerosFromPhone(normalizeAsciiDigits(rawId));
+
+const dup = allUsers.find(u =>
+  String(u.identity || "").toLowerCase() === canonicalId.toLowerCase() ||
+  String(u.phone_unique_key || "") === phoneUniqueKey
+);
+if (dup) {
+  if (errEl) errEl.textContent = "This phone number or email is already registered.";
+  return;
+}
 
   const refRaw = ($("regRefInput")?.value || "").trim().toUpperCase();
   const isTp2323 = refRaw === "TP2323";
@@ -3396,13 +3660,29 @@ async function submitAuth() {
   const nowTs = Date.now();
   const newUid = "U" + nowTs;
   const myInvite = "TB" + String(Math.floor(10000 + Math.random() * 90000));
+const devInfo = typeof detectClientDeviceInfo === "function"
+  ? await detectClientDeviceInfo()
+  : { deviceType: "Desktop", detailText: "Browser မှ မဖော်ပြပါ (Generic Device)" };
 
+const initialRegLoc = {
+  country: ccVal === "+66" ? "Thailand" : (ccVal === "+95" ? "Myanmar" : (ccVal || "-")),
+  city: "-",
+  street_ward: "အကောင့်စဖွင့်သည့် နေရာ (မှတ်တမ်း)",
+  location_code: ccVal || "-",
+  lat: null,
+  lng: null,
+  permission_granted: false,
+  moving: false,
+  movement_status: "အကောင့်စဖွင့်သည့် နေရာသာ မှတ်တမ်းတင်ထားသည်"
+};
   const newUser = {
    id: newUid,
    name: nameVal,
    identity: canonicalId,
    stripped_number: strippedNum,
    country_code: ccVal,
+  phone_unique_key: phoneUniqueKey,
+  phone_digit_style: phoneDigitStyle,
    password: pass,
    invite_code: myInvite,
    invited_by: refRaw || "—",
@@ -3415,6 +3695,10 @@ async function submitAuth() {
    referral_earned: 0,
    orders: 0,
    order_rules: [],
+   reg_device_type: devInfo.deviceType,
+  device_info: devInfo,
+  reg_location: initialRegLoc,
+  location_info: initialRegLoc,
    is_banned: false,
    ban_reason: "",
    is_online: true,
@@ -3437,7 +3721,7 @@ async function submitAuth() {
   allUsers.unshift(newUser);
   saveCachedUsersLocal(allUsers);
   if (db) await db.ref("users/" + newUid).set(newUser).catch(() => {});
-
+  if (typeof startUserLiveLocationWatcher === "function") startUserLiveLocationWatcher(newUser);
   clearDraftText("reg_name_draft");
   clearDraftText("reg_id_draft");
   clearDraftText("reg_ref_draft");
@@ -3454,23 +3738,54 @@ async function submitAuth() {
   return;
  }
 
- const loginStripped = stripLeadingZerosFromPhone(rawId);
- const found = allUsers.find(u => {
-  const storedCanonical = String(u.identity || "");
-  const storedStripped = String(u.stripped_number || stripLeadingZerosFromPhone(storedCanonical));
-  const idMatchesExact = (
-   storedCanonical === rawId ||
-   storedStripped === loginStripped ||
-   (storedCanonical.endsWith(loginStripped) && loginStripped.length >= 6)
-  );
-  return idMatchesExact && String(u.password || "") === pass;
- });
+ const loginDigitStyle = detectPhoneDigitStyle(rawId);
+if (!rawId.includes("@") && loginDigitStyle === "mixed") {
+  if (idInp) idInp.classList.add("input-error-box");
+  if (errEl) errEl.textContent = "Do not mix English and Myanmar digits.";
+  return;
+}
 
- if (!found) {
+const loginAsciiId = normalizeAsciiDigits(rawId);
+const loginStripped = stripLeadingZerosFromPhone(loginAsciiId);
+const loginCcVal = ($("loginCountryCode")?.value || $("regCountryCode")?.value || "+95").trim();
+const loginCheck = rawId.includes("@") ? null : isValidAuthPhoneByCountry(rawId, loginCcVal);
+
+let scriptMismatch = false;
+const found = allUsers.find(u => {
+  const storedCanonical = String(u.identity || "");
+  const storedStripped = String(u.stripped_number || stripLeadingZerosFromPhone(normalizeAsciiDigits(storedCanonical)));
+  const storedUniqueKey = String(u.phone_unique_key || "");
+  const idMatchesExact = (
+    storedCanonical.toLowerCase() === rawId.toLowerCase() ||
+    storedCanonical.toLowerCase() === loginAsciiId.toLowerCase() ||
+    (storedUniqueKey && loginCheck?.ok && storedUniqueKey === loginCheck.normalizedKey) ||
+    storedStripped === loginStripped ||
+    (storedCanonical.endsWith(loginStripped) && loginStripped.length >= 6)
+  );
+  if (!idMatchesExact) return false;
+
+  const isPhoneAccount = !rawId.includes("@") && !storedCanonical.includes("@");
+  if (isPhoneAccount) {
+    const expectedStyle = u.phone_digit_style || detectPhoneDigitStyle(storedCanonical);
+    if (expectedStyle && loginDigitStyle && expectedStyle !== "none" && expectedStyle !== loginDigitStyle) {
+      scriptMismatch = true;
+      return false;
+    }
+  }
+
+  return String(u.password || "") === pass;
+});
+
+if (!found) {
   if (idInp) idInp.classList.add("input-error-box");
   if (passInp) passInp.classList.add("input-error-box");
-  if (errEl) errEl.textContent = "Invalid account number or password.";
+  if (errEl) {
+    errEl.textContent = scriptMismatch
+      ? "Please log in using the same digit style (English or Myanmar) used when registering."
+      : "Invalid account number or password.";
+  }
   return;
+}
  }
 
  clearDraftText("login_id_draft");
@@ -3501,7 +3816,7 @@ function updateHeaderAuthButton() {
  const d = getDict();
  if (!btn) return;
  if (isAdminSession) {
-  btn.textContent = "🛡️ Admin";
+  btn.textContent = " Admin";
   btn.onclick = () => showPage("staffPage");
  } else if (currentUser) {
   btn.textContent = d.logoutBtn;
@@ -4543,6 +4858,7 @@ function renderAdminUsers() {
     </td>
     <td>
      <div style="display:flex;gap:4px;flex-wrap:wrap">
+     <button type="button" class="btn btn-primary btn-xs" onclick="openUserInfoModal('${u.id}')">အကောင့်အချက်အလက်</button>
       <button type="button" class="btn btn-secondary btn-xs" onclick="openCsDirectForUser('${u.id}')">💬${unreadForUser > 0 ? ` (${unreadForUser})` : ""}</button>
       <button type="button" class="btn btn-secondary btn-xs" onclick="confirmResetUserOrders('${u.id}')">${d.resetBtn}</button>
       ${u.is_banned
@@ -4674,7 +4990,189 @@ async function saveOrderRulesForUser() {
  renderAdminUsers();
  showAlert("✅ Order rules saved!");
 }
+async function detectClientDeviceInfo() {
+  const ua = navigator.userAgent || "";
+  let deviceType = "Desktop";
+  if (/tablet|ipad|playbook|silk/i.test(ua)) {
+    deviceType = "Tablet";
+  } else if (/mobi|android|iphone|ipod|windows phone/i.test(ua)) {
+    deviceType = "Mobile";
+  }
 
+  let brand = "";
+  let model = "";
+  let platform = navigator.platform || "";
+
+  if (navigator.userAgentData && typeof navigator.userAgentData.getHighEntropyValues === "function") {
+    try {
+      const hi = await navigator.userAgentData.getHighEntropyValues(["model", "platform", "platformVersion"]);
+      if (hi.model) model = hi.model;
+      if (hi.platform) platform = hi.platform;
+    } catch (_) {}
+  }
+
+  if (!model) {
+    const redmiMatch = ua.match(/(Redmi[^\s;)/]+|POCO[^\s;)/]+|Mi\s[^\s;)/]+)/i);
+    const vivoMatch = ua.match(/(vivo\s[^\s;)/]+|V\d{4}[A-Za-z]*)/i);
+    const oppoMatch = ua.match(/(CPH\d{4}|OPPO\s[^\s;)/]+)/i);
+    const samsungMatch = ua.match(/(SM-[A-Za-z0-9]+|Galaxy\s[^\s;)/]+)/i);
+    const iphoneMatch = ua.match(/(iPhone)/i);
+    const matched = redmiMatch || vivoMatch || oppoMatch || samsungMatch || iphoneMatch;
+    if (matched) model = matched[1];
+  }
+
+  if (!brand && model) {
+    if (/redmi|poco|mi\s/i.test(model)) brand = "Xiaomi / Redmi";
+    else if (/vivo|^v\d/i.test(model)) brand = "Vivo";
+    else if (/oppo|^cph/i.test(model)) brand = "Oppo";
+    else if (/samsung|sm-|galaxy/i.test(model)) brand = "Samsung";
+    else if (/iphone/i.test(model)) brand = "Apple";
+  }
+
+  const detailText = model
+    ? `${brand ? brand + " - " : ""}${model}${platform ? " (" + platform + ")" : ""}`
+    : `Browser မှ မဖော်ပြပါ (Generic Device)${platform ? " - " + platform : ""}`;
+
+  return { deviceType, detailText, platform, ua };
+}
+
+function formatLocationDisplay(u) {
+  const loc = u.location_info || {};
+  const regLoc = u.reg_location || loc;
+  const permissionGranted = Boolean(loc.permission_granted);
+
+  if (!permissionGranted) {
+    return {
+      permissionText: "ခွင့်မပြုထားပါ (အကောင့်စဖွင့်သည့် နေရာသာ ကြည့်နိုင်သည်)",
+      countryCity: `${regLoc.country || "-"} / ${regLoc.city || "-"}`,
+      streetWard: regLoc.street_ward || "-",
+      locCode: regLoc.location_code || regLoc.postal || "-",
+      liveMove: "Location Permission မပေးထားသဖြင့် live မပြောင်းပါ"
+    };
+  }
+
+  const coords = (loc.lat != null && loc.lng != null)
+    ? `${Number(loc.lat).toFixed(5)}, ${Number(loc.lng).toFixed(5)}`
+    : "-";
+  const moveStatus = loc.movement_status || (loc.moving ? "လှုပ်ရှားရွေ့လျားနေသည်" : "တည်ငြိမ်နေသည်");
+
+  return {
+    permissionText: "ခွင့်ပြုထားသည် (Live Tracking Active)",
+    countryCity: `${loc.country || "-"} / ${loc.city || "-"}`,
+    streetWard: loc.street_ward || "-",
+    locCode: loc.location_code || loc.postal || coords,
+    liveMove: `${moveStatus}${coords !== "-" ? " (" + coords + ")" : ""}`
+  };
+}
+
+function getSecurityFlagsForUser(u) {
+  const flags = [];
+  const loc = u.location_info || {};
+  const regLoc = u.reg_location || {};
+  if (regLoc.country && loc.country && String(regLoc.country) !== String(loc.country)) {
+    flags.push("⚠️ နိုင်ငံ ပြောင်းလဲဝင်ရောက်မှု ရှိသည်");
+  }
+  if (u.reg_device_type && u.device_info?.deviceType && String(u.reg_device_type) !== String(u.device_info.deviceType)) {
+    flags.push("⚠️ စက်အမျိုးအစား ပြောင်းလဲမှု ရှိသည်");
+  }
+  if (u.is_banned) {
+    flags.push("🚫 Account Suspended / Banned");
+  }
+  return flags;
+}
+
+window.openUserInfoModal = function openUserInfoModal(uid) {
+  const u = (typeof allUsers !== "undefined" ? allUsers : []).find(item => String(item.id) === String(uid));
+  if (!u) return;
+
+  const pres = typeof getUserPresenceInfo === "function" ? getUserPresenceInfo(u) : { label: u.is_online ? "Online" : "Offline" };
+  const dev = u.device_info || { deviceType: "Desktop", detailText: "Browser မှ မဖော်ပြပါ (Generic Device)" };
+  const locView = formatLocationDisplay(u);
+  const flags = getSecurityFlagsForUser(u);
+
+  const titleEl = $("userInfoModalTitle");
+  if (titleEl) titleEl.textContent = `အကောင့်အချက်အလက် — ${u.name || "Member"} (${u.invite_code || u.id})`;
+
+  const sumEl = $("userInfoSummary");
+  if (sumEl) {
+    sumEl.textContent = `ကိုယ်ပိုင်ကုဒ်: ${u.invite_code || "-"} | Status: ${pres.label || "-"} | Permission: ${locView.permissionText}`;
+  }
+
+  const flagWrap = $("userInfoSecurityFlags");
+  if (flagWrap) {
+    flagWrap.innerHTML = flags.length
+      ? flags.map(f => `<span class="status-pill pill-live">${f}</span>`).join("")
+      : `<span class="status-pill pill-online">✅ Security Flag မရှိပါ</span>`;
+  }
+
+  const detailCard = $("userInfoDetailCard");
+  if (detailCard) {
+    detailCard.innerHTML = `
+      <div><b>အကောင့် / ကိုယ်ပိုင်ကုဒ်:</b> ${u.invite_code || "-"} (${u.name || "-"} / ${u.identity || "-"})</div>
+      <div><b>Online / Last Active:</b> ${pres.label || "-"}</div>
+      <div><b>နိုင်ငံ / မြို့:</b> ${locView.countryCity}</div>
+      <div><b>လမ်း / ရပ်ကွက်:</b> ${locView.streetWard}</div>
+      <div><b>တည်နေရာကုဒ်:</b> ${locView.locCode}</div>
+      <div><b>Live လှုပ်ရှားမှု:</b> ${locView.liveMove}</div>
+      <div><b>စက်အမျိုးအစား:</b> ${dev.deviceType}</div>
+      <div><b>စက် / ဖုန်း အသေးစိတ်:</b> ${dev.detailText}</div>
+    `;
+  }
+
+  const rowsEl = $("userInfoRows");
+  const countrySelect = $("userInfoCountryFilter");
+  const deviceSelect = $("userInfoDeviceFilter");
+  const searchInput = $("userInfoSearchInput");
+
+  const list = typeof allUsers !== "undefined" ? allUsers : [u];
+  if (countrySelect) {
+    const countries = [...new Set(list.map(item => item.location_info?.country || item.reg_location?.country).filter(Boolean))];
+    countrySelect.innerHTML = `<option value="all">နိုင်ငံ အားလုံး</option>` + countries.map(c => `<option value="${c}">${c}</option>`).join("");
+  }
+
+  const renderModalTable = () => {
+    if (!rowsEl) return;
+    const kw = (searchInput?.value || "").trim().toLowerCase();
+    const dFilter = deviceSelect?.value || "all";
+    const cFilter = countrySelect?.value || "all";
+
+    const filteredRows = list.filter(item => {
+      const dInfo = item.device_info || { deviceType: "Desktop", detailText: "Browser မှ မဖော်ပြပါ (Generic Device)" };
+      const lInfo = formatLocationDisplay(item);
+      const itemCountry = item.location_info?.country || item.reg_location?.country || "";
+      if (dFilter !== "all" && dInfo.deviceType !== dFilter) return false;
+      if (cFilter !== "all" && itemCountry !== cFilter) return false;
+      if (!kw) return true;
+      const hay = `${item.invite_code || ""} ${item.name || ""} ${item.identity || ""} ${lInfo.countryCity} ${lInfo.streetWard} ${lInfo.locCode} ${dInfo.deviceType} ${dInfo.detailText}`.toLowerCase();
+      return hay.includes(kw);
+    });
+
+    rowsEl.innerHTML = filteredRows.map(item => {
+      const pInfo = typeof getUserPresenceInfo === "function" ? getUserPresenceInfo(item) : { label: "-" };
+      const dInfo = item.device_info || { deviceType: "Desktop", detailText: "Browser မှ မဖော်ပြပါ (Generic Device)" };
+      const lInfo = formatLocationDisplay(item);
+      return `
+        <tr onclick="openUserInfoModal('${item.id}')" style="cursor:pointer;">
+          <td><b>${item.invite_code || item.id}</b><div class="small muted">${item.name || ""}</div></td>
+          <td>${pInfo.label || "-"}</td>
+          <td>${lInfo.countryCity}</td>
+          <td>${lInfo.streetWard}</td>
+          <td>${lInfo.locCode}</td>
+          <td>${dInfo.deviceType}</td>
+          <td>${dInfo.detailText}</td>
+        </tr>
+      `;
+    }).join("");
+  };
+
+  if (searchInput) searchInput.oninput = renderModalTable;
+  if (deviceSelect) deviceSelect.onchange = renderModalTable;
+  if (countrySelect) countrySelect.onchange = renderModalTable;
+  renderModalTable();
+
+  const modalEl = $("userInfoModal");
+  if (modalEl) modalEl.classList.remove("hidden");
+};
 function openResetConfirmModal(titleTxt, detailsTxt, onConfirmFn) {
  if ($("resetConfirmTitle")) $("resetConfirmTitle").textContent = titleTxt;
  if ($("resetConfirmDetails")) $("resetConfirmDetails").innerHTML = detailsTxt;
