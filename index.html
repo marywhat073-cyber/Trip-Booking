@@ -3603,39 +3603,82 @@ function saveState(skipCloud = false) {
 }
 
 function normalizeUser(u) {
+ const src = u && typeof u === "object" ? u : {};
+ const rawName = src.name || src.fullName || src.username || src.identity || "Member";
+ const rawPhone = src.phone || src.mobile || "";
+ const rawEmail = src.email || "";
+ const rawBalance =
+  typeof src.balance === "number"
+   ? src.balance
+   : typeof src.wallet === "number"
+   ? src.wallet
+   : Number(src.balance || 0);
+
  return {
-  id: u.id || ("usr-" + Math.random().toString(36).slice(2, 8)),
-  name: u.name || "Member",
-  phone: u.phone || "",
-  email: u.email || "",
-  password: u.password || "123456",
-  inviteCode: u.inviteCode || ("TP" + Math.floor(1000 + Math.random() * 9000)),
-  usedInviteCode: u.usedInviteCode || "",
-  balance: Number(u.balance || 0),
-  profit: Number(u.profit || 0),
-  pendingProfit: Number(u.pendingProfit || 0),
-  negativeAmount: Number(u.negativeAmount || 0),
-  completedOrders: Number(u.completedOrders || 0),
-  banned: Boolean(u.banned),
-  banReason: u.banReason || "",
-  online: Boolean(u.online),
-  placingOrder: Boolean(u.placingOrder),
-  avatarUrl: u.avatarUrl || "",
-  bank: u.bank || null,
-  orderRules: Array.isArray(u.orderRules) ? u.orderRules : [],
-  history: Array.isArray(u.history) ? u.history : [],
-  location: u.location || null,
-  deviceInfo: u.deviceInfo || ""
+  id: String(src.id || src.uid || src.userId || ("usr-" + Math.random().toString(36).slice(2, 8))),
+  name: String(rawName),
+  phone: String(rawPhone),
+  email: String(rawEmail),
+  password: String(src.password || "123456"),
+  inviteCode: String(src.inviteCode || src.code || ("TP" + Math.floor(1000 + Math.random() * 9000))),
+  usedInviteCode: String(src.usedInviteCode || src.invitedBy || ""),
+  balance: Number.isNaN(rawBalance) ? 0 : rawBalance,
+  profit: Number(src.profit || 0),
+  pendingProfit: Number(src.pendingProfit || 0),
+  negativeAmount: Number(src.negativeAmount || src.negative || 0),
+  completedOrders: Number(src.completedOrders || src.orders || 0),
+  banned: Boolean(src.banned || src.isBanned),
+  banReason: String(src.banReason || src.ban_reason || ""),
+  online: Boolean(src.online),
+  placingOrder: Boolean(src.placingOrder),
+  avatarUrl: String(src.avatarUrl || src.avatar || ""),
+  bank: src.bank || null,
+  orderRules: Array.isArray(src.orderRules) ? src.orderRules : [],
+  history: Array.isArray(src.history) ? src.history : [],
+  location: src.location || null,
+  deviceInfo: String(src.deviceInfo || "")
  };
 }
+ function readCachedUsersFromStorage() {
+ const merged = [];
+ const seenIds = new Set();
 
+ const pushUsers = (arr) => {
+  if (!Array.isArray(arr)) return;
+  arr.forEach((item) => {
+   if (!item || typeof item !== "object") return;
+   const idStr = String(item.id || item.uid || "");
+   if (idStr.startsWith("U_ADMIN_")) return;
+   const norm = normalizeUser(item);
+   const key = norm.id || `${norm.name}_${norm.phone}_${norm.email}`;
+   if (!seenIds.has(key)) {
+    seenIds.add(key);
+    merged.push(norm);
+   }
+  });
+ };
+
+ try {
+  const v1Raw = localStorage.getItem("tb_cached_users_v1");
+  if (v1Raw) pushUsers(JSON.parse(v1Raw));
+ } catch (e) {}
+
+ try {
+  const v0Raw = localStorage.getItem("tb_cached_users");
+  if (v0Raw) pushUsers(JSON.parse(v0Raw));
+ } catch (e) {}
+
+ return merged;
+}
 function loadInitialState() {
+ let loadedUsers = [];
  try {
   const raw = localStorage.getItem("trip_booking_state_v2");
   if (raw) {
    const parsed = JSON.parse(raw);
-   state.users = Array.isArray(parsed.users) ? parsed.users.map(normalizeUser) : [];
-   // Do NOT auto-populate pre-seeded bank accounts; admin starts clean
+   if (Array.isArray(parsed.users)) {
+    loadedUsers = parsed.users.map(normalizeUser);
+   }
    state.adminBankAccounts = Array.isArray(parsed.adminBankAccounts) ? parsed.adminBankAccounts : [];
    if (Array.isArray(parsed.profitTiers) && parsed.profitTiers.length) {
     state.profitTiers = parsed.profitTiers;
@@ -3651,15 +3694,31 @@ function loadInitialState() {
    if (Array.isArray(parsed.fxHistory)) state.fxHistory = parsed.fxHistory;
    if (parsed.deviceLocation) state.deviceLocation = parsed.deviceLocation;
    if (parsed.currentUserId) {
-    const found = state.users.find((u) => u.id === parsed.currentUserId);
+    const found = loadedUsers.find((u) => u.id === parsed.currentUserId);
     if (found) state.currentUser = found;
    }
   }
  } catch (e) {}
 
+ const cachedUsers = readCachedUsersFromStorage();
+ const mapById = new Map();
+ [...loadedUsers, ...cachedUsers].forEach((u) => {
+  mapById.set(u.id, u);
+ });
+ state.users = Array.from(mapById.values());
+
+ if (state.currentUser) {
+  const freshMe = state.users.find((u) => u.id === state.currentUser.id);
+  if (freshMe) state.currentUser = freshMe;
+ }
+
  if (!state.hotels.length) {
   state.hotels = generateHotelsCatalog(599);
  }
+ if (!state.fxHistory.length) {
+  initFxStream();
+ }
+}
  if (!state.fxHistory.length) {
   initFxStream();
  }
