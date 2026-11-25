@@ -94,7 +94,7 @@
    <div>
     <div class="fx-hero-label" data-i18n="todayUsdRateTitle">Today's USD Rate</div>
     <div id="todayFxRateValue" class="fx-hero-rate">1 USD = 4,500.00 MMK</div>
-    <div id="todayFxDateInfo" class="fx-hero-sub">Base: 4,500 MMK · Live stream</div>
+    <div id="todayFxDateInfo" class="fx-hero-sub">Base: 4,500 MMK · Smooth market stream</div>
    </div>
    <div class="fx-hero-pill">LIVE FX</div>
   </div>
@@ -103,7 +103,7 @@
    <div class="fx-chart-header">
     <div>
      <div class="fx-chart-title" data-i18n="fxChartTitle">USD ↔ MMK Live Rate Trend</div>
-     <div class="fx-chart-sub">Smooth live market stream (4,489 – 4,999 MMK)</div>
+     <div class="fx-chart-sub">Smooth 120fps market stream (4,489 – 4,999 MMK)</div>
     </div>
     <div class="fx-chart-live-readout">
      <span id="fxCurrentRateDisplay" class="fx-current-rate is-up">1 USD = 4,500.00 MMK</span>
@@ -170,8 +170,8 @@
     <button type="button" class="icon-btn" onclick="document.getElementById('supportPhotoInput').click()" title="Send Photo">
      <svg class="mono-ico" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
     </button>
-    <input id="supportInput" type="text" placeholder="Press Enter to send and Shift + Enter for a new line" onkeydown="handleComposerKeydown(event, 'user')" onfocus="handleSupportInputFocus()">
-    <button type="button" class="btn btn-secondary" onclick="sendSupportMessage()" title="Send">
+    <textarea id="supportInput" rows="1" placeholder="Press Enter to send and Shift + Enter for a new line" onkeydown="handleComposerKeydown(event, 'user')" onfocus="handleSupportInputFocus()" oninput="autoResizeTextarea(this)"></textarea>
+    <button type="button" class="btn btn-primary" onclick="sendSupportMessage()" title="Send">
      <svg class="mono-ico" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
     </button>
    </div>
@@ -231,22 +231,14 @@
     </div>
    </div>
 
-   <div class="stats" style="margin-top:16px">
+   <div class="stats" style="margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
     <div class="stat">
      <div class="muted small" data-i18n="accBal">Account Balance</div>
      <h2 id="profileBalance">$0.00</h2>
     </div>
     <div class="stat">
-     <div class="muted small" data-i18n="taskComm">Task Commission</div>
-     <h2 id="profileProfit">$0.00</h2>
-    </div>
-    <div class="stat">
-     <div class="muted small" data-i18n="totalProfit">Total Profit</div>
-     <h2 id="profileTotalProfit" style="color:var(--fb-success)">$0.00</h2>
-    </div>
-    <div class="stat">
-     <div class="muted small" data-i18n="dailyLimit">Daily Orders</div>
-     <h2 id="profileOrdersText">0/30</h2>
+     <div class="muted small">Account Status</div>
+     <h2 id="profileAccountStatus" style="font-size:18px;color:var(--fb-success)">Member</h2>
     </div>
    </div>
 
@@ -294,6 +286,7 @@
       <button type="button" class="btn btn-danger btn-sm" onclick="logoutAdmin()">Admin Logout</button>
      </div>
     </div>
+    <div id="adminLiveOrderBanner" class="live-order-banner hidden"></div>
     <div id="adminSyncStatus" class="small muted">Admin session active</div>
    </div>
 
@@ -312,7 +305,7 @@
        <input id="adminUserSearch" class="search-input" type="text" placeholder="Search user name, phone, code..." oninput="renderAdminUsers()">
        <select id="adminUserFilter" class="filter-select" onchange="renderAdminUsers()">
         <option value="all">All Users</option>
-        <option value="live_order">Placing Order</option>
+        <option value="live_order">Placing Order (LIVE)</option>
         <option value="negative">Negative Balance</option>
         <option value="has_rules">Has Auto Catch</option>
         <option value="banned">Banned</option>
@@ -353,12 +346,12 @@
      <div class="cs-chat-pane">
       <div id="adminCsActiveHeader" class="cs-pane-head">Select a user conversation</div>
       <div id="adminCsMessages" class="cs-messages"></div>
-      <div class="cs-composer">
+      <div class="cs-composer admin-cs-composer">
        <input type="file" id="adminCsPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'admin')">
        <button type="button" class="icon-btn" onclick="document.getElementById('adminCsPhotoInput').click()" title="Send Photo">
         <svg class="mono-ico" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
        </button>
-       <input id="adminCsInput" type="text" placeholder="Type reply to user..." onkeydown="handleComposerKeydown(event, 'admin')">
+       <textarea id="adminCsInput" rows="2" class="admin-reply-textarea" placeholder="Type reply to user... (Press Enter to send, Shift+Enter for new line)" onkeydown="handleComposerKeydown(event, 'admin')" oninput="autoResizeTextarea(this)"></textarea>
        <button type="button" class="btn btn-primary" onclick="sendAdminCsMessage()">Send</button>
       </div>
      </div>
@@ -918,6 +911,17 @@ body.dark .icon-btn {
  flex-wrap: wrap;
 }
 
+.live-order-banner {
+ margin-top: 10px;
+ padding: 10px 14px;
+ border-radius: 10px;
+ background: rgba(210, 153, 34, 0.14);
+ border: 1px solid rgba(210, 153, 34, 0.45);
+ color: var(--fb-text);
+ font-size: 13px;
+ font-weight: 700;
+}
+
 .activity-ticker-wrap {
  display: flex;
  align-items: center;
@@ -1342,7 +1346,7 @@ body.dark .icon-btn {
  margin-top: 6px;
 }
 
-/* Customer Service Full-Fit & Realistic Chat Bubbles */
+/* Customer Service Full-Fit, Realistic Chat Bubbles & Message Edit/Delete */
 #supportPage.active {
  display: flex;
  flex-direction: column;
@@ -1397,12 +1401,21 @@ body.dark .icon-btn {
  padding: 12px;
  background: var(--fb-card);
  border-top: 1px solid var(--fb-border);
- align-items: center;
+ align-items: flex-end;
 }
 .support-composer input[type="text"],
 .support-composer textarea {
  flex: 1;
  min-width: 0;
+ resize: none;
+ max-height: 120px;
+ line-height: 1.45;
+ padding: 9px 12px;
+ border-radius: 10px;
+ border: 1px solid var(--fb-border);
+ background: var(--fb-bg);
+ color: var(--fb-text);
+ font-size: 14px;
 }
 
 .chat-msg {
@@ -1412,6 +1425,7 @@ body.dark .icon-btn {
  font-size: 14px;
  line-height: 1.45;
  word-wrap: break-word;
+ white-space: pre-wrap;
 }
 .chat-msg.user,
 .chat-msg.user.user-rose-bubble {
@@ -1445,9 +1459,28 @@ body.dark .icon-btn {
 .chat-msg.user .chat-time,
 .chat-msg.user.user-rose-bubble .chat-time {
  text-align: right;
- color: #94a3b8;
+ color: #cbd5e1;
  opacity: 1;
  margin-top: 5px;
+}
+.msg-action-bar {
+ display: flex;
+ gap: 6px;
+ margin-top: 6px;
+ flex-wrap: wrap;
+}
+.msg-action-bar button {
+ background: rgba(13, 17, 23, 0.35);
+ color: #e6edf3;
+ border: 1px solid rgba(255, 255, 255, 0.16);
+ border-radius: 6px;
+ padding: 2px 7px;
+ font-size: 11px;
+ font-weight: 700;
+ cursor: pointer;
+}
+.msg-action-bar button:hover {
+ background: rgba(13, 17, 23, 0.65);
 }
 .chat-empty-state {
  margin: auto;
@@ -1628,9 +1661,9 @@ td input.mini-input {
 
 .cs-layout {
  display: grid;
- grid-template-columns: 310px 1fr;
+ grid-template-columns: 290px 1fr;
  gap: 14px;
- min-height: 500px;
+ min-height: 540px;
 }
 .cs-client-list, .cs-chat-pane {
  background: var(--fb-card);
@@ -1664,16 +1697,34 @@ td input.mini-input {
  flex: 1;
  padding: 14px;
  overflow-y: auto;
- max-height: 380px;
+ min-height: 340px;
+ max-height: 440px;
  display: flex;
  flex-direction: column;
  gap: 10px;
 }
-.cs-composer {
+.cs-composer,
+.admin-cs-composer {
  display: flex;
- gap: 8px;
- padding: 10px;
+ gap: 10px;
+ padding: 12px;
  border-top: 1px solid var(--fb-border);
+ background: var(--fb-bg);
+ align-items: flex-end;
+}
+.admin-reply-textarea {
+ flex: 1;
+ min-width: 0;
+ min-height: 52px;
+ max-height: 150px;
+ padding: 10px 12px;
+ border-radius: 10px;
+ border: 1px solid var(--fb-border);
+ background: var(--fb-card) !important;
+ color: var(--fb-text) !important;
+ font-size: 14px;
+ line-height: 1.45;
+ resize: vertical;
 }
 
 .bottom-nav {
@@ -1952,6 +2003,7 @@ const ADMIN_CREDS = {
  passwords: ["12344321", "1245"]
 };
 
+// Replace with your real Firebase Realtime Database config so all devices/browsers sync live
 const FIREBASE_CONFIG = {
  apiKey: "",
  authDomain: "",
@@ -1966,19 +2018,7 @@ let firebaseReady = false;
 let db = null;
 let auth = null;
 let liveLocationWatcherId = null;
-
-(function initFirebaseIfConfigured() {
- try {
-  if (typeof firebase !== "undefined" && FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL) {
-   firebase.initializeApp(FIREBASE_CONFIG);
-   db = firebase.database();
-   auth = firebase.auth();
-   firebaseReady = true;
-  }
- } catch (e) {
-  firebaseReady = false;
- }
-})();
+let lastNotifiedUserMsgKey = "";
 
 const $ = (id) => document.getElementById(id);
 
@@ -2022,6 +2062,13 @@ function formatBubbleTimestamp(dateObj = new Date()) {
  const hh = String(dateObj.getHours()).padStart(2, "0");
  const min = String(dateObj.getMinutes()).padStart(2, "0");
  return `${mm}/${dd}, ${hh}:${min}`;
+}
+
+function autoResizeTextarea(el) {
+ if (!el) return;
+ el.style.height = "auto";
+ const maxH = el.classList.contains("admin-reply-textarea") ? 150 : 120;
+ el.style.height = Math.min(maxH, Math.max(el.classList.contains("admin-reply-textarea") ? 52 : 38, el.scrollHeight)) + "px";
 }
 
 // =========================================================================
@@ -2112,6 +2159,7 @@ function updateLiveMovingLocationForUser(userObj) {
   userObj.lng = newLng;
   userObj.locStatus = moved ? "Live Moving" : "Active Location";
   userObj.locUpdatedAt = new Date().toLocaleTimeString();
+  userObj.lastSeenAt = Date.now();
   saveUsers(userObj);
   if (typeof renderProfile === "function") renderProfile();
   if (isStaffLoggedIn && $("accountInfoModal") && !$("accountInfoModal").classList.contains("hidden")) {
@@ -2141,6 +2189,7 @@ function updateLiveMovingLocationForUser(userObj) {
 function openAccountInfoModal() {
  const diskUsers = loadJson(STORAGE_KEYS.USERS, []);
  users = mergeUserLists(users, diskUsers);
+ saveJson(STORAGE_KEYS.USERS, users);
  renderAccountInfoModalRows();
  openModal("accountInfoModal");
 }
@@ -2183,9 +2232,10 @@ function handleReeschAdmin() {
  setTimeout(() => {
   const diskUsers = loadJson(STORAGE_KEYS.USERS, []);
   users = mergeUserLists(users, diskUsers);
-  chats = loadJson(STORAGE_KEYS.CHATS, {});
-  if (typeof checkNewUserMessagesForToast === "function") checkNewUserMessagesForToast(chats);
+  chats = mergeChatMaps(chats, loadJson(STORAGE_KEYS.CHATS, {}));
   saveJson(STORAGE_KEYS.USERS, users);
+  saveJson(STORAGE_KEYS.CHATS, chats);
+  checkNewUserMessagesForToast(chats);
 
   if (firebaseReady && db) {
    db.ref("users").once("value", (snap) => {
@@ -2193,14 +2243,17 @@ function handleReeschAdmin() {
     if (val && typeof val === "object") {
      users = mergeUserLists(users, Object.values(val));
      saveJson(STORAGE_KEYS.USERS, users);
+     renderAdminPanel();
     }
    });
    db.ref("chats").once("value", (snap) => {
     const cVal = snap.val();
     if (cVal && typeof cVal === "object") {
-     chats = { ...chats, ...cVal };
+     chats = mergeChatMaps(chats, cVal);
      saveJson(STORAGE_KEYS.CHATS, chats);
-     if (typeof checkNewUserMessagesForToast === "function") checkNewUserMessagesForToast(chats);
+     checkNewUserMessagesForToast(chats);
+     renderAdminCsList();
+     renderAdminCsMessages();
     }
    });
   }
@@ -2214,11 +2267,11 @@ function handleReeschAdmin() {
    title: "REESCH အောင်မြင်ပါသည်",
    badge: "SYNCED"
   });
- }, 300);
+ }, 250);
 }
 
 // =========================================================================
-// CORE STATE, AUTH & REGISTRATION
+// CORE STATE, FIREBASE & CROSS-TAB/STORAGE SYNC
 // =========================================================================
 const BASE_HOTELS = [
  { id: 1, name: "Grand Lotus Yangon", country: "Myanmar · Yangon", stars: 5, price: 145, description: "Central Yangon business and leisure stay with pool and airport shuttle.", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop" },
@@ -2270,7 +2323,7 @@ function normalizeUserRecord(u) {
  return copy;
 }
 
-users = users.map(normalizeUserRecord);
+users = (Array.isArray(users) ? users : []).map(normalizeUserRecord);
 
 function mergeUserLists(primaryList, secondaryList) {
  const map = new Map();
@@ -2283,18 +2336,50 @@ function mergeUserLists(primaryList, secondaryList) {
   if (!item || !item.phone) return;
   const norm = normalizeUserRecord(item);
   const prev = map.get(norm.phone);
-  if (!prev || (norm.lastSeenAt || 0) >= (prev.lastSeenAt || 0)) {
-   map.set(norm.phone, { ...(prev || {}), ...norm });
+  if (!prev) {
+   map.set(norm.phone, norm);
   } else {
-   map.set(norm.phone, { ...norm, ...prev });
+   const newest = (norm.lastSeenAt || 0) >= (prev.lastSeenAt || 0) ? norm : prev;
+   const oldest = newest === norm ? prev : norm;
+   map.set(norm.phone, {
+    ...oldest,
+    ...newest,
+    password: newest.password || oldest.password,
+    orderRules: newest.orderRules.length ? newest.orderRules : oldest.orderRules,
+    history: newest.history.length ? newest.history : oldest.history
+   });
   }
  });
  return Array.from(map.values());
 }
 
+function mergeChatMaps(primaryMap, secondaryMap) {
+ const out = {};
+ const keys = new Set([
+  ...Object.keys(secondaryMap || {}),
+  ...Object.keys(primaryMap || {})
+ ]);
+ keys.forEach(k => {
+  const a = Array.isArray(secondaryMap?.[k]) ? secondaryMap[k] : [];
+  const b = Array.isArray(primaryMap?.[k]) ? primaryMap[k] : [];
+  const base = b.length >= a.length ? b : a;
+  out[k] = base.map((msg, idx) => ({
+   id: msg.id || `${k}_${idx}_${msg.time || "t"}`,
+   sender: msg.sender || "user",
+   senderName: msg.senderName || k,
+   text: String(msg.text || ""),
+   photo: msg.photo || "",
+   time: msg.time || formatBubbleTimestamp(new Date())
+  }));
+ });
+ return out;
+}
+
 function saveUsers(changedUser) {
- users = users.map(normalizeUserRecord);
+ const latestDisk = loadJson(STORAGE_KEYS.USERS, []);
+ users = mergeUserLists(users, latestDisk).map(normalizeUserRecord);
  saveJson(STORAGE_KEYS.USERS, users);
+
  if (firebaseReady && db) {
   if (changedUser && changedUser.phone) {
    db.ref("users/" + encodeURIComponent(changedUser.phone)).set(changedUser).catch(() => {});
@@ -2323,6 +2408,79 @@ function addUserHistory(u, title, amountText, type = "info") {
  if (u.history.length > 80) u.history.length = 80;
 }
 
+function initFirebaseAndListeners() {
+ try {
+  if (typeof firebase !== "undefined" && FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL) {
+   if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+   db = firebase.database();
+   auth = firebase.auth();
+   firebaseReady = true;
+
+   db.ref("users").on("value", (snap) => {
+    const val = snap.val();
+    if (val && typeof val === "object") {
+     users = mergeUserLists(Object.values(val), users);
+     saveJson(STORAGE_KEYS.USERS, users);
+     renderProfile();
+     renderBookingCenter();
+     renderHistory();
+     if (isStaffLoggedIn) {
+      renderAdminPanel();
+      if ($("accountInfoModal") && !$("accountInfoModal").classList.contains("hidden")) {
+       renderAccountInfoModalRows();
+      }
+     }
+    }
+   });
+
+   db.ref("chats").on("value", (snap) => {
+    const cVal = snap.val();
+    if (cVal && typeof cVal === "object") {
+     chats = mergeChatMaps(cVal, chats);
+     saveJson(STORAGE_KEYS.CHATS, chats);
+     checkNewUserMessagesForToast(chats);
+     renderSupportChat();
+     if (isStaffLoggedIn) {
+      renderAdminCsList();
+      renderAdminCsMessages();
+     }
+    }
+   });
+  }
+ } catch (e) {
+  firebaseReady = false;
+ }
+
+ window.addEventListener("storage", (ev) => {
+  if (ev.key === STORAGE_KEYS.USERS) {
+   users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
+   renderProfile();
+   renderBookingCenter();
+   renderHistory();
+   if (isStaffLoggedIn) {
+    renderAdminPanel();
+    if ($("accountInfoModal") && !$("accountInfoModal").classList.contains("hidden")) {
+     renderAccountInfoModalRows();
+    }
+   }
+  } else if (ev.key === STORAGE_KEYS.CHATS) {
+   chats = mergeChatMaps(loadJson(STORAGE_KEYS.CHATS, {}), chats);
+   checkNewUserMessagesForToast(chats);
+   renderSupportChat();
+   if (isStaffLoggedIn) {
+    renderAdminCsList();
+    renderAdminCsMessages();
+   }
+  } else if (ev.key === STORAGE_KEYS.SESSION) {
+   currentPhone = loadJson(STORAGE_KEYS.SESSION, null);
+   renderProfile();
+   renderBookingCenter();
+   renderHistory();
+   renderSupportChat();
+  }
+ });
+}
+
 function openModal(id) {
  const el = $(id);
  if (el) el.classList.remove("hidden");
@@ -2340,7 +2498,10 @@ function showPage(pageId, btnEl) {
  document.querySelectorAll(".bottom-nav button").forEach(b => b.classList.remove("active"));
  if (btnEl) btnEl.classList.add("active");
 
- if (pageId === "homePage") renderHotels();
+ if (pageId === "homePage") {
+  applyNextHeroHotelSlide();
+  renderHotels();
+ }
  if (pageId === "supportPage") renderSupportChat();
  if (pageId === "bookingPage") renderBookingCenter();
  if (pageId === "historyPage") renderHistory();
@@ -2368,6 +2529,8 @@ function registerUser() {
  const invitedBy = ($("regInvite")?.value || "").trim();
  const password = $("regPassword")?.value || "";
  const errEl = $("regErr");
+
+ users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
 
  if (!name || !phone || !password) {
   errEl.textContent = "Please fill in your name, phone number, and password.";
@@ -2414,7 +2577,7 @@ function registerUser() {
  const toast = $("regSuccessToast");
  if (toast) {
   toast.classList.remove("hidden");
-  setTimeout(() => toast.classList.add("hidden"), 2200);
+  setTimeout(() => toast.classList.add("hidden"), 2000);
  }
 }
 
@@ -2422,6 +2585,8 @@ function loginUser() {
  const phone = ($("loginPhone")?.value || "").trim();
  const password = $("loginPassword")?.value || "";
  const errEl = $("loginErr");
+
+ users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
 
  if (phone === ADMIN_CREDS.phone && ADMIN_CREDS.passwords.includes(password)) {
   if (errEl) errEl.textContent = "";
@@ -2470,7 +2635,7 @@ function logoutUser() {
 }
 
 // =========================================================================
-// AUTO-CATCH (အော်တိုဖမ်း) ORDER 10+ WITH EDIT / DELETE & COUNT LOG
+// AUTO-CATCH (အော်တိုဖမ်း) ORDER 1–30 WITH EDIT / DELETE & COUNT LOG
 // =========================================================================
 let activeAutoCatchUserPhone = null;
 let editingCatchRuleIndex = -1;
@@ -2542,8 +2707,8 @@ function confirmAutoCatchRule() {
  const ordNum = Number($("catchOrderNumInput").value);
  const errEl = $("autoCatchErr");
 
- if (!ordNum || ordNum < 10 || ordNum > 30) {
-  errEl.textContent = "ဘယ်နှကြိမ် (Order #) ကို 10 မှ 30 အတွင်း ထည့်သွင်းပါ (Order 10 အထက်)။";
+ if (!ordNum || ordNum < 1 || ordNum > 30) {
+  errEl.textContent = "ဘယ်နှကြိမ် (Order #) ကို 1 မှ 30 အတွင်း ထည့်သွင်းပါ။";
   return;
  }
  if (negVal <= 0 && profVal <= 0) {
@@ -2769,6 +2934,7 @@ function openCenterOrderForHotel(hotelId) {
  u.activeOrderHotel = `${h.name} (#${nextOrderNum})`;
  u.lastSeenAt = Date.now();
  saveUsers(u);
+ if (isStaffLoggedIn) renderAdminPanel();
 
  $("centerOrderTitle").textContent = `Booking Order #${nextOrderNum}/30`;
  $("centerOrderBody").innerHTML = `
@@ -2791,6 +2957,7 @@ function cancelCenterOrderModal() {
  }
  pendingOrderHotel = null;
  closeModal("centerOrderModal");
+ if (isStaffLoggedIn) renderAdminPanel();
 }
 
 function submitCenterOrder() {
@@ -2814,7 +2981,7 @@ function submitCenterOrder() {
  u.balance = roundMoney(u.balance + commission);
 
  if (caughtNeg > 0 && roundMoney(u.balance) < caughtNeg) {
-  u.negativeBalance = roundMoney(Math.max(u.negativeBalance, caughtNeg - u.balance));
+  u.negativeBalance = roundMoney(Math.max(0, caughtNeg - u.balance));
  }
 
  u.isPlacingOrder = false;
@@ -2943,7 +3110,7 @@ function submitBindBank() {
 }
 
 // =========================================================================
-// CUSTOMER SERVICE CHAT (USER & ADMIN)
+// CUSTOMER SERVICE CHAT (USER & ADMIN + EDIT/DELETE ACTION BAR)
 // =========================================================================
 function getChatThread(phone) {
  if (!phone) return [];
@@ -2993,12 +3160,14 @@ function sendSupportMessage() {
  if (!txt) return;
  const list = getChatThread(u.phone);
  list.push({
+  id: "m_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
   sender: "user",
   senderName: u.name || u.phone,
   text: txt,
   time: formatBubbleTimestamp(new Date())
  });
  inp.value = "";
+ autoResizeTextarea(inp);
  saveChats();
  renderSupportChat();
  if (isStaffLoggedIn) {
@@ -3030,15 +3199,34 @@ function handleChatPhotoUpload(ev, role) {
    const u = getCurrentUser();
    if (!u) { openAuth("login"); return; }
    const list = getChatThread(u.phone);
-   list.push({ sender: "user", senderName: u.name || u.phone, text: "", photo: dataUrl, time: formatBubbleTimestamp(new Date()) });
+   list.push({
+    id: "m_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    sender: "user",
+    senderName: u.name || u.phone,
+    text: "",
+    photo: dataUrl,
+    time: formatBubbleTimestamp(new Date())
+   });
    saveChats();
    renderSupportChat();
+   if (isStaffLoggedIn) {
+    renderAdminCsList();
+    if (activeCsUserPhone === u.phone) renderAdminCsMessages();
+   }
   } else {
    if (!activeCsUserPhone) return;
    const list = getChatThread(activeCsUserPhone);
-   list.push({ sender: "admin", senderName: "Customer Service", text: "", photo: dataUrl, time: formatBubbleTimestamp(new Date()) });
+   list.push({
+    id: "m_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+    sender: "admin",
+    senderName: "Customer Service",
+    text: "",
+    photo: dataUrl,
+    time: formatBubbleTimestamp(new Date())
+   });
    saveChats();
    renderAdminCsMessages();
+   if (currentPhone === activeCsUserPhone) renderSupportChat();
   }
   ev.target.value = "";
  };
@@ -3069,6 +3257,9 @@ function checkNewUserMessagesForToast(chatMap) {
   if (!Array.isArray(msgs) || !msgs.length) continue;
   const last = msgs[msgs.length - 1];
   if (last && last.sender === "user") {
+   const key = `${phone}|${last.time || ""}|${last.text || "[Photo]"}`;
+   if (key === lastNotifiedUserMsgKey) continue;
+   lastNotifiedUserMsgKey = key;
    const u = users.find(x => x.phone === phone);
    $("csToastSender").textContent = `${u?.name || phone} (${phone})`;
    $("csToastPreview").textContent = last.text || "[Photo]";
@@ -3092,6 +3283,9 @@ function loginAdmin() {
  const pw = ($("adminPassInput")?.value || "").trim();
  const errEl = $("adminLoginErr");
 
+ users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
+ chats = mergeChatMaps(loadJson(STORAGE_KEYS.CHATS, {}), chats);
+
  if (ph !== ADMIN_CREDS.phone || !ADMIN_CREDS.passwords.includes(pw)) {
   errEl.textContent = "Invalid admin phone or password.";
   return;
@@ -3107,6 +3301,20 @@ function logoutAdmin() {
  isStaffLoggedIn = false;
  saveJson(STORAGE_KEYS.ADMIN_AUTH, false);
  renderAdminPanel();
+}
+
+function renderAdminLiveOrderBanner() {
+ const banner = $("adminLiveOrderBanner");
+ if (!banner) return;
+ const placing = users.filter(u => u.isPlacingOrder);
+ if (!placing.length) {
+  banner.classList.add("hidden");
+  banner.textContent = "";
+  return;
+ }
+ const names = placing.map(u => `${u.name || u.phone} (${u.activeOrderHotel || "Booking"})`).join(" · ");
+ banner.classList.remove("hidden");
+ banner.textContent = `LIVE ORDERING NOW (${placing.length}): ${names}`;
 }
 
 function renderAdminPanel() {
@@ -3125,6 +3333,7 @@ function renderAdminPanel() {
  const badge = $("adminUsersCountBadge");
  if (badge) badge.textContent = `${users.length} Users`;
 
+ renderAdminLiveOrderBanner();
  renderAdminUsers();
  renderAdminCsList();
  renderAdminHotels();
@@ -3174,7 +3383,7 @@ function renderAdminUsers() {
  });
 
  if (!filtered.length) {
-  tbody.innerHTML = `<tr><td colspan="9" style="text-align:center" class="muted">No matching users found.</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="8" style="text-align:center" class="muted">No matching users found.</td></tr>`;
   return;
  }
 
@@ -3187,7 +3396,7 @@ function renderAdminUsers() {
      <strong>${escapeHtml(u.name || "")}</strong><br>
      <span class="small muted">${escapeHtml(u.phone || "")}</span><br>
      <span class="status-pill ${u.isBanned ? "pill-banned" : (u.isOnline ? "pill-online" : "pill-offline")}">${u.isBanned ? "Banned" : (u.isOnline ? "Online" : "Offline")}</span>
-     ${u.isPlacingOrder ? `<span class="status-pill pill-ordering">Ordering</span>` : ""}
+     ${u.isPlacingOrder ? `<span class="status-pill pill-ordering">Placing Order (LIVE)</span>` : ""}
      ${lockInfo ? `<div class="status-pill pill-banned" style="margin-top:3px">Order #${lockInfo.orderNum} Locked</div>` : ""}
     </td>
     <td><input class="mini-input adm-bal" type="number" step="0.01" value="${roundMoney(u.balance).toFixed(2)}"></td>
@@ -3294,18 +3503,48 @@ function renderAdminCsMessages() {
  const u = users.find(x => x.phone === activeCsUserPhone);
  head.textContent = `Chat with ${u?.name || activeCsUserPhone} (${activeCsUserPhone})`;
  const list = getChatThread(activeCsUserPhone);
- box.innerHTML = list.map(m => {
+ box.innerHTML = list.map((m, idx) => {
   const cls = m.sender === "admin" ? "user user-rose-bubble" : "admin";
   const imgHtml = m.photo ? `<img class="chat-photo" src="${m.photo}" alt="attachment" onclick="window.open(this.src,'_blank')">` : "";
   return `
-   <div class="chat-msg ${cls}">
+   <div class="chat-msg ${cls} staff-editable">
     ${m.text ? `<div>${escapeHtml(m.text)}</div>` : ""}
     ${imgHtml}
     <div class="chat-time">${escapeHtml(m.time || "")}</div>
+    <div class="msg-action-bar">
+     <button type="button" onclick="editAdminChatMsg(${idx})">Edit</button>
+     <button type="button" onclick="deleteAdminChatMsg(${idx})">Delete</button>
+    </div>
    </div>
   `;
  }).join("");
  box.scrollTop = box.scrollHeight;
+}
+
+function editAdminChatMsg(idx) {
+ if (!activeCsUserPhone) return;
+ const list = getChatThread(activeCsUserPhone);
+ const item = list[idx];
+ if (!item) return;
+ const nextTxt = prompt("Edit message text:", item.text || "");
+ if (nextTxt === null) return;
+ item.text = nextTxt.trim();
+ item.edited = true;
+ saveChats();
+ renderAdminCsMessages();
+ renderAdminCsList();
+ if (currentPhone === activeCsUserPhone) renderSupportChat();
+}
+
+function deleteAdminChatMsg(idx) {
+ if (!activeCsUserPhone) return;
+ const list = getChatThread(activeCsUserPhone);
+ if (!list[idx]) return;
+ list.splice(idx, 1);
+ saveChats();
+ renderAdminCsMessages();
+ renderAdminCsList();
+ if (currentPhone === activeCsUserPhone) renderSupportChat();
 }
 
 function sendAdminCsMessage() {
@@ -3314,8 +3553,15 @@ function sendAdminCsMessage() {
  const txt = (inp?.value || "").trim();
  if (!txt) return;
  const list = getChatThread(activeCsUserPhone);
- list.push({ sender: "admin", senderName: "Customer Service", text: txt, time: formatBubbleTimestamp(new Date()) });
+ list.push({
+  id: "m_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+  sender: "admin",
+  senderName: "Customer Service",
+  text: txt,
+  time: formatBubbleTimestamp(new Date())
+ });
  inp.value = "";
+ autoResizeTextarea(inp);
  saveChats();
  renderAdminCsMessages();
  renderAdminCsList();
@@ -3340,7 +3586,7 @@ function renderAdminHotels() {
 }
 
 // =========================================================================
-// +499 UNIQUE HOTELS, HOTEL GRID/DETAIL, HERO BANNER & 120FPS FX CHART
+// +499 UNIQUE HOTELS, HOTEL GRID/DETAIL, PAGE-ENTRY HERO BANNER & SLOW 120FPS FX CHART
 // =========================================================================
 const EXTRA_499_HOTEL_PHOTOS = [
  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop",
@@ -3545,19 +3791,17 @@ function openHotelDetailModal(hotelId) {
  openModal("hotelDetailModal");
 }
 
-function initHeroRotator() {
+// Changes hotel image every time user enters/visits the page
+let heroSlideCursor = Number(loadJson("tb_hero_slide_idx", 0)) || 0;
+function applyNextHeroHotelSlide() {
  const banner = $("homeHotelHeroBanner");
  const label = $("heroHotelNameLabel");
- if (!banner) return;
- let idx = 0;
- const applySlide = () => {
-  const h = hotels[idx % hotels.length] || BASE_HOTELS[0];
-  banner.style.backgroundImage = `url('${h.img || HERO_BANNER_IMAGES[idx % HERO_BANNER_IMAGES.length]}')`;
-  if (label) label.textContent = `${h.name} · ${h.country} · $${Number(h.price || 0).toFixed(2)}`;
-  idx++;
- };
- applySlide();
- setInterval(applySlide, 5000);
+ if (!banner || !hotels.length) return;
+ const h = hotels[heroSlideCursor % hotels.length] || BASE_HOTELS[0];
+ heroSlideCursor = (heroSlideCursor + 1) % hotels.length;
+ saveJson("tb_hero_slide_idx", heroSlideCursor);
+ banner.style.backgroundImage = `url('${h.img || HERO_BANNER_IMAGES[0]}')`;
+ if (label) label.textContent = `${h.name} · ${h.country} · $${Number(h.price || 0).toFixed(2)}`;
 }
 
 function initActivityTicker() {
@@ -3572,6 +3816,8 @@ function initActivityTicker() {
  track.innerHTML = [...items, ...items].map(t => `<span>${t}</span>`).join("");
 }
 
+// Slow, realistic market/BTC-like 120fps smooth trend line (4,489 - 4,999 MMK)
+// Green when above base 4500 / rising, Red when below base 4500 / falling
 function initFxLiveChart() {
  const canvas = $("fxLiveCanvas");
  if (!canvas) return;
@@ -3580,45 +3826,75 @@ function initFxLiveChart() {
  const minR = 4489;
  const maxR = 4999;
 
- const totalPts = 96;
- const points = Array.from({ length: totalPts }, (_, i) => baseRate + Math.sin(i * 0.14) * 14);
- let displayRate = 4500;
- let targetRate = 4501.71;
+ const totalPts = 110;
+ const points = Array.from({ length: totalPts }, (_, i) => baseRate + Math.sin(i * 0.12) * 18);
+ let displayRate = 4502.40;
+ let targetRate = 4508.00;
+ let driftBias = 1;
  let lastTargetShift = performance.now();
  let lastFrameTime = performance.now();
+ let hoverNormX = null;
 
- function pickNextTarget() {
-  const wave = Math.sin(performance.now() * 0.0012) * 28;
-  const jitter = (Math.random() - 0.5) * 42;
-  targetRate = Math.max(minR, Math.min(maxR, Number((baseRate + 65 + wave + jitter).toFixed(2))));
+ canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  hoverNormX = Math.max(0, Math.min(1, (e.clientX - rect.left) / Math.max(1, rect.width)));
+ });
+ canvas.addEventListener("mouseleave", () => {
+  hoverNormX = null;
+ });
+ canvas.addEventListener("touchmove", (e) => {
+  if (!e.touches || !e.touches.length) return;
+  const rect = canvas.getBoundingClientRect();
+  hoverNormX = Math.max(0, Math.min(1, (e.touches[0].clientX - rect.left) / Math.max(1, rect.width)));
+ }, { passive: true });
+ canvas.addEventListener("touchend", () => {
+  hoverNormX = null;
+ });
+
+ function pickSlowMarketTarget() {
+  if (Math.random() < 0.24) driftBias *= -1;
+  const step = ((Math.random() - 0.46) * 34) + (driftBias * 9);
+  let next = targetRate + step;
+  if (Math.random() < 0.12) {
+   next = Math.random() < 0.5
+    ? (minR + Math.random() * 14)
+    : (maxR - Math.random() * 35);
+  }
+  targetRate = Math.max(minR, Math.min(maxR, Number(next.toFixed(2))));
  }
 
  function renderFrame(now) {
   const dt = Math.min(0.05, Math.max(0.001, (now - lastFrameTime) / 1000));
   lastFrameTime = now;
 
-  if (now - lastTargetShift >= 450) {
-   pickNextTarget();
+  // Slow market pace: updates target every ~1.35s and eases gently
+  if (now - lastTargetShift >= 1350) {
+   pickSlowMarketTarget();
    lastTargetShift = now;
   }
 
-  const alpha = 1 - Math.exp(-dt * 7.5);
+  const alpha = 1 - Math.exp(-dt * 2.2);
   displayRate = displayRate + (targetRate - displayRate) * alpha;
 
   points[points.length - 1] = displayRate;
   for (let i = 0; i < points.length - 1; i++) {
-   points[i] = points[i] + (points[i + 1] - points[i]) * Math.min(1, dt * 11);
+   points[i] = points[i] + (points[i + 1] - points[i]) * Math.min(1, dt * 3.4);
   }
 
   const rect = canvas.parentElement.getBoundingClientRect();
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const w = Math.max(260, Math.floor(rect.width || 600));
-  const h = Math.max(150, Math.floor(rect.height || 200));
+  const h = Math.max(150, Math.floor(rect.height || 220));
 
   if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
    canvas.width = Math.floor(w * dpr);
    canvas.height = Math.floor(h * dpr);
   }
+
+  const isUp = displayRate >= baseRate;
+  const strokeColor = isUp ? "#3fb950" : "#f85149";
+  const topGradColor = isUp ? "rgba(63, 185, 80, 0.24)" : "rgba(248, 81, 73, 0.24)";
+  const botGradColor = isUp ? "rgba(63, 185, 80, 0.0)" : "rgba(248, 81, 73, 0.0)";
 
   ctx.save();
   ctx.scale(dpr, dpr);
@@ -3634,13 +3910,13 @@ function initFxLiveChart() {
    ctx.stroke();
   }
 
-  const lo = Math.min(...points) - 6;
-  const hi = Math.max(...points) + 6;
+  const lo = Math.min(...points) - 8;
+  const hi = Math.max(...points) + 8;
   const span = Math.max(1, hi - lo);
 
   const grad = ctx.createLinearGradient(0, 10, 0, h - 10);
-  grad.addColorStop(0, "rgba(47, 129, 247, 0.28)");
-  grad.addColorStop(1, "rgba(47, 129, 247, 0.0)");
+  grad.addColorStop(0, topGradColor);
+  grad.addColorStop(1, botGradColor);
 
   ctx.beginPath();
   points.forEach((val, idx) => {
@@ -3650,8 +3926,8 @@ function initFxLiveChart() {
    else ctx.lineTo(x, y);
   });
 
-  ctx.strokeStyle = "#2f81f7";
-  ctx.lineWidth = 2.4;
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = 2.3;
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
   ctx.stroke();
@@ -3666,16 +3942,43 @@ function initFxLiveChart() {
   const lastY = h - 18 - ((displayRate - lo) / span) * (h - 36);
   ctx.beginPath();
   ctx.arc(lastX, lastY, 4.2, 0, Math.PI * 2);
-  ctx.fillStyle = "#58a6ff";
+  ctx.fillStyle = strokeColor;
   ctx.fill();
+
+  if (hoverNormX !== null) {
+   const pIdx = Math.min(points.length - 1, Math.max(0, Math.round(hoverNormX * (points.length - 1))));
+   const pVal = points[pIdx];
+   const px = (pIdx / Math.max(1, points.length - 1)) * (w - 24) + 12;
+   const py = h - 18 - ((pVal - lo) / span) * (h - 36);
+   ctx.strokeStyle = "rgba(139, 148, 158, 0.55)";
+   ctx.setLineDash([4, 4]);
+   ctx.beginPath();
+   ctx.moveTo(px, 10);
+   ctx.lineTo(px, h - 14);
+   ctx.stroke();
+   ctx.setLineDash([]);
+
+   ctx.beginPath();
+   ctx.arc(px, py, 4.5, 0, Math.PI * 2);
+   ctx.fillStyle = pVal >= baseRate ? "#3fb950" : "#f85149";
+   ctx.fill();
+
+   if ($("fxPointDetailText")) {
+    $("fxPointDetailText").textContent = `Tick Rate: 1 USD = ${pVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+   }
+  } else if ($("fxPointDetailText")) {
+   $("fxPointDetailText").textContent = "Move cursor or touch chart to inspect live tick rate";
+  }
 
   ctx.restore();
 
   const diffPct = (((displayRate - baseRate) / baseRate) * 100).toFixed(2);
-  const isUp = displayRate >= baseRate;
   const formatted = displayRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  if ($("todayFxRateValue")) $("todayFxRateValue").textContent = `1 USD = ${formatted} MMK`;
+  if ($("todayFxRateValue")) {
+   $("todayFxRateValue").textContent = `1 USD = ${formatted} MMK`;
+   $("todayFxRateValue").style.color = strokeColor;
+  }
   if ($("fxCurrentRateDisplay")) {
    $("fxCurrentRateDisplay").textContent = `1 USD = ${formatted} MMK`;
    $("fxCurrentRateDisplay").className = "fx-current-rate " + (isUp ? "is-up" : "is-down");
@@ -3736,9 +4039,10 @@ function renderProfile() {
   $("profileInvite").textContent = "";
   $("profileDeviceLoc").textContent = "";
   $("profileBalance").textContent = "$0.00";
-  $("profileProfit").textContent = "$0.00";
-  $("profileTotalProfit").textContent = "$0.00";
-  $("profileOrdersText").textContent = "0/30";
+  if ($("profileAccountStatus")) {
+   $("profileAccountStatus").textContent = "Guest";
+   $("profileAccountStatus").style.color = "var(--fb-muted)";
+  }
   $("suspendedAccountNotice").classList.add("hidden");
   return;
  }
@@ -3751,9 +4055,10 @@ function renderProfile() {
  $("profileDeviceLoc").textContent = `Device: ${u.deviceInfo || formatDeviceAndPlatform()}${locTxt ? ` · Location: ${locTxt}` : ""}`;
 
  $("profileBalance").textContent = fmtMoney(u.balance);
- $("profileProfit").textContent = fmtMoney(u.profit);
- $("profileTotalProfit").textContent = fmtMoney(u.totalProfit);
- $("profileOrdersText").textContent = `${Number(u.completedOrders || 0)}/30`;
+ if ($("profileAccountStatus")) {
+  $("profileAccountStatus").textContent = u.isBanned ? "Suspended" : "Active Member";
+  $("profileAccountStatus").style.color = u.isBanned ? "var(--fb-danger)" : "var(--fb-success)";
+ }
 
  const susp = $("suspendedAccountNotice");
  if (susp) {
@@ -3790,6 +4095,8 @@ function refreshAllViews() {
  const savedLang = loadJson(STORAGE_KEYS.LANG, "en");
  if ($("language")) $("language").value = savedLang;
 
+ initFirebaseAndListeners();
+
  const u = getCurrentUser();
  if (u) {
   u.isOnline = true;
@@ -3799,14 +4106,14 @@ function refreshAllViews() {
   updateLiveMovingLocationForUser(u);
  }
 
- initHeroRotator();
+ applyNextHeroHotelSlide();
  initActivityTicker();
  initFxLiveChart();
  refreshAllViews();
 
  const splash = $("introSplash");
  if (splash) {
-  setTimeout(() => splash.classList.add("fade-out"), 650);
+  setTimeout(() => splash.classList.add("fade-out"), 550);
  }
 })();
 </script>
