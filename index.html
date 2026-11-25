@@ -94,7 +94,7 @@
    <div>
     <div class="fx-hero-label" data-i18n="todayUsdRateTitle">Today's USD Rate</div>
     <div id="todayFxRateValue" class="fx-hero-rate">1 USD = 4,500.00 MMK</div>
-    <div id="todayFxDateInfo" class="fx-hero-sub">Base: 4,500 MMK · Smooth market stream</div>
+    <div id="todayFxDateInfo" class="fx-hero-sub">Base: 4,500 MMK · Live tick stream</div>
    </div>
    <div class="fx-hero-pill">LIVE FX</div>
   </div>
@@ -103,7 +103,7 @@
    <div class="fx-chart-header">
     <div>
      <div class="fx-chart-title" data-i18n="fxChartTitle">USD ↔ MMK Live Rate Trend</div>
-     <div class="fx-chart-sub">Smooth 120fps market stream (4,489 – 4,999 MMK)</div>
+     <div class="fx-chart-sub">Live tick stream · Green when rising, Red when falling</div>
     </div>
     <div class="fx-chart-live-readout">
      <span id="fxCurrentRateDisplay" class="fx-current-rate is-up">1 USD = 4,500.00 MMK</span>
@@ -217,7 +217,12 @@
  <section id="profilePage" class="page">
   <div class="panel">
    <div class="profile-head">
-    <div id="profileAvatar" class="avatar">TB</div>
+    <div class="profile-avatar-wrap">
+     <div id="profileAvatar" class="avatar">TB</div>
+     <img id="profileAvatarImg" class="avatar-img hidden" src="" alt="Profile Photo">
+     <input type="file" id="profilePhotoInput" accept="image/*" class="hidden" onchange="handleProfilePhotoUpload(event)">
+     <button type="button" class="btn btn-secondary btn-xs" style="margin-top:6px" onclick="document.getElementById('profilePhotoInput').click()">ပုံတင်ရန် (Upload Photo)</button>
+    </div>
     <div style="flex:1;min-width:200px">
      <h2 id="profileName" style="margin-bottom:4px">Guest Member</h2>
      <div id="profilePhone" class="muted small">Not logged in</div>
@@ -302,7 +307,7 @@
      <div class="section-head">
       <h3>Users Management &amp; Auto Catch</h3>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-       <input id="adminUserSearch" class="search-input" type="text" placeholder="Search user name, phone, code..." oninput="renderAdminUsers()">
+       <input id="adminUserSearch" class="search-input" type="text" placeholder="Search user name, phone, email, code..." oninput="renderAdminUsers()">
        <select id="adminUserFilter" class="filter-select" onchange="renderAdminUsers()">
         <option value="all">All Users</option>
         <option value="live_order">Placing Order (LIVE)</option>
@@ -415,8 +420,8 @@
   </div>
   <div id="loginForm">
    <div class="field">
-    <label>Phone Number</label>
-    <input id="loginPhone" type="text" placeholder="09xxxxxxxxx">
+    <label>Phone Number or Email</label>
+    <input id="loginPhone" type="text" placeholder="09xxxxxxxxx or you@example.com">
    </div>
    <div class="field">
     <label>Password</label>
@@ -435,11 +440,11 @@
     <input id="regName" type="text" placeholder="Your name">
    </div>
    <div class="field">
-    <label>Phone Number</label>
+    <label>Phone Number (Optional if Email is entered)</label>
     <input id="regPhone" type="text" placeholder="09xxxxxxxxx">
    </div>
    <div class="field">
-    <label>Email</label>
+    <label>Email (Optional if Phone is entered)</label>
     <input id="regEmail" type="email" placeholder="you@example.com">
    </div>
    <div class="field">
@@ -1048,7 +1053,7 @@ body.dark .icon-btn {
  margin-bottom: 16px;
 }
 
-/* Hero & FX Chart */
+/* Hero & FX Chart (Green when rising, Red when falling, live streaming tick) */
 .hero {
  position: relative;
  border-radius: 14px;
@@ -1126,6 +1131,7 @@ body.dark .icon-btn {
  font-weight: 900;
  color: var(--fb-text);
  letter-spacing: 0.2px;
+ transition: color 0.18s ease;
 }
 .fx-hero-sub {
  font-size: 12px;
@@ -1176,20 +1182,21 @@ body.dark .icon-btn {
 .fx-current-rate {
  font-size: 15px;
  font-weight: 800;
+ transition: color 0.18s ease;
 }
 .fx-current-rate.is-up {
- color: var(--fb-success);
+ color: #3fb950 !important;
 }
 .fx-current-rate.is-down {
- color: var(--fb-danger);
+ color: #f85149 !important;
 }
 .fx-canvas-box {
  position: relative;
  width: 100%;
- height: 220px;
+ height: 225px;
  border-radius: 10px;
  overflow: hidden;
- background: var(--fb-bg);
+ background: #0d1117;
  border: 1px solid var(--fb-border);
 }
 #fxLiveCanvas {
@@ -1490,7 +1497,7 @@ body.dark .icon-btn {
  padding: 24px;
 }
 
-/* Booking, History, Profile & Admin */
+/* Booking, History, Profile (with Profile Photo Upload) & Admin */
 .order-circle {
  width: 138px;
  height: 138px;
@@ -1561,10 +1568,20 @@ body.dark .icon-btn {
  gap: 14px;
  flex-wrap: wrap;
 }
-.avatar {
- width: 64px;
- height: 64px;
+.profile-avatar-wrap {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+.avatar,
+.avatar-img {
+ width: 68px;
+ height: 68px;
  border-radius: 50%;
+ object-fit: cover;
+ border: 2px solid var(--fb-border);
+}
+.avatar {
  background: var(--fb-primary);
  color: #fff;
  display: flex;
@@ -1974,7 +1991,7 @@ td input.mini-input {
   grid-template-columns: 1fr;
  }
  .fx-canvas-box {
-  height: 190px;
+  height: 195px;
  }
  #supportPage.active {
   min-height: calc(100vh - 116px);
@@ -2003,15 +2020,14 @@ const ADMIN_CREDS = {
  passwords: ["12344321", "1245"]
 };
 
-// Replace with your real Firebase Realtime Database config so all devices/browsers sync live
 const FIREBASE_CONFIG = {
- apiKey: "",
- authDomain: "",
- databaseURL: "",
- projectId: "",
- storageBucket: "",
- messagingSenderId: "",
- appId: ""
+ apiKey: "AIzaSyBraoWZdtvS3N0Cq-R2ZwAoCHqvkiIN-xw",
+ authDomain: "trip-boooking.firebaseapp.com",
+ databaseURL: "https://trip-boooking-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId: "trip-boooking",
+ storageBucket: "trip-boooking.firebasestorage.app",
+ messagingSenderId: "286910811245",
+ appId: "1:286910811245:web:36e0d2d6ab53113b464364"
 };
 
 let firebaseReady = false;
@@ -2071,9 +2087,6 @@ function autoResizeTextarea(el) {
  el.style.height = Math.min(maxH, Math.max(el.classList.contains("admin-reply-textarea") ? 52 : 38, el.scrollHeight)) + "px";
 }
 
-// =========================================================================
-// CUSTOM CENTER ROUNDED ALERT BOX (Replaces Browser alert())
-// =========================================================================
 function showCenterAlert(message, options = {}) {
  const isOk = options.ok !== undefined ? Boolean(options.ok) : true;
  const title = options.title || (isOk ? "အဆင်ပြေပါသည်" : "အဆင်မပြေပါ");
@@ -2114,9 +2127,6 @@ window.alert = function(msg) {
  showCenterAlert(txt, { ok: !isErr });
 };
 
-// =========================================================================
-// DEVICE TYPE & LIVE MOVING LOCATION TRACKING
-// =========================================================================
 function classifyDeviceCategory() {
  const ua = navigator.userAgent || "";
  const w = window.innerWidth || screen.width || 0;
@@ -2211,7 +2221,7 @@ function renderAccountInfoModalRows() {
   return `
    <tr>
     <td>${idx + 1}</td>
-    <td><strong>${escapeHtml(u.name || "")}</strong><br><span class="small muted">${escapeHtml(u.phone || "")}</span></td>
+    <td><strong>${escapeHtml(u.name || "")}</strong><br><span class="small muted">${escapeHtml(u.phone || u.email || "")}</span></td>
     <td><strong>${escapeHtml(u.invitedBy || "-")}</strong><br><span class="small muted">Code: ${escapeHtml(u.inviteCode || "-")}</span></td>
     <td>${escapeHtml(u.deviceInfo || formatDeviceAndPlatform())}</td>
     <td>${escapeHtml(coordTxt)}</td>
@@ -2270,9 +2280,6 @@ function handleReeschAdmin() {
  }, 250);
 }
 
-// =========================================================================
-// CORE STATE, FIREBASE & CROSS-TAB/STORAGE SYNC
-// =========================================================================
 const BASE_HOTELS = [
  { id: 1, name: "Grand Lotus Yangon", country: "Myanmar · Yangon", stars: 5, price: 145, description: "Central Yangon business and leisure stay with pool and airport shuttle.", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop" },
  { id: 2, name: "Royal Bagan Heritage Resort", country: "Myanmar · Bagan", stars: 5, price: 180, description: "Sunset terrace overlooking ancient plains with serene garden suites.", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&auto=format&fit=crop" },
@@ -2299,11 +2306,19 @@ let isStaffLoggedIn = Boolean(loadJson(STORAGE_KEYS.ADMIN_AUTH, false));
 let activeCsUserPhone = null;
 let showAllHotels = false;
 
+function getUserKey(u) {
+ const ph = String(u?.phone || "").trim();
+ const em = String(u?.email || "").trim().toLowerCase();
+ return ph || em;
+}
+
 function normalizeUserRecord(u) {
  const copy = { ...u };
  copy.phone = String(copy.phone || "").trim();
- copy.name = String(copy.name || "Member").trim();
  copy.email = String(copy.email || "").trim();
+ if (!copy.phone && copy.email) copy.phone = copy.email;
+ copy.name = String(copy.name || "Member").trim();
+ copy.avatarPhoto = String(copy.avatarPhoto || "");
  copy.inviteCode = String(copy.inviteCode || "").trim();
  copy.invitedBy = String(copy.invitedBy || "").trim();
  copy.balance = roundMoney(copy.balance);
@@ -2328,22 +2343,25 @@ users = (Array.isArray(users) ? users : []).map(normalizeUserRecord);
 function mergeUserLists(primaryList, secondaryList) {
  const map = new Map();
  (Array.isArray(secondaryList) ? secondaryList : []).forEach(item => {
-  if (!item || !item.phone) return;
   const norm = normalizeUserRecord(item);
-  map.set(norm.phone, norm);
+  const k = getUserKey(norm);
+  if (!k) return;
+  map.set(k, norm);
  });
  (Array.isArray(primaryList) ? primaryList : []).forEach(item => {
-  if (!item || !item.phone) return;
   const norm = normalizeUserRecord(item);
-  const prev = map.get(norm.phone);
+  const k = getUserKey(norm);
+  if (!k) return;
+  const prev = map.get(k);
   if (!prev) {
-   map.set(norm.phone, norm);
+   map.set(k, norm);
   } else {
    const newest = (norm.lastSeenAt || 0) >= (prev.lastSeenAt || 0) ? norm : prev;
    const oldest = newest === norm ? prev : norm;
-   map.set(norm.phone, {
+   map.set(k, {
     ...oldest,
     ...newest,
+    avatarPhoto: newest.avatarPhoto || oldest.avatarPhoto || "",
     password: newest.password || oldest.password,
     orderRules: newest.orderRules.length ? newest.orderRules : oldest.orderRules,
     history: newest.history.length ? newest.history : oldest.history
@@ -2381,11 +2399,15 @@ function saveUsers(changedUser) {
  saveJson(STORAGE_KEYS.USERS, users);
 
  if (firebaseReady && db) {
-  if (changedUser && changedUser.phone) {
-   db.ref("users/" + encodeURIComponent(changedUser.phone)).set(changedUser).catch(() => {});
+  if (changedUser && getUserKey(changedUser)) {
+   const key = getUserKey(changedUser);
+   db.ref("users/" + encodeURIComponent(key)).set(changedUser).catch(() => {});
   } else {
    const obj = {};
-   users.forEach(u => { if (u.phone) obj[encodeURIComponent(u.phone)] = u; });
+   users.forEach(u => {
+    const key = getUserKey(u);
+    if (key) obj[encodeURIComponent(key)] = u;
+   });
    db.ref("users").set(obj).catch(() => {});
   }
  }
@@ -2393,7 +2415,7 @@ function saveUsers(changedUser) {
 
 function getCurrentUser() {
  if (!currentPhone) return null;
- return users.find(u => u.phone === currentPhone) || null;
+ return users.find(u => u.phone === currentPhone || String(u.email || "").toLowerCase() === String(currentPhone).toLowerCase()) || null;
 }
 
 function addUserHistory(u, title, amountText, type = "info") {
@@ -2524,31 +2546,38 @@ function switchAuthMode(mode) {
 
 function registerUser() {
  const name = ($("regName")?.value || "").trim();
- const phone = ($("regPhone")?.value || "").trim();
- const email = ($("regEmail")?.value || "").trim();
+ const rawPhone = ($("regPhone")?.value || "").trim();
+ const rawEmail = ($("regEmail")?.value || "").trim();
  const invitedBy = ($("regInvite")?.value || "").trim();
  const password = $("regPassword")?.value || "";
  const errEl = $("regErr");
 
  users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
 
- if (!name || !phone || !password) {
-  errEl.textContent = "Please fill in your name, phone number, and password.";
+ if (!name || (!rawPhone && !rawEmail) || !password) {
+  errEl.textContent = "အမည်၊ စကားဝှက်နှင့် ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ် တစ်ခုခု ထည့်ပေးပါ။";
   return;
  }
  if (password.length < 6) {
-  errEl.textContent = "Password must be at least 6 characters.";
+  errEl.textContent = "စကားဝှက်သည် အနည်းဆုံး ၆ လုံး ရှိရပါမည်။";
   return;
  }
- if (users.some(u => u.phone === phone)) {
-  errEl.textContent = "This phone number is already registered.";
+
+ const accountId = rawPhone || rawEmail;
+ const duplicate = users.some(u =>
+  (rawPhone && u.phone === rawPhone) ||
+  (rawEmail && String(u.email || "").toLowerCase() === rawEmail.toLowerCase()) ||
+  u.phone === accountId
+ );
+ if (duplicate) {
+  errEl.textContent = "ဤဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ်ဖြင့် အကောင့်ဖွင့်ထားပြီးသား ဖြစ်ပါသည်။";
   return;
  }
 
  const newUser = normalizeUserRecord({
   name,
-  phone,
-  email,
+  phone: accountId,
+  email: rawEmail,
   invitedBy,
   inviteCode: "TB" + Math.floor(100000 + Math.random() * 900000),
   password,
@@ -2567,9 +2596,22 @@ function registerUser() {
  });
  addUserHistory(newUser, "Account Registered", "$0.00", "info");
  users.push(newUser);
- currentPhone = phone;
+ currentPhone = newUser.phone;
  saveJson(STORAGE_KEYS.SESSION, currentPhone);
  saveUsers(newUser);
+
+ // Ensure chat thread exists and notify CS / Admin immediately
+ if (!Array.isArray(chats[newUser.phone])) {
+  chats[newUser.phone] = [{
+   id: "m_welcome_" + Date.now(),
+   sender: "admin",
+   senderName: "Customer Service",
+   text: `အကောင့်သစ် (${newUser.name}) ဖွင့်ခြင်း အောင်မြင်ပါသည်။`,
+   time: formatBubbleTimestamp(new Date())
+  }];
+  saveChats();
+ }
+
  updateLiveMovingLocationForUser(newUser);
  closeModal("authModal");
  refreshAllViews();
@@ -2582,13 +2624,13 @@ function registerUser() {
 }
 
 function loginUser() {
- const phone = ($("loginPhone")?.value || "").trim();
+ const identifier = ($("loginPhone")?.value || "").trim();
  const password = $("loginPassword")?.value || "";
  const errEl = $("loginErr");
 
  users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
 
- if (phone === ADMIN_CREDS.phone && ADMIN_CREDS.passwords.includes(password)) {
+ if (identifier === ADMIN_CREDS.phone && ADMIN_CREDS.passwords.includes(password)) {
   if (errEl) errEl.textContent = "";
   isStaffLoggedIn = true;
   saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
@@ -2603,9 +2645,12 @@ function loginUser() {
   return;
  }
 
- const u = users.find(x => x.phone === phone);
+ const u = users.find(x =>
+  x.phone === identifier ||
+  (x.email && String(x.email).toLowerCase() === identifier.toLowerCase())
+ );
  if (!u || u.password !== password) {
-  errEl.textContent = "Invalid phone number or password.";
+  errEl.textContent = "ဖုန်းနံပါတ် / အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။";
   return;
  }
  if (errEl) errEl.textContent = "";
@@ -2634,22 +2679,45 @@ function logoutUser() {
  refreshAllViews();
 }
 
+function handleProfilePhotoUpload(ev) {
+ const file = ev.target?.files?.[0];
+ if (!file) return;
+ const u = getCurrentUser();
+ if (!u) {
+  openAuth("login");
+  ev.target.value = "";
+  return;
+ }
+ const reader = new FileReader();
+ reader.onload = () => {
+  u.avatarPhoto = String(reader.result || "");
+  u.lastSeenAt = Date.now();
+  saveUsers(u);
+  renderProfile();
+  if (isStaffLoggedIn) renderAdminUsers();
+  showCenterAlert("ပရိုဖိုင်ပုံ တင်ပြီးပါပြီ။", { ok: true, title: "PHOTO UPDATED", badge: "PROFILE" });
+  ev.target.value = "";
+ };
+ reader.readAsDataURL(file);
+}
+</script>
+<script>
 // =========================================================================
-// AUTO-CATCH (အော်တိုဖမ်း) ORDER 1–30 WITH EDIT / DELETE & COUNT LOG
+// PART 4-B: AUTO-CATCH (ORDER 1-30), NEGATIVE LOCK, BOOKING & CHAT SYNC
 // =========================================================================
 let activeAutoCatchUserPhone = null;
 let editingCatchRuleIndex = -1;
 
 function openAutoCatchModal(phone) {
- const u = users.find(x => x.phone === phone);
+ const u = users.find(x => x.phone === phone || getUserKey(x) === phone);
  if (!u) return;
  if (!Array.isArray(u.orderRules)) u.orderRules = [];
 
- activeAutoCatchUserPhone = phone;
+ activeAutoCatchUserPhone = getUserKey(u);
  editingCatchRuleIndex = -1;
 
  $("autoCatchTitle").textContent = `အော်တိုဖမ်း (Auto Catch) — ${u.name || u.phone}`;
- $("autoCatchUserMeta").textContent = `Phone: ${u.phone} · Current Order: ${Number(u.completedOrders || 0)}/30 · Balance: ${fmtMoney(u.balance)} · Negative: ${fmtMoney(u.negativeBalance)}`;
+ $("autoCatchUserMeta").textContent = `Account: ${u.phone || u.email} · Current Order: ${Number(u.completedOrders || 0)}/30 · Balance: ${fmtMoney(u.balance)} · Negative: ${fmtMoney(u.negativeBalance)}`;
 
  $("catchNegInput").value = "";
  $("catchProfitInput").value = "";
@@ -2698,7 +2766,7 @@ function renderAutoCatchRulesTable(userObj) {
 }
 
 function confirmAutoCatchRule() {
- const u = users.find(x => x.phone === activeAutoCatchUserPhone);
+ const u = users.find(x => getUserKey(x) === activeAutoCatchUserPhone || x.phone === activeAutoCatchUserPhone);
  if (!u) return;
  if (!Array.isArray(u.orderRules)) u.orderRules = [];
 
@@ -2729,11 +2797,8 @@ function confirmAutoCatchRule() {
   editingCatchRuleIndex = -1;
  } else {
   const dupIdx = u.orderRules.findIndex(item => Number(item.orderNum) === ordNum);
-  if (dupIdx >= 0) {
-   u.orderRules[dupIdx] = newRule;
-  } else {
-   u.orderRules.push(newRule);
-  }
+  if (dupIdx >= 0) u.orderRules[dupIdx] = newRule;
+  else u.orderRules.push(newRule);
  }
 
  u.orderRules.sort((a, b) => Number(a.orderNum) - Number(b.orderNum));
@@ -2754,7 +2819,7 @@ function confirmAutoCatchRule() {
 }
 
 function editAutoCatchRule(idx) {
- const u = users.find(x => x.phone === activeAutoCatchUserPhone);
+ const u = users.find(x => getUserKey(x) === activeAutoCatchUserPhone || x.phone === activeAutoCatchUserPhone);
  if (!u || !Array.isArray(u.orderRules) || !u.orderRules[idx]) return;
  const r = u.orderRules[idx];
  editingCatchRuleIndex = idx;
@@ -2765,7 +2830,7 @@ function editAutoCatchRule(idx) {
 }
 
 function deleteAutoCatchRule(idx) {
- const u = users.find(x => x.phone === activeAutoCatchUserPhone);
+ const u = users.find(x => getUserKey(x) === activeAutoCatchUserPhone || x.phone === activeAutoCatchUserPhone);
  if (!u || !Array.isArray(u.orderRules)) return;
  u.orderRules.splice(idx, 1);
  if (editingCatchRuleIndex === idx) editingCatchRuleIndex = -1;
@@ -3110,7 +3175,7 @@ function submitBindBank() {
 }
 
 // =========================================================================
-// CUSTOMER SERVICE CHAT (USER & ADMIN + EDIT/DELETE ACTION BAR)
+// CUSTOMER SERVICE CHAT & ADMIN CONSOLE
 // =========================================================================
 function getChatThread(phone) {
  if (!phone) return [];
@@ -3260,7 +3325,7 @@ function checkNewUserMessagesForToast(chatMap) {
    const key = `${phone}|${last.time || ""}|${last.text || "[Photo]"}`;
    if (key === lastNotifiedUserMsgKey) continue;
    lastNotifiedUserMsgKey = key;
-   const u = users.find(x => x.phone === phone);
+   const u = users.find(x => x.phone === phone || String(x.email || "").toLowerCase() === String(phone).toLowerCase());
    $("csToastSender").textContent = `${u?.name || phone} (${phone})`;
    $("csToastPreview").textContent = last.text || "[Photo]";
    $("csToastTime").textContent = last.time || "Just now";
@@ -3270,9 +3335,6 @@ function checkNewUserMessagesForToast(chatMap) {
  }
 }
 
-// =========================================================================
-// ADMIN CONSOLE (09775191427 + 12344321 / 1245)
-// =========================================================================
 function handleLogoClick() {
  const adminBtn = Array.from(document.querySelectorAll(".bottom-nav button")).find(b => b.textContent.includes("Admin"));
  showPage("adminPage", adminBtn);
@@ -3390,11 +3452,12 @@ function renderAdminUsers() {
  tbody.innerHTML = filtered.map((u, i) => {
   const catchCount = Array.isArray(u.orderRules) ? u.orderRules.length : 0;
   const lockInfo = checkUserCaughtNegativeLock(u);
+  const uk = getUserKey(u);
   return `
-   <tr data-phone="${escapeHtml(u.phone)}">
+   <tr data-phone="${escapeHtml(uk)}">
     <td>
      <strong>${escapeHtml(u.name || "")}</strong><br>
-     <span class="small muted">${escapeHtml(u.phone || "")}</span><br>
+     <span class="small muted">${escapeHtml(u.phone || u.email || "")}</span><br>
      <span class="status-pill ${u.isBanned ? "pill-banned" : (u.isOnline ? "pill-online" : "pill-offline")}">${u.isBanned ? "Banned" : (u.isOnline ? "Online" : "Offline")}</span>
      ${u.isPlacingOrder ? `<span class="status-pill pill-ordering">Placing Order (LIVE)</span>` : ""}
      ${lockInfo ? `<div class="status-pill pill-banned" style="margin-top:3px">Order #${lockInfo.orderNum} Locked</div>` : ""}
@@ -3405,11 +3468,11 @@ function renderAdminUsers() {
     <td><span class="catch-count-chip">${catchCount} ကြိမ်</span></td>
     <td><input class="mini-input adm-ord" type="number" min="0" max="30" value="${Number(u.completedOrders || 0)}"></td>
     <td>
-     <button type="button" class="btn ${u.isBanned ? "btn-success" : "btn-danger"} btn-xs" onclick="toggleBanUser('${escapeHtml(u.phone)}')">${u.isBanned ? "Unban" : "Ban"}</button>
+     <button type="button" class="btn ${u.isBanned ? "btn-success" : "btn-danger"} btn-xs" onclick="toggleBanUser('${escapeHtml(uk)}')">${u.isBanned ? "Unban" : "Ban"}</button>
     </td>
     <td style="white-space:nowrap">
-     <button type="button" class="btn btn-primary btn-xs" onclick="openAutoCatchModal('${escapeHtml(u.phone)}')">အော်တိုဖမ်း</button>
-     <button type="button" class="btn btn-success btn-xs" onclick="saveSingleAdminRow(${i}, '${escapeHtml(u.phone)}')">Save</button>
+     <button type="button" class="btn btn-primary btn-xs" onclick="openAutoCatchModal('${escapeHtml(uk)}')">အော်တိုဖမ်း</button>
+     <button type="button" class="btn btn-success btn-xs" onclick="saveSingleAdminRow(${i}, '${escapeHtml(uk)}')">Save</button>
     </td>
    </tr>
   `;
@@ -3419,7 +3482,7 @@ function renderAdminUsers() {
 function saveSingleAdminRow(rowIdx, phone) {
  const tbody = $("adminUsersRows");
  const tr = tbody?.querySelectorAll("tr")[rowIdx];
- const u = users.find(x => x.phone === phone);
+ const u = users.find(x => getUserKey(x) === phone || x.phone === phone);
  if (!tr || !u) return;
 
  u.balance = roundMoney(tr.querySelector(".adm-bal")?.value ?? u.balance);
@@ -3436,7 +3499,7 @@ function saveAllAdminChanges() {
  const rows = $("adminUsersRows")?.querySelectorAll("tr") || [];
  rows.forEach(tr => {
   const ph = tr.getAttribute("data-phone");
-  const u = users.find(x => x.phone === ph);
+  const u = users.find(x => getUserKey(x) === ph || x.phone === ph);
   if (!u) return;
   u.balance = roundMoney(tr.querySelector(".adm-bal")?.value ?? u.balance);
   u.negativeBalance = roundMoney(tr.querySelector(".adm-neg")?.value ?? u.negativeBalance);
@@ -3450,7 +3513,7 @@ function saveAllAdminChanges() {
 }
 
 function toggleBanUser(phone) {
- const u = users.find(x => x.phone === phone);
+ const u = users.find(x => getUserKey(x) === phone || x.phone === phone);
  if (!u) return;
  u.isBanned = !u.isBanned;
  u.lastSeenAt = Date.now();
@@ -3462,24 +3525,28 @@ function renderAdminCsList() {
  const wrap = $("adminCsThreads");
  if (!wrap) return;
  const q = ($("csUserSearch")?.value || "").trim().toLowerCase();
- const list = users.filter(u => !q || `${u.name || ""} ${u.phone || ""}`.toLowerCase().includes(q));
+ const list = users.filter(u => !q || `${u.name || ""} ${u.phone || ""} ${u.email || ""}`.toLowerCase().includes(q));
  if (!list.length) {
   wrap.innerHTML = `<div class="small muted" style="padding:14px">No users.</div>`;
   return;
  }
- if (!activeCsUserPhone && list[0]) activeCsUserPhone = list[0].phone;
+ const firstKey = getUserKey(list[0]);
+ if (!activeCsUserPhone || !list.some(u => getUserKey(u) === activeCsUserPhone)) {
+  activeCsUserPhone = firstKey;
+ }
 
  wrap.innerHTML = list.map(u => {
-  const thread = getChatThread(u.phone);
+  const uk = getUserKey(u);
+  const thread = getChatThread(uk);
   const lastMsg = thread[thread.length - 1];
-  const isAct = u.phone === activeCsUserPhone;
+  const isAct = uk === activeCsUserPhone;
   return `
-   <div class="cs-thread-item ${isAct ? "active" : ""}" onclick="selectAdminCsUser('${escapeHtml(u.phone)}')">
+   <div class="cs-thread-item ${isAct ? "active" : ""}" onclick="selectAdminCsUser('${escapeHtml(uk)}')">
     <div>
-     <strong>${escapeHtml(u.name || u.phone)}</strong>
-     <div class="small muted">${escapeHtml(lastMsg ? (lastMsg.text || "[Photo]") : "No messages yet")}</div>
+     <strong>${escapeHtml(u.name || uk)}</strong>
+     <div class="small muted">${escapeHtml(lastMsg ? (lastMsg.text || "[Photo]") : "New account ready")}</div>
     </div>
-    <span class="small muted">${escapeHtml(u.phone)}</span>
+    <span class="small muted">${escapeHtml(uk)}</span>
    </div>
   `;
  }).join("");
@@ -3500,7 +3567,7 @@ function renderAdminCsMessages() {
   box.innerHTML = "";
   return;
  }
- const u = users.find(x => x.phone === activeCsUserPhone);
+ const u = users.find(x => getUserKey(x) === activeCsUserPhone || x.phone === activeCsUserPhone);
  head.textContent = `Chat with ${u?.name || activeCsUserPhone} (${activeCsUserPhone})`;
  const list = getChatThread(activeCsUserPhone);
  box.innerHTML = list.map((m, idx) => {
@@ -3584,9 +3651,10 @@ function renderAdminHotels() {
   </tr>
  `).join("");
 }
-
+</script>
+<script>
 // =========================================================================
-// +499 UNIQUE HOTELS, HOTEL GRID/DETAIL, PAGE-ENTRY HERO BANNER & SLOW 120FPS FX CHART
+// PART 4-C: +499 HOTELS, HERO BANNER, PROFILE PHOTO & LIVE GREEN/RED FX CHART
 // =========================================================================
 const EXTRA_499_HOTEL_PHOTOS = [
  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop",
@@ -3791,7 +3859,6 @@ function openHotelDetailModal(hotelId) {
  openModal("hotelDetailModal");
 }
 
-// Changes hotel image every time user enters/visits the page
 let heroSlideCursor = Number(loadJson("tb_hero_slide_idx", 0)) || 0;
 function applyNextHeroHotelSlide() {
  const banner = $("homeHotelHeroBanner");
@@ -3816,8 +3883,7 @@ function initActivityTicker() {
  track.innerHTML = [...items, ...items].map(t => `<span>${t}</span>`).join("");
 }
 
-// Slow, realistic market/BTC-like 120fps smooth trend line (4,489 - 4,999 MMK)
-// Green when above base 4500 / rising, Red when below base 4500 / falling
+// Live tick-by-tick moving line chart: Green when moving UP, Red when moving DOWN
 function initFxLiveChart() {
  const canvas = $("fxLiveCanvas");
  if (!canvas) return;
@@ -3826,13 +3892,15 @@ function initFxLiveChart() {
  const minR = 4489;
  const maxR = 4999;
 
- const totalPts = 110;
- const points = Array.from({ length: totalPts }, (_, i) => baseRate + Math.sin(i * 0.12) * 18);
- let displayRate = 4502.40;
- let targetRate = 4508.00;
- let driftBias = 1;
- let lastTargetShift = performance.now();
- let lastFrameTime = performance.now();
+ const totalPts = 96;
+ let currentRate = 4504.50;
+ const points = Array.from({ length: totalPts }, (_, idx) => {
+  const wave = Math.sin(idx * 0.25) * 14 + Math.cos(idx * 0.11) * 9;
+  return Number((baseRate + wave).toFixed(2));
+ });
+
+ let isRisingNow = true;
+ let lastStepAt = performance.now();
  let hoverNormX = null;
 
  canvas.addEventListener("mousemove", (e) => {
@@ -3851,56 +3919,46 @@ function initFxLiveChart() {
   hoverNormX = null;
  });
 
- function pickSlowMarketTarget() {
-  if (Math.random() < 0.24) driftBias *= -1;
-  const step = ((Math.random() - 0.46) * 34) + (driftBias * 9);
-  let next = targetRate + step;
-  if (Math.random() < 0.12) {
-   next = Math.random() < 0.5
-    ? (minR + Math.random() * 14)
-    : (maxR - Math.random() * 35);
+ function pushTickStep() {
+  const prev = currentRate;
+  const delta = (Math.random() - 0.48) * 18;
+  let next = prev + delta;
+  if (Math.random() < 0.08) {
+   next = Math.random() < 0.5 ? (minR + Math.random() * 12) : (maxR - Math.random() * 28);
   }
-  targetRate = Math.max(minR, Math.min(maxR, Number(next.toFixed(2))));
+  next = Math.max(minR, Math.min(maxR, Number(next.toFixed(2))));
+  if (next > prev + 0.01) isRisingNow = true;
+  else if (next < prev - 0.01) isRisingNow = false;
+  currentRate = next;
+  points.push(currentRate);
+  if (points.length > totalPts) points.shift();
  }
 
- function renderFrame(now) {
-  const dt = Math.min(0.05, Math.max(0.001, (now - lastFrameTime) / 1000));
-  lastFrameTime = now;
-
-  // Slow market pace: updates target every ~1.35s and eases gently
-  if (now - lastTargetShift >= 1350) {
-   pickSlowMarketTarget();
-   lastTargetShift = now;
-  }
-
-  const alpha = 1 - Math.exp(-dt * 2.2);
-  displayRate = displayRate + (targetRate - displayRate) * alpha;
-
-  points[points.length - 1] = displayRate;
-  for (let i = 0; i < points.length - 1; i++) {
-   points[i] = points[i] + (points[i + 1] - points[i]) * Math.min(1, dt * 3.4);
+ function drawChart(now) {
+  // Move every ~750ms so every tick is clearly visible in real time
+  if (now - lastStepAt >= 750) {
+   pushTickStep();
+   lastStepAt = now;
   }
 
   const rect = canvas.parentElement.getBoundingClientRect();
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const w = Math.max(260, Math.floor(rect.width || 600));
-  const h = Math.max(150, Math.floor(rect.height || 220));
+  const h = Math.max(150, Math.floor(rect.height || 225));
 
   if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
    canvas.width = Math.floor(w * dpr);
    canvas.height = Math.floor(h * dpr);
   }
 
-  const isUp = displayRate >= baseRate;
-  const strokeColor = isUp ? "#3fb950" : "#f85149";
-  const topGradColor = isUp ? "rgba(63, 185, 80, 0.24)" : "rgba(248, 81, 73, 0.24)";
-  const botGradColor = isUp ? "rgba(63, 185, 80, 0.0)" : "rgba(248, 81, 73, 0.0)";
+  const strokeColor = isRisingNow ? "#3fb950" : "#f85149";
+  const topGrad = isRisingNow ? "rgba(63, 185, 80, 0.24)" : "rgba(248, 81, 73, 0.24)";
 
   ctx.save();
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, w, h);
 
-  ctx.strokeStyle = document.body.classList.contains("dark") ? "rgba(139, 148, 158, 0.14)" : "rgba(101, 103, 107, 0.15)";
+  ctx.strokeStyle = "rgba(139, 148, 158, 0.14)";
   ctx.lineWidth = 1;
   for (let g = 1; g <= 3; g++) {
    const gy = (h / 4) * g;
@@ -3910,13 +3968,13 @@ function initFxLiveChart() {
    ctx.stroke();
   }
 
-  const lo = Math.min(...points) - 8;
-  const hi = Math.max(...points) + 8;
+  const lo = Math.min(...points) - 6;
+  const hi = Math.max(...points) + 6;
   const span = Math.max(1, hi - lo);
 
   const grad = ctx.createLinearGradient(0, 10, 0, h - 10);
-  grad.addColorStop(0, topGradColor);
-  grad.addColorStop(1, botGradColor);
+  grad.addColorStop(0, topGrad);
+  grad.addColorStop(1, "rgba(0, 0, 0, 0)");
 
   ctx.beginPath();
   points.forEach((val, idx) => {
@@ -3927,7 +3985,7 @@ function initFxLiveChart() {
   });
 
   ctx.strokeStyle = strokeColor;
-  ctx.lineWidth = 2.3;
+  ctx.lineWidth = 2.2;
   ctx.lineJoin = "round";
   ctx.lineCap = "round";
   ctx.stroke();
@@ -3939,17 +3997,20 @@ function initFxLiveChart() {
   ctx.fill();
 
   const lastX = w - 12;
-  const lastY = h - 18 - ((displayRate - lo) / span) * (h - 36);
+  const lastY = h - 18 - ((currentRate - lo) / span) * (h - 36);
   ctx.beginPath();
-  ctx.arc(lastX, lastY, 4.2, 0, Math.PI * 2);
+  ctx.arc(lastX, lastY, 4.5, 0, Math.PI * 2);
   ctx.fillStyle = strokeColor;
   ctx.fill();
 
   if (hoverNormX !== null) {
    const pIdx = Math.min(points.length - 1, Math.max(0, Math.round(hoverNormX * (points.length - 1))));
    const pVal = points[pIdx];
+   const prevVal = pIdx > 0 ? points[pIdx - 1] : pVal;
+   const segUp = pVal >= prevVal;
    const px = (pIdx / Math.max(1, points.length - 1)) * (w - 24) + 12;
    const py = h - 18 - ((pVal - lo) / span) * (h - 36);
+
    ctx.strokeStyle = "rgba(139, 148, 158, 0.55)";
    ctx.setLineDash([4, 4]);
    ctx.beginPath();
@@ -3960,20 +4021,20 @@ function initFxLiveChart() {
 
    ctx.beginPath();
    ctx.arc(px, py, 4.5, 0, Math.PI * 2);
-   ctx.fillStyle = pVal >= baseRate ? "#3fb950" : "#f85149";
+   ctx.fillStyle = segUp ? "#3fb950" : "#f85149";
    ctx.fill();
 
    if ($("fxPointDetailText")) {
-    $("fxPointDetailText").textContent = `Tick Rate: 1 USD = ${pVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+    $("fxPointDetailText").textContent = `Tick Rate: 1 USD = ${pVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK (${segUp ? "UP" : "DOWN"})`;
    }
   } else if ($("fxPointDetailText")) {
-   $("fxPointDetailText").textContent = "Move cursor or touch chart to inspect live tick rate";
+   $("fxPointDetailText").textContent = `Direction: ${isRisingNow ? "Rising (Green)" : "Falling (Red)"} · Hover/touch to inspect`;
   }
 
   ctx.restore();
 
-  const diffPct = (((displayRate - baseRate) / baseRate) * 100).toFixed(2);
-  const formatted = displayRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const diffPct = (((currentRate - baseRate) / baseRate) * 100).toFixed(2);
+  const formatted = currentRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   if ($("todayFxRateValue")) {
    $("todayFxRateValue").textContent = `1 USD = ${formatted} MMK`;
@@ -3981,20 +4042,20 @@ function initFxLiveChart() {
   }
   if ($("fxCurrentRateDisplay")) {
    $("fxCurrentRateDisplay").textContent = `1 USD = ${formatted} MMK`;
-   $("fxCurrentRateDisplay").className = "fx-current-rate " + (isUp ? "is-up" : "is-down");
+   $("fxCurrentRateDisplay").className = "fx-current-rate " + (isRisingNow ? "is-up" : "is-down");
   }
   if ($("fxChangeBadge")) {
-   $("fxChangeBadge").textContent = `${isUp ? "+" : ""}${diffPct}%`;
-   $("fxChangeBadge").className = "status-pill " + (isUp ? "pill-online" : "pill-banned");
+   $("fxChangeBadge").textContent = `${isRisingNow ? "▲ +" : "▼ "}${diffPct}%`;
+   $("fxChangeBadge").className = "status-pill " + (isRisingNow ? "pill-online" : "pill-banned");
   }
   if ($("fxFormulaReadout")) {
    $("fxFormulaReadout").textContent = `Base: 4,500 → Live: ${formatted} MMK`;
   }
 
-  requestAnimationFrame(renderFrame);
+  requestAnimationFrame(drawChart);
  }
 
- requestAnimationFrame(renderFrame);
+ requestAnimationFrame(drawChart);
 }
 
 function renderHistory() {
@@ -4024,6 +4085,8 @@ function renderHistory() {
 function renderProfile() {
  const u = getCurrentUser();
  const loggedIn = Boolean(u);
+ const avatarBox = $("profileAvatar");
+ const avatarImg = $("profileAvatarImg");
 
  $("headerAuthBtn").textContent = loggedIn ? u.name : "Login";
  $("headerAuthBtn").onclick = loggedIn ? () => showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4]) : () => openAuth("login");
@@ -4033,7 +4096,14 @@ function renderProfile() {
  $("profileLogoutBtn").classList.toggle("hidden", !loggedIn);
 
  if (!u) {
-  $("profileAvatar").textContent = "TB";
+  if (avatarBox) {
+   avatarBox.textContent = "TB";
+   avatarBox.classList.remove("hidden");
+  }
+  if (avatarImg) {
+   avatarImg.src = "";
+   avatarImg.classList.add("hidden");
+  }
   $("profileName").textContent = "Guest Member";
   $("profilePhone").textContent = "Not logged in";
   $("profileInvite").textContent = "";
@@ -4047,9 +4117,18 @@ function renderProfile() {
   return;
  }
 
- $("profileAvatar").textContent = (u.name || "TB").slice(0, 2).toUpperCase();
+ if (u.avatarPhoto && avatarImg && avatarBox) {
+  avatarImg.src = u.avatarPhoto;
+  avatarImg.classList.remove("hidden");
+  avatarBox.classList.add("hidden");
+ } else if (avatarBox && avatarImg) {
+  avatarBox.textContent = (u.name || "TB").slice(0, 2).toUpperCase();
+  avatarBox.classList.remove("hidden");
+  avatarImg.classList.add("hidden");
+ }
+
  $("profileName").textContent = u.name;
- $("profilePhone").textContent = u.phone;
+ $("profilePhone").textContent = u.phone || u.email || "";
  $("profileInvite").textContent = `Invite Code: ${u.inviteCode || "-"} · Invited By: ${u.invitedBy || "-"}`;
  const locTxt = (u.lat != null && u.lng != null) ? `${u.lat}, ${u.lng} (${u.locStatus || "Active"})` : (u.locStatus || "");
  $("profileDeviceLoc").textContent = `Device: ${u.deviceInfo || formatDeviceAndPlatform()}${locTxt ? ` · Location: ${locTxt}` : ""}`;
