@@ -3529,9 +3529,21 @@ function initFirebaseSync() {
 }
 
 function applyCloudSnapshot(cloud) {
+ const mapById = new Map();
+ (state.users || []).forEach((u) => {
+  const norm = normalizeUser(u);
+  mapById.set(norm.id, norm);
+ });
+ readCachedUsersFromStorage().forEach((u) => {
+  if (!mapById.has(u.id)) mapById.set(u.id, u);
+ });
  if (Array.isArray(cloud.users)) {
-  state.users = cloud.users.map(normalizeUser);
+  cloud.users.map(normalizeUser).forEach((u) => {
+   mapById.set(u.id, u);
+  });
  }
+ state.users = Array.from(mapById.values());
+
  if (Array.isArray(cloud.adminBankAccounts)) {
   state.adminBankAccounts = cloud.adminBankAccounts;
  }
@@ -3555,6 +3567,9 @@ function applyCloudSnapshot(cloud) {
   const freshMe = state.users.find((u) => u.id === state.currentUser.id);
   if (freshMe) state.currentUser = freshMe;
  }
+ saveState(true);
+ refreshAllUI();
+}
  saveState(true);
  refreshAllUI();
 }
