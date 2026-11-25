@@ -44,7 +44,7 @@
   </div>
  </div>
 
- <!-- Incoming CS Toast -->
+ <!-- Incoming CS Toast (Instant Alert on User Message / Reply) -->
  <div id="csIncomingToast" class="cs-incoming-toast hidden" onclick="handleCsToastClick()">
   <div class="cs-toast-top">
    <span class="cs-toast-badge">NEW MESSAGE</span>
@@ -160,7 +160,7 @@
     <div class="support-chat-header">
      <div class="support-agent-avatar">☏</div>
      <div>
-      <div style="font-weight:800;font-size:15px">Customer Service Live</div>
+      <div style="font-weight:800;font-size:16px">Customer Service Live</div>
       <div id="userSideTypingIndicator" class="small muted">Online · Direct synchronization with Admin &amp; Support</div>
      </div>
     </div>
@@ -242,17 +242,17 @@
   <!-- PROFILE PAGE -->
   <section id="profilePage" class="page">
    <!-- Shown when NOT logged in: ONLY two clean buttons (အကောင့်ဖွင့်ရန် & အကောင့်ဝင်ရန်) -->
-   <div id="guestAuthGateCard" class="panel" style="text-align:center;padding:32px 20px">
-    <h2 style="margin-bottom:16px">Trip Booking</h2>
+   <div id="guestAuthGateCard" class="panel" style="text-align:center;padding:34px 20px">
+    <h2 style="margin-bottom:18px">Trip Booking</h2>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
      <button type="button" class="btn btn-success" onclick="openAuth('register')">အကောင့်ဖွင့်ရန်</button>
      <button type="button" class="btn btn-primary" onclick="openAuth('login')">အကောင့်ဝင်ရန်</button>
     </div>
    </div>
 
-   <!-- Shown when logged in -->
+   <!-- Shown when logged in: Boxed info cards, NO Device/Location shown on user side -->
    <div id="loggedInProfileCard" class="hidden">
-    <div id="suspendedAccountNotice" class="suspended-banner hidden" style="border-radius:10px;margin-bottom:14px">
+    <div id="suspendedAccountNotice" class="suspended-banner hidden" style="border-radius:12px;margin-bottom:14px">
      <div class="suspended-banner-inner">
       <span>Account Suspended: <strong id="suspendedReasonText"></strong></span>
       <button type="button" class="btn btn-secondary btn-xs" onclick="openSupportFromSuspension()">Contact Support</button>
@@ -270,16 +270,41 @@
        </label>
       </div>
 
-      <div>
-       <h2 id="profileName">Member</h2>
-       <div id="profileAccountId" class="small muted" style="margin-top:2px"></div>
-       <div id="profilePhone" class="small muted" style="margin-top:2px"></div>
-       <div id="profileInvite" class="small muted" style="margin-top:3px"></div>
-       <div id="profileDeviceLoc" class="small muted" style="margin-top:3px"></div>
-       <div style="margin-top:6px">
-        Balance: <strong id="profileBalance">$0.00</strong> · Status: <strong id="profileAccountStatus">Active</strong>
+      <div style="flex:1;min-width:220px">
+       <h2 id="profileName" style="margin-bottom:10px">Member</h2>
+       <div class="profile-info-grid">
+        <div class="profile-info-box">
+         <div class="small muted">Account ID</div>
+         <div id="profileAccountId" class="profile-info-val">-</div>
+        </div>
+        <div class="profile-info-box">
+         <div class="small muted">Contact</div>
+         <div id="profilePhone" class="profile-info-val">-</div>
+        </div>
+        <div class="profile-info-box">
+         <div class="small muted">Balance &amp; Status</div>
+         <div class="profile-info-val">
+          <span id="profileBalance">$0.00</span> · <span id="profileAccountStatus">Active</span>
+         </div>
+        </div>
+        <div class="profile-info-box">
+         <div class="small muted">Invite Code</div>
+         <div class="profile-copy-row">
+          <span id="profileInvite" class="profile-info-val">-</span>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="copyInviteCode()">Copy Code</button>
+         </div>
+        </div>
        </div>
       </div>
+     </div>
+
+     <!-- Platform Share Link Box -->
+     <div class="share-link-box" style="margin-top:14px">
+      <div style="min-width:0;flex:1">
+       <div class="small muted" style="font-weight:700">Platform Link (မျှဝေရန်)</div>
+       <div id="platformShareLinkText" class="share-link-text"></div>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm" onclick="copyPlatformLink()">Copy Link</button>
      </div>
 
      <div class="profile-actions">
@@ -364,7 +389,9 @@
      <div class="section-head">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
        <button type="button" id="adminTabUsers" class="btn btn-primary btn-sm" onclick="switchAdminTab('users')">Users &amp; Rules</button>
-       <button type="button" id="adminTabCs" class="btn btn-secondary btn-sm" onclick="switchAdminTab('cs')">Customer Service</button>
+       <button type="button" id="adminTabCs" class="btn btn-secondary btn-sm" onclick="switchAdminTab('cs')">
+        Customer Service <span id="adminCsUnreadBadge" class="count-badge hidden">0</span>
+       </button>
        <button type="button" id="adminTabBanks" class="btn btn-secondary btn-sm" onclick="switchAdminTab('banks')">ဘဏ်အကောင့်များ</button>
        <button type="button" id="adminTabTiers" class="btn btn-secondary btn-sm" onclick="switchAdminTab('tiers')">Profit Tiers ($100–$10,000)</button>
        <button type="button" id="adminTabHotels" class="btn btn-secondary btn-sm" onclick="switchAdminTab('hotels')">Hotels (599)</button>
@@ -669,7 +696,7 @@
     <h3 id="centerOrderTitle">Booking Order</h3>
     <button type="button" class="close-x" onclick="cancelCenterOrderModal()">✕</button>
    </div>
-   <div id="centerOrderBody" style="line-height:1.55;font-size:14px"></div>
+   <div id="centerOrderBody" style="line-height:1.55;font-size:14.5px"></div>
    <div id="centerOrderErr" class="error-text"></div>
    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
     <button type="button" class="btn btn-secondary" onclick="cancelCenterOrderModal()">Cancel</button>
@@ -732,7 +759,7 @@
     <h3>Negative Balance Notice</h3>
     <button type="button" class="close-x" onclick="handleNegLockUnderstand()">✕</button>
    </div>
-   <div id="negLockDetails" style="line-height:1.55;font-size:14px"></div>
+   <div id="negLockDetails" style="line-height:1.55;font-size:14.5px"></div>
    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
     <button type="button" class="btn btn-secondary" onclick="handleNegLockUnderstand()">နားလည်ပါတယ်</button>
     <button type="button" class="btn btn-primary" onclick="handleNegLockContinue()">ဆက်သွားမယ်</button>
@@ -848,15 +875,63 @@
   </div>
  </div>
 </body>
-</html>
 <style>
 /* =========================================================================
-   PART 2: UI MODALS, BANK CARD PICKER, BANK LOCK BADGES & COMPOSER CSS
+   PART 2: PROFILE BOXES, COPY CARDS, UI MODALS, BANK PICKER & COMPOSER CSS
    ========================================================================= */
+.profile-info-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+ gap: 10px;
+}
+
+.profile-info-box {
+ background: var(--fb-surface);
+ border: 1px solid var(--fb-border);
+ border-radius: 11px;
+ padding: 11px 13px;
+}
+
+.profile-info-val {
+ font-size: 14.5px;
+ font-weight: 800;
+ color: var(--fb-text);
+ margin-top: 3px;
+ word-break: break-word;
+}
+
+.profile-copy-row {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 8px;
+ margin-top: 3px;
+}
+
+.share-link-box {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 12px;
+ flex-wrap: wrap;
+ background: var(--fb-surface);
+ border: 1px solid var(--fb-border);
+ border-radius: 12px;
+ padding: 12px 14px;
+}
+
+.share-link-text {
+ font-size: 13.5px;
+ font-weight: 700;
+ color: var(--fb-primary);
+ word-break: break-all;
+ margin-top: 3px;
+}
+
 .modal-backdrop {
  position: fixed;
  inset: 0;
- background: rgba(1, 4, 9, 0.72);
+ background: rgba(1, 4, 9, 0.74);
  backdrop-filter: blur(4px);
  display: flex;
  align-items: center;
@@ -872,18 +947,18 @@
 
 .modal-card {
  width: 100%;
- max-width: 440px;
+ max-width: 450px;
  max-height: 88vh;
  overflow-y: auto;
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 14px;
- padding: 18px;
+ border-radius: 15px;
+ padding: 20px;
  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
 }
 
 .modal-card.wide-modal {
- max-width: 780px;
+ max-width: 800px;
 }
 
 .modal-header {
@@ -897,18 +972,18 @@
 }
 
 .modal-header h3 {
- font-size: 17px;
+ font-size: 18px;
  font-weight: 800;
 }
 
 .close-x {
- width: 32px;
- height: 32px;
- border-radius: 8px;
+ width: 34px;
+ height: 34px;
+ border-radius: 9px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 15px;
+ font-size: 16px;
  font-weight: 700;
  cursor: pointer;
  display: inline-flex;
@@ -921,27 +996,27 @@
 }
 
 .field {
- margin-bottom: 12px;
+ margin-bottom: 13px;
 }
 
 .field label {
  display: block;
- font-size: 12px;
+ font-size: 13px;
  font-weight: 700;
  color: var(--fb-muted);
- margin-bottom: 5px;
+ margin-bottom: 6px;
 }
 
 .field input,
 .field select,
 .field textarea {
  width: 100%;
- padding: 9px 11px;
- border-radius: 9px;
+ padding: 10px 12px;
+ border-radius: 10px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 13.5px;
+ font-size: 14.5px;
  outline: none;
  font-family: inherit;
 }
@@ -954,7 +1029,7 @@
 
 .error-text {
  color: var(--fb-danger);
- font-size: 12.5px;
+ font-size: 13px;
  min-height: 18px;
  margin-top: 4px;
  font-weight: 600;
@@ -975,11 +1050,11 @@
 
 .center-rounded-card {
  width: 100%;
- max-width: 360px;
+ max-width: 370px;
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 18px;
- padding: 20px;
+ padding: 22px;
  text-align: center;
  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
@@ -1007,16 +1082,16 @@
 }
 
 .center-rounded-title {
- font-size: 16px;
+ font-size: 17px;
  font-weight: 800;
  margin-bottom: 6px;
 }
 
 .center-rounded-msg {
- font-size: 13.5px;
+ font-size: 14px;
  color: var(--fb-muted);
- line-height: 1.5;
- margin-bottom: 14px;
+ line-height: 1.55;
+ margin-bottom: 16px;
 }
 
 .center-rounded-actions {
@@ -1027,9 +1102,9 @@
 /* Customer Service Two-Column Layout & Composers */
 .cs-layout {
  display: grid;
- grid-template-columns: 270px 1fr;
- gap: 12px;
- min-height: 460px;
+ grid-template-columns: 280px 1fr;
+ gap: 14px;
+ min-height: 470px;
 }
 
 .cs-client-list {
@@ -1039,11 +1114,11 @@
  display: flex;
  flex-direction: column;
  overflow: hidden;
- max-height: 540px;
+ max-height: 550px;
 }
 
 .cs-list-head {
- padding: 10px 12px;
+ padding: 11px 12px;
  border-bottom: 1px solid var(--fb-border);
  display: flex;
  align-items: center;
@@ -1057,7 +1132,7 @@
 }
 
 .cs-thread-item {
- padding: 10px 12px;
+ padding: 11px 12px;
  border-bottom: 1px solid var(--fb-border);
  display: flex;
  align-items: center;
@@ -1082,16 +1157,16 @@
  background: var(--fb-surface);
  display: flex;
  flex-direction: column;
- min-height: 460px;
- max-height: 540px;
+ min-height: 470px;
+ max-height: 550px;
  overflow: hidden;
 }
 
 .cs-pane-head {
- padding: 10px 14px;
+ padding: 11px 14px;
  border-bottom: 1px solid var(--fb-border);
  background: var(--fb-card);
- font-size: 14px;
+ font-size: 14.5px;
 }
 
 .cs-messages,
@@ -1105,7 +1180,7 @@
 }
 
 .typing-live-txt {
- font-size: 12px;
+ font-size: 12.5px;
  font-weight: 700;
  color: var(--fb-success);
 }
@@ -1131,10 +1206,10 @@
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- padding: 8px 11px;
- font-size: 13.5px;
+ padding: 9px 12px;
+ font-size: 14px;
  line-height: 1.4;
- max-height: 110px;
+ max-height: 115px;
  overflow-y: auto;
  font-family: inherit;
 }
@@ -1163,7 +1238,7 @@
  padding: 12px;
  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
  z-index: 60;
- max-height: 290px;
+ max-height: 300px;
  overflow-y: auto;
 }
 
@@ -1183,12 +1258,12 @@
 }
 
 .bank-type-chip {
- padding: 5px 10px;
+ padding: 5px 11px;
  border-radius: 8px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 12px;
+ font-size: 12.5px;
  font-weight: 700;
  cursor: pointer;
 }
@@ -1201,13 +1276,13 @@
 
 .bank-account-list {
  display: grid;
- grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+ grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
  gap: 8px;
 }
 
 .bank-account-btn {
  text-align: left;
- padding: 9px 11px;
+ padding: 10px 12px;
  border-radius: 10px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
@@ -1223,11 +1298,11 @@
 
 .bank-account-btn .b-name {
  font-weight: 800;
- font-size: 13px;
+ font-size: 13.5px;
 }
 
 .bank-account-btn .b-meta {
- font-size: 12px;
+ font-size: 12.5px;
  color: var(--fb-muted);
  margin-top: 2px;
 }
@@ -1257,7 +1332,7 @@
   grid-template-columns: 1fr;
  }
  .cs-client-list {
-  max-height: 170px;
+  max-height: 175px;
  }
  .support-composer,
  .admin-cs-composer {
@@ -1273,31 +1348,31 @@
 </style>
 <style>
 /* =========================================================================
-   PART 3: MAIN LAYOUT, GREEN/RED FX CHART, TABLES, CARDS & RESPONSIVE CSS
+   PART 3: MAIN LAYOUT, LARGER CLEAN UI, GREEN/RED FX CHART & TABLES CSS
    ========================================================================= */
 :root {
- --fb-bg: #f0f2f5;
+ --fb-bg: #eef2f7;
  --fb-card: #ffffff;
- --fb-surface: #f7f8fa;
- --fb-hover: #e4e6eb;
- --fb-text: #1c1e21;
- --fb-muted: #65676b;
- --fb-border: #dadde1;
+ --fb-surface: #f6f8fb;
+ --fb-hover: #e5eaf2;
+ --fb-text: #161b22;
+ --fb-muted: #57606a;
+ --fb-border: #d0d7de;
  --fb-primary: #1877f2;
  --fb-primary-hover: #166fe5;
- --fb-success: #3fb950;
- --fb-danger: #f85149;
- --fb-warn: #d29922;
+ --fb-success: #2da44e;
+ --fb-danger: #cf222e;
+ --fb-warn: #bf8700;
 }
 
 body.dark {
- --fb-bg: #0b0e14;
- --fb-card: #121721;
- --fb-surface: #18202e;
- --fb-hover: #222c3f;
+ --fb-bg: #090d14;
+ --fb-card: #121824;
+ --fb-surface: #182131;
+ --fb-hover: #222e44;
  --fb-text: #e6edf3;
- --fb-muted: #8b949e;
- --fb-border: #263042;
+ --fb-muted: #919ba7;
+ --fb-border: #263248;
  --fb-primary: #2f81f7;
  --fb-primary-hover: #388bfd;
  --fb-success: #3fb950;
@@ -1316,6 +1391,8 @@ body {
  background: var(--fb-bg);
  color: var(--fb-text);
  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Myanmar", sans-serif;
+ font-size: 15px;
+ line-height: 1.5;
  min-height: 100vh;
  overflow-x: hidden;
 }
@@ -1340,15 +1417,15 @@ body {
 
 .intro-stage-box {
  text-align: center;
- padding: 28px 34px;
+ padding: 30px 36px;
  border-radius: 20px;
- background: rgba(18, 23, 33, 0.75);
- border: 1px solid rgba(255, 255, 255, 0.1);
+ background: rgba(18, 24, 36, 0.78);
+ border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .intro-brand-mark {
- width: 64px;
- height: 64px;
+ width: 66px;
+ height: 66px;
  margin: 0 auto 14px;
  border-radius: 16px;
  background: linear-gradient(135deg, #2f81f7, #3fb950);
@@ -1358,30 +1435,30 @@ body {
 }
 
 .intro-title-txt {
- font-size: 24px;
+ font-size: 25px;
  font-weight: 800;
  color: #ffffff;
  letter-spacing: 0.02em;
 }
 
 .intro-sub-txt {
- font-size: 13px;
+ font-size: 13.5px;
  color: #9da7b3;
- margin-top: 4px;
+ margin-top: 5px;
 }
 
 /* Topbar */
 .topbar {
  position: sticky;
  top: 0;
- height: 58px;
+ height: 60px;
  background: var(--fb-card);
  border-bottom: 1px solid var(--fb-border);
  display: flex;
  align-items: center;
  justify-content: space-between;
- padding: 0 16px;
- gap: 10px;
+ padding: 0 18px;
+ gap: 12px;
  z-index: 500;
 }
 
@@ -1390,16 +1467,16 @@ body {
  align-items: center;
  gap: 10px;
  font-weight: 800;
- font-size: 18px;
+ font-size: 19px;
 }
 
 .brand .logo {
- width: 34px;
- height: 34px;
- border-radius: 9px;
+ width: 36px;
+ height: 36px;
+ border-radius: 10px;
  background: linear-gradient(135deg, var(--fb-primary), var(--fb-success));
  color: #ffffff;
- font-size: 18px;
+ font-size: 19px;
  font-weight: 900;
  display: inline-flex;
  align-items: center;
@@ -1414,24 +1491,24 @@ body {
 
 .lang-select,
 .filter-select {
- padding: 6px 10px;
- border-radius: 8px;
+ padding: 7px 11px;
+ border-radius: 9px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 12.5px;
- font-weight: 600;
+ font-size: 13px;
+ font-weight: 700;
  cursor: pointer;
 }
 
 .icon-btn {
- width: 34px;
- height: 34px;
- border-radius: 8px;
+ width: 36px;
+ height: 36px;
+ border-radius: 9px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 15px;
+ font-size: 16px;
  cursor: pointer;
  display: inline-flex;
  align-items: center;
@@ -1448,10 +1525,10 @@ body {
  align-items: center;
  justify-content: center;
  gap: 6px;
- padding: 9px 15px;
- border-radius: 9px;
+ padding: 10px 16px;
+ border-radius: 10px;
  border: 1px solid transparent;
- font-size: 13.5px;
+ font-size: 14px;
  font-weight: 700;
  cursor: pointer;
  text-decoration: none;
@@ -1496,24 +1573,24 @@ body {
 }
 
 .btn-sm {
- padding: 6px 11px;
- font-size: 12.5px;
- border-radius: 8px;
+ padding: 7px 12px;
+ font-size: 13px;
+ border-radius: 9px;
 }
 
 .btn-xs {
- padding: 4px 8px;
- font-size: 11.5px;
- border-radius: 6px;
+ padding: 5px 9px;
+ font-size: 12px;
+ border-radius: 7px;
 }
 
 .count-badge {
- padding: 2px 9px;
+ padding: 3px 10px;
  border-radius: 999px;
  background: var(--fb-surface);
  border: 1px solid var(--fb-border);
- font-size: 12px;
- font-weight: 700;
+ font-size: 12.5px;
+ font-weight: 800;
  color: var(--fb-muted);
 }
 
@@ -1522,20 +1599,20 @@ body {
  display: flex;
  align-items: center;
  gap: 10px;
- padding: 6px 16px;
+ padding: 7px 18px;
  background: var(--fb-surface);
  border-bottom: 1px solid var(--fb-border);
- font-size: 12.5px;
+ font-size: 13px;
  overflow: hidden;
 }
 
 .activity-ticker-label {
  background: var(--fb-primary);
  color: #fff;
- font-size: 10.5px;
+ font-size: 11px;
  font-weight: 800;
- padding: 2px 7px;
- border-radius: 5px;
+ padding: 2px 8px;
+ border-radius: 6px;
  flex-shrink: 0;
 }
 
@@ -1547,7 +1624,7 @@ body {
 
 .activity-ticker-track {
  display: inline-flex;
- gap: 28px;
+ gap: 30px;
  animation: tickerScroll 24s linear infinite;
 }
 
@@ -1564,15 +1641,15 @@ body {
 /* Toasts */
 .cs-incoming-toast {
  position: fixed;
- top: 68px;
+ top: 70px;
  right: 16px;
- width: 310px;
+ width: 325px;
  max-width: calc(100vw - 32px);
  background: var(--fb-card);
  border: 1px solid var(--fb-primary);
- border-radius: 12px;
- padding: 12px;
- box-shadow: 0 14px 32px rgba(0, 0, 0, 0.5);
+ border-radius: 14px;
+ padding: 13px 14px;
+ box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
  z-index: 1100;
  cursor: pointer;
 }
@@ -1581,40 +1658,40 @@ body {
  display: flex;
  align-items: center;
  justify-content: space-between;
- margin-bottom: 4px;
+ margin-bottom: 5px;
 }
 
 .cs-toast-badge {
- font-size: 10px;
+ font-size: 10.5px;
  font-weight: 800;
  background: rgba(47, 129, 247, 0.18);
  color: var(--fb-primary);
- padding: 2px 7px;
+ padding: 2px 8px;
  border-radius: 999px;
 }
 
 .cs-toast-time {
- font-size: 11px;
+ font-size: 11.5px;
  color: var(--fb-muted);
 }
 
 .cs-toast-sender {
  font-weight: 800;
- font-size: 13px;
+ font-size: 14px;
 }
 
 .cs-toast-preview {
- font-size: 12.5px;
+ font-size: 13px;
  color: var(--fb-muted);
  white-space: nowrap;
  overflow: hidden;
  text-overflow: ellipsis;
- margin-top: 2px;
+ margin-top: 3px;
 }
 
 .reg-success-toast {
  position: fixed;
- top: 68px;
+ top: 70px;
  left: 50%;
  transform: translateX(-50%);
  display: flex;
@@ -1622,15 +1699,15 @@ body {
  gap: 10px;
  background: var(--fb-card);
  border: 1px solid var(--fb-success);
- border-radius: 12px;
- padding: 10px 16px;
+ border-radius: 14px;
+ padding: 11px 16px;
  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
  z-index: 1150;
 }
 
 .reg-toast-check {
- width: 26px;
- height: 26px;
+ width: 28px;
+ height: 28px;
  border-radius: 50%;
  background: rgba(63, 185, 80, 0.18);
  color: var(--fb-success);
@@ -1642,19 +1719,19 @@ body {
 
 .reg-toast-title {
  font-weight: 800;
- font-size: 13.5px;
+ font-size: 14px;
 }
 
 .reg-toast-sub {
- font-size: 12px;
+ font-size: 12.5px;
  color: var(--fb-muted);
 }
 
 /* Container & Pages */
 .container {
- max-width: 1120px;
+ max-width: 1140px;
  margin: 0 auto;
- padding: 16px 16px 88px;
+ padding: 18px 16px 92px;
 }
 
 .page {
@@ -1670,14 +1747,14 @@ body {
  position: relative;
  border-radius: 16px;
  overflow: hidden;
- min-height: 220px;
+ min-height: 230px;
  background-color: var(--fb-surface);
  background-size: cover;
  background-position: center;
  border: 1px solid var(--fb-border);
  display: flex;
  align-items: flex-end;
- margin-bottom: 14px;
+ margin-bottom: 16px;
  transition: background-image 0.35s ease;
 }
 
@@ -1691,29 +1768,29 @@ body {
 .hero-content {
  position: relative;
  z-index: 1;
- padding: 20px;
+ padding: 22px;
  color: #ffffff;
  width: 100%;
 }
 
 .hero-content h1 {
- font-size: 23px;
+ font-size: 25px;
  font-weight: 800;
 }
 
 .hero-content p {
- font-size: 13.5px;
+ font-size: 14px;
  color: #d0d7de;
- margin-top: 4px;
+ margin-top: 5px;
 }
 
 .hero-hotel-tag {
  display: inline-block;
- margin-top: 8px;
- font-size: 12px;
+ margin-top: 10px;
+ font-size: 12.5px;
  font-weight: 700;
- background: rgba(255, 255, 255, 0.16);
- padding: 4px 10px;
+ background: rgba(255, 255, 255, 0.18);
+ padding: 5px 11px;
  border-radius: 999px;
 }
 
@@ -1727,33 +1804,33 @@ body {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 14px;
- padding: 14px 16px;
+ padding: 15px 18px;
  margin-bottom: 12px;
 }
 
 .fx-hero-label {
- font-size: 12px;
+ font-size: 12.5px;
  font-weight: 700;
  color: var(--fb-muted);
 }
 
 .fx-hero-rate {
- font-size: 20px;
+ font-size: 22px;
  font-weight: 900;
- margin-top: 2px;
+ margin-top: 3px;
  transition: color 0.2s ease;
 }
 
 .fx-hero-sub {
- font-size: 12px;
+ font-size: 12.5px;
  color: var(--fb-muted);
- margin-top: 2px;
+ margin-top: 3px;
 }
 
 .fx-hero-pill {
- font-size: 11px;
+ font-size: 11.5px;
  font-weight: 800;
- padding: 4px 10px;
+ padding: 5px 11px;
  border-radius: 999px;
  background: rgba(47, 129, 247, 0.15);
  color: var(--fb-primary);
@@ -1764,8 +1841,8 @@ body {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 14px;
- padding: 14px 16px;
- margin-bottom: 16px;
+ padding: 15px 18px;
+ margin-bottom: 18px;
 }
 
 .fx-chart-header {
@@ -1779,11 +1856,11 @@ body {
 
 .fx-chart-title {
  font-weight: 800;
- font-size: 15px;
+ font-size: 16px;
 }
 
 .fx-chart-sub {
- font-size: 12px;
+ font-size: 12.5px;
  color: var(--fb-muted);
 }
 
@@ -1796,7 +1873,7 @@ body {
 
 .fx-current-rate {
  font-weight: 900;
- font-size: 15px;
+ font-size: 16px;
  transition: color 0.2s ease;
 }
 
@@ -1811,8 +1888,8 @@ body {
 .fx-canvas-box {
  position: relative;
  width: 100%;
- height: 235px;
- border-radius: 10px;
+ height: 245px;
+ border-radius: 11px;
  background: var(--fb-surface);
  border: 1px solid var(--fb-border);
  overflow: hidden;
@@ -1831,47 +1908,47 @@ body {
  justify-content: space-between;
  gap: 8px;
  flex-wrap: wrap;
- margin-top: 8px;
- font-size: 12px;
+ margin-top: 9px;
+ font-size: 12.5px;
  color: var(--fb-muted);
 }
 
 /* Guide Grid */
 .guide-grid {
  display: grid;
- grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
- gap: 12px;
- margin-bottom: 18px;
+ grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+ gap: 14px;
+ margin-bottom: 20px;
 }
 
 .guide-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px;
+ border-radius: 13px;
+ padding: 15px;
 }
 
 .guide-step {
  display: inline-block;
- font-size: 10.5px;
+ font-size: 11px;
  font-weight: 800;
  color: var(--fb-primary);
  background: rgba(47, 129, 247, 0.14);
- padding: 2px 8px;
+ padding: 2px 9px;
  border-radius: 999px;
- margin-bottom: 6px;
+ margin-bottom: 7px;
 }
 
 .guide-card h4 {
- font-size: 14.5px;
+ font-size: 15.5px;
  font-weight: 800;
- margin-bottom: 4px;
+ margin-bottom: 5px;
 }
 
 .guide-card p {
- font-size: 12.5px;
+ font-size: 13.5px;
  color: var(--fb-muted);
- line-height: 1.45;
+ line-height: 1.5;
 }
 
 /* Section Head & Hotel Grid */
@@ -1879,37 +1956,37 @@ body {
  display: flex;
  align-items: center;
  justify-content: space-between;
- gap: 10px;
+ gap: 12px;
  flex-wrap: wrap;
  margin-bottom: 14px;
 }
 
 .section-head h2,
 .section-head h3 {
- font-size: 18px;
+ font-size: 19px;
  font-weight: 800;
 }
 
 .search-input {
- padding: 8px 12px;
- border-radius: 9px;
+ padding: 9px 13px;
+ border-radius: 10px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 13px;
- min-width: 210px;
+ font-size: 13.5px;
+ min-width: 220px;
 }
 
 .grid {
  display: grid;
- grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
- gap: 14px;
+ grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+ gap: 15px;
 }
 
 .card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 12px;
+ border-radius: 13px;
  overflow: hidden;
  display: flex;
  flex-direction: column;
@@ -1927,13 +2004,13 @@ body {
 
 .card img {
  width: 100%;
- height: 150px;
+ height: 156px;
  object-fit: cover;
  display: block;
 }
 
 .card-body {
- padding: 12px;
+ padding: 13px;
  display: flex;
  flex-direction: column;
  justify-content: space-between;
@@ -1942,39 +2019,39 @@ body {
 
 .stars {
  color: #f5b942;
- font-size: 13px;
+ font-size: 13.5px;
  letter-spacing: 1px;
 }
 
 .price {
  font-weight: 900;
- font-size: 15px;
+ font-size: 16px;
  color: var(--fb-success);
 }
 
 .load-more-wrap {
  display: flex;
  justify-content: center;
- margin-top: 16px;
+ margin-top: 18px;
 }
 
 /* Stats & Panels */
 .stats {
  display: grid;
- grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
- gap: 12px;
- margin-bottom: 14px;
+ grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+ gap: 13px;
+ margin-bottom: 16px;
 }
 
 .stat {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 12px;
- padding: 14px;
+ border-radius: 13px;
+ padding: 15px;
 }
 
 .stat h2 {
- font-size: 22px;
+ font-size: 24px;
  font-weight: 900;
  margin-top: 4px;
 }
@@ -1982,22 +2059,22 @@ body {
 .panel {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 14px;
- padding: 16px;
- margin-bottom: 14px;
+ border-radius: 15px;
+ padding: 18px;
+ margin-bottom: 16px;
 }
 
 /* Booking Circle & Banners */
 .order-circle {
- width: 112px;
- height: 112px;
+ width: 118px;
+ height: 118px;
  border-radius: 50%;
- margin: 16px auto;
+ margin: 18px auto;
  display: flex;
  align-items: center;
  justify-content: center;
  font-weight: 900;
- font-size: 18px;
+ font-size: 19px;
  background: conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg);
  position: relative;
 }
@@ -2017,33 +2094,33 @@ body {
 
 .pending-profit-banner {
  margin: 10px auto;
- max-width: 540px;
- padding: 10px 12px;
+ max-width: 560px;
+ padding: 11px 14px;
  border-radius: 10px;
  background: rgba(248, 81, 73, 0.14);
  border: 1px solid rgba(248, 81, 73, 0.4);
  color: var(--fb-danger);
- font-size: 13px;
+ font-size: 13.5px;
  font-weight: 700;
 }
 
 .last-order-box {
  margin-top: 14px;
- padding: 10px 12px;
+ padding: 11px 14px;
  border-radius: 10px;
  background: rgba(63, 185, 80, 0.12);
  border: 1px solid rgba(63, 185, 80, 0.35);
- font-size: 13px;
+ font-size: 13.5px;
 }
 
 .live-order-banner {
- padding: 10px 14px;
+ padding: 11px 14px;
  border-radius: 10px;
  background: rgba(210, 153, 34, 0.16);
  border: 1px solid rgba(210, 153, 34, 0.45);
  color: var(--fb-warn);
  font-weight: 800;
- font-size: 13px;
+ font-size: 13.5px;
 }
 
 .suspended-banner {
@@ -2064,7 +2141,7 @@ body {
 .history-list {
  display: flex;
  flex-direction: column;
- gap: 8px;
+ gap: 10px;
 }
 
 .history-item {
@@ -2072,16 +2149,16 @@ body {
  align-items: center;
  justify-content: space-between;
  gap: 12px;
- padding: 11px 12px;
- border-radius: 10px;
+ padding: 12px 14px;
+ border-radius: 11px;
  background: var(--fb-surface);
  border: 1px solid var(--fb-border);
 }
 
 .profile-head {
  display: flex;
- align-items: center;
- gap: 16px;
+ align-items: flex-start;
+ gap: 18px;
  flex-wrap: wrap;
 }
 
@@ -2092,21 +2169,21 @@ body {
 }
 
 .avatar {
- width: 68px;
- height: 68px;
+ width: 72px;
+ height: 72px;
  border-radius: 50%;
  background: var(--fb-primary);
  color: #fff;
  font-weight: 900;
- font-size: 24px;
+ font-size: 26px;
  display: flex;
  align-items: center;
  justify-content: center;
 }
 
 .avatar-img {
- width: 68px;
- height: 68px;
+ width: 72px;
+ height: 72px;
  border-radius: 50%;
  object-fit: cover;
  border: 2px solid var(--fb-primary);
@@ -2117,36 +2194,38 @@ body {
  gap: 10px;
  flex-wrap: wrap;
  margin-top: 16px;
+ padding-top: 14px;
+ border-top: 1px solid var(--fb-border);
 }
 
 /* Chat Bubbles */
 .support-chat-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
- border-radius: 14px;
+ border-radius: 15px;
  overflow: hidden;
  display: flex;
  flex-direction: column;
- min-height: 440px;
- max-height: 560px;
+ min-height: 450px;
+ max-height: 570px;
 }
 
 .support-chat-header {
  display: flex;
  align-items: center;
- gap: 10px;
- padding: 12px 14px;
+ gap: 11px;
+ padding: 13px 16px;
  border-bottom: 1px solid var(--fb-border);
  background: var(--fb-surface);
 }
 
 .support-agent-avatar {
- width: 38px;
- height: 38px;
+ width: 40px;
+ height: 40px;
  border-radius: 50%;
  background: var(--fb-primary);
  color: #fff;
- font-size: 18px;
+ font-size: 19px;
  font-weight: 800;
  display: flex;
  align-items: center;
@@ -2155,11 +2234,11 @@ body {
 
 .chat-msg {
  position: relative;
- max-width: 78%;
- padding: 9px 12px;
- border-radius: 12px;
- font-size: 13.5px;
- line-height: 1.45;
+ max-width: 80%;
+ padding: 10px 13px;
+ border-radius: 13px;
+ font-size: 14px;
+ line-height: 1.5;
  word-break: break-word;
  white-space: pre-line;
 }
@@ -2179,14 +2258,14 @@ body {
 }
 
 .chat-time {
- font-size: 10.5px;
- opacity: 0.75;
+ font-size: 11px;
+ opacity: 0.78;
  margin-top: 4px;
 }
 
 .chat-photo {
- max-width: 220px;
- border-radius: 8px;
+ max-width: 230px;
+ border-radius: 9px;
  margin-top: 6px;
  display: block;
  cursor: pointer;
@@ -2195,9 +2274,9 @@ body {
 .chat-empty-state {
  text-align: center;
  color: var(--fb-muted);
- font-size: 13px;
+ font-size: 13.5px;
  margin: auto;
- padding: 20px;
+ padding: 22px;
 }
 
 .msg-action-bar {
@@ -2207,8 +2286,8 @@ body {
 }
 
 .msg-action-bar button {
- font-size: 11px;
- padding: 2px 7px;
+ font-size: 11.5px;
+ padding: 2px 8px;
  border-radius: 6px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
@@ -2228,18 +2307,18 @@ body {
  width: 100%;
  overflow-x: auto;
  border: 1px solid var(--fb-border);
- border-radius: 10px;
+ border-radius: 11px;
 }
 
 table {
  width: 100%;
  border-collapse: collapse;
- font-size: 13px;
+ font-size: 13.5px;
 }
 
 th,
 td {
- padding: 9px 10px;
+ padding: 10px 11px;
  border-bottom: 1px solid var(--fb-border);
  text-align: left;
  vertical-align: middle;
@@ -2248,25 +2327,25 @@ td {
 th {
  background: var(--fb-surface);
  font-weight: 800;
- font-size: 12px;
+ font-size: 12.5px;
  color: var(--fb-muted);
 }
 
 .mini-input {
- width: 88px;
- padding: 5px 7px;
- border-radius: 6px;
+ width: 92px;
+ padding: 6px 8px;
+ border-radius: 7px;
  border: 1px solid var(--fb-border);
  background: var(--fb-surface);
  color: var(--fb-text);
- font-size: 12.5px;
+ font-size: 13px;
 }
 
 .status-pill {
  display: inline-block;
- padding: 2px 8px;
+ padding: 3px 9px;
  border-radius: 999px;
- font-size: 11px;
+ font-size: 11.5px;
  font-weight: 800;
 }
 
@@ -2307,11 +2386,11 @@ th {
  background: var(--fb-surface);
  border: 1px solid var(--fb-border);
  font-size: 12px;
- font-weight: 700;
+ font-weight: 800;
 }
 
 .small {
- font-size: 12.5px;
+ font-size: 13px;
 }
 
 .muted {
@@ -2324,7 +2403,7 @@ th {
  bottom: 0;
  left: 0;
  right: 0;
- height: 60px;
+ height: 62px;
  background: var(--fb-card);
  border-top: 1px solid var(--fb-border);
  display: grid;
@@ -2336,7 +2415,7 @@ th {
  border: none;
  background: transparent;
  color: var(--fb-muted);
- font-size: 11px;
+ font-size: 11.5px;
  font-weight: 700;
  cursor: pointer;
  display: flex;
@@ -2347,21 +2426,25 @@ th {
 }
 
 .bottom-nav button span:first-child {
- font-size: 15px;
+ font-size: 16px;
  line-height: 1;
 }
 
 .bottom-nav button.active {
  color: var(--fb-primary);
- background: rgba(47, 129, 247, 0.08);
+ background: rgba(47, 129, 247, 0.09);
 }
 
 @media (max-width: 640px) {
+ html,
+ body {
+  font-size: 14.5px;
+ }
  .fx-canvas-box {
-  height: 195px;
+  height: 205px;
  }
  .hero-content h1 {
-  font-size: 19px;
+  font-size: 20px;
  }
  .search-input {
   width: 100%;
@@ -2371,7 +2454,7 @@ th {
 </style>
 <script>
 // =========================================================================
-// PART 4-A: FIREBASE, STANDARD LOGIN->ADMIN PIN 1245, AUTO-CS, 599 ASIA HOTELS
+// PART 4-A: ALERT TONE, AUTO-CS NEW USER SYNC, LOGIN/REGISTER, COPY & 599 HOTELS
 // =========================================================================
 const STORAGE_KEYS = {
  USERS: "tb_users_v1",
@@ -2408,6 +2491,7 @@ const FIREBASE_CONFIG = {
 let firebaseReady = false;
 let db = null;
 let auth = null;
+let audioCtx = null;
 let lastNotifiedUserMsgKey = "";
 let pendingCsActionContext = "";
 let adminLoginStage = 1;
@@ -2455,7 +2539,7 @@ function formatBubbleTimestamp(dateObj = new Date()) {
 function autoResizeTextarea(el) {
  if (!el) return;
  el.style.height = "auto";
- el.style.height = `${Math.min(110, el.scrollHeight)}px`;
+ el.style.height = `${Math.min(115, el.scrollHeight)}px`;
 }
 
 function formatDeviceAndPlatform() {
@@ -2486,7 +2570,72 @@ function matchesUserIdentifier(u, ident) {
  return (ph && ph === clean) || (em && em === clean) || (aid && aid === clean);
 }
 
-// Default Profit Tiers ($100-$1,000 by $100; $1,500-$10,000 by $500)
+// Unified Alert Tone for Deposit/Withdraw, Login/Register, CS Send/Reply
+function playAlertTone() {
+ try {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+  if (!audioCtx) audioCtx = new AudioContextClass();
+  if (audioCtx.state === "suspended") {
+   audioCtx.resume().catch(() => {});
+  }
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(880, now);
+  osc.frequency.setValueAtTime(1174.66, now + 0.08);
+
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.exponentialRampToValueAtTime(0.14, now + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.24);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.25);
+ } catch (_) {}
+}
+
+function copyTextToClipboard(text, successMsg = "ကော်ပီကူးပြီးပါပြီ။") {
+ const val = String(text || "").trim();
+ if (!val) return;
+ if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+  navigator.clipboard.writeText(val).then(() => {
+   showCenterAlert(successMsg, { ok: true, title: "COPIED", badge: "CLIPBOARD" });
+  }).catch(() => {
+   fallbackCopyText(val, successMsg);
+  });
+ } else {
+  fallbackCopyText(val, successMsg);
+ }
+}
+
+function fallbackCopyText(val, successMsg) {
+ const ta = document.createElement("textarea");
+ ta.value = val;
+ ta.style.position = "fixed";
+ ta.style.opacity = "0";
+ document.body.appendChild(ta);
+ ta.select();
+ try {
+  document.execCommand("copy");
+  showCenterAlert(successMsg, { ok: true, title: "COPIED", badge: "CLIPBOARD" });
+ } catch (_) {}
+ document.body.removeChild(ta);
+}
+
+function copyInviteCode() {
+ const u = getCurrentUser();
+ if (!u || !u.inviteCode) return;
+ copyTextToClipboard(u.inviteCode, `ဖိတ်ကြားကုဒ် (${u.inviteCode}) ကို ကော်ပီကူးပြီးပါပြီ။`);
+}
+
+function copyPlatformLink() {
+ const link = window.location.href || "";
+ copyTextToClipboard(link, "ပလက်ဖောင်း Link ကို ကော်ပီကူးပြီးပါပြီ။");
+}
+
 function buildDefaultProfitTiers() {
  const list = [];
  for (let p = 100; p <= 1000; p += 100) {
@@ -2498,7 +2647,6 @@ function buildDefaultProfitTiers() {
  return list;
 }
 
-// Generate 599 Asia Hotels across countries/cities with stars (1-5) and varied prices
 function generate599AsiaHotels() {
  const asiaDestinations = [
   { country: "Myanmar", city: "Yangon" },
@@ -2579,8 +2727,9 @@ if (!Array.isArray(profitTiers) || !profitTiers.length) {
  saveJson(STORAGE_KEYS.PROFIT_TIERS, profitTiers);
 }
 
-let users = loadJson(STORAGE_KEYS.USERS, []);
+let users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), []);
 let chats = loadJson(STORAGE_KEYS.CHATS, {});
+if (!chats || typeof chats !== "object") chats = {};
 let currentPhone = loadJson(STORAGE_KEYS.CURRENT_PHONE, "");
 let isStaffLoggedIn = Boolean(loadJson(STORAGE_KEYS.ADMIN_AUTH, false));
 let activeCsUserPhone = "";
@@ -2708,6 +2857,42 @@ function saveUsers(targetUser = null) {
    }
    db.ref("users").set(obj).catch(() => {});
   }
+ }
+}
+
+function ensureUserAutoAddedToCs(userObj, isNewRegistration = false) {
+ if (!userObj) return;
+ const chatKey = getUserKey(userObj);
+ if (!chatKey) return;
+ const now = Date.now();
+ const timeStr = formatBubbleTimestamp(new Date(now));
+
+ if (!Array.isArray(chats[chatKey]) || !chats[chatKey].length) {
+  const regSummary = isNewRegistration
+   ? `New Account Registered\n• Account ID: ${userObj.accountId}\n• Name: ${userObj.name}\n• Contact: ${userObj.phone || userObj.email || "-"}`
+   : `Welcome to Trip Booking! How can we assist you today?`;
+  chats[chatKey] = [{
+   id: "sys_" + now + "_" + Math.random().toString(36).slice(2, 6),
+   sender: isNewRegistration ? "user" : "admin",
+   senderName: isNewRegistration ? userObj.name : "Customer Service",
+   text: regSummary,
+   time: timeStr
+  }];
+ } else if (isNewRegistration) {
+  chats[chatKey].push({
+   id: "reg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+   sender: "user",
+   senderName: userObj.name,
+   text: `New Account Registered\n• Account ID: ${userObj.accountId}\n• Name: ${userObj.name}\n• Contact: ${userObj.phone || userObj.email || "-"}`,
+   time: timeStr
+  });
+ }
+
+ activeCsUserPhone = chatKey;
+ saveJson(STORAGE_KEYS.CHATS, chats);
+ if (firebaseReady && db) {
+  const safeKey = encodeURIComponent(chatKey).replace(/\./g, "%2E");
+  db.ref(`chats/${safeKey}`).set(chats[chatKey]).catch(() => {});
  }
 }
 
@@ -2870,6 +3055,7 @@ function showRegistrationSuccessToast(bonusAmt) {
 }
 
 function registerUser() {
+ users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
  const name = ($("regName")?.value || "").trim();
  const phone = ($("regPhone")?.value || "").trim();
  const email = ($("regEmail")?.value || "").trim();
@@ -2939,21 +3125,16 @@ function registerUser() {
  currentPhone = getUserKey(newUser);
  saveJson(STORAGE_KEYS.CURRENT_PHONE, currentPhone);
  saveUsers(newUser);
+ ensureUserAutoAddedToCs(newUser, true);
 
- const chatKey = getUserKey(newUser);
- if (!Array.isArray(chats[chatKey]) || !chats[chatKey].length) {
-  chats[chatKey] = [{
-   id: "welcome_" + Date.now(),
-   sender: "admin",
-   senderName: "Customer Service",
-   text: "Welcome to Trip Booking! How can we assist you today?",
-   time: formatBubbleTimestamp(new Date())
-  }];
-  saveJson(STORAGE_KEYS.CHATS, chats);
-  if (firebaseReady && db) db.ref("chats").set(chats).catch(() => {});
- }
+ if ($("regName")) $("regName").value = "";
+ if ($("regPhone")) $("regPhone").value = "";
+ if ($("regEmail")) $("regEmail").value = "";
+ if ($("regInvite")) $("regInvite").value = "";
+ if ($("regPassword")) $("regPassword").value = "";
 
  closeModal("authModal");
+ playAlertTone();
  updateLiveMovingLocationForUser(newUser);
  refreshAllViews();
  showRegistrationSuccessToast(bonusAmt);
@@ -2988,6 +3169,7 @@ function loginUser() {
   saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
   resetLoginModalState();
   closeModal("authModal");
+  playAlertTone();
   showPage("adminPage", null);
   renderAdminPanel();
   showCenterAlert("Admin Console သို့ ဝင်ရောက်ပြီးပါပြီ။", {
@@ -3016,8 +3198,10 @@ function loginUser() {
  currentPhone = getUserKey(found);
  saveJson(STORAGE_KEYS.CURRENT_PHONE, currentPhone);
  saveUsers(found);
+ ensureUserAutoAddedToCs(found, false);
 
  closeModal("authModal");
+ playAlertTone();
  updateLiveMovingLocationForUser(found);
  refreshAllViews();
  showCenterAlert(`ကြိုဆိုပါတယ် ${found.name}!`, { ok: true, title: "LOGIN SUCCESS", badge: "ONLINE" });
@@ -3077,6 +3261,7 @@ function completeAdminLogin() {
  isStaffLoggedIn = true;
  saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
  backToAdminStep1();
+ playAlertTone();
  renderAdminPanel();
  showCenterAlert("Admin Console သို့ ဝင်ရောက်ပြီးပါပြီ။", {
   ok: true,
@@ -3123,9 +3308,6 @@ function addUserHistory(userObj, title, amountText, kind = "info") {
  if (userObj.history.length > 100) userObj.history.length = 100;
 }
 
-// =========================================================================
-// VARIED 30-ORDER PROFIT ENGINE (0.34, 0.12 ETC. -> TARGET 30-ORDER PROFIT)
-// =========================================================================
 function getTargetProfitForPrincipal(principalAmt) {
  const p = roundMoney(principalAmt);
  if (!Array.isArray(profitTiers) || !profitTiers.length) {
@@ -3181,7 +3363,7 @@ function updateLiveMovingLocationForUser(userObj) {
 </script>
 <script>
 // =========================================================================
-// PART 4-B: AUTO-CS REDIRECT, CARD AUTO-SEND + DOUBLE-TAP GUARD, LOCKS & ADMIN
+// PART 4-B: ADMIN ALERT+SOUND, AUTO-CS, CARD AUTO-SEND, LOCKS & ADMIN TABS
 // =========================================================================
 let activeOrderContext = null;
 let pendingNegLockContext = null;
@@ -3848,8 +4030,8 @@ function openBankPickerForMode(role = "user", mode = "") {
 
  box.innerHTML = `
   <div class="bank-picker-top">
-   <strong style="font-size:13px">${escapeHtml(modeTitle)}</strong>
-   <button type="button" class="close-x" style="width:24px;height:24px;font-size:12px" onclick="closeBankPicker('${role}')">✕</button>
+   <strong style="font-size:13.5px">${escapeHtml(modeTitle)}</strong>
+   <button type="button" class="close-x" style="width:26px;height:26px;font-size:12px" onclick="closeBankPicker('${role}')">✕</button>
   </div>
   <div class="bank-type-tabs">
    ${types.map(t => `
@@ -3883,7 +4065,7 @@ function closeBankPicker(role = "user") {
 function sendBankCardToChat(role, bankId) {
  const now = Date.now();
  if (now < bankPickerLockUntil) return;
- bankPickerLockUntil = now + 1500; // 1.5s double-tap lock
+ bankPickerLockUntil = now + 1500;
 
  const u = getCurrentUser();
  const available = getAvailableBanksForUser(u);
@@ -3916,6 +4098,7 @@ function sendBankCardToChat(role, bankId) {
    text: summaryText,
    time: formatBubbleTimestamp(new Date(now))
   });
+  playAlertTone();
   renderAdminCsList();
   renderAdminCsMessages();
  } else {
@@ -3931,18 +4114,19 @@ function sendBankCardToChat(role, bankId) {
    text: summaryText,
    time: formatBubbleTimestamp(new Date(now))
   });
+  playAlertTone();
   renderSupportChat();
   const inp = $("supportInput");
   if (inp) {
    inp.value = "";
-   inp.placeholder = "ထုတ်မည့်/သွင်းမည့် ပမာဏကို ရိုက်ထည့်ပါ...";
+   inp.placeholder = "ထုတ်မည့်/သွင်းမည့် ပမာဏကို ကိုယ်တိုင်ရိုက်ထည့်ပါ...";
    inp.focus();
   }
  }
 }
 
 // =========================================================================
-// REAL-TIME CUSTOMER SERVICE CHAT, PHOTO UPLOAD & TYPING INDICATOR
+// REAL-TIME CUSTOMER SERVICE CHAT, INSTANT ADMIN ALERT & TYPING INDICATOR
 // =========================================================================
 function appendMessageToThread(threadKey, msgObj) {
  if (!threadKey) return;
@@ -3952,6 +4136,11 @@ function appendMessageToThread(threadKey, msgObj) {
  if (firebaseReady && db) {
   const safeKey = encodeURIComponent(threadKey).replace(/\./g, "%2E");
   db.ref(`chats/${safeKey}`).set(chats[threadKey]).catch(() => {});
+ }
+ if (isStaffLoggedIn) {
+  renderAdminCsList();
+  renderAdminCsMessages();
+  checkNewUserMessagesForToast(chats);
  }
 }
 
@@ -4040,6 +4229,7 @@ function handleChatPhotoUpload(ev, role) {
     photo: dataUrl,
     time: formatBubbleTimestamp(new Date(now))
    });
+   playAlertTone();
    renderAdminCsList();
    renderAdminCsMessages();
   } else {
@@ -4056,6 +4246,7 @@ function handleChatPhotoUpload(ev, role) {
     photo: dataUrl,
     time: formatBubbleTimestamp(new Date(now))
    });
+   playAlertTone();
    renderSupportChat();
   }
  };
@@ -4115,6 +4306,7 @@ function sendSupportMessage() {
   time: formatBubbleTimestamp(new Date(now))
  });
 
+ playAlertTone();
  if (inp) {
   inp.value = "";
   inp.style.height = "auto";
@@ -4174,7 +4366,7 @@ function renderAdminCsList() {
  wrap.innerHTML = filtered.map(e => `
   <div class="cs-thread-item ${e.key === activeCsUserPhone ? "active" : ""}" onclick="selectAdminCsThread('${escapeHtml(e.key)}')">
    <div style="min-width:0;flex:1">
-    <div style="font-weight:800;font-size:13px">${escapeHtml(e.name)}</div>
+    <div style="font-weight:800;font-size:13.5px">${escapeHtml(e.name)}</div>
     <div class="small muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(e.preview)}</div>
    </div>
   </div>
@@ -4183,6 +4375,11 @@ function renderAdminCsList() {
 
 function selectAdminCsThread(key) {
  activeCsUserPhone = key;
+ const badge = $("adminCsUnreadBadge");
+ if (badge) {
+  badge.textContent = "0";
+  badge.classList.add("hidden");
+ }
  renderAdminCsList();
  renderAdminCsMessages();
  renderTypingIndicators();
@@ -4243,6 +4440,7 @@ function sendAdminCsMessage() {
   time: formatBubbleTimestamp(new Date(now))
  });
 
+ playAlertTone();
  if (inp) {
   inp.value = "";
   inp.style.height = "auto";
@@ -4264,6 +4462,14 @@ function deleteAdminCsMessage(threadKey, idx) {
  renderAdminCsMessages();
 }
 
+function triggerBrowserDeviceNotification(title, bodyText) {
+ try {
+  if ("Notification" in window && Notification.permission === "granted") {
+   new Notification(title, { body: bodyText });
+  }
+ } catch (_) {}
+}
+
 function checkNewUserMessagesForToast(chatMap) {
  if (!isStaffLoggedIn || !chatMap || typeof chatMap !== "object") return;
  let latest = null;
@@ -4281,6 +4487,19 @@ function checkNewUserMessagesForToast(chatMap) {
  if (sig === lastNotifiedUserMsgKey) return;
  lastNotifiedUserMsgKey = sig;
 
+ playAlertTone();
+ triggerBrowserDeviceNotification(
+  `CS Message · ${latest.msg.senderName || latest.key}`,
+  latest.msg.text || (latest.msg.photo ? "[Photo]" : "New message")
+ );
+
+ const unreadBadge = $("adminCsUnreadBadge");
+ if (unreadBadge) {
+  const curCount = Number(unreadBadge.textContent || 0) + 1;
+  unreadBadge.textContent = String(curCount);
+  unreadBadge.classList.remove("hidden");
+ }
+
  const toast = $("csIncomingToast");
  if (!toast) return;
  if ($("csToastTime")) $("csToastTime").textContent = latest.msg.time || "";
@@ -4288,7 +4507,7 @@ function checkNewUserMessagesForToast(chatMap) {
  if ($("csToastPreview")) $("csToastPreview").textContent = latest.msg.text || (latest.msg.photo ? "[Photo]" : "New message");
  toast.dataset.threadKey = latest.key;
  toast.classList.remove("hidden");
- setTimeout(() => toast.classList.add("hidden"), 4500);
+ setTimeout(() => toast.classList.add("hidden"), 5000);
 }
 
 function handleCsToastClick() {
@@ -4350,7 +4569,6 @@ function generateInitialFxTicks(anchorRate = 4750) {
    delta = (Math.random() - 0.46) * 34;
   }
 
-  // Pull gently toward mid-band (4489..4999) if near edges
   if (cur < FX_MIN_RATE + 45) delta = Math.abs(delta) + 12;
   if (cur > FX_MAX_RATE - 45) delta = -(Math.abs(delta) + 12);
 
@@ -4448,6 +4666,7 @@ function adminUpdateLiveRate() {
   return;
  }
  applyAdminRateSync(raw, true);
+ playAlertTone();
  showCenterAlert(`Live FX Rate ကို 1 USD = ${cleanRateNumber(raw)} MMK သို့ ပြောင်းလဲပြီးပါပြီ။`, {
   ok: true,
   title: "RATE UPDATED",
@@ -4519,7 +4738,6 @@ function drawFxLiveChart() {
  const maxVal = Math.min(FX_MAX_RATE, Math.max(...rates) + 18);
  const span = Math.max(10, maxVal - minVal);
 
- // Horizontal grid lines & Y-axis labels
  ctx.strokeStyle = "rgba(139, 148, 158, 0.16)";
  ctx.lineWidth = 1;
  ctx.font = "11px sans-serif";
@@ -4543,7 +4761,6 @@ function drawFxLiveChart() {
  };
  const getY = (val) => padT + ((maxVal - val) / span) * plotH;
 
- // Draw each segment colored Green when rising, Red when falling
  for (let i = 1; i < fxHistoryTicks.length; i++) {
   const p0 = fxHistoryTicks[i - 1];
   const p1 = fxHistoryTicks[i];
@@ -4563,7 +4780,6 @@ function drawFxLiveChart() {
   ctx.stroke();
  }
 
- // Latest point marker
  const lastIdx = fxHistoryTicks.length - 1;
  const prevRate = lastIdx > 0 ? fxHistoryTicks[lastIdx - 1].rate : fxHistoryTicks[lastIdx].rate;
  const lastRate = fxHistoryTicks[lastIdx].rate;
@@ -4576,14 +4792,12 @@ function drawFxLiveChart() {
  ctx.fillStyle = lastRising ? "#3fb950" : "#f85149";
  ctx.fill();
 
- // X-axis time labels
  ctx.textAlign = "center";
  ctx.fillStyle = "#8b949e";
  ctx.fillText("-24h", padL, height - 7);
  ctx.fillText("-12h", padL + plotW * 0.5, height - 7);
  ctx.fillText("LIVE", padL + plotW, height - 7);
 
- // Hover crosshair inspection
  if (fxHoverIdx >= 0 && fxHoverIdx < fxHistoryTicks.length) {
   const pt = fxHistoryTicks[fxHoverIdx];
   const hx = getX(fxHoverIdx);
@@ -4706,7 +4920,7 @@ function renderHotels() {
    <img src="${escapeHtml(h.img)}" alt="${escapeHtml(h.name)}" loading="lazy" />
    <div class="card-body">
     <div>
-     <div style="font-weight:800;font-size:14px">${escapeHtml(h.name)}</div>
+     <div style="font-weight:800;font-size:14.5px">${escapeHtml(h.name)}</div>
      <div class="small muted" style="margin-top:2px">${escapeHtml(h.country)}</div>
      <div class="stars" style="margin-top:5px">${"★".repeat(Number(h.stars || 4))}${"☆".repeat(Math.max(0, 5 - Number(h.stars || 4)))}</div>
     </div>
@@ -4752,13 +4966,18 @@ function openHotelDetail(hotelId) {
 }
 
 // =========================================================================
-// GUEST PROFILE CLEAN VIEW (ONLY 2 BUTTONS WHEN NOT LOGGED IN) & ADMIN PANEL
+// GUEST PROFILE CLEAN VIEW (NO DEVICE/LOCATION SHOWN TO USER) & ADMIN PANEL
 // =========================================================================
 function renderProfile() {
  const u = getCurrentUser();
  const guestGate = $("guestAuthGateCard");
  const loggedCard = $("loggedInProfileCard");
  const headerAuthBtn = $("headerAuthBtn");
+ const shareLinkEl = $("platformShareLinkText");
+
+ if (shareLinkEl) {
+  shareLinkEl.textContent = window.location.href || "";
+ }
 
  if (!u) {
   if (guestGate) guestGate.classList.remove("hidden");
@@ -4804,13 +5023,9 @@ function renderProfile() {
  }
 
  if ($("profileName")) $("profileName").textContent = u.name || "Member";
- if ($("profileAccountId")) $("profileAccountId").textContent = `Account ID: ${u.accountId || "-"}`;
- if ($("profilePhone")) $("profilePhone").textContent = `Contact: ${u.phone || u.email || "-"}`;
- if ($("profileInvite")) $("profileInvite").textContent = `Invite Code: ${u.inviteCode || "-"} · Invited By: ${u.invitedBy || "-"}`;
- if ($("profileDeviceLoc")) {
-  const locStr = (u.lat != null && u.lng != null) ? `${u.lat}, ${u.lng}` : (u.locStatus || "Location Off");
-  $("profileDeviceLoc").textContent = `Device: ${u.deviceInfo || "-"} · ${locStr}`;
- }
+ if ($("profileAccountId")) $("profileAccountId").textContent = u.accountId || "-";
+ if ($("profilePhone")) $("profilePhone").textContent = u.phone || u.email || "-";
+ if ($("profileInvite")) $("profileInvite").textContent = u.inviteCode || "-";
  if ($("profileBalance")) $("profileBalance").textContent = fmtMoney(u.balance);
  if ($("profileAccountStatus")) $("profileAccountStatus").textContent = u.isBanned ? "Suspended" : "Active";
 }
@@ -4844,6 +5059,7 @@ function submitDeposit() {
  addUserHistory(u, `Deposit (${method})`, `+${fmtMoney(amt)}`, "deposit");
  saveUsers(u);
  closeModal("depositModal");
+ playAlertTone();
  refreshAllViews();
  showCenterAlert(`Deposit +${fmtMoney(amt)} (${method}) ထည့်သွင်းပြီးပါပြီ။`, {
   ok: true,
@@ -4894,6 +5110,7 @@ function submitWithdraw() {
  addUserHistory(u, "Withdraw Request", `-${fmtMoney(amt)}`, "withdraw");
  saveUsers(u);
  closeModal("withdrawModal");
+ playAlertTone();
  refreshAllViews();
  showCenterAlert(`Withdraw ${fmtMoney(amt)} တောင်းဆိုမှု မှတ်တမ်းတင်ပြီးပါပြီ။`, {
   ok: true,
@@ -4931,6 +5148,7 @@ function submitBindBank() {
  u.lastSeenAt = Date.now();
  saveUsers(u);
  closeModal("bindBankModal");
+ playAlertTone();
  renderProfile();
  showCenterAlert(`ဘဏ်ကဒ် (${bankName} · ${accountNumber}) ချိတ်ဆက်ပြီးပါပြီ။`, {
   ok: true,
@@ -4955,7 +5173,7 @@ function renderHistory() {
  wrap.innerHTML = list.map(item => `
   <div class="history-item">
    <div>
-    <div style="font-weight:700;font-size:13.5px">${escapeHtml(item.title)}</div>
+    <div style="font-weight:700;font-size:14px">${escapeHtml(item.title)}</div>
     <div class="small muted">${escapeHtml(item.time || "")}</div>
    </div>
    <strong style="color:${String(item.amountText || "").startsWith("-") ? "var(--fb-danger)" : "var(--fb-success)"}">${escapeHtml(item.amountText || "")}</strong>
@@ -4999,6 +5217,11 @@ function switchAdminTab(tabName) {
   }
  }
  if (tabName === "cs") {
+  const badge = $("adminCsUnreadBadge");
+  if (badge) {
+   badge.textContent = "0";
+   badge.classList.add("hidden");
+  }
   renderAdminCsList();
   renderAdminCsMessages();
   renderTypingIndicators();
@@ -5239,6 +5462,10 @@ document.addEventListener("DOMContentLoaded", () => {
  const savedLang = loadJson(STORAGE_KEYS.LANG, "my");
  if ($("language")) $("language").value = savedLang;
  document.documentElement.lang = savedLang;
+
+ if ("Notification" in window && Notification.permission === "default") {
+  Notification.requestPermission().catch(() => {});
+ }
 
  initFirebaseAndListeners();
  initActivityTicker();
