@@ -32,7 +32,7 @@
     <option value="zh">中文 (ZH)</option>
    </select>
    <button type="button" class="icon-btn" onclick="toggleTheme()" title="Toggle Theme">◐</button>
-   <button type="button" id="headerAuthBtn" class="btn btn-primary btn-sm" onclick="openAuth('login')">Login</button>
+   <button type="button" id="headerAuthBtn" class="btn btn-primary btn-sm" onclick="openAuth('login')">အကောင့်ဝင်ရန်</button>
   </div>
  </header>
 
@@ -125,11 +125,27 @@
    </div>
 
    <div class="section-head">
-    <div style="display:flex;align-items:center;gap:10px">
-     <h2>Featured Hotels</h2>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+     <h2>Featured Hotels (Asia)</h2>
      <span id="hotelCountBadge" class="count-badge">0</span>
     </div>
-    <input id="hotelSearch" type="text" class="search-input" placeholder="Search hotel, city, stars..." oninput="renderHotels()" />
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+     <select id="hotelStarFilter" class="filter-select" onchange="renderHotels()" aria-label="Filter by Stars">
+      <option value="all">All Stars (1–5★)</option>
+      <option value="5">5 Stars</option>
+      <option value="4">4 Stars</option>
+      <option value="3">3 Stars</option>
+      <option value="2">2 Stars</option>
+      <option value="1">1 Star</option>
+     </select>
+     <select id="hotelPriceSort" class="filter-select" onchange="renderHotels()" aria-label="Sort by Price">
+      <option value="default">Default Order</option>
+      <option value="price_asc">Price: Low to High</option>
+      <option value="price_desc">Price: High to Low</option>
+      <option value="stars_desc">Stars: High to Low</option>
+     </select>
+     <input id="hotelSearch" type="text" class="search-input" placeholder="Search hotel, country, city..." oninput="renderHotels()" />
+    </div>
    </div>
 
    <div id="hotelGrid" class="grid"></div>
@@ -149,6 +165,8 @@
      </div>
     </div>
 
+    <div id="supportContextBanner" class="pending-profit-banner hidden" style="margin:8px 14px 0;max-width:none"></div>
+
     <div id="supportMessages" class="support-messages"></div>
 
     <div style="position:relative">
@@ -162,7 +180,7 @@
       <textarea
        id="supportInput"
        rows="1"
-       placeholder="Type a message... (Enter to send, Shift+Enter for new line)"
+       placeholder="Type a message or enter amount... (Enter to send, Shift+Enter for new line)"
        onkeydown="handleComposerKeydown(event, 'user')"
        onfocus="handleSupportInputFocus()"
        oninput="handleComposerTyping('user', this)"
@@ -203,8 +221,8 @@
 
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px">
      <button type="button" class="btn btn-primary" onclick="triggerGetOrder()">Start Booking Order</button>
-     <button type="button" class="btn btn-success" onclick="openDepositModal()">Deposit</button>
-     <button type="button" class="btn btn-secondary" onclick="openWithdrawModal()">Withdraw</button>
+     <button type="button" class="btn btn-success" onclick="handleDepositAction()">Deposit</button>
+     <button type="button" class="btn btn-secondary" onclick="handleWithdrawAction()">Withdraw</button>
     </div>
 
     <div id="lastCompletedOrderBox" class="last-order-box hidden"></div>
@@ -223,40 +241,53 @@
 
   <!-- PROFILE PAGE -->
   <section id="profilePage" class="page">
-   <div id="suspendedAccountNotice" class="suspended-banner hidden" style="border-radius:10px;margin-bottom:14px">
-    <div class="suspended-banner-inner">
-     <span>Account Suspended: <strong id="suspendedReasonText"></strong></span>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="openSupportFromSuspension()">Contact Support</button>
+   <!-- Shown when NOT logged in: ONLY two clean buttons (အကောင့်ဖွင့်ရန် & အကောင့်ဝင်ရန်) -->
+   <div id="guestAuthGateCard" class="panel" style="text-align:center;padding:32px 20px">
+    <h2 style="margin-bottom:16px">Trip Booking</h2>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+     <button type="button" class="btn btn-success" onclick="openAuth('register')">အကောင့်ဖွင့်ရန်</button>
+     <button type="button" class="btn btn-primary" onclick="openAuth('login')">အကောင့်ဝင်ရန်</button>
     </div>
    </div>
 
-   <div class="panel">
-    <div class="profile-head">
-     <div class="profile-avatar-wrap">
-      <div id="profileAvatar" class="avatar">◯</div>
-      <img id="profileAvatarImg" class="avatar-img hidden" alt="Profile Photo" />
-      <label class="btn btn-secondary btn-xs" style="margin-top:8px;cursor:pointer">
-       Upload Photo
-       <input type="file" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)" />
-      </label>
-     </div>
-
-     <div>
-      <h2 id="profileName">Guest Member</h2>
-      <div id="profilePhone" class="small muted">Not logged in</div>
-      <div id="profileInvite" class="small muted" style="margin-top:3px"></div>
-      <div id="profileDeviceLoc" class="small muted" style="margin-top:3px"></div>
-      <div style="margin-top:6px">
-       Balance: <strong id="profileBalance">$0.00</strong> · Status: <strong id="profileAccountStatus">Guest</strong>
-      </div>
+   <!-- Shown when logged in -->
+   <div id="loggedInProfileCard" class="hidden">
+    <div id="suspendedAccountNotice" class="suspended-banner hidden" style="border-radius:10px;margin-bottom:14px">
+     <div class="suspended-banner-inner">
+      <span>Account Suspended: <strong id="suspendedReasonText"></strong></span>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="openSupportFromSuspension()">Contact Support</button>
      </div>
     </div>
 
-    <div class="profile-actions">
-     <button type="button" id="profileLoginBtn" class="btn btn-primary" onclick="openAuth('login')">Login</button>
-     <button type="button" id="profileRegisterBtn" class="btn btn-secondary" onclick="openAuth('register')">Register</button>
-     <button type="button" class="btn btn-secondary" onclick="openBindBankModal()">Bind Bank</button>
-     <button type="button" id="profileLogoutBtn" class="btn btn-danger hidden" onclick="logoutUser()">Logout</button>
+    <div class="panel">
+     <div class="profile-head">
+      <div class="profile-avatar-wrap">
+       <div id="profileAvatar" class="avatar">◯</div>
+       <img id="profileAvatarImg" class="avatar-img hidden" alt="Profile Photo" />
+       <label class="btn btn-secondary btn-xs" style="margin-top:8px;cursor:pointer">
+        Upload Photo
+        <input type="file" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)" />
+       </label>
+      </div>
+
+      <div>
+       <h2 id="profileName">Member</h2>
+       <div id="profileAccountId" class="small muted" style="margin-top:2px"></div>
+       <div id="profilePhone" class="small muted" style="margin-top:2px"></div>
+       <div id="profileInvite" class="small muted" style="margin-top:3px"></div>
+       <div id="profileDeviceLoc" class="small muted" style="margin-top:3px"></div>
+       <div style="margin-top:6px">
+        Balance: <strong id="profileBalance">$0.00</strong> · Status: <strong id="profileAccountStatus">Active</strong>
+       </div>
+      </div>
+     </div>
+
+     <div class="profile-actions">
+      <button type="button" class="btn btn-secondary" onclick="openBindBankModal()">Bind Bank</button>
+      <button type="button" class="btn btn-success" onclick="handleDepositAction()">Deposit</button>
+      <button type="button" class="btn btn-secondary" onclick="handleWithdrawAction()">Withdraw</button>
+      <button type="button" id="profileLogoutBtn" class="btn btn-danger" onclick="logoutUser()">Logout</button>
+     </div>
     </div>
    </div>
   </section>
@@ -317,7 +348,7 @@
      </div>
     </div>
 
-    <!-- Admin Live Rate Sync Bar -->
+    <!-- Admin Quick Rate Sync Bar -->
     <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
      <div>
       <strong>Admin Live Dollar Rate Sync</strong>
@@ -336,7 +367,7 @@
        <button type="button" id="adminTabCs" class="btn btn-secondary btn-sm" onclick="switchAdminTab('cs')">Customer Service</button>
        <button type="button" id="adminTabBanks" class="btn btn-secondary btn-sm" onclick="switchAdminTab('banks')">ဘဏ်အကောင့်များ</button>
        <button type="button" id="adminTabTiers" class="btn btn-secondary btn-sm" onclick="switchAdminTab('tiers')">Profit Tiers ($100–$10,000)</button>
-       <button type="button" id="adminTabHotels" class="btn btn-secondary btn-sm" onclick="switchAdminTab('hotels')">Hotels</button>
+       <button type="button" id="adminTabHotels" class="btn btn-secondary btn-sm" onclick="switchAdminTab('hotels')">Hotels (599)</button>
        <span id="adminUsersCountBadge" class="count-badge">0 Users</span>
       </div>
       <div class="admin-header-tools">
@@ -512,7 +543,7 @@
      <!-- HOTELS TAB -->
      <div id="adminHotelsTab" class="hidden">
       <div class="section-head">
-       <h3>Hotels Catalog</h3>
+       <h3>Hotels Catalog (Asia · 599 Entries)</h3>
        <input id="adminHotelSearch" type="text" class="search-input" placeholder="Search hotels..." oninput="renderAdminHotels()" />
       </div>
       <div class="table-wrap">
@@ -560,17 +591,17 @@
   </button>
  </nav>
 
- <!-- AUTH MODAL (LOGIN / REGISTER) -->
+ <!-- AUTH MODAL (LOGIN / REGISTER — ALSO SUPPORTS ADMIN 09775191427 / 12344321 -> PIN 1245) -->
  <div id="authModal" class="modal-backdrop hidden">
   <div class="modal-card">
    <div class="modal-header">
-    <h3 id="authTitle">Login</h3>
+    <h3 id="authTitle">အကောင့်ဝင်ရန်</h3>
     <button type="button" class="close-x" onclick="closeModal('authModal')">✕</button>
    </div>
 
    <div style="display:flex;gap:8px;margin-bottom:14px">
-    <button type="button" class="btn btn-secondary btn-sm" style="flex:1" onclick="switchAuthMode('login')">Login</button>
-    <button type="button" class="btn btn-secondary btn-sm" style="flex:1" onclick="switchAuthMode('register')">Register</button>
+    <button type="button" class="btn btn-secondary btn-sm" style="flex:1" onclick="switchAuthMode('login')">အကောင့်ဝင်ရန်</button>
+    <button type="button" class="btn btn-secondary btn-sm" style="flex:1" onclick="switchAuthMode('register')">အကောင့်ဖွင့်ရန်</button>
    </div>
 
    <form id="loginForm" onsubmit="event.preventDefault();loginUser();">
@@ -582,8 +613,12 @@
      <label>Password</label>
      <input id="loginPassword" type="password" placeholder="Enter password" required />
     </div>
+    <div id="loginPinStepBox" class="field hidden">
+     <label>Admin 4-Digit Security PIN</label>
+     <input id="loginAdminPin" type="password" maxlength="4" placeholder="Enter 4-digit PIN" />
+    </div>
     <div id="loginErr" class="error-text"></div>
-    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:6px">Login</button>
+    <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:6px">အကောင့်ဝင်ရန်</button>
    </form>
 
    <form id="registerForm" class="hidden" onsubmit="event.preventDefault();registerUser();">
@@ -608,7 +643,7 @@
      <input id="regPassword" type="password" placeholder="Create password" required />
     </div>
     <div id="regErr" class="error-text"></div>
-    <button type="submit" class="btn btn-success" style="width:100%;margin-top:6px">Create Account</button>
+    <button type="submit" class="btn btn-success" style="width:100%;margin-top:6px">အကောင့်ဖွင့်ရန်</button>
    </form>
   </div>
  </div>
@@ -705,7 +740,7 @@
   </div>
  </div>
 
- <!-- DEPOSIT MODAL -->
+ <!-- DEPOSIT MODAL (FOR USERS WITHOUT BOUND BANK YET) -->
  <div id="depositModal" class="modal-backdrop hidden">
   <div class="modal-card">
    <div class="modal-header">
@@ -730,7 +765,7 @@
   </div>
  </div>
 
- <!-- WITHDRAW MODAL -->
+ <!-- WITHDRAW MODAL (FOR USERS WITHOUT BOUND BANK YET) -->
  <div id="withdrawModal" class="modal-backdrop hidden">
   <div class="modal-card">
    <div class="modal-header">
@@ -1630,7 +1665,7 @@ body {
  display: block;
 }
 
-/* Hero Banner (Hotel Photography) */
+/* Hero Banner (Rotating Hotel Photography) */
 .hero {
  position: relative;
  border-radius: 16px;
@@ -2336,7 +2371,7 @@ th {
 </style>
 <script>
 // =========================================================================
-// PART 4-A: FIREBASE SYNC, 2-STEP ADMIN AUTH, $18 BONUS & 30-ORDER ENGINE
+// PART 4-A: FIREBASE, STANDARD LOGIN->ADMIN PIN 1245, AUTO-CS, 599 ASIA HOTELS
 // =========================================================================
 const STORAGE_KEYS = {
  USERS: "tb_users_v1",
@@ -2374,6 +2409,8 @@ let firebaseReady = false;
 let db = null;
 let auth = null;
 let lastNotifiedUserMsgKey = "";
+let pendingCsActionContext = "";
+let adminLoginStage = 1;
 
 const $ = (id) => document.getElementById(id);
 
@@ -2434,6 +2471,7 @@ function formatDeviceAndPlatform() {
 
 function getUserKey(u) {
  if (!u) return "";
+ if (u.accountId) return String(u.accountId).trim();
  const ph = String(u.phone || "").trim();
  if (ph) return ph;
  return String(u.email || "").trim().toLowerCase();
@@ -2444,7 +2482,8 @@ function matchesUserIdentifier(u, ident) {
  const clean = String(ident).trim().toLowerCase();
  const ph = String(u.phone || "").trim().toLowerCase();
  const em = String(u.email || "").trim().toLowerCase();
- return (ph && ph === clean) || (em && em === clean);
+ const aid = String(u.accountId || "").trim().toLowerCase();
+ return (ph && ph === clean) || (em && em === clean) || (aid && aid === clean);
 }
 
 // Default Profit Tiers ($100-$1,000 by $100; $1,500-$10,000 by $500)
@@ -2459,48 +2498,81 @@ function buildDefaultProfitTiers() {
  return list;
 }
 
-const BASE_HOTELS = [
- {
-  id: 101,
-  name: "Grand Lotus Yangon Hotel",
-  country: "Myanmar · Yangon",
-  stars: 5,
-  price: 145.00,
-  description: "Central heritage & skyline luxury hotel near Shwedagon view corridor.",
-  img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop"
- },
- {
-  id: 102,
-  name: "Chao Phraya Sky Suites",
-  country: "Thailand · Bangkok",
-  stars: 5,
-  price: 168.00,
-  description: "Riverside infinity pool hotel with panoramic city views.",
-  img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&auto=format&fit=crop"
- },
- {
-  id: 103,
-  name: "Marina Bay Horizon Hotel",
-  country: "Singapore · Marina",
-  stars: 5,
-  price: 260.00,
-  description: "Modern harbourfront rooms with sky deck and lounge.",
-  img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&auto=format&fit=crop"
- },
- {
-  id: 104,
-  name: "Royal Bagan Heritage Resort",
-  country: "Myanmar · Bagan",
-  stars: 4,
-  price: 118.00,
-  description: "Peaceful garden resort surrounded by ancient temple views.",
-  img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&auto=format&fit=crop"
+// Generate 599 Asia Hotels across countries/cities with stars (1-5) and varied prices
+function generate599AsiaHotels() {
+ const asiaDestinations = [
+  { country: "Myanmar", city: "Yangon" },
+  { country: "Myanmar", city: "Mandalay" },
+  { country: "Myanmar", city: "Bagan" },
+  { country: "Myanmar", city: "Pyin Oo Lwin" },
+  { country: "Thailand", city: "Bangkok" },
+  { country: "Thailand", city: "Chiang Mai" },
+  { country: "Thailand", city: "Phuket" },
+  { country: "Singapore", city: "Marina Bay" },
+  { country: "Japan", city: "Tokyo" },
+  { country: "Japan", city: "Kyoto" },
+  { country: "South Korea", city: "Seoul" },
+  { country: "Vietnam", city: "Da Nang" },
+  { country: "Malaysia", city: "Kuala Lumpur" },
+  { country: "Indonesia", city: "Bali" },
+  { country: "Laos", city: "Luang Prabang" }
+ ];
+
+ const hotelPrefixes = [
+  "Grand Lotus", "Royal Horizon", "Emerald Palace", "Golden Pagoda",
+  "Skyline Suites", "Harbour View", "Silk Garden", "Imperial Crest",
+  "Moonlight Resort", "Cedar Sanctuary", "Riverfront Plaza", "Jade Pavilion"
+ ];
+
+ const hotelSuffixes = [
+  "Hotel", "Resort & Spa", "Suites", "Grand Hotel", "Boutique Hotel", "Heritage Inn"
+ ];
+
+ const asiaHotelPhotos = [
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=700&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1540541338287-1917e42180ce?w=700&auto=format&fit=crop"
+ ];
+
+ const list = [];
+ for (let i = 1; i <= 599; i++) {
+  const dest = asiaDestinations[(i - 1) % asiaDestinations.length];
+  const prefix = hotelPrefixes[(i * 3) % hotelPrefixes.length];
+  const suffix = hotelSuffixes[(i * 5) % hotelSuffixes.length];
+  const stars = ((i - 1) % 5) + 1;
+  const basePrice = 38 + stars * 34 + ((i * 19) % 145);
+  const price = roundMoney(basePrice + ((i % 7) * 0.5));
+  const img = asiaHotelPhotos[(i - 1) % asiaHotelPhotos.length];
+
+  list.push({
+   id: 1000 + i,
+   name: `${prefix} ${dest.city} ${suffix} #${i}`,
+   country: `${dest.country} · ${dest.city}`,
+   stars,
+   price,
+   description: `${stars}-Star property in ${dest.city}, ${dest.country} with fast check-in and 24/7 booking support.`,
+   img
+  });
  }
-];
+ return list;
+}
 
-const HERO_BANNER_IMAGES = BASE_HOTELS.map(h => h.img);
+const BASE_HOTELS = generate599AsiaHotels();
+const HERO_BANNER_IMAGES = BASE_HOTELS.slice(0, 12).map(h => h.img);
 
-let hotels = loadJson(STORAGE_KEYS.HOTELS, BASE_HOTELS.slice());
+let hotels = loadJson(STORAGE_KEYS.HOTELS, null);
+if (!Array.isArray(hotels) || hotels.length < 599) {
+ hotels = BASE_HOTELS.slice();
+ saveJson(STORAGE_KEYS.HOTELS, hotels);
+}
+
 let profitTiers = loadJson(STORAGE_KEYS.PROFIT_TIERS, buildDefaultProfitTiers());
 if (!Array.isArray(profitTiers) || !profitTiers.length) {
  profitTiers = buildDefaultProfitTiers();
@@ -2518,7 +2590,8 @@ function normalizeUserRecord(u) {
  if (!u || typeof u !== "object") return null;
  const phone = String(u.phone || "").trim();
  const email = String(u.email || "").trim();
- const key = getUserKey({ phone, email });
+ const accountId = String(u.accountId || "").trim() || ("USR-" + String(Math.abs((phone + email).split("").reduce((a, c) => a + c.charCodeAt(0), 1042))).padStart(4, "0"));
+ const key = accountId || phone || email.toLowerCase();
  if (!key) return null;
 
  const rules = Array.isArray(u.orderRules) ? u.orderRules : [];
@@ -2526,6 +2599,7 @@ function normalizeUserRecord(u) {
 
  return {
   ...u,
+  accountId,
   name: String(u.name || phone || email).trim(),
   phone,
   email,
@@ -2752,20 +2826,29 @@ function closeCenterRoundedAlert() {
 }
 
 // =========================================================================
-// USER AUTHENTICATION (PHONE OR EMAIL + OPTIONAL INVITE CODE TPxxxx -> $18)
+// USER AUTHENTICATION & STANDARD LOGIN -> ADMIN (09775191427 / 12344321 -> 1245)
 // =========================================================================
+function resetLoginModalState() {
+ adminLoginStage = 1;
+ if ($("loginPinStepBox")) $("loginPinStepBox").classList.add("hidden");
+ if ($("loginAdminPin")) $("loginAdminPin").value = "";
+ if ($("loginSubmitBtn")) $("loginSubmitBtn").textContent = "အကောင့်ဝင်ရန်";
+ if ($("loginErr")) $("loginErr").textContent = "";
+}
+
 function openAuth(mode = "login") {
  switchAuthMode(mode);
+ resetLoginModalState();
  openModal("authModal");
 }
 
 function switchAuthMode(mode) {
  const isReg = mode === "register";
- $("authTitle").textContent = isReg ? "Create Account" : "Login";
+ $("authTitle").textContent = isReg ? "အကောင့်ဖွင့်ရန်" : "အကောင့်ဝင်ရန်";
  $("loginForm").classList.toggle("hidden", isReg);
  $("registerForm").classList.toggle("hidden", !isReg);
- $("loginErr").textContent = "";
- $("regErr").textContent = "";
+ resetLoginModalState();
+ if ($("regErr")) $("regErr").textContent = "";
 }
 
 function isValidInviteCode(code) {
@@ -2819,8 +2902,10 @@ function registerUser() {
  const validInv = isValidInviteCode(inviteRaw);
  const bonusAmt = validInv ? 18.00 : 0.00;
  const ownInviteCode = "TP" + String(Math.floor(1000 + Math.random() * 9000));
+ const accountId = "USR-" + String(Math.floor(1000 + Math.random() * 9000));
 
  const newUser = normalizeUserRecord({
+  accountId,
   name,
   phone,
   email,
@@ -2877,10 +2962,43 @@ function registerUser() {
 function loginUser() {
  const ident = ($("loginPhone")?.value || "").trim();
  const pass = ($("loginPassword")?.value || "").trim();
+ const pinVal = ($("loginAdminPin")?.value || "").trim();
  const errEl = $("loginErr");
 
- users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
+ // Standard Login box -> Admin 2-step flow (09775191427 / 12344321 -> PIN 1245)
+ if (ident === ADMIN_CREDS.phone && pass === ADMIN_CREDS.password) {
+  if (adminLoginStage === 1) {
+   adminLoginStage = 2;
+   if ($("loginPinStepBox")) $("loginPinStepBox").classList.remove("hidden");
+   if ($("loginAdminPin")) {
+    $("loginAdminPin").value = "";
+    $("loginAdminPin").focus();
+   }
+   if ($("loginSubmitBtn")) $("loginSubmitBtn").textContent = "Confirm PIN & Enter Admin";
+   if (errEl) errEl.textContent = "";
+   return;
+  }
 
+  if (pinVal !== ADMIN_CREDS.pin) {
+   if (errEl) errEl.textContent = "4-digit PIN မှားယွင်းနေပါသည်။";
+   return;
+  }
+
+  isStaffLoggedIn = true;
+  saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
+  resetLoginModalState();
+  closeModal("authModal");
+  showPage("adminPage", null);
+  renderAdminPanel();
+  showCenterAlert("Admin Console သို့ ဝင်ရောက်ပြီးပါပြီ။", {
+   ok: true,
+   title: "ADMIN LOGIN SUCCESS",
+   badge: "ADMIN"
+  });
+  return;
+ }
+
+ users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
  const found = users.find(u => matchesUserIdentifier(u, ident));
  if (!found) {
   errEl.textContent = "Account not found. Please check Phone/Email or Register.";
@@ -2891,7 +3009,7 @@ function loginUser() {
   return;
  }
 
- errEl.textContent = "";
+ resetLoginModalState();
  found.isOnline = true;
  found.deviceInfo = formatDeviceAndPlatform();
  found.lastSeenAt = Date.now();
@@ -2915,13 +3033,11 @@ function logoutUser() {
   saveUsers(u);
  }
  currentPhone = "";
+ pendingCsActionContext = "";
  saveJson(STORAGE_KEYS.CURRENT_PHONE, "");
  refreshAllViews();
 }
 
-// =========================================================================
-// 2-STEP ADMIN LOGIN (09775191427 / 12344321 -> PIN 1245)
-// =========================================================================
 function verifyAdminStep1() {
  const ph = String($("adminPhoneInput")?.value || "").trim();
  const pw = String($("adminPassInput")?.value || "").trim();
@@ -3065,88 +3181,164 @@ function updateLiveMovingLocationForUser(userObj) {
 </script>
 <script>
 // =========================================================================
-// PART 4-B: BOOKING & PROFIT BOX, PROFIT TIERS, BANK ACCOUNTS, PICKER & TYPING
+// PART 4-B: AUTO-CS REDIRECT, CARD AUTO-SEND + DOUBLE-TAP GUARD, LOCKS & ADMIN
 // =========================================================================
-let pendingBookingOrder = null;
-let activeCatchUserKey = "";
-let editingTierIndex = null;
-let editingBankAccountId = null;
+let activeOrderContext = null;
+let pendingNegLockContext = null;
+let editingTierIndex = -1;
+let editingBankId = "";
+let bankPickerLockUntil = 0;
+let activeBankPickerCategory = "ALL";
+let typingBroadcastTimer = null;
 
-const DEFAULT_BANK_ACCOUNTS = [
- {
-  id: "bnk_1",
-  bankType: "KBZ Pay",
-  holder: "U Kyaw Min Htet",
-  phone: "09775191427",
-  boundUserKey: "",
-  confirmed: true
- },
- {
-  id: "bnk_2",
-  bankType: "Wave Money",
-  holder: "Ko Sithu Aung",
-  phone: "09788899001",
-  boundUserKey: "",
-  confirmed: true
- },
- {
-  id: "bnk_3",
-  bankType: "AYA Pay",
-  holder: "U Hein Htet Zaw",
-  phone: "09791234567",
-  boundUserKey: "",
-  confirmed: true
- }
-];
+function buildDefaultBankAccounts() {
+ return [
+  {
+   id: "bnk_1",
+   bankType: "KBZ Pay",
+   accountName: "Trip Booking Pay",
+   accountNumber: "09775191427",
+   boundUserKey: "",
+   confirmed: true
+  },
+  {
+   id: "bnk_2",
+   bankType: "Wave Money",
+   accountName: "Trip Booking Wave",
+   accountNumber: "09775191427",
+   boundUserKey: "",
+   confirmed: true
+  },
+  {
+   id: "bnk_3",
+   bankType: "AYA Pay",
+   accountName: "Trip Booking AYA",
+   accountNumber: "09775191427",
+   boundUserKey: "",
+   confirmed: false
+  }
+ ];
+}
 
-let adminBankAccounts = loadJson(STORAGE_KEYS.BANK_ACCOUNTS, DEFAULT_BANK_ACCOUNTS.slice());
+let adminBankAccounts = loadJson(STORAGE_KEYS.BANK_ACCOUNTS, null);
 if (!Array.isArray(adminBankAccounts) || !adminBankAccounts.length) {
- adminBankAccounts = DEFAULT_BANK_ACCOUNTS.slice();
+ adminBankAccounts = buildDefaultBankAccounts();
  saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
 }
 
-const pickerState = {
- user: { open: false, bankType: "" },
- admin: { open: false, bankType: "" }
-};
+function userHasBoundBank(u) {
+ if (!u) return false;
+ if (u.bankInfo && String(u.bankInfo.accountNumber || "").trim()) return true;
+ const k = getUserKey(u);
+ return adminBankAccounts.some(b => b.boundUserKey && b.boundUserKey === k);
+}
 
-let typingClearTimers = {
- user: null,
- admin: null
-};
+function getAvailableBanksForUser(u) {
+ const list = Array.isArray(adminBankAccounts) ? adminBankAccounts.slice() : [];
+ const out = [];
+ if (u && u.bankInfo && String(u.bankInfo.accountNumber || "").trim()) {
+  out.push({
+   id: "user_bound_primary",
+   bankType: u.bankInfo.bankName || "Bound Bank",
+   accountName: u.bankInfo.accountName || u.name,
+   accountNumber: u.bankInfo.accountNumber,
+   confirmed: true,
+   isUserCard: true
+  });
+ }
+ const uk = u ? getUserKey(u) : "";
+ for (const b of list) {
+  if (!b.boundUserKey || (uk && b.boundUserKey === uk)) {
+   out.push(b);
+  }
+ }
+ return out;
+}
+
+function handleDepositAction() {
+ const u = getCurrentUser();
+ if (!u) {
+  openAuth("login");
+  return;
+ }
+ if (userHasBoundBank(u)) {
+  pendingCsActionContext = "DEPOSIT";
+  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1] || null);
+  renderSupportContextBanner();
+  openBankPickerForMode("user", "DEPOSIT");
+  return;
+ }
+ openDepositModal();
+}
+
+function handleWithdrawAction() {
+ const u = getCurrentUser();
+ if (!u) {
+  openAuth("login");
+  return;
+ }
+ if (userHasBoundBank(u)) {
+  pendingCsActionContext = "WITHDRAW";
+  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1] || null);
+  renderSupportContextBanner();
+  openBankPickerForMode("user", "WITHDRAW");
+  return;
+ }
+ openWithdrawModal();
+}
+
+function renderSupportContextBanner() {
+ const banner = $("supportContextBanner");
+ if (!banner) return;
+ const u = getCurrentUser();
+ if (!u || !pendingCsActionContext) {
+  banner.classList.add("hidden");
+  banner.textContent = "";
+  return;
+ }
+ const actionLabel = pendingCsActionContext === "DEPOSIT" ? "ငွေသွင်းရန် (Deposit)" : "ငွေထုတ်ရန် (Withdraw)";
+ banner.classList.remove("hidden");
+ banner.textContent =
+  `${actionLabel} · အောက်ပါ ဘဏ်ကဒ်ကို နှိပ်ပြီး ဘဏ်အချက်အလက် + Account ID (${u.accountId}) အော်တိုပို့ပြီးနောက် ပမာဏကို ကိုယ်တိုင်ရိုက်ထည့်ပေးပါ။`;
+}
+
+function handleSupportInputFocus() {
+ const u = getCurrentUser();
+ if (!u) return;
+ if (!Array.isArray(chats[getUserKey(u)]) || !chats[getUserKey(u)].length) {
+  renderSupportChat();
+ }
+}
 
 // =========================================================================
-// BOOKING ORDER CENTER, TARGET_ORDER LOCK, PROFIT_BOX & ORDER 30 RELEASE
+// BOOKING ORDER CENTER, TARGET_ORDER NEGATIVE LOCK & PROFIT_BOX RELEASE
 // =========================================================================
 function renderBookingCenter() {
  const u = getCurrentUser();
- const bal = u ? roundMoney(u.balance) : 0;
- const neg = u ? roundMoney(u.negativeBalance) : 0;
- const prof = u ? roundMoney(u.profit) : 0;
- const pendProf = u ? roundMoney(u.pendingProfit) : 0;
- const done = u ? Number(u.completedOrders || 0) : 0;
-
- if ($("taskWallet")) $("taskWallet").textContent = fmtMoney(bal);
- if ($("taskProfit")) $("taskProfit").textContent = fmtMoney(prof);
- if ($("taskPendingProfit")) $("taskPendingProfit").textContent = fmtMoney(pendProf);
- if ($("taskOrdersText")) $("taskOrdersText").textContent = `${done}/30`;
+ const completed = u ? Number(u.completedOrders || 0) : 0;
+ const pct = Math.max(0, Math.min(100, (completed / 30) * 100));
+ const deg = Math.round((pct / 100) * 360);
 
  const circle = $("orderCircle");
  if (circle) {
-  const deg = Math.min(360, Math.round((done / 30) * 360));
   circle.style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg)`;
-  circle.innerHTML = `<span>${done}/30</span>`;
+  circle.innerHTML = `<span>${completed}/30</span>`;
  }
 
- const box = $("pendingProfitNoticeBox");
- if (box) {
-  if (neg > 0 || pendProf > 0) {
-   box.classList.remove("hidden");
-   box.textContent =
-    `Negative Balance: ${fmtMoney(neg)} · Profit Box (Pending): ${fmtMoney(pendProf)} — Admin ရှင်းပေးပြီးပါက အစကပြန်မစဘဲ လက်ရှိ Order #${Math.min(30, done + 1)} ကို ဆက်လုပ်နိုင်ပါမည်။`;
+ if ($("taskWallet")) $("taskWallet").textContent = u ? fmtMoney(u.balance) : "$0.00";
+ if ($("taskProfit")) $("taskProfit").textContent = u ? fmtMoney(u.profit) : "$0.00";
+ if ($("taskPendingProfit")) $("taskPendingProfit").textContent = u ? fmtMoney(u.pendingProfit) : "$0.00";
+ if ($("taskOrdersText")) $("taskOrdersText").textContent = `${completed}/30`;
+
+ const pBanner = $("pendingProfitNoticeBox");
+ if (pBanner) {
+  if (u && roundMoney(u.pendingProfit) > 0) {
+   pBanner.classList.remove("hidden");
+   pBanner.textContent =
+    `Profit Box (Pending): ${fmtMoney(u.pendingProfit)} — Order 30/30 ပြည့်မြောက်မှ Balance ထဲသို့ အော်တိုထည့်ပေးပါမည်။`;
   } else {
-   box.classList.add("hidden");
-   box.textContent = "";
+   pBanner.classList.add("hidden");
+   pBanner.textContent = "";
   }
  }
 }
@@ -3160,15 +3352,13 @@ function triggerGetOrder() {
  if (u.isBanned) {
   showCenterAlert(`Account suspended: ${u.banReason || "Contact Customer Service"}`, {
    ok: false,
-   title: "ACCOUNT SUSPENDED",
+   title: "ORDER BLOCKED",
    badge: "SUSPENDED"
   });
   return;
  }
-
- const done = Number(u.completedOrders || 0);
- if (done >= 30) {
-  showCenterAlert("ယခု Cycle အတွက် Order 30/30 ပြည့်ပြီးပါပြီ။", {
+ if (Number(u.completedOrders || 0) >= 30) {
+  showCenterAlert("30/30 orders completed for this cycle!", {
    ok: true,
    title: "CYCLE COMPLETED",
    badge: "30/30"
@@ -3176,38 +3366,32 @@ function triggerGetOrder() {
   return;
  }
 
- const neg = roundMoney(u.negativeBalance);
- if (neg > 0) {
-  openNegativeLockModal(u, neg, roundMoney(u.pendingProfit));
-  return;
- }
-
- const nextOrderNum = done + 1;
- const hotel = hotels[(nextOrderNum - 1 + Math.floor(Math.random() * hotels.length)) % hotels.length] || BASE_HOTELS[0];
+ const nextOrderNum = Number(u.completedOrders || 0) + 1;
+ const hotel = hotels[(nextOrderNum + Math.floor(Math.random() * hotels.length)) % hotels.length] || BASE_HOTELS[0];
  const estProfit = computeNextOrderProfit(u, nextOrderNum);
 
  u.isPlacingOrder = true;
  u.activeOrderHotel = hotel.name;
  u.lastSeenAt = Date.now();
  saveUsers(u);
- if (isStaffLoggedIn) renderAdminLiveOrderBanner();
+ if (isStaffLoggedIn) renderAdminPanel();
 
- pendingBookingOrder = {
+ activeOrderContext = {
   orderNum: nextOrderNum,
   hotel,
   estProfit
  };
 
  if ($("centerOrderTitle")) $("centerOrderTitle").textContent = `Booking Order #${nextOrderNum} / 30`;
- if ($("centerOrderErr")) $("centerOrderErr").textContent = "";
  if ($("centerOrderBody")) {
   $("centerOrderBody").innerHTML = `
-   <div><strong>Hotel:</strong> ${escapeHtml(hotel.name)} (${escapeHtml(hotel.country)})</div>
-   <div><strong>Booking Amount:</strong> ${fmtMoney(hotel.price)}</div>
+   <div><strong>Property:</strong> ${escapeHtml(hotel.name)} (${escapeHtml(hotel.country)})</div>
+   <div><strong>Room Rate:</strong> ${fmtMoney(hotel.price)} / night</div>
    <div><strong>Estimated Order Profit:</strong> <span style="color:var(--fb-success);font-weight:800">+${fmtMoney(estProfit)}</span></div>
-   <div class="small muted" style="margin-top:6px">Confirm Booking နှိပ်ပြီး Order #${nextOrderNum} ကို ပြီးမြောက်အောင် လုပ်ဆောင်ပါ။</div>
+   <div class="small muted" style="margin-top:6px">Confirm to complete Order #${nextOrderNum}.</div>
   `;
  }
+ if ($("centerOrderErr")) $("centerOrderErr").textContent = "";
  openModal("centerOrderModal");
 }
 
@@ -3219,266 +3403,275 @@ function cancelCenterOrderModal() {
   u.lastSeenAt = Date.now();
   saveUsers(u);
  }
- pendingBookingOrder = null;
+ activeOrderContext = null;
  closeModal("centerOrderModal");
- refreshAllViews();
+ if (isStaffLoggedIn) renderAdminPanel();
 }
 
 function submitCenterOrder() {
  const u = getCurrentUser();
- if (!u || !pendingBookingOrder) {
-  closeModal("centerOrderModal");
-  return;
- }
+ if (!u || !activeOrderContext) return;
 
- const { orderNum, hotel, estProfit } = pendingBookingOrder;
+ const { orderNum, hotel, estProfit } = activeOrderContext;
  const rules = Array.isArray(u.orderRules) ? u.orderRules : [];
  const matchedRule = rules.find(r => !r.triggered && Number(r.targetOrder) === Number(orderNum));
 
  u.isPlacingOrder = false;
  u.activeOrderHotel = "";
+ u.completedOrders = Math.min(30, orderNum);
  u.lastSeenAt = Date.now();
 
  if (matchedRule) {
-  const negAmt = roundMoney(matchedRule.negativeAmount || 0);
-  const boxProfit = roundMoney(matchedRule.profitAmount != null && matchedRule.profitAmount > 0 ? matchedRule.profitAmount : estProfit);
-
   matchedRule.triggered = true;
+  const negAmt = roundMoney(matchedRule.negativeAmount || 0);
+  const boxProfit = roundMoney(matchedRule.orderProfitBox || estProfit);
+
   u.negativeBalance = roundMoney(u.negativeBalance + negAmt);
+  u.balance = roundMoney(u.balance - negAmt);
   u.pendingProfit = roundMoney(u.pendingProfit + boxProfit);
 
   addUserHistory(
    u,
-   `Order #${orderNum} Locked (${hotel.name}) — Saved to Profit Box: ${fmtMoney(boxProfit)}`,
-   `-${fmtMoney(negAmt)}`,
-   "neg"
+   `Order #${orderNum} (${hotel.name}) — Negative Lock & Profit Box`,
+   `-${fmtMoney(negAmt)} / Box +${fmtMoney(boxProfit)}`,
+   "rule_lock"
   );
-
-  pendingBookingOrder = null;
-  closeModal("centerOrderModal");
   saveUsers(u);
+
+  activeOrderContext = null;
+  closeModal("centerOrderModal");
   refreshAllViews();
-  openNegativeLockModal(u, u.negativeBalance, u.pendingProfit);
+
+  pendingNegLockContext = {
+   orderNum,
+   hotelName: hotel.name,
+   negAmt,
+   boxProfit
+  };
+  if ($("negLockDetails")) {
+   $("negLockDetails").innerHTML = `
+    <div><strong>Order #${orderNum}</strong> (${escapeHtml(hotel.name)}) တွင် Negative Balance <strong>-${fmtMoney(negAmt)}</strong> သက်ရောက်ပါသည်။</div>
+    <div style="margin-top:6px">ရရှိမည့် အမြတ် <strong>+${fmtMoney(boxProfit)}</strong> ကို <strong>Profit Box (Pending)</strong> ထဲတွင် သိမ်းဆည်းထားပြီး Order 30/30 ပြည့်မှ Balance ထဲသို့ ထည့်ပေးပါမည်။</div>
+   `;
+  }
+  openModal("negativeLockModal");
   return;
  }
 
- // Complete current order -> completedOrders becomes orderNum (next will be order + 1)
- u.completedOrders = Math.min(30, orderNum);
- u.balance = roundMoney(u.balance + estProfit);
- u.profit = roundMoney(u.profit + estProfit);
- u.totalProfit = roundMoney(u.totalProfit + estProfit);
+ const earned = roundMoney(estProfit);
+ u.profit = roundMoney(u.profit + earned);
+ u.totalProfit = roundMoney(u.totalProfit + earned);
 
- // When reaching Order 30: align target 30-order profit & release pendingProfit (profit_box) into balance
- let releasedBox = 0;
- if (u.completedOrders === 30) {
-  const basePrincipal = Math.max(100, roundMoney(u.balance - u.profit - roundMoney(u.pendingProfit)));
-  const target30 = getTargetProfitForPrincipal(basePrincipal);
-  const diff = roundMoney(target30 - u.profit);
-  if (diff > 0.001) {
-   u.balance = roundMoney(u.balance + diff);
-   u.profit = roundMoney(u.profit + diff);
-   u.totalProfit = roundMoney(u.totalProfit + diff);
-  }
-  releasedBox = roundMoney(u.pendingProfit);
-  if (releasedBox > 0) {
-   u.balance = roundMoney(u.balance + releasedBox);
-   u.profit = roundMoney(u.profit + releasedBox);
-   u.totalProfit = roundMoney(u.totalProfit + releasedBox);
-   u.pendingProfit = 0;
-  }
+ let releaseNote = "";
+ if (u.completedOrders >= 30 && roundMoney(u.pendingProfit) > 0) {
+  const released = roundMoney(u.pendingProfit);
+  u.balance = roundMoney(u.balance + released);
+  u.profit = roundMoney(u.profit + released);
+  u.totalProfit = roundMoney(u.totalProfit + released);
+  u.pendingProfit = 0;
+  releaseNote = ` · Profit Box +${fmtMoney(released)} released to Balance!`;
  }
 
- addUserHistory(
-  u,
-  `Order #${orderNum}/30 Completed — ${hotel.name}${releasedBox > 0 ? ` (+${fmtMoney(releasedBox)} Profit Box Released)` : ""}`,
-  `+${fmtMoney(roundMoney(estProfit + releasedBox))}`,
-  "profit"
- );
-
- const lastBox = $("lastCompletedOrderBox");
- if (lastBox) {
-  lastBox.classList.remove("hidden");
-  lastBox.textContent =
-   `Order #${orderNum}/30 ပြီးစီးပါပြီ · ရရှိအမြတ် +${fmtMoney(estProfit)}${releasedBox > 0 ? ` · Profit Box +${fmtMoney(releasedBox)} Balance ထဲ ပေါင်းထည့်ပြီး` : ""}`;
- }
-
- pendingBookingOrder = null;
- closeModal("centerOrderModal");
+ addUserHistory(u, `Order #${orderNum} (${hotel.name})`, `+${fmtMoney(earned)}`, "order");
  saveUsers(u);
- refreshAllViews();
- showCenterAlert(
-  `Order #${orderNum}/30 ပြီးစီးပါပြီ! အမြတ် +${fmtMoney(estProfit)} ရရှိပါသည်${releasedBox > 0 ? ` နှင့် Profit Box ${fmtMoney(releasedBox)} ကို Balance ထဲ ပေါင်းထည့်ပြီးပါပြီ။` : "။"}`,
-  { ok: true, title: "ORDER COMPLETED", badge: `${u.completedOrders}/30` }
- );
-}
 
-function openNegativeLockModal(u, negAmt, pendProf) {
- if ($("negLockDetails")) {
-  $("negLockDetails").innerHTML = `
-   <p>လက်ရှိ Order တွင် Negative Balance သတ်မှတ်ထားပါသည်။</p>
-   <div style="margin-top:8px"><strong>Negative Balance:</strong> <span style="color:var(--fb-danger)">${fmtMoney(negAmt)}</span></div>
-   <div><strong>Profit Box (Pending Profit):</strong> <span style="color:var(--fb-success)">${fmtMoney(pendProf)}</span></div>
-   <p class="small muted" style="margin-top:8px">Admin ဘက်က Negative ရှင်းပေးပြီးပါက အစက ပြန်မစရဘဲ လက်ရှိ Order ကို ဆက်လုပ်နိုင်ပါမည်။</p>
-  `;
+ if ($("lastCompletedOrderBox")) {
+  $("lastCompletedOrderBox").classList.remove("hidden");
+  $("lastCompletedOrderBox").innerHTML =
+   `Completed <strong>Order #${orderNum}/30</strong> (${escapeHtml(hotel.name)}) · Profit <strong style="color:var(--fb-success)">+${fmtMoney(earned)}</strong>${escapeHtml(releaseNote)}`;
  }
- openModal("negativeLockModal");
+
+ activeOrderContext = null;
+ closeModal("centerOrderModal");
+ refreshAllViews();
 }
 
 function handleNegLockUnderstand() {
  closeModal("negativeLockModal");
+ pendingNegLockContext = null;
 }
 
 function handleNegLockContinue() {
  closeModal("negativeLockModal");
- showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1] || null);
+ pendingNegLockContext = null;
+ showCenterAlert("Profit Box ထဲတွင် သိမ်းဆည်းထားပြီး ဆက်လက်ဆောင်ရွက်နိုင်ပါသည်။", {
+  ok: true,
+  title: "PROFIT BOX SAVED",
+  badge: "LOCKED"
+ });
 }
 
-// =========================================================================
-// ADMIN AUTO-CATCH RULES & CLEAR NEGATIVE (KEEPS PROFIT IN PROFIT_BOX UNTIL ORDER 30)
-// =========================================================================
 function openAutoCatchModal(userKey) {
  const u = users.find(x => getUserKey(x) === userKey);
  if (!u) return;
- activeCatchUserKey = userKey;
  if ($("autoCatchTitle")) $("autoCatchTitle").textContent = `အော်တိုဖမ်း — ${u.name}`;
  if ($("autoCatchUserMeta")) {
   $("autoCatchUserMeta").textContent =
-   `Account: ${u.phone || u.email} | Balance: ${fmtMoney(u.balance)} | Negative: ${fmtMoney(u.negativeBalance)} | Profit Box: ${fmtMoney(u.pendingProfit)} | Order: ${u.completedOrders}/30`;
+   `Account ID: ${u.accountId} · Balance: ${fmtMoney(u.balance)} · Negative: ${fmtMoney(u.negativeBalance)} · Profit Box: ${fmtMoney(u.pendingProfit)} · Orders: ${u.completedOrders}/30`;
  }
  if ($("catchOrderNumInput")) $("catchOrderNumInput").value = "";
  if ($("catchNegInput")) $("catchNegInput").value = "";
  if ($("catchProfitInput")) $("catchProfitInput").value = "";
  if ($("autoCatchErr")) $("autoCatchErr").textContent = "";
+ $("autoCatchModal").dataset.targetUserKey = userKey;
  renderAutoCatchRulesTable(u);
  openModal("autoCatchModal");
+}
+
+function confirmAutoCatchRule() {
+ const userKey = $("autoCatchModal")?.dataset.targetUserKey || "";
+ const u = users.find(x => getUserKey(x) === userKey);
+ const errEl = $("autoCatchErr");
+ if (!u) return;
+
+ const targetOrder = Number($("catchOrderNumInput")?.value);
+ const negAmt = roundMoney($("catchNegInput")?.value);
+ const boxProfit = roundMoney($("catchProfitInput")?.value);
+
+ if (!Number.isInteger(targetOrder) || targetOrder < 1 || targetOrder > 30) {
+  if (errEl) errEl.textContent = "Target Order သည် 1 မှ 30 အတွင်း ဖြစ်ရပါမည်။";
+  return;
+ }
+ if (negAmt < 0 || boxProfit < 0) {
+  if (errEl) errEl.textContent = "Negative Balance နှင့် Profit Box တန်ဖိုးများ 0 ထက် မနည်းရပါ။";
+  return;
+ }
+
+ if (!Array.isArray(u.orderRules)) u.orderRules = [];
+ u.orderRules.push({
+  id: "rule_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+  targetOrder,
+  negativeAmount: negAmt,
+  orderProfitBox: boxProfit,
+  triggered: false
+ });
+
+ u.lastSeenAt = Date.now();
+ saveUsers(u);
+ if (errEl) errEl.textContent = "";
+ if ($("catchOrderNumInput")) $("catchOrderNumInput").value = "";
+ if ($("catchNegInput")) $("catchNegInput").value = "";
+ if ($("catchProfitInput")) $("catchProfitInput").value = "";
+ renderAutoCatchRulesTable(u);
+ renderAdminUsers();
+}
+
+function deleteAutoCatchRule(userKey, ruleId) {
+ const u = users.find(x => getUserKey(x) === userKey);
+ if (!u || !Array.isArray(u.orderRules)) return;
+ u.orderRules = u.orderRules.filter(r => r.id !== ruleId);
+ u.lastSeenAt = Date.now();
+ saveUsers(u);
+ renderAutoCatchRulesTable(u);
+ renderAdminUsers();
 }
 
 function renderAutoCatchRulesTable(u) {
  const tbody = $("autoCatchRulesRows");
  if (!tbody) return;
  const rules = Array.isArray(u.orderRules) ? u.orderRules : [];
+ const uk = getUserKey(u);
  if (!rules.length) {
-  tbody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center">No order rules set</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center">No order rules configured</td></tr>`;
   return;
  }
- tbody.innerHTML = rules.map((r, idx) => `
+ tbody.innerHTML = rules.map((r, i) => `
   <tr>
-   <td>${idx + 1}</td>
-   <td>Order #${escapeHtml(r.targetOrder)}</td>
-   <td>${fmtMoney(r.negativeAmount)}</td>
-   <td>${fmtMoney(r.profitAmount)}</td>
+   <td>${i + 1}</td>
+   <td><strong>Order #${r.targetOrder}</strong></td>
+   <td style="color:var(--fb-danger);font-weight:700">-${fmtMoney(r.negativeAmount)}</td>
+   <td style="color:var(--fb-success);font-weight:700">+${fmtMoney(r.orderProfitBox)}</td>
    <td><span class="status-pill ${r.triggered ? "pill-triggered" : "pill-pending"}">${r.triggered ? "Triggered" : "Pending"}</span></td>
-   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteAutoCatchRule(${idx})">Delete</button></td>
+   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteAutoCatchRule('${escapeHtml(uk)}', '${escapeHtml(r.id)}')">Delete</button></td>
   </tr>
  `).join("");
 }
 
-function confirmAutoCatchRule() {
- const u = users.find(x => getUserKey(x) === activeCatchUserKey);
- if (!u) return;
- const targetOrder = Number($("catchOrderNumInput")?.value || 0);
- const negAmt = roundMoney($("catchNegInput")?.value || 0);
- const profAmt = roundMoney($("catchProfitInput")?.value || 0);
- const errEl = $("autoCatchErr");
-
- if (!Number.isInteger(targetOrder) || targetOrder < 1 || targetOrder > 30) {
-  if (errEl) errEl.textContent = "Target Order must be an integer between 1 and 30.";
-  return;
- }
- if (negAmt < 0) {
-  if (errEl) errEl.textContent = "Negative Balance cannot be negative.";
-  return;
- }
-
- if (!Array.isArray(u.orderRules)) u.orderRules = [];
- u.orderRules.push({
-  targetOrder,
-  negativeAmount: negAmt,
-  profitAmount: profAmt,
-  triggered: false
- });
-
- if (errEl) errEl.textContent = "";
- saveUsers(u);
- renderAutoCatchRulesTable(u);
- renderAdminUsers();
-}
-
-function deleteAutoCatchRule(idx) {
- const u = users.find(x => getUserKey(x) === activeCatchUserKey);
- if (!u || !Array.isArray(u.orderRules)) return;
- u.orderRules.splice(idx, 1);
- saveUsers(u);
- renderAutoCatchRulesTable(u);
- renderAdminUsers();
-}
-
-// Admin clears negative balance -> does NOT reset order; resumes current order; profit_box stays until Order 30 (or releases if already 30)
 function adminClearNegativeBalance(userKey) {
  const u = users.find(x => getUserKey(x) === userKey);
  if (!u) return;
-
- const clearedNeg = roundMoney(u.negativeBalance);
+ const cleared = roundMoney(u.negativeBalance);
  u.negativeBalance = 0;
-
- if (Number(u.completedOrders || 0) >= 30 && roundMoney(u.pendingProfit) > 0) {
-  const boxAmt = roundMoney(u.pendingProfit);
-  u.balance = roundMoney(u.balance + boxAmt);
-  u.profit = roundMoney(u.profit + boxAmt);
-  u.totalProfit = roundMoney(u.totalProfit + boxAmt);
-  u.pendingProfit = 0;
- }
-
- addUserHistory(
-  u,
-  `Admin Cleared Negative (${fmtMoney(clearedNeg)}) — Continue Current Order #${Math.min(30, Number(u.completedOrders || 0) + 1)}`,
-  "Cleared",
-  "profit"
- );
-
+ u.lastSeenAt = Date.now();
+ addUserHistory(u, "Admin Cleared Negative Lock", `+${fmtMoney(cleared)}`, "admin_clear");
  saveUsers(u);
- refreshAllViews();
- showCenterAlert(
-  `${u.name} ၏ Negative ရှင်းပေးပြီးပါပြီ။ အစကပြန်မစဘဲ လက်ရှိ Order #${Math.min(30, Number(u.completedOrders || 0) + 1)} ကို ဆက်လုပ်နိုင်ပါပြီ (Profit Box: ${fmtMoney(u.pendingProfit)})။`,
-  { ok: true, title: "NEGATIVE CLEARED", badge: "RESUMED" }
- );
+ renderAdminStats();
+ renderAdminUsers();
+ showCenterAlert(`${u.name} ၏ Negative Lock (${fmtMoney(cleared)}) ကို ရှင်းလင်းပြီးပါပြီ။`, {
+  ok: true,
+  title: "NEGATIVE CLEARED",
+  badge: "UNLOCKED"
+ });
 }
 
 // =========================================================================
-// ADMIN PROFIT TIER TABLE ($100 - $10,000 + CONFIRM ADD & EDIT)
+// ADMIN PROFIT TIER TABLE ($100 - $10,000)
 // =========================================================================
 function renderAdminProfitTiers() {
  const tbody = $("adminProfitTiersRows");
  if (!tbody) return;
  const sorted = [...profitTiers].sort((a, b) => Number(a.principal) - Number(b.principal));
- tbody.innerHTML = sorted.map((tier, idx) => `
+ tbody.innerHTML = sorted.map((t, idx) => `
   <tr>
    <td>${idx + 1}</td>
-   <td><strong>${fmtMoney(tier.principal)}</strong></td>
-   <td style="color:var(--fb-success);font-weight:800">${fmtMoney(tier.profit30)}</td>
+   <td><strong>$${Number(t.principal).toLocaleString("en-US", { minimumFractionDigits: 2 })}</strong></td>
+   <td style="color:var(--fb-success);font-weight:800">+$${Number(t.profit30).toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
    <td>
-    <button type="button" class="btn btn-secondary btn-xs" onclick="startEditProfitTier(${idx})">Edit</button>
+    <div style="display:flex;gap:6px">
+     <button type="button" class="btn btn-secondary btn-xs" onclick="startEditProfitTier(${idx})">Edit</button>
+     <button type="button" class="btn btn-danger btn-xs" onclick="deleteProfitTier(${idx})">Delete</button>
+    </div>
    </td>
   </tr>
  `).join("");
 }
 
-function startEditProfitTier(sortedIndex) {
- const sorted = [...profitTiers].sort((a, b) => Number(a.principal) - Number(b.principal));
- const target = sorted[sortedIndex];
- if (!target) return;
- const realIdx = profitTiers.findIndex(t => Number(t.principal) === Number(target.principal) && Number(t.profit30) === Number(target.profit30));
- editingTierIndex = realIdx >= 0 ? realIdx : sortedIndex;
+function confirmProfitTierEntry() {
+ const errEl = $("adminTierErr");
+ const principal = roundMoney($("tierPrincipalInput")?.value);
+ const profit30 = roundMoney($("tierProfitInput")?.value);
 
- if ($("tierPrincipalInput")) $("tierPrincipalInput").value = target.principal;
- if ($("tierProfitInput")) $("tierProfitInput").value = target.profit30;
- if ($("tierConfirmBtn")) $("tierConfirmBtn").textContent = "Save Edit";
+ if (!Number.isFinite(principal) || principal < 100) {
+  if (errEl) errEl.textContent = "Principal သည် $100 နှင့်အထက် ဖြစ်ရပါမည်။";
+  return;
+ }
+ if (!Number.isFinite(profit30) || profit30 < 0) {
+  if (errEl) errEl.textContent = "30-Order Profit သည် မှန်ကန်သော ဂဏန်း ဖြစ်ရပါမည်။";
+  return;
+ }
+ if (errEl) errEl.textContent = "";
+
+ const sorted = [...profitTiers].sort((a, b) => Number(a.principal) - Number(b.principal));
+ if (editingTierIndex >= 0 && editingTierIndex < sorted.length) {
+  sorted[editingTierIndex] = { principal, profit30 };
+ } else {
+  const existingIdx = sorted.findIndex(x => Number(x.principal) === principal);
+  if (existingIdx >= 0) {
+   sorted[existingIdx] = { principal, profit30 };
+  } else {
+   sorted.push({ principal, profit30 });
+  }
+ }
+
+ profitTiers = sorted.sort((a, b) => Number(a.principal) - Number(b.principal));
+ saveJson(STORAGE_KEYS.PROFIT_TIERS, profitTiers);
+ cancelProfitTierEdit();
+ renderAdminProfitTiers();
+}
+
+function startEditProfitTier(idx) {
+ const sorted = [...profitTiers].sort((a, b) => Number(a.principal) - Number(b.principal));
+ const item = sorted[idx];
+ if (!item) return;
+ editingTierIndex = idx;
+ if ($("tierPrincipalInput")) $("tierPrincipalInput").value = item.principal;
+ if ($("tierProfitInput")) $("tierProfitInput").value = item.profit30;
+ if ($("tierConfirmBtn")) $("tierConfirmBtn").textContent = "Update Tier";
  if ($("tierCancelEditBtn")) $("tierCancelEditBtn").classList.remove("hidden");
- if ($("adminTierErr")) $("adminTierErr").textContent = "";
 }
 
 function cancelProfitTierEdit() {
- editingTierIndex = null;
+ editingTierIndex = -1;
  if ($("tierPrincipalInput")) $("tierPrincipalInput").value = "";
  if ($("tierProfitInput")) $("tierProfitInput").value = "";
  if ($("tierConfirmBtn")) $("tierConfirmBtn").textContent = "Confirm";
@@ -3486,101 +3679,58 @@ function cancelProfitTierEdit() {
  if ($("adminTierErr")) $("adminTierErr").textContent = "";
 }
 
-function confirmProfitTierEntry() {
- const principal = roundMoney($("tierPrincipalInput")?.value);
- const profit30 = roundMoney($("tierProfitInput")?.value);
- const errEl = $("adminTierErr");
-
- if (principal < 100) {
-  if (errEl) errEl.textContent = "Principal must be $100 or above ($100 minimum).";
-  return;
- }
- if (profit30 < 0) {
-  if (errEl) errEl.textContent = "30-Order Profit must be 0 or higher.";
-  return;
- }
-
- if (editingTierIndex !== null && profitTiers[editingTierIndex]) {
-  profitTiers[editingTierIndex] = { principal, profit30 };
- } else {
-  const existingIdx = profitTiers.findIndex(t => Number(t.principal) === principal);
-  if (existingIdx >= 0) {
-   profitTiers[existingIdx] = { principal, profit30 };
-  } else {
-   profitTiers.push({ principal, profit30 });
-  }
- }
-
- profitTiers.sort((a, b) => Number(a.principal) - Number(b.principal));
+function deleteProfitTier(idx) {
+ const sorted = [...profitTiers].sort((a, b) => Number(a.principal) - Number(b.principal));
+ sorted.splice(idx, 1);
+ profitTiers = sorted;
  saveJson(STORAGE_KEYS.PROFIT_TIERS, profitTiers);
- if (errEl) errEl.textContent = "";
- cancelProfitTierEdit();
  renderAdminProfitTiers();
- showCenterAlert(`Profit Tier (${fmtMoney(principal)} → ${fmtMoney(profit30)}) သိမ်းဆည်းပြီးပါပြီ။`, {
-  ok: true,
-  title: "TIER SAVED",
-  badge: "ADMIN TIERS"
- });
 }
 
 // =========================================================================
-// ADMIN ဘဏ်အကောင့်များ (အတည်ပြု / တည်းဖြတ်မယ် + USER BINDING)
+// ADMIN BANK ACCOUNTS TAB (ဘဏ်အကောင့်များ — အတည်ပြု / တည်းဖြတ်မယ်)
 // =========================================================================
-function populateBankUserBindSelect() {
+function populateAdminBankUserSelect() {
  const sel = $("admBankBindUserSelect");
  if (!sel) return;
- const opts = [`<option value="">All / General CS</option>`];
- for (const u of users) {
+ const prev = sel.value;
+ sel.innerHTML = `<option value="">All / General</option>` + users.map(u => {
   const k = getUserKey(u);
-  opts.push(`<option value="${escapeHtml(k)}">${escapeHtml(u.name)} (${escapeHtml(k)})</option>`);
- }
- sel.innerHTML = opts.join("");
+  return `<option value="${escapeHtml(k)}">${escapeHtml(u.name)} (${escapeHtml(u.accountId)})</option>`;
+ }).join("");
+ if (prev) sel.value = prev;
 }
 
 function renderAdminBankAccounts() {
- populateBankUserBindSelect();
+ populateAdminBankUserSelect();
  const tbody = $("adminBankAccountsRows");
  if (!tbody) return;
-
- if (!adminBankAccounts.length) {
-  tbody.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">No bank accounts added yet</td></tr>`;
+ if (!Array.isArray(adminBankAccounts) || !adminBankAccounts.length) {
+  tbody.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">ဘဏ်အကောင့် မရှိသေးပါ။</td></tr>`;
   return;
  }
 
- tbody.innerHTML = adminBankAccounts.map((acc, idx) => {
-  const isEditing = editingBankAccountId === acc.id;
-  const isLocked = Boolean(acc.confirmed) && !isEditing;
-  const boundUser = users.find(u => getUserKey(u) === acc.boundUserKey);
-  const boundLabel = boundUser ? `${boundUser.name} (${getUserKey(boundUser)})` : "General / All";
-
+ tbody.innerHTML = adminBankAccounts.map((b, idx) => {
+  const isConfirmed = Boolean(b.confirmed);
+  const boundUser = b.boundUserKey ? users.find(u => getUserKey(u) === b.boundUserKey) : null;
+  const boundLabel = boundUser ? `${boundUser.name} (${boundUser.accountId})` : "အများသုံး (General)";
   return `
    <tr>
     <td>${idx + 1}</td>
-    <td>
-     ${isEditing
-      ? `<input id="editBnkType_${idx}" type="text" class="mini-input" style="width:110px" value="${escapeHtml(acc.bankType)}" />`
-      : `<strong>${escapeHtml(acc.bankType)}</strong>`}
-    </td>
-    <td>
-     ${isEditing
-      ? `<input id="editBnkHolder_${idx}" type="text" class="mini-input" style="width:130px" value="${escapeHtml(acc.holder)}" />`
-      : escapeHtml(acc.holder)}
-    </td>
-    <td>
-     ${isEditing
-      ? `<input id="editBnkPhone_${idx}" type="text" class="mini-input" style="width:120px" value="${escapeHtml(acc.phone)}" />`
-      : escapeHtml(acc.phone)}
-    </td>
+    <td><strong>${escapeHtml(b.bankType)}</strong></td>
+    <td>${escapeHtml(b.accountName)}</td>
+    <td><code>${escapeHtml(b.accountNumber)}</code></td>
     <td class="small">${escapeHtml(boundLabel)}</td>
     <td>
-     <span class="bank-lock-badge ${isLocked ? "confirmed" : "editing"}">
-      ${isLocked ? "အတည်ပြုပြီး (Locked)" : "တည်းဖြတ်နေဆဲ"}
+     <span class="bank-lock-badge ${isConfirmed ? "confirmed" : "editing"}">
+      ${isConfirmed ? "အတည်ပြုပြီး (Locked)" : "တည်းဖြတ်နေဆဲ"}
      </span>
     </td>
     <td>
      <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button type="button" class="btn btn-success btn-xs" onclick="confirmAdminBankAccount('${escapeHtml(acc.id)}', ${idx})">အတည်ပြု</button>
-      <button type="button" class="btn btn-secondary btn-xs" onclick="editAdminBankAccount('${escapeHtml(acc.id)}')">တည်းဖြတ်မယ်</button>
+      <button type="button" class="btn btn-success btn-xs" onclick="adminConfirmBankAccount('${escapeHtml(b.id)}')">အတည်ပြု</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="adminEditBankAccount('${escapeHtml(b.id)}')">တည်းဖြတ်မယ်</button>
+      <button type="button" class="btn btn-danger btn-xs" onclick="adminDeleteBankAccount('${escapeHtml(b.id)}')">ဖျက်မယ်</button>
      </div>
     </td>
    </tr>
@@ -3590,309 +3740,360 @@ function renderAdminBankAccounts() {
 
 function adminAddBankAccount() {
  const bankType = String($("admBankTypeInput")?.value || "").trim();
- const holder = String($("admBankHolderInput")?.value || "").trim();
- const phone = String($("admBankNumberInput")?.value || "").trim();
+ const accountName = String($("admBankHolderInput")?.value || "").trim();
+ const accountNumber = String($("admBankNumberInput")?.value || "").trim();
  const boundUserKey = String($("admBankBindUserSelect")?.value || "").trim();
  const errEl = $("adminBankErr");
 
- if (!bankType || !holder || !phone) {
-  if (errEl) errEl.textContent = "ဘဏ်အမျိုးအစား၊ အမည် နှင့် ဖုန်းနံပါတ်တို့ကို ထည့်သွင်းပါ။";
+ if (!bankType || !accountName || !accountNumber) {
+  if (errEl) errEl.textContent = "အမျိုးအစား၊ အမည် နှင့် ဖုန်းနံပါတ်/အကောင့်နံပါတ် ပြည့်စုံစွာ ထည့်ပါ။";
   return;
  }
-
- const newAcc = {
-  id: "bnk_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
-  bankType,
-  holder,
-  phone,
-  boundUserKey,
-  confirmed: false
- };
-
- adminBankAccounts.push(newAcc);
- editingBankAccountId = newAcc.id;
- saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
  if (errEl) errEl.textContent = "";
 
+ if (editingBankId) {
+  const target = adminBankAccounts.find(x => x.id === editingBankId);
+  if (target) {
+   target.bankType = bankType;
+   target.accountName = accountName;
+   target.accountNumber = accountNumber;
+   target.boundUserKey = boundUserKey;
+   target.confirmed = false;
+  }
+  editingBankId = "";
+ } else {
+  adminBankAccounts.push({
+   id: "bnk_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+   bankType,
+   accountName,
+   accountNumber,
+   boundUserKey,
+   confirmed: false
+  });
+ }
+
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
  if ($("admBankTypeInput")) $("admBankTypeInput").value = "";
  if ($("admBankHolderInput")) $("admBankHolderInput").value = "";
  if ($("admBankNumberInput")) $("admBankNumberInput").value = "";
-
+ if ($("admBankBindUserSelect")) $("admBankBindUserSelect").value = "";
  renderAdminBankAccounts();
 }
 
-function editAdminBankAccount(accId) {
- editingBankAccountId = accId;
- const target = adminBankAccounts.find(x => x.id === accId);
- if (target) target.confirmed = false;
+function adminConfirmBankAccount(bankId) {
+ const target = adminBankAccounts.find(x => x.id === bankId);
+ if (!target) return;
+ target.confirmed = true;
  saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
  renderAdminBankAccounts();
-}
-
-function confirmAdminBankAccount(accId, rowIdx) {
- const acc = adminBankAccounts.find(x => x.id === accId);
- if (!acc) return;
-
- if (editingBankAccountId === accId) {
-  const tInp = $(`editBnkType_${rowIdx}`);
-  const hInp = $(`editBnkHolder_${rowIdx}`);
-  const pInp = $(`editBnkPhone_${rowIdx}`);
-  if (tInp && String(tInp.value).trim()) acc.bankType = String(tInp.value).trim();
-  if (hInp && String(hInp.value).trim()) acc.holder = String(hInp.value).trim();
-  if (pInp && String(pInp.value).trim()) acc.phone = String(pInp.value).trim();
-  editingBankAccountId = null;
- }
-
- acc.confirmed = true;
- saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
-
- // Also sync to bound user's bankInfo if bound
- if (acc.boundUserKey) {
-  const u = users.find(x => getUserKey(x) === acc.boundUserKey);
-  if (u) {
-   u.bankInfo = {
-    bankName: acc.bankType,
-    accountName: acc.holder,
-    accountNumber: acc.phone
-   };
-   u.lastSeenAt = Date.now();
-   saveUsers(u);
-  }
- }
-
- renderAdminBankAccounts();
- showCenterAlert(`ဘဏ်အကောင့် (${acc.bankType} · ${acc.holder}) ကို အတည်ပြုပုံသေ သိမ်းဆည်းပြီးပါပြီ။`, {
+ showCenterAlert(`${target.bankType} (${target.accountNumber}) ကို အတည်ပြု သိမ်းဆည်းပြီးပါပြီ။`, {
   ok: true,
-  title: "BANK CONFIRMED",
-  badge: "LOCKED"
+  title: "CONFIRMED",
+  badge: "BANK LOCKED"
  });
 }
 
+function adminEditBankAccount(bankId) {
+ const target = adminBankAccounts.find(x => x.id === bankId);
+ if (!target) return;
+ target.confirmed = false;
+ editingBankId = target.id;
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
+ if ($("admBankTypeInput")) $("admBankTypeInput").value = target.bankType;
+ if ($("admBankHolderInput")) $("admBankHolderInput").value = target.accountName;
+ if ($("admBankNumberInput")) $("admBankNumberInput").value = target.accountNumber;
+ if ($("admBankBindUserSelect")) $("admBankBindUserSelect").value = target.boundUserKey || "";
+ renderAdminBankAccounts();
+}
+
+function adminDeleteBankAccount(bankId) {
+ adminBankAccounts = adminBankAccounts.filter(x => x.id !== bankId);
+ if (editingBankId === bankId) editingBankId = "";
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
+ renderAdminBankAccounts();
+}
+
 // =========================================================================
-// CUSTOMER SERVICE CHAT, BANK CARD PICKER & TYPING INDICATORS
+// BANK CARD PICKER + AUTO-SEND BANK & ACCOUNT ID + DOUBLE-TAP GUARD
 // =========================================================================
+function toggleBankPicker(role = "user") {
+ const boxId = role === "admin" ? "adminBankPickerBox" : "userBankPickerBox";
+ const box = $(boxId);
+ if (!box) return;
+ if (!box.classList.contains("hidden")) {
+  box.classList.add("hidden");
+  return;
+ }
+ activeBankPickerCategory = "ALL";
+ openBankPickerForMode(role, pendingCsActionContext || "");
+}
+
+function openBankPickerForMode(role = "user", mode = "") {
+ const boxId = role === "admin" ? "adminBankPickerBox" : "userBankPickerBox";
+ const box = $(boxId);
+ if (!box) return;
+
+ const u = getCurrentUser();
+ const available = getAvailableBanksForUser(u);
+ const types = ["ALL", ...Array.from(new Set(available.map(b => b.bankType).filter(Boolean)))];
+ if (!types.includes(activeBankPickerCategory)) activeBankPickerCategory = "ALL";
+
+ const filtered = activeBankPickerCategory === "ALL"
+  ? available
+  : available.filter(b => b.bankType === activeBankPickerCategory);
+
+ const modeTitle = mode === "DEPOSIT"
+  ? "ငွေသွင်းရန် ကဒ်ရွေးချယ်ပါ"
+  : (mode === "WITHDRAW" ? "ငွေထုတ်ရန် ကဒ်ရွေးချယ်ပါ" : "ဘဏ်ကဒ် ရွေးချယ်ရန်");
+
+ box.innerHTML = `
+  <div class="bank-picker-top">
+   <strong style="font-size:13px">${escapeHtml(modeTitle)}</strong>
+   <button type="button" class="close-x" style="width:24px;height:24px;font-size:12px" onclick="closeBankPicker('${role}')">✕</button>
+  </div>
+  <div class="bank-type-tabs">
+   ${types.map(t => `
+    <button type="button" class="bank-type-chip ${activeBankPickerCategory === t ? "active" : ""}" onclick="selectBankPickerCategory('${role}', '${escapeHtml(t)}')">
+     ${escapeHtml(t === "ALL" ? "အားလုံး" : t)}
+    </button>
+   `).join("")}
+  </div>
+  <div class="bank-account-list">
+   ${filtered.map(b => `
+    <button type="button" class="bank-account-btn" onclick="sendBankCardToChat('${role}', '${escapeHtml(b.id)}')">
+     <div class="b-name">${escapeHtml(b.bankType)} · ${escapeHtml(b.accountName)}</div>
+     <div class="b-meta">${escapeHtml(b.accountNumber)}</div>
+    </button>
+   `).join("")}
+  </div>
+ `;
+ box.classList.remove("hidden");
+}
+
+function selectBankPickerCategory(role, cat) {
+ activeBankPickerCategory = cat;
+ openBankPickerForMode(role, pendingCsActionContext || "");
+}
+
+function closeBankPicker(role = "user") {
+ const box = $(role === "admin" ? "adminBankPickerBox" : "userBankPickerBox");
+ if (box) box.classList.add("hidden");
+}
+
+function sendBankCardToChat(role, bankId) {
+ const now = Date.now();
+ if (now < bankPickerLockUntil) return;
+ bankPickerLockUntil = now + 1500; // 1.5s double-tap lock
+
+ const u = getCurrentUser();
+ const available = getAvailableBanksForUser(u);
+ const card = available.find(x => x.id === bankId) || available[0];
+ if (!card) return;
+
+ const actionLabel = pendingCsActionContext === "DEPOSIT"
+  ? "ငွေသွင်းရန် ရွေးချယ်ထားသော ဘဏ်ကဒ်"
+  : "ငွေထုတ်ရန် ဘဏ်ကဒ် ရွေးချယ်မှု";
+
+ const accId = u?.accountId || "GUEST";
+ const memberName = u?.name || "Guest";
+ const summaryText =
+  `${actionLabel}\n` +
+  `• Account ID: ${accId}\n` +
+  `• အမည်: ${memberName}\n` +
+  `• ဘဏ်အမျိုးအစား: ${card.bankType}\n` +
+  `• အကောင့်အမည်: ${card.accountName}\n` +
+  `• ဖုန်း/အကောင့်နံပါတ်: ${card.accountNumber}`;
+
+ closeBankPicker(role);
+
+ if (role === "admin") {
+  const targetKey = activeCsUserPhone;
+  if (!targetKey) return;
+  appendMessageToThread(targetKey, {
+   id: "msg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+   sender: "admin",
+   senderName: "Customer Service",
+   text: summaryText,
+   time: formatBubbleTimestamp(new Date(now))
+  });
+  renderAdminCsList();
+  renderAdminCsMessages();
+ } else {
+  if (!u) {
+   openAuth("login");
+   return;
+  }
+  const chatKey = getUserKey(u);
+  appendMessageToThread(chatKey, {
+   id: "msg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+   sender: "user",
+   senderName: memberName,
+   text: summaryText,
+   time: formatBubbleTimestamp(new Date(now))
+  });
+  renderSupportChat();
+  const inp = $("supportInput");
+  if (inp) {
+   inp.value = "";
+   inp.placeholder = "ထုတ်မည့်/သွင်းမည့် ပမာဏကို ရိုက်ထည့်ပါ...";
+   inp.focus();
+  }
+ }
+}
+
+// =========================================================================
+// REAL-TIME CUSTOMER SERVICE CHAT, PHOTO UPLOAD & TYPING INDICATOR
+// =========================================================================
+function appendMessageToThread(threadKey, msgObj) {
+ if (!threadKey) return;
+ if (!Array.isArray(chats[threadKey])) chats[threadKey] = [];
+ chats[threadKey].push(msgObj);
+ saveJson(STORAGE_KEYS.CHATS, chats);
+ if (firebaseReady && db) {
+  const safeKey = encodeURIComponent(threadKey).replace(/\./g, "%2E");
+  db.ref(`chats/${safeKey}`).set(chats[threadKey]).catch(() => {});
+ }
+}
+
 function handleComposerKeydown(ev, role) {
  if (ev.key === "Enter" && !ev.shiftKey) {
   ev.preventDefault();
-  if (role === "user") sendSupportMessage();
-  else sendAdminCsMessage();
+  if (role === "admin") sendAdminCsMessage();
+  else sendSupportMessage();
  }
 }
 
 function handleComposerTyping(role, textareaEl) {
  autoResizeTextarea(textareaEl);
  const hasText = Boolean(String(textareaEl?.value || "").trim());
- const typingMap = loadJson(STORAGE_KEYS.TYPING, {});
+ const u = getCurrentUser();
+ const targetKey = role === "admin" ? activeCsUserPhone : (u ? getUserKey(u) : "");
+ if (!targetKey) return;
 
- if (role === "user") {
-  const u = getCurrentUser();
-  const key = u ? getUserKey(u) : "guest";
-  typingMap.user = { active: hasText, userKey: key, at: Date.now() };
-  if (typingClearTimers.user) clearTimeout(typingClearTimers.user);
-  if (hasText) {
-   typingClearTimers.user = setTimeout(() => {
-    const cur = loadJson(STORAGE_KEYS.TYPING, {});
-    cur.user = { active: false, userKey: key, at: Date.now() };
-    saveJson(STORAGE_KEYS.TYPING, cur);
-    if (firebaseReady && db) db.ref("typing").set(cur).catch(() => {});
-    renderTypingIndicators();
-   }, 1800);
-  }
- } else {
-  typingMap.admin = { active: hasText, targetKey: activeCsUserPhone, at: Date.now() };
-  if (typingClearTimers.admin) clearTimeout(typingClearTimers.admin);
-  if (hasText) {
-   typingClearTimers.admin = setTimeout(() => {
-    const cur = loadJson(STORAGE_KEYS.TYPING, {});
-    cur.admin = { active: false, targetKey: activeCsUserPhone, at: Date.now() };
-    saveJson(STORAGE_KEYS.TYPING, cur);
-    if (firebaseReady && db) db.ref("typing").set(cur).catch(() => {});
-    renderTypingIndicators();
-   }, 1800);
-  }
+ const typingMap = loadJson(STORAGE_KEYS.TYPING, {});
+ if (!typingMap[targetKey]) typingMap[targetKey] = {};
+ typingMap[targetKey][role] = hasText ? Date.now() : 0;
+ saveJson(STORAGE_KEYS.TYPING, typingMap);
+
+ if (firebaseReady && db) {
+  const safeKey = encodeURIComponent(targetKey).replace(/\./g, "%2E");
+  db.ref(`typing/${safeKey}/${role}`).set(hasText ? Date.now() : 0).catch(() => {});
  }
 
- saveJson(STORAGE_KEYS.TYPING, typingMap);
- if (firebaseReady && db) db.ref("typing").set(typingMap).catch(() => {});
+ clearTimeout(typingBroadcastTimer);
+ if (hasText) {
+  typingBroadcastTimer = setTimeout(() => {
+   const latestMap = loadJson(STORAGE_KEYS.TYPING, {});
+   if (latestMap[targetKey]) latestMap[targetKey][role] = 0;
+   saveJson(STORAGE_KEYS.TYPING, latestMap);
+   if (firebaseReady && db) {
+    const safeKey = encodeURIComponent(targetKey).replace(/\./g, "%2E");
+    db.ref(`typing/${safeKey}/${role}`).set(0).catch(() => {});
+   }
+   renderTypingIndicators();
+  }, 2500);
+ }
  renderTypingIndicators();
 }
 
 function renderTypingIndicators() {
- const typingMap = loadJson(STORAGE_KEYS.TYPING, {});
  const now = Date.now();
-
- const adminActive = Boolean(typingMap.admin?.active) && (now - Number(typingMap.admin?.at || 0) < 4000);
+ const typingMap = loadJson(STORAGE_KEYS.TYPING, {});
  const u = getCurrentUser();
- const uKey = u ? getUserKey(u) : "";
- const userTypingEl = $("userSideTypingIndicator");
- if (userTypingEl) {
-  if (adminActive && (!typingMap.admin?.targetKey || typingMap.admin.targetKey === uKey)) {
-   userTypingEl.innerHTML = `<span class="typing-live-txt">Support is typing...</span>`;
+ const userKey = u ? getUserKey(u) : "";
+
+ const userInd = $("userSideTypingIndicator");
+ if (userInd) {
+  const adminTypingAt = Number(typingMap[userKey]?.admin || 0);
+  if (userKey && adminTypingAt > 0 && now - adminTypingAt < 4000) {
+   userInd.innerHTML = `<span class="typing-live-txt">Customer Service is typing...</span>`;
   } else {
-   userTypingEl.textContent = "Online · Direct synchronization with Admin & Support";
+   userInd.textContent = "Online · Direct synchronization with Admin & Support";
   }
  }
 
- const userActive = Boolean(typingMap.user?.active) && (now - Number(typingMap.user?.at || 0) < 4000);
- const adminTypingEl = $("adminSideTypingIndicator");
- if (adminTypingEl) {
-  if (userActive && (!typingMap.user?.userKey || typingMap.user.userKey === activeCsUserPhone)) {
-   adminTypingEl.innerHTML = `<span class="typing-live-txt">Typing...</span>`;
+ const adminInd = $("adminSideTypingIndicator");
+ if (adminInd) {
+  const uTypingAt = Number(typingMap[activeCsUserPhone]?.user || 0);
+  if (activeCsUserPhone && uTypingAt > 0 && now - uTypingAt < 4000) {
+   adminInd.innerHTML = `<span class="typing-live-txt">User is typing...</span>`;
   } else {
-   adminTypingEl.textContent = "";
+   adminInd.textContent = "";
   }
  }
 }
 
-function getAvailableBanksForRole(role) {
- const u = getCurrentUser();
- const uKey = u ? getUserKey(u) : "";
- const grouped = {};
-
- for (const acc of adminBankAccounts) {
-  if (role === "user" && acc.boundUserKey && acc.boundUserKey !== uKey) continue;
-  const bType = String(acc.bankType || "Bank").trim();
-  if (!grouped[bType]) grouped[bType] = [];
-  grouped[bType].push(acc);
- }
- return grouped;
-}
-
-function toggleBankPicker(role) {
- const isUser = role === "user";
- const box = $(isUser ? "userBankPickerBox" : "adminBankPickerBox");
- if (!box) return;
-
- const st = pickerState[role];
- st.open = !st.open;
-
- if (!st.open) {
-  box.classList.add("hidden");
-  box.innerHTML = "";
-  return;
- }
-
- const grouped = getAvailableBanksForRole(role);
- const types = Object.keys(grouped);
- if (!types.includes(st.bankType)) {
-  st.bankType = types[0] || "";
- }
-
- box.classList.remove("hidden");
- renderBankPickerContent(role);
-}
-
-function selectBankCategory(role, bankName) {
- pickerState[role].bankType = bankName;
- renderBankPickerContent(role);
-}
-
-function renderBankPickerContent(role) {
- const isUser = role === "user";
- const box = $(isUser ? "userBankPickerBox" : "adminBankPickerBox");
- if (!box) return;
-
- const grouped = getAvailableBanksForRole(role);
- const bankNames = Object.keys(grouped);
-
- if (!bankNames.length) {
-  box.innerHTML = `
-   <div class="bank-picker-top">
-    <strong style="font-size:13px">💳 ဘဏ်ကဒ်</strong>
-    <button type="button" class="close-x" style="width:24px;height:24px;font-size:12px" onclick="toggleBankPicker('${role}')">✕</button>
-   </div>
-   <div class="small muted">No bank accounts available yet.</div>
-  `;
-  return;
- }
-
- const currentBank = grouped[pickerState[role].bankType] ? pickerState[role].bankType : bankNames[0];
- pickerState[role].bankType = currentBank;
-
- const tabsHtml = bankNames.map(bName => `
-  <button
-   type="button"
-   class="bank-type-chip ${bName === currentBank ? "active" : ""}"
-   onclick="selectBankCategory('${role}', '${escapeHtml(bName)}')"
-  >${escapeHtml(bName)}</button>
- `).join("");
-
- const accounts = grouped[currentBank] || [];
- const accountsHtml = accounts.map((acc) => `
-  <button
-   type="button"
-   class="bank-account-btn"
-   onclick="pickBankAccountAndSend('${role}', '${escapeHtml(acc.id)}')"
-  >
-   <div class="b-name">${escapeHtml(acc.holder)}</div>
-   <div class="b-meta">${escapeHtml(acc.bankType)} · ${escapeHtml(acc.phone)}</div>
-  </button>
- `).join("");
-
- box.innerHTML = `
-  <div class="bank-picker-top">
-   <strong style="font-size:13px">💳 ဘဏ်ကဒ် ရွေးချယ်ပို့ရန်</strong>
-   <button type="button" class="close-x" style="width:24px;height:24px;font-size:12px" onclick="toggleBankPicker('${role}')">✕</button>
-  </div>
-  <div class="bank-type-tabs">${tabsHtml}</div>
-  <div class="bank-account-list">${accountsHtml}</div>
- `;
-}
-
-function pickBankAccountAndSend(role, accId) {
- const acc = adminBankAccounts.find(x => x.id === accId);
- if (!acc) return;
-
- const formattedMsg =
-  `💳 ဘဏ်အချက်အလက် (${acc.bankType})\n` +
-  `• အမည်: ${acc.holder}\n` +
-  `• နံပါတ်: ${acc.phone}`;
-
- pickerState[role].open = false;
- const box = $(role === "user" ? "userBankPickerBox" : "adminBankPickerBox");
- if (box) {
-  box.classList.add("hidden");
-  box.innerHTML = "";
- }
-
- if (role === "user") {
-  const u = getCurrentUser();
-  if (!u) {
-   openAuth("login");
-   return;
-  }
-  appendMessageToChat(getUserKey(u), "user", formattedMsg, "");
- } else {
-  if (!activeCsUserPhone) {
-   showCenterAlert("ဘယ်ဘက်စာရင်းမှ User တစ်ဦးကို ဦးစွာ ရွေးချယ်ပါ။", {
-    ok: false,
-    title: "SELECT USER",
-    badge: "CS CHAT"
+function handleChatPhotoUpload(ev, role) {
+ const file = ev.target?.files?.[0];
+ if (!file) return;
+ const reader = new FileReader();
+ reader.onload = () => {
+  const dataUrl = String(reader.result || "");
+  const now = Date.now();
+  if (role === "admin") {
+   if (!activeCsUserPhone) return;
+   appendMessageToThread(activeCsUserPhone, {
+    id: "msg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+    sender: "admin",
+    senderName: "Customer Service",
+    text: "",
+    photo: dataUrl,
+    time: formatBubbleTimestamp(new Date(now))
    });
-   return;
+   renderAdminCsList();
+   renderAdminCsMessages();
+  } else {
+   const u = getCurrentUser();
+   if (!u) {
+    openAuth("login");
+    return;
+   }
+   appendMessageToThread(getUserKey(u), {
+    id: "msg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+    sender: "user",
+    senderName: u.name,
+    text: "",
+    photo: dataUrl,
+    time: formatBubbleTimestamp(new Date(now))
+   });
+   renderSupportChat();
   }
-  appendMessageToChat(activeCsUserPhone, "admin", formattedMsg, "");
- }
+ };
+ reader.readAsDataURL(file);
+ ev.target.value = "";
 }
 
-function appendMessageToChat(threadKey, sender, text, photoDataUrl = "") {
- if (!threadKey) return;
- if (!Array.isArray(chats[threadKey])) chats[threadKey] = [];
- chats[threadKey].push({
-  id: "msg_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
-  sender,
-  senderName: sender === "admin" ? "Trip Booking Support" : "Member",
-  text: String(text || "").trim(),
-  photo: photoDataUrl || "",
-  time: formatBubbleTimestamp(new Date())
- });
- saveJson(STORAGE_KEYS.CHATS, chats);
- if (firebaseReady && db) {
-  db.ref("chats").set(chats).catch(() => {});
+function renderSupportChat() {
+ const box = $("supportMessages");
+ if (!box) return;
+ const u = getCurrentUser();
+ if (!u) {
+  box.innerHTML = `<div class="chat-empty-state">Please login to chat with Customer Service.</div>`;
+  return;
  }
- renderSupportChat();
- renderAdminCsList();
- renderAdminCsMessages();
+ const chatKey = getUserKey(u);
+ const list = Array.isArray(chats[chatKey]) ? chats[chatKey] : [];
+ if (!list.length) {
+  box.innerHTML = `<div class="chat-empty-state">Start a conversation with Customer Service or tap 💳 ဘဏ်ကဒ်.</div>`;
+  return;
+ }
+
+ box.innerHTML = list.map((m, idx) => {
+  const isUser = m.sender === "user";
+  const imgHtml = m.photo
+   ? `<img src="${m.photo}" alt="Attachment" class="chat-photo" onclick="window.open(this.src, '_blank')" />`
+   : "";
+  const txtHtml = m.text ? `<div>${escapeHtml(m.text)}</div>` : "";
+  return `
+   <div class="chat-msg ${isUser ? "user-rose-bubble" : "admin"}">
+    ${txtHtml}
+    ${imgHtml}
+    <div class="chat-time">${escapeHtml(m.time || "")}</div>
+    ${isUser ? `<div class="msg-action-bar"><button type="button" onclick="deleteUserChatMessage('${escapeHtml(chatKey)}', ${idx})">Delete</button></div>` : ""}
+   </div>
+  `;
+ }).join("");
+ box.scrollTop = box.scrollHeight;
 }
 
 function sendSupportMessage() {
@@ -3904,75 +4105,33 @@ function sendSupportMessage() {
  const inp = $("supportInput");
  const txt = String(inp?.value || "").trim();
  if (!txt) return;
- appendMessageToChat(getUserKey(u), "user", txt, "");
+
+ const now = Date.now();
+ appendMessageToThread(getUserKey(u), {
+  id: "msg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+  sender: "user",
+  senderName: u.name,
+  text: txt,
+  time: formatBubbleTimestamp(new Date(now))
+ });
+
  if (inp) {
   inp.value = "";
-  autoResizeTextarea(inp);
+  inp.style.height = "auto";
  }
  handleComposerTyping("user", inp);
+ renderSupportChat();
 }
 
-function sendAdminCsMessage() {
- if (!activeCsUserPhone) {
-  showCenterAlert("User တစ်ဦးကို ရွေးချယ်ပြီးမှ မက်ဆေ့ချ် ပို့ပါ။", {
-   ok: false,
-   title: "NO USER SELECTED",
-   badge: "CS CHAT"
-  });
-  return;
+function deleteUserChatMessage(chatKey, idx) {
+ if (!Array.isArray(chats[chatKey])) return;
+ chats[chatKey].splice(idx, 1);
+ saveJson(STORAGE_KEYS.CHATS, chats);
+ if (firebaseReady && db) {
+  const safeKey = encodeURIComponent(chatKey).replace(/\./g, "%2E");
+  db.ref(`chats/${safeKey}`).set(chats[chatKey]).catch(() => {});
  }
- const inp = $("adminCsInput");
- const txt = String(inp?.value || "").trim();
- if (!txt) return;
- appendMessageToChat(activeCsUserPhone, "admin", txt, "");
- if (inp) {
-  inp.value = "";
-  autoResizeTextarea(inp);
- }
- handleComposerTyping("admin", inp);
-}
-
-function handleChatPhotoUpload(ev, role) {
- const file = ev.target?.files?.[0];
- ev.target.value = "";
- if (!file) return;
-
- const targetKey = role === "user" ? getUserKey(getCurrentUser()) : activeCsUserPhone;
- if (!targetKey) {
-  if (role === "user") openAuth("login");
-  else showCenterAlert("User တစ်ဦးကို ဦးစွာ ရွေးချယ်ပါ။", { ok: false, title: "SELECT USER", badge: "CS CHAT" });
-  return;
- }
-
- const reader = new FileReader();
- reader.onload = () => {
-  appendMessageToChat(targetKey, role === "user" ? "user" : "admin", "", String(reader.result || ""));
- };
- reader.readAsDataURL(file);
-}
-
-function renderSupportChat() {
- const box = $("supportMessages");
- if (!box) return;
- const u = getCurrentUser();
- if (!u) {
-  box.innerHTML = `<div class="chat-empty-state">Please Login to chat with Customer Service.</div>`;
-  return;
- }
- const key = getUserKey(u);
- const list = Array.isArray(chats[key]) ? chats[key] : [];
- if (!list.length) {
-  box.innerHTML = `<div class="chat-empty-state">No messages yet. Start a conversation below.</div>`;
-  return;
- }
- box.innerHTML = list.map(m => `
-  <div class="chat-msg ${m.sender === "admin" ? "admin" : "user"}">
-   ${m.text ? `<div>${escapeHtml(m.text)}</div>` : ""}
-   ${m.photo ? `<img src="${m.photo}" class="chat-photo" alt="Attachment" onclick="window.open(this.src, '_blank')" />` : ""}
-   <div class="chat-time">${escapeHtml(m.time || "")}</div>
-  </div>
- `).join("");
- box.scrollTop = box.scrollHeight;
+ renderSupportChat();
 }
 
 function renderAdminCsList() {
@@ -3980,40 +4139,49 @@ function renderAdminCsList() {
  if (!wrap) return;
  const q = String($("csUserSearch")?.value || "").trim().toLowerCase();
 
- const filtered = users.filter(u => {
-  const k = getUserKey(u);
-  if (!q) return true;
-  return String(u.name || "").toLowerCase().includes(q) || k.toLowerCase().includes(q);
- });
+ const keys = Array.from(new Set([
+  ...users.map(u => getUserKey(u)),
+  ...Object.keys(chats || {})
+ ])).filter(Boolean);
+
+ const entries = keys.map(k => {
+  const u = users.find(x => getUserKey(x) === k || matchesUserIdentifier(x, k));
+  const msgs = Array.isArray(chats[k]) ? chats[k] : [];
+  const lastMsg = msgs[msgs.length - 1];
+  const lastTs = lastMsg?.id ? Number(String(lastMsg.id).split("_")[1] || 0) : 0;
+  return {
+   key: k,
+   name: u ? `${u.name} (${u.accountId})` : k,
+   sub: u ? (u.phone || u.email) : "",
+   preview: lastMsg ? (lastMsg.text || (lastMsg.photo ? "[Photo]" : "")) : "No messages yet",
+   lastTs
+  };
+ }).sort((a, b) => b.lastTs - a.lastTs);
+
+ const filtered = entries.filter(e =>
+  !q || e.name.toLowerCase().includes(q) || e.sub.toLowerCase().includes(q) || e.preview.toLowerCase().includes(q)
+ );
 
  if (!activeCsUserPhone && filtered.length) {
-  activeCsUserPhone = getUserKey(filtered[0]);
+  activeCsUserPhone = filtered[0].key;
  }
 
  if (!filtered.length) {
-  wrap.innerHTML = `<div class="chat-empty-state">No users found</div>`;
+  wrap.innerHTML = `<div class="chat-empty-state">No user conversations</div>`;
   return;
  }
 
- wrap.innerHTML = filtered.map(u => {
-  const k = getUserKey(u);
-  const msgs = Array.isArray(chats[k]) ? chats[k] : [];
-  const last = msgs[msgs.length - 1];
-  const preview = last ? (last.text || (last.photo ? "[Photo]" : "")) : "No messages yet";
-  const isActive = k === activeCsUserPhone;
-  return `
-   <div class="cs-thread-item ${isActive ? "active" : ""}" onclick="selectAdminCsUser('${escapeHtml(k)}')">
-    <div style="min-width:0;flex:1">
-     <div style="font-weight:800;font-size:13px">${escapeHtml(u.name)}</div>
-     <div class="small muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(preview)}</div>
-    </div>
-    <span class="status-pill ${u.isOnline ? "pill-online" : "pill-offline"}">${u.isOnline ? "Online" : "Offline"}</span>
+ wrap.innerHTML = filtered.map(e => `
+  <div class="cs-thread-item ${e.key === activeCsUserPhone ? "active" : ""}" onclick="selectAdminCsThread('${escapeHtml(e.key)}')">
+   <div style="min-width:0;flex:1">
+    <div style="font-weight:800;font-size:13px">${escapeHtml(e.name)}</div>
+    <div class="small muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(e.preview)}</div>
    </div>
-  `;
- }).join("");
+  </div>
+ `).join("");
 }
 
-function selectAdminCsUser(key) {
+function selectAdminCsThread(key) {
  activeCsUserPhone = key;
  renderAdminCsList();
  renderAdminCsMessages();
@@ -4021,294 +4189,295 @@ function selectAdminCsUser(key) {
 }
 
 function renderAdminCsMessages() {
- const pane = $("adminCsMessages");
+ const box = $("adminCsMessages");
  const hdr = $("adminCsActiveHeader");
- if (!pane) return;
-
- const u = users.find(x => getUserKey(x) === activeCsUserPhone);
- if (hdr) {
-  hdr.textContent = u ? `${u.name} (${u.phone || u.email})` : "Select a user conversation";
- }
+ if (!box) return;
 
  if (!activeCsUserPhone) {
-  pane.innerHTML = `<div class="chat-empty-state">Select a user from the left list to view messages.</div>`;
+  if (hdr) hdr.textContent = "Select a user conversation";
+  box.innerHTML = `<div class="chat-empty-state">Select a user on the left to view messages.</div>`;
   return;
  }
+
+ const u = users.find(x => getUserKey(x) === activeCsUserPhone || matchesUserIdentifier(x, activeCsUserPhone));
+ if (hdr) hdr.textContent = u ? `${u.name} · ${u.accountId} (${u.phone || u.email})` : activeCsUserPhone;
 
  const list = Array.isArray(chats[activeCsUserPhone]) ? chats[activeCsUserPhone] : [];
  if (!list.length) {
-  pane.innerHTML = `<div class="chat-empty-state">No chat history with this user yet.</div>`;
+  box.innerHTML = `<div class="chat-empty-state">No messages in this conversation yet.</div>`;
   return;
  }
 
- pane.innerHTML = list.map((m, i) => `
-  <div class="chat-msg ${m.sender === "admin" ? "admin" : "user"}">
-   ${m.text ? `<div>${escapeHtml(m.text)}</div>` : ""}
-   ${m.photo ? `<img src="${m.photo}" class="chat-photo" alt="Attachment" onclick="window.open(this.src, '_blank')" />` : ""}
-   <div class="chat-time">${escapeHtml(m.time || "")}</div>
-   <div class="msg-action-bar">
-    <button type="button" onclick="deleteCsMessage('${escapeHtml(activeCsUserPhone)}', ${i})">Delete</button>
+ box.innerHTML = list.map((m, idx) => {
+  const isUser = m.sender === "user";
+  const imgHtml = m.photo
+   ? `<img src="${m.photo}" alt="Attachment" class="chat-photo" onclick="window.open(this.src, '_blank')" />`
+   : "";
+  const txtHtml = m.text ? `<div>${escapeHtml(m.text)}</div>` : "";
+  return `
+   <div class="chat-msg ${isUser ? "user-rose-bubble" : "admin"}">
+    ${txtHtml}
+    ${imgHtml}
+    <div class="chat-time">${escapeHtml(m.time || "")}</div>
+    <div class="msg-action-bar">
+     <button type="button" onclick="deleteAdminCsMessage('${escapeHtml(activeCsUserPhone)}', ${idx})">Delete</button>
+    </div>
    </div>
-  </div>
- `).join("");
- pane.scrollTop = pane.scrollHeight;
+  `;
+ }).join("");
+ box.scrollTop = box.scrollHeight;
 }
 
-function deleteCsMessage(key, index) {
- if (!Array.isArray(chats[key])) return;
- chats[key].splice(index, 1);
- saveJson(STORAGE_KEYS.CHATS, chats);
- if (firebaseReady && db) {
-  db.ref("chats").set(chats).catch(() => {});
+function sendAdminCsMessage() {
+ if (!activeCsUserPhone) return;
+ const inp = $("adminCsInput");
+ const txt = String(inp?.value || "").trim();
+ if (!txt) return;
+
+ const now = Date.now();
+ appendMessageToThread(activeCsUserPhone, {
+  id: "msg_" + now + "_" + Math.random().toString(36).slice(2, 6),
+  sender: "admin",
+  senderName: "Customer Service",
+  text: txt,
+  time: formatBubbleTimestamp(new Date(now))
+ });
+
+ if (inp) {
+  inp.value = "";
+  inp.style.height = "auto";
  }
- renderSupportChat();
+ handleComposerTyping("admin", inp);
  renderAdminCsList();
  renderAdminCsMessages();
 }
 
-function handleSupportInputFocus() {
- const u = getCurrentUser();
- if (u) {
-  u.lastSeenAt = Date.now();
-  saveUsers(u);
+function deleteAdminCsMessage(threadKey, idx) {
+ if (!Array.isArray(chats[threadKey])) return;
+ chats[threadKey].splice(idx, 1);
+ saveJson(STORAGE_KEYS.CHATS, chats);
+ if (firebaseReady && db) {
+  const safeKey = encodeURIComponent(threadKey).replace(/\./g, "%2E");
+  db.ref(`chats/${safeKey}`).set(chats[threadKey]).catch(() => {});
  }
+ renderAdminCsList();
+ renderAdminCsMessages();
+}
+
+function checkNewUserMessagesForToast(chatMap) {
+ if (!isStaffLoggedIn || !chatMap || typeof chatMap !== "object") return;
+ let latest = null;
+ for (const [key, arr] of Object.entries(chatMap)) {
+  if (!Array.isArray(arr) || !arr.length) continue;
+  const last = arr[arr.length - 1];
+  if (!last || last.sender !== "user") continue;
+  const ts = last.id ? Number(String(last.id).split("_")[1] || 0) : 0;
+  if (!latest || ts > latest.ts) {
+   latest = { key, msg: last, ts };
+  }
+ }
+ if (!latest) return;
+ const sig = `${latest.key}|${latest.msg.id || latest.ts}`;
+ if (sig === lastNotifiedUserMsgKey) return;
+ lastNotifiedUserMsgKey = sig;
+
+ const toast = $("csIncomingToast");
+ if (!toast) return;
+ if ($("csToastTime")) $("csToastTime").textContent = latest.msg.time || "";
+ if ($("csToastSender")) $("csToastSender").textContent = latest.msg.senderName || latest.key;
+ if ($("csToastPreview")) $("csToastPreview").textContent = latest.msg.text || (latest.msg.photo ? "[Photo]" : "New message");
+ toast.dataset.threadKey = latest.key;
+ toast.classList.remove("hidden");
+ setTimeout(() => toast.classList.add("hidden"), 4500);
 }
 
 function handleCsToastClick() {
  const toast = $("csIncomingToast");
+ const key = toast?.dataset.threadKey || "";
  if (toast) toast.classList.add("hidden");
- if (isStaffLoggedIn) {
-  showPage("adminPage", null);
-  switchAdminTab("cs");
- } else {
-  showPage("supportPage", document.querySelectorAll(".bottom-nav button")[1] || null);
- }
-}
-
-function checkNewUserMessagesForToast(chatMap) {
- if (!isStaffLoggedIn || !chatMap) return;
- for (const [k, list] of Object.entries(chatMap)) {
-  if (!Array.isArray(list) || !list.length) continue;
-  const last = list[list.length - 1];
-  const sig = `${k}|${last.id || last.time}|${last.text || ""}`;
-  if (last.sender === "user" && sig !== lastNotifiedUserMsgKey) {
-   lastNotifiedUserMsgKey = sig;
-   const u = users.find(x => getUserKey(x) === k);
-   const toast = $("csIncomingToast");
-   if (toast) {
-    if ($("csToastTime")) $("csToastTime").textContent = last.time || "";
-    if ($("csToastSender")) $("csToastSender").textContent = u ? u.name : k;
-    if ($("csToastPreview")) $("csToastPreview").textContent = last.text || "[Sent a photo]";
-    toast.classList.remove("hidden");
-    setTimeout(() => toast.classList.add("hidden"), 5000);
-   }
-  }
- }
+ showPage("adminPage", null);
+ switchAdminTab("cs");
+ if (key) selectAdminCsThread(key);
 }
 </script>
 <script>
 // =========================================================================
-// PART 4-C: 24H MULTI-PATTERN FX CHART, ADMIN RATE SYNC, HERO & BOOTSTRAP
+// PART 4-C: 24H FX CHART (4489-4999) + ADMIN RATE SYNC + HERO + GUEST PROFILE + 599 HOTELS
 // =========================================================================
-const FX_PATTERNS = [
- { id: "RANDOM_UP", label: "တက်ချင်တက် (Upward Burst)" },
- { id: "RANDOM_DOWN", label: "ကျချင်ကျ (Downward Slide)" },
- { id: "PLUNGE_THEN_SPIKE", label: "ထိုးကျလိုက် ထိုးတက်လိုက် (Plunge → Spike)" },
- { id: "PLUNGE_DOUBLE_DROP", label: "ထိုးကျပြီး ထပ်ကျ (Double Plunge)" },
- { id: "RALLY_AGAIN", label: "ထပ်ပြန်တက် (Rally Surge)" },
- { id: "RE_PLUNGE", label: "ပြန်ထိုး (Re-Plunge)" },
- { id: "WILD_MIX", label: "အတက်အကျစုံ (Wild Choppy)" }
-];
-
-const FX_BASE_RATE = 4500.0;
-const FX_MIN_BAND = 4489.0;
-const FX_MAX_BAND = 4999.0;
-const FX_MAX_POINTS = 72;
-
-const fxState = {
- points: [],
- currentRate: 4725.50,
- prevRate: 4718.00,
- patternIndex: 0,
- patternTicksLeft: 8,
- hoverIndex: -1,
- timerId: null
-};
+const FX_MIN_RATE = 4489;
+const FX_MAX_RATE = 4999;
+let fxHistoryTicks = [];
+let fxBaseAnchor = 4750;
+let fxHoverIdx = -1;
+let heroSlideIndex = 0;
 
 function clampFxRate(val) {
- const n = roundMoney(val);
- if (n < FX_MIN_BAND) return FX_MIN_BAND;
- if (n > FX_MAX_BAND) return FX_MAX_BAND;
- return n;
+ const n = Number(val);
+ if (!Number.isFinite(n)) return 4750;
+ return Math.max(FX_MIN_RATE, Math.min(FX_MAX_RATE, roundMoney(n)));
+}
+
+// Generates varied 24H tick patterns: rise, drop, sharp dip + rebound, sharp dip + further drop
+function generateInitialFxTicks(anchorRate = 4750) {
+ const ticks = [];
+ let cur = clampFxRate(anchorRate || 4750);
+ const totalPoints = 72;
+
+ for (let i = 0; i < totalPoints; i++) {
+  let delta = 0;
+  const phase = i % 16;
+
+  if (phase >= 0 && phase <= 3) {
+   // Steady / rising wave
+   delta = 14 + Math.random() * 22;
+  } else if (phase >= 4 && phase <= 6) {
+   // Falling wave
+   delta = -(12 + Math.random() * 20);
+  } else if (phase === 7) {
+   // Sharp drop (ထိုးကျ)
+   delta = -(45 + Math.random() * 35);
+  } else if (phase === 8) {
+   // Sharp rebound (ထိုးတက်)
+   delta = 48 + Math.random() * 36;
+  } else if (phase === 9) {
+   // Another sharp drop (ထိုးကျ)
+   delta = -(42 + Math.random() * 32);
+  } else if (phase === 10) {
+   // Continued drop (ထပ်ကျ)
+   delta = -(28 + Math.random() * 26);
+  } else {
+   // Mixed rise/fall ticks
+   delta = (Math.random() - 0.46) * 34;
+  }
+
+  // Pull gently toward mid-band (4489..4999) if near edges
+  if (cur < FX_MIN_RATE + 45) delta = Math.abs(delta) + 12;
+  if (cur > FX_MAX_RATE - 45) delta = -(Math.abs(delta) + 12);
+
+  cur = clampFxRate(cur + delta);
+  const hoursAgo = Math.max(0, Math.round(((totalPoints - 1 - i) / totalPoints) * 24));
+  const label = hoursAgo === 0 ? "NOW" : `-${hoursAgo}h`;
+  ticks.push({ rate: cur, label });
+ }
+ return ticks;
 }
 
 function initFxStream() {
- const savedSync = loadJson(STORAGE_KEYS.FX_SYNC, null);
- let startRate = (savedSync && typeof savedSync.rate === "number")
-  ? clampFxRate(savedSync.rate)
-  : 4725.50;
-
- if (!fxState.points.length) {
-  let r = clampFxRate(startRate - 18);
-  for (let i = 0; i < FX_MAX_POINTS; i++) {
-   const pat = FX_PATTERNS[i % FX_PATTERNS.length];
-   const swing = Math.sin(i * 0.55) * 16 + Math.cos(i * 1.15) * 11 + ((i % 4 === 0 ? 1 : -1) * 9);
-   const nextR = clampFxRate(r + swing);
-   fxState.points.push({
-    rate: nextR,
-    prev: r,
-    pattern: pat.id,
-    ts: Date.now() - (FX_MAX_POINTS - i) * 1000
-   });
-   r = nextR;
-  }
-  fxState.currentRate = clampFxRate(startRate);
-  fxState.points[fxState.points.length - 1].rate = fxState.currentRate;
-  fxState.prevRate = fxState.points[fxState.points.length - 2]?.rate || fxState.currentRate;
+ const saved = loadJson(STORAGE_KEYS.FX_SYNC, null);
+ if (saved && typeof saved.rate === "number") {
+  fxBaseAnchor = clampFxRate(saved.rate);
  }
+ fxHistoryTicks = generateInitialFxTicks(fxBaseAnchor);
+ if (saved && typeof saved.rate === "number") {
+  fxHistoryTicks[fxHistoryTicks.length - 1] = {
+   rate: clampFxRate(saved.rate),
+   label: "NOW"
+  };
+ }
+ updateFxReadouts();
+ drawFxLiveChart();
 
- bindFxCanvasHover();
- renderFxReadouts();
- renderFxCanvas();
+ setInterval(() => {
+  const prev = fxHistoryTicks.length ? fxHistoryTicks[fxHistoryTicks.length - 1].rate : fxBaseAnchor;
+  const r = Math.random();
+  let delta = 0;
 
- if (fxState.timerId) clearInterval(fxState.timerId);
- fxState.timerId = setInterval(stepFxTick, 1000);
+  if (r < 0.25) {
+   // Rise (တက်)
+   delta = 10 + Math.random() * 24;
+  } else if (r < 0.48) {
+   // Drop (ကျ)
+   delta = -(10 + Math.random() * 24);
+  } else if (r < 0.66) {
+   // Sharp drop then rebound (ထိုးကျထိုးတက်)
+   const dip = clampFxRate(prev - (36 + Math.random() * 28));
+   fxHistoryTicks.push({ rate: dip, label: "NOW" });
+   if (fxHistoryTicks.length > 72) fxHistoryTicks.shift();
+   delta = 42 + Math.random() * 34;
+  } else if (r < 0.84) {
+   // Sharp drop then further drop (ထိုးကျထပ်ကျ)
+   const dip1 = clampFxRate(prev - (34 + Math.random() * 26));
+   fxHistoryTicks.push({ rate: dip1, label: "NOW" });
+   if (fxHistoryTicks.length > 72) fxHistoryTicks.shift();
+   delta = -(24 + Math.random() * 26);
+  } else {
+   // Mixed micro-tick
+   delta = (Math.random() - 0.5) * 28;
+  }
+
+  const curBase = fxHistoryTicks.length ? fxHistoryTicks[fxHistoryTicks.length - 1].rate : prev;
+  let nextRate = clampFxRate(curBase + delta);
+  if (nextRate <= FX_MIN_RATE + 10) nextRate = clampFxRate(nextRate + 35);
+  if (nextRate >= FX_MAX_RATE - 10) nextRate = clampFxRate(nextRate - 35);
+
+  fxHistoryTicks.push({ rate: nextRate, label: "NOW" });
+  if (fxHistoryTicks.length > 72) fxHistoryTicks.shift();
+
+  updateFxReadouts();
+  drawFxLiveChart();
+ }, 2600);
 }
 
-function stepFxTick() {
- fxState.patternTicksLeft -= 1;
- if (fxState.patternTicksLeft <= 0) {
-  // Pick a varied next pattern without repeating the exact same one consecutively
-  let nextIdx = Math.floor(Math.random() * FX_PATTERNS.length);
-  if (nextIdx === fxState.patternIndex) {
-   nextIdx = (fxState.patternIndex + 1 + Math.floor(Math.random() * (FX_PATTERNS.length - 1))) % FX_PATTERNS.length;
-  }
-  fxState.patternIndex = nextIdx;
-  fxState.patternTicksLeft = 5 + Math.floor(Math.random() * 8);
+function applyAdminRateSync(newRateVal, persistRemote = true) {
+ const cleanRate = clampFxRate(newRateVal);
+ fxBaseAnchor = cleanRate;
+ saveJson(STORAGE_KEYS.FX_SYNC, { rate: cleanRate, updatedAt: Date.now() });
+
+ if (persistRemote && firebaseReady && db) {
+  db.ref("fxOverride").set({ rate: cleanRate, updatedAt: Date.now() }).catch(() => {});
  }
 
- const pat = FX_PATTERNS[fxState.patternIndex];
- const stepProgress = 1 - (fxState.patternTicksLeft / 12);
- const prev = fxState.currentRate;
- let delta = 0;
-
- if (pat.id === "RANDOM_UP") {
-  delta = Math.random() < 0.72
-   ? (5 + Math.random() * 24)
-   : -(3 + Math.random() * 10);
- } else if (pat.id === "RANDOM_DOWN") {
-  delta = Math.random() < 0.72
-   ? -(5 + Math.random() * 24)
-   : (3 + Math.random() * 10);
- } else if (pat.id === "PLUNGE_THEN_SPIKE") {
-  delta = stepProgress < 0.5
-   ? -(18 + Math.random() * 34)
-   : (22 + Math.random() * 40);
- } else if (pat.id === "PLUNGE_DOUBLE_DROP") {
-  delta = -(14 + Math.random() * 32);
- } else if (pat.id === "RALLY_AGAIN") {
-  delta = Math.random() < 0.8
-   ? (12 + Math.random() * 32)
-   : -(4 + Math.random() * 9);
- } else if (pat.id === "RE_PLUNGE") {
-  delta = Math.random() < 0.8
-   ? -(14 + Math.random() * 34)
-   : (4 + Math.random() * 9);
+ if (!fxHistoryTicks.length) {
+  fxHistoryTicks = generateInitialFxTicks(cleanRate);
  } else {
-  // WILD_MIX: sudden plunge, spike, dip, rally
-  const mode = Math.floor(Math.random() * 4);
-  if (mode === 0) delta = -(20 + Math.random() * 35);
-  else if (mode === 1) delta = (20 + Math.random() * 35);
-  else if (mode === 2) delta = -(5 + Math.random() * 14);
-  else delta = (5 + Math.random() * 14);
+  fxHistoryTicks[fxHistoryTicks.length - 1] = { rate: cleanRate, label: "NOW" };
  }
 
- let next = clampFxRate(prev + delta);
- // Bounce naturally near 4489 or 4999 edges so spikes/plunges stay visible inside the band
- if (next <= FX_MIN_BAND + 2 && delta < 0) {
-  next = clampFxRate(FX_MIN_BAND + 12 + Math.random() * 24);
- } else if (next >= FX_MAX_BAND - 2 && delta > 0) {
-  next = clampFxRate(FX_MAX_BAND - 12 - Math.random() * 24);
- }
-
- fxState.prevRate = prev;
- fxState.currentRate = next;
- fxState.points.push({
-  rate: next,
-  prev,
-  pattern: pat.id,
-  ts: Date.now()
- });
- if (fxState.points.length > FX_MAX_POINTS) {
-  fxState.points.shift();
- }
-
- renderFxReadouts();
- renderFxCanvas();
-}
-
-function applyAdminRateSync(newRate, broadcast = true) {
- const clamped = clampFxRate(newRate);
- const prev = fxState.currentRate;
- fxState.prevRate = prev;
- fxState.currentRate = clamped;
- fxState.points.push({
-  rate: clamped,
-  prev,
-  pattern: clamped >= prev ? "RANDOM_UP" : "RANDOM_DOWN",
-  ts: Date.now()
- });
- if (fxState.points.length > FX_MAX_POINTS) {
-  fxState.points.shift();
- }
-
- if (broadcast) {
-  const payload = { rate: clamped, updatedAt: Date.now() };
-  saveJson(STORAGE_KEYS.FX_SYNC, payload);
-  if (firebaseReady && db) {
-   db.ref("fxOverride").set(payload).catch(() => {});
-  }
- }
-
- renderFxReadouts();
- renderFxCanvas();
+ updateFxReadouts();
+ drawFxLiveChart();
 }
 
 function adminUpdateLiveRate() {
  const raw = Number($("adminFxRateInput")?.value);
- if (!Number.isFinite(raw) || raw <= 0) {
-  showCenterAlert("မှန်ကန်သော Dollar Rate ဂဏန်းထည့်ပါ (4,489 – 4,999 ဝန်းကျင်)။", {
+ if (!Number.isFinite(raw) || raw < FX_MIN_RATE || raw > FX_MAX_RATE) {
+  showCenterAlert(`Rate သည် ${FX_MIN_RATE.toLocaleString()} မှ ${FX_MAX_RATE.toLocaleString()} MMK အတွင်း ဖြစ်ရပါမည်။`, {
    ok: false,
    title: "INVALID RATE",
-   badge: "FX SYNC"
+   badge: "RANGE ERROR"
   });
   return;
  }
  applyAdminRateSync(raw, true);
- showCenterAlert(
-  `Live Dollar Rate ကို 1 USD = ${fxState.currentRate.toLocaleString("en-US", { minimumFractionDigits: 2 })} MMK သို့ ချက်ချင်း Update လုပ်ပြီးပါပြီ။`,
-  { ok: true, title: "RATE UPDATED", badge: "LIVE SYNC" }
- );
+ showCenterAlert(`Live FX Rate ကို 1 USD = ${cleanRateNumber(raw)} MMK သို့ ပြောင်းလဲပြီးပါပြီ။`, {
+  ok: true,
+  title: "RATE UPDATED",
+  badge: "LIVE SYNC"
+ });
 }
 
-function renderFxReadouts() {
- const cur = fxState.currentRate;
- const isUp = cur >= fxState.prevRate;
- const pct = (((cur - FX_BASE_RATE) / FX_BASE_RATE) * 100).toFixed(2);
- const sign = Number(pct) >= 0 ? "+" : "";
- const pat = FX_PATTERNS[fxState.patternIndex] || FX_PATTERNS[0];
+function cleanRateNumber(n) {
+ return Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
- const formatted = `1 USD = ${cur.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
- if ($("todayFxRateValue")) $("todayFxRateValue").textContent = formatted;
- if ($("statLiveFxRate")) $("statLiveFxRate").textContent = cur.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
- if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) {
-  $("adminFxRateInput").value = cur.toFixed(2);
+function updateFxReadouts() {
+ if (!fxHistoryTicks.length) return;
+ const last = fxHistoryTicks[fxHistoryTicks.length - 1].rate;
+ const prev = fxHistoryTicks.length > 1 ? fxHistoryTicks[fxHistoryTicks.length - 2].rate : last;
+ const first = fxHistoryTicks[0].rate;
+ const isUp = last >= prev;
+ const pct = first > 0 ? (((last - first) / first) * 100).toFixed(2) : "0.00";
+ const sign = Number(pct) >= 0 ? "+" : "";
+
+ const heroVal = $("todayFxRateValue");
+ if (heroVal) {
+  heroVal.textContent = `1 USD = ${cleanRateNumber(last)} MMK`;
+  heroVal.style.color = isUp ? "var(--fb-success)" : "var(--fb-danger)";
  }
 
- const curEl = $("fxCurrentRateDisplay");
- if (curEl) {
-  curEl.textContent = formatted;
-  curEl.className = "fx-current-rate " + (isUp ? "is-up" : "is-down");
+ const curDisp = $("fxCurrentRateDisplay");
+ if (curDisp) {
+  curDisp.textContent = `1 USD = ${cleanRateNumber(last)} MMK`;
+  curDisp.className = "fx-current-rate " + (isUp ? "is-up" : "is-down");
  }
 
  const badge = $("fxChangeBadge");
@@ -4317,237 +4486,244 @@ function renderFxReadouts() {
   badge.className = "status-pill " + (isUp ? "pill-online" : "pill-banned");
  }
 
- if ($("fxFormulaReadout")) {
-  $("fxFormulaReadout").textContent = `Base: 4,500 · Band: 4,489–4,999 MMK`;
- }
-
- if ($("fxPointDetailText") && fxState.hoverIndex < 0) {
-  $("fxPointDetailText").textContent = `${pat.label} · Hover/touch to inspect`;
+ const statFx = $("statLiveFxRate");
+ if (statFx) {
+  statFx.textContent = cleanRateNumber(last);
  }
 }
 
-function bindFxCanvasHover() {
+function drawFxLiveChart() {
  const canvas = $("fxLiveCanvas");
- if (!canvas) return;
+ if (!canvas || !fxHistoryTicks.length) return;
+ const parent = canvas.parentElement;
+ const width = Math.max(280, parent ? parent.clientWidth : 600);
+ const height = Math.max(160, parent ? parent.clientHeight : 230);
+ const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
- const updateHover = (clientX) => {
-  const rect = canvas.getBoundingClientRect();
-  if (!rect.width || !fxState.points.length) return;
-  const relX = Math.max(0, Math.min(rect.width, clientX - rect.left));
-  const idx = Math.round((relX / rect.width) * (fxState.points.length - 1));
-  fxState.hoverIndex = Math.max(0, Math.min(fxState.points.length - 1, idx));
-  const pt = fxState.points[fxState.hoverIndex];
-  if (pt && $("fxPointDetailText")) {
-   const dir = pt.rate >= pt.prev ? "▲ တက်" : "▼ ကျ";
-   $("fxPointDetailText").textContent =
-    `${dir} · ${pt.rate.toLocaleString("en-US", { minimumFractionDigits: 2 })} MMK`;
-  }
-  renderFxCanvas();
- };
-
- canvas.onmousemove = (e) => updateHover(e.clientX);
- canvas.ontouchmove = (e) => {
-  if (e.touches && e.touches[0]) updateHover(e.touches[0].clientX);
- };
- canvas.onmouseleave = () => {
-  fxState.hoverIndex = -1;
-  renderFxReadouts();
-  renderFxCanvas();
- };
-}
-
-function renderFxCanvas() {
- const canvas = $("fxLiveCanvas");
- if (!canvas) return;
- const dpr = window.devicePixelRatio || 1;
- const rect = canvas.getBoundingClientRect();
- const w = Math.max(240, rect.width || canvas.clientWidth || 600);
- const h = Math.max(150, rect.height || canvas.clientHeight || 220);
-
- if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
-  canvas.width = Math.floor(w * dpr);
-  canvas.height = Math.floor(h * dpr);
- }
+ canvas.width = Math.floor(width * dpr);
+ canvas.height = Math.floor(height * dpr);
 
  const ctx = canvas.getContext("2d");
- if (!ctx) return;
- ctx.save();
- ctx.scale(dpr, dpr);
- ctx.clearRect(0, 0, w, h);
+ ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+ ctx.clearRect(0, 0, width, height);
 
- const pts = fxState.points;
- if (!pts.length) {
-  ctx.restore();
-  return;
- }
+ const padL = 56;
+ const padR = 16;
+ const padT = 16;
+ const padB = 26;
+ const plotW = Math.max(60, width - padL - padR);
+ const plotH = Math.max(60, height - padT - padB);
 
- const rates = pts.map(p => p.rate);
- let minV = Math.min(...rates, FX_MIN_BAND);
- let maxV = Math.max(...rates, FX_MAX_BAND);
- if (Math.abs(maxV - minV) < 25) {
-  minV = FX_MIN_BAND;
-  maxV = FX_MAX_BAND;
- }
+ const rates = fxHistoryTicks.map(t => t.rate);
+ const minVal = Math.max(FX_MIN_RATE, Math.min(...rates) - 18);
+ const maxVal = Math.min(FX_MAX_RATE, Math.max(...rates) + 18);
+ const span = Math.max(10, maxVal - minVal);
 
- const padTop = 18;
- const padBottom = 22;
- const padLeft = 12;
- const padRight = 16;
- const plotW = Math.max(10, w - padLeft - padRight);
- const plotH = Math.max(10, h - padTop - padBottom);
-
- ctx.strokeStyle = "rgba(139, 148, 158, 0.15)";
+ // Horizontal grid lines & Y-axis labels
+ ctx.strokeStyle = "rgba(139, 148, 158, 0.16)";
  ctx.lineWidth = 1;
- for (let g = 0; g <= 3; g++) {
-  const gy = padTop + (plotH / 3) * g;
+ ctx.font = "11px sans-serif";
+ ctx.fillStyle = "#8b949e";
+ ctx.textAlign = "right";
+
+ for (let g = 0; g <= 4; g++) {
+  const ratio = g / 4;
+  const y = padT + ratio * plotH;
+  const val = maxVal - ratio * span;
   ctx.beginPath();
-  ctx.moveTo(padLeft, gy);
-  ctx.lineTo(w - padRight, gy);
+  ctx.moveTo(padL, y);
+  ctx.lineTo(padL + plotW, y);
   ctx.stroke();
+  ctx.fillText(Math.round(val).toLocaleString("en-US"), padL - 7, y + 4);
  }
 
- const toX = (i) => padLeft + (pts.length === 1 ? 0 : (i / (pts.length - 1)) * plotW);
- const toY = (val) => padTop + ((maxV - val) / (maxV - minV)) * plotH;
+ const getX = (idx) => {
+  if (fxHistoryTicks.length <= 1) return padL;
+  return padL + (idx / (fxHistoryTicks.length - 1)) * plotW;
+ };
+ const getY = (val) => padT + ((maxVal - val) / span) * plotH;
 
- // Green when rising, Red when falling on every spike/plunge segment
- for (let i = 1; i < pts.length; i++) {
-  const x0 = toX(i - 1);
-  const y0 = toY(pts[i - 1].rate);
-  const x1 = toX(i);
-  const y1 = toY(pts[i].rate);
-  const rising = pts[i].rate >= pts[i - 1].rate;
-  const strokeCol = rising ? "#3fb950" : "#f85149";
-
-  ctx.beginPath();
-  ctx.moveTo(x0, y0);
-  ctx.lineTo(x1, y1);
-  ctx.lineTo(x1, padTop + plotH);
-  ctx.lineTo(x0, padTop + plotH);
-  ctx.closePath();
-  ctx.fillStyle = rising ? "rgba(63, 185, 80, 0.11)" : "rgba(248, 81, 73, 0.11)";
-  ctx.fill();
+ // Draw each segment colored Green when rising, Red when falling
+ for (let i = 1; i < fxHistoryTicks.length; i++) {
+  const p0 = fxHistoryTicks[i - 1];
+  const p1 = fxHistoryTicks[i];
+  const x0 = getX(i - 1);
+  const y0 = getY(p0.rate);
+  const x1 = getX(i);
+  const y1 = getY(p1.rate);
+  const rising = p1.rate >= p0.rate;
 
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
-  ctx.strokeStyle = strokeCol;
+  ctx.strokeStyle = rising ? "#3fb950" : "#f85149";
   ctx.lineWidth = 2.4;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   ctx.stroke();
  }
 
- const lastIdx = pts.length - 1;
- const lx = toX(lastIdx);
- const ly = toY(pts[lastIdx].rate);
- const lastRising = pts[lastIdx].rate >= pts[lastIdx].prev;
- const lastCol = lastRising ? "#3fb950" : "#f85149";
+ // Latest point marker
+ const lastIdx = fxHistoryTicks.length - 1;
+ const prevRate = lastIdx > 0 ? fxHistoryTicks[lastIdx - 1].rate : fxHistoryTicks[lastIdx].rate;
+ const lastRate = fxHistoryTicks[lastIdx].rate;
+ const lx = getX(lastIdx);
+ const ly = getY(lastRate);
+ const lastRising = lastRate >= prevRate;
 
  ctx.beginPath();
  ctx.arc(lx, ly, 4.5, 0, Math.PI * 2);
- ctx.fillStyle = lastCol;
+ ctx.fillStyle = lastRising ? "#3fb950" : "#f85149";
  ctx.fill();
- ctx.lineWidth = 2;
- ctx.strokeStyle = "#ffffff";
- ctx.stroke();
 
- if (fxState.hoverIndex >= 0 && fxState.hoverIndex < pts.length) {
-  const hx = toX(fxState.hoverIndex);
-  const hy = toY(pts[fxState.hoverIndex].rate);
-  ctx.beginPath();
+ // X-axis time labels
+ ctx.textAlign = "center";
+ ctx.fillStyle = "#8b949e";
+ ctx.fillText("-24h", padL, height - 7);
+ ctx.fillText("-12h", padL + plotW * 0.5, height - 7);
+ ctx.fillText("LIVE", padL + plotW, height - 7);
+
+ // Hover crosshair inspection
+ if (fxHoverIdx >= 0 && fxHoverIdx < fxHistoryTicks.length) {
+  const pt = fxHistoryTicks[fxHoverIdx];
+  const hx = getX(fxHoverIdx);
+  const hy = getY(pt.rate);
+  ctx.save();
   ctx.setLineDash([4, 4]);
-  ctx.moveTo(hx, padTop);
-  ctx.lineTo(hx, padTop + plotH);
-  ctx.strokeStyle = "rgba(230, 237, 243, 0.45)";
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(139, 148, 158, 0.55)";
+  ctx.beginPath();
+  ctx.moveTo(hx, padT);
+  ctx.lineTo(hx, padT + plotH);
   ctx.stroke();
-  ctx.setLineDash([]);
+  ctx.restore();
 
   ctx.beginPath();
-  ctx.arc(hx, hy, 4, 0, Math.PI * 2);
+  ctx.arc(hx, hy, 5, 0, Math.PI * 2);
   ctx.fillStyle = "#2f81f7";
   ctx.fill();
- }
 
- ctx.restore();
-}
-
-// =========================================================================
-// HERO BANNER (ROTATES ONE HOTEL PHOTO PER PAGE OPEN/VISIT), HOTELS & PROFILE
-// =========================================================================
-function initHeroAndTicker() {
- const sourceHotels = (Array.isArray(hotels) && hotels.length) ? hotels : BASE_HOTELS;
- const bannerIdxKey = "tb_hero_banner_idx_v1";
- const prevIdx = Number(loadJson(bannerIdxKey, -1));
- const nextIdx = (prevIdx + 1) % sourceHotels.length;
- saveJson(bannerIdxKey, nextIdx);
-
- const activeHotel = sourceHotels[nextIdx] || BASE_HOTELS[0];
- const hero = $("homeHotelHeroBanner");
- if (hero && activeHotel?.img) {
-  hero.style.backgroundImage = `url('${activeHotel.img}')`;
- }
- if ($("heroHotelNameLabel") && activeHotel) {
-  $("heroHotelNameLabel").textContent = `${activeHotel.name} · ${activeHotel.country}`;
- }
-
- const track = $("activityTickerSlide");
- if (track) {
-  const sampleItems = [
-   `Kyaw Min • Completed Order #24 • Profit <span class="ticker-amt">+$14.20</span>`,
-   `Su Myat • Joined with Code TPxxxx • <span class="ticker-amt">30-Order Cycle</span>`,
-   `Sithu • Completed 30/30 Orders • Payout <span class="ticker-amt">+$86.50</span>`,
-   `Thandar • Booked Marina Bay Horizon • <span class="ticker-amt">Confirmed</span>`
-  ];
-  const joined = [...sampleItems, ...sampleItems]
-   .map(txt => `<span>${txt}</span>`)
-   .join("");
-  track.innerHTML = joined;
+  const detailEl = $("fxPointDetailText");
+  if (detailEl) {
+   detailEl.textContent = `${pt.label} · 1 USD = ${cleanRateNumber(pt.rate)} MMK`;
+  }
  }
 }
 
-function renderHotels() {
- const grid = $("hotelGrid");
- if (!grid) return;
+function bindFxChartHover() {
+ const canvas = $("fxLiveCanvas");
+ if (!canvas) return;
+ const inspectAtClientX = (clientX) => {
+  if (!fxHistoryTicks.length) return;
+  const rect = canvas.getBoundingClientRect();
+  const relX = clientX - rect.left;
+  const padL = 56;
+  const padR = 16;
+  const plotW = Math.max(1, rect.width - padL - padR);
+  const ratio = Math.max(0, Math.min(1, (relX - padL) / plotW));
+  fxHoverIdx = Math.round(ratio * (fxHistoryTicks.length - 1));
+  drawFxLiveChart();
+ };
+
+ canvas.addEventListener("mousemove", (e) => inspectAtClientX(e.clientX));
+ canvas.addEventListener("touchmove", (e) => {
+  if (e.touches && e.touches[0]) inspectAtClientX(e.touches[0].clientX);
+ }, { passive: true });
+ canvas.addEventListener("mouseleave", () => {
+  fxHoverIdx = -1;
+  const detailEl = $("fxPointDetailText");
+  if (detailEl) detailEl.textContent = "Live ticks · Hover/touch to inspect";
+  drawFxLiveChart();
+ });
+}
+
+// =========================================================================
+// HERO BANNER ROTATION & 599 ASIA HOTELS (STAR FILTER + PRICE SORT)
+// =========================================================================
+function updateHeroBannerSlide() {
+ const banner = $("homeHotelHeroBanner");
+ const tag = $("heroHotelNameLabel");
+ if (!banner || !Array.isArray(hotels) || !hotels.length) return;
+ const sample = hotels[heroSlideIndex % hotels.length];
+ const imgUrl = sample.img || HERO_BANNER_IMAGES[heroSlideIndex % HERO_BANNER_IMAGES.length];
+ banner.style.backgroundImage = `url("${imgUrl}")`;
+ if (tag) {
+  tag.textContent = `${sample.name} · ${sample.country} · ${"★".repeat(sample.stars)} · ${fmtMoney(sample.price)}`;
+ }
+ heroSlideIndex = (heroSlideIndex + 1) % hotels.length;
+}
+
+function initHeroBannerRotation() {
+ updateHeroBannerSlide();
+ setInterval(updateHeroBannerSlide, 4500);
+}
+
+function getFilteredAndSortedHotels() {
  const q = String($("hotelSearch")?.value || "").trim().toLowerCase();
+ const starVal = String($("hotelStarFilter")?.value || "all");
+ const sortVal = String($("hotelPriceSort")?.value || "default");
 
- const list = hotels.filter(h => {
-  if (!q) return true;
-  return (
+ let list = Array.isArray(hotels) ? hotels.slice() : [];
+
+ if (starVal !== "all") {
+  const starNum = Number(starVal);
+  list = list.filter(h => Number(h.stars) === starNum);
+ }
+
+ if (q) {
+  list = list.filter(h =>
    String(h.name || "").toLowerCase().includes(q) ||
    String(h.country || "").toLowerCase().includes(q) ||
    String(h.stars || "").includes(q)
   );
- });
+ }
 
- if ($("hotelCountBadge")) $("hotelCountBadge").textContent = String(list.length);
+ if (sortVal === "price_asc") {
+  list.sort((a, b) => Number(a.price) - Number(b.price));
+ } else if (sortVal === "price_desc") {
+  list.sort((a, b) => Number(b.price) - Number(a.price));
+ } else if (sortVal === "stars_desc") {
+  list.sort((a, b) => Number(b.stars) - Number(a.stars) || Number(a.price) - Number(b.price));
+ }
 
- const visible = showAllHotels ? list : list.slice(0, 8);
+ return list;
+}
+
+function renderHotels() {
+ const grid = $("hotelGrid");
+ const badge = $("hotelCountBadge");
+ const moreWrap = $("loadMoreHotelsWrap");
+ const moreBtn = $("loadMoreHotelsBtn");
+ if (!grid) return;
+
+ const filtered = getFilteredAndSortedHotels();
+ if (badge) badge.textContent = String(filtered.length);
+
+ const limit = showAllHotels ? filtered.length : 12;
+ const visible = filtered.slice(0, limit);
+
  grid.innerHTML = visible.map(h => `
   <div class="card clickable-hotel" onclick="openHotelDetail(${h.id})">
    <img src="${escapeHtml(h.img)}" alt="${escapeHtml(h.name)}" loading="lazy" />
    <div class="card-body">
     <div>
-     <div style="font-weight:800;font-size:14.5px">${escapeHtml(h.name)}</div>
+     <div style="font-weight:800;font-size:14px">${escapeHtml(h.name)}</div>
      <div class="small muted" style="margin-top:2px">${escapeHtml(h.country)}</div>
-     <div class="stars" style="margin-top:4px">${"★".repeat(Number(h.stars || 4))}</div>
+     <div class="stars" style="margin-top:5px">${"★".repeat(Number(h.stars || 4))}${"☆".repeat(Math.max(0, 5 - Number(h.stars || 4)))}</div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
      <span class="price">${fmtMoney(h.price)}</span>
-     <span class="small muted">Details →</span>
+     <span class="small" style="color:var(--fb-primary);font-weight:700">Details →</span>
     </div>
    </div>
   </div>
  `).join("");
 
- const loadMoreWrap = $("loadMoreHotelsWrap");
- const loadMoreBtn = $("loadMoreHotelsBtn");
- if (loadMoreWrap && loadMoreBtn) {
-  if (list.length > 8) {
-   loadMoreWrap.classList.remove("hidden");
-   loadMoreBtn.textContent = showAllHotels ? "Show Less" : `Show All (${list.length})`;
+ if (moreWrap && moreBtn) {
+  if (filtered.length > 12) {
+   moreWrap.classList.remove("hidden");
+   moreBtn.textContent = showAllHotels ? `Show Less (Top 12)` : `Show All (${filtered.length} Hotels)`;
   } else {
-   loadMoreWrap.classList.add("hidden");
+   moreWrap.classList.add("hidden");
   }
  }
 }
@@ -4562,9 +4738,8 @@ function openHotelDetail(hotelId) {
  if (!h) return;
  if ($("detailHotelTitle")) $("detailHotelTitle").textContent = h.name;
  if ($("detailHotelImg")) $("detailHotelImg").src = h.img;
- if ($("detailHotelMeta")) $("detailHotelMeta").textContent = `${h.country} · ${"★".repeat(Number(h.stars || 4))} · ${fmtMoney(h.price)} / night`;
- if ($("detailHotelDesc")) $("detailHotelDesc").textContent = h.description || "Comfortable stay with instant booking confirmation.";
-
+ if ($("detailHotelMeta")) $("detailHotelMeta").textContent = `${h.country} · ${"★".repeat(h.stars)} (${h.stars} Stars) · ${fmtMoney(h.price)} / night`;
+ if ($("detailHotelDesc")) $("detailHotelDesc").textContent = h.description || "";
  const bookBtn = $("detailBookNowBtn");
  if (bookBtn) {
   bookBtn.onclick = () => {
@@ -4576,95 +4751,68 @@ function openHotelDetail(hotelId) {
  openModal("hotelDetailModal");
 }
 
-function renderHistory() {
- const listEl = $("historyList");
- if (!listEl) return;
- const u = getCurrentUser();
- if (!u) {
-  listEl.innerHTML = `<div class="small muted">Login to view your order and wallet history.</div>`;
-  return;
- }
- const hist = Array.isArray(u.history) ? u.history : [];
- if (!hist.length) {
-  listEl.innerHTML = `<div class="small muted">No activity history yet.</div>`;
-  return;
- }
- listEl.innerHTML = hist.map(item => `
-  <div class="history-item">
-   <div>
-    <div style="font-weight:700;font-size:13.5px">${escapeHtml(item.title)}</div>
-    <div class="small muted">${escapeHtml(item.time || "")}</div>
-   </div>
-   <strong style="color:${String(item.amountText || "").startsWith("-") ? "var(--fb-danger)" : "var(--fb-success)"}">${escapeHtml(item.amountText || "")}</strong>
-  </div>
- `).join("");
-}
-
+// =========================================================================
+// GUEST PROFILE CLEAN VIEW (ONLY 2 BUTTONS WHEN NOT LOGGED IN) & ADMIN PANEL
+// =========================================================================
 function renderProfile() {
  const u = getCurrentUser();
- const authBtn = $("headerAuthBtn");
+ const guestGate = $("guestAuthGateCard");
+ const loggedCard = $("loggedInProfileCard");
+ const headerAuthBtn = $("headerAuthBtn");
 
  if (!u) {
-  if (authBtn) {
-   authBtn.textContent = "Login";
-   authBtn.onclick = () => openAuth("login");
+  if (guestGate) guestGate.classList.remove("hidden");
+  if (loggedCard) loggedCard.classList.add("hidden");
+  if (headerAuthBtn) {
+   headerAuthBtn.textContent = "အကောင့်ဝင်ရန်";
+   headerAuthBtn.onclick = () => openAuth("login");
   }
-  if ($("profileName")) $("profileName").textContent = "Guest Member";
-  if ($("profilePhone")) $("profilePhone").textContent = "Not logged in";
-  if ($("profileInvite")) $("profileInvite").textContent = "";
-  if ($("profileDeviceLoc")) $("profileDeviceLoc").textContent = "";
-  if ($("profileBalance")) $("profileBalance").textContent = "$0.00";
-  if ($("profileAccountStatus")) $("profileAccountStatus").textContent = "Guest";
-  if ($("profileAvatarImg")) $("profileAvatarImg").classList.add("hidden");
-  if ($("profileAvatar")) {
-   $("profileAvatar").classList.remove("hidden");
-   $("profileAvatar").textContent = "◯";
-  }
-  if ($("profileLogoutBtn")) $("profileLogoutBtn").classList.add("hidden");
-  if ($("suspendedAccountNotice")) $("suspendedAccountNotice").classList.add("hidden");
   return;
  }
 
- if (authBtn) {
-  authBtn.textContent = u.name;
-  authBtn.onclick = () => showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4] || null);
+ if (guestGate) guestGate.classList.add("hidden");
+ if (loggedCard) loggedCard.classList.remove("hidden");
+ if (headerAuthBtn) {
+  headerAuthBtn.textContent = u.name || "Account";
+  headerAuthBtn.onclick = () => showPage("profilePage", document.querySelectorAll(".bottom-nav button")[4] || null);
  }
 
- if ($("profileName")) $("profileName").textContent = u.name;
- if ($("profilePhone")) $("profilePhone").textContent = [u.phone, u.email].filter(Boolean).join(" · ");
- if ($("profileInvite")) {
-  $("profileInvite").textContent = `Invite Code: ${u.inviteCode || "-"} · Invited By: ${u.invitedBy || "-"} · Orders: ${u.completedOrders}/30`;
+ const suspNotice = $("suspendedAccountNotice");
+ if (suspNotice) {
+  if (u.isBanned) {
+   suspNotice.classList.remove("hidden");
+   if ($("suspendedReasonText")) $("suspendedReasonText").textContent = u.banReason || "Contact Customer Service";
+  } else {
+   suspNotice.classList.add("hidden");
+  }
  }
+
+ const avText = $("profileAvatar");
+ const avImg = $("profileAvatarImg");
+ if (u.avatarPhoto) {
+  if (avText) avText.classList.add("hidden");
+  if (avImg) {
+   avImg.src = u.avatarPhoto;
+   avImg.classList.remove("hidden");
+  }
+ } else {
+  if (avImg) avImg.classList.add("hidden");
+  if (avText) {
+   avText.classList.remove("hidden");
+   avText.textContent = (u.name || "U").charAt(0).toUpperCase();
+  }
+ }
+
+ if ($("profileName")) $("profileName").textContent = u.name || "Member";
+ if ($("profileAccountId")) $("profileAccountId").textContent = `Account ID: ${u.accountId || "-"}`;
+ if ($("profilePhone")) $("profilePhone").textContent = `Contact: ${u.phone || u.email || "-"}`;
+ if ($("profileInvite")) $("profileInvite").textContent = `Invite Code: ${u.inviteCode || "-"} · Invited By: ${u.invitedBy || "-"}`;
  if ($("profileDeviceLoc")) {
-  const coords = (u.lat != null && u.lng != null) ? ` (${u.lat}, ${u.lng})` : "";
-  $("profileDeviceLoc").textContent = `Device: ${u.deviceInfo || formatDeviceAndPlatform()} · ${u.locStatus || "Location Ready"}${coords}`;
+  const locStr = (u.lat != null && u.lng != null) ? `${u.lat}, ${u.lng}` : (u.locStatus || "Location Off");
+  $("profileDeviceLoc").textContent = `Device: ${u.deviceInfo || "-"} · ${locStr}`;
  }
  if ($("profileBalance")) $("profileBalance").textContent = fmtMoney(u.balance);
  if ($("profileAccountStatus")) $("profileAccountStatus").textContent = u.isBanned ? "Suspended" : "Active";
-
- if (u.avatarPhoto && $("profileAvatarImg")) {
-  $("profileAvatarImg").src = u.avatarPhoto;
-  $("profileAvatarImg").classList.remove("hidden");
-  if ($("profileAvatar")) $("profileAvatar").classList.add("hidden");
- } else {
-  if ($("profileAvatarImg")) $("profileAvatarImg").classList.add("hidden");
-  if ($("profileAvatar")) {
-   $("profileAvatar").classList.remove("hidden");
-   $("profileAvatar").textContent = String(u.name || "◯").slice(0, 2).toUpperCase();
-  }
- }
-
- if ($("profileLogoutBtn")) $("profileLogoutBtn").classList.remove("hidden");
-
- const suspBanner = $("suspendedAccountNotice");
- if (suspBanner) {
-  if (u.isBanned) {
-   suspBanner.classList.remove("hidden");
-   if ($("suspendedReasonText")) $("suspendedReasonText").textContent = u.banReason || "Account suspended by administrator.";
-  } else {
-   suspBanner.classList.add("hidden");
-  }
- }
 }
 
 function openSupportFromSuspension() {
@@ -4672,8 +4820,7 @@ function openSupportFromSuspension() {
 }
 
 function openDepositModal() {
- const u = getCurrentUser();
- if (!u) {
+ if (!getCurrentUser()) {
   openAuth("login");
   return;
  }
@@ -4685,11 +4832,11 @@ function openDepositModal() {
 function submitDeposit() {
  const u = getCurrentUser();
  if (!u) return;
- const method = $("depositMethod")?.value || "Wallet";
+ const method = String($("depositMethod")?.value || "KBZ Pay");
  const amt = roundMoney($("depositAmount")?.value);
  const errEl = $("depositErr");
- if (amt < 1) {
-  if (errEl) errEl.textContent = "Please enter an amount of at least $1.00.";
+ if (!Number.isFinite(amt) || amt <= 0) {
+  if (errEl) errEl.textContent = "Please enter a valid deposit amount.";
   return;
  }
  u.balance = roundMoney(u.balance + amt);
@@ -4711,25 +4858,10 @@ function openWithdrawModal() {
   openAuth("login");
   return;
  }
- if (u.isBanned) {
-  showCenterAlert(`Account suspended: ${u.banReason || "Contact Customer Service"}`, {
-   ok: false,
-   title: "WITHDRAW BLOCKED",
-   badge: "SUSPENDED"
-  });
-  return;
- }
- if (u.hasInviteBonus && Number(u.completedOrders || 0) < 30) {
-  showCenterAlert(
-   `Invite bonus ($18.00) ရယူထားသောကြောင့် Order 30/30 ပြည့်ပြီးမှသာ ငွေထုတ်နိုင်ပါမည် (လက်ရှိ ${u.completedOrders}/30)။`,
-   { ok: false, title: "ORDER 30 REQUIRED", badge: `${u.completedOrders}/30` }
-  );
-  return;
- }
  if ($("withdrawBoundInfo")) {
   $("withdrawBoundInfo").textContent = u.bankInfo
-   ? `Bound Bank: ${u.bankInfo.bankName} · ${u.bankInfo.accountName} (${u.bankInfo.accountNumber})`
-   : "No bank bound yet — you can bind your bank account anytime.";
+   ? `Bound Bank: ${u.bankInfo.bankName} · ${u.bankInfo.accountNumber}`
+   : "No bank bound yet. Please bind bank or contact Customer Service.";
  }
  if ($("withdrawAmount")) $("withdrawAmount").value = "";
  if ($("withdrawPass")) $("withdrawPass").value = "";
@@ -4741,18 +4873,14 @@ function submitWithdraw() {
  const u = getCurrentUser();
  if (!u) return;
  const amt = roundMoney($("withdrawAmount")?.value);
- const pass = String($("withdrawPass")?.value || "");
+ const pass = String($("withdrawPass")?.value || "").trim();
  const errEl = $("withdrawErr");
 
- if (u.hasInviteBonus && Number(u.completedOrders || 0) < 30) {
-  if (errEl) errEl.textContent = `Order 30/30 is required before withdrawal (${u.completedOrders}/30).`;
+ if (!Number.isFinite(amt) || amt <= 0) {
+  if (errEl) errEl.textContent = "Please enter a valid amount.";
   return;
  }
- if (amt < 1) {
-  if (errEl) errEl.textContent = "Enter a valid amount ($1.00 minimum).";
-  return;
- }
- if (u.password && u.password !== pass) {
+ if (u.password && pass !== u.password) {
   if (errEl) errEl.textContent = "Incorrect account password.";
   return;
  }
@@ -4763,14 +4891,14 @@ function submitWithdraw() {
 
  u.balance = roundMoney(u.balance - amt);
  u.lastSeenAt = Date.now();
- addUserHistory(u, "Withdrawal Request", `-${fmtMoney(amt)}`, "withdraw");
+ addUserHistory(u, "Withdraw Request", `-${fmtMoney(amt)}`, "withdraw");
  saveUsers(u);
  closeModal("withdrawModal");
  refreshAllViews();
- showCenterAlert(`ငွေထုတ်တောင်းဆိုမှု ${fmtMoney(amt)} တင်သွင်းပြီးပါပြီ။`, {
+ showCenterAlert(`Withdraw ${fmtMoney(amt)} တောင်းဆိုမှု မှတ်တမ်းတင်ပြီးပါပြီ။`, {
   ok: true,
   title: "WITHDRAW SUBMITTED",
-  badge: "PAYOUT"
+  badge: "WALLET"
  });
 }
 
@@ -4781,7 +4909,7 @@ function openBindBankModal() {
   return;
  }
  if ($("bindBankName")) $("bindBankName").value = u.bankInfo?.bankName || "";
- if ($("bindAccountName")) $("bindAccountName").value = u.bankInfo?.accountName || "";
+ if ($("bindAccountName")) $("bindAccountName").value = u.bankInfo?.accountName || u.name || "";
  if ($("bindAccountNumber")) $("bindAccountNumber").value = u.bankInfo?.accountNumber || "";
  if ($("bindBankErr")) $("bindBankErr").textContent = "";
  openModal("bindBankModal");
@@ -4796,30 +4924,48 @@ function submitBindBank() {
  const errEl = $("bindBankErr");
 
  if (!bankName || !accountName || !accountNumber) {
-  if (errEl) errEl.textContent = "Please fill in bank name, account holder name, and number.";
+  if (errEl) errEl.textContent = "Please fill in all bank details.";
   return;
  }
-
  u.bankInfo = { bankName, accountName, accountNumber };
  u.lastSeenAt = Date.now();
- addUserHistory(u, `Bound Bank (${bankName})`, accountNumber, "bank");
  saveUsers(u);
  closeModal("bindBankModal");
  renderProfile();
- showCenterAlert("ဘဏ်အကောင့် ချိတ်ဆက်သိမ်းဆည်းပြီးပါပြီ။", {
+ showCenterAlert(`ဘဏ်ကဒ် (${bankName} · ${accountNumber}) ချိတ်ဆက်ပြီးပါပြီ။`, {
   ok: true,
   title: "BANK BOUND",
-  badge: "BANK"
+  badge: "VERIFIED"
  });
 }
 
-// =========================================================================
-// ADMIN PANEL & ACCOUNT INFO MODAL
-// =========================================================================
-function handleLogoClick() {
- showPage("homePage", document.querySelectorAll(".bottom-nav button")[0] || null);
+function renderHistory() {
+ const wrap = $("historyList");
+ if (!wrap) return;
+ const u = getCurrentUser();
+ if (!u) {
+  wrap.innerHTML = `<div class="chat-empty-state">Please login to view history.</div>`;
+  return;
+ }
+ const list = Array.isArray(u.history) ? u.history : [];
+ if (!list.length) {
+  wrap.innerHTML = `<div class="chat-empty-state">No transactions or orders yet.</div>`;
+  return;
+ }
+ wrap.innerHTML = list.map(item => `
+  <div class="history-item">
+   <div>
+    <div style="font-weight:700;font-size:13.5px">${escapeHtml(item.title)}</div>
+    <div class="small muted">${escapeHtml(item.time || "")}</div>
+   </div>
+   <strong style="color:${String(item.amountText || "").startsWith("-") ? "var(--fb-danger)" : "var(--fb-success)"}">${escapeHtml(item.amountText || "")}</strong>
+  </div>
+ `).join("");
 }
 
+// =========================================================================
+// ADMIN CONSOLE RENDERING & CONTROLS
+// =========================================================================
 function renderAdminPanel() {
  const gate = $("adminLoginGate");
  const consoleEl = $("adminConsole");
@@ -4831,7 +4977,6 @@ function renderAdminPanel() {
  if (gate) gate.classList.add("hidden");
  if (consoleEl) consoleEl.classList.remove("hidden");
 
- renderAdminLiveOrderBanner();
  renderAdminStats();
  renderAdminUsers();
  renderAdminCsList();
@@ -4839,25 +4984,20 @@ function renderAdminPanel() {
  renderAdminBankAccounts();
  renderAdminProfitTiers();
  renderAdminHotels();
- renderTypingIndicators();
 }
 
 function switchAdminTab(tabName) {
- const tabs = {
-  users: { panel: "adminUsersTab", btn: "adminTabUsers" },
-  cs: { panel: "adminCsTab", btn: "adminTabCs" },
-  banks: { panel: "adminBanksTab", btn: "adminTabBanks" },
-  tiers: { panel: "adminTiersTab", btn: "adminTabTiers" },
-  hotels: { panel: "adminHotelsTab", btn: "adminTabHotels" }
- };
-
- Object.entries(tabs).forEach(([key, cfg]) => {
-  const p = $(cfg.panel);
-  const b = $(cfg.btn);
-  if (p) p.classList.toggle("hidden", key !== tabName);
-  if (b) b.className = `btn btn-sm ${key === tabName ? "btn-primary" : "btn-secondary"}`;
- });
-
+ const tabs = ["users", "cs", "banks", "tiers", "hotels"];
+ for (const t of tabs) {
+  const cap = t.charAt(0).toUpperCase() + t.slice(1);
+  const pane = $(`admin${cap}Tab`);
+  const btn = $(`adminTab${cap}`);
+  if (pane) pane.classList.toggle("hidden", t !== tabName);
+  if (btn) {
+   btn.classList.toggle("btn-primary", t === tabName);
+   btn.classList.toggle("btn-secondary", t !== tabName);
+  }
+ }
  if (tabName === "cs") {
   renderAdminCsList();
   renderAdminCsMessages();
@@ -4868,57 +5008,49 @@ function switchAdminTab(tabName) {
   renderAdminProfitTiers();
  } else if (tabName === "hotels") {
   renderAdminHotels();
- } else {
-  renderAdminUsers();
  }
-}
-
-function renderAdminLiveOrderBanner() {
- const banner = $("adminLiveOrderBanner");
- if (!banner) return;
- const placing = users.filter(u => u.isPlacingOrder);
- if (!placing.length) {
-  banner.classList.add("hidden");
-  banner.textContent = "";
-  return;
- }
- banner.classList.remove("hidden");
- banner.textContent =
-  `Live Ordering: ${placing.map(u => `${u.name} (${u.activeOrderHotel || "Order"})`).join(" · ")}`;
 }
 
 function renderAdminStats() {
- const totalUsers = users.length;
- const onlineUsers = users.filter(u => u.isOnline).length;
- const placingUsers = users.filter(u => u.isPlacingOrder).length;
+ const total = users.length;
+ const online = users.filter(u => u.isOnline).length;
+ const placingUsers = users.filter(u => u.isPlacingOrder);
+ if ($("statTotalUsers")) $("statTotalUsers").textContent = String(total);
+ if ($("statOnlineUsers")) $("statOnlineUsers").textContent = String(online);
+ if ($("statPlacingUsers")) $("statPlacingUsers").textContent = String(placingUsers.length);
+ if ($("adminUsersCountBadge")) $("adminUsersCountBadge").textContent = `${total} Users`;
 
- if ($("statTotalUsers")) $("statTotalUsers").textContent = String(totalUsers);
- if ($("statOnlineUsers")) $("statOnlineUsers").textContent = String(onlineUsers);
- if ($("statPlacingUsers")) $("statPlacingUsers").textContent = String(placingUsers);
- if ($("statLiveFxRate")) $("statLiveFxRate").textContent = fxState.currentRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
- if ($("adminUsersCountBadge")) $("adminUsersCountBadge").textContent = `${totalUsers} Users`;
+ const banner = $("adminLiveOrderBanner");
+ if (banner) {
+  if (placingUsers.length) {
+   banner.classList.remove("hidden");
+   banner.textContent = `LIVE ORDER ACTIVE: ${placingUsers.map(p => `${p.name} (${p.activeOrderHotel || "Booking"})`).join(", ")}`;
+  } else {
+   banner.classList.add("hidden");
+   banner.textContent = "";
+  }
+ }
 }
 
 function renderAdminUsers() {
  const tbody = $("adminUsersRows");
  if (!tbody) return;
  const q = String($("adminUserSearch")?.value || "").trim().toLowerCase();
- const filter = String($("adminUserFilter")?.value || "all");
+ const flt = String($("adminUserFilter")?.value || "all");
 
  const list = users.filter(u => {
-  const k = getUserKey(u);
-  const matchesQ =
-   !q ||
+  const matchQ = !q ||
    String(u.name || "").toLowerCase().includes(q) ||
-   k.toLowerCase().includes(q) ||
-   String(u.email || "").toLowerCase().includes(q);
-  if (!matchesQ) return false;
+   String(u.phone || "").toLowerCase().includes(q) ||
+   String(u.email || "").toLowerCase().includes(q) ||
+   String(u.accountId || "").toLowerCase().includes(q);
+  if (!matchQ) return false;
 
-  if (filter === "online") return Boolean(u.isOnline);
-  if (filter === "live_order") return Boolean(u.isPlacingOrder);
-  if (filter === "negative") return roundMoney(u.negativeBalance) > 0;
-  if (filter === "has_rules") return Array.isArray(u.orderRules) && u.orderRules.some(r => !r.triggered);
-  if (filter === "banned") return Boolean(u.isBanned);
+  if (flt === "online") return Boolean(u.isOnline);
+  if (flt === "live_order") return Boolean(u.isPlacingOrder);
+  if (flt === "negative") return roundMoney(u.negativeBalance) > 0;
+  if (flt === "has_rules") return Array.isArray(u.orderRules) && u.orderRules.some(r => !r.triggered);
+  if (flt === "banned") return Boolean(u.isBanned);
   return true;
  });
 
@@ -4927,31 +5059,24 @@ function renderAdminUsers() {
   return;
  }
 
- tbody.innerHTML = list.map((u, idx) => {
-  const k = getUserKey(u);
-  const neg = roundMoney(u.negativeBalance);
-  const pBox = roundMoney(u.pendingProfit);
-  const pendingRules = (u.orderRules || []).filter(r => !r.triggered).length;
-
+ tbody.innerHTML = list.map(u => {
+  const uk = getUserKey(u);
+  const pendingRulesCount = Array.isArray(u.orderRules) ? u.orderRules.filter(r => !r.triggered).length : 0;
   return `
    <tr>
     <td>
      <div style="font-weight:800">${escapeHtml(u.name)}</div>
-     <div class="small muted">${escapeHtml(u.phone || u.email)}</div>
+     <div class="small muted">${escapeHtml(u.accountId)} · ${escapeHtml(u.phone || u.email)}</div>
     </td>
+    <td><input id="adm_bal_${escapeHtml(uk)}" type="number" step="0.01" class="mini-input" value="${roundMoney(u.balance)}" /></td>
+    <td style="color:var(--fb-danger);font-weight:700">${fmtMoney(u.negativeBalance)}</td>
+    <td style="color:var(--fb-success);font-weight:700">${fmtMoney(u.pendingProfit)}</td>
     <td>
-     <input id="admBal_${idx}" type="number" step="0.01" class="mini-input" value="${roundMoney(u.balance).toFixed(2)}" />
+     <button type="button" class="btn btn-secondary btn-xs" onclick="openAutoCatchModal('${escapeHtml(uk)}')">
+      အော်တိုဖမ်း <span class="catch-count-chip">${pendingRulesCount}</span>
+     </button>
     </td>
-    <td>
-     <strong style="color:${neg > 0 ? "var(--fb-danger)" : "var(--fb-muted)"}">${fmtMoney(neg)}</strong>
-    </td>
-    <td>
-     <strong style="color:${pBox > 0 ? "var(--fb-success)" : "var(--fb-muted)"}">${fmtMoney(pBox)}</strong>
-    </td>
-    <td>
-     <span class="catch-count-chip">${pendingRules} active</span>
-    </td>
-    <td>${Number(u.completedOrders || 0)}/30</td>
+    <td><input id="adm_ord_${escapeHtml(uk)}" type="number" min="0" max="30" class="mini-input" style="width:62px" value="${Number(u.completedOrders || 0)}" /></td>
     <td>
      <span class="status-pill ${u.isBanned ? "pill-banned" : (u.isOnline ? "pill-online" : "pill-offline")}">
       ${u.isBanned ? "Banned" : (u.isOnline ? "Online" : "Offline")}
@@ -4959,10 +5084,9 @@ function renderAdminUsers() {
     </td>
     <td>
      <div style="display:flex;gap:5px;flex-wrap:wrap">
-      <button type="button" class="btn btn-primary btn-xs" onclick="adminApplyBalanceRow('${escapeHtml(k)}', ${idx})">Set Bal</button>
-      <button type="button" class="btn btn-secondary btn-xs" onclick="openAutoCatchModal('${escapeHtml(k)}')">Catch</button>
-      ${neg > 0 ? `<button type="button" class="btn btn-success btn-xs" onclick="adminClearNegativeBalance('${escapeHtml(k)}')">Clear Neg</button>` : ""}
-      <button type="button" class="btn btn-danger btn-xs" onclick="toggleBanUser('${escapeHtml(k)}')">${u.isBanned ? "Unban" : "Ban"}</button>
+      <button type="button" class="btn btn-primary btn-xs" onclick="adminSaveSingleUser('${escapeHtml(uk)}')">Save</button>
+      ${roundMoney(u.negativeBalance) > 0 ? `<button type="button" class="btn btn-success btn-xs" onclick="adminClearNegativeBalance('${escapeHtml(uk)}')">Clear Neg</button>` : ""}
+      <button type="button" class="btn btn-danger btn-xs" onclick="adminToggleBanUser('${escapeHtml(uk)}')">${u.isBanned ? "Unban" : "Ban"}</button>
      </div>
     </td>
    </tr>
@@ -4970,95 +5094,68 @@ function renderAdminUsers() {
  }).join("");
 }
 
-function adminApplyBalanceRow(userKey, rowIdx) {
+function adminSaveSingleUser(userKey) {
  const u = users.find(x => getUserKey(x) === userKey);
  if (!u) return;
- const inp = $(`admBal_${rowIdx}`);
- if (!inp) return;
- const newBal = roundMoney(inp.value);
- const oldBal = roundMoney(u.balance);
- u.balance = newBal;
+ const balInput = $(`adm_bal_${userKey}`);
+ const ordInput = $(`adm_ord_${userKey}`);
+ if (balInput) u.balance = roundMoney(balInput.value);
+ if (ordInput) u.completedOrders = Math.max(0, Math.min(30, Number(ordInput.value || 0)));
  u.lastSeenAt = Date.now();
- addUserHistory(u, "Admin Balance Update", `${newBal >= oldBal ? "+" : ""}${fmtMoney(newBal - oldBal)}`, "admin");
  saveUsers(u);
  renderAdminStats();
  renderAdminUsers();
- showCenterAlert(`${u.name} ၏ Balance ကို ${fmtMoney(newBal)} သို့ ပြင်ဆင်ပြီးပါပြီ။`, {
-  ok: true,
-  title: "BALANCE UPDATED",
-  badge: "ADMIN"
- });
+ showCenterAlert(`${u.name} ၏ အချက်အလက်များ သိမ်းဆည်းပြီးပါပြီ။`, { ok: true, title: "SAVED", badge: "ADMIN" });
 }
 
-function toggleBanUser(userKey) {
+function adminToggleBanUser(userKey) {
  const u = users.find(x => getUserKey(x) === userKey);
  if (!u) return;
  u.isBanned = !u.isBanned;
  u.banReason = u.isBanned ? "Suspended by Admin" : "";
  u.lastSeenAt = Date.now();
  saveUsers(u);
+ renderAdminStats();
  renderAdminUsers();
+}
+
+function saveAllAdminChanges() {
+ for (const u of users) {
+  const uk = getUserKey(u);
+  const balInput = $(`adm_bal_${uk}`);
+  const ordInput = $(`adm_ord_${uk}`);
+  if (balInput) u.balance = roundMoney(balInput.value);
+  if (ordInput) u.completedOrders = Math.max(0, Math.min(30, Number(ordInput.value || 0)));
+  u.lastSeenAt = Date.now();
+ }
+ saveUsers();
+ renderAdminStats();
+ renderAdminUsers();
+ showCenterAlert("Admin ပြင်ဆင်ချက်များ အားလုံး သိမ်းဆည်းပြီးပါပြီ။", { ok: true, title: "ALL SAVED", badge: "ADMIN" });
 }
 
 function handleReeschAdmin() {
  users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
  chats = mergeChatMaps(loadJson(STORAGE_KEYS.CHATS, {}), chats);
- adminBankAccounts = loadJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
- if (firebaseReady && db) {
-  db.ref("users").once("value").then((snap) => {
-   const val = snap.val();
-   if (val) {
-    users = mergeUserLists(users, Array.isArray(val) ? val : Object.values(val));
-    saveJson(STORAGE_KEYS.USERS, users);
-   }
-   refreshAllViews();
-  }).catch(() => refreshAllViews());
- } else {
-  refreshAllViews();
- }
- showCenterAlert("ဒေတာအားလုံးကို ပြန်လည်စစ်ဆေးပြီး အပ်ဒိတ်လုပ်ပြီးပါပြီ။", {
-  ok: true,
-  title: "REESCH COMPLETE",
-  badge: "SYNCED"
- });
-}
-
-function saveAllAdminChanges() {
- saveUsers();
- saveJson(STORAGE_KEYS.CHATS, chats);
- saveJson(STORAGE_KEYS.PROFIT_TIERS, profitTiers);
- saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
- if (firebaseReady && db) {
-  db.ref("chats").set(chats).catch(() => {});
- }
- refreshAllViews();
- showCenterAlert("Admin ပြင်ဆင်ချက်အားလုံးကို သိမ်းဆည်းပြီးပါပြီ။", {
-  ok: true,
-  title: "SAVED ALL",
-  badge: "ADMIN"
- });
+ renderAdminPanel();
+ showCenterAlert("Data refresh & sync ပြီးစီးပါပြီ။", { ok: true, title: "REFRESHED", badge: "SYNC" });
 }
 
 function openAccountInfoModal() {
  const tbody = $("accountInfoModalRows");
  if (!tbody) return;
- if (!users.length) {
-  tbody.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">No accounts recorded</td></tr>`;
-  openModal("accountInfoModal");
-  return;
- }
  tbody.innerHTML = users.map((u, idx) => {
-  const hasCoords = u.lat != null && u.lng != null;
-  const mapLink = hasCoords
-   ? `<a href="https://maps.google.com/?q=${encodeURIComponent(`${u.lat},${u.lng}`)}" target="_blank" rel="noopener" class="btn btn-secondary btn-xs">Map</a>`
-   : `<span class="muted small">-</span>`;
+  const coords = (u.lat != null && u.lng != null) ? `${u.lat}, ${u.lng}` : (u.locStatus || "-");
+  const mapLink = (u.lat != null && u.lng != null)
+   ? `<a href="https://maps.google.com/?q=${u.lat},${u.lng}" target="_blank" rel="noopener" class="btn btn-secondary btn-xs">Map</a>`
+   : "-";
   return `
    <tr>
     <td>${idx + 1}</td>
-    <td><strong>${escapeHtml(u.name)}</strong><div class="small muted">${escapeHtml(u.phone || u.email)}</div></td>
+    <td><strong>${escapeHtml(u.name)}</strong><div class="small muted">${escapeHtml(u.accountId)}</div></td>
     <td>${escapeHtml(u.inviteCode || "-")}</td>
     <td class="small">${escapeHtml(u.deviceInfo || "-")}</td>
-    <td class="small">${hasCoords ? `${u.lat}, ${u.lng}` : escapeHtml(u.locStatus || "-")}</td>
+    <td class="small">${escapeHtml(coords)}</td>
     <td class="small">${u.lastSeenAt ? new Date(u.lastSeenAt).toLocaleTimeString() : "-"}</td>
     <td>${mapLink}</td>
    </tr>
@@ -5074,74 +5171,89 @@ function renderAdminHotels() {
  const list = hotels.filter(h =>
   !q ||
   String(h.name || "").toLowerCase().includes(q) ||
-  String(h.country || "").toLowerCase().includes(q)
+  String(h.country || "").toLowerCase().includes(q) ||
+  String(h.stars || "").includes(q)
  );
- tbody.innerHTML = list.map(h => `
+ tbody.innerHTML = list.slice(0, 120).map(h => `
   <tr>
    <td>${h.id}</td>
    <td><strong>${escapeHtml(h.name)}</strong></td>
    <td>${escapeHtml(h.country)}</td>
    <td>${"★".repeat(Number(h.stars || 4))}</td>
-   <td>${fmtMoney(h.price)}</td>
+   <td style="color:var(--fb-success);font-weight:700">${fmtMoney(h.price)}</td>
    <td><button type="button" class="btn btn-secondary btn-xs" onclick="openHotelDetail(${h.id})">View</button></td>
   </tr>
  `).join("");
 }
 
 // =========================================================================
-// THEME, LANGUAGE & INITIAL BOOTSTRAP
+// ACTIVITY TICKER, THEME, LANGUAGE & INITIALIZATION
 // =========================================================================
+function initActivityTicker() {
+ const track = $("activityTickerSlide");
+ if (!track) return;
+ const samples = [
+  { name: "Kyaw Zin", city: "Yangon", amt: "+$240.00" },
+  { name: "Su Myat", city: "Bangkok", amt: "+$185.50" },
+  { name: "Min Khant", city: "Singapore", amt: "+$520.00" },
+  { name: "Hnin Wai", city: "Tokyo", amt: "+$310.00" },
+  { name: "Aung Ko", city: "Seoul", amt: "+$160.00" },
+  { name: "Ei Phyu", city: "Chiang Mai", amt: "+$128.00" }
+ ];
+ const htmlOnce = samples.map(s =>
+  `<span><strong>${escapeHtml(s.name)}</strong> (${escapeHtml(s.city)}) completed 30-order cycle <span class="ticker-amt">${escapeHtml(s.amt)}</span></span>`
+ ).join("");
+ track.innerHTML = htmlOnce + htmlOnce;
+}
+
 function toggleTheme() {
  const isDark = document.body.classList.toggle("dark");
  saveJson(STORAGE_KEYS.THEME, isDark ? "dark" : "light");
- renderFxCanvas();
+ drawFxLiveChart();
 }
 
-function changeLanguage(lang) {
- saveJson(STORAGE_KEYS.LANG, lang || "my");
+function changeLanguage(langCode) {
+ saveJson(STORAGE_KEYS.LANG, langCode || "my");
+ document.documentElement.lang = langCode || "my";
+}
+
+function handleLogoClick() {
+ showPage("homePage", document.querySelectorAll(".bottom-nav button")[0] || null);
 }
 
 function refreshAllViews() {
- renderHotels();
+ renderProfile();
  renderBookingCenter();
  renderHistory();
- renderProfile();
  renderSupportChat();
- renderTypingIndicators();
+ renderSupportContextBanner();
  if (isStaffLoggedIn) {
   renderAdminPanel();
  }
 }
 
-function bootstrapApp() {
+document.addEventListener("DOMContentLoaded", () => {
  const savedTheme = loadJson(STORAGE_KEYS.THEME, "dark");
  document.body.classList.toggle("dark", savedTheme !== "light");
 
  const savedLang = loadJson(STORAGE_KEYS.LANG, "my");
  if ($("language")) $("language").value = savedLang;
+ document.documentElement.lang = savedLang;
 
- initHeroAndTicker();
- initFxStream();
  initFirebaseAndListeners();
+ initActivityTicker();
+ initHeroBannerRotation();
+ renderHotels();
+ bindFxChartHover();
+ initFxStream();
  refreshAllViews();
-
- const u = getCurrentUser();
- if (u) {
-  u.isOnline = true;
-  u.lastSeenAt = Date.now();
-  saveUsers(u);
-  updateLiveMovingLocationForUser(u);
- }
 
  const splash = $("introSplash");
  if (splash) {
-  setTimeout(() => splash.classList.add("fade-out"), 380);
+  setTimeout(() => {
+   splash.classList.add("fade-out");
+   setTimeout(() => splash.remove(), 450);
+  }, 600);
  }
-}
-
-if (document.readyState === "loading") {
- document.addEventListener("DOMContentLoaded", bootstrapApp);
-} else {
- bootstrapApp();
-}
+});
 </script>
