@@ -4664,7 +4664,6 @@ function updateFxDisplays() {
   badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
  }
 }
-
 function drawFxChart() {
   const canvas = document.getElementById("fxLiveCanvas");
   if (!canvas) return;
@@ -4686,101 +4685,95 @@ function drawFxChart() {
   const minBand = typeof FX_MIN_RATE === "number" ? FX_MIN_RATE : 4489;
   const maxBand = typeof FX_MAX_RATE === "number" ? FX_MAX_RATE : 4999;
 
-  if (!Array.isArray(state.fxHistory) || state.fxHistory.length === 0) {
-    const baseVal = Number(state.fxCurrentRate) || 4990.50;
-    state.fxHistory = [{ rate: baseVal }];
-  }
-
   const now = performance.now();
   if (!window.__tbFxMotion) {
+    const startVal = Number(state.fxCurrentRate) || 4856.74;
+    const seed = [];
+    const peaks = [4860, 4935, 4885, 4975, 4810, 4915, 4755, 4890, 4695, 4845, startVal];
+    for (let i = 0; i < peaks.length; i++) {
+      seed.push({ rate: peaks[i], ts: Date.now() - (peaks.length - i) * 1600 });
+    }
+    state.fxHistory = seed;
     window.__tbFxMotion = {
-      smoothRates: [],
-      mode: 0,
-      ticksLeft: 6,
-      target: Number(state.fxCurrentRate) || 4990.50,
-      phase: 0,
-      lastTime: now,
+      smoothRates: seed.map((p) => p.rate),
+      lastTickTime: now,
+      tickIntervalMs: 1600,
+      peakGoal: 4960,
+      valleyGoal: 4680,
+      headingUp: true,
+      stepsLeft: 5,
+      microFlip: 1,
       rafId: null
     };
   }
   const m = window.__tbFxMotion;
-  const dt = Math.min(0.05, Math.max(0.001, (now - m.lastTime) / 1000));
-  m.lastTime = now;
 
-  if (--m.ticksLeft <= 0) {
-    m.mode = Math.floor(Math.random() * 5);
-    m.ticksLeft = 5 + Math.floor(Math.random() * 9);
-    const snapHigh = [4999.00, 4990.50, 4989.00, 4980.00, 4955.00, 4910.00];
-    const snapMidLow = [4840.00, 4740.00, 4630.00, 4520.00, 4500.00];
-    if (m.mode === 1) {
-      m.target = snapMidLow[Math.floor(Math.random() * snapMidLow.length)];
-    } else if (m.mode === 2) {
-      m.target = snapHigh[Math.floor(Math.random() * snapHigh.length)];
-    } else {
-      m.target = minBand + 10 + Math.random() * (maxBand - minBand - 12);
+  if (!Array.isArray(state.fxHistory) || state.fxHistory.length === 0) {
+    const v = Number(state.fxCurrentRate) || 4856.74;
+    state.fxHistory = [{ rate: v, ts: Date.now() }];
+  }
+
+  if (now - m.lastTickTime >= m.tickIntervalMs) {
+    m.lastTickTime = now;
+
+    if (--m.stepsLeft <= 0) {
+      m.headingUp = !m.headingUp;
+      m.stepsLeft = 4 + Math.floor(Math.random() * 5); // 4-8 steps per mountain/valley
+      if (m.headingUp) {
+        m.peakGoal = Math.min(maxBand - 1, 4760 + Math.random() * 235);
+      } else {
+        m.valleyGoal = Math.max(minBand + 4, minBand + 12 + Math.random() * 340);
+      }
     }
-  }
 
-  m.phase += dt * 4.2;
-  const latestSrc = Number(state.fxHistory[state.fxHistory.length - 1].rate) || Number(state.fxCurrentRate) || 4990.50;
-  let pull = (m.target - latestSrc) * 0.14;
-  let delta = 0;
+    m.microFlip *= -1;
+    const prevRate = Number(state.fxHistory[state.fxHistory.length - 1].rate) || 4856.74;
+    const goal = m.headingUp ? m.peakGoal : m.valleyGoal;
+    const towardGoal = (goal - prevRate) * 0.34;
+    const mountainWave = (m.headingUp ? 1 : -1) * (10 + Math.random() * 18);
+    const tooth = m.microFlip * (3.5 + Math.random() * 7.5);
 
-  if (m.mode === 0) {
-    delta = (Math.random() - 0.5) * 8 + pull * 0.4;
-  } else if (m.mode === 1) {
-    delta = -Math.abs((Math.random() - 0.3) * 14) + pull * 0.5;
-  } else if (m.mode === 2) {
-    delta = Math.abs((Math.random() - 0.3) * 14) + pull * 0.5;
-  } else if (m.mode === 3) {
-    delta = Math.sin(m.phase) * 12 + (Math.random() - 0.5) * 5;
-  } else {
-    const dir = Math.random() < 0.5 ? -1 : 1;
-    delta = dir * (6 + Math.random() * 14) + pull * 0.35;
-  }
+    let nextRate = prevRate + towardGoal * 0.55 + mountainWave * 0.45 + tooth;
+    if (nextRate > maxBand) nextRate = maxBand - Math.random() * 3.5;
+    if (nextRate < minBand) nextRate = minBand + Math.random() * 5.0;
+    nextRate = Number(nextRate.toFixed(2));
 
-  let nextLiveRate = latestSrc + delta;
-  if (nextLiveRate > maxBand) nextLiveRate = maxBand - Math.random() * 3;
-  if (nextLiveRate < minBand) nextLiveRate = minBand + Math.random() * 4;
-  nextLiveRate = Number(nextLiveRate.toFixed(2));
+    state.fxCurrentRate = nextRate;
+    state.fxHistory.push({ rate: nextRate, ts: Date.now() });
+    if (state.fxHistory.length > 75) state.fxHistory.shift();
 
-  const prevLiveRate = latestSrc;
-  state.fxCurrentRate = nextLiveRate;
-  state.fxHistory.push({ rate: nextLiveRate, ts: Date.now() });
-  if (state.fxHistory.length > 90) state.fxHistory.shift();
+    const curDisp = document.getElementById("fxCurrentRateDisplay");
+    const todayDisp = document.getElementById("todayFxRateValue");
+    const badge = document.getElementById("fxChangeBadge");
+    const fmtRate = `1 USD = ${nextRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+    const isDown = nextRate < prevRate;
+    const baseRef = typeof FX_BASE_RATE === "number" ? FX_BASE_RATE : 4500;
+    const diffPct = ((nextRate - baseRef) / baseRef) * 100;
 
-  const curDisp = document.getElementById("fxCurrentRateDisplay");
-  const todayDisp = document.getElementById("todayFxRateValue");
-  const badge = document.getElementById("fxChangeBadge");
-  const fmtRate = `1 USD = ${nextLiveRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
-  const isDown = nextLiveRate < prevLiveRate;
-  const baseRef = typeof FX_BASE_RATE === "number" ? FX_BASE_RATE : 4500;
-  const diffPct = ((nextLiveRate - baseRef) / baseRef) * 100;
-
-  if (todayDisp) todayDisp.textContent = fmtRate;
-  if (curDisp) {
-    curDisp.textContent = fmtRate;
-    curDisp.className = "fx-current-rate " + (isDown ? "is-down" : "is-up");
-    curDisp.style.color = isDown ? "#ef4444" : "#22c55e";
-  }
-  if (badge) {
-    const sign = diffPct >= 0 ? "+" : "";
-    badge.textContent = `${isDown ? "▼" : "▲"} ${sign}${diffPct.toFixed(2)}%`;
-    badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
+    if (todayDisp) todayDisp.textContent = fmtRate;
+    if (curDisp) {
+      curDisp.textContent = fmtRate;
+      curDisp.className = "fx-current-rate " + (isDown ? "is-down" : "is-up");
+      curDisp.style.color = isDown ? "#ef4444" : "#22c55e";
+    }
+    if (badge) {
+      const sign = diffPct >= 0 ? "+" : "";
+      badge.textContent = `${isDown ? "▼" : "▲"} ${sign}${diffPct.toFixed(2)}%`;
+      badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
+    }
   }
 
   const pts = state.fxHistory;
   while (m.smoothRates.length < pts.length) {
-    m.smoothRates.push(Number(pts[m.smoothRates.length].rate) || nextLiveRate);
+    m.smoothRates.push(Number(pts[m.smoothRates.length].rate) || 4856.74);
   }
   if (m.smoothRates.length > pts.length) {
     m.smoothRates.splice(0, m.smoothRates.length - pts.length);
   }
 
-  const lerp = 1 - Math.exp(-12 * dt);
   for (let i = 0; i < pts.length; i++) {
-    const targetVal = Number(pts[i].rate) || nextLiveRate;
-    m.smoothRates[i] += (targetVal - m.smoothRates[i]) * lerp;
+    const targetVal = Number(pts[i].rate) || 4856.74;
+    m.smoothRates[i] += (targetVal - m.smoothRates[i]) * 0.08;
   }
 
   const rates = m.smoothRates;
