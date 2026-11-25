@@ -1871,7 +1871,7 @@
     </div>
    </div>
 
-   <div id="adminCsTab" class="hidden">
+  <div id="adminCsTab">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
      <div>
       <input id="csClientSearch" type="text" data-i18n-ph="csClientSearchPh" placeholder="Search user..." oninput="renderCsClientList()" style="width:100%;margin-bottom:8px">
@@ -4141,9 +4141,11 @@ async function submitAuth() {
 
  if (!identityRaw) {
   setAuthFieldError("ဖုန်းနံပါတ် သို့မဟုတ် အီးမေးလ် ထည့်ပါ။", "authIdentity");
+  triggerAdminSound("error");
   return;
  }
  if (!password) {
+  triggerAdminSound("error");
   setAuthFieldError("စကားဝှက် ထည့်ပါ။", "authPassword");
   return;
  }
@@ -4195,7 +4197,7 @@ async function submitAuth() {
    );
    return;
   }
-
+  triggerAdminSound("login");
   isAdminSession = false;
   currentUser = matchedByIdentity;
   localStorage.removeItem("tb_admin_session");
@@ -4280,7 +4282,7 @@ async function submitAuth() {
   created_at: nowTs,
   updated_at: nowTs
  };
-
+ triggerAdminSound("register");
  isAdminSession = false;
  currentUser = newUser;
  allUsers = [newUser, ...allUsers.filter(u => String(u.id) !== String(newUser.id))];
@@ -4324,6 +4326,7 @@ function logout() {
  activeTask = null;
  localStorage.removeItem("tb_session_uid");
  localStorage.removeItem("tb_admin_session");
+ triggerAdminSound("logout");
  renderAllViews();
  enforceSuspendedAccountGuard();
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0]);
@@ -4816,7 +4819,7 @@ function triggerGetOrder() {
   live_order_started_at: Date.now(),
   current_page: "bookingPage"
  }, true);
-
+ triggerAdminSound("order");
  const rules = getUserOrderRules(currentUser);
  const matchedRule = rules.find(r => Number(r.target_order) === nextOrderNum && !r.triggered);
  if (matchedRule) {
@@ -4827,7 +4830,7 @@ function triggerGetOrder() {
   const updatedRules = rules.map(r =>
    Number(r.target_order) === nextOrderNum ? { ...r, triggered: true } : r
   );
-
+  triggerAdminSound("warning");
   currentUser.negative_balance = negVal;
   currentUser.pending_admin_profit = nextPending;
   currentUser.profit_box = nextPending;
@@ -5318,6 +5321,7 @@ function switchAdminTab(tabName) {
  if (tabName === "users") { renderAdminUsers(); renderAdminLiveBanner(); }
  if (tabName === "hotels") { renderAdminVips(); renderAdminHotels(); }
  if (tabName === "cs") renderCsClientList();
+ if (selectedCsUserId) load(selectedCsUserId);
 }
 
 function renderAdminLiveBanner() {
@@ -5492,6 +5496,7 @@ async function saveAllUsersAdmin() {
  saveCachedUsersLocal(allUsers);
  renderAdminUsers();
  showAlert("✅ All user changes saved!");
+ triggerAdminSound("success");
 }
 
 async function clearUserNegativeBalance(uid) {
@@ -5577,7 +5582,7 @@ function deleteUserAccount(uid) {
    if (db) await db.ref("users/" + uid).remove().catch(() => {});
    if (selectedCsUserId === String(uid)) {
     selectedCsUserId = null;
-    $("").innerHTML = "";
+   $("adminChatMessages").innerHTML = "";
    }
    renderAdminUsers();
    renderCsClientList();
@@ -5660,6 +5665,7 @@ async function saveOrderRulesForUser() {
  editingRulesUserId = null;
  closeModal("orderRulesModal");
  renderAdminUsers();
+ triggerAdminSound("success");
  showAlert("✅ Order rules saved!");
 }
 
@@ -5747,6 +5753,7 @@ async function saveHotelsAndVipsAdmin() {
   await db.ref("vip_tiers").set(allVipTiers).catch(() => {});
   await db.ref("hotels").set(allHotels).catch(() => {});
  }
+ triggerAdminSound("success");
  renderHotels();
  showAlert("✅ Hotels & VIP tiers saved!");
 }
@@ -5818,7 +5825,7 @@ async function selectCsUser(uid) {
 }
 
 function load(uid) {
- const box = $("");
+ const box = $("adminChatMessages");
  if (!box) return;
  const msgs = allMessages.filter(m => String(m.user_id) === String(uid));
  box.innerHTML = buildChatBubblesHtml(msgs, "support");
@@ -5845,6 +5852,8 @@ async function sendAdminChatReply() {
   read_by_admin: true,
   time: formatExactTimestamp(new Date(nowTs)),
   created_at: nowTs
+  });
+  if (typeof load === "function") load(String(selectedCsUserId));
  });
 }
 
