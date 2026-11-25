@@ -8,7 +8,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
-<body>
+<body class="dark">
 
 <div id="introSplash" class="intro-splash">
  <div id="introStageBox" class="intro-stage-box">
@@ -160,18 +160,18 @@
      <svg class="mono-ico mono-ico-lg" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
     </div>
     <div>
-     <div style="font-weight:700;font-size:15px;color:#e6edf3" data-i18n="csHeader">Trip Booking Customer Service</div>
-     <div style="font-size:12px;color:#3fb950" data-i18n="csActiveBadge">Online</div>
+     <div style="font-weight:700;font-size:15px" data-i18n="csHeader">Trip Booking Customer Service</div>
+     <div style="font-size:12px;color:var(--fb-success)" data-i18n="csActiveBadge">Online</div>
     </div>
    </div>
    <div id="supportMessages" class="support-messages"></div>
    <div class="support-composer">
     <input type="file" id="supportPhotoInput" accept="image/*" class="hidden" onchange="handleChatPhotoUpload(event, 'user')">
-    <button type="button" class="icon-btn" onclick="document.getElementById('supportPhotoInput').click()" title="Send Photo" style="background:#21262d;border-color:#30363d;color:#e6edf3">
+    <button type="button" class="icon-btn" onclick="document.getElementById('supportPhotoInput').click()" title="Send Photo">
      <svg class="mono-ico" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
     </button>
-    <input id="supportInput" type="text" placeholder="Press Enter to send and Shift + Enter for a new line" onkeydown="handleComposerKeydown(event, 'user')" onfocus="handleSupportInputFocus()" style="background:#0d1117;color:#e6edf3;border-color:#30363d">
-    <button type="button" class="btn btn-secondary" onclick="sendSupportMessage()" style="background:#21262d;border-color:#30363d;color:#e6edf3" title="Send">
+    <input id="supportInput" type="text" placeholder="Press Enter to send and Shift + Enter for a new line" onkeydown="handleComposerKeydown(event, 'user')" onfocus="handleSupportInputFocus()">
+    <button type="button" class="btn btn-secondary" onclick="sendSupportMessage()" title="Send">
      <svg class="mono-ico" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
     </button>
    </div>
@@ -206,6 +206,7 @@
    <div id="lastCompletedOrderBox" class="last-order-box hidden"></div>
   </div>
  </section>
+
  <section id="historyPage" class="page">
   <div class="panel">
    <h2 data-i18n="histTitle">Booking &amp; Transaction History</h2>
@@ -680,63 +681,49 @@
 </html>
 <style>
 :root {
+ --fb-bg: #0d1117;
+ --fb-card: #161b22;
+ --fb-elevated: #21262d;
+ --fb-text: #e6edf3;
+ --fb-muted: #8b949e;
+ --fb-border: #30363d;
+ --fb-primary: #2f81f7;
+ --fb-primary-hover: #388bfd;
+ --fb-success: #3fb950;
+ --fb-danger: #f85149;
+ --fb-gold: #d29922;
+ --fb-shadow: 0 8px 24px rgba(1, 4, 9, 0.55);
+ --fb-soft: rgba(47, 129, 247, 0.14);
+}
+
+body:not(.dark) {
  --fb-bg: #f0f2f5;
  --fb-card: #ffffff;
+ --fb-elevated: #f6f8fa;
  --fb-text: #1c1e21;
  --fb-muted: #65676b;
  --fb-border: #dadde1;
  --fb-primary: #1877f2;
  --fb-primary-hover: #166fe5;
- --fb-success: #42b72a;
- --fb-danger: #e41e3f;
- --fb-gold: #f59e0b;
+ --fb-success: #2da44e;
+ --fb-danger: #cf222e;
+ --fb-gold: #bf8700;
  --fb-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
- --fb-soft: #e7f3ff;
+ --fb-soft: rgba(24, 119, 242, 0.12);
 }
 
-body.dark {
- --fb-bg: #18191a;
- --fb-card: #242526;
- --fb-text: #e4e6eb;
- --fb-muted: #b0b3b8;
- --fb-border: #3a3b3c;
- --fb-primary: #2d88ff;
- --fb-primary-hover: #3b93ff;
- --fb-success: #45bd62;
- --fb-danger: #f02849;
- --fb-gold: #fbbf24;
- --fb-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
- --fb-soft: rgba(45, 136, 255, 0.16);
+body.dark,
+body {
+ background: var(--fb-bg) !important;
+ color: var(--fb-text) !important;
+ padding-bottom: 84px;
+ transition: background 0.2s, color 0.2s;
 }
 
-/* Strict Light & Dark Theme Sync Across Entire Platform (No Extra Labels) */
-body:not(.dark) {
- background: #f0f2f5 !important;
- color: #1c1e21 !important;
-}
-body:not(.dark) .panel,
-body:not(.dark) .card,
-body:not(.dark) .modal-card,
-body:not(.dark) .support-chat-card,
-body:not(.dark) .support-messages,
-body:not(.dark) .support-composer,
-body:not(.dark) .cs-chat-pane,
-body:not(.dark) .cs-client-list,
-body:not(.dark) .stat,
-body:not(.dark) .guide-card,
-body:not(.dark) .fx-hero-card,
-body:not(.dark) .fx-chart-card {
- background: #ffffff !important;
- color: #1c1e21 !important;
- border-color: #dadde1 !important;
-}
-body.dark {
- background: #0d1117 !important;
- color: #e6edf3 !important;
-}
 body.dark .panel,
 body.dark .card,
 body.dark .modal-card,
+body.dark .center-rounded-card,
 body.dark .support-chat-card,
 body.dark .support-messages,
 body.dark .support-composer,
@@ -745,10 +732,32 @@ body.dark .cs-client-list,
 body.dark .stat,
 body.dark .guide-card,
 body.dark .fx-hero-card,
-body.dark .fx-chart-card {
- background: #161b22 !important;
- color: #e6edf3 !important;
- border-color: #30363d !important;
+body.dark .fx-chart-card,
+body.dark .topbar,
+body.dark .bottom-nav,
+body.dark .activity-ticker-wrap {
+ background: var(--fb-card) !important;
+ color: var(--fb-text) !important;
+ border-color: var(--fb-border) !important;
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea,
+body.dark .search-input,
+body.dark .filter-select,
+body.dark .lang-select,
+body.dark td input.mini-input {
+ background: var(--fb-bg) !important;
+ color: var(--fb-text) !important;
+ border-color: var(--fb-border) !important;
+}
+
+body.dark .btn-secondary,
+body.dark .icon-btn {
+ background: var(--fb-elevated) !important;
+ color: var(--fb-text) !important;
+ border-color: var(--fb-border) !important;
 }
 
 * {
@@ -756,13 +765,6 @@ body.dark .fx-chart-card {
  margin: 0;
  padding: 0;
  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-body {
- background: var(--fb-bg);
- color: var(--fb-text);
- padding-bottom: 84px;
- transition: background 0.2s, color 0.2s;
 }
 
 .mono-ico {
@@ -785,7 +787,7 @@ body {
 .intro-splash {
  position: fixed;
  inset: 0;
- background: linear-gradient(135deg, #090d16 0%, #111827 55%, #0c192e 100%);
+ background: linear-gradient(135deg, #090d16 0%, #161b22 55%, #0d1117 100%);
  display: flex;
  align-items: center;
  justify-content: center;
@@ -799,7 +801,7 @@ body {
 }
 .intro-stage-box {
  text-align: center;
- color: #fff;
+ color: #e6edf3;
  padding: 28px 34px;
 }
 .intro-brand-mark {
@@ -807,11 +809,11 @@ body {
  height: 72px;
  margin: 0 auto 14px;
  border-radius: 20px;
- background: linear-gradient(135deg, #2d88ff, #166fe5);
+ background: linear-gradient(135deg, #2f81f7, #1f6feb);
  display: flex;
  align-items: center;
  justify-content: center;
- box-shadow: 0 12px 32px rgba(45, 136, 255, 0.45);
+ box-shadow: 0 12px 32px rgba(47, 129, 247, 0.4);
 }
 .intro-brand-mark svg {
  width: 38px;
@@ -825,7 +827,7 @@ body {
 }
 .intro-sub-txt {
  font-size: 13px;
- color: #94a3b8;
+ color: #8b949e;
  margin-top: 4px;
 }
 
@@ -886,7 +888,7 @@ body {
  height: 36px;
  border-radius: 50%;
  border: 1px solid var(--fb-border);
- background: var(--fb-bg);
+ background: var(--fb-elevated);
  color: var(--fb-text);
  cursor: pointer;
  display: flex;
@@ -900,7 +902,7 @@ body {
 }
 
 .suspended-banner {
- background: #dc2626;
+ background: #da3633;
  color: #fff;
  padding: 9px 16px;
  font-size: 13px;
@@ -962,8 +964,8 @@ body {
  color: var(--fb-success);
  font-weight: 800;
 }
-</style>
-<style>
+
+/* Layout & Buttons */
 .container {
  max-width: 1180px;
  margin: 0 auto;
@@ -1001,7 +1003,7 @@ body {
  background: var(--fb-primary-hover);
 }
 .btn-secondary {
- background: var(--fb-bg);
+ background: var(--fb-elevated);
  color: var(--fb-text);
  border: 1px solid var(--fb-border);
 }
@@ -1009,15 +1011,15 @@ body {
  background: var(--fb-soft);
 }
 .btn-success {
- background: var(--fb-success);
+ background: #238636;
  color: #fff;
 }
 .btn-danger {
- background: var(--fb-danger);
+ background: #da3633;
  color: #fff;
 }
 .btn-gold {
- background: linear-gradient(135deg, #f59e0b, #d97706);
+ background: linear-gradient(135deg, #d29922, #b07d14);
  color: #fff;
 }
 .btn-sm {
@@ -1042,6 +1044,7 @@ body {
  margin-bottom: 16px;
 }
 
+/* Hero & FX Chart */
 .hero {
  position: relative;
  border-radius: 14px;
@@ -1052,7 +1055,7 @@ body {
  min-height: 215px;
  display: flex;
  align-items: center;
- background-color: #164e9e;
+ background-color: #161b22;
  background-size: cover;
  background-position: center;
  transition: background-image 0.45s ease;
@@ -1061,7 +1064,7 @@ body {
  content: "";
  position: absolute;
  inset: 0;
- background: linear-gradient(95deg, rgba(10, 18, 32, 0.82) 0%, rgba(10, 18, 32, 0.56) 55%, rgba(10, 18, 32, 0.34) 100%);
+ background: linear-gradient(95deg, rgba(13, 17, 23, 0.86) 0%, rgba(13, 17, 23, 0.62) 55%, rgba(13, 17, 23, 0.36) 100%);
  z-index: 0;
 }
 .hero-content {
@@ -1086,15 +1089,15 @@ body {
  margin-top: 10px;
  padding: 5px 11px;
  border-radius: 999px;
- background: rgba(15, 23, 42, 0.65);
- border: 1px solid rgba(255, 255, 255, 0.24);
+ background: rgba(22, 27, 34, 0.78);
+ border: 1px solid rgba(240, 246, 252, 0.16);
  font-size: 12px;
  font-weight: 700;
- color: #fde68a;
+ color: #e3b341;
 }
 
 .fx-hero-card {
- background: linear-gradient(135deg, var(--fb-card) 0%, var(--fb-soft) 100%);
+ background: var(--fb-card);
  border: 1px solid var(--fb-border);
  border-radius: 14px;
  padding: 16px 20px;
@@ -1203,6 +1206,7 @@ body {
  color: var(--fb-muted);
 }
 
+/* Guide & Hotels */
 .guide-grid {
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1254,7 +1258,7 @@ body {
 }
 .search-input, .filter-select {
  border: 1px solid var(--fb-border);
- background: var(--fb-card);
+ background: var(--fb-bg);
  color: var(--fb-text);
  border-radius: 8px;
  padding: 8px 12px;
@@ -1281,13 +1285,13 @@ body {
 .card.clickable-hotel:hover {
  transform: translateY(-2px);
  border-color: var(--fb-primary);
- box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+ box-shadow: 0 8px 20px rgba(1, 4, 9, 0.45);
 }
 .card img {
  width: 100%;
  height: 165px;
  object-fit: cover;
- background: #334155;
+ background: var(--fb-elevated);
  display: block;
 }
 .card-body {
@@ -1338,7 +1342,7 @@ body {
  margin-top: 6px;
 }
 
-/* Customer Service Full-Fit on Both Mobile & Desktop (No Empty Gaps) */
+/* Customer Service Full-Fit & Realistic Chat Bubbles */
 #supportPage.active {
  display: flex;
  flex-direction: column;
@@ -1350,9 +1354,9 @@ body {
  flex-direction: column;
  width: 100%;
  min-height: calc(100vh - 154px);
- background: #0d1117;
- color: #e6edf3;
- border: 1px solid #30363d;
+ background: var(--fb-bg);
+ color: var(--fb-text);
+ border: 1px solid var(--fb-border);
  border-radius: 14px;
  overflow: hidden;
  box-shadow: var(--fb-shadow);
@@ -1362,14 +1366,14 @@ body {
  align-items: center;
  gap: 12px;
  padding: 14px 16px;
- background: #161b22;
- border-bottom: 1px solid #30363d;
+ background: var(--fb-card);
+ border-bottom: 1px solid var(--fb-border);
 }
 .support-agent-avatar {
  width: 42px;
  height: 42px;
  border-radius: 50%;
- background: #1f6feb;
+ background: var(--fb-primary);
  color: #fff;
  display: flex;
  align-items: center;
@@ -1385,14 +1389,14 @@ body {
  display: flex;
  flex-direction: column;
  gap: 10px;
- background: #0d1117;
+ background: var(--fb-bg);
 }
 .support-composer {
  display: flex;
  gap: 8px;
  padding: 12px;
- background: #161b22;
- border-top: 1px solid #30363d;
+ background: var(--fb-card);
+ border-top: 1px solid var(--fb-border);
  align-items: center;
 }
 .support-composer input[type="text"],
@@ -1409,16 +1413,20 @@ body {
  line-height: 1.45;
  word-wrap: break-word;
 }
-.chat-msg.user {
+.chat-msg.user,
+.chat-msg.user.user-rose-bubble {
  align-self: flex-end;
- background: var(--fb-primary);
- color: #fff;
- border-bottom-right-radius: 4px;
+ background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+ color: #ffffff !important;
+ border-radius: 18px !important;
+ padding: 11px 16px !important;
+ max-width: 72%;
+ box-shadow: 0 6px 18px rgba(225, 29, 72, 0.28);
 }
 .chat-msg.admin, .chat-msg.agent {
  align-self: flex-start;
- background: #21262d;
- color: #e6edf3;
+ background: var(--fb-elevated);
+ color: var(--fb-text);
  border-bottom-left-radius: 4px;
 }
 .chat-msg img.chat-photo {
@@ -1431,17 +1439,25 @@ body {
 }
 .chat-time {
  font-size: 11px;
- opacity: 0.72;
+ opacity: 0.82;
  margin-top: 4px;
+}
+.chat-msg.user .chat-time,
+.chat-msg.user.user-rose-bubble .chat-time {
+ text-align: right;
+ color: #94a3b8;
+ opacity: 1;
+ margin-top: 5px;
 }
 .chat-empty-state {
  margin: auto;
  text-align: center;
- color: #8b949e;
+ color: var(--fb-muted);
  font-size: 14px;
  padding: 24px;
 }
 
+/* Booking, History, Profile & Admin */
 .order-circle {
  width: 138px;
  height: 138px;
@@ -1473,8 +1489,8 @@ body {
  max-width: 520px;
  padding: 10px 14px;
  border-radius: 10px;
- background: rgba(245, 158, 11, 0.14);
- border: 1px solid rgba(245, 158, 11, 0.45);
+ background: rgba(210, 153, 34, 0.16);
+ border: 1px solid rgba(210, 153, 34, 0.45);
  color: var(--fb-text);
  font-size: 13px;
  font-weight: 700;
@@ -1586,28 +1602,28 @@ td input.mini-input {
  font-weight: 700;
 }
 .pill-online {
- background: rgba(66, 183, 42, 0.15);
+ background: rgba(63, 185, 80, 0.16);
  color: var(--fb-success);
 }
 .pill-offline {
- background: rgba(101, 103, 107, 0.18);
+ background: rgba(139, 148, 158, 0.18);
  color: var(--fb-muted);
 }
 .pill-ordering {
- background: rgba(245, 158, 11, 0.2);
- color: #d97706;
+ background: rgba(210, 153, 34, 0.2);
+ color: var(--fb-gold);
 }
 .pill-banned {
- background: rgba(228, 30, 63, 0.16);
+ background: rgba(248, 81, 73, 0.18);
  color: var(--fb-danger);
 }
 .pill-pending {
- background: rgba(24, 119, 242, 0.15);
+ background: rgba(47, 129, 247, 0.16);
  color: var(--fb-primary);
 }
 .pill-triggered {
- background: rgba(16, 185, 129, 0.18);
- color: #059669;
+ background: rgba(63, 185, 80, 0.18);
+ color: var(--fb-success);
 }
 
 .cs-layout {
@@ -1671,7 +1687,7 @@ td input.mini-input {
  display: grid;
  grid-template-columns: repeat(5, 1fr);
  padding: 6px 4px;
- box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+ box-shadow: 0 -2px 10px rgba(1, 4, 9, 0.45);
 }
 .bottom-nav button {
  background: none;
@@ -1692,10 +1708,11 @@ td input.mini-input {
  background: var(--fb-soft);
 }
 
+/* Modals & Alerts */
 .modal-backdrop {
  position: fixed;
  inset: 0;
- background: rgba(0, 0, 0, 0.58);
+ background: rgba(1, 4, 9, 0.72);
  display: flex;
  align-items: center;
  justify-content: center;
@@ -1713,7 +1730,7 @@ td input.mini-input {
  width: 100%;
  max-width: 440px;
  padding: 20px;
- box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+ box-shadow: 0 12px 32px rgba(1, 4, 9, 0.6);
  max-height: 90vh;
  overflow-y: auto;
 }
@@ -1734,11 +1751,10 @@ td input.mini-input {
  cursor: pointer;
 }
 
-/* Custom Center Rounded Alert Box */
 .center-rounded-alert {
  position: fixed;
  inset: 0;
- background: rgba(15, 23, 42, 0.55);
+ background: rgba(1, 4, 9, 0.68);
  backdrop-filter: blur(3px);
  display: flex;
  align-items: center;
@@ -1754,7 +1770,7 @@ td input.mini-input {
  background: var(--fb-card);
  color: var(--fb-text);
  border: 1px solid var(--fb-border);
- box-shadow: 0 20px 50px rgba(0, 0, 0, 0.38);
+ box-shadow: 0 20px 50px rgba(1, 4, 9, 0.65);
  text-align: center;
 }
 .center-rounded-badge {
@@ -1766,12 +1782,12 @@ td input.mini-input {
  margin-bottom: 10px;
 }
 .center-rounded-badge.is-ok {
- background: rgba(34, 197, 94, 0.16);
- color: #16a34a;
+ background: rgba(63, 185, 80, 0.16);
+ color: var(--fb-success);
 }
 .center-rounded-badge.is-err {
- background: rgba(239, 68, 68, 0.16);
- color: #dc2626;
+ background: rgba(248, 81, 73, 0.16);
+ color: var(--fb-danger);
 }
 .center-rounded-title {
  font-size: 17px;
@@ -1803,7 +1819,7 @@ td input.mini-input {
  border-left: 5px solid var(--fb-primary);
  border-radius: 12px;
  padding: 12px 14px;
- box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+ box-shadow: 0 10px 28px rgba(1, 4, 9, 0.55);
  cursor: pointer;
 }
 .cs-toast-top {
@@ -1845,7 +1861,7 @@ td input.mini-input {
  align-items: center;
  justify-content: center;
  padding: 20px;
- background: rgba(15, 23, 42, 0.45);
+ background: rgba(1, 4, 9, 0.65);
  backdrop-filter: blur(3px);
 }
 .reg-toast-check {
@@ -1859,7 +1875,7 @@ td input.mini-input {
  background: var(--fb-card);
  color: var(--fb-text);
  border: 1px solid var(--fb-border);
- box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+ box-shadow: 0 18px 44px rgba(1, 4, 9, 0.6);
  text-align: center;
 }
 .reg-toast-title {
@@ -1998,6 +2014,14 @@ function fmtMoney(n) {
 
 function roundMoney(n) {
  return Math.round((Number(n) || 0) * 100) / 100;
+}
+
+function formatBubbleTimestamp(dateObj = new Date()) {
+ const mm = String(dateObj.getMonth() + 1).padStart(2, "0");
+ const dd = String(dateObj.getDate()).padStart(2, "0");
+ const hh = String(dateObj.getHours()).padStart(2, "0");
+ const min = String(dateObj.getMinutes()).padStart(2, "0");
+ return `${mm}/${dd}, ${hh}:${min}`;
 }
 
 // =========================================================================
@@ -2192,8 +2216,10 @@ function handleReeschAdmin() {
   });
  }, 300);
 }
-</script>
-<script>
+
+// =========================================================================
+// CORE STATE, AUTH & REGISTRATION
+// =========================================================================
 const BASE_HOTELS = [
  { id: 1, name: "Grand Lotus Yangon", country: "Myanmar · Yangon", stars: 5, price: 145, description: "Central Yangon business and leisure stay with pool and airport shuttle.", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop" },
  { id: 2, name: "Royal Bagan Heritage Resort", country: "Myanmar · Bagan", stars: 5, price: 180, description: "Sunset terrace overlooking ancient plains with serene garden suites.", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&auto=format&fit=crop" },
@@ -2336,11 +2362,11 @@ function switchAuthMode(mode) {
 }
 
 function registerUser() {
- const name = $("regName").value.trim();
- const phone = $("regPhone").value.trim();
- const email = $("regEmail").value.trim();
- const invitedBy = $("regInvite").value.trim();
- const password = $("regPassword").value;
+ const name = ($("regName")?.value || "").trim();
+ const phone = ($("regPhone")?.value || "").trim();
+ const email = ($("regEmail")?.value || "").trim();
+ const invitedBy = ($("regInvite")?.value || "").trim();
+ const password = $("regPassword")?.value || "";
  const errEl = $("regErr");
 
  if (!name || !phone || !password) {
@@ -2393,15 +2419,31 @@ function registerUser() {
 }
 
 function loginUser() {
- const phone = $("loginPhone").value.trim();
- const password = $("loginPassword").value;
+ const phone = ($("loginPhone")?.value || "").trim();
+ const password = $("loginPassword")?.value || "";
  const errEl = $("loginErr");
+
+ if (phone === ADMIN_CREDS.phone && ADMIN_CREDS.passwords.includes(password)) {
+  if (errEl) errEl.textContent = "";
+  isStaffLoggedIn = true;
+  saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
+  closeModal("authModal");
+  showPage("adminPage");
+  renderAdminPanel();
+  showCenterAlert("Admin အကောင့်ဖြင့် ဝင်ရောက်ခြင်း အောင်မြင်ပါသည်။", {
+   ok: true,
+   title: "ADMIN LOGIN SUCCESS",
+   badge: "ADMIN"
+  });
+  return;
+ }
 
  const u = users.find(x => x.phone === phone);
  if (!u || u.password !== password) {
   errEl.textContent = "Invalid phone number or password.";
   return;
  }
+ if (errEl) errEl.textContent = "";
  u.isOnline = true;
  u.deviceInfo = formatDeviceAndPlatform();
  u.lastSeenAt = Date.now();
@@ -2606,7 +2648,7 @@ function openNegativeLockModal(lockInfo) {
  activeNegLockInfo = lockInfo;
  $("negLockDetails").innerHTML = `
   <div><strong>Order #${lockInfo.orderNum}</strong> တွင် ဖမ်းထားသော အနှုတ်ဒေါ်လာ <strong>$${lockInfo.negativeAmount.toFixed(2)}</strong> ရှိနေပါသည်။</div>
-  <div style="margin-top:6px">လက်ရှိ လက်ကျန်ငွေ: <strong>$${lockInfo.balance.toFixed(2)}</strong> · ရှင်းလင်းရန် လိုအပ်ငွေ: <strong style="color:#dc2626">$${lockInfo.shortfall.toFixed(2)}</strong></div>
+  <div style="margin-top:6px">လက်ရှိ လက်ကျန်ငွေ: <strong>$${lockInfo.balance.toFixed(2)}</strong> · ရှင်းလင်းရန် လိုအပ်ငွေ: <strong style="color:#f85149">$${lockInfo.shortfall.toFixed(2)}</strong></div>
   <div class="small muted" style="margin-top:8px">အနှုတ်ဒေါ်လာ မရှင်းရသေးသရွေ့ ဘွတ်ကင်ဆက်တင်၍ မရပါ။</div>
  `;
  openModal("negativeLockModal");
@@ -2621,8 +2663,7 @@ function handleNegLockContinue() {
  const serviceBtn = document.querySelectorAll(".bottom-nav button")[1];
  showPage("supportPage", serviceBtn);
 }
-</script>
-<script>
+
 // =========================================================================
 // BOOKING TASKS, DEPOSIT, WITHDRAW & BANK BINDING
 // =========================================================================
@@ -2734,7 +2775,7 @@ function openCenterOrderForHotel(hotelId) {
   <div><strong>Hotel:</strong> ${escapeHtml(h.name)} (${escapeHtml(h.country)})</div>
   <div style="margin-top:4px"><strong>Booking Price:</strong> $${Number(h.price || 0).toFixed(2)}</div>
   <div style="margin-top:4px"><strong>Commission:</strong> <span style="color:var(--fb-success);font-weight:800">+$${comm.toFixed(2)}</span></div>
-  ${pendingOrderHotel.caughtNeg > 0 ? `<div style="margin-top:6px;color:#dc2626;font-weight:700">Auto-Catch Negative Set: $${pendingOrderHotel.caughtNeg.toFixed(2)}</div>` : ""}
+  ${pendingOrderHotel.caughtNeg > 0 ? `<div style="margin-top:6px;color:#f85149;font-weight:700">Auto-Catch Negative Set: $${pendingOrderHotel.caughtNeg.toFixed(2)}</div>` : ""}
  `;
  $("centerOrderErr").textContent = "";
  openModal("centerOrderModal");
@@ -2931,7 +2972,7 @@ function renderSupportChat() {
   return;
  }
  box.innerHTML = list.map(m => {
-  const cls = m.sender === "admin" ? "admin" : "user";
+  const cls = m.sender === "admin" ? "admin" : "user user-rose-bubble";
   const imgHtml = m.photo ? `<img class="chat-photo" src="${m.photo}" alt="attachment" onclick="window.open(this.src,'_blank')">` : "";
   return `
    <div class="chat-msg ${cls}">
@@ -2955,7 +2996,7 @@ function sendSupportMessage() {
   sender: "user",
   senderName: u.name || u.phone,
   text: txt,
-  time: new Date().toLocaleTimeString()
+  time: formatBubbleTimestamp(new Date())
  });
  inp.value = "";
  saveChats();
@@ -2989,13 +3030,13 @@ function handleChatPhotoUpload(ev, role) {
    const u = getCurrentUser();
    if (!u) { openAuth("login"); return; }
    const list = getChatThread(u.phone);
-   list.push({ sender: "user", senderName: u.name || u.phone, text: "", photo: dataUrl, time: new Date().toLocaleTimeString() });
+   list.push({ sender: "user", senderName: u.name || u.phone, text: "", photo: dataUrl, time: formatBubbleTimestamp(new Date()) });
    saveChats();
    renderSupportChat();
   } else {
    if (!activeCsUserPhone) return;
    const list = getChatThread(activeCsUserPhone);
-   list.push({ sender: "admin", senderName: "Customer Service", text: "", photo: dataUrl, time: new Date().toLocaleTimeString() });
+   list.push({ sender: "admin", senderName: "Customer Service", text: "", photo: dataUrl, time: formatBubbleTimestamp(new Date()) });
    saveChats();
    renderAdminCsMessages();
   }
@@ -3254,7 +3295,7 @@ function renderAdminCsMessages() {
  head.textContent = `Chat with ${u?.name || activeCsUserPhone} (${activeCsUserPhone})`;
  const list = getChatThread(activeCsUserPhone);
  box.innerHTML = list.map(m => {
-  const cls = m.sender === "admin" ? "user" : "admin";
+  const cls = m.sender === "admin" ? "user user-rose-bubble" : "admin";
   const imgHtml = m.photo ? `<img class="chat-photo" src="${m.photo}" alt="attachment" onclick="window.open(this.src,'_blank')">` : "";
   return `
    <div class="chat-msg ${cls}">
@@ -3273,7 +3314,7 @@ function sendAdminCsMessage() {
  const txt = (inp?.value || "").trim();
  if (!txt) return;
  const list = getChatThread(activeCsUserPhone);
- list.push({ sender: "admin", senderName: "Customer Service", text: txt, time: new Date().toLocaleTimeString() });
+ list.push({ sender: "admin", senderName: "Customer Service", text: txt, time: formatBubbleTimestamp(new Date()) });
  inp.value = "";
  saveChats();
  renderAdminCsMessages();
@@ -3297,10 +3338,9 @@ function renderAdminHotels() {
   </tr>
  `).join("");
 }
-</script>
-<script>
+
 // =========================================================================
-// PART 4: +499 UNIQUE HOTELS, HOTEL GRID/DETAIL, FX CHART, THEME & STARTUP
+// +499 UNIQUE HOTELS, HOTEL GRID/DETAIL, HERO BANNER & 120FPS FX CHART
 // =========================================================================
 const EXTRA_499_HOTEL_PHOTOS = [
  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700&auto=format&fit=crop",
@@ -3436,9 +3476,6 @@ function build499UniqueHotels(startId = 5001) {
  }
 })();
 
-// =========================================================================
-// HOTELS GRID, HOTEL DETAIL MODAL & HERO BANNER
-// =========================================================================
 function toggleShowAllHotels() {
  showAllHotels = !showAllHotels;
  renderHotels();
@@ -3523,9 +3560,6 @@ function initHeroRotator() {
  setInterval(applySlide, 5000);
 }
 
-// =========================================================================
-// ACTIVITY TICKER & LIVE FX STREAM (4,489 - 4,999 MMK)
-// =========================================================================
 function initActivityTicker() {
  const track = $("activityTickerSlide");
  if (!track) return;
@@ -3545,22 +3579,68 @@ function initFxLiveChart() {
  const baseRate = 4500;
  const minR = 4489;
  const maxR = 4999;
- const points = Array.from({ length: 42 }, (_, i) => baseRate + Math.sin(i * 0.35) * 18);
- let currentRate = 4500;
 
- function draw() {
-  const rect = canvas.parentElement.getBoundingClientRect();
-  const w = Math.max(260, Math.floor(rect.width || 600));
-  const h = Math.max(150, Math.floor(rect.height || 200));
-  if (canvas.width !== w || canvas.height !== h) {
-   canvas.width = w;
-   canvas.height = h;
+ const totalPts = 96;
+ const points = Array.from({ length: totalPts }, (_, i) => baseRate + Math.sin(i * 0.14) * 14);
+ let displayRate = 4500;
+ let targetRate = 4501.71;
+ let lastTargetShift = performance.now();
+ let lastFrameTime = performance.now();
+
+ function pickNextTarget() {
+  const wave = Math.sin(performance.now() * 0.0012) * 28;
+  const jitter = (Math.random() - 0.5) * 42;
+  targetRate = Math.max(minR, Math.min(maxR, Number((baseRate + 65 + wave + jitter).toFixed(2))));
+ }
+
+ function renderFrame(now) {
+  const dt = Math.min(0.05, Math.max(0.001, (now - lastFrameTime) / 1000));
+  lastFrameTime = now;
+
+  if (now - lastTargetShift >= 450) {
+   pickNextTarget();
+   lastTargetShift = now;
   }
 
+  const alpha = 1 - Math.exp(-dt * 7.5);
+  displayRate = displayRate + (targetRate - displayRate) * alpha;
+
+  points[points.length - 1] = displayRate;
+  for (let i = 0; i < points.length - 1; i++) {
+   points[i] = points[i] + (points[i + 1] - points[i]) * Math.min(1, dt * 11);
+  }
+
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(260, Math.floor(rect.width || 600));
+  const h = Math.max(150, Math.floor(rect.height || 200));
+
+  if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
+   canvas.width = Math.floor(w * dpr);
+   canvas.height = Math.floor(h * dpr);
+  }
+
+  ctx.save();
+  ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, w, h);
-  const lo = Math.min(...points) - 8;
-  const hi = Math.max(...points) + 8;
+
+  ctx.strokeStyle = document.body.classList.contains("dark") ? "rgba(139, 148, 158, 0.14)" : "rgba(101, 103, 107, 0.15)";
+  ctx.lineWidth = 1;
+  for (let g = 1; g <= 3; g++) {
+   const gy = (h / 4) * g;
+   ctx.beginPath();
+   ctx.moveTo(10, gy);
+   ctx.lineTo(w - 10, gy);
+   ctx.stroke();
+  }
+
+  const lo = Math.min(...points) - 6;
+  const hi = Math.max(...points) + 6;
   const span = Math.max(1, hi - lo);
+
+  const grad = ctx.createLinearGradient(0, 10, 0, h - 10);
+  grad.addColorStop(0, "rgba(47, 129, 247, 0.28)");
+  grad.addColorStop(1, "rgba(47, 129, 247, 0.0)");
 
   ctx.beginPath();
   points.forEach((val, idx) => {
@@ -3569,15 +3649,35 @@ function initFxLiveChart() {
    if (idx === 0) ctx.moveTo(x, y);
    else ctx.lineTo(x, y);
   });
-  ctx.strokeStyle = "#2d88ff";
-  ctx.lineWidth = 2.5;
+
+  ctx.strokeStyle = "#2f81f7";
+  ctx.lineWidth = 2.4;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
   ctx.stroke();
 
-  const diffPct = (((currentRate - baseRate) / baseRate) * 100).toFixed(2);
-  const isUp = currentRate >= baseRate;
-  if ($("todayFxRateValue")) $("todayFxRateValue").textContent = `1 USD = ${currentRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+  ctx.lineTo(w - 12, h - 18);
+  ctx.lineTo(12, h - 18);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  const lastX = w - 12;
+  const lastY = h - 18 - ((displayRate - lo) / span) * (h - 36);
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 4.2, 0, Math.PI * 2);
+  ctx.fillStyle = "#58a6ff";
+  ctx.fill();
+
+  ctx.restore();
+
+  const diffPct = (((displayRate - baseRate) / baseRate) * 100).toFixed(2);
+  const isUp = displayRate >= baseRate;
+  const formatted = displayRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  if ($("todayFxRateValue")) $("todayFxRateValue").textContent = `1 USD = ${formatted} MMK`;
   if ($("fxCurrentRateDisplay")) {
-   $("fxCurrentRateDisplay").textContent = `1 USD = ${currentRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+   $("fxCurrentRateDisplay").textContent = `1 USD = ${formatted} MMK`;
    $("fxCurrentRateDisplay").className = "fx-current-rate " + (isUp ? "is-up" : "is-down");
   }
   if ($("fxChangeBadge")) {
@@ -3585,23 +3685,15 @@ function initFxLiveChart() {
    $("fxChangeBadge").className = "status-pill " + (isUp ? "pill-online" : "pill-banned");
   }
   if ($("fxFormulaReadout")) {
-   $("fxFormulaReadout").textContent = `Base: 4,500 → Live: ${currentRate.toFixed(2)} MMK`;
+   $("fxFormulaReadout").textContent = `Base: 4,500 → Live: ${formatted} MMK`;
   }
+
+  requestAnimationFrame(renderFrame);
  }
 
- draw();
- setInterval(() => {
-  const step = (Math.random() - 0.48) * 14;
-  currentRate = Math.max(minR, Math.min(maxR, Number((currentRate + step).toFixed(2))));
-  points.push(currentRate);
-  if (points.length > 42) points.shift();
-  draw();
- }, 1600);
+ requestAnimationFrame(renderFrame);
 }
 
-// =========================================================================
-// HISTORY, PROFILE, THEME, LANGUAGE & BOOT
-// =========================================================================
 function renderHistory() {
  const wrap = $("historyList");
  if (!wrap) return;
