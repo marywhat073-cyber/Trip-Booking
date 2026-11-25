@@ -10,9 +10,7 @@
  <div id="introSplash" class="intro-splash">
   <div class="intro-stage-box">
    <div class="intro-brand-mark">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-     <path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.3l6.8 3.8L12 11.9 5.2 8.1 12 4.3zM5 10.1l6 3.3v6.3l-6-3.3v-6.3zm8 9.6v-6.3l6-3.3v6.3l-6 3.3z" />
-    </svg>
+    <span style="font-size:32px;font-weight:900;color:#fff">⌂</span>
    </div>
    <div class="intro-title-txt">Trip Booking</div>
    <div class="intro-sub-txt">Real-Time Travel &amp; Booking Platform</div>
@@ -22,11 +20,7 @@
  <!-- Topbar -->
  <header class="topbar">
   <div class="brand" onclick="handleLogoClick()" style="cursor:pointer">
-   <span class="logo">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-     <path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.3l6.8 3.8L12 11.9 5.2 8.1 12 4.3zM5 10.1l6 3.3v6.3l-6-3.3v-6.3zm8 9.6v-6.3l6-3.3v6.3l-6 3.3z" />
-    </svg>
-   </span>
+   <span class="logo">⌂</span>
    <span>Trip Booking</span>
   </div>
 
@@ -77,27 +71,27 @@
     <div class="hero-content">
      <h1>Premium Stay &amp; Travel Booking</h1>
      <p>Real-time hotel orders, live currency trend analytics, and instant support.</p>
-     <div id="heroHotelNameLabel" class="hero-hotel-tag">Loading featured stay...</div>
+     <div id="heroHotelNameLabel" class="hero-hotel-tag">Featured stay loading...</div>
     </div>
    </div>
 
    <div class="fx-hero-card">
     <div>
-     <div class="fx-hero-label">Live Exchange Rate</div>
-     <div id="todayFxRateValue" class="fx-hero-rate">1 USD = 4,978.14 MMK</div>
-     <div class="fx-hero-sub">Dynamic multi-pattern trend stream (Spike Up, Drop Down, Zig-Zag)</div>
+     <div class="fx-hero-label">24H Live Exchange Rate</div>
+     <div id="todayFxRateValue" class="fx-hero-rate">1 USD = 4,750.00 MMK</div>
+     <div class="fx-hero-sub">24-hour live tick stream (Band ~4,489 – 4,999 MMK · Green = Rising, Red = Falling)</div>
     </div>
-    <span class="fx-hero-pill">REAL-TIME STREAM</span>
+    <span class="fx-hero-pill">24H LIVE</span>
    </div>
 
    <div class="fx-chart-card">
     <div class="fx-chart-header">
      <div>
       <div class="fx-chart-title">USD ↔ MMK Live Rate Trend</div>
-      <div class="fx-chart-sub">Live tick stream · Green when rising, Red when falling</div>
+      <div class="fx-chart-sub">24H live ticks · Green on rise, Red on drop</div>
      </div>
      <div class="fx-chart-live-readout">
-      <span id="fxCurrentRateDisplay" class="fx-current-rate is-up">1 USD = 4,978.14 MMK</span>
+      <span id="fxCurrentRateDisplay" class="fx-current-rate is-up">1 USD = 4,750.00 MMK</span>
       <span id="fxChangeBadge" class="status-pill pill-online">▲ +0.00%</span>
      </div>
     </div>
@@ -107,24 +101,24 @@
     </div>
 
     <div class="fx-chart-footer">
-     <span id="fxPointDetailText">Pattern: Mixed Stream · Hover/touch to inspect</span>
-     <span id="fxFormulaReadout">Base: 4,500 → Live: 4,978.14 MMK</span>
+     <span id="fxPointDetailText">Live ticks · Hover/touch to inspect</span>
+     <span id="fxFormulaReadout">Base: 4,500 · Band: 4,489–4,999 MMK</span>
     </div>
    </div>
 
    <div class="guide-grid">
     <div class="guide-card">
-     <span class="guide-step">STEP 01</span>
+     <span class="guide-step">01</span>
      <h4>Flexible Account Setup</h4>
-     <p>Register with Phone or Email. Invite code is optional; valid code (e.g. TP2323) grants $18 bonus.</p>
+     <p>Register with Phone or Email. Invite code is optional; valid code (e.g. TPxxxx) grants $18 bonus.</p>
     </div>
     <div class="guide-card">
-     <span class="guide-step">STEP 02</span>
+     <span class="guide-step">02</span>
      <h4>30-Order Booking Cycle</h4>
-     <p>Each order gives varied profit; completing all 30 orders unlocks full tier profit &amp; withdrawal.</p>
+     <p>Each order gives varied profit; completing 30 orders unlocks full tier profit &amp; moves profit box to balance.</p>
     </div>
     <div class="guide-card">
-     <span class="guide-step">STEP 03</span>
+     <span class="guide-step">03</span>
      <h4>Instant Support &amp; Payouts</h4>
      <p>Chat directly with Customer Service with photo and bank card sharing anytime.</p>
     </div>
@@ -148,10 +142,10 @@
   <section id="supportPage" class="page">
    <div class="support-chat-card">
     <div class="support-chat-header">
-     <div class="support-agent-avatar">CS</div>
+     <div class="support-agent-avatar">☏</div>
      <div>
       <div style="font-weight:800;font-size:15px">Customer Service Live</div>
-      <div class="small muted">Online · Direct synchronization with Admin &amp; Support</div>
+      <div id="userSideTypingIndicator" class="small muted">Online · Direct synchronization with Admin &amp; Support</div>
      </div>
     </div>
 
@@ -171,7 +165,7 @@
        placeholder="Type a message... (Enter to send, Shift+Enter for new line)"
        onkeydown="handleComposerKeydown(event, 'user')"
        onfocus="handleSupportInputFocus()"
-       oninput="autoResizeTextarea(this)"
+       oninput="handleComposerTyping('user', this)"
       ></textarea>
       <button type="button" class="btn btn-primary btn-sm" onclick="sendSupportMessage()">➤ Send</button>
      </div>
@@ -191,8 +185,8 @@
      <h2 id="taskProfit">$0.00</h2>
     </div>
     <div class="stat">
-     <div class="small muted">Total Profit</div>
-     <h2 id="taskTotalProfit">$0.00</h2>
+     <div class="small muted">Profit Box (Pending)</div>
+     <h2 id="taskPendingProfit">$0.00</h2>
     </div>
     <div class="stat">
      <div class="small muted">Completed Orders</div>
@@ -202,7 +196,7 @@
 
    <div class="panel" style="text-align:center">
     <h3>Booking Order Center</h3>
-    <p class="small muted" style="margin-top:4px">Complete 30 orders per cycle to reach your tier profit target.</p>
+    <p class="small muted" style="margin-top:4px">Complete 30 orders per cycle to reach your tier profit target &amp; release profit box.</p>
 
     <div id="orderCircle" class="order-circle"><span>0/30</span></div>
     <div id="pendingProfitNoticeBox" class="pending-profit-banner hidden"></div>
@@ -239,7 +233,7 @@
    <div class="panel">
     <div class="profile-head">
      <div class="profile-avatar-wrap">
-      <div id="profileAvatar" class="avatar">TB</div>
+      <div id="profileAvatar" class="avatar">◯</div>
       <img id="profileAvatarImg" class="avatar-img hidden" alt="Profile Photo" />
       <label class="btn btn-secondary btn-xs" style="margin-top:8px;cursor:pointer">
        Upload Photo
@@ -271,16 +265,34 @@
   <section id="adminPage" class="page">
    <div id="adminLoginGate" class="panel" style="max-width:420px;margin:24px auto">
     <h2 style="margin-bottom:10px">Admin Console Login</h2>
-    <div class="field">
-     <label>Admin Phone</label>
-     <input id="adminPhoneInput" type="text" placeholder="Enter admin phone" />
+
+    <div id="adminStep1Box">
+     <div class="field">
+      <label>Admin Phone</label>
+      <input id="adminPhoneInput" type="text" placeholder="09775191427" />
+     </div>
+     <div class="field">
+      <label>Admin Password</label>
+      <input id="adminPassInput" type="password" placeholder="Enter password" />
+     </div>
+     <div id="adminLoginErr" class="error-text"></div>
+     <button type="button" class="btn btn-primary" style="width:100%;margin-top:8px" onclick="verifyAdminStep1()">Continue</button>
     </div>
-    <div class="field">
-     <label>Admin Password</label>
-     <input id="adminPassInput" type="password" placeholder="Enter admin password" />
+
+    <div id="adminStep2Box" class="hidden">
+     <div class="small muted" style="margin-bottom:10px">
+      အဆင့် (၂): ဆက်လက်ဝင်ရောက်ရန် ဂဏန်း ၄ လုံး (PIN) ထည့်ပါ။
+     </div>
+     <div class="field">
+      <label>4-Digit Security Code</label>
+      <input id="adminPinInput" type="password" maxlength="4" placeholder="4-digit PIN" />
+     </div>
+     <div id="adminPinErr" class="error-text"></div>
+     <div style="display:flex;gap:8px;margin-top:8px">
+      <button type="button" class="btn btn-secondary" style="flex:1" onclick="backToAdminStep1()">Back</button>
+      <button type="button" class="btn btn-primary" style="flex:2" onclick="completeAdminLogin()">Login to Admin</button>
+     </div>
     </div>
-    <div id="adminLoginErr" class="error-text"></div>
-    <button type="button" class="btn btn-primary" style="width:100%;margin-top:8px" onclick="loginAdmin()">Login to Admin</button>
    </div>
 
    <div id="adminConsole" class="hidden">
@@ -300,8 +312,20 @@
       <h2 id="statPlacingUsers">0</h2>
      </div>
      <div class="stat">
-      <div class="small muted">Total Balance</div>
-      <h2 id="statTotalBalance">$0.00</h2>
+      <div class="small muted">Live USD Rate</div>
+      <h2 id="statLiveFxRate">4,750.00</h2>
+     </div>
+    </div>
+
+    <!-- Admin Live Rate Sync Bar -->
+    <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+     <div>
+      <strong>Admin Live Dollar Rate Sync</strong>
+      <div class="small muted">Change USD ↔ MMK rate and push immediately to all users &amp; live chart.</div>
+     </div>
+     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <input id="adminFxRateInput" type="number" step="0.01" min="1000" max="20000" class="mini-input" style="width:120px" placeholder="4750.00" />
+      <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()">Update Rate</button>
      </div>
     </div>
 
@@ -310,6 +334,7 @@
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
        <button type="button" id="adminTabUsers" class="btn btn-primary btn-sm" onclick="switchAdminTab('users')">Users &amp; Rules</button>
        <button type="button" id="adminTabCs" class="btn btn-secondary btn-sm" onclick="switchAdminTab('cs')">Customer Service</button>
+       <button type="button" id="adminTabBanks" class="btn btn-secondary btn-sm" onclick="switchAdminTab('banks')">ဘဏ်အကောင့်များ</button>
        <button type="button" id="adminTabTiers" class="btn btn-secondary btn-sm" onclick="switchAdminTab('tiers')">Profit Tiers ($100–$10,000)</button>
        <button type="button" id="adminTabHotels" class="btn btn-secondary btn-sm" onclick="switchAdminTab('hotels')">Hotels</button>
        <span id="adminUsersCountBadge" class="count-badge">0 Users</span>
@@ -367,8 +392,9 @@
        </div>
 
        <div class="cs-chat-pane">
-        <div class="cs-pane-head">
+        <div class="cs-pane-head" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
          <strong id="adminCsActiveHeader">Select a user conversation</strong>
+         <span id="adminSideTypingIndicator" class="small muted"></span>
         </div>
         <div id="adminCsMessages" class="cs-messages"></div>
 
@@ -386,12 +412,61 @@
            rows="1"
            placeholder="Reply as Trip Booking Support... (Enter to send, Shift+Enter for new line)"
            onkeydown="handleComposerKeydown(event, 'admin')"
-           oninput="autoResizeTextarea(this)"
+           oninput="handleComposerTyping('admin', this)"
           ></textarea>
           <button type="button" class="btn btn-primary btn-sm" onclick="sendAdminCsMessage()">➤ Send</button>
          </div>
         </div>
        </div>
+      </div>
+     </div>
+
+     <!-- ADMIN BANK ACCOUNTS TAB (ဘဏ်အကောင့်များ) -->
+     <div id="adminBanksTab" class="hidden">
+      <div class="section-head">
+       <div>
+        <h3>ဘဏ်အကောင့်များ</h3>
+        <div class="small muted">Add bank accounts, link/bind for CS picker, and click အတည်ပြု to lock as confirmed or တည်းဖြတ်မယ် to edit.</div>
+       </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">
+       <div class="field" style="margin:0;min-width:150px">
+        <label>အမျိုးအစား (Bank Type)</label>
+        <input id="admBankTypeInput" type="text" placeholder="e.g. KBZ Pay, Wave Money, AYA Pay" />
+       </div>
+       <div class="field" style="margin:0;min-width:160px">
+        <label>အမည် (Account Name)</label>
+        <input id="admBankHolderInput" type="text" placeholder="Account holder name" />
+       </div>
+       <div class="field" style="margin:0;min-width:160px">
+        <label>ဖုန်းနံပါတ် / Account No.</label>
+        <input id="admBankNumberInput" type="text" placeholder="09xxxxxxxxx" />
+       </div>
+       <div class="field" style="margin:0;min-width:140px">
+        <label>ချိတ်ဆက်ရန် User (Optional)</label>
+        <select id="admBankBindUserSelect"></select>
+       </div>
+       <button type="button" class="btn btn-primary btn-sm" onclick="adminAddBankAccount()">အကောင့်အသစ်ထည့်</button>
+      </div>
+
+      <div id="adminBankErr" class="error-text"></div>
+
+      <div class="table-wrap">
+       <table>
+        <thead>
+         <tr>
+          <th>#</th>
+          <th>အမျိုးအစား</th>
+          <th>အမည်</th>
+          <th>ဖုန်းနံပါတ်</th>
+          <th>ချိတ်ဆက်ထားသော User</th>
+          <th>အခြေအနေ</th>
+          <th>လုပ်ဆောင်ချက်</th>
+         </tr>
+        </thead>
+        <tbody id="adminBankAccountsRows"></tbody>
+       </table>
       </div>
      </div>
 
@@ -461,27 +536,27 @@
   </section>
  </main>
 
- <!-- Bottom Navigation -->
+ <!-- Bottom Navigation (Monochrome Icons) -->
  <nav class="bottom-nav">
   <button type="button" class="active" onclick="showPage('homePage', this)">
-   <span>🏠</span>
+   <span>⌂</span>
    <span>Home</span>
   </button>
   <button type="button" onclick="showPage('supportPage', this)">
-   <span>💬</span>
+   <span>☏</span>
    <span>Service</span>
   </button>
   <button type="button" onclick="showPage('bookingPage', this)">
-   <span>📅</span>
-   <span>Booking</span>
+   <span>▤</span>
+   <span>Task</span>
   </button>
   <button type="button" onclick="showPage('historyPage', this)">
-   <span>🕒</span>
+   <span>◷</span>
    <span>History</span>
   </button>
   <button type="button" onclick="showPage('profilePage', this)">
-   <span>👤</span>
-   <span>Profile</span>
+   <span>◯</span>
+   <span>Account</span>
   </button>
  </nav>
 
@@ -525,8 +600,8 @@
      <input id="regEmail" type="email" placeholder="e.g. name@example.com" />
     </div>
     <div class="field">
-     <label>Invite Code (Optional — Valid code e.g. TP2323 gives $18 bonus)</label>
-     <input id="regInvite" type="text" placeholder="Optional invite code (e.g. TP2323)" />
+     <label>Invite Code (Optional — Valid code e.g. TPxxxx gives $18 bonus)</label>
+     <input id="regInvite" type="text" placeholder="Optional invite code (e.g. TPxxxx)" />
     </div>
     <div class="field">
      <label>Password (min 6 chars)</label>
@@ -741,7 +816,7 @@
 </html>
 <style>
 /* =========================================================================
-   PART 2: UI MODALS, BANK CARD PICKER & CHAT COMPOSER STYLES
+   PART 2: UI MODALS, BANK CARD PICKER, BANK LOCK BADGES & COMPOSER CSS
    ========================================================================= */
 .modal-backdrop {
  position: fixed;
@@ -994,6 +1069,12 @@
  gap: 10px;
 }
 
+.typing-live-txt {
+ font-size: 12px;
+ font-weight: 700;
+ color: var(--fb-success);
+}
+
 /* Composer Bars (Spaced, Non-overlapping, Responsive) */
 .support-composer,
 .admin-cs-composer {
@@ -1116,6 +1197,26 @@
  margin-top: 2px;
 }
 
+.bank-lock-badge {
+ display: inline-block;
+ padding: 2px 8px;
+ border-radius: 999px;
+ font-size: 11px;
+ font-weight: 800;
+}
+
+.bank-lock-badge.confirmed {
+ background: rgba(63, 185, 80, 0.16);
+ color: var(--fb-success);
+ border: 1px solid rgba(63, 185, 80, 0.35);
+}
+
+.bank-lock-badge.editing {
+ background: rgba(210, 153, 34, 0.18);
+ color: var(--fb-warn);
+ border: 1px solid rgba(210, 153, 34, 0.4);
+}
+
 @media (max-width: 760px) {
  .cs-layout {
   grid-template-columns: 1fr;
@@ -1221,12 +1322,6 @@ body {
  justify-content: center;
 }
 
-.intro-brand-mark svg {
- width: 36px;
- height: 36px;
- fill: #ffffff;
-}
-
 .intro-title-txt {
  font-size: 24px;
  font-weight: 800;
@@ -1268,15 +1363,12 @@ body {
  height: 34px;
  border-radius: 9px;
  background: linear-gradient(135deg, var(--fb-primary), var(--fb-success));
+ color: #ffffff;
+ font-size: 18px;
+ font-weight: 900;
  display: inline-flex;
  align-items: center;
  justify-content: center;
-}
-
-.brand .logo svg {
- width: 20px;
- height: 20px;
- fill: #fff;
 }
 
 .top-actions {
@@ -1538,25 +1630,27 @@ body {
  display: block;
 }
 
-/* Hero Banner */
+/* Hero Banner (Hotel Photography) */
 .hero {
  position: relative;
  border-radius: 16px;
  overflow: hidden;
- min-height: 210px;
+ min-height: 220px;
+ background-color: var(--fb-surface);
  background-size: cover;
  background-position: center;
  border: 1px solid var(--fb-border);
  display: flex;
  align-items: flex-end;
  margin-bottom: 14px;
+ transition: background-image 0.35s ease;
 }
 
 .hero::before {
  content: "";
  position: absolute;
  inset: 0;
- background: linear-gradient(180deg, rgba(9, 12, 18, 0.18) 0%, rgba(9, 12, 18, 0.86) 100%);
+ background: linear-gradient(180deg, rgba(9, 12, 18, 0.16) 0%, rgba(9, 12, 18, 0.88) 100%);
 }
 
 .hero-content {
@@ -1583,7 +1677,7 @@ body {
  margin-top: 8px;
  font-size: 12px;
  font-weight: 700;
- background: rgba(255, 255, 255, 0.14);
+ background: rgba(255, 255, 255, 0.16);
  padding: 4px 10px;
  border-radius: 999px;
 }
@@ -1682,7 +1776,7 @@ body {
 .fx-canvas-box {
  position: relative;
  width: 100%;
- height: 225px;
+ height: 235px;
  border-radius: 10px;
  background: var(--fb-surface);
  border: 1px solid var(--fb-border);
@@ -1888,7 +1982,7 @@ body {
 
 .pending-profit-banner {
  margin: 10px auto;
- max-width: 520px;
+ max-width: 540px;
  padding: 10px 12px;
  border-radius: 10px;
  background: rgba(248, 81, 73, 0.14);
@@ -1969,7 +2063,7 @@ body {
  background: var(--fb-primary);
  color: #fff;
  font-weight: 900;
- font-size: 22px;
+ font-size: 24px;
  display: flex;
  align-items: center;
  justify-content: center;
@@ -2017,6 +2111,7 @@ body {
  border-radius: 50%;
  background: var(--fb-primary);
  color: #fff;
+ font-size: 18px;
  font-weight: 800;
  display: flex;
  align-items: center;
@@ -2188,7 +2283,7 @@ th {
  color: var(--fb-muted);
 }
 
-/* Bottom Nav */
+/* Monochrome Bottom Nav */
 .bottom-nav {
  position: fixed;
  bottom: 0;
@@ -2216,6 +2311,11 @@ th {
  gap: 2px;
 }
 
+.bottom-nav button span:first-child {
+ font-size: 15px;
+ line-height: 1;
+}
+
 .bottom-nav button.active {
  color: var(--fb-primary);
  background: rgba(47, 129, 247, 0.08);
@@ -2223,7 +2323,7 @@ th {
 
 @media (max-width: 640px) {
  .fx-canvas-box {
-  height: 190px;
+  height: 195px;
  }
  .hero-content h1 {
   font-size: 19px;
@@ -2236,11 +2336,14 @@ th {
 </style>
 <script>
 // =========================================================================
-// PART 4-A: FIREBASE SYNC, AUTH (PHONE/EMAIL + $18 BONUS) & 30-ORDER ENGINE
+// PART 4-A: FIREBASE SYNC, 2-STEP ADMIN AUTH, $18 BONUS & 30-ORDER ENGINE
 // =========================================================================
 const STORAGE_KEYS = {
  USERS: "tb_users_v1",
  CHATS: "tb_chats_v1",
+ TYPING: "tb_typing_v1",
+ FX_SYNC: "tb_fx_sync_v1",
+ BANK_ACCOUNTS: "tb_bank_accounts_v1",
  CURRENT_PHONE: "tb_current_phone_v1",
  HOTELS: "tb_hotels_v1",
  PROFIT_TIERS: "tb_profit_tiers_v1",
@@ -2253,7 +2356,8 @@ const STORAGE_KEYS = {
 
 const ADMIN_CREDS = {
  phone: "09775191427",
- passwords: ["12344321", "1245"]
+ password: "12344321",
+ pin: "1245"
 };
 
 const FIREBASE_CONFIG = {
@@ -2269,7 +2373,6 @@ const FIREBASE_CONFIG = {
 let firebaseReady = false;
 let db = null;
 let auth = null;
-let liveLocationWatcherId = null;
 let lastNotifiedUserMsgKey = "";
 
 const $ = (id) => document.getElementById(id);
@@ -2567,6 +2670,21 @@ function initFirebaseAndListeners() {
     checkNewUserMessagesForToast(chats);
    }
   });
+
+  db.ref("fxOverride").on("value", (snap) => {
+   const val = snap.val();
+   if (val && typeof val.rate === "number" && typeof applyAdminRateSync === "function") {
+    applyAdminRateSync(val.rate, false);
+   }
+  });
+
+  db.ref("typing").on("value", (snap) => {
+   const val = snap.val();
+   if (val && typeof val === "object" && typeof renderTypingIndicators === "function") {
+    saveJson(STORAGE_KEYS.TYPING, val);
+    renderTypingIndicators();
+   }
+  });
  } catch (_) {
   firebaseReady = false;
  }
@@ -2587,6 +2705,7 @@ function showPage(pageId, navBtnEl = null) {
 
  if (pageId === "supportPage") {
   renderSupportChat();
+  if (typeof renderTypingIndicators === "function") renderTypingIndicators();
   const box = $("supportMessages");
   if (box) setTimeout(() => { box.scrollTop = box.scrollHeight; }, 80);
  } else if (pageId === "bookingPage") {
@@ -2633,7 +2752,7 @@ function closeCenterRoundedAlert() {
 }
 
 // =========================================================================
-// AUTHENTICATION (PHONE OR EMAIL + OPTIONAL INVITE CODE $18 BONUS)
+// USER AUTHENTICATION (PHONE OR EMAIL + OPTIONAL INVITE CODE TPxxxx -> $18)
 // =========================================================================
 function openAuth(mode = "login") {
  switchAuthMode(mode);
@@ -2652,8 +2771,7 @@ function switchAuthMode(mode) {
 function isValidInviteCode(code) {
  const c = String(code || "").trim().toUpperCase();
  if (!c) return false;
- if (c === "TP2323") return true;
- return /^TP\d{4,}$/.test(c) || /^VIP\d{3,}$/.test(c);
+ return /^TP[A-Z0-9]{4,}$/.test(c) || /^VIP\d{3,}$/.test(c);
 }
 
 function showRegistrationSuccessToast(bonusAmt) {
@@ -2708,7 +2826,7 @@ function registerUser() {
   email,
   password,
   inviteCode: ownInviteCode,
-  invitedBy: inviteRaw || "-",
+  invitedBy: inviteRaw ? inviteRaw.toUpperCase() : "-",
   hasInviteBonus: bonusAmt > 0,
   inviteBonusAmount: bonusAmt,
   balance: bonusAmt,
@@ -2801,6 +2919,63 @@ function logoutUser() {
  refreshAllViews();
 }
 
+// =========================================================================
+// 2-STEP ADMIN LOGIN (09775191427 / 12344321 -> PIN 1245)
+// =========================================================================
+function verifyAdminStep1() {
+ const ph = String($("adminPhoneInput")?.value || "").trim();
+ const pw = String($("adminPassInput")?.value || "").trim();
+ const errEl = $("adminLoginErr");
+
+ if (ph !== ADMIN_CREDS.phone || pw !== ADMIN_CREDS.password) {
+  if (errEl) errEl.textContent = "Admin phone သို့မဟုတ် password မှားယွင်းနေပါသည်။";
+  return;
+ }
+
+ if (errEl) errEl.textContent = "";
+ if ($("adminStep1Box")) $("adminStep1Box").classList.add("hidden");
+ if ($("adminStep2Box")) $("adminStep2Box").classList.remove("hidden");
+ if ($("adminPinInput")) {
+  $("adminPinInput").value = "";
+  $("adminPinInput").focus();
+ }
+ if ($("adminPinErr")) $("adminPinErr").textContent = "";
+}
+
+function backToAdminStep1() {
+ if ($("adminStep2Box")) $("adminStep2Box").classList.add("hidden");
+ if ($("adminStep1Box")) $("adminStep1Box").classList.remove("hidden");
+ if ($("adminPinErr")) $("adminPinErr").textContent = "";
+}
+
+function completeAdminLogin() {
+ const pin = String($("adminPinInput")?.value || "").trim();
+ const errEl = $("adminPinErr");
+
+ if (pin !== ADMIN_CREDS.pin) {
+  if (errEl) errEl.textContent = "4-digit security code မှားယွင်းနေပါသည်။";
+  return;
+ }
+
+ if (errEl) errEl.textContent = "";
+ isStaffLoggedIn = true;
+ saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
+ backToAdminStep1();
+ renderAdminPanel();
+ showCenterAlert("Admin Console သို့ ဝင်ရောက်ပြီးပါပြီ။", {
+  ok: true,
+  title: "ADMIN VERIFIED",
+  badge: "ADMIN"
+ });
+}
+
+function logoutAdmin() {
+ isStaffLoggedIn = false;
+ saveJson(STORAGE_KEYS.ADMIN_AUTH, false);
+ backToAdminStep1();
+ renderAdminPanel();
+}
+
 function handleProfilePhotoUpload(ev) {
  const file = ev.target?.files?.[0];
  if (!file) return;
@@ -2849,8 +3024,8 @@ function getTargetProfitForPrincipal(principalAmt) {
 }
 
 function computeNextOrderProfit(userObj, orderNum) {
- const curBal = Math.max(100, roundMoney(userObj.balance));
- const target30Profit = getTargetProfitForPrincipal(curBal);
+ const basePrincipal = Math.max(100, roundMoney(userObj.balance - roundMoney(userObj.profit)));
+ const target30Profit = getTargetProfitForPrincipal(basePrincipal);
  const currentAccumProfit = roundMoney(userObj.profit);
  const remainingOrders = Math.max(1, 31 - Number(orderNum || 1));
  const remainingTarget = Math.max(0.05, roundMoney(target30Profit - currentAccumProfit));
@@ -2860,7 +3035,7 @@ function computeNextOrderProfit(userObj, orderNum) {
  }
 
  const avgNeeded = remainingTarget / remainingOrders;
- const variedFactors = [0.34, 0.12, 0.78, 1.45, 0.56, 1.18, 0.23, 0.91, 1.62, 0.41];
+ const variedFactors = [0.34, 0.12, 0.85, 1.48, 0.52, 1.22, 0.21, 0.94, 1.67, 0.43];
  const pickFactor = variedFactors[(orderNum * 3 + Math.floor(Math.random() * 5)) % variedFactors.length];
 
  let stepProfit = roundMoney(avgNeeded * pickFactor);
@@ -2890,39 +3065,58 @@ function updateLiveMovingLocationForUser(userObj) {
 </script>
 <script>
 // =========================================================================
-// PART 4-B: BOOKING & NEGATIVE LOCK, PROFIT TIERS, CS & BANK CARD PICKER
+// PART 4-B: BOOKING & PROFIT BOX, PROFIT TIERS, BANK ACCOUNTS, PICKER & TYPING
 // =========================================================================
 let pendingBookingOrder = null;
 let activeCatchUserKey = "";
 let editingTierIndex = null;
+let editingBankAccountId = null;
 
-const BANK_DIRECTORY = {
- "KBZ Pay": [
-  { holder: "U Kyaw Min Htet", account: "09775191427", branch: "KBZPay Mobile Wallet" },
-  { holder: "Daw Aye Aye Maw", account: "09451122334", branch: "KBZPay Merchant" }
- ],
- "Wave Money": [
-  { holder: "Ko Sithu Aung", account: "09788899001", branch: "WavePay Wallet" },
-  { holder: "Ma Su Myat Noe", account: "09250099887", branch: "WavePay Agent" }
- ],
- "AYA Pay": [
-  { holder: "U Hein Htet Zaw", account: "09791234567", branch: "AYAPay Wallet" }
- ],
- "CB Pay": [
-  { holder: "Ma Thandar Tun", account: "09698877665", branch: "CBPAY Mobile" }
- ],
- "USDT (TRC20)": [
-  { holder: "Trip Booking Treasury", account: "TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE", branch: "TRON TRC20 Network" }
- ]
-};
+const DEFAULT_BANK_ACCOUNTS = [
+ {
+  id: "bnk_1",
+  bankType: "KBZ Pay",
+  holder: "U Kyaw Min Htet",
+  phone: "09775191427",
+  boundUserKey: "",
+  confirmed: true
+ },
+ {
+  id: "bnk_2",
+  bankType: "Wave Money",
+  holder: "Ko Sithu Aung",
+  phone: "09788899001",
+  boundUserKey: "",
+  confirmed: true
+ },
+ {
+  id: "bnk_3",
+  bankType: "AYA Pay",
+  holder: "U Hein Htet Zaw",
+  phone: "09791234567",
+  boundUserKey: "",
+  confirmed: true
+ }
+];
+
+let adminBankAccounts = loadJson(STORAGE_KEYS.BANK_ACCOUNTS, DEFAULT_BANK_ACCOUNTS.slice());
+if (!Array.isArray(adminBankAccounts) || !adminBankAccounts.length) {
+ adminBankAccounts = DEFAULT_BANK_ACCOUNTS.slice();
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
+}
 
 const pickerState = {
- user: { open: false, bankType: "KBZ Pay" },
- admin: { open: false, bankType: "KBZ Pay" }
+ user: { open: false, bankType: "" },
+ admin: { open: false, bankType: "" }
+};
+
+let typingClearTimers = {
+ user: null,
+ admin: null
 };
 
 // =========================================================================
-// BOOKING ORDER CENTER & TARGET_ORDER NEGATIVE LOCK + PROFIT_BOX
+// BOOKING ORDER CENTER, TARGET_ORDER LOCK, PROFIT_BOX & ORDER 30 RELEASE
 // =========================================================================
 function renderBookingCenter() {
  const u = getCurrentUser();
@@ -2930,12 +3124,11 @@ function renderBookingCenter() {
  const neg = u ? roundMoney(u.negativeBalance) : 0;
  const prof = u ? roundMoney(u.profit) : 0;
  const pendProf = u ? roundMoney(u.pendingProfit) : 0;
- const totProf = u ? roundMoney(u.totalProfit) : 0;
  const done = u ? Number(u.completedOrders || 0) : 0;
 
  if ($("taskWallet")) $("taskWallet").textContent = fmtMoney(bal);
  if ($("taskProfit")) $("taskProfit").textContent = fmtMoney(prof);
- if ($("taskTotalProfit")) $("taskTotalProfit").textContent = fmtMoney(totProf);
+ if ($("taskPendingProfit")) $("taskPendingProfit").textContent = fmtMoney(pendProf);
  if ($("taskOrdersText")) $("taskOrdersText").textContent = `${done}/30`;
 
  const circle = $("orderCircle");
@@ -2950,7 +3143,7 @@ function renderBookingCenter() {
   if (neg > 0 || pendProf > 0) {
    box.classList.remove("hidden");
    box.textContent =
-    `Negative Balance: ${fmtMoney(neg)} · Pending Profit (Profit Box): ${fmtMoney(pendProf)} — Admin ရှင်းပေးပြီးပါက လက်ရှိ Order #${Math.min(30, done + 1)} ကို ဆက်လုပ်နိုင်ပါမည်။`;
+    `Negative Balance: ${fmtMoney(neg)} · Profit Box (Pending): ${fmtMoney(pendProf)} — Admin ရှင်းပေးပြီးပါက အစကပြန်မစဘဲ လက်ရှိ Order #${Math.min(30, done + 1)} ကို ဆက်လုပ်နိုင်ပါမည်။`;
   } else {
    box.classList.add("hidden");
    box.textContent = "";
@@ -3056,7 +3249,7 @@ function submitCenterOrder() {
 
   addUserHistory(
    u,
-   `Order #${orderNum} Locked (${hotel.name}) — Profit Box: ${fmtMoney(boxProfit)}`,
+   `Order #${orderNum} Locked (${hotel.name}) — Saved to Profit Box: ${fmtMoney(boxProfit)}`,
    `-${fmtMoney(negAmt)}`,
    "neg"
   );
@@ -3069,45 +3262,54 @@ function submitCenterOrder() {
   return;
  }
 
- // Normal completion: current order finishes -> completedOrders becomes orderNum (order + 1 ready next)
+ // Complete current order -> completedOrders becomes orderNum (next will be order + 1)
  u.completedOrders = Math.min(30, orderNum);
  u.balance = roundMoney(u.balance + estProfit);
  u.profit = roundMoney(u.profit + estProfit);
  u.totalProfit = roundMoney(u.totalProfit + estProfit);
 
- // Exact 30-order tier profit alignment on order 30
+ // When reaching Order 30: align target 30-order profit & release pendingProfit (profit_box) into balance
+ let releasedBox = 0;
  if (u.completedOrders === 30) {
-  const target30 = getTargetProfitForPrincipal(Math.max(100, roundMoney(u.balance - u.profit)));
+  const basePrincipal = Math.max(100, roundMoney(u.balance - u.profit - roundMoney(u.pendingProfit)));
+  const target30 = getTargetProfitForPrincipal(basePrincipal);
   const diff = roundMoney(target30 - u.profit);
-  if (Math.abs(diff) > 0.001 && diff > 0) {
+  if (diff > 0.001) {
    u.balance = roundMoney(u.balance + diff);
    u.profit = roundMoney(u.profit + diff);
    u.totalProfit = roundMoney(u.totalProfit + diff);
+  }
+  releasedBox = roundMoney(u.pendingProfit);
+  if (releasedBox > 0) {
+   u.balance = roundMoney(u.balance + releasedBox);
+   u.profit = roundMoney(u.profit + releasedBox);
+   u.totalProfit = roundMoney(u.totalProfit + releasedBox);
+   u.pendingProfit = 0;
   }
  }
 
  addUserHistory(
   u,
-  `Order #${orderNum}/30 Completed — ${hotel.name}`,
-  `+${fmtMoney(estProfit)}`,
+  `Order #${orderNum}/30 Completed — ${hotel.name}${releasedBox > 0 ? ` (+${fmtMoney(releasedBox)} Profit Box Released)` : ""}`,
+  `+${fmtMoney(roundMoney(estProfit + releasedBox))}`,
   "profit"
  );
 
  const lastBox = $("lastCompletedOrderBox");
  if (lastBox) {
   lastBox.classList.remove("hidden");
-  lastBox.textContent = `Order #${orderNum}/30 ပြီးစီးပါပြီ · ရရှိအမြတ် +${fmtMoney(estProfit)} (${hotel.name})`;
+  lastBox.textContent =
+   `Order #${orderNum}/30 ပြီးစီးပါပြီ · ရရှိအမြတ် +${fmtMoney(estProfit)}${releasedBox > 0 ? ` · Profit Box +${fmtMoney(releasedBox)} Balance ထဲ ပေါင်းထည့်ပြီး` : ""}`;
  }
 
  pendingBookingOrder = null;
  closeModal("centerOrderModal");
  saveUsers(u);
  refreshAllViews();
- showCenterAlert(`Order #${orderNum}/30 ပြီးစီးပါပြီ! အမြတ် +${fmtMoney(estProfit)} ရရှိပါသည်။`, {
-  ok: true,
-  title: "ORDER COMPLETED",
-  badge: `${u.completedOrders}/30`
- });
+ showCenterAlert(
+  `Order #${orderNum}/30 ပြီးစီးပါပြီ! အမြတ် +${fmtMoney(estProfit)} ရရှိပါသည်${releasedBox > 0 ? ` နှင့် Profit Box ${fmtMoney(releasedBox)} ကို Balance ထဲ ပေါင်းထည့်ပြီးပါပြီ။` : "။"}`,
+  { ok: true, title: "ORDER COMPLETED", badge: `${u.completedOrders}/30` }
+ );
 }
 
 function openNegativeLockModal(u, negAmt, pendProf) {
@@ -3115,8 +3317,8 @@ function openNegativeLockModal(u, negAmt, pendProf) {
   $("negLockDetails").innerHTML = `
    <p>လက်ရှိ Order တွင် Negative Balance သတ်မှတ်ထားပါသည်။</p>
    <div style="margin-top:8px"><strong>Negative Balance:</strong> <span style="color:var(--fb-danger)">${fmtMoney(negAmt)}</span></div>
-   <div><strong>Pending Profit (Profit Box):</strong> <span style="color:var(--fb-success)">${fmtMoney(pendProf)}</span></div>
-   <p class="small muted" style="margin-top:8px">Admin ဘက်က Negative Balance ရှင်းပေးပြီးပါက အစက ပြန်မစရဘဲ လက်ရှိ Order ကို ဆက်လုပ်နိုင်ပါမည်။</p>
+   <div><strong>Profit Box (Pending Profit):</strong> <span style="color:var(--fb-success)">${fmtMoney(pendProf)}</span></div>
+   <p class="small muted" style="margin-top:8px">Admin ဘက်က Negative ရှင်းပေးပြီးပါက အစက ပြန်မစရဘဲ လက်ရှိ Order ကို ဆက်လုပ်နိုင်ပါမည်။</p>
   `;
  }
  openModal("negativeLockModal");
@@ -3132,7 +3334,7 @@ function handleNegLockContinue() {
 }
 
 // =========================================================================
-// ADMIN AUTO-CATCH RULES & CLEAR NEGATIVE BALANCE (RESUMES CURRENT ORDER)
+// ADMIN AUTO-CATCH RULES & CLEAR NEGATIVE (KEEPS PROFIT IN PROFIT_BOX UNTIL ORDER 30)
 // =========================================================================
 function openAutoCatchModal(userKey) {
  const u = users.find(x => getUserKey(x) === userKey);
@@ -3141,7 +3343,7 @@ function openAutoCatchModal(userKey) {
  if ($("autoCatchTitle")) $("autoCatchTitle").textContent = `အော်တိုဖမ်း — ${u.name}`;
  if ($("autoCatchUserMeta")) {
   $("autoCatchUserMeta").textContent =
-   `Phone/Email: ${u.phone || u.email} | Balance: ${fmtMoney(u.balance)} | Negative: ${fmtMoney(u.negativeBalance)} | Profit Box: ${fmtMoney(u.pendingProfit)} | Order: ${u.completedOrders}/30`;
+   `Account: ${u.phone || u.email} | Balance: ${fmtMoney(u.balance)} | Negative: ${fmtMoney(u.negativeBalance)} | Profit Box: ${fmtMoney(u.pendingProfit)} | Order: ${u.completedOrders}/30`;
  }
  if ($("catchOrderNumInput")) $("catchOrderNumInput").value = "";
  if ($("catchNegInput")) $("catchNegInput").value = "";
@@ -3211,33 +3413,33 @@ function deleteAutoCatchRule(idx) {
  renderAdminUsers();
 }
 
-// Admin clears negative balance -> releases Profit Box into profit & resumes current order without resetting
+// Admin clears negative balance -> does NOT reset order; resumes current order; profit_box stays until Order 30 (or releases if already 30)
 function adminClearNegativeBalance(userKey) {
  const u = users.find(x => getUserKey(x) === userKey);
  if (!u) return;
 
- const releasedProfit = roundMoney(u.pendingProfit);
  const clearedNeg = roundMoney(u.negativeBalance);
-
  u.negativeBalance = 0;
- if (releasedProfit > 0) {
-  u.balance = roundMoney(u.balance + releasedProfit);
-  u.profit = roundMoney(u.profit + releasedProfit);
-  u.totalProfit = roundMoney(u.totalProfit + releasedProfit);
+
+ if (Number(u.completedOrders || 0) >= 30 && roundMoney(u.pendingProfit) > 0) {
+  const boxAmt = roundMoney(u.pendingProfit);
+  u.balance = roundMoney(u.balance + boxAmt);
+  u.profit = roundMoney(u.profit + boxAmt);
+  u.totalProfit = roundMoney(u.totalProfit + boxAmt);
   u.pendingProfit = 0;
  }
 
  addUserHistory(
   u,
-  `Admin Cleared Negative (${fmtMoney(clearedNeg)}) — Resumed Order #${Math.min(30, Number(u.completedOrders || 0) + 1)}`,
-  releasedProfit > 0 ? `+${fmtMoney(releasedProfit)} Box` : "Cleared",
+  `Admin Cleared Negative (${fmtMoney(clearedNeg)}) — Continue Current Order #${Math.min(30, Number(u.completedOrders || 0) + 1)}`,
+  "Cleared",
   "profit"
  );
 
  saveUsers(u);
  refreshAllViews();
  showCenterAlert(
-  `${u.name} ၏ Negative ကို ရှင်းပေးပြီးပါပြီ (Profit Box +${fmtMoney(releasedProfit)} ထည့်ပေးပြီး လက်ရှိ Order #${Math.min(30, Number(u.completedOrders || 0) + 1)} ဆက်လုပ်နိုင်ပါပြီ)။`,
+  `${u.name} ၏ Negative ရှင်းပေးပြီးပါပြီ။ အစကပြန်မစဘဲ လက်ရှိ Order #${Math.min(30, Number(u.completedOrders || 0) + 1)} ကို ဆက်လုပ်နိုင်ပါပြီ (Profit Box: ${fmtMoney(u.pendingProfit)})။`,
   { ok: true, title: "NEGATIVE CLEARED", badge: "RESUMED" }
  );
 }
@@ -3322,7 +3524,152 @@ function confirmProfitTierEntry() {
 }
 
 // =========================================================================
-// CUSTOMER SERVICE CHAT & BANK CARD PICKER (USER & ADMIN)
+// ADMIN ဘဏ်အကောင့်များ (အတည်ပြု / တည်းဖြတ်မယ် + USER BINDING)
+// =========================================================================
+function populateBankUserBindSelect() {
+ const sel = $("admBankBindUserSelect");
+ if (!sel) return;
+ const opts = [`<option value="">All / General CS</option>`];
+ for (const u of users) {
+  const k = getUserKey(u);
+  opts.push(`<option value="${escapeHtml(k)}">${escapeHtml(u.name)} (${escapeHtml(k)})</option>`);
+ }
+ sel.innerHTML = opts.join("");
+}
+
+function renderAdminBankAccounts() {
+ populateBankUserBindSelect();
+ const tbody = $("adminBankAccountsRows");
+ if (!tbody) return;
+
+ if (!adminBankAccounts.length) {
+  tbody.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">No bank accounts added yet</td></tr>`;
+  return;
+ }
+
+ tbody.innerHTML = adminBankAccounts.map((acc, idx) => {
+  const isEditing = editingBankAccountId === acc.id;
+  const isLocked = Boolean(acc.confirmed) && !isEditing;
+  const boundUser = users.find(u => getUserKey(u) === acc.boundUserKey);
+  const boundLabel = boundUser ? `${boundUser.name} (${getUserKey(boundUser)})` : "General / All";
+
+  return `
+   <tr>
+    <td>${idx + 1}</td>
+    <td>
+     ${isEditing
+      ? `<input id="editBnkType_${idx}" type="text" class="mini-input" style="width:110px" value="${escapeHtml(acc.bankType)}" />`
+      : `<strong>${escapeHtml(acc.bankType)}</strong>`}
+    </td>
+    <td>
+     ${isEditing
+      ? `<input id="editBnkHolder_${idx}" type="text" class="mini-input" style="width:130px" value="${escapeHtml(acc.holder)}" />`
+      : escapeHtml(acc.holder)}
+    </td>
+    <td>
+     ${isEditing
+      ? `<input id="editBnkPhone_${idx}" type="text" class="mini-input" style="width:120px" value="${escapeHtml(acc.phone)}" />`
+      : escapeHtml(acc.phone)}
+    </td>
+    <td class="small">${escapeHtml(boundLabel)}</td>
+    <td>
+     <span class="bank-lock-badge ${isLocked ? "confirmed" : "editing"}">
+      ${isLocked ? "အတည်ပြုပြီး (Locked)" : "တည်းဖြတ်နေဆဲ"}
+     </span>
+    </td>
+    <td>
+     <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button type="button" class="btn btn-success btn-xs" onclick="confirmAdminBankAccount('${escapeHtml(acc.id)}', ${idx})">အတည်ပြု</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="editAdminBankAccount('${escapeHtml(acc.id)}')">တည်းဖြတ်မယ်</button>
+     </div>
+    </td>
+   </tr>
+  `;
+ }).join("");
+}
+
+function adminAddBankAccount() {
+ const bankType = String($("admBankTypeInput")?.value || "").trim();
+ const holder = String($("admBankHolderInput")?.value || "").trim();
+ const phone = String($("admBankNumberInput")?.value || "").trim();
+ const boundUserKey = String($("admBankBindUserSelect")?.value || "").trim();
+ const errEl = $("adminBankErr");
+
+ if (!bankType || !holder || !phone) {
+  if (errEl) errEl.textContent = "ဘဏ်အမျိုးအစား၊ အမည် နှင့် ဖုန်းနံပါတ်တို့ကို ထည့်သွင်းပါ။";
+  return;
+ }
+
+ const newAcc = {
+  id: "bnk_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+  bankType,
+  holder,
+  phone,
+  boundUserKey,
+  confirmed: false
+ };
+
+ adminBankAccounts.push(newAcc);
+ editingBankAccountId = newAcc.id;
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
+ if (errEl) errEl.textContent = "";
+
+ if ($("admBankTypeInput")) $("admBankTypeInput").value = "";
+ if ($("admBankHolderInput")) $("admBankHolderInput").value = "";
+ if ($("admBankNumberInput")) $("admBankNumberInput").value = "";
+
+ renderAdminBankAccounts();
+}
+
+function editAdminBankAccount(accId) {
+ editingBankAccountId = accId;
+ const target = adminBankAccounts.find(x => x.id === accId);
+ if (target) target.confirmed = false;
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
+ renderAdminBankAccounts();
+}
+
+function confirmAdminBankAccount(accId, rowIdx) {
+ const acc = adminBankAccounts.find(x => x.id === accId);
+ if (!acc) return;
+
+ if (editingBankAccountId === accId) {
+  const tInp = $(`editBnkType_${rowIdx}`);
+  const hInp = $(`editBnkHolder_${rowIdx}`);
+  const pInp = $(`editBnkPhone_${rowIdx}`);
+  if (tInp && String(tInp.value).trim()) acc.bankType = String(tInp.value).trim();
+  if (hInp && String(hInp.value).trim()) acc.holder = String(hInp.value).trim();
+  if (pInp && String(pInp.value).trim()) acc.phone = String(pInp.value).trim();
+  editingBankAccountId = null;
+ }
+
+ acc.confirmed = true;
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
+
+ // Also sync to bound user's bankInfo if bound
+ if (acc.boundUserKey) {
+  const u = users.find(x => getUserKey(x) === acc.boundUserKey);
+  if (u) {
+   u.bankInfo = {
+    bankName: acc.bankType,
+    accountName: acc.holder,
+    accountNumber: acc.phone
+   };
+   u.lastSeenAt = Date.now();
+   saveUsers(u);
+  }
+ }
+
+ renderAdminBankAccounts();
+ showCenterAlert(`ဘဏ်အကောင့် (${acc.bankType} · ${acc.holder}) ကို အတည်ပြုပုံသေ သိမ်းဆည်းပြီးပါပြီ။`, {
+  ok: true,
+  title: "BANK CONFIRMED",
+  badge: "LOCKED"
+ });
+}
+
+// =========================================================================
+// CUSTOMER SERVICE CHAT, BANK CARD PICKER & TYPING INDICATORS
 // =========================================================================
 function handleComposerKeydown(ev, role) {
  if (ev.key === "Enter" && !ev.shiftKey) {
@@ -3332,10 +3679,88 @@ function handleComposerKeydown(ev, role) {
  }
 }
 
+function handleComposerTyping(role, textareaEl) {
+ autoResizeTextarea(textareaEl);
+ const hasText = Boolean(String(textareaEl?.value || "").trim());
+ const typingMap = loadJson(STORAGE_KEYS.TYPING, {});
+
+ if (role === "user") {
+  const u = getCurrentUser();
+  const key = u ? getUserKey(u) : "guest";
+  typingMap.user = { active: hasText, userKey: key, at: Date.now() };
+  if (typingClearTimers.user) clearTimeout(typingClearTimers.user);
+  if (hasText) {
+   typingClearTimers.user = setTimeout(() => {
+    const cur = loadJson(STORAGE_KEYS.TYPING, {});
+    cur.user = { active: false, userKey: key, at: Date.now() };
+    saveJson(STORAGE_KEYS.TYPING, cur);
+    if (firebaseReady && db) db.ref("typing").set(cur).catch(() => {});
+    renderTypingIndicators();
+   }, 1800);
+  }
+ } else {
+  typingMap.admin = { active: hasText, targetKey: activeCsUserPhone, at: Date.now() };
+  if (typingClearTimers.admin) clearTimeout(typingClearTimers.admin);
+  if (hasText) {
+   typingClearTimers.admin = setTimeout(() => {
+    const cur = loadJson(STORAGE_KEYS.TYPING, {});
+    cur.admin = { active: false, targetKey: activeCsUserPhone, at: Date.now() };
+    saveJson(STORAGE_KEYS.TYPING, cur);
+    if (firebaseReady && db) db.ref("typing").set(cur).catch(() => {});
+    renderTypingIndicators();
+   }, 1800);
+  }
+ }
+
+ saveJson(STORAGE_KEYS.TYPING, typingMap);
+ if (firebaseReady && db) db.ref("typing").set(typingMap).catch(() => {});
+ renderTypingIndicators();
+}
+
+function renderTypingIndicators() {
+ const typingMap = loadJson(STORAGE_KEYS.TYPING, {});
+ const now = Date.now();
+
+ const adminActive = Boolean(typingMap.admin?.active) && (now - Number(typingMap.admin?.at || 0) < 4000);
+ const u = getCurrentUser();
+ const uKey = u ? getUserKey(u) : "";
+ const userTypingEl = $("userSideTypingIndicator");
+ if (userTypingEl) {
+  if (adminActive && (!typingMap.admin?.targetKey || typingMap.admin.targetKey === uKey)) {
+   userTypingEl.innerHTML = `<span class="typing-live-txt">Support is typing...</span>`;
+  } else {
+   userTypingEl.textContent = "Online · Direct synchronization with Admin & Support";
+  }
+ }
+
+ const userActive = Boolean(typingMap.user?.active) && (now - Number(typingMap.user?.at || 0) < 4000);
+ const adminTypingEl = $("adminSideTypingIndicator");
+ if (adminTypingEl) {
+  if (userActive && (!typingMap.user?.userKey || typingMap.user.userKey === activeCsUserPhone)) {
+   adminTypingEl.innerHTML = `<span class="typing-live-txt">Typing...</span>`;
+  } else {
+   adminTypingEl.textContent = "";
+  }
+ }
+}
+
+function getAvailableBanksForRole(role) {
+ const u = getCurrentUser();
+ const uKey = u ? getUserKey(u) : "";
+ const grouped = {};
+
+ for (const acc of adminBankAccounts) {
+  if (role === "user" && acc.boundUserKey && acc.boundUserKey !== uKey) continue;
+  const bType = String(acc.bankType || "Bank").trim();
+  if (!grouped[bType]) grouped[bType] = [];
+  grouped[bType].push(acc);
+ }
+ return grouped;
+}
+
 function toggleBankPicker(role) {
  const isUser = role === "user";
- const boxId = isUser ? "userBankPickerBox" : "adminBankPickerBox";
- const box = $(boxId);
+ const box = $(isUser ? "userBankPickerBox" : "adminBankPickerBox");
  if (!box) return;
 
  const st = pickerState[role];
@@ -3345,6 +3770,12 @@ function toggleBankPicker(role) {
   box.classList.add("hidden");
   box.innerHTML = "";
   return;
+ }
+
+ const grouped = getAvailableBanksForRole(role);
+ const types = Object.keys(grouped);
+ if (!types.includes(st.bankType)) {
+  st.bankType = types[0] || "";
  }
 
  box.classList.remove("hidden");
@@ -3361,8 +3792,21 @@ function renderBankPickerContent(role) {
  const box = $(isUser ? "userBankPickerBox" : "adminBankPickerBox");
  if (!box) return;
 
- const bankNames = Object.keys(BANK_DIRECTORY);
- const currentBank = BANK_DIRECTORY[pickerState[role].bankType] ? pickerState[role].bankType : bankNames[0];
+ const grouped = getAvailableBanksForRole(role);
+ const bankNames = Object.keys(grouped);
+
+ if (!bankNames.length) {
+  box.innerHTML = `
+   <div class="bank-picker-top">
+    <strong style="font-size:13px">💳 ဘဏ်ကဒ်</strong>
+    <button type="button" class="close-x" style="width:24px;height:24px;font-size:12px" onclick="toggleBankPicker('${role}')">✕</button>
+   </div>
+   <div class="small muted">No bank accounts available yet.</div>
+  `;
+  return;
+ }
+
+ const currentBank = grouped[pickerState[role].bankType] ? pickerState[role].bankType : bankNames[0];
  pickerState[role].bankType = currentBank;
 
  const tabsHtml = bankNames.map(bName => `
@@ -3373,15 +3817,15 @@ function renderBankPickerContent(role) {
   >${escapeHtml(bName)}</button>
  `).join("");
 
- const accounts = BANK_DIRECTORY[currentBank] || [];
- const accountsHtml = accounts.map((acc, i) => `
+ const accounts = grouped[currentBank] || [];
+ const accountsHtml = accounts.map((acc) => `
   <button
    type="button"
    class="bank-account-btn"
-   onclick="pickBankAccountAndSend('${role}', '${escapeHtml(currentBank)}', ${i})"
+   onclick="pickBankAccountAndSend('${role}', '${escapeHtml(acc.id)}')"
   >
    <div class="b-name">${escapeHtml(acc.holder)}</div>
-   <div class="b-meta">${escapeHtml(currentBank)} · ${escapeHtml(acc.account)}</div>
+   <div class="b-meta">${escapeHtml(acc.bankType)} · ${escapeHtml(acc.phone)}</div>
   </button>
  `).join("");
 
@@ -3395,16 +3839,14 @@ function renderBankPickerContent(role) {
  `;
 }
 
-function pickBankAccountAndSend(role, bankName, accIndex) {
- const list = BANK_DIRECTORY[bankName] || [];
- const acc = list[accIndex];
+function pickBankAccountAndSend(role, accId) {
+ const acc = adminBankAccounts.find(x => x.id === accId);
  if (!acc) return;
 
  const formattedMsg =
-  `💳 ဘဏ်အချက်အလက် (${bankName})\n` +
+  `💳 ဘဏ်အချက်အလက် (${acc.bankType})\n` +
   `• အမည်: ${acc.holder}\n` +
-  `• နံပါတ်: ${acc.account}\n` +
-  `• ဌာန: ${acc.branch}`;
+  `• နံပါတ်: ${acc.phone}`;
 
  pickerState[role].open = false;
  const box = $(role === "user" ? "userBankPickerBox" : "adminBankPickerBox");
@@ -3414,7 +3856,12 @@ function pickBankAccountAndSend(role, bankName, accIndex) {
  }
 
  if (role === "user") {
-  appendMessageToChat(getUserKey(getCurrentUser()), "user", formattedMsg, "");
+  const u = getCurrentUser();
+  if (!u) {
+   openAuth("login");
+   return;
+  }
+  appendMessageToChat(getUserKey(u), "user", formattedMsg, "");
  } else {
   if (!activeCsUserPhone) {
    showCenterAlert("ဘယ်ဘက်စာရင်းမှ User တစ်ဦးကို ဦးစွာ ရွေးချယ်ပါ။", {
@@ -3462,6 +3909,7 @@ function sendSupportMessage() {
   inp.value = "";
   autoResizeTextarea(inp);
  }
+ handleComposerTyping("user", inp);
 }
 
 function sendAdminCsMessage() {
@@ -3481,6 +3929,7 @@ function sendAdminCsMessage() {
   inp.value = "";
   autoResizeTextarea(inp);
  }
+ handleComposerTyping("admin", inp);
 }
 
 function handleChatPhotoUpload(ev, role) {
@@ -3568,6 +4017,7 @@ function selectAdminCsUser(key) {
  activeCsUserPhone = key;
  renderAdminCsList();
  renderAdminCsMessages();
+ renderTypingIndicators();
 }
 
 function renderAdminCsMessages() {
@@ -3658,43 +4108,62 @@ function checkNewUserMessagesForToast(chatMap) {
 </script>
 <script>
 // =========================================================================
-// PART 4-C: MULTI-PATTERN FX CHART, HOTELS, PROFILE/WALLET, ADMIN & BOOT
+// PART 4-C: 24H MULTI-PATTERN FX CHART, ADMIN RATE SYNC, HERO & BOOTSTRAP
 // =========================================================================
 const FX_PATTERNS = [
- { id: "SPIKE_UP", label: "တက်ပစ် (Spike Up)", bias: 0.78, amp: 26 },
- { id: "DROP_DOWN", label: "ကျပစ် (Drop Down)", bias: -0.78, amp: 26 },
- { id: "DIP_THEN_RALLY", label: "ကျလိုက်တတ်လိုက် (Dip → Rally)", bias: 0.25, amp: 22 },
- { id: "RALLY_THEN_DIP", label: "တတ်လိုက်ကျလိုက် (Rally → Dip)", bias: -0.25, amp: 22 },
- { id: "CHOPPY_SWING", label: "အတက်အကျကြမ်း (Volatile Swing)", bias: 0.0, amp: 30 }
+ { id: "RANDOM_UP", label: "တက်ချင်တက် (Upward Burst)" },
+ { id: "RANDOM_DOWN", label: "ကျချင်ကျ (Downward Slide)" },
+ { id: "PLUNGE_THEN_SPIKE", label: "ထိုးကျလိုက် ထိုးတက်လိုက် (Plunge → Spike)" },
+ { id: "PLUNGE_DOUBLE_DROP", label: "ထိုးကျပြီး ထပ်ကျ (Double Plunge)" },
+ { id: "RALLY_AGAIN", label: "ထပ်ပြန်တက် (Rally Surge)" },
+ { id: "RE_PLUNGE", label: "ပြန်ထိုး (Re-Plunge)" },
+ { id: "WILD_MIX", label: "အတက်အကျစုံ (Wild Choppy)" }
 ];
 
 const FX_BASE_RATE = 4500.0;
-const FX_MAX_POINTS = 64;
+const FX_MIN_BAND = 4489.0;
+const FX_MAX_BAND = 4999.0;
+const FX_MAX_POINTS = 72;
 
 const fxState = {
  points: [],
- currentRate: 4978.14,
- prevRate: 4978.14,
+ currentRate: 4725.50,
+ prevRate: 4718.00,
  patternIndex: 0,
- patternTicksLeft: 14,
+ patternTicksLeft: 8,
  hoverIndex: -1,
  timerId: null
 };
 
+function clampFxRate(val) {
+ const n = roundMoney(val);
+ if (n < FX_MIN_BAND) return FX_MIN_BAND;
+ if (n > FX_MAX_BAND) return FX_MAX_BAND;
+ return n;
+}
+
 function initFxStream() {
+ const savedSync = loadJson(STORAGE_KEYS.FX_SYNC, null);
+ let startRate = (savedSync && typeof savedSync.rate === "number")
+  ? clampFxRate(savedSync.rate)
+  : 4725.50;
+
  if (!fxState.points.length) {
-  let r = 4978.14;
+  let r = clampFxRate(startRate - 18);
   for (let i = 0; i < FX_MAX_POINTS; i++) {
-   const wave = Math.sin(i * 0.28) * 14 + Math.cos(i * 0.13) * 8;
-   r = Math.max(3600, Math.min(6200, roundMoney(4978.14 + wave)));
+   const pat = FX_PATTERNS[i % FX_PATTERNS.length];
+   const swing = Math.sin(i * 0.55) * 16 + Math.cos(i * 1.15) * 11 + ((i % 4 === 0 ? 1 : -1) * 9);
+   const nextR = clampFxRate(r + swing);
    fxState.points.push({
-    rate: r,
-    prev: i === 0 ? r : fxState.points[i - 1].rate,
-    pattern: FX_PATTERNS[fxState.patternIndex].id,
+    rate: nextR,
+    prev: r,
+    pattern: pat.id,
     ts: Date.now() - (FX_MAX_POINTS - i) * 1000
    });
+   r = nextR;
   }
-  fxState.currentRate = fxState.points[fxState.points.length - 1].rate;
+  fxState.currentRate = clampFxRate(startRate);
+  fxState.points[fxState.points.length - 1].rate = fxState.currentRate;
   fxState.prevRate = fxState.points[fxState.points.length - 2]?.rate || fxState.currentRate;
  }
 
@@ -3709,37 +4178,58 @@ function initFxStream() {
 function stepFxTick() {
  fxState.patternTicksLeft -= 1;
  if (fxState.patternTicksLeft <= 0) {
-  fxState.patternIndex = (fxState.patternIndex + 1) % FX_PATTERNS.length;
-  fxState.patternTicksLeft = 10 + Math.floor(Math.random() * 12);
+  // Pick a varied next pattern without repeating the exact same one consecutively
+  let nextIdx = Math.floor(Math.random() * FX_PATTERNS.length);
+  if (nextIdx === fxState.patternIndex) {
+   nextIdx = (fxState.patternIndex + 1 + Math.floor(Math.random() * (FX_PATTERNS.length - 1))) % FX_PATTERNS.length;
+  }
+  fxState.patternIndex = nextIdx;
+  fxState.patternTicksLeft = 5 + Math.floor(Math.random() * 8);
  }
 
  const pat = FX_PATTERNS[fxState.patternIndex];
- const progress = 1 - fxState.patternTicksLeft / 20;
+ const stepProgress = 1 - (fxState.patternTicksLeft / 12);
+ const prev = fxState.currentRate;
  let delta = 0;
 
- if (pat.id === "SPIKE_UP") {
-  const burst = Math.random() < 0.35 ? (18 + Math.random() * 28) : (4 + Math.random() * 14);
-  delta = burst + (Math.random() - 0.35) * 8;
- } else if (pat.id === "DROP_DOWN") {
-  const drop = Math.random() < 0.35 ? -(18 + Math.random() * 28) : -(4 + Math.random() * 14);
-  delta = drop + (Math.random() - 0.65) * 8;
- } else if (pat.id === "DIP_THEN_RALLY") {
-  delta = progress < 0.45
-   ? -(8 + Math.random() * 18)
-   : (10 + Math.random() * 24);
- } else if (pat.id === "RALLY_THEN_DIP") {
-  delta = progress < 0.45
-   ? (8 + Math.random() * 18)
-   : -(10 + Math.random() * 24);
+ if (pat.id === "RANDOM_UP") {
+  delta = Math.random() < 0.72
+   ? (5 + Math.random() * 24)
+   : -(3 + Math.random() * 10);
+ } else if (pat.id === "RANDOM_DOWN") {
+  delta = Math.random() < 0.72
+   ? -(5 + Math.random() * 24)
+   : (3 + Math.random() * 10);
+ } else if (pat.id === "PLUNGE_THEN_SPIKE") {
+  delta = stepProgress < 0.5
+   ? -(18 + Math.random() * 34)
+   : (22 + Math.random() * 40);
+ } else if (pat.id === "PLUNGE_DOUBLE_DROP") {
+  delta = -(14 + Math.random() * 32);
+ } else if (pat.id === "RALLY_AGAIN") {
+  delta = Math.random() < 0.8
+   ? (12 + Math.random() * 32)
+   : -(4 + Math.random() * 9);
+ } else if (pat.id === "RE_PLUNGE") {
+  delta = Math.random() < 0.8
+   ? -(14 + Math.random() * 34)
+   : (4 + Math.random() * 9);
  } else {
-  const sign = Math.random() < 0.5 ? 1 : -1;
-  delta = sign * (8 + Math.random() * pat.amp);
+  // WILD_MIX: sudden plunge, spike, dip, rally
+  const mode = Math.floor(Math.random() * 4);
+  if (mode === 0) delta = -(20 + Math.random() * 35);
+  else if (mode === 1) delta = (20 + Math.random() * 35);
+  else if (mode === 2) delta = -(5 + Math.random() * 14);
+  else delta = (5 + Math.random() * 14);
  }
 
- const prev = fxState.currentRate;
- let next = roundMoney(prev + delta);
- if (next < 3500) next = roundMoney(3500 + Math.abs(delta));
- if (next > 6500) next = roundMoney(6500 - Math.abs(delta));
+ let next = clampFxRate(prev + delta);
+ // Bounce naturally near 4489 or 4999 edges so spikes/plunges stay visible inside the band
+ if (next <= FX_MIN_BAND + 2 && delta < 0) {
+  next = clampFxRate(FX_MIN_BAND + 12 + Math.random() * 24);
+ } else if (next >= FX_MAX_BAND - 2 && delta > 0) {
+  next = clampFxRate(FX_MAX_BAND - 12 - Math.random() * 24);
+ }
 
  fxState.prevRate = prev;
  fxState.currentRate = next;
@@ -3757,15 +4247,63 @@ function stepFxTick() {
  renderFxCanvas();
 }
 
+function applyAdminRateSync(newRate, broadcast = true) {
+ const clamped = clampFxRate(newRate);
+ const prev = fxState.currentRate;
+ fxState.prevRate = prev;
+ fxState.currentRate = clamped;
+ fxState.points.push({
+  rate: clamped,
+  prev,
+  pattern: clamped >= prev ? "RANDOM_UP" : "RANDOM_DOWN",
+  ts: Date.now()
+ });
+ if (fxState.points.length > FX_MAX_POINTS) {
+  fxState.points.shift();
+ }
+
+ if (broadcast) {
+  const payload = { rate: clamped, updatedAt: Date.now() };
+  saveJson(STORAGE_KEYS.FX_SYNC, payload);
+  if (firebaseReady && db) {
+   db.ref("fxOverride").set(payload).catch(() => {});
+  }
+ }
+
+ renderFxReadouts();
+ renderFxCanvas();
+}
+
+function adminUpdateLiveRate() {
+ const raw = Number($("adminFxRateInput")?.value);
+ if (!Number.isFinite(raw) || raw <= 0) {
+  showCenterAlert("မှန်ကန်သော Dollar Rate ဂဏန်းထည့်ပါ (4,489 – 4,999 ဝန်းကျင်)။", {
+   ok: false,
+   title: "INVALID RATE",
+   badge: "FX SYNC"
+  });
+  return;
+ }
+ applyAdminRateSync(raw, true);
+ showCenterAlert(
+  `Live Dollar Rate ကို 1 USD = ${fxState.currentRate.toLocaleString("en-US", { minimumFractionDigits: 2 })} MMK သို့ ချက်ချင်း Update လုပ်ပြီးပါပြီ။`,
+  { ok: true, title: "RATE UPDATED", badge: "LIVE SYNC" }
+ );
+}
+
 function renderFxReadouts() {
  const cur = fxState.currentRate;
  const isUp = cur >= fxState.prevRate;
  const pct = (((cur - FX_BASE_RATE) / FX_BASE_RATE) * 100).toFixed(2);
  const sign = Number(pct) >= 0 ? "+" : "";
- const pat = FX_PATTERNS[fxState.patternIndex];
+ const pat = FX_PATTERNS[fxState.patternIndex] || FX_PATTERNS[0];
 
  const formatted = `1 USD = ${cur.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
  if ($("todayFxRateValue")) $("todayFxRateValue").textContent = formatted;
+ if ($("statLiveFxRate")) $("statLiveFxRate").textContent = cur.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+ if ($("adminFxRateInput") && document.activeElement !== $("adminFxRateInput")) {
+  $("adminFxRateInput").value = cur.toFixed(2);
+ }
 
  const curEl = $("fxCurrentRateDisplay");
  if (curEl) {
@@ -3780,11 +4318,11 @@ function renderFxReadouts() {
  }
 
  if ($("fxFormulaReadout")) {
-  $("fxFormulaReadout").textContent = `Base: ${FX_BASE_RATE.toLocaleString()} → Live: ${cur.toLocaleString("en-US", { minimumFractionDigits: 2 })} MMK`;
+  $("fxFormulaReadout").textContent = `Base: 4,500 · Band: 4,489–4,999 MMK`;
  }
 
  if ($("fxPointDetailText") && fxState.hoverIndex < 0) {
-  $("fxPointDetailText").textContent = `Pattern: ${pat.label} · Hover/touch to inspect`;
+  $("fxPointDetailText").textContent = `${pat.label} · Hover/touch to inspect`;
  }
 }
 
@@ -3800,9 +4338,9 @@ function bindFxCanvasHover() {
   fxState.hoverIndex = Math.max(0, Math.min(fxState.points.length - 1, idx));
   const pt = fxState.points[fxState.hoverIndex];
   if (pt && $("fxPointDetailText")) {
-   const dir = pt.rate >= pt.prev ? "▲ Rising" : "▼ Falling";
+   const dir = pt.rate >= pt.prev ? "▲ တက်" : "▼ ကျ";
    $("fxPointDetailText").textContent =
-    `${dir} · ${pt.rate.toLocaleString("en-US", { minimumFractionDigits: 2 })} MMK (${pt.pattern})`;
+    `${dir} · ${pt.rate.toLocaleString("en-US", { minimumFractionDigits: 2 })} MMK`;
   }
   renderFxCanvas();
  };
@@ -3844,12 +4382,13 @@ function renderFxCanvas() {
  }
 
  const rates = pts.map(p => p.rate);
- let minV = Math.min(...rates);
- let maxV = Math.max(...rates);
- if (Math.abs(maxV - minV) < 12) {
-  minV -= 10;
-  maxV += 10;
+ let minV = Math.min(...rates, FX_MIN_BAND);
+ let maxV = Math.max(...rates, FX_MAX_BAND);
+ if (Math.abs(maxV - minV) < 25) {
+  minV = FX_MIN_BAND;
+  maxV = FX_MAX_BAND;
  }
+
  const padTop = 18;
  const padBottom = 22;
  const padLeft = 12;
@@ -3857,8 +4396,7 @@ function renderFxCanvas() {
  const plotW = Math.max(10, w - padLeft - padRight);
  const plotH = Math.max(10, h - padTop - padBottom);
 
- // Horizontal subtle grid lines
- ctx.strokeStyle = "rgba(139, 148, 158, 0.16)";
+ ctx.strokeStyle = "rgba(139, 148, 158, 0.15)";
  ctx.lineWidth = 1;
  for (let g = 0; g <= 3; g++) {
   const gy = padTop + (plotH / 3) * g;
@@ -3871,7 +4409,7 @@ function renderFxCanvas() {
  const toX = (i) => padLeft + (pts.length === 1 ? 0 : (i / (pts.length - 1)) * plotW);
  const toY = (val) => padTop + ((maxV - val) / (maxV - minV)) * plotH;
 
- // Draw each segment colored Green when rising, Red when falling
+ // Green when rising, Red when falling on every spike/plunge segment
  for (let i = 1; i < pts.length; i++) {
   const x0 = toX(i - 1);
   const y0 = toY(pts[i - 1].rate);
@@ -3880,14 +4418,13 @@ function renderFxCanvas() {
   const rising = pts[i].rate >= pts[i - 1].rate;
   const strokeCol = rising ? "#3fb950" : "#f85149";
 
-  // Subtle vertical area tint under segment
   ctx.beginPath();
   ctx.moveTo(x0, y0);
   ctx.lineTo(x1, y1);
   ctx.lineTo(x1, padTop + plotH);
   ctx.lineTo(x0, padTop + plotH);
   ctx.closePath();
-  ctx.fillStyle = rising ? "rgba(63, 185, 80, 0.10)" : "rgba(248, 81, 73, 0.10)";
+  ctx.fillStyle = rising ? "rgba(63, 185, 80, 0.11)" : "rgba(248, 81, 73, 0.11)";
   ctx.fill();
 
   ctx.beginPath();
@@ -3900,7 +4437,6 @@ function renderFxCanvas() {
   ctx.stroke();
  }
 
- // Latest point marker
  const lastIdx = pts.length - 1;
  const lx = toX(lastIdx);
  const ly = toY(pts[lastIdx].rate);
@@ -3915,7 +4451,6 @@ function renderFxCanvas() {
  ctx.strokeStyle = "#ffffff";
  ctx.stroke();
 
- // Hover crosshair
  if (fxState.hoverIndex >= 0 && fxState.hoverIndex < pts.length) {
   const hx = toX(fxState.hoverIndex);
   const hy = toY(pts[fxState.hoverIndex].rate);
@@ -3938,23 +4473,29 @@ function renderFxCanvas() {
 }
 
 // =========================================================================
-// HOTELS, HERO BANNER, TICKER, HISTORY, PROFILE & WALLET MODALS
+// HERO BANNER (ROTATES ONE HOTEL PHOTO PER PAGE OPEN/VISIT), HOTELS & PROFILE
 // =========================================================================
 function initHeroAndTicker() {
+ const sourceHotels = (Array.isArray(hotels) && hotels.length) ? hotels : BASE_HOTELS;
+ const bannerIdxKey = "tb_hero_banner_idx_v1";
+ const prevIdx = Number(loadJson(bannerIdxKey, -1));
+ const nextIdx = (prevIdx + 1) % sourceHotels.length;
+ saveJson(bannerIdxKey, nextIdx);
+
+ const activeHotel = sourceHotels[nextIdx] || BASE_HOTELS[0];
  const hero = $("homeHotelHeroBanner");
- const featured = hotels[0] || BASE_HOTELS[0];
- if (hero && featured) {
-  hero.style.backgroundImage = `url('${featured.img || HERO_BANNER_IMAGES[0]}')`;
+ if (hero && activeHotel?.img) {
+  hero.style.backgroundImage = `url('${activeHotel.img}')`;
  }
- if ($("heroHotelNameLabel") && featured) {
-  $("heroHotelNameLabel").textContent = `Featured: ${featured.name} · ${featured.country}`;
+ if ($("heroHotelNameLabel") && activeHotel) {
+  $("heroHotelNameLabel").textContent = `${activeHotel.name} · ${activeHotel.country}`;
  }
 
  const track = $("activityTickerSlide");
  if (track) {
   const sampleItems = [
    `Kyaw Min • Completed Order #24 • Profit <span class="ticker-amt">+$14.20</span>`,
-   `Su Myat • New Member Joined • <span class="ticker-amt">30-Order Cycle</span>`,
+   `Su Myat • Joined with Code TPxxxx • <span class="ticker-amt">30-Order Cycle</span>`,
    `Sithu • Completed 30/30 Orders • Payout <span class="ticker-amt">+$86.50</span>`,
    `Thandar • Booked Marina Bay Horizon • <span class="ticker-amt">Confirmed</span>`
   ];
@@ -4077,7 +4618,7 @@ function renderProfile() {
   if ($("profileAvatarImg")) $("profileAvatarImg").classList.add("hidden");
   if ($("profileAvatar")) {
    $("profileAvatar").classList.remove("hidden");
-   $("profileAvatar").textContent = "TB";
+   $("profileAvatar").textContent = "◯";
   }
   if ($("profileLogoutBtn")) $("profileLogoutBtn").classList.add("hidden");
   if ($("suspendedAccountNotice")) $("suspendedAccountNotice").classList.add("hidden");
@@ -4109,7 +4650,7 @@ function renderProfile() {
   if ($("profileAvatarImg")) $("profileAvatarImg").classList.add("hidden");
   if ($("profileAvatar")) {
    $("profileAvatar").classList.remove("hidden");
-   $("profileAvatar").textContent = String(u.name || "TB").slice(0, 2).toUpperCase();
+   $("profileAvatar").textContent = String(u.name || "◯").slice(0, 2).toUpperCase();
   }
  }
 
@@ -4180,7 +4721,7 @@ function openWithdrawModal() {
  }
  if (u.hasInviteBonus && Number(u.completedOrders || 0) < 30) {
   showCenterAlert(
-   `Invite bonus ($18.00) အသုံးပြုထားသောကြောင့် Order 30/30 ပြည့်ပြီးမှသာ ငွေထုတ်နိုင်ပါမည် (လက်ရှိ ${u.completedOrders}/30)။`,
+   `Invite bonus ($18.00) ရယူထားသောကြောင့် Order 30/30 ပြည့်ပြီးမှသာ ငွေထုတ်နိုင်ပါမည် (လက်ရှိ ${u.completedOrders}/30)။`,
    { ok: false, title: "ORDER 30 REQUIRED", badge: `${u.completedOrders}/30` }
   );
   return;
@@ -4279,27 +4820,6 @@ function handleLogoClick() {
  showPage("homePage", document.querySelectorAll(".bottom-nav button")[0] || null);
 }
 
-function loginAdmin() {
- const ph = String($("adminPhoneInput")?.value || "").trim();
- const pw = String($("adminPassInput")?.value || "").trim();
- const errEl = $("adminLoginErr");
-
- if (ph === ADMIN_CREDS.phone && ADMIN_CREDS.passwords.includes(pw)) {
-  isStaffLoggedIn = true;
-  saveJson(STORAGE_KEYS.ADMIN_AUTH, true);
-  if (errEl) errEl.textContent = "";
-  renderAdminPanel();
- } else {
-  if (errEl) errEl.textContent = "Invalid admin phone or password.";
- }
-}
-
-function logoutAdmin() {
- isStaffLoggedIn = false;
- saveJson(STORAGE_KEYS.ADMIN_AUTH, false);
- renderAdminPanel();
-}
-
 function renderAdminPanel() {
  const gate = $("adminLoginGate");
  const consoleEl = $("adminConsole");
@@ -4316,14 +4836,17 @@ function renderAdminPanel() {
  renderAdminUsers();
  renderAdminCsList();
  renderAdminCsMessages();
+ renderAdminBankAccounts();
  renderAdminProfitTiers();
  renderAdminHotels();
+ renderTypingIndicators();
 }
 
 function switchAdminTab(tabName) {
  const tabs = {
   users: { panel: "adminUsersTab", btn: "adminTabUsers" },
   cs: { panel: "adminCsTab", btn: "adminTabCs" },
+  banks: { panel: "adminBanksTab", btn: "adminTabBanks" },
   tiers: { panel: "adminTiersTab", btn: "adminTabTiers" },
   hotels: { panel: "adminHotelsTab", btn: "adminTabHotels" }
  };
@@ -4338,6 +4861,9 @@ function switchAdminTab(tabName) {
  if (tabName === "cs") {
   renderAdminCsList();
   renderAdminCsMessages();
+  renderTypingIndicators();
+ } else if (tabName === "banks") {
+  renderAdminBankAccounts();
  } else if (tabName === "tiers") {
   renderAdminProfitTiers();
  } else if (tabName === "hotels") {
@@ -4365,12 +4891,11 @@ function renderAdminStats() {
  const totalUsers = users.length;
  const onlineUsers = users.filter(u => u.isOnline).length;
  const placingUsers = users.filter(u => u.isPlacingOrder).length;
- const totalBal = users.reduce((sum, u) => sum + roundMoney(u.balance), 0);
 
  if ($("statTotalUsers")) $("statTotalUsers").textContent = String(totalUsers);
  if ($("statOnlineUsers")) $("statOnlineUsers").textContent = String(onlineUsers);
  if ($("statPlacingUsers")) $("statPlacingUsers").textContent = String(placingUsers);
- if ($("statTotalBalance")) $("statTotalBalance").textContent = fmtMoney(totalBal);
+ if ($("statLiveFxRate")) $("statLiveFxRate").textContent = fxState.currentRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
  if ($("adminUsersCountBadge")) $("adminUsersCountBadge").textContent = `${totalUsers} Users`;
 }
 
@@ -4478,6 +5003,7 @@ function toggleBanUser(userKey) {
 function handleReeschAdmin() {
  users = mergeUserLists(loadJson(STORAGE_KEYS.USERS, []), users);
  chats = mergeChatMaps(loadJson(STORAGE_KEYS.CHATS, {}), chats);
+ adminBankAccounts = loadJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
  if (firebaseReady && db) {
   db.ref("users").once("value").then((snap) => {
    const val = snap.val();
@@ -4501,6 +5027,7 @@ function saveAllAdminChanges() {
  saveUsers();
  saveJson(STORAGE_KEYS.CHATS, chats);
  saveJson(STORAGE_KEYS.PROFIT_TIERS, profitTiers);
+ saveJson(STORAGE_KEYS.BANK_ACCOUNTS, adminBankAccounts);
  if (firebaseReady && db) {
   db.ref("chats").set(chats).catch(() => {});
  }
@@ -4580,6 +5107,7 @@ function refreshAllViews() {
  renderHistory();
  renderProfile();
  renderSupportChat();
+ renderTypingIndicators();
  if (isStaffLoggedIn) {
   renderAdminPanel();
  }
