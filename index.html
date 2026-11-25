@@ -4666,68 +4666,203 @@ function updateFxDisplays() {
 }
 
 function drawFxChart() {
- const canvas = document.getElementById("fxLiveCanvas");
- if (!canvas) return;
- const box = canvas.parentElement;
- if (!box) return;
+  const canvas = document.getElementById("fxLiveCanvas");
+  if (!canvas) return;
+  const box = canvas.parentElement;
+  if (!box) return;
 
- const dpr = window.devicePixelRatio || 1;
- const w = box.clientWidth;
- const h = box.clientHeight;
- if (w <= 0 || h <= 0) return;
- canvas.width = w * dpr;
- canvas.height = h * dpr;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = box.clientWidth;
+  const h = box.clientHeight;
+  if (w <= 0 || h <= 0) return;
 
- const ctx = canvas.getContext("2d");
- ctx.scale(dpr, dpr);
- ctx.clearRect(0, 0, w, h);
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
 
- const pts = state.fxHistory && state.fxHistory.length ? state.fxHistory : [{ rate: state.fxCurrentRate }];
- const rates = pts.map((p) => Number(p.rate));
- const minR = Math.min(FX_MIN_RATE, ...rates) - 10;
- const maxR = Math.max(FX_MAX_RATE, ...rates) + 10;
- const span = Math.max(1, maxR - minR);
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
 
- const padL = 12;
- const padR = 56;
- const padT = 14;
- const padB = 22;
- const plotW = Math.max(20, w - padL - padR);
- const plotH = Math.max(20, h - padT - padB);
+  const minBand = typeof FX_MIN_RATE === "number" ? FX_MIN_RATE : 4489;
+  const maxBand = typeof FX_MAX_RATE === "number" ? FX_MAX_RATE : 4999;
 
- ctx.strokeStyle = state.theme === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
- ctx.lineWidth = 1;
- for (let i = 0; i <= 3; i++) {
-  const y = padT + (plotH * i) / 3;
-  ctx.beginPath();
-  ctx.moveTo(padL, y);
-  ctx.lineTo(w - padR, y);
-  ctx.stroke();
-
-  const val = maxR - (span * i) / 3;
-  ctx.fillStyle = state.theme === "dark" ? "#919ba7" : "#65676b";
-  ctx.font = "11px sans-serif";
-  ctx.fillText(Math.round(val).toLocaleString(), w - padR + 6, y + 4);
- }
-
- if (pts.length > 1) {
-  for (let i = 1; i < pts.length; i++) {
-   const x1 = padL + ((i - 1) / (pts.length - 1)) * plotW;
-   const y1 = padT + (1 - (pts[i - 1].rate - minR) / span) * plotH;
-   const x2 = padL + (i / (pts.length - 1)) * plotW;
-   const y2 = padT + (1 - (pts[i].rate - minR) / span) * plotH;
-
-   const rising = pts[i].rate >= pts[i - 1].rate;
-   ctx.strokeStyle = rising ? "#3fb950" : "#f85149";
-   ctx.lineWidth = 2.2;
-   ctx.beginPath();
-   ctx.moveTo(x1, y1);
-   ctx.lineTo(x2, y2);
-   ctx.stroke();
+  if (!Array.isArray(state.fxHistory) || state.fxHistory.length === 0) {
+    const baseVal = Number(state.fxCurrentRate) || 4990.50;
+    state.fxHistory = [{ rate: baseVal }];
   }
- }
-}
 
+  const now = performance.now();
+  if (!window.__tbFxMotion) {
+    window.__tbFxMotion = {
+      smoothRates: [],
+      mode: 0,
+      ticksLeft: 6,
+      target: Number(state.fxCurrentRate) || 4990.50,
+      phase: 0,
+      lastTime: now,
+      rafId: null
+    };
+  }
+  const m = window.__tbFxMotion;
+  const dt = Math.min(0.05, Math.max(0.001, (now - m.lastTime) / 1000));
+  m.lastTime = now;
+
+  if (--m.ticksLeft <= 0) {
+    m.mode = Math.floor(Math.random() * 5);
+    m.ticksLeft = 5 + Math.floor(Math.random() * 9);
+    const snapHigh = [4999.00, 4990.50, 4989.00, 4980.00, 4955.00, 4910.00];
+    const snapMidLow = [4840.00, 4740.00, 4630.00, 4520.00, 4500.00];
+    if (m.mode === 1) {
+      m.target = snapMidLow[Math.floor(Math.random() * snapMidLow.length)];
+    } else if (m.mode === 2) {
+      m.target = snapHigh[Math.floor(Math.random() * snapHigh.length)];
+    } else {
+      m.target = minBand + 10 + Math.random() * (maxBand - minBand - 12);
+    }
+  }
+
+  m.phase += dt * 4.2;
+  const latestSrc = Number(state.fxHistory[state.fxHistory.length - 1].rate) || Number(state.fxCurrentRate) || 4990.50;
+  let pull = (m.target - latestSrc) * 0.14;
+  let delta = 0;
+
+  if (m.mode === 0) {
+    delta = (Math.random() - 0.5) * 8 + pull * 0.4;
+  } else if (m.mode === 1) {
+    delta = -Math.abs((Math.random() - 0.3) * 14) + pull * 0.5;
+  } else if (m.mode === 2) {
+    delta = Math.abs((Math.random() - 0.3) * 14) + pull * 0.5;
+  } else if (m.mode === 3) {
+    delta = Math.sin(m.phase) * 12 + (Math.random() - 0.5) * 5;
+  } else {
+    const dir = Math.random() < 0.5 ? -1 : 1;
+    delta = dir * (6 + Math.random() * 14) + pull * 0.35;
+  }
+
+  let nextLiveRate = latestSrc + delta;
+  if (nextLiveRate > maxBand) nextLiveRate = maxBand - Math.random() * 3;
+  if (nextLiveRate < minBand) nextLiveRate = minBand + Math.random() * 4;
+  nextLiveRate = Number(nextLiveRate.toFixed(2));
+
+  const prevLiveRate = latestSrc;
+  state.fxCurrentRate = nextLiveRate;
+  state.fxHistory.push({ rate: nextLiveRate, ts: Date.now() });
+  if (state.fxHistory.length > 90) state.fxHistory.shift();
+
+  const curDisp = document.getElementById("fxCurrentRateDisplay");
+  const todayDisp = document.getElementById("todayFxRateValue");
+  const badge = document.getElementById("fxChangeBadge");
+  const fmtRate = `1 USD = ${nextLiveRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+  const isDown = nextLiveRate < prevLiveRate;
+  const baseRef = typeof FX_BASE_RATE === "number" ? FX_BASE_RATE : 4500;
+  const diffPct = ((nextLiveRate - baseRef) / baseRef) * 100;
+
+  if (todayDisp) todayDisp.textContent = fmtRate;
+  if (curDisp) {
+    curDisp.textContent = fmtRate;
+    curDisp.className = "fx-current-rate " + (isDown ? "is-down" : "is-up");
+    curDisp.style.color = isDown ? "#ef4444" : "#22c55e";
+  }
+  if (badge) {
+    const sign = diffPct >= 0 ? "+" : "";
+    badge.textContent = `${isDown ? "▼" : "▲"} ${sign}${diffPct.toFixed(2)}%`;
+    badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
+  }
+
+  const pts = state.fxHistory;
+  while (m.smoothRates.length < pts.length) {
+    m.smoothRates.push(Number(pts[m.smoothRates.length].rate) || nextLiveRate);
+  }
+  if (m.smoothRates.length > pts.length) {
+    m.smoothRates.splice(0, m.smoothRates.length - pts.length);
+  }
+
+  const lerp = 1 - Math.exp(-12 * dt);
+  for (let i = 0; i < pts.length; i++) {
+    const targetVal = Number(pts[i].rate) || nextLiveRate;
+    m.smoothRates[i] += (targetVal - m.smoothRates[i]) * lerp;
+  }
+
+  const rates = m.smoothRates;
+  const minR = Math.min(minBand, ...rates);
+  const maxR = Math.max(maxBand, ...rates);
+  const span = Math.max(1, maxR - minR);
+
+  const padL = 10;
+  const padR = 54;
+  const padT = 14;
+  const padB = 18;
+  const plotW = Math.max(10, w - padL - padR);
+  const plotH = Math.max(10, h - padT - padB);
+
+  const getX = (idx) => padL + (idx / Math.max(1, rates.length - 1)) * plotW;
+  const getY = (val) => padT + (1 - (val - minR) / span) * plotH;
+
+  ctx.font = "11px sans-serif";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  [maxR, (maxR + minR) / 2, minR].forEach((lv) => {
+    const gy = getY(lv);
+    ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padL, gy);
+    ctx.lineTo(w - padR, gy);
+    ctx.stroke();
+    ctx.fillStyle = "#94a3b8";
+    ctx.fillText(Math.round(lv).toLocaleString(), w - padR + 6, gy);
+  });
+
+  ctx.lineWidth = 2.4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  for (let i = 1; i < rates.length; i++) {
+    const x0 = getX(i - 1);
+    const y0 = getY(rates[i - 1]);
+    const x1 = getX(i);
+    const y1 = getY(rates[i]);
+    const rise = rates[i] >= rates[i - 1];
+    const col = rise ? "#22c55e" : "#ef4444";
+
+    const grad = ctx.createLinearGradient(0, Math.min(y0, y1), 0, padT + plotH);
+    grad.addColorStop(0, rise ? "rgba(34, 197, 94, 0.18)" : "rgba(239, 68, 68, 0.18)");
+    grad.addColorStop(1, "rgba(15, 23, 42, 0)");
+
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.lineTo(x1, padT + plotH);
+    ctx.lineTo(x0, padT + plotH);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = col;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+  }
+
+  const lastIdx = rates.length - 1;
+  const lx = getX(lastIdx);
+  const ly = getY(rates[lastIdx]);
+  const lastRise = lastIdx > 0 ? rates[lastIdx] >= rates[lastIdx - 1] : true;
+  ctx.fillStyle = lastRise ? "#22c55e" : "#ef4444";
+  ctx.beginPath();
+  ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (!m.rafId) {
+    m.rafId = requestAnimationFrame(() => {
+      m.rafId = null;
+      if (document.getElementById("fxLiveCanvas")) {
+        drawFxChart();
+      }
+    });
+  }
+}
 /* Booking 30-Order Cycle & History */
 function renderBookingStats() {
  const u = state.currentUser;
