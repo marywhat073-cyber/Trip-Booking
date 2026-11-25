@@ -3572,8 +3572,6 @@ function applyCloudSnapshot(cloud) {
 }
  saveState(true);
  refreshAllUI();
-}
-
 function pushToCloud(force = false) {
  if (!cloudReady || !db) return;
  const now = Date.now();
