@@ -603,34 +603,34 @@
     <div class="panel">
      <div class="section-head">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-       <button type="button" id="adminTabUsers" class="btn btn-primary btn-sm" onclick="switchAdminTab('users')" data-i18n="adm_tab_users">Users &amp; Rules</button>
+       <button type="button" id="adminTabUsers" class="btn btn-primary btn-sm" onclick="switchAdminTab('users')" data-i18n="adm_tab_users">အသုံးပြုသူများ</button>
        <button type="button" id="adminTabCs" class="btn btn-secondary btn-sm" onclick="switchAdminTab('cs')">
-        <span data-i18n="adm_tab_cs">Customer Service</span> <span id="adminCsUnreadBadge" class="count-badge hidden">0</span>
+        <span data-i18n="adm_tab_cs">ဝန်ဆောင်မှု</span> <span id="adminCsUnreadBadge" class="count-badge hidden">0</span>
        </button>
        <button type="button" id="adminTabBanks" class="btn btn-secondary btn-sm" onclick="switchAdminTab('banks')" data-i18n="adm_tab_banks">ဘဏ်အကောင့်များ</button>
-       <button type="button" id="adminTabTiers" class="btn btn-secondary btn-sm" onclick="switchAdminTab('tiers')" data-i18n="adm_tab_tiers">Profit Tiers ($100–$10,000)</button>
-       <button type="button" id="adminTabHotels" class="btn btn-secondary btn-sm" onclick="switchAdminTab('hotels')" data-i18n="adm_tab_hotels">Hotels (599)</button>
+       <button type="button" id="adminTabTiers" class="btn btn-secondary btn-sm" onclick="switchAdminTab('tiers')" data-i18n="adm_tab_tiers">အကျိုးအမြတ် အဆင့်များ ($100–$10,000)</button>
+       <button type="button" id="adminTabHotels" class="btn btn-secondary btn-sm" onclick="switchAdminTab('hotels')" data-i18n="adm_tab_hotels">ဟိုတယ်များ (599)</button>
        <span id="adminUsersCountBadge" class="count-badge">0 Users</span>
       </div>
       <div class="admin-header-tools">
-       <button type="button" class="btn btn-secondary btn-sm" onclick="openAccountInfoModal()" data-i18n="btn_acc_info">Account Info</button>
+       <button type="button" class="btn btn-secondary btn-sm" onclick="openAccountInfoModal()" data-i18n="btn_acc_info">အကောင့် အချက်အလက်</button>
        <button type="button" class="btn btn-primary btn-sm" onclick="handleReeschAdmin()">REESCH</button>
-       <button type="button" class="btn btn-secondary btn-sm" onclick="saveAllAdminChanges()" data-i18n="btn_save_all">Save All</button>
-       <button type="button" class="btn btn-danger btn-sm" onclick="logoutAdmin()" data-i18n="btn_logout">Logout</button>
+       <button type="button" class="btn btn-secondary btn-sm" onclick="saveAllAdminChanges()" data-i18n="btn_save_all">အားလုံးသိမ်းမည်</button>
+       <button type="button" class="btn btn-danger btn-sm" onclick="logoutAdmin()" data-i18n="btn_logout">ထွက်ရန်</button>
       </div>
      </div>
 
      <!-- USERS TAB -->
      <div id="adminUsersTab">
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
-       <input id="adminUserSearch" type="text" class="search-input" data-i18n-placeholder="adm_search_user_ph" placeholder="Search user name, phone, email..." oninput="renderAdminUsers()" />
+       <input id="adminUserSearch" type="text" class="search-input" data-i18n-placeholder="adm_search_user_ph" placeholder="အမည်၊ ဖုန်း၊ အီးမေးလ် ရှာရန်..." oninput="renderAdminUsers()" />
        <select id="adminUserFilter" class="filter-select" onchange="renderAdminUsers()">
-        <option value="all" data-i18n="flt_all_users">All Users</option>
-        <option value="online" data-i18n="flt_online">Online</option>
-        <option value="live_order" data-i18n="flt_live_order">Live Ordering</option>
-        <option value="negative" data-i18n="flt_negative">Negative / Locked</option>
-        <option value="has_rules" data-i18n="flt_has_rules">Has Order Rules</option>
-        <option value="banned" data-i18n="flt_banned">Banned</option>
+        <option value="all" data-i18n="flt_all_users">အသုံးပြုသူအားလုံး</option>
+        <option value="online" data-i18n="flt_online">အွန်လိုင်း</option>
+        <option value="live_order" data-i18n="flt_live_order">အော်ဒါတင်နေသူ</option>
+        <option value="negative" data-i18n="flt_negative">အနှုတ် / ပိတ်ထားသူ</option>
+        <option value="has_rules" data-i18n="flt_has_rules">အော်ဒါဖမ်းထားသူ</option>
+        <option value="banned" data-i18n="flt_banned">ပိတ်ပင်ထားသူ</option>
        </select>
       </div>
 
@@ -638,14 +638,14 @@
        <table>
         <thead>
          <tr>
-          <th data-i18n="th_user">User</th>
-          <th data-i18n="th_balance">Balance</th>
-          <th data-i18n="th_negative">Negative</th>
-          <th data-i18n="th_profit_box">Profit Box</th>
-          <th data-i18n="th_rules">Rules</th>
-          <th data-i18n="th_order">Order</th>
-          <th data-i18n="th_status">Status</th>
-          <th data-i18n="th_actions">Actions</th>
+          <th data-i18n="th_user">အသုံးပြုသူ &amp; စကားဝှက်</th>
+          <th data-i18n="th_balance">လက်ကျန်ငွေ ($)</th>
+          <th data-i18n="th_negative">အနှုတ် ($)</th>
+          <th data-i18n="th_profit_box">အမြတ်သေတ္တာ ($)</th>
+          <th data-i18n="th_rules">ဖမ်းထားသော အော်ဒါများ</th>
+          <th data-i18n="th_order">အော်ဒါ</th>
+          <th data-i18n="th_status">အခြေအနေ</th>
+          <th data-i18n="th_actions">လုပ်ဆောင်ချက်များ</th>
          </tr>
         </thead>
         <tbody id="adminUsersRows"></tbody>
@@ -658,15 +658,15 @@
       <div class="cs-layout">
        <div class="cs-client-list">
         <div class="cs-list-head">
-         <strong data-i18n="cs_users_heading">Users</strong>
-         <input id="csUserSearch" type="text" class="search-input" style="min-width:120px;padding:5px 8px;font-size:12px" data-i18n-placeholder="search_short_ph" placeholder="Search..." oninput="renderAdminCsList()" />
+         <strong data-i18n="cs_users_heading">အသုံးပြုသူများ</strong>
+         <input id="csUserSearch" type="text" class="search-input" style="min-width:120px;padding:5px 8px;font-size:12px" data-i18n-placeholder="search_short_ph" placeholder="ရှာရန်..." oninput="renderAdminCsList()" />
         </div>
         <div id="adminCsThreads"></div>
        </div>
 
        <div class="cs-chat-pane">
         <div class="cs-pane-head" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
-         <strong id="adminCsActiveHeader" data-i18n="cs_select_user">Select a user conversation</strong>
+         <strong id="adminCsActiveHeader" data-i18n="cs_select_user">စကားပြောမည့် အသုံးပြုသူကို ရွေးပါ</strong>
          <span id="adminSideTypingIndicator" class="small muted"></span>
         </div>
         <div id="adminCsMessages" class="cs-messages"></div>
@@ -676,7 +676,7 @@
          <div class="admin-cs-composer">
           <button type="button" class="btn btn-secondary btn-sm" onclick="toggleBankPicker('admin')" title="ဘဏ်ကဒ်" data-i18n="btn_bank_card">💳 ဘဏ်ကဒ်</button>
           <label class="btn btn-secondary btn-sm" style="cursor:pointer;margin:0" title="Photo">
-           <span data-i18n="btn_photo">📎 Photo</span>
+           <span data-i18n="btn_photo">📎 ဓာတ်ပုံ</span>
            <input type="file" accept="image/*" style="display:none" onchange="handleChatPhotoUpload(event, 'admin')" />
           </label>
           <textarea
@@ -688,7 +688,7 @@
            onkeydown="handleComposerKeydown(event, 'admin')"
            oninput="handleComposerTyping('admin', this)"
           ></textarea>
-          <button type="button" class="btn btn-primary btn-sm" onclick="sendAdminCsMessage()" data-i18n="btn_send">➤ Send</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="sendAdminCsMessage()" data-i18n="btn_send">➤ ပို့မည်</button>
          </div>
         </div>
        </div>
@@ -932,33 +932,33 @@
   </div>
  </div>
 
- <!-- AUTO-CATCH MODAL -->
+ <!-- AUTO-CATCH MODAL (10+ Rules, Target Order #, Negative $, Profit Box $, Remove & Confirm) -->
  <div id="autoCatchModal" class="modal-backdrop hidden">
   <div class="modal-card wide-modal">
    <div class="modal-header">
-    <h3 id="autoCatchTitle">အော်တိုဖမ်း (Auto Catch)</h3>
+    <h3 id="autoCatchTitle">အော်ဒါဖမ်းယူခြင်း (Auto Catch)</h3>
     <button type="button" class="close-x" onclick="closeModal('autoCatchModal')">✕</button>
    </div>
    <div id="autoCatchUserMeta" class="small muted" style="margin-bottom:12px"></div>
 
-   <div style="display:flex;gap:10px;flex-wrap:wrap">
+   <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
     <div class="field" style="flex:1;min-width:130px">
-     <label>Target Order # (1-30)</label>
-     <input id="catchOrderNumInput" type="number" min="1" max="30" placeholder="e.g. 10" />
+     <label>ဖမ်းမည့် အော်ဒါအကြိမ်ရေ # (1-30)</label>
+     <input id="catchOrderNumInput" type="number" min="1" max="30" placeholder="ဥပမာ 6" />
     </div>
     <div class="field" style="flex:1;min-width:130px">
-     <label>Negative Balance ($)</label>
-     <input id="catchNegInput" type="number" step="0.01" placeholder="e.g. 150" />
+     <label>အနှုတ်ဒေါ်လာ ($)</label>
+     <input id="catchNegInput" type="number" step="0.01" placeholder="ဥပမာ 300" />
     </div>
     <div class="field" style="flex:1;min-width:130px">
-     <label>Order Profit Box ($)</label>
-     <input id="catchProfitInput" type="number" step="0.01" placeholder="e.g. 25" />
+     <label>အော်ဒါ အမြတ်ဒေါ်လာ ($)</label>
+     <input id="catchProfitInput" type="number" step="0.01" placeholder="ဥပမာ 25" />
     </div>
    </div>
 
    <div id="autoCatchErr" class="error-text"></div>
-   <div style="margin-bottom:14px">
-    <button type="button" class="btn btn-primary btn-sm" onclick="confirmAutoCatchRule()" data-i18n="btn_save_rule">Save Rule</button>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <button type="button" class="btn btn-primary btn-sm" onclick="confirmAutoCatchRule()">အော်ဒါဖမ်းမည် (Save Rule)</button>
    </div>
 
    <div class="table-wrap">
@@ -966,11 +966,11 @@
      <thead>
       <tr>
        <th>#</th>
-       <th>Target Order</th>
-       <th>Negative ($)</th>
-       <th>Profit Box ($)</th>
-       <th data-i18n="th_status">Status</th>
-       <th data-i18n="th_action">Action</th>
+       <th>ဖမ်းမည့် အော်ဒါ #</th>
+       <th>အနှုတ် ($)</th>
+       <th>အမြတ် ($)</th>
+       <th>အခြေအနေ</th>
+       <th>ဖယ်ရှား / အတည်ပြု</th>
       </tr>
      </thead>
      <tbody id="autoCatchRulesRows"></tbody>
@@ -1073,7 +1073,7 @@
  <div id="accountInfoModal" class="modal-backdrop hidden">
   <div class="modal-card wide-modal">
    <div class="modal-header">
-    <h3 data-i18n="acc_info_modal_title">Account &amp; Live Location Info</h3>
+    <h3 data-i18n="acc_info_modal_title">အသုံးပြုသူ အကောင့် အချက်အလက်များ</h3>
     <button type="button" class="close-x" onclick="closeModal('accountInfoModal')">✕</button>
    </div>
    <div class="table-wrap">
@@ -1081,7 +1081,8 @@
      <thead>
       <tr>
        <th>#</th>
-       <th data-i18n="th_user">User</th>
+       <th data-i18n="th_user">အသုံးပြုသူ</th>
+       <th>စကားဝှက် (Password)</th>
        <th data-i18n="th_invite">Invite</th>
        <th data-i18n="th_device">Device</th>
        <th data-i18n="th_coords">Coordinates</th>
@@ -1110,10 +1111,9 @@
 </html>
 <style>
 /* =========================================================================
-   PART 2: INTRO SPLASH (4s), ADMIN BANK (0/5), PROFILE, MODALS & COMPOSER CSS
+   PART 2: INTRO SPLASH, ADMIN BANK (0/5), PROFILE, MODALS & COMPOSER CSS
    ========================================================================= */
 
-/* Intro Splash (2.5s Stage 1 + 1.5s Stage 2 Hotel-Backed Loader) */
 .intro-splash {
  position: fixed;
  inset: 0;
@@ -1268,7 +1268,6 @@
  letter-spacing: 0.03em;
 }
 
-/* Stage 2 (1.5s): 3rd Image Over Hotel Background (No White Box) */
 .intro-stage-two {
  position: relative;
  z-index: 3;
@@ -1306,7 +1305,6 @@
  100% { transform: scale(0.96) rotate(0deg); }
 }
 
-/* Admin Myanmar Bank / Pay Provider Grid (0/5) & Form Card */
 .bank-provider-grid {
  display: grid;
  grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
@@ -1387,7 +1385,6 @@
  font-weight: 700;
 }
 
-/* Profile Boxes & Copy Cards */
 .profile-info-grid {
  display: grid;
  grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
@@ -1467,7 +1464,7 @@
 }
 
 .modal-card.wide-modal {
- max-width: 800px;
+ max-width: 860px;
 }
 
 .modal-header {
@@ -1544,7 +1541,6 @@
  font-weight: 600;
 }
 
-/* Center Rounded Alert */
 .center-rounded-alert {
  position: fixed;
  inset: 0;
@@ -1608,7 +1604,6 @@
  justify-content: center;
 }
 
-/* Customer Service Two-Column Layout & Composers */
 .cs-layout {
  display: grid;
  grid-template-columns: 280px 1fr;
@@ -1694,7 +1689,6 @@
  color: var(--fb-success);
 }
 
-/* Composer Bars */
 .support-composer,
 .admin-cs-composer {
  display: flex;
@@ -1735,7 +1729,6 @@
  white-space: nowrap;
 }
 
-/* Bank Card Picker Popover Above Composer */
 .bank-picker-panel {
  position: absolute;
  left: 10px;
@@ -1816,6 +1809,29 @@
  margin-top: 2px;
 }
 
+.adm-inline-edit-row {
+ display: flex;
+ align-items: center;
+ gap: 4px;
+ flex-wrap: wrap;
+}
+
+.adm-pass-chip {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ margin-top: 4px;
+ font-size: 12px;
+ color: var(--fb-muted);
+}
+
+.adm-action-stack {
+ display: flex;
+ flex-direction: column;
+ gap: 5px;
+ min-width: 120px;
+}
+
 @media (max-width: 760px) {
  .cs-layout {
   grid-template-columns: 1fr;
@@ -1840,7 +1856,8 @@
 </style>
 <style>
 /* =========================================================================
-   PART 3: THEME VARIABLES, HOME/FX/HOTELS, CHAT BUBBLES & ADMIN TABLES CSS
+   PART 3: THEME VARIABLES, FULL-VIEWPORT THEME BG (NO WHITE GAPS),
+           HOME/FX/HOTELS, CHAT BUBBLES & ADMIN TABLES CSS
    ========================================================================= */
 :root {
  --fb-bg: #f0f2f5;
@@ -1876,14 +1893,22 @@ body.dark {
  --fb-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
-* {
+*,
+*::before,
+*::after {
  box-sizing: border-box;
  margin: 0;
  padding: 0;
 }
 
-html,
+html {
+ min-height: 100%;
+ background: var(--fb-bg);
+}
+
 body {
+ min-height: 100vh;
+ width: 100%;
  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
  background: var(--fb-bg);
  color: var(--fb-text);
@@ -1901,7 +1926,6 @@ textarea {
  color: inherit;
 }
 
-/* Topbar */
 .topbar {
  position: sticky;
  top: 0;
@@ -1979,7 +2003,6 @@ textarea {
  background: var(--fb-hover);
 }
 
-/* Activity Ticker */
 .activity-ticker-wrap {
  display: flex;
  align-items: center;
@@ -2039,7 +2062,6 @@ textarea {
  100% { transform: translateX(-50%); }
 }
 
-/* Incoming CS Toast */
 .cs-incoming-toast {
  position: fixed;
  top: calc(var(--top-h) + 38px);
@@ -2095,7 +2117,6 @@ textarea {
  text-overflow: ellipsis;
 }
 
-/* Registration Success Toast */
 .reg-success-toast {
  position: fixed;
  top: calc(var(--top-h) + 42px);
@@ -2140,11 +2161,12 @@ textarea {
  margin-top: 2px;
 }
 
-/* Main Layout */
 .container {
  max-width: 1120px;
+ min-height: calc(100vh - var(--top-h) - var(--nav-h) - 34px);
  margin: 0 auto;
- padding: 14px 14px calc(var(--nav-h) + 24px);
+ padding: 14px 14px calc(var(--nav-h) + 28px);
+ background: transparent;
 }
 
 .page {
@@ -2155,7 +2177,6 @@ textarea {
  display: block;
 }
 
-/* Buttons */
 .btn {
  display: inline-flex;
  align-items: center;
@@ -2224,7 +2245,6 @@ textarea {
  border-radius: 7px;
 }
 
-/* Hero Banner */
 .hero {
  position: relative;
  border-radius: 16px;
@@ -2280,7 +2300,6 @@ textarea {
  color: #fff;
 }
 
-/* Today FX Hero Highlight */
 .fx-hero-card {
  background: linear-gradient(135deg, rgba(47, 129, 247, 0.16), rgba(63, 185, 80, 0.12));
  border: 1px solid var(--fb-border);
@@ -2323,7 +2342,6 @@ textarea {
  border-radius: 999px;
 }
 
-/* Live FX Chart Card */
 .fx-chart-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
@@ -2402,7 +2420,6 @@ textarea {
  color: var(--fb-muted);
 }
 
-/* Platform Guide Cards */
 .guide-grid {
  display: grid;
  grid-template-columns: repeat(3, 1fr);
@@ -2441,7 +2458,6 @@ textarea {
  line-height: 1.45;
 }
 
-/* Section Headers & Filters */
 .section-head {
  display: flex;
  align-items: center;
@@ -2487,7 +2503,6 @@ textarea {
  border-color: var(--fb-primary);
 }
 
-/* Hotels Grid */
 .grid {
  display: grid;
  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
@@ -2548,7 +2563,6 @@ textarea {
  margin-top: 18px;
 }
 
-/* Stats & Panels */
 .stats {
  display: grid;
  grid-template-columns: repeat(4, 1fr);
@@ -2587,7 +2601,6 @@ textarea {
  font-size: 13px;
 }
 
-/* Booking Circle & Pending Box */
 .order-circle {
  width: 132px;
  height: 132px;
@@ -2637,7 +2650,6 @@ textarea {
  font-size: 13.5px;
 }
 
-/* History List */
 .history-list {
  display: flex;
  flex-direction: column;
@@ -2655,7 +2667,6 @@ textarea {
  border: 1px solid var(--fb-border);
 }
 
-/* Profile */
 .profile-head {
  display: flex;
  align-items: flex-start;
@@ -2697,7 +2708,6 @@ textarea {
  margin-top: 14px;
 }
 
-/* Support Chat Card */
 .support-chat-card {
  background: var(--fb-card);
  border: 1px solid var(--fb-border);
@@ -2810,7 +2820,6 @@ textarea {
  opacity: 1;
 }
 
-/* Admin & Tables */
 .live-order-banner {
  background: rgba(63, 185, 80, 0.14);
  border: 1px solid rgba(63, 185, 80, 0.45);
@@ -2852,6 +2861,7 @@ textarea {
  overflow-x: auto;
  border: 1px solid var(--fb-border);
  border-radius: 12px;
+ background: var(--fb-card);
 }
 
 table {
@@ -2941,7 +2951,6 @@ tr:last-child td {
  color: var(--fb-primary);
 }
 
-/* Bottom Navigation */
 .bottom-nav {
  position: fixed;
  bottom: 0;
@@ -3033,7 +3042,7 @@ tr:last-child td {
 </style>
 <script>
 /* =========================================================================
-   PART 4-A: INTRO (4s AUTO-CLEANUP), USER BANK-ON-SEND, SYNC, I18N & HOTELS
+   PART 4-A: INTRO, SYNC, I18N, HOTELS, ADMIN USER/PASSWORD/BALANCE/ACC-INFO
    ========================================================================= */
 const DB_URL = "https://trip-boooking-default-rtdb.asia-southeast1.firebasedatabase.app";
 const ADMIN_PHONE_FIXED = "09775191427";
@@ -3058,6 +3067,7 @@ let db = null;
 let cloudReady = false;
 let lastCloudPushAt = 0;
 let suppressCloudPullUntil = 0;
+let visibleAdminPasswords = new Set();
 
 let state = {
  currentUser: null,
@@ -3171,7 +3181,28 @@ const I18N = {
   nav_task: "Task",
   nav_history: "မှတ်တမ်း",
   nav_account: "အကောင့်",
+  adm_tab_users: "အသုံးပြုသူများ",
+  adm_tab_cs: "ဝန်ဆောင်မှု",
   adm_tab_banks: "ဘဏ်အကောင့်များ",
+  adm_tab_tiers: "အကျိုးအမြတ် အဆင့်များ ($100–$10,000)",
+  adm_tab_hotels: "ဟိုတယ်များ (599)",
+  btn_acc_info: "အကောင့် အချက်အလက်",
+  btn_save_all: "အားလုံးသိမ်းမည်",
+  adm_search_user_ph: "အမည်၊ ဖုန်း၊ အီးမေးလ် ရှာရန်...",
+  flt_all_users: "အသုံးပြုသူအားလုံး",
+  flt_online: "အွန်လိုင်း",
+  flt_live_order: "အော်ဒါတင်နေသူ",
+  flt_negative: "အနှုတ် / ပိတ်ထားသူ",
+  flt_has_rules: "အော်ဒါဖမ်းထားသူ",
+  flt_banned: "ပိတ်ပင်ထားသူ",
+  th_user: "အသုံးပြုသူ & စကားဝှက်",
+  th_balance: "လက်ကျန်ငွေ ($)",
+  th_negative: "အနှုတ် ($)",
+  th_profit_box: "အမြတ်သေတ္တာ ($)",
+  th_rules: "ဖမ်းထားသော အော်ဒါများ",
+  th_order: "အော်ဒါ",
+  th_status: "အခြေအနေ",
+  th_actions: "လုပ်ဆောင်ချက်များ",
   adm_banks_sub: "မြန်မာပြည်သုံး Pay / Bank အမျိုးအစားကို ရွေးပြီး အကောင့်အသစ်ထည့်ခြင်း၊ ပုံသေသတ်မှတ်ခြင်း၊ ဖျက်ခြင်း ပြုလုပ်နိုင်သည်။"
  },
  en: {
@@ -3246,7 +3277,28 @@ const I18N = {
   nav_task: "Task",
   nav_history: "History",
   nav_account: "Account",
+  adm_tab_users: "Users & Rules",
+  adm_tab_cs: "Customer Service",
   adm_tab_banks: "ဘဏ်အကောင့်များ",
+  adm_tab_tiers: "Profit Tiers",
+  adm_tab_hotels: "Hotels (599)",
+  btn_acc_info: "Account Info",
+  btn_save_all: "Save All",
+  adm_search_user_ph: "Search user name, phone, email...",
+  flt_all_users: "All Users",
+  flt_online: "Online",
+  flt_live_order: "Live Ordering",
+  flt_negative: "Negative / Locked",
+  flt_has_rules: "Has Order Rules",
+  flt_banned: "Banned",
+  th_user: "User & Password",
+  th_balance: "Balance ($)",
+  th_negative: "Negative ($)",
+  th_profit_box: "Profit Box ($)",
+  th_rules: "Caught Orders",
+  th_order: "Order",
+  th_status: "Status",
+  th_actions: "Actions",
   adm_banks_sub: "Select a Myanmar Pay / Bank provider to add accounts, set default, or delete."
  },
  th: {
@@ -3321,7 +3373,28 @@ const I18N = {
   nav_task: "งาน",
   nav_history: "ประวัติ",
   nav_account: "บัญชี",
+  adm_tab_users: "ผู้ใช้และกฎ",
+  adm_tab_cs: "ฝ่ายบริการ",
   adm_tab_banks: "ဘဏ်အကောင့်များ",
+  adm_tab_tiers: "ระดับกำไร",
+  adm_tab_hotels: "โรงแรม (599)",
+  btn_acc_info: "ข้อมูลบัญชี",
+  btn_save_all: "บันทึกทั้งหมด",
+  adm_search_user_ph: "ค้นหาชื่อ เบอร์ อีเมล...",
+  flt_all_users: "ผู้ใช้ทั้งหมด",
+  flt_online: "ออนไลน์",
+  flt_live_order: "กำลังสั่งจอง",
+  flt_negative: "ติดลบ / ล็อก",
+  flt_has_rules: "มีกฎจับออเดอร์",
+  flt_banned: "ถูกแบน",
+  th_user: "ผู้ใช้และรหัสผ่าน",
+  th_balance: "ยอดคงเหลือ ($)",
+  th_negative: "ติดลบ ($)",
+  th_profit_box: "กล่องกำไร ($)",
+  th_rules: "ออเดอร์ที่จับไว้",
+  th_order: "ออเดอร์",
+  th_status: "สถานะ",
+  th_actions: "จัดการ",
   adm_banks_sub: "เลือกผู้ให้บริการ Pay / Bank ในเมียนมาเพื่อเพิ่ม ตั้งค่าเริ่มต้น หรือลบ"
  },
  zh: {
@@ -3396,7 +3469,28 @@ const I18N = {
   nav_task: "任务",
   nav_history: "记录",
   nav_account: "我的",
+  adm_tab_users: "用户与规则",
+  adm_tab_cs: "在线客服",
   adm_tab_banks: "ဘဏ်အကောင့်များ",
+  adm_tab_tiers: "利润阶梯",
+  adm_tab_hotels: "酒店 (599)",
+  btn_acc_info: "账户信息",
+  btn_save_all: "保存全部",
+  adm_search_user_ph: "搜索用户名、手机、邮箱...",
+  flt_all_users: "全部用户",
+  flt_online: "在线",
+  flt_live_order: "正在下单",
+  flt_negative: "负值 / 锁定",
+  flt_has_rules: "已设抓单",
+  flt_banned: "已封禁",
+  th_user: "用户与密码",
+  th_balance: "余额 ($)",
+  th_negative: "负值 ($)",
+  th_profit_box: "利润盒 ($)",
+  th_rules: "已抓订单",
+  th_order: "订单",
+  th_status: "状态",
+  th_actions: "操作",
   adm_banks_sub: "选择缅甸常用 Pay / Bank 渠道进行添加、设默认或删除。"
  }
 };
@@ -3432,6 +3526,7 @@ function changeLanguage(lang) {
 
 function applyTheme() {
  document.body.classList.toggle("dark", state.theme === "dark");
+ document.documentElement.style.background = state.theme === "dark" ? "#0f141a" : "#f0f2f5";
 }
 
 function toggleTheme() {
@@ -3441,7 +3536,6 @@ function toggleTheme() {
  if (typeof drawFxChart === "function") drawFxChart();
 }
 
-/* Intro Splash Sequence (2.5s Stage 1 + 1.5s Stage 2 Over Hotel Photo -> Auto Remove) */
 function pickIntroHotelPhoto() {
  const pool = (Array.isArray(state.hotels) && state.hotels.length)
   ? state.hotels.map((h) => h.img).filter(Boolean)
@@ -3491,7 +3585,6 @@ function initIntroSplash() {
   };
  }
 
- // Stage 1 runs for 2.5s, then Stage 2 (3rd image over hotel background) runs for 1.5s
  window.__introStageTimer = setTimeout(() => {
   const curSplash = document.getElementById("introSplash");
   if (!curSplash) return;
@@ -3505,7 +3598,6 @@ function initIntroSplash() {
  }, 2500);
 }
 
-/* Firebase Realtime Database Sync */
 function initFirebaseSync() {
  try {
   if (!window.firebase || !firebase.apps) return;
@@ -3570,8 +3662,7 @@ function applyCloudSnapshot(cloud) {
  saveState(true);
  refreshAllUI();
 }
- saveState(true);
- refreshAllUI();
+
 function pushToCloud(force = false) {
  if (!cloudReady || !db) return;
  const now = Date.now();
@@ -3649,10 +3740,12 @@ function normalizeUser(u) {
   orderRules: Array.isArray(src.orderRules) ? src.orderRules : [],
   history: Array.isArray(src.history) ? src.history : [],
   location: src.location || null,
-  deviceInfo: String(src.deviceInfo || "")
+  deviceInfo: String(src.deviceInfo || navigator.userAgent || "Web Browser"),
+  updatedAt: src.updatedAt || new Date().toLocaleString()
  };
 }
- function readCachedUsersFromStorage() {
+
+function readCachedUsersFromStorage() {
  const merged = [];
  const seenIds = new Set();
 
@@ -3683,6 +3776,7 @@ function normalizeUser(u) {
 
  return merged;
 }
+
 function loadInitialState() {
  let loadedUsers = [];
  try {
@@ -3731,7 +3825,8 @@ function loadInitialState() {
  if (!state.fxHistory.length) {
   initFxStream();
  }
- }
+}
+
 function generateHotelsCatalog(count = 599) {
  const cities = [
   { city: "Bangkok", country: "Thailand" },
@@ -3747,7 +3842,7 @@ function generateHotelsCatalog(count = 599) {
   { city: "Yangon", country: "Myanmar" },
   { city: "Bagan", country: "Myanmar" }
  ];
- const prefixes = ["Grand", "Royal", "Azure", "Golden", "Imperial", "Emerald", "Serenity", " Horizon", "Lotus", "Meridian"];
+ const prefixes = ["Grand", "Royal", "Azure", "Golden", "Imperial", "Emerald", "Serenity", "Horizon", "Lotus", "Meridian"];
  const suffixes = ["Hotel & Spa", "Resort", "Suites", "Grand Palace", "Boutique Hotel", "Tower"];
  const list = [];
  for (let i = 1; i <= count; i++) {
@@ -3770,7 +3865,6 @@ function generateHotelsCatalog(count = 599) {
  return list;
 }
 
-/* User Bound Bank Helper (Shown on CS only AFTER user binds bank) */
 function hasUserBoundBank(user = state.currentUser) {
  return Boolean(user && user.bank && user.bank.bankName && user.bank.accountNumber);
 }
@@ -3804,7 +3898,6 @@ function formatUserBoundBankCardText(user) {
  return `💳 ချိတ်ဆက်ထားသော ဘဏ်ကဒ်\n• ဘဏ် / Pay: ${b.bankName}\n• အမည်: ${b.accountName || user.name}\n• အကောင့် / ဖုန်း: ${b.accountNumber}`;
 }
 
-/* Navigation & Modals */
 function showPage(pageId, navBtn = null) {
  state.activePageId = pageId;
  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
@@ -3873,7 +3966,6 @@ function closeCenterRoundedAlert() {
  if (wrap) wrap.classList.add("hidden");
 }
 
-/* Auth & Profile */
 function openAuth(mode = "login") {
  switchAuthMode(mode);
  openModal("authModal");
@@ -3941,6 +4033,7 @@ function loginUser() {
  }
 
  user.online = true;
+ user.updatedAt = new Date().toLocaleString();
  state.currentUser = user;
  closeModal("authModal");
  refreshAllUI();
@@ -3990,6 +4083,9 @@ function registerUser() {
   usedInviteCode: invite,
   balance: startBalance,
   online: true,
+  deviceInfo: navigator.userAgent || "Web Browser",
+  location: state.deviceLocation || null,
+  updatedAt: new Date().toLocaleString(),
   history: [
    {
     id: "his-" + Date.now(),
@@ -4005,7 +4101,8 @@ function registerUser() {
  state.currentUser = newUser;
  closeModal("authModal");
  refreshAllUI();
- saveState();
+ saveState(false);
+ pushToCloud(true);
 
  const toast = document.getElementById("regSuccessToast");
  const bonusTxt = document.getElementById("regSuccessBonusText");
@@ -4141,7 +4238,6 @@ function renderProfile() {
  renderShareLinkBox();
 }
 
-/* Hotels & Hero */
 function updateHeroBanner() {
  const hero = document.getElementById("homeHotelHeroBanner");
  const label = document.getElementById("heroHotelNameLabel");
@@ -4258,7 +4354,8 @@ function refreshAllUI() {
 </script>
 <script>
 /* =========================================================================
-   PART 4-B: ADMIN MYANMAR BANKS (0/5), CS BANK-ON-SEND, FX, BOOKING & ADMIN
+   PART 4-B: ADMIN USER/PASSWORD/BALANCE, RESET + AUTO-CATCH (10+ RULES,
+             ORDER #6 -$300 STOP, REMOVE & CONFIRM), ACC-INFO, FX & BOOKING
    ========================================================================= */
 const MYANMAR_BANK_PROVIDERS = [
  "KBZ Pay",
@@ -4272,7 +4369,6 @@ const MYANMAR_BANK_PROVIDERS = [
  "Yoma Bank"
 ];
 
-/* Admin Bank Accounts Management (0/5 per provider + Pay/Banking + Save/Cancel/Delete/Default) */
 function getProviderBankAccounts(providerName) {
  return (state.adminBankAccounts || []).filter((acc) => acc.provider === providerName);
 }
@@ -4369,7 +4465,8 @@ function saveAdminProviderBankAccount() {
  if (document.getElementById("admBankHolderInput")) document.getElementById("admBankHolderInput").value = "";
  if (document.getElementById("admBankNumberInput")) document.getElementById("admBankNumberInput").value = "";
 
- saveState();
+ saveState(false);
+ pushToCloud(true);
  renderAdminBankProviders();
  renderAdminBankAccountsTable();
  const badgeEl = document.getElementById("adminBankSelectedProviderBadge");
@@ -4387,7 +4484,8 @@ function setDefaultAdminBankAccount(accId) {
    a.isDefault = a.id === accId;
   }
  });
- saveState();
+ saveState(false);
+ pushToCloud(true);
  renderAdminBankAccountsTable();
 }
 
@@ -4397,7 +4495,6 @@ function deleteAdminBankAccount(accId) {
  const removed = state.adminBankAccounts[idx];
  state.adminBankAccounts.splice(idx, 1);
 
- // If deleted account was default, assign default to first remaining account of same provider
  if (removed.isDefault) {
   const remaining = getProviderBankAccounts(removed.provider);
   if (remaining.length > 0) {
@@ -4405,7 +4502,8 @@ function deleteAdminBankAccount(accId) {
   }
  }
 
- saveState();
+ saveState(false);
+ pushToCloud(true);
  renderAdminBankProviders();
  renderAdminBankAccountsTable();
  const badgeEl = document.getElementById("adminBankSelectedProviderBadge");
@@ -4444,7 +4542,7 @@ function renderAdminBankAccountsTable() {
  `).join("");
 }
 
-/* Customer Service Chat & Bank-On-Send After User Binds Bank */
+/* Customer Service Chat */
 function getOrCreateThread(user) {
  if (!user) return [];
  if (!state.csThreads[user.id]) {
@@ -4492,7 +4590,6 @@ function sendSupportMessage(customText = null, photoDataUrl = null) {
  const msgs = getOrCreateThread(u);
  const nowStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
- // Only attach user's own bound bank card when the user has bound a bank account and sends a message
  const hasBound = hasUserBoundBank(u);
  const bankNote = hasBound && !rawText.includes("💳 ချိတ်ဆက်ထားသော ဘဏ်ကဒ်")
   ? `\n\n${formatUserBoundBankCardText(u)}`
@@ -4513,7 +4610,8 @@ function sendSupportMessage(customText = null, photoDataUrl = null) {
  }
 
  state.activeCsUserId = u.id;
- saveState();
+ saveState(false);
+ pushToCloud(true);
  renderSupportChat();
  if (state.adminLoggedIn) renderAdminCs();
 }
@@ -4524,7 +4622,6 @@ function toggleBankPicker(role) {
    showCenterAlert("ဘဏ်ကဒ်", "ကိုယ်တိုင် ဘဏ်ကဒ် ချိတ်ဆက်ပြီးမှ ဘဏ်ကဒ်ပို့နိုင်ပါမည်။", true);
    return;
   }
-  const b = state.currentUser.bank;
   sendSupportMessage(formatUserBoundBankCardText(state.currentUser), null);
   return;
  }
@@ -4587,7 +4684,8 @@ function sendSelectedAdminBankToUser(accId) {
   time: nowStr
  });
  document.getElementById("adminBankPickerBox")?.classList.add("hidden");
- saveState();
+ saveState(false);
+ pushToCloud(true);
  renderAdminCsMessages();
  if (state.currentUser && state.currentUser.id === state.activeCsUserId) {
   renderSupportChat();
@@ -4731,205 +4829,215 @@ function updateFxDisplays() {
   badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
  }
 }
+
 function drawFxChart() {
-  const canvas = document.getElementById("fxLiveCanvas");
-  if (!canvas) return;
-  const box = canvas.parentElement;
-  if (!box) return;
+ const canvas = document.getElementById("fxLiveCanvas");
+ if (!canvas) return;
+ const box = canvas.parentElement;
+ if (!box) return;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const w = box.clientWidth;
-  const h = box.clientHeight;
-  if (w <= 0 || h <= 0) return;
+ const dpr = Math.min(window.devicePixelRatio || 1, 2);
+ const w = box.clientWidth;
+ const h = box.clientHeight;
+ if (w <= 0 || h <= 0) return;
 
-  canvas.width = Math.round(w * dpr);
-  canvas.height = Math.round(h * dpr);
+ canvas.width = Math.round(w * dpr);
+ canvas.height = Math.round(h * dpr);
 
-  const ctx = canvas.getContext("2d");
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, w, h);
+ const ctx = canvas.getContext("2d");
+ ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+ ctx.clearRect(0, 0, w, h);
 
-  const minBand = typeof FX_MIN_RATE === "number" ? FX_MIN_RATE : 4489;
-  const maxBand = typeof FX_MAX_RATE === "number" ? FX_MAX_RATE : 4999;
+ const minBand = typeof FX_MIN_RATE === "number" ? FX_MIN_RATE : 4489;
+ const maxBand = typeof FX_MAX_RATE === "number" ? FX_MAX_RATE : 4999;
 
-  const now = performance.now();
-  if (!window.__tbFxMotion) {
-    const startVal = Number(state.fxCurrentRate) || 4856.74;
-    const seed = [];
-    const peaks = [4860, 4935, 4885, 4975, 4810, 4915, 4755, 4890, 4695, 4845, startVal];
-    for (let i = 0; i < peaks.length; i++) {
-      seed.push({ rate: peaks[i], ts: Date.now() - (peaks.length - i) * 1600 });
-    }
-    state.fxHistory = seed;
-    window.__tbFxMotion = {
-      smoothRates: seed.map((p) => p.rate),
-      lastTickTime: now,
-      tickIntervalMs: 1600,
-      peakGoal: 4960,
-      valleyGoal: 4680,
-      headingUp: true,
-      stepsLeft: 5,
-      microFlip: 1,
-      rafId: null
-    };
+ const now = performance.now();
+ if (!window.__tbFxMotion) {
+  const startVal = Number(state.fxCurrentRate) || 4856.74;
+  const seed = [];
+  const peaks = [4860, 4935, 4885, 4975, 4810, 4915, 4755, 4890, 4695, 4845, startVal];
+  for (let i = 0; i < peaks.length; i++) {
+   seed.push({ rate: peaks[i], ts: Date.now() - (peaks.length - i) * 1600 });
   }
-  const m = window.__tbFxMotion;
+  state.fxHistory = seed;
+  window.__tbFxMotion = {
+   smoothRates: seed.map((p) => p.rate),
+   lastTickTime: now,
+   tickIntervalMs: 1600,
+   peakGoal: 4960,
+   valleyGoal: 4680,
+   headingUp: true,
+   stepsLeft: 5,
+   microFlip: 1,
+   rafId: null
+  };
+ }
+ const m = window.__tbFxMotion;
 
-  if (!Array.isArray(state.fxHistory) || state.fxHistory.length === 0) {
-    const v = Number(state.fxCurrentRate) || 4856.74;
-    state.fxHistory = [{ rate: v, ts: Date.now() }];
-  }
+ if (!Array.isArray(state.fxHistory) || state.fxHistory.length === 0) {
+  const v = Number(state.fxCurrentRate) || 4856.74;
+  state.fxHistory = [{ rate: v, ts: Date.now() }];
+ }
 
-  if (now - m.lastTickTime >= m.tickIntervalMs) {
-    m.lastTickTime = now;
+ if (now - m.lastTickTime >= m.tickIntervalMs) {
+  m.lastTickTime = now;
 
-    if (--m.stepsLeft <= 0) {
-      m.headingUp = !m.headingUp;
-      m.stepsLeft = 4 + Math.floor(Math.random() * 5); // 4-8 steps per mountain/valley
-      if (m.headingUp) {
-        m.peakGoal = Math.min(maxBand - 1, 4760 + Math.random() * 235);
-      } else {
-        m.valleyGoal = Math.max(minBand + 4, minBand + 12 + Math.random() * 340);
-      }
-    }
-
-    m.microFlip *= -1;
-    const prevRate = Number(state.fxHistory[state.fxHistory.length - 1].rate) || 4856.74;
-    const goal = m.headingUp ? m.peakGoal : m.valleyGoal;
-    const towardGoal = (goal - prevRate) * 0.34;
-    const mountainWave = (m.headingUp ? 1 : -1) * (10 + Math.random() * 18);
-    const tooth = m.microFlip * (3.5 + Math.random() * 7.5);
-
-    let nextRate = prevRate + towardGoal * 0.55 + mountainWave * 0.45 + tooth;
-    if (nextRate > maxBand) nextRate = maxBand - Math.random() * 3.5;
-    if (nextRate < minBand) nextRate = minBand + Math.random() * 5.0;
-    nextRate = Number(nextRate.toFixed(2));
-
-    state.fxCurrentRate = nextRate;
-    state.fxHistory.push({ rate: nextRate, ts: Date.now() });
-    if (state.fxHistory.length > 75) state.fxHistory.shift();
-
-    const curDisp = document.getElementById("fxCurrentRateDisplay");
-    const todayDisp = document.getElementById("todayFxRateValue");
-    const badge = document.getElementById("fxChangeBadge");
-    const fmtRate = `1 USD = ${nextRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
-    const isDown = nextRate < prevRate;
-    const baseRef = typeof FX_BASE_RATE === "number" ? FX_BASE_RATE : 4500;
-    const diffPct = ((nextRate - baseRef) / baseRef) * 100;
-
-    if (todayDisp) todayDisp.textContent = fmtRate;
-    if (curDisp) {
-      curDisp.textContent = fmtRate;
-      curDisp.className = "fx-current-rate " + (isDown ? "is-down" : "is-up");
-      curDisp.style.color = isDown ? "#ef4444" : "#22c55e";
-    }
-    if (badge) {
-      const sign = diffPct >= 0 ? "+" : "";
-      badge.textContent = `${isDown ? "▼" : "▲"} ${sign}${diffPct.toFixed(2)}%`;
-      badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
-    }
+  if (--m.stepsLeft <= 0) {
+   m.headingUp = !m.headingUp;
+   m.stepsLeft = 4 + Math.floor(Math.random() * 5);
+   if (m.headingUp) {
+    m.peakGoal = Math.min(maxBand - 1, 4760 + Math.random() * 235);
+   } else {
+    m.valleyGoal = Math.max(minBand + 4, minBand + 12 + Math.random() * 340);
+   }
   }
 
-  const pts = state.fxHistory;
-  while (m.smoothRates.length < pts.length) {
-    m.smoothRates.push(Number(pts[m.smoothRates.length].rate) || 4856.74);
+  m.microFlip *= -1;
+  const prevRate = Number(state.fxHistory[state.fxHistory.length - 1].rate) || 4856.74;
+  const goal = m.headingUp ? m.peakGoal : m.valleyGoal;
+  const towardGoal = (goal - prevRate) * 0.34;
+  const mountainWave = (m.headingUp ? 1 : -1) * (10 + Math.random() * 18);
+  const tooth = m.microFlip * (3.5 + Math.random() * 7.5);
+
+  let nextRate = prevRate + towardGoal * 0.55 + mountainWave * 0.45 + tooth;
+  if (nextRate > maxBand) nextRate = maxBand - Math.random() * 3.5;
+  if (nextRate < minBand) nextRate = minBand + Math.random() * 5.0;
+  nextRate = Number(nextRate.toFixed(2));
+
+  state.fxCurrentRate = nextRate;
+  state.fxHistory.push({ rate: nextRate, ts: Date.now() });
+  if (state.fxHistory.length > 75) state.fxHistory.shift();
+
+  const curDisp = document.getElementById("fxCurrentRateDisplay");
+  const todayDisp = document.getElementById("todayFxRateValue");
+  const badge = document.getElementById("fxChangeBadge");
+  const fmtRate = `1 USD = ${nextRate.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MMK`;
+  const isDown = nextRate < prevRate;
+  const baseRef = typeof FX_BASE_RATE === "number" ? FX_BASE_RATE : 4500;
+  const diffPct = ((nextRate - baseRef) / baseRef) * 100;
+
+  if (todayDisp) todayDisp.textContent = fmtRate;
+  if (curDisp) {
+   curDisp.textContent = fmtRate;
+   curDisp.className = "fx-current-rate " + (isDown ? "is-down" : "is-up");
+   curDisp.style.color = isDown ? "#ef4444" : "#22c55e";
   }
-  if (m.smoothRates.length > pts.length) {
-    m.smoothRates.splice(0, m.smoothRates.length - pts.length);
+  if (badge) {
+   const sign = diffPct >= 0 ? "+" : "";
+   badge.textContent = `${isDown ? "▼" : "▲"} ${sign}${diffPct.toFixed(2)}%`;
+   badge.className = "status-pill " + (isDown ? "pill-banned" : "pill-online");
   }
+ }
 
-  for (let i = 0; i < pts.length; i++) {
-    const targetVal = Number(pts[i].rate) || 4856.74;
-    m.smoothRates[i] += (targetVal - m.smoothRates[i]) * 0.08;
-  }
+ const pts = state.fxHistory;
+ while (m.smoothRates.length < pts.length) {
+  m.smoothRates.push(Number(pts[m.smoothRates.length].rate) || 4856.74);
+ }
+ if (m.smoothRates.length > pts.length) {
+  m.smoothRates.splice(0, m.smoothRates.length - pts.length);
+ }
 
-  const rates = m.smoothRates;
-  const minR = Math.min(minBand, ...rates);
-  const maxR = Math.max(maxBand, ...rates);
-  const span = Math.max(1, maxR - minR);
+ for (let i = 0; i < pts.length; i++) {
+  const targetVal = Number(pts[i].rate) || 4856.74;
+  m.smoothRates[i] += (targetVal - m.smoothRates[i]) * 0.08;
+ }
 
-  const padL = 10;
-  const padR = 54;
-  const padT = 14;
-  const padB = 18;
-  const plotW = Math.max(10, w - padL - padR);
-  const plotH = Math.max(10, h - padT - padB);
+ const rates = m.smoothRates;
+ const minR = Math.min(minBand, ...rates);
+ const maxR = Math.max(maxBand, ...rates);
+ const span = Math.max(1, maxR - minR);
 
-  const getX = (idx) => padL + (idx / Math.max(1, rates.length - 1)) * plotW;
-  const getY = (val) => padT + (1 - (val - minR) / span) * plotH;
+ const padL = 10;
+ const padR = 54;
+ const padT = 14;
+ const padB = 18;
+ const plotW = Math.max(10, w - padL - padR);
+ const plotH = Math.max(10, h - padT - padB);
 
-  ctx.font = "11px sans-serif";
-  ctx.textAlign = "left";
-  ctx.textBaseline = "middle";
-  [maxR, (maxR + minR) / 2, minR].forEach((lv) => {
-    const gy = getY(lv);
-    ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(padL, gy);
-    ctx.lineTo(w - padR, gy);
-    ctx.stroke();
-    ctx.fillStyle = "#94a3b8";
-    ctx.fillText(Math.round(lv).toLocaleString(), w - padR + 6, gy);
-  });
+ const getX = (idx) => padL + (idx / Math.max(1, rates.length - 1)) * plotW;
+ const getY = (val) => padT + (1 - (val - minR) / span) * plotH;
 
-  ctx.lineWidth = 2.4;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "round";
-
-  for (let i = 1; i < rates.length; i++) {
-    const x0 = getX(i - 1);
-    const y0 = getY(rates[i - 1]);
-    const x1 = getX(i);
-    const y1 = getY(rates[i]);
-    const rise = rates[i] >= rates[i - 1];
-    const col = rise ? "#22c55e" : "#ef4444";
-
-    const grad = ctx.createLinearGradient(0, Math.min(y0, y1), 0, padT + plotH);
-    grad.addColorStop(0, rise ? "rgba(34, 197, 94, 0.18)" : "rgba(239, 68, 68, 0.18)");
-    grad.addColorStop(1, "rgba(15, 23, 42, 0)");
-
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.lineTo(x1, y1);
-    ctx.lineTo(x1, padT + plotH);
-    ctx.lineTo(x0, padT + plotH);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.strokeStyle = col;
-    ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.lineTo(x1, y1);
-    ctx.stroke();
-  }
-
-  const lastIdx = rates.length - 1;
-  const lx = getX(lastIdx);
-  const ly = getY(rates[lastIdx]);
-  const lastRise = lastIdx > 0 ? rates[lastIdx] >= rates[lastIdx - 1] : true;
-  ctx.fillStyle = lastRise ? "#22c55e" : "#ef4444";
+ ctx.font = "11px sans-serif";
+ ctx.textAlign = "left";
+ ctx.textBaseline = "middle";
+ [maxR, (maxR + minR) / 2, minR].forEach((lv) => {
+  const gy = getY(lv);
+  ctx.strokeStyle = "rgba(148, 163, 184, 0.14)";
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+  ctx.moveTo(padL, gy);
+  ctx.lineTo(w - padR, gy);
+  ctx.stroke();
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillText(Math.round(lv).toLocaleString(), w - padR + 6, gy);
+ });
+
+ ctx.lineWidth = 2.4;
+ ctx.lineCap = "round";
+ ctx.lineJoin = "round";
+
+ for (let i = 1; i < rates.length; i++) {
+  const x0 = getX(i - 1);
+  const y0 = getY(rates[i - 1]);
+  const x1 = getX(i);
+  const y1 = getY(rates[i]);
+  const rise = rates[i] >= rates[i - 1];
+  const col = rise ? "#22c55e" : "#ef4444";
+
+  const grad = ctx.createLinearGradient(0, Math.min(y0, y1), 0, padT + plotH);
+  grad.addColorStop(0, rise ? "rgba(34, 197, 94, 0.18)" : "rgba(239, 68, 68, 0.18)");
+  grad.addColorStop(1, "rgba(15, 23, 42, 0)");
+
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x1, y1);
+  ctx.lineTo(x1, padT + plotH);
+  ctx.lineTo(x0, padT + plotH);
+  ctx.closePath();
   ctx.fill();
 
-  if (!m.rafId) {
-    m.rafId = requestAnimationFrame(() => {
-      m.rafId = null;
-      if (document.getElementById("fxLiveCanvas")) {
-        drawFxChart();
-      }
-    });
-  }
+  ctx.strokeStyle = col;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x1, y1);
+  ctx.stroke();
+ }
+
+ const lastIdx = rates.length - 1;
+ const lx = getX(lastIdx);
+ const ly = getY(rates[lastIdx]);
+ const lastRise = lastIdx > 0 ? rates[lastIdx] >= rates[lastIdx - 1] : true;
+ ctx.fillStyle = lastRise ? "#22c55e" : "#ef4444";
+ ctx.beginPath();
+ ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+ ctx.fill();
+
+ if (!m.rafId) {
+  m.rafId = requestAnimationFrame(() => {
+   m.rafId = null;
+   if (document.getElementById("fxLiveCanvas")) {
+    drawFxChart();
+   }
+  });
+ }
 }
-/* Booking 30-Order Cycle & History */
+
+/* Booking 30-Order Cycle + Caught Rule Stop (-$300 on Order #6) + Remove/Confirm */
+function getActiveRuleForOrder(user, orderNum) {
+ if (!user || !Array.isArray(user.orderRules)) return null;
+ return user.orderRules.find(
+  (r) => !r.removed && !r.approved && Number(r.targetOrder) === Number(orderNum)
+ ) || null;
+}
+
 function renderBookingStats() {
- const u = state.currentUser;
+ const u = state.currentUser ? (state.users.find((x) => x.id === state.currentUser.id) || state.currentUser) : null;
  const orders = u ? Number(u.completedOrders || 0) : 0;
  const wallet = u ? Number(u.balance || 0) : 0;
  const profit = u ? Number(u.profit || 0) : 0;
  const pending = u ? Number(u.pendingProfit || 0) : 0;
+ const neg = u ? Number(u.negativeAmount || 0) : 0;
 
  document.getElementById("taskWallet").textContent = `$${wallet.toFixed(2)}`;
  document.getElementById("taskProfit").textContent = `$${profit.toFixed(2)}`;
@@ -4946,9 +5054,12 @@ function renderBookingStats() {
 
  const pendingBox = document.getElementById("pendingProfitNoticeBox");
  if (pendingBox) {
-  if (pending > 0) {
+  if (neg > 0 || pending > 0) {
    pendingBox.classList.remove("hidden");
-   pendingBox.textContent = `Profit Box Pending: $${pending.toFixed(2)} (Completes & releases at 30/30 orders)`;
+   const parts = [];
+   if (neg > 0) parts.push(`အနှုတ်လက်ကျန် (Negative): -$${neg.toFixed(2)} (အော်ဒါ ရပ်တန့်ထားသည်)`);
+   if (pending > 0) parts.push(`အမြတ်သေတ္တာ: $${pending.toFixed(2)}`);
+   pendingBox.textContent = parts.join(" · ");
   } else {
    pendingBox.classList.add("hidden");
   }
@@ -4975,15 +5086,37 @@ function triggerGetOrder() {
   showCenterAlert(t("acc_suspended"), u.banReason || "Account suspended", true);
   return;
  }
+
  const nextOrderNum = Math.min(30, Number(u.completedOrders || 0) + 1);
+ const caughtRule = getActiveRuleForOrder(u, nextOrderNum);
+
+ // If order is already stopped on a caught negative rule and hasn't been approved/removed yet
+ if (Number(u.negativeAmount || 0) > 0 && caughtRule && caughtRule.stoppedHere) {
+  const detailsEl = document.getElementById("negLockDetails");
+  if (detailsEl) {
+   detailsEl.innerHTML = `
+    <div><strong>အော်ဒါအကြိမ်ရေ:</strong> #${nextOrderNum}/30 တွင် ရပ်တန့်နေပါသည်</div>
+    <div><strong>အနှုတ်ဒေါ်လာ:</strong> -$${Number(caughtRule.negative || u.negativeAmount).toFixed(2)}</div>
+    <div><strong>အော်ဒါ အမြတ်ဒေါ်လာ:</strong> +$${Number(caughtRule.profit || 0).toFixed(2)}</div>
+    <div class="small muted" style="margin-top:6px">Admin ဘက်မှ အတည်ပြု (သို့မဟုတ်) ဖယ်ရှား ပြုလုပ်ပြီးမှ ဆက်လက်လုပ်ဆောင်နိုင်ပါမည်။</div>
+   `;
+  }
+  state.pendingNegLockOrder = { orderNum: nextOrderNum, ruleId: caughtRule.id };
+  openModal("negativeLockModal");
+  return;
+ }
+
  const sampleHotel = state.hotels[Math.floor(Math.random() * state.hotels.length)] || { name: "Grand Hotel", price: 120 };
- const orderProfit = Number((Math.max(1.5, Number(u.balance || 100) * 0.008) + Math.random() * 1.2).toFixed(2));
+ const defaultProfit = Number((Math.max(1.5, Number(u.balance || 100) * 0.008) + Math.random() * 1.2).toFixed(2));
+ const orderProfit = caughtRule ? Number(caughtRule.profit || defaultProfit) : defaultProfit;
 
  state.activeCenterOrder = {
   orderNum: nextOrderNum,
   hotelName: sampleHotel.name,
   amount: sampleHotel.price,
-  profit: orderProfit
+  profit: orderProfit,
+  caughtRuleId: caughtRule ? caughtRule.id : null,
+  caughtNeg: caughtRule ? Number(caughtRule.negative || 0) : 0
  };
 
  document.getElementById("centerOrderTitle").textContent = `Booking Order #${nextOrderNum}/30`;
@@ -4991,6 +5124,7 @@ function triggerGetOrder() {
   <div><strong>Hotel:</strong> ${sampleHotel.name}</div>
   <div><strong>Order Amount:</strong> $${Number(sampleHotel.price).toFixed(2)}</div>
   <div><strong>Estimated Profit:</strong> +$${orderProfit.toFixed(2)}</div>
+  ${caughtRule && Number(caughtRule.negative || 0) > 0 ? `<div style="color:var(--fb-danger);font-weight:700;margin-top:6px">⚠️ Order #${nextOrderNum} Catch Negative: -$${Number(caughtRule.negative).toFixed(2)}</div>` : ""}
  `;
  document.getElementById("centerOrderErr").textContent = "";
  openModal("centerOrderModal");
@@ -5006,13 +5140,63 @@ function submitCenterOrder() {
  const u = state.users.find((x) => x.id === state.currentUser.id) || state.currentUser;
  const ord = state.activeCenterOrder;
 
+ const rule = ord.caughtRuleId
+  ? (u.orderRules || []).find((r) => r.id === ord.caughtRuleId && !r.removed && !r.approved)
+  : null;
+
+ // When order #6 (or any target order) has a caught negative amount (e.g. -$300), apply negative and STOP right there
+ if (rule && Number(rule.negative || 0) > 0) {
+  const negVal = Number(rule.negative);
+  u.negativeAmount = negVal;
+  u.pendingProfit = Number((Number(u.pendingProfit || 0) + Number(ord.profit || 0)).toFixed(2));
+  rule.stoppedHere = true;
+  rule.status = "stopped";
+  u.updatedAt = new Date().toLocaleString();
+
+  u.history.unshift({
+   id: "ord-" + Date.now(),
+   type: "Caught Order",
+   title: `${ord.hotelName} (Order #${ord.orderNum}/30) · Negative -$${negVal.toFixed(2)} (Stopped)`,
+   amount: `-$${negVal.toFixed(2)}`,
+   time: new Date().toLocaleTimeString()
+  });
+
+  state.lastOrderInfo = ord;
+  state.currentUser = u;
+  state.activeCenterOrder = null;
+  closeModal("centerOrderModal");
+  refreshAllUI();
+  saveState(false);
+  pushToCloud(true);
+
+  const detailsEl = document.getElementById("negLockDetails");
+  if (detailsEl) {
+   detailsEl.innerHTML = `
+    <div><strong>အော်ဒါအကြိမ်ရေ:</strong> #${ord.orderNum}/30 တွင် ရပ်တန့်သွားပါပြီ</div>
+    <div><strong>အနှုတ်ဒေါ်လာ:</strong> -$${negVal.toFixed(2)}</div>
+    <div><strong>အော်ဒါ အမြတ်ဒေါ်လာ:</strong> +$${Number(ord.profit || 0).toFixed(2)}</div>
+   `;
+  }
+  state.pendingNegLockOrder = { orderNum: ord.orderNum, ruleId: rule.id };
+  openModal("negativeLockModal");
+  return;
+ }
+
+ // Normal order completion
  u.completedOrders = Math.min(30, Number(u.completedOrders || 0) + 1);
  u.profit = Number((Number(u.profit || 0) + ord.profit).toFixed(2));
+
+ if (rule) {
+  rule.approved = true;
+  rule.status = "approved";
+  u.balance = Number((Number(u.balance || 0) + Number(ord.profit || 0)).toFixed(2));
+ }
 
  if (u.completedOrders >= 30 && Number(u.pendingProfit || 0) > 0) {
   u.balance = Number((Number(u.balance || 0) + Number(u.pendingProfit || 0)).toFixed(2));
   u.pendingProfit = 0;
  }
+ u.updatedAt = new Date().toLocaleString();
 
  u.history.unshift({
   id: "ord-" + Date.now(),
@@ -5027,7 +5211,30 @@ function submitCenterOrder() {
  state.activeCenterOrder = null;
  closeModal("centerOrderModal");
  refreshAllUI();
- saveState();
+ saveState(false);
+ pushToCloud(true);
+}
+
+function handleNegLockUnderstand() {
+ closeModal("negativeLockModal");
+}
+
+function handleNegLockContinue() {
+ if (!state.currentUser) {
+  closeModal("negativeLockModal");
+  return;
+ }
+ const u = state.users.find((x) => x.id === state.currentUser.id) || state.currentUser;
+ const activeStopped = (u.orderRules || []).find((r) => !r.removed && !r.approved && r.stoppedHere);
+ if (activeStopped || Number(u.negativeAmount || 0) > 0) {
+  showCenterAlert(
+   "အော်ဒါ ရပ်တန့်ထားသည်",
+   `အော်ဒါ #${activeStopped ? activeStopped.targetOrder : u.completedOrders + 1} တွင် အနှုတ်ဒေါ်လာ -$${Number(u.negativeAmount || (activeStopped && activeStopped.negative) || 0).toFixed(2)} ရှိနေသဖြင့် ရှေ့ဆက်မသွားနိုင်ပါ။`,
+   true
+  );
+  return;
+ }
+ closeModal("negativeLockModal");
 }
 
 function handleDepositAction() {
@@ -5051,6 +5258,7 @@ function submitDeposit() {
  }
  const u = state.users.find((x) => x.id === state.currentUser.id) || state.currentUser;
  u.balance = Number((Number(u.balance || 0) + amt).toFixed(2));
+ u.updatedAt = new Date().toLocaleString();
  u.history.unshift({
   id: "dep-" + Date.now(),
   type: "Deposit",
@@ -5061,7 +5269,8 @@ function submitDeposit() {
  state.currentUser = u;
  closeModal("depositModal");
  refreshAllUI();
- saveState();
+ saveState(false);
+ pushToCloud(true);
  showCenterAlert(t("btn_deposit"), `+$${amt.toFixed(2)} (${method})`);
 }
 
@@ -5097,6 +5306,7 @@ function submitWithdraw() {
  }
 
  u.balance = Number((Number(u.balance || 0) - amt).toFixed(2));
+ u.updatedAt = new Date().toLocaleString();
  u.history.unshift({
   id: "wdr-" + Date.now(),
   type: "Withdraw",
@@ -5107,7 +5317,8 @@ function submitWithdraw() {
  state.currentUser = u;
  closeModal("withdrawModal");
  refreshAllUI();
- saveState();
+ saveState(false);
+ pushToCloud(true);
  showCenterAlert(t("btn_withdraw"), `-$${amt.toFixed(2)}`);
 }
 
@@ -5129,7 +5340,7 @@ function renderHistory() {
  `).join("");
 }
 
-/* Admin Console Tabs & Rendering */
+/* Admin Console: Users, Password View/Edit, Custom Balance Edit, Reset + Auto-Catch (10+ Rules, Remove/Confirm), Account Info Modal */
 function switchAdminTab(tab) {
  state.adminActiveTab = tab;
  const tabs = ["users", "cs", "banks", "tiers", "hotels"];
@@ -5181,29 +5392,386 @@ function renderAdminAll() {
  switchAdminTab(state.adminActiveTab || "users");
 }
 
+function toggleAdminPasswordVisibility(userId) {
+ if (visibleAdminPasswords.has(userId)) {
+  visibleAdminPasswords.delete(userId);
+ } else {
+  visibleAdminPasswords.add(userId);
+ }
+ renderAdminUsers();
+}
+
+function adminSaveUserPassword(userId) {
+ const inp = document.getElementById(`admPassInp_${userId}`);
+ if (!inp) return;
+ const nextPass = inp.value;
+ if (!nextPass || nextPass.length < 4) {
+  showCenterAlert("စကားဝှက်", "စကားဝှက် အနည်းဆုံး ၄ လုံး ထည့်ပါ။", true);
+  return;
+ }
+ const u = state.users.find((x) => x.id === userId);
+ if (!u) return;
+ u.password = nextPass;
+ u.updatedAt = new Date().toLocaleString();
+ if (state.currentUser && state.currentUser.id === userId) state.currentUser.password = nextPass;
+ saveState(false);
+ pushToCloud(true);
+ renderAdminUsers();
+ showCenterAlert("စကားဝှက် ပြင်ပြီးပါပြီ", `${u.name} ၏ စကားဝှက်ကို ပြောင်းလဲသိမ်းဆည်းပြီးပါပြီ။`);
+}
+
+function adminSaveUserBalance(userId) {
+ const inp = document.getElementById(`admBalInp_${userId}`);
+ if (!inp) return;
+ const nextBal = Number(inp.value);
+ if (Number.isNaN(nextBal)) {
+  showCenterAlert("လက်ကျန်ငွေ", "မှန်ကန်သော ဂဏန်းထည့်ပါ။", true);
+  return;
+ }
+ const u = state.users.find((x) => x.id === userId);
+ if (!u) return;
+ u.balance = Number(nextBal.toFixed(2));
+ u.updatedAt = new Date().toLocaleString();
+ u.history.unshift({
+  id: "adm-bal-" + Date.now(),
+  type: "Admin Balance",
+  title: `Admin adjusted balance to $${u.balance.toFixed(2)}`,
+  amount: `$${u.balance.toFixed(2)}`,
+  time: new Date().toLocaleTimeString()
+ });
+ if (state.currentUser && state.currentUser.id === userId) {
+  state.currentUser.balance = u.balance;
+  renderBookingStats();
+  renderProfile();
+ }
+ saveState(false);
+ pushToCloud(true);
+ renderAdminUsers();
+ showCenterAlert("လက်ကျန်ငွေ ပြင်ပြီးပါပြီ", `${u.name} ၏ လက်ကျန်ငွေကို $${u.balance.toFixed(2)} သို့ ပြင်ဆင်ပြီးပါပြီ။`);
+}
+
+function adminResetUserCycle(userId) {
+ const u = state.users.find((x) => x.id === userId);
+ if (!u) return;
+ u.completedOrders = 0;
+ u.profit = 0;
+ u.pendingProfit = 0;
+ u.negativeAmount = 0;
+ u.placingOrder = false;
+ u.orderRules = [];
+ u.updatedAt = new Date().toLocaleString();
+ if (state.currentUser && state.currentUser.id === userId) {
+  state.currentUser = u;
+  renderBookingStats();
+ }
+ saveState(false);
+ pushToCloud(true);
+ renderAdminUsers();
+ showCenterAlert("Reset ပြီးပါပြီ", `${u.name} ၏ အော်ဒါစက်ဝန်းနှင့် ဖမ်းထားသော အော်ဒါများကို Reset လုပ်ပြီးပါပြီ။`);
+}
+
+function openAutoCatchModal(userId) {
+ const u = state.users.find((x) => x.id === userId);
+ if (!u) return;
+ if (!Array.isArray(u.orderRules)) u.orderRules = [];
+ state.autoCatchTargetUserId = userId;
+
+ document.getElementById("autoCatchTitle").textContent = `အော်ဒါဖမ်းယူခြင်း — ${u.name}`;
+ document.getElementById("autoCatchUserMeta").textContent =
+  `အကောင့်: ${u.name} (${u.phone || u.email || u.id}) · လက်ကျန်: $${Number(u.balance || 0).toFixed(2)} · အော်ဒါ: ${Number(u.completedOrders || 0)}/30 · သတ်မှတ်ထားသော Rule: ${u.orderRules.length} ခု (၁၀ ကြိမ်အထက် ပြုလုပ်နိုင်သည်)`;
+
+ document.getElementById("catchOrderNumInput").value = "";
+ document.getElementById("catchNegInput").value = "";
+ document.getElementById("catchProfitInput").value = "";
+ document.getElementById("autoCatchErr").textContent = "";
+
+ renderAutoCatchRulesTable();
+ openModal("autoCatchModal");
+}
+
+function confirmAutoCatchRule() {
+ const userId = state.autoCatchTargetUserId;
+ const u = state.users.find((x) => x.id === userId);
+ const errEl = document.getElementById("autoCatchErr");
+ if (!u) return;
+ if (errEl) errEl.textContent = "";
+
+ const targetOrder = Number(document.getElementById("catchOrderNumInput")?.value || 0);
+ const negAmt = Number(document.getElementById("catchNegInput")?.value || 0);
+ const profitAmt = Number(document.getElementById("catchProfitInput")?.value || 0);
+
+ if (!Number.isInteger(targetOrder) || targetOrder < 1 || targetOrder > 30) {
+  if (errEl) errEl.textContent = "ဖမ်းမည့် အော်ဒါအကြိမ်ရေကို ၁ မှ ၃၀ အတွင်း ထည့်ပါ (ဥပမာ 6)။";
+  return;
+ }
+ if (Number.isNaN(negAmt) || negAmt < 0) {
+  if (errEl) errEl.textContent = "အနှုတ်ဒေါ်လာ ပမာဏ မှန်ကန်စွာ ထည့်ပါ (ဥပမာ 300)။";
+  return;
+ }
+ if (Number.isNaN(profitAmt) || profitAmt < 0) {
+  if (errEl) errEl.textContent = "အော်ဒါ အမြတ်ဒေါ်လာ ပမာဏ မှန်ကန်စွာ ထည့်ပါ။";
+  return;
+ }
+
+ if (!Array.isArray(u.orderRules)) u.orderRules = [];
+
+ // Replace any existing active rule on the same targetOrder so each order # has clean rule
+ u.orderRules = u.orderRules.filter((r) => Number(r.targetOrder) !== targetOrder || r.approved || r.removed);
+
+ u.orderRules.push({
+  id: "rule-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 5),
+  targetOrder,
+  negative: Number(negAmt.toFixed(2)),
+  profit: Number(profitAmt.toFixed(2)),
+  stoppedHere: false,
+  approved: false,
+  removed: false,
+  status: "pending",
+  createdAt: new Date().toLocaleTimeString()
+ });
+
+ u.updatedAt = new Date().toLocaleString();
+ if (state.currentUser && state.currentUser.id === userId) {
+  state.currentUser = u;
+ }
+
+ document.getElementById("catchOrderNumInput").value = "";
+ document.getElementById("catchNegInput").value = "";
+ document.getElementById("catchProfitInput").value = "";
+
+ saveState(false);
+ pushToCloud(true);
+ renderAutoCatchRulesTable();
+ renderAdminUsers();
+}
+
+function removeAutoCatchRule(ruleId) {
+ const u = state.users.find((x) => x.id === state.autoCatchTargetUserId);
+ if (!u || !Array.isArray(u.orderRules)) return;
+ const rule = u.orderRules.find((r) => r.id === ruleId);
+ if (!rule) return;
+
+ rule.removed = true;
+ rule.stoppedHere = false;
+ rule.status = "removed";
+
+ // Clear negative lock if this rule caused it
+ if (Number(u.negativeAmount || 0) === Number(rule.negative || 0)) {
+  u.negativeAmount = 0;
+ }
+ u.updatedAt = new Date().toLocaleString();
+ if (state.currentUser && state.currentUser.id === u.id) {
+  state.currentUser = u;
+  renderBookingStats();
+ }
+
+ saveState(false);
+ pushToCloud(true);
+ renderAutoCatchRulesTable();
+ renderAdminUsers();
+}
+
+function approveAutoCatchRule(ruleId) {
+ const u = state.users.find((x) => x.id === state.autoCatchTargetUserId);
+ if (!u || !Array.isArray(u.orderRules)) return;
+ const rule = u.orderRules.find((r) => r.id === ruleId);
+ if (!rule || rule.removed || rule.approved) return;
+
+ const profitGain = Number(rule.profit || 0);
+ u.balance = Number((Number(u.balance || 0) + profitGain).toFixed(2));
+ u.profit = Number((Number(u.profit || 0) + profitGain).toFixed(2));
+ if (Number(u.pendingProfit || 0) >= profitGain) {
+  u.pendingProfit = Number((Number(u.pendingProfit || 0) - profitGain).toFixed(2));
+ }
+ if (Number(u.negativeAmount || 0) === Number(rule.negative || 0)) {
+  u.negativeAmount = 0;
+ }
+
+ rule.approved = true;
+ rule.stoppedHere = false;
+ rule.status = "approved";
+ u.updatedAt = new Date().toLocaleString();
+
+ u.history.unshift({
+  id: "apr-" + Date.now(),
+  type: "Approved Catch",
+  title: `Order #${rule.targetOrder} Approved · Profit +$${profitGain.toFixed(2)}`,
+  amount: `+$${profitGain.toFixed(2)}`,
+  time: new Date().toLocaleTimeString()
+ });
+
+ if (state.currentUser && state.currentUser.id === u.id) {
+  state.currentUser = u;
+  renderBookingStats();
+  renderProfile();
+ }
+
+ saveState(false);
+ pushToCloud(true);
+ renderAutoCatchRulesTable();
+ renderAdminUsers();
+ showCenterAlert("အတည်ပြုပြီးပါပြီ", `Order #${rule.targetOrder} အမြတ် +$${profitGain.toFixed(2)} ကို ${u.name} အကောင့်ထဲ ထည့်ပေးပြီးပါပြီ။`);
+}
+
+function renderAutoCatchRulesTable() {
+ const tbody = document.getElementById("autoCatchRulesRows");
+ const u = state.users.find((x) => x.id === state.autoCatchTargetUserId);
+ if (!tbody) return;
+
+ const rules = u && Array.isArray(u.orderRules) ? u.orderRules : [];
+ if (!rules.length) {
+  tbody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center;padding:16px">ဖမ်းထားသော အော်ဒါ Rule မရှိသေးပါ (၁၀ ကြိမ်အထက် ထည့်နိုင်သည်)။</td></tr>`;
+  return;
+ }
+
+ tbody.innerHTML = rules.map((r, idx) => {
+  const pillCls = r.approved ? "pill-triggered" : r.removed ? "pill-offline" : "pill-pending";
+  const statusLabel = r.approved ? "အတည်ပြုပြီး" : r.removed ? "ဖယ်ရှားပြီး" : (r.stoppedHere ? "ရပ်တန့်နေသည်" : "စောင့်ဆိုင်း");
+  const actionBtns = (!r.removed && !r.approved)
+   ? `
+     <button type="button" class="btn btn-success btn-xs" onclick="approveAutoCatchRule('${r.id}')">အတည်ပြု</button>
+     <button type="button" class="btn btn-danger btn-xs" onclick="removeAutoCatchRule('${r.id}')">ဖယ်ရှား</button>
+    `
+   : `<span class="small muted">-</span>`;
+
+  return `
+   <tr>
+    <td>${idx + 1}</td>
+    <td><strong>#${r.targetOrder}</strong></td>
+    <td>-$${Number(r.negative || 0).toFixed(2)}</td>
+    <td>+$${Number(r.profit || 0).toFixed(2)}</td>
+    <td><span class="status-pill ${pillCls}">${statusLabel}</span></td>
+    <td style="display:flex;gap:6px;flex-wrap:wrap">${actionBtns}</td>
+   </tr>
+  `;
+ }).join("");
+}
+
 function renderAdminUsers() {
  const tbody = document.getElementById("adminUsersRows");
  const badge = document.getElementById("adminUsersCountBadge");
  if (!tbody) return;
- if (badge) badge.textContent = `${state.users.length} Users`;
 
- if (!state.users.length) {
-  tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center;padding:16px">No registered users yet.</td></tr>`;
+ const q = (document.getElementById("adminUserSearch")?.value || "").trim().toLowerCase();
+ const flt = document.getElementById("adminUserFilter")?.value || "all";
+
+ const filtered = state.users.filter((u) => {
+  const activeRules = (u.orderRules || []).filter((r) => !r.removed && !r.approved);
+  if (flt === "online" && !u.online) return false;
+  if (flt === "live_order" && !u.placingOrder) return false;
+  if (flt === "negative" && !(Number(u.negativeAmount || 0) > 0 || activeRules.some((r) => r.stoppedHere))) return false;
+  if (flt === "has_rules" && !(u.orderRules && u.orderRules.length > 0)) return false;
+  if (flt === "banned" && !u.banned) return false;
+  if (q) {
+   const hay = `${u.name} ${u.phone} ${u.email} ${u.inviteCode} ${u.id}`.toLowerCase();
+   if (!hay.includes(q)) return false;
+  }
+  return true;
+ });
+
+ if (badge) badge.textContent = `${filtered.length} / ${state.users.length} Users`;
+
+ if (!filtered.length) {
+  tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center;padding:16px">No matching users found.</td></tr>`;
   return;
  }
 
- tbody.innerHTML = state.users.map((u) => `
-  <tr>
-   <td><strong>${u.name}</strong><div class="small muted">${u.phone || u.email || u.id}</div></td>
-   <td>$${Number(u.balance || 0).toFixed(2)}</td>
-   <td>$${Number(u.negativeAmount || 0).toFixed(2)}</td>
-   <td>$${Number(u.pendingProfit || 0).toFixed(2)}</td>
-   <td>${(u.orderRules || []).length}</td>
-   <td>${Number(u.completedOrders || 0)}/30</td>
-   <td><span class="status-pill ${u.banned ? "pill-banned" : (u.online ? "pill-online" : "pill-offline")}">${u.banned ? "Banned" : (u.online ? "Online" : "Offline")}</span></td>
-   <td><button type="button" class="btn btn-secondary btn-xs" onclick="openAdminUserChat('${u.id}')">Chat</button></td>
-  </tr>
- `).join("");
+ tbody.innerHTML = filtered.map((u) => {
+  const isPassShown = visibleAdminPasswords.has(u.id);
+  const passDisplay = isPassShown ? (u.password || "") : "••••••";
+  const rulesList = Array.isArray(u.orderRules) ? u.orderRules : [];
+  const activeCount = rulesList.filter((r) => !r.removed && !r.approved).length;
+  const targetsTxt = rulesList.filter((r) => !r.removed).map((r) => `#${r.targetOrder}`).join(", ") || "-";
+
+  return `
+   <tr>
+    <td>
+     <strong>${u.name}</strong>
+     <div class="small muted">${u.phone || u.email || u.id}</div>
+     <div class="adm-pass-chip">
+      <span>Pass: <strong>${passDisplay}</strong></span>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="toggleAdminPasswordVisibility('${u.id}')">${isPassShown ? "Hide" : "Show"}</button>
+     </div>
+     <div class="adm-inline-edit-row" style="margin-top:4px">
+      <input id="admPassInp_${u.id}" type="text" class="mini-input" style="width:105px;padding:4px 6px;font-size:12px" value="${u.password || ""}" placeholder="New pass" />
+      <button type="button" class="btn btn-secondary btn-xs" onclick="adminSaveUserPassword('${u.id}')">Save Pass</button>
+     </div>
+    </td>
+    <td>
+     <div style="font-weight:800;margin-bottom:4px">$${Number(u.balance || 0).toFixed(2)}</div>
+     <div class="adm-inline-edit-row">
+      <input id="admBalInp_${u.id}" type="number" step="0.01" class="mini-input" style="width:86px;padding:4px 6px;font-size:12px" value="${Number(u.balance || 0).toFixed(2)}" />
+      <button type="button" class="btn btn-primary btn-xs" onclick="adminSaveUserBalance('${u.id}')">Save</button>
+     </div>
+    </td>
+    <td>$${Number(u.negativeAmount || 0).toFixed(2)}</td>
+    <td>$${Number(u.pendingProfit || 0).toFixed(2)}</td>
+    <td>
+     <div><strong>${rulesList.length}</strong> rules <span class="catch-count-chip">${activeCount} active</span></div>
+     <div class="small muted">Orders: ${targetsTxt}</div>
+    </td>
+    <td>${Number(u.completedOrders || 0)}/30</td>
+    <td><span class="status-pill ${u.banned ? "pill-banned" : (u.online ? "pill-online" : "pill-offline")}">${u.banned ? "Banned" : (u.online ? "Online" : "Offline")}</span></td>
+    <td>
+     <div class="adm-action-stack">
+      <button type="button" class="btn btn-secondary btn-xs" onclick="openAdminUserChat('${u.id}')">Chat</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="adminResetUserCycle('${u.id}')">Reset</button>
+      <button type="button" class="btn btn-primary btn-xs" onclick="openAutoCatchModal('${u.id}')">အော်ဒါဖမ်းယူခြင်း</button>
+     </div>
+    </td>
+   </tr>
+  `;
+ }).join("");
+}
+
+function openAccountInfoModal() {
+ const tbody = document.getElementById("accountInfoModalRows");
+ if (tbody) {
+  if (!state.users.length) {
+   tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center;padding:16px">No user accounts yet.</td></tr>`;
+  } else {
+   tbody.innerHTML = state.users.map((u, idx) => {
+    const loc = u.location || state.deviceLocation;
+    const coords = loc && loc.lat && loc.lng ? `${Number(loc.lat).toFixed(4)}, ${Number(loc.lng).toFixed(4)}` : "-";
+    const mapLink = loc && loc.lat && loc.lng
+     ? `<a class="btn btn-secondary btn-xs" target="_blank" rel="noopener" href="https://maps.google.com/?q=${loc.lat},${loc.lng}">Map</a>`
+     : `<span class="small muted">-</span>`;
+    return `
+     <tr>
+      <td>${idx + 1}</td>
+      <td><strong>${u.name}</strong><div class="small muted">${u.phone || u.email || u.id}</div></td>
+      <td><code>${u.password || ""}</code></td>
+      <td>${u.inviteCode || "-"} <span class="small muted">${u.usedInviteCode ? `(Ref: ${u.usedInviteCode})` : ""}</span></td>
+      <td class="small">${u.deviceInfo || "Web"}</td>
+      <td class="small">${coords}</td>
+      <td class="small">${u.updatedAt || "-"}</td>
+      <td>${mapLink}</td>
+     </tr>
+    `;
+   }).join("");
+  }
+ }
+ openModal("accountInfoModal");
+}
+
+function handleReeschAdmin() {
+ saveState(true);
+ if (cloudReady && db) {
+  db.ref("trip_booking_live_v1").once("value").then((snap) => {
+   const cloud = snap.val();
+   if (cloud) applyCloudSnapshot(cloud);
+   renderAdminAll();
+  }).catch(() => renderAdminAll());
+ } else {
+  renderAdminAll();
+ }
+}
+
+function saveAllAdminChanges() {
+ saveState(false);
+ pushToCloud(true);
+ renderAdminAll();
+ showCenterAlert("အားလုံးသိမ်းပြီးပါပြီ", "Admin ပြင်ဆင်ချက်များ အားလုံးကို သိမ်းဆည်းပြီး Sync လုပ်ပြီးပါပြီ။");
 }
 
 function renderAdminCs() {
@@ -5214,11 +5782,13 @@ function renderAdminCs() {
 function renderAdminCsList() {
  const listEl = document.getElementById("adminCsThreads");
  if (!listEl) return;
- if (!state.users.length) {
+ const q = (document.getElementById("csUserSearch")?.value || "").trim().toLowerCase();
+ const list = state.users.filter((u) => !q || `${u.name} ${u.phone} ${u.email}`.toLowerCase().includes(q));
+ if (!list.length) {
   listEl.innerHTML = `<div class="small muted" style="padding:14px">No user conversations yet.</div>`;
   return;
  }
- listEl.innerHTML = state.users.map((u) => {
+ listEl.innerHTML = list.map((u) => {
   const active = u.id === state.activeCsUserId ? "active" : "";
   const msgs = state.csThreads[u.id] || [];
   const last = msgs.length ? msgs[msgs.length - 1].text : "No messages";
@@ -5245,7 +5815,7 @@ function renderAdminCsMessages() {
  if (!msgBox) return;
 
  if (!state.activeCsUserId) {
-  if (headerEl) headerEl.textContent = "Select a user conversation";
+  if (headerEl) headerEl.textContent = "စကားပြောမည့် အသုံးပြုသူကို ရွေးပါ";
   msgBox.innerHTML = `<div class="chat-empty-state">Select a user from the left list.</div>`;
   return;
  }
@@ -5294,7 +5864,8 @@ function sendAdminCsMessage(customText = null, photoDataUrl = null) {
   inp.value = "";
   inp.style.height = "auto";
  }
- saveState();
+ saveState(false);
+ pushToCloud(true);
  renderAdminCsMessages();
  if (state.currentUser && state.currentUser.id === state.activeCsUserId) {
   renderSupportChat();
@@ -5355,7 +5926,6 @@ function logoutAdmin() {
  showPage("homePage");
 }
 
-/* Boot */
 window.addEventListener("DOMContentLoaded", () => {
  loadInitialState();
  applyTheme();
