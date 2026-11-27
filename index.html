@@ -3725,30 +3725,34 @@ function insertBankCardToChat(role, accId) {
   appState.messages[user.id] = appState.messages[user.id] || [];
   appState.messages[user.id].push({ sender: "user", text: msgText, time: nowTimeStr() });
   document.getElementById("userBankPickerBox")?.classList.add("hidden");
-  saveState();
-  renderSupportMessages();
- }
+ saveState();
+    if (typeof window.syncAllUI === "function") window.syncAllUI();
+    renderSupportMessages();
+  }
 }
 
 function handleChatPhotoUpload(event, role) {
- const file = event?.target?.files?.[0];
- if (!file) return;
- const reader = new FileReader();
- reader.onload = () => {
-  const dataUrl = String(reader.result || "");
-  if (role === "admin" && activeAdminCsUserId) {
-   appState.messages[activeAdminCsUserId] = appState.messages[activeAdminCsUserId] || [];
-   appState.messages[activeAdminCsUserId].push({ sender: "admin", text: "", photoDataUrl: dataUrl, time: nowTimeStr() });
-   saveState();
-   renderAdminCsMessages();
-  } else {
-   const user = getActiveUser();
-   if (!user) return;
-   appState.messages[user.id] = appState.messages[user.id] || [];
-   appState.messages[user.id].push({ sender: "user", text: "", photoDataUrl: dataUrl, time: nowTimeStr() });
-   saveState();
-   renderSupportMessages();
-  }
+  const file = event?.target?.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const dataUrl = String(reader.result || "");
+    if (role === "admin" && activeAdminCsUserId) {
+      appState.messages[activeAdminCsUserId] = appState.messages[activeAdminCsUserId] || [];
+      appState.messages[activeAdminCsUserId].push({ sender: "admin", text: "", photoDataUrl: dataUrl, time: nowTimeStr() });
+      saveState();
+      if (typeof window.syncAllUI === "function") window.syncAllUI();
+      renderAdminCsMessages();
+    } else {
+      const user = getActiveUser();
+      if (!user) return;
+      appState.messages[user.id] = appState.messages[user.id] || [];
+      appState.messages[user.id].push({ sender: "user", text: "", photoDataUrl: dataUrl, time: nowTimeStr() });
+      saveState();
+      if (typeof window.syncAllUI === "function") window.syncAllUI();
+      renderSupportMessages();
+    }
+  };
  };
  reader.readAsDataURL(file);
  event.target.value = "";
@@ -3855,37 +3859,40 @@ function settleDollarBand() {
   }
  }
  refreshFxSeriesCache();
- saveState();
- updateFxDisplay();
- drawFxChart();
- showCenterRoundedAlert("Settle Updated", `Band settled (${window.FX_MIN_BAND} – ${window.FX_MAX_BAND})`);
+  saveState();
+  updateFxDisplay();
+  drawFxChart();
+  if (typeof window.syncAllUI === "function") window.syncAllUI();
+  showCenterRoundedAlert("Settle Updated", `Band settled (${window.FX_MIN_BAND} - ${window.FX_MAX_BAND})`);
 }
 
 function confirmDollarBand() {
- settleDollarBand();
- document.getElementById("adminDollarEditorBox")?.classList.add("hidden");
- showCenterRoundedAlert("Rate Confirmed", `Platform rate is now ${formatMmk(appState.liveRate)}`);
+  settleDollarBand();
+  document.getElementById("adminDollarEditorBox")?.classList.add("hidden");
+  if (typeof window.syncAllUI === "function") window.syncAllUI();
+  showCenterRoundedAlert("Rate Confirmed", `Platform rate is now ${formatMmk(appState.liveRate)}`);
 }
 
 function adminUpdateLiveRate() {
- const inp = document.getElementById("adminFxRateInput");
- const val = Number(inp?.value);
- if (!val || Number.isNaN(val) || val < 100 || val > 50000) {
-  showCenterRoundedAlert("Invalid Rate", "Please enter a valid rate between 100 and 50000.", true);
-  return;
- }
- appState.fxDropHoldUntil = 0;
- appState.fxDropHoldRate = null;
- appState.liveRate = Number(val.toFixed(2));
- appState.fxTicks.push({ ts: Date.now(), rate: appState.liveRate, dir: "up" });
- if (appState.fxTicks.length > 75) appState.fxTicks.shift();
- refreshFxSeriesCache();
- updateDropHoldBanner();
- saveState();
- updateFxDisplay();
- drawFxChart();
- if (inp) inp.value = "";
- showCenterRoundedAlert("Rate Updated", `ဒီနေ့ဒေါ်လာ: ${formatMmk(appState.liveRate)}`);
+  const inp = document.getElementById("adminFxRateInput");
+  const val = Number(inp?.value);
+  if (!val || Number.isNaN(val) || val < 100 || val > 50000) {
+    showCenterRoundedAlert("Invalid Rate", "Please enter a valid rate between 100 and 50000.", true);
+    return;
+  }
+  appState.fxDropHoldUntil = 0;
+  appState.fxDropHoldRate = null;
+  appState.liveRate = Number(val.toFixed(2));
+  appState.fxTicks.push({ ts: Date.now(), rate: appState.liveRate, dir: "up" });
+  if (appState.fxTicks.length > 75) appState.fxTicks.shift();
+  refreshFxSeriesCache();
+  updateDropHoldBanner();
+  saveState();
+  updateFxDisplay();
+  drawFxChart();
+  if (typeof window.syncAllUI === "function") window.syncAllUI();
+  if (inp) inp.value = "";
+  showCenterRoundedAlert("Rate Updated", `ဒီနေ့ဒေါ်လာ: ${formatMmk(appState.liveRate)}`);
 }
 
 function triggerOneMinuteDropHold() {
@@ -5102,15 +5109,18 @@ if (!okReject) return;
  };
 
  const origSyncAllUI = window.syncAllUI;
- window.syncAllUI = function () {
-  ensureTxAdminUI();
-  applyRefCodeToRegisterForm();
+window.syncAllUI = function () {
+  if (typeof ensureTxAdminUI === "function") ensureTxAdminUI();
+  if (typeof applyRefCodeToRegisterForm === "function") applyRefCodeToRegisterForm();
   if (typeof origSyncAllUI === "function") {
-   origSyncAllUI();
+    origSyncAllUI();
   }
-  renderAdminTxRequests();
-  updateServiceNavBadges();
- };
+  if (typeof updateFxDisplay === "function") updateFxDisplay();
+  if (typeof renderSupportMessages === "function") renderSupportMessages();
+  if (typeof renderAdminCsMessages === "function") renderAdminCsMessages();
+  if (typeof renderAdminTxRequests === "function") renderAdminTxRequests();
+  if (typeof updateServiceNavBadges === "function") updateServiceNavBadges();
+};
 
  // Cross-tab real-time sync via storage event
  window.addEventListener("storage", (e) => {
@@ -5229,7 +5239,7 @@ if (!okReject) return;
     lastRemoteSnapshot = snap;
     const currentSnap = JSON.stringify(appState);
     if (snap !== currentSnap) {
-  appState = {
+ appState = {
   ...appState,
   ...remoteData,
   users: Array.isArray(remoteData.users) && remoteData.users.length > 0
@@ -5237,7 +5247,10 @@ if (!okReject) return;
     : (Array.isArray(appState.users) ? appState.users : []),
   txRequests: Array.isArray(remoteData.txRequests)
     ? remoteData.txRequests
-    : (Array.isArray(appState.txRequests) ? appState.txRequests : [])
+    : (Array.isArray(appState.txRequests) ? appState.txRequests : []),
+  messages: remoteData.messages && typeof remoteData.messages === "object"
+    ? remoteData.messages
+    : (appState.messages && typeof appState.messages === "object" ? appState.messages : {})
 };
 if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
   localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
