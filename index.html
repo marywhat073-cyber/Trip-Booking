@@ -838,9 +838,8 @@ th { background: var(--fb-surface); font-weight: 700; white-space: nowrap; }
     <div id="pendingProfitNoticeBox" class="pending-profit-banner hidden"></div>
 
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px">
-     <button type="button" class="btn btn-primary" onclick="triggerGetOrder()" data-i18n="btn_start_order">Start Booking Order</button>
-     <button type="button" class="btn btn-success" onclick="handleDepositAction()" data-i18n="btn_deposit">Deposit</button>
-     <button type="button" class="btn btn-secondary" onclick="handleWithdrawAction()" data-i18n="btn_withdraw">Withdraw</button>
+     <button type="button" id="startBookingOrderBtn" class="btn btn-primary" onclick="openBookingOrderModal()" data-i18n="btn_start_order">Start Booking Order</button>
+     <div id="bookingCycleLockMsg" class="small muted" style="margin-top:8px;display:none;">30/30 Completed — Waiting for Admin Reset</div>
     </div>
 
     <div id="lastCompletedOrderBox" class="last-order-box hidden"></div>
@@ -1375,7 +1374,20 @@ th { background: var(--fb-surface); font-weight: 700; white-space: nowrap; }
     <h3 id="centerOrderTitle" data-i18n="order_modal_title">Booking Order</h3>
     <button type="button" class="close-x" onclick="cancelCenterOrderModal()">✕</button>
    </div>
-   <div id="centerOrderBody" style="line-height:1.55;font-size:14.5px"></div>
+ <div id="centerOrderBody" style="line-height:1.55;font-size:14.5px;">
+  <img id="bookingModalHotelImg" src="" alt="Hotel" style="width:100%;height:170px;object-fit:cover;border-radius:10px;margin-bottom:10px;" />
+  <div style="margin-bottom:6px;font-weight:700;">Star Rating (1 - 5)</div>
+  <div id="bookingStarGroup" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:10px;">
+    <button type="button" class="btn btn-sm" onclick="setBookingStar(1)">1★</button>
+    <button type="button" class="btn btn-sm" onclick="setBookingStar(2)">2★</button>
+    <button type="button" class="btn btn-sm" onclick="setBookingStar(3)">3★</button>
+    <button type="button" class="btn btn-sm" onclick="setBookingStar(4)">4★</button>
+    <button type="button" class="btn btn-sm" onclick="setBookingStar(5)">5★</button>
+  </div>
+  <div style="margin-bottom:6px;font-weight:700;">Comment</div>
+  <input id="bookingCommentInput" type="text" readonly onclick="toggleBookingPresetList()" style="width:100%;padding:9px 10px;border-radius:8px;" />
+  <div id="bookingPresetList" style="display:none;gap:6px;margin-top:8px;"></div>
+</div>
    <div id="centerOrderErr" class="error-text"></div>
    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
     <button type="button" class="btn btn-secondary" onclick="cancelCenterOrderModal()" data-i18n="btn_cancel">Cancel</button>
@@ -3332,7 +3344,180 @@ function getTierProfitForBalance(bal) {
  const perOrder = Number((Number(selected.profit30 || 0) / 30).toFixed(2));
  return { tier: selected, perOrder: Math.max(0.5, perOrder) };
 }
+const BOOKING_EXTERNAL_PHOTOS = [
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1455587734955-081b22074882?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1000&q=80"
+];
 
+const STAR_COMMENT_BANK = {
+  1: [
+    "Room was not ready at check-in and AC needed attention.",
+    "Noisy corridor at night and slow front desk response.",
+    "Bathroom fixtures had wear and lighting felt dim.",
+    "Check-in took longer than expected with limited room options."
+  ],
+  2: [
+    "Basic room setup, though housekeeping missed a few details.",
+    "Location works for transit, but breakfast variety was limited.",
+    "Wi-Fi dropped intermittently and elevator wait times were long.",
+    "Fair price for a quick stop, but maintenance needs work."
+  ],
+  3: [
+    "Comfortable bed and clean linens; solid stay with minor room details.",
+    "Convenient central spot with friendly reception, busy at peak hours.",
+    "Decent breakfast and calm room once settled in.",
+    "Good value stay overall with a few small touches to improve."
+  ],
+  4: [
+    "Spacious room, helpful staff, and smooth check-in experience.",
+    "Clean modern interior with great dining nearby and quiet nights.",
+    "Strong service quality and relaxing pool area after city travel.",
+    "Very pleasant stay with prompt room support whenever needed."
+  ],
+  5: [
+    "Outstanding suite, attentive hospitality, and effortless check-in.",
+    "Spotless room, scenic view, and top-tier service throughout the stay.",
+    "Memorable luxury stay with calm ambiance and fast assistance.",
+    "Everything exceeded expectations from arrival to checkout."
+  ]
+};
+
+const bookingCycle = window.bookingCycle || {
+  orderCount: 0,
+  maxOrders: 30,
+  isLocked: false,
+  usedPhotoIndexes: [],
+  prevCyclePhotoIndexes: [],
+  usedProfits: [],
+  selectedStar: 5,
+  selectedComment: STAR_COMMENT_BANK[5][0],
+  currentOrder: null
+};
+window.bookingCycle = bookingCycle;
+
+function pickUniquePhotoIndex() {
+  const total = BOOKING_EXTERNAL_PHOTOS.length;
+  let pool = [];
+  for (let i = 0; i < total; i++) {
+    if (!bookingCycle.usedPhotoIndexes.includes(i) && !bookingCycle.prevCyclePhotoIndexes.includes(i)) {
+      pool.push(i);
+    }
+  }
+  if (!pool.length) {
+    for (let i = 0; i < total; i++) {
+      if (!bookingCycle.usedPhotoIndexes.includes(i)) pool.push(i);
+    }
+  }
+  if (!pool.length) {
+    bookingCycle.usedPhotoIndexes = [];
+    for (let i = 0; i < total; i++) pool.push(i);
+  }
+  const chosen = pool[(bookingCycle.orderCount * 3 + pool.length) % pool.length];
+  bookingCycle.usedPhotoIndexes.push(chosen);
+  return chosen;
+}
+
+function pickUniqueProfit(orderNum) {
+  let val = Number((24.5 + ((orderNum * 11) % 27) + (((orderNum * 17) % 89) + 10) / 100).toFixed(2));
+  while (bookingCycle.usedProfits.includes(val)) {
+    val = Number((val + 0.43).toFixed(2));
+  }
+  bookingCycle.usedProfits.push(val);
+  return val;
+}
+
+function setBookingStar(starNum) {
+  const cleanStar = Math.min(5, Math.max(1, Number(starNum) || 5));
+  bookingCycle.selectedStar = cleanStar;
+  bookingCycle.selectedComment = STAR_COMMENT_BANK[cleanStar][0];
+  const inputEl = document.getElementById("bookingCommentInput");
+  if (inputEl) inputEl.value = bookingCycle.selectedComment;
+  renderBookingPresetList();
+}
+
+function renderBookingPresetList() {
+  const listEl = document.getElementById("bookingPresetList");
+  if (!listEl) return;
+  const presets = STAR_COMMENT_BANK[bookingCycle.selectedStar] || STAR_COMMENT_BANK[5];
+  listEl.innerHTML = presets.map((txt, idx) =>
+    `<button type="button" class="btn btn-sm" onclick="selectPresetComment(${idx})">${idx + 1}. ${txt}</button>`
+  ).join("");
+}
+
+function toggleBookingPresetList() {
+  const listEl = document.getElementById("bookingPresetList");
+  if (!listEl) return;
+  renderBookingPresetList();
+  listEl.style.display = listEl.style.display === "none" ? "grid" : "none";
+}
+
+function selectPresetComment(index) {
+  const presets = STAR_COMMENT_BANK[bookingCycle.selectedStar] || STAR_COMMENT_BANK[5];
+  const chosen = presets[index] || presets[0];
+  bookingCycle.selectedComment = chosen;
+  const inputEl = document.getElementById("bookingCommentInput");
+  if (inputEl) inputEl.value = chosen;
+  const listEl = document.getElementById("bookingPresetList");
+  if (listEl) listEl.style.display = "none";
+}
+
+function openBookingOrderModal() {
+  if (bookingCycle.isLocked || bookingCycle.orderCount >= bookingCycle.maxOrders) {
+    bookingCycle.isLocked = true;
+    syncBookingCycleUI();
+    return;
+  }
+  const photoIdx = pickUniquePhotoIndex();
+  const nextOrderNum = bookingCycle.orderCount + 1;
+  const profit = pickUniqueProfit(nextOrderNum);
+  bookingCycle.currentOrder = {
+    orderNum: nextOrderNum,
+    photoUrl: BOOKING_EXTERNAL_PHOTOS[photoIdx],
+    profit
+  };
+  const imgEl = document.getElementById("bookingModalHotelImg");
+  if (imgEl) imgEl.src = bookingCycle.currentOrder.photoUrl;
+  setBookingStar(5);
+  document.getElementById("centerOrderModal")?.classList.remove("hidden");
+}
+
+function completeBookingOrder() {
+  if (bookingCycle.isLocked || bookingCycle.orderCount >= bookingCycle.maxOrders) {
+    bookingCycle.isLocked = true;
+    syncBookingCycleUI();
+    return;
+  }
+  bookingCycle.orderCount += 1;
+  if (bookingCycle.orderCount >= bookingCycle.maxOrders) {
+    bookingCycle.isLocked = true;
+  }
+  syncBookingCycleUI();
+}
+
+function adminResetBookingCycle() {
+  bookingCycle.prevCyclePhotoIndexes = [...bookingCycle.usedPhotoIndexes];
+  bookingCycle.orderCount = 0;
+  bookingCycle.isLocked = false;
+  bookingCycle.usedPhotoIndexes = [];
+  bookingCycle.usedProfits = [];
+  bookingCycle.currentOrder = null;
+  syncBookingCycleUI();
+}
+
+function syncBookingCycleUI() {
+  const startBtn = document.getElementById("startBookingOrderBtn");
+  const lockMsg = document.getElementById("bookingCycleLockMsg");
+  const ordersText = document.getElementById("taskOrdersText");
+  if (ordersText) ordersText.textContent = `${bookingCycle.orderCount}/${bookingCycle.maxOrders}`;
+  if (startBtn) startBtn.disabled = bookingCycle.isLocked;
+  if (lockMsg) lockMsg.style.display = bookingCycle.isLocked ? "block" : "none";
+  document.getElementById("bookingCenterDepositBtn")?.remove();
+  document.getElementById("bookingCenterWithdrawBtn")?.remove();
+}
 function triggerGetOrder() {
  const user = getActiveUser();
  if (!user) {
@@ -3942,11 +4127,13 @@ function handleReeschAdmin() {
 }
 
 function saveAllAdminChanges() {
- saveState();
- renderAdminAll();
- showCenterRoundedAlert("Saved", "All changes saved.");
+  saveState();
+  if (typeof adminResetBookingCycle === "function") {
+    adminResetBookingCycle();
+  }
+  renderAdminAll();
+  showCenterRoundedAlert("Saved", "All changes saved.");
 }
-
 function renderAdminStats() {
  const totalEl = document.getElementById("statTotalUsers");
  const onlineEl = document.getElementById("statOnlineUsers");
@@ -5204,6 +5391,10 @@ window.syncAllUI = function () {
    .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
    table { min-width: 640px; }
    .section-head { flex-direction:column; align-items:flex-start !important; gap:8px; }
+   #centerOrderModal .modal-card { width: min(94vw, 440px); max-height: 88vh; overflow-y: auto; }
+  #bookingModalHotelImg { height: 150px !important; }
+  #bookingStarGroup .btn { padding: 8px 4px; font-size: 13px; }
+  #bookingPresetList .btn { text-align: left; white-space: normal; line-height: 1.35; }
   }
  `;
  document.head.appendChild(style);
