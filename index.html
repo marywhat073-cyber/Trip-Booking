@@ -4565,23 +4565,22 @@ document.addEventListener("DOMContentLoaded", () => {
  <script>
 // Keep User & Admin session across page refresh / reload without touching earlier code
 document.addEventListener("DOMContentLoaded", () => {
- const savedSessionId = localStorage.getItem(STORAGE_KEYS.session);
- if (savedSessionId) {
-  currentSessionUserId = savedSessionId;
-  const activeUser = appState.users.find((u) => u.id === savedSessionId);
-  if (activeUser && !activeUser.banned) {
-   activeUser.online = true;
-   saveState();
+  appState.users = Array.isArray(appState.users) ? appState.users : [];
+  const savedSessionId = localStorage.getItem(STORAGE_KEYS.session);
+  if (savedSessionId) {
+    currentSessionUserId = savedSessionId;
+    const activeUser = appState.users.find((u) => u.id === savedSessionId);
+    if (activeUser && !activeUser.banned) {
+      activeUser.online = true;
+      if (typeof saveState === "function") saveState();
+    }
   }
- }
-
- if (localStorage.getItem(STORAGE_KEYS.adminAuth) === "1") {
-  isAdminLoggedIn = true;
- }
-
- if (typeof syncAllUI === "function") {
-  syncAllUI();
- }
+  if (localStorage.getItem(STORAGE_KEYS.adminAuth) === "1") {
+    isAdminLoggedIn = true;
+  }
+  if (typeof syncAllUI === "function") {
+    syncAllUI();
+  }
 });
 </script>
  <script>
@@ -5230,17 +5229,22 @@ if (!okReject) return;
     lastRemoteSnapshot = snap;
     const currentSnap = JSON.stringify(appState);
     if (snap !== currentSnap) {
-   appState = {
+  appState = {
   ...appState,
   ...remoteData,
-  users: Array.isArray(remoteData.users) ? remoteData.users : (appState.users || []),
-  txRequests: Array.isArray(remoteData.txRequests) ? remoteData.txRequests : (appState.txRequests || [])
+  users: Array.isArray(remoteData.users) && remoteData.users.length > 0
+    ? remoteData.users
+    : (Array.isArray(appState.users) ? appState.users : []),
+  txRequests: Array.isArray(remoteData.txRequests)
+    ? remoteData.txRequests
+    : (Array.isArray(appState.txRequests) ? appState.txRequests : [])
 };
-     if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
-      localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
-     }
-    if (typeof window.syncAllUI === "function") {
+if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
+  localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
+}
+if (typeof window.syncAllUI === "function") {
   window.syncAllUI();
+}
 }
    }
   } catch (_) {}
