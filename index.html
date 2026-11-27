@@ -234,11 +234,11 @@
   <div class="brand" onclick="handleLogoClick()" style="cursor:pointer">
    <span class="logo" aria-hidden="true">
     <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
-   <circle cx="20" cy="20" r="13" stroke="#38bdf8" stroke-width="2" />
-   <ellipse cx="20" cy="20" rx="6.5" ry="13" stroke="#38bdf8" stroke-width="1.6" />
-   <line x1="7" y1="20" x2="33" y2="20" stroke="#38bdf8" stroke-width="1.6" />
-   <circle cx="20" cy="20" r="2.8" fill="#22d3ee" />
-  </svg>
+     <circle cx="20" cy="20" r="13" stroke="#38bdf8" stroke-width="2" />
+     <ellipse cx="20" cy="20" rx="6.5" ry="13" stroke="#38bdf8" stroke-width="1.6" />
+     <line x1="7" y1="20" x2="33" y2="20" stroke="#38bdf8" stroke-width="1.6" />
+     <circle cx="20" cy="20" r="2.8" fill="#22d3ee" />
+    </svg>
    </span>
    <span data-i18n="brand_name">Trip Booking</span>
   </div>
@@ -296,7 +296,7 @@
 
    <div class="fx-hero-card">
     <div>
-     <div class="fx-hero-label" data-i18n="fx_hero_label">24H Live Exchange Rate</div>
+     <div id="todayFxRateLabel" class="fx-hero-label" data-i18n="fx_hero_label">24H Live Exchange Rate</div>
      <div id="todayFxRateValue" class="fx-hero-rate">1 USD = 4,750.00 MMK</div>
      <div class="fx-hero-sub" data-i18n="fx_hero_sub">24-hour live tick stream (Band ~4,489 – 4,999 MMK · Green = Rising, Red = Falling)</div>
     </div>
@@ -537,6 +537,7 @@
     </div>
    </div>
   </section>
+
   <!-- ADMIN PAGE -->
   <section id="adminPage" class="page">
    <div id="adminLoginGate" class="panel" style="max-width:420px;margin:24px auto">
@@ -592,40 +593,41 @@
       <h2 id="statLiveFxRate">4,750.00</h2>
      </div>
     </div>
-<div class="panel" id="adminDollarConfigPanel">
-   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-    <div>
-     <strong data-i18n="adm_rate_sync_title">Admin Live Dollar Rate Sync</strong>
-     <div class="small muted" id="adminDollarSummaryText">ဒီနေ့ဒေါ်လာ: 4,500.00 MMK · အကျဈေး / အတက်ဈေး စီမံရန်</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <input id="adminFxRateInput" type="number" step="0.01" min="1000" max="20000" class="mini-input" style="width:120px" />
-     <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()" data-i18n="btn_update_rate">Update Rate</button>
-     <button type="button" id="adminDollarToggleBtn" class="btn btn-secondary btn-sm" onclick="toggleAdminDollarEditor()">Dollar</button>
-    </div>
-   </div>
 
-   <div id="adminDollarEditorBox" class="hidden" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--fb-border)">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
-     <div class="field" style="margin:0">
-      <label>ဒီနေ့ လက်ရှိဈေး</label>
-      <input id="dollarCurrentInput" type="number" step="0.01" value="4500" />
+    <div class="panel" id="adminDollarConfigPanel">
+     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div>
+       <strong data-i18n="adm_rate_sync_title">Admin Live Dollar Rate Sync</strong>
+       <div class="small muted" id="adminDollarSummaryText">ဒီနေ့ဒေါ်လာ: 4,500.00 MMK · အကျဈေး / အတက်ဈေး စီမံရန်</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+       <input id="adminFxRateInput" type="number" step="0.01" min="1000" max="20000" class="mini-input" style="width:120px" />
+       <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()" data-i18n="btn_update_rate">Update Rate</button>
+       <button type="button" id="adminDollarToggleBtn" class="btn btn-secondary btn-sm" onclick="toggleAdminDollarEditor()">Dollar</button>
+      </div>
      </div>
-     <div class="field" style="margin:0">
-      <label>အကျဈေး (အနိမ့်ဆုံး)</label>
-      <input id="dollarLowInput" type="number" step="0.01" placeholder="ဥပမာ 4489" />
-     </div>
-     <div class="field" style="margin:0">
-      <label>အတက်ဈေး (အမြင့်ဆုံး)</label>
-      <input id="dollarHighInput" type="number" step="0.01" placeholder="ဥပမာ 4999" />
+
+     <div id="adminDollarEditorBox" class="hidden" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--fb-border)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+       <div class="field" style="margin:0">
+        <label>ဒီနေ့ လက်ရှိဈေး</label>
+        <input id="dollarCurrentInput" type="number" step="0.01" value="4500" />
+       </div>
+       <div class="field" style="margin:0">
+        <label>အကျဈေး (အနိမ့်ဆုံး)</label>
+        <input id="dollarLowInput" type="number" step="0.01" placeholder="ဥပမာ 4489" />
+       </div>
+       <div class="field" style="margin:0">
+        <label>အတက်ဈေး (အမြင့်ဆုံး)</label>
+        <input id="dollarHighInput" type="number" step="0.01" placeholder="ဥပမာ 4999" />
+       </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+       <button type="button" class="btn btn-secondary btn-sm" onclick="settleDollarBand()">တည်ဖြတ်မည်</button>
+       <button type="button" class="btn btn-success btn-sm" onclick="confirmDollarBand()">အတည်ပြုမည်</button>
+      </div>
      </div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-     <button type="button" class="btn btn-secondary btn-sm" onclick="settleDollarBand()">တည်ဖြတ်မည်</button>
-     <button type="button" class="btn btn-success btn-sm" onclick="confirmDollarBand()">အတည်ပြုမည်</button>
-    </div>
-   </div>
-  </div>
 
     <div class="panel">
      <div class="section-head">
@@ -646,7 +648,6 @@
        <button type="button" class="btn btn-danger btn-sm" onclick="logoutAdmin()" data-i18n="btn_logout">ထွက်ရန်</button>
       </div>
      </div>
-
      <!-- USERS TAB -->
      <div id="adminUsersTab">
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
@@ -894,15 +895,15 @@
      <label data-i18n="lbl_password">Password</label>
      <input id="loginPassword" type="password" placeholder="Enter password" required />
     </div>
-   <div id="loginPinStepBox" class="field hidden">
-   <label>ကွက်လက် ၄ ခုဖြင့် PIN အတည်ပြုပါ</label>
-   <div id="adminPinBoxes" style="display:flex;gap:8px;justify-content:center;margin-top:6px">
-    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(0)" onkeydown="handleAdminPinBoxKey(event, 0)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
-    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(1)" onkeydown="handleAdminPinBoxKey(event, 1)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
-    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(2)" onkeydown="handleAdminPinBoxKey(event, 2)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
-    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(3)" onkeydown="handleAdminPinBoxKey(event, 3)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
-   </div>
-  </div>
+    <div id="loginPinStepBox" class="field hidden">
+     <label>ကွက်လက် ၄ ခုဖြင့် PIN အတည်ပြုပါ</label>
+     <div id="adminPinBoxes" style="display:flex;gap:8px;justify-content:center;margin-top:6px">
+      <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(0)" onkeydown="handleAdminPinBoxKey(event, 0)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+      <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(1)" onkeydown="handleAdminPinBoxKey(event, 1)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+      <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(2)" onkeydown="handleAdminPinBoxKey(event, 2)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+      <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(3)" onkeydown="handleAdminPinBoxKey(event, 3)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+     </div>
+    </div>
     <div id="loginErr" class="error-text"></div>
     <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:6px" data-i18n="btn_login">အကောင့်ဝင်ရန်</button>
    </form>
@@ -1139,687 +1140,7 @@
    </div>
   </div>
  </div>
- <style>
-:root {
- --fb-bg: #f0f2f5;
- --fb-card: #ffffff;
- --fb-surface: #f7f8fa;
- --fb-text: #1c1e21;
- --fb-muted: #65676b;
- --fb-border: #dadde1;
- --fb-primary: #1877f2;
- --fb-primary-hover: #166fe5;
- --fb-success: #42b72a;
- --fb-danger: #e41e3f;
- --fb-shadow: 0 1px 2px rgba(0,0,0,0.08), 0 4px 14px rgba(0,0,0,0.05);
-}
-
-body.dark {
- --fb-bg: #0f141a;
- --fb-card: #18202a;
- --fb-surface: #202a37;
- --fb-text: #e7edf5;
- --fb-muted: #9aa7b8;
- --fb-border: #2c3848;
- --fb-primary: #1d7dfa;
- --fb-primary-hover: #318aff;
- --fb-success: #2fb344;
- --fb-danger: #f85149;
- --fb-shadow: 0 2px 10px rgba(0,0,0,0.35);
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
- font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
- background: var(--fb-bg);
- color: var(--fb-text);
- padding-bottom: 84px;
- transition: background 0.2s ease, color 0.2s ease;
-}
-
-.hidden { display: none !important; }
-.muted { color: var(--fb-muted); }
-.small { font-size: 13px; }
-.error-text { color: var(--fb-danger); font-size: 13px; margin: 6px 0; min-height: 18px; }
-
-/* Topbar */
-.topbar {
- position: sticky; top: 0; z-index: 40;
- background: var(--fb-card); border-bottom: 1px solid var(--fb-border);
- padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
- box-shadow: var(--fb-shadow);
-}
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: var(--fb-primary); }
-.brand .logo {
- width: 38px;
- height: 38px;
- border-radius: 50%;
- background: #0b1120;
- border: 2px solid #22d3ee;
- box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
- display: grid;
- place-items: center;
- flex-shrink: 0;
-}
-.top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-.lang-select, .filter-select {
- padding: 7px 10px; border-radius: 8px; border: 1px solid var(--fb-border);
- background: var(--fb-surface); color: var(--fb-text); font-weight: 600; font-size: 13px;
-}
-
-.icon-btn {
- border: 1px solid var(--fb-border); background: var(--fb-surface); color: var(--fb-text);
- border-radius: 8px; padding: 7px 10px; cursor: pointer; font-weight: 700; font-size: 13px;
-}
-.icon-btn:hover { background: var(--fb-border); }
-
-.btn {
- border: none; border-radius: 8px; padding: 9px 14px; font-weight: 700; font-size: 14px;
- cursor: pointer; transition: 0.15s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-}
-.btn-primary { background: var(--fb-primary); color: #fff; }
-.btn-primary:hover { background: var(--fb-primary-hover); }
-.btn-success { background: var(--fb-success); color: #fff; }
-.btn-success:hover { filter: brightness(1.06); }
-.btn-danger { background: var(--fb-danger); color: #fff; }
-.btn-danger:hover { filter: brightness(1.06); }
-.btn-secondary { background: var(--fb-surface); color: var(--fb-text); border: 1px solid var(--fb-border); }
-.btn-secondary:hover { background: var(--fb-border); }
-.btn-sm { padding: 6px 10px; font-size: 12.5px; }
-.btn-xs { padding: 4px 8px; font-size: 11.5px; border-radius: 6px; }
-
-/* Activity Ticker */
-.activity-ticker-wrap {
- display: flex; align-items: center; gap: 10px;
- background: var(--fb-card); border-bottom: 1px solid var(--fb-border);
- padding: 7px 16px; font-size: 12.5px; overflow: hidden;
-}
-.activity-ticker-label {
- background: rgba(24, 119, 242, 0.14); color: var(--fb-primary);
- border: 1px solid rgba(24, 119, 242, 0.3); font-weight: 800;
- font-size: 11px; padding: 2px 8px; border-radius: 999px; flex-shrink: 0;
-}
-.activity-ticker-viewport { flex: 1; overflow: hidden; white-space: nowrap; }
-.activity-ticker-track { display: inline-block; padding-left: 100%; animation: tickerScroll 26s linear infinite; }
-.activity-ticker-track:hover { animation-play-state: paused; }
-@keyframes tickerScroll {
- 0% { transform: translateX(0); }
- 100% { transform: translateX(-100%); }
-}
-
-/* Container & Pages */
-.container { max-width: 1180px; margin: 16px auto; padding: 0 14px; }
-.page { display: none; animation: fadeIn 0.18s ease; }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-
-/* Hero & 24H FX Live Chart */
-.hero {
- background: linear-gradient(125deg, #0b192c 0%, #163a63 55%, #1877f2 100%);
- background-size: cover; background-position: center;
- color: #fff; border-radius: 14px; padding: 26px 22px; margin-bottom: 16px;
- box-shadow: var(--fb-shadow); position: relative; overflow: hidden; min-height: 158px;
- display: flex; align-items: flex-end; transition: background-image 0.45s ease;
-}
-.hero::before {
- content: ""; position: absolute; inset: 0;
- background: linear-gradient(180deg, rgba(10,18,30,0.35) 0%, rgba(10,18,30,0.78) 100%); z-index: 0;
-}
-.hero-content { position: relative; z-index: 1; max-width: 700px; }
-.hero h1 { font-size: 25px; margin-bottom: 6px; font-weight: 800; }
-.hero p { opacity: 0.94; font-size: 14.5px; }
-.hero-hotel-tag {
- display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 999px;
- background: rgba(255,255,255,0.16); backdrop-filter: blur(4px);
- font-size: 12px; font-weight: 700; color: #fff; border: 1px solid rgba(255,255,255,0.28);
-}
-
-.fx-hero-card {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 14px;
- padding: 14px 18px; margin-bottom: 16px; box-shadow: var(--fb-shadow);
- display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-}
-.fx-hero-label { font-size: 12px; font-weight: 700; color: var(--fb-muted); text-transform: uppercase; letter-spacing: 0.4px; }
-.fx-hero-rate { font-size: 22px; font-weight: 900; color: var(--fb-primary); margin-top: 2px; }
-.fx-hero-sub { font-size: 12px; color: var(--fb-muted); margin-top: 2px; }
-.fx-hero-pill {
- background: rgba(47, 179, 68, 0.14); color: var(--fb-success);
- border: 1px solid rgba(47, 179, 68, 0.35); font-size: 12px; font-weight: 800;
- padding: 6px 12px; border-radius: 999px;
-}
-
-.fx-chart-card {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 14px;
- padding: 16px; margin-bottom: 18px; box-shadow: var(--fb-shadow);
-}
-.fx-chart-header {
- display: flex; align-items: center; justify-content: space-between;
- gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
-}
-.fx-chart-title { font-size: 16px; font-weight: 800; }
-.fx-chart-sub { font-size: 12.5px; color: var(--fb-muted); }
-.fx-chart-live-readout { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.fx-current-rate { font-size: 15px; font-weight: 800; }
-.fx-current-rate.is-up { color: #2fb344; }
-.fx-current-rate.is-down { color: #f85149; }
-
-.fx-canvas-box {
- position: relative; width: 100%; height: 220px; border-radius: 10px;
- overflow: hidden; background: var(--fb-surface); border: 1px solid var(--fb-border);
-}
-#fxLiveCanvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
-
-.fx-chart-footer {
- display: flex; align-items: center; justify-content: space-between;
- gap: 10px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; color: var(--fb-muted);
-}
-
-/* 8 HOTEL FLASH DEALS & PROMOTIONS CAROUSEL */
-.promo-deals-wrap {
- background: var(--fb-card);
- border: 1px solid var(--fb-border);
- border-radius: 14px;
- padding: 15px;
- margin-bottom: 18px;
- box-shadow: var(--fb-shadow);
-}
-.promo-deals-head {
- display: flex;
- align-items: center;
- justify-content: space-between;
- gap: 10px;
- flex-wrap: wrap;
- margin-bottom: 12px;
-}
-.promo-deals-title { font-size: 16.5px; font-weight: 800; color: var(--fb-text); }
-.promo-deals-sub { font-size: 12.5px; color: var(--fb-muted); margin-top: 2px; }
-.promo-deals-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.promo-cycle-pill {
- font-size: 11.5px;
- font-weight: 800;
- padding: 3px 9px;
- border-radius: 999px;
- background: rgba(248, 81, 73, 0.15);
- color: var(--fb-danger);
- border: 1px solid rgba(248, 81, 73, 0.35);
-}
-.promo-viewport {
- position: relative;
- width: 100%;
- overflow: hidden;
- border-radius: 12px;
- touch-action: pan-y;
- user-select: none;
- cursor: grab;
-}
-.promo-viewport.is-dragging { cursor: grabbing; }
-.promo-track {
- display: flex;
- gap: 12px;
- will-change: transform;
- transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.promo-track.no-anim { transition: none !important; }
-.promo-slide-card {
- flex: 0 0 calc((100% - 24px) / 3);
- min-width: 240px;
- background: var(--fb-surface);
- border: 1px solid var(--fb-border);
- border-radius: 12px;
- overflow: hidden;
- display: flex;
- flex-direction: column;
- position: relative;
- transition: border-color 0.15s ease, transform 0.15s ease;
-}
-.promo-slide-card:hover {
- border-color: var(--fb-primary);
- transform: translateY(-2px);
-}
-.promo-img-box {
- position: relative;
- width: 100%;
- height: 146px;
- background: var(--fb-card);
- overflow: hidden;
-}
-.promo-img-box img {
- width: 100%;
- height: 100%;
- object-fit: cover;
- display: block;
- pointer-events: none;
-}
-.promo-disc-tag {
- position: absolute;
- top: 8px;
- left: 8px;
- background: #cf222e;
- color: #ffffff;
- font-size: 12px;
- font-weight: 900;
- padding: 3px 8px;
- border-radius: 7px;
- box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
-}
-.promo-days-tag {
- position: absolute;
- top: 8px;
- right: 8px;
- background: rgba(15, 20, 26, 0.84);
- color: #fbbf24;
- border: 1px solid rgba(251, 191, 36, 0.45);
- font-size: 11px;
- font-weight: 800;
- padding: 3px 8px;
- border-radius: 7px;
- backdrop-filter: blur(4px);
-}
-.promo-card-body {
- padding: 11px 12px;
- display: flex;
- flex-direction: column;
- gap: 6px;
- flex: 1;
- justify-content: space-between;
-}
-.promo-hotel-name {
- font-weight: 800;
- font-size: 14.5px;
- color: var(--fb-text);
- line-height: 1.3;
-}
-.promo-loc-line { font-size: 12px; color: var(--fb-muted); }
-.promo-date-window { font-size: 11.5px; font-weight: 700; color: var(--fb-primary); }
-.promo-price-row {
- display: flex;
- align-items: baseline;
- justify-content: space-between;
- gap: 8px;
- margin-top: 4px;
- padding-top: 6px;
- border-top: 1px solid var(--fb-border);
-}
-.promo-old-price {
- font-size: 12.5px;
- color: var(--fb-muted);
- text-decoration: line-through;
- font-weight: 700;
-}
-.promo-new-price {
- font-size: 16.5px;
- font-weight: 900;
- color: var(--fb-success);
-}
-.promo-dots {
- display: flex;
- justify-content: center;
- gap: 6px;
- margin-top: 10px;
-}
-.promo-dot {
- width: 8px;
- height: 8px;
- border-radius: 50%;
- border: none;
- background: var(--fb-border);
- cursor: pointer;
- padding: 0;
- transition: width 0.2s ease, background 0.2s ease;
-}
-.promo-dot.active {
- width: 20px;
- border-radius: 999px;
- background: var(--fb-primary);
-}
-@media (max-width: 820px) {
- .promo-slide-card {
-  flex: 0 0 calc((100% - 12px) / 2);
-  min-width: 210px;
- }
-}
-@media (max-width: 520px) {
- .promo-slide-card {
-  flex: 0 0 84%;
-  min-width: 220px;
- }
- .promo-img-box { height: 132px; }
-}
-
-/* Section Head & Hotel Cards */
-.section-head {
- display: flex; align-items: center; justify-content: space-between;
- gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
-}
-.count-badge {
- background: var(--fb-primary); color: #fff; font-size: 12px;
- font-weight: 700; padding: 3px 9px; border-radius: 999px;
-}
-.search-input {
- padding: 8px 12px; border-radius: 8px; border: 1px solid var(--fb-border);
- background: var(--fb-card); color: var(--fb-text); font-size: 14px; min-width: 220px;
-}
-
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 14px; }
-.hotel-card {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
- overflow: hidden; box-shadow: var(--fb-shadow); display: flex; flex-direction: column;
- transition: transform 0.15s ease;
-}
-.hotel-card:hover { transform: translateY(-2px); }
-.hotel-card img { width: 100%; height: 162px; object-fit: cover; background: var(--fb-surface); }
-.hotel-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.hotel-title { font-weight: 700; font-size: 15.5px; }
-.stars { color: #f5b400; font-size: 13.5px; letter-spacing: 1px; }
-.price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 8px; }
-.price { font-weight: 800; color: var(--fb-primary); font-size: 16px; }
-
-.load-more-wrap { display: flex; justify-content: center; margin-top: 18px; }
-
-/* Panels, Stats, Tables */
-.panel {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
- padding: 16px; box-shadow: var(--fb-shadow); margin-bottom: 14px;
-}
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; margin-bottom: 14px; }
-.stat {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
- padding: 14px; box-shadow: var(--fb-shadow);
-}
-.stat h2 { font-size: 21px; margin-top: 4px; color: var(--fb-primary); }
-
-.order-circle {
- width: 132px; height: 132px; border-radius: 50%; margin: 18px auto;
- display: grid; place-items: center; font-weight: 800; font-size: 22px;
- background: conic-gradient(var(--fb-primary) 0deg, var(--fb-border) 0deg);
- position: relative;
-}
-.order-circle::before {
- content: ""; position: absolute; width: 104px; height: 104px; border-radius: 50%;
- background: var(--fb-card);
-}
-.order-circle span { position: relative; z-index: 1; }
-
-.pending-profit-banner {
- margin: 10px auto 6px; max-width: 560px; padding: 10px 14px; border-radius: 10px;
- background: rgba(245, 180, 0, 0.14); border: 1px solid rgba(245, 180, 0, 0.45);
- color: var(--fb-text); font-size: 13px; font-weight: 600; text-align: left;
-}
-.last-order-box {
- margin: 14px auto 0; max-width: 520px; padding: 12px 14px; border-radius: 10px;
- background: var(--fb-surface); border: 1px solid var(--fb-border); text-align: left; font-size: 13.5px;
-}
-
-/* Profile */
-.profile-head { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-.profile-avatar-wrap { display: flex; flex-direction: column; align-items: center; }
-.avatar {
- width: 76px; height: 76px; border-radius: 50%; background: var(--fb-primary); color: #fff;
- display: grid; place-items: center; font-size: 28px; font-weight: 800;
-}
-.avatar-img {
- width: 76px; height: 76px; border-radius: 50%; object-fit: cover;
- border: 2px solid var(--fb-primary); background: var(--fb-surface);
-}
-.profile-info-grid {
- display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
- gap: 10px; margin-top: 8px;
-}
-.profile-info-box {
- background: var(--fb-surface); border: 1px solid var(--fb-border);
- border-radius: 10px; padding: 9px 11px;
-}
-.profile-info-val { font-weight: 800; font-size: 14px; margin-top: 2px; word-break: break-word; }
-.profile-copy-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
-.share-link-box {
- display: flex; align-items: center; justify-content: space-between; gap: 10px;
- flex-wrap: wrap; background: var(--fb-surface); border: 1px solid var(--fb-border);
- border-radius: 10px; padding: 10px 12px;
-}
-.share-link-text {
- font-size: 12.5px; font-weight: 700; color: var(--fb-primary);
- word-break: break-all; margin-top: 2px;
-}
-.profile-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-
-/* Suspended Banner */
-.suspended-banner {
- background: #cf222e; color: #fff; padding: 10px 16px;
- font-size: 13.5px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.2);
-}
-.suspended-banner-inner {
- max-width: 1180px; margin: 0 auto; display: flex;
- align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-}
-
-/* Admin Live Order Banner */
-.live-order-banner {
- background: rgba(47, 179, 68, 0.14); border: 1px solid rgba(47, 179, 68, 0.45);
- color: var(--fb-text); padding: 10px 14px; border-radius: 10px;
- font-size: 13px; font-weight: 700; margin-bottom: 12px;
-}
-.admin-header-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-/* Tables */
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-th, td { padding: 9px 10px; border-bottom: 1px solid var(--fb-border); text-align: left; vertical-align: middle; }
-th { background: var(--fb-surface); font-weight: 700; white-space: nowrap; }
-.mini-input {
- width: 78px; padding: 5px 7px; border-radius: 6px; border: 1px solid var(--fb-border);
- background: var(--fb-surface); color: var(--fb-text); font-size: 12.5px;
-}
-.status-pill { padding: 3px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; display: inline-block; }
-.pill-online { background: rgba(47, 179, 68, 0.16); color: #2fb344; }
-.pill-offline { background: rgba(154, 167, 184, 0.18); color: var(--fb-muted); }
-.pill-warn { background: rgba(248, 81, 73, 0.16); color: #f85149; }
-
-/* History List */
-.history-list { display: flex; flex-direction: column; gap: 8px; }
-.history-item {
- background: var(--fb-surface); border: 1px solid var(--fb-border); border-radius: 10px;
- padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13.5px;
-}
-
-/* Customer Service Chat */
-.support-chat-card {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 14px;
- box-shadow: var(--fb-shadow); overflow: hidden; display: flex; flex-direction: column; height: 72vh; min-height: 460px;
-}
-.support-chat-header {
- padding: 12px 16px; border-bottom: 1px solid var(--fb-border);
- display: flex; align-items: center; gap: 10px; background: var(--fb-card);
-}
-.support-agent-avatar {
- width: 38px; height: 38px; border-radius: 50%; background: var(--fb-primary);
- color: #fff; display: grid; place-items: center; font-weight: 800;
-}
-.support-messages, .cs-messages {
- flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;
- background: var(--fb-surface);
-}
-.cs-messages { height: 390px; flex: none; }
-.chat-msg {
- max-width: 78%; padding: 9px 12px; border-radius: 12px; font-size: 13.5px; line-height: 1.45; word-break: break-word;
-}
-.chat-msg.user { align-self: flex-end; background: var(--fb-primary); color: #fff; border-bottom-right-radius: 3px; }
-.chat-msg.admin { align-self: flex-start; background: var(--fb-card); color: var(--fb-text); border: 1px solid var(--fb-border); border-bottom-left-radius: 3px; }
-.chat-meta { font-size: 11px; opacity: 0.75; margin-top: 4px; }
-.chat-photo-img {
- max-width: 220px; max-height: 220px; border-radius: 8px; display: block; margin-top: 4px; object-fit: cover;
-}
-.support-composer, .admin-cs-composer {
- display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--fb-border);
- background: var(--fb-card); align-items: flex-end;
-}
-.support-composer textarea, .admin-cs-composer textarea {
- flex: 1; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--fb-border);
- background: var(--fb-surface); color: var(--fb-text); font-size: 13.5px;
- font-family: inherit; line-height: 1.4; resize: none; max-height: 120px; overflow-y: auto;
-}
-
-.bound-bank-strip {
- margin: 8px 14px 0; padding: 8px 12px; border-radius: 10px;
- background: var(--fb-surface); border: 1px solid var(--fb-border);
- font-size: 12.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
-}
-.bank-picker-panel {
- position: absolute; bottom: 58px; left: 12px; right: 12px; max-width: 460px;
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
- box-shadow: 0 10px 28px rgba(0,0,0,0.28); padding: 10px; z-index: 35;
- max-height: 250px; overflow-y: auto;
-}
-.bank-picker-item {
- display: flex; align-items: center; justify-content: space-between; gap: 8px;
- padding: 8px 10px; border-radius: 8px; border: 1px solid var(--fb-border);
- background: var(--fb-surface); margin-bottom: 6px; font-size: 12.5px;
-}
-.bank-picker-item:last-child { margin-bottom: 0; }
-.bank-card-bubble {
- background: rgba(24, 119, 242, 0.1); border: 1px solid rgba(24, 119, 242, 0.35);
- border-radius: 10px; padding: 8px 10px; margin-top: 4px; font-size: 12.5px;
-}
-
-/* Admin Bank Provider Cards */
-.bank-provider-grid {
- display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
- gap: 10px; margin-top: 10px;
-}
-.bank-provider-card {
- background: var(--fb-surface); border: 1px solid var(--fb-border);
- border-radius: 12px; padding: 12px; cursor: pointer;
- transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
- display: flex; flex-direction: column; gap: 4px;
-}
-.bank-provider-card:hover { transform: translateY(-2px); border-color: var(--fb-primary); }
-.bank-provider-card.active {
- border-color: var(--fb-primary); background: rgba(24, 119, 242, 0.12);
- box-shadow: 0 0 0 1px var(--fb-primary);
-}
-.bank-provider-name { font-weight: 800; font-size: 14px; }
-.bank-provider-type { font-size: 11.5px; color: var(--fb-muted); font-weight: 600; }
-.bank-provider-count { font-size: 11.5px; color: var(--fb-primary); font-weight: 700; margin-top: 2px; }
-.bank-entry-form-card {
- margin-top: 12px; padding: 14px; border-radius: 12px;
- background: var(--fb-surface); border: 1px solid var(--fb-border);
-}
-.bank-form-head {
- display: flex; align-items: center; justify-content: space-between;
- gap: 8px; margin-bottom: 10px;
-}
-
-.cs-layout { display: grid; grid-template-columns: 290px 1fr; gap: 12px; }
-.cs-client-list { border: 1px solid var(--fb-border); border-radius: 10px; overflow: hidden; background: var(--fb-surface); }
-.cs-list-head { padding: 10px; border-bottom: 1px solid var(--fb-border); display: flex; gap: 6px; align-items: center; }
-.cs-thread-item {
- padding: 10px 12px; border-bottom: 1px solid var(--fb-border); cursor: pointer;
- display: flex; justify-content: space-between; align-items: center; gap: 8px;
-}
-.cs-thread-item:hover, .cs-thread-item.active { background: rgba(24, 119, 242, 0.14); }
-.cs-chat-pane { border: 1px solid var(--fb-border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; background: var(--fb-card); }
-.cs-pane-head { padding: 10px 14px; border-bottom: 1px solid var(--fb-border); background: var(--fb-surface); }
-
-/* Incoming CS Toast */
-.cs-incoming-toast {
- position: fixed; top: 68px; right: 16px; z-index: 95; width: 310px; max-width: calc(100vw - 32px);
- background: var(--fb-card); border: 1px solid var(--fb-primary); border-left: 5px solid var(--fb-primary);
- border-radius: 12px; padding: 11px 13px; box-shadow: 0 10px 28px rgba(0,0,0,0.28); cursor: pointer;
-}
-.cs-toast-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
-.cs-toast-badge { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; background: rgba(24, 119, 242, 0.14); color: var(--fb-primary); }
-.cs-toast-time { font-size: 11px; color: var(--fb-muted); }
-.cs-toast-sender { font-weight: 800; font-size: 13.5px; margin-bottom: 2px; }
-.cs-toast-preview { font-size: 12.5px; color: var(--fb-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-/* Registration Success Toast */
-.reg-success-toast {
- position: fixed; top: 68px; left: 50%; transform: translateX(-50%); z-index: 96;
- min-width: 280px; max-width: calc(100vw - 32px);
- background: var(--fb-card); border: 1px solid var(--fb-success); border-left: 5px solid var(--fb-success);
- border-radius: 12px; padding: 11px 14px; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
- display: flex; align-items: center; gap: 10px;
-}
-.reg-toast-check {
- width: 28px; height: 28px; border-radius: 50%; background: rgba(47, 179, 68, 0.16);
- color: var(--fb-success); display: grid; place-items: center; font-weight: 900; flex-shrink: 0;
-}
-.reg-toast-title { font-weight: 800; font-size: 13.5px; }
-.reg-toast-sub { font-size: 12px; color: var(--fb-muted); margin-top: 2px; }
-
-/* Center Rounded Alert */
-.center-rounded-alert {
- position: fixed; inset: 0; z-index: 120;
- background: rgba(0, 0, 0, 0.52); backdrop-filter: blur(2px);
- display: flex; align-items: center; justify-content: center; padding: 18px;
-}
-.center-rounded-card {
- width: 100%; max-width: 370px; background: var(--fb-card);
- border: 1px solid var(--fb-border); border-radius: 22px;
- padding: 22px 20px 18px; box-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
- text-align: center; animation: fadeIn 0.16s ease;
-}
-.center-rounded-badge {
- display: inline-block; font-size: 11px; font-weight: 800;
- padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; letter-spacing: 0.4px;
-}
-.center-rounded-badge.is-ok { background: rgba(47, 179, 68, 0.16); color: #2fb344; }
-.center-rounded-badge.is-warn { background: rgba(248, 81, 73, 0.16); color: #f85149; }
-.center-rounded-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
-.center-rounded-msg { font-size: 13.5px; color: var(--fb-muted); line-height: 1.5; white-space: pre-line; }
-.center-rounded-actions { margin-top: 16px; display: flex; justify-content: center; }
-
-/* Bottom Nav */
-.bottom-nav {
- position: fixed; bottom: 0; left: 0; right: 0; z-index: 45;
- background: var(--fb-card); border-top: 1px solid var(--fb-border);
- display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 4px;
- box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
-}
-.bottom-nav button {
- background: none; border: none; color: var(--fb-muted);
- display: flex; flex-direction: column; align-items: center; gap: 2px;
- font-size: 11px; font-weight: 700; padding: 5px 2px; cursor: pointer; border-radius: 8px;
-}
-.bottom-nav button span:first-child { font-size: 17px; line-height: 1.1; }
-.bottom-nav button.active { color: var(--fb-primary); background: rgba(24, 119, 242, 0.1); }
-
-/* Modals */
-.modal-backdrop {
- position: fixed; inset: 0; background: rgba(0,0,0,0.58); z-index: 80;
- display: flex; align-items: center; justify-content: center; padding: 14px;
-}
-.modal-card {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 14px;
- width: 100%; max-width: 440px; padding: 18px; box-shadow: 0 12px 32px rgba(0,0,0,0.35);
- max-height: 90vh; overflow-y: auto;
-}
-.modal-card.wide-modal { max-width: 820px; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.close-x { background: none; border: none; color: var(--fb-muted); font-size: 20px; cursor: pointer; }
-.field { margin-bottom: 11px; }
-.field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 4px; color: var(--fb-muted); }
-.field input, .field select {
- width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--fb-border);
- background: var(--fb-surface); color: var(--fb-text); font-size: 14px;
-}
-
-@media (max-width: 820px) {
- .cs-layout { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
- .hero h1 { font-size: 20px; }
- .fx-canvas-box { height: 185px; }
- .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
- .hotel-card img { height: 124px; }
- .hotel-body { padding: 9px; gap: 4px; }
- .hotel-title { font-size: 13.5px; line-height: 1.25; }
- .stars { font-size: 11.5px; }
- .price { font-size: 14px; }
- .hotel-body .btn-sm { padding: 5px 8px; font-size: 11.5px; }
-}
-</style>
-<script>
+ <script>
 const PROMO_CYCLE_ANCHOR_MS = Date.UTC(2026, 10, 26, 0, 0, 0); // Nov 26, 2026
 const PROMO_CYCLE_DAYS = 3; // 3-day cycle (change to 7 for weekly)
 const PROMO_SLIDE_INTERVAL_MS = 8000; // 8 seconds auto-slide
@@ -1882,7 +1203,6 @@ function getUniqueHotelPhotoUrl(index) {
  return `${base}${sep}stay=${index + 1}`;
 }
 
-// 6 Dedicated Myanmar Hotels + Diverse Europe & Asia Hotels = 489 Total (No #1/#2, No Duplicate Photos)
 const MYANMAR_FEATURED_HOTELS = [
  { name: "Pan Pacific Yangon", city: "Yangon", country: "Myanmar", stars: 5, price: 185 },
  { name: "Aureum Palace Hotel Bagan", city: "Bagan", country: "Myanmar", stars: 5, price: 168 },
@@ -1961,7 +1281,7 @@ const REGION_DESTINATIONS = [
  { city: "Rome", country: "Italy", region: "Europe" },
  { city: "Florence", country: "Italy", region: "Europe" },
  { city: "Venice", country: "Italy", region: "Europe" },
- { city: "Milan", country: "Italy", country: "Italy", region: "Europe" },
+ { city: "Milan", country: "Italy", region: "Europe" },
  { city: "Madrid", country: "Spain", region: "Europe" },
  { city: "Barcelona", country: "Spain", region: "Europe" },
  { city: "Seville", country: "Spain", region: "Europe" },
@@ -2023,13 +1343,9 @@ function buildHotelsCatalog489() {
   });
  }
 
- // 1) Add 6 Myanmar hotels first
  MYANMAR_FEATURED_HOTELS.forEach((h) => addHotelEntry(h));
-
- // 2) Add curated Europe & Asia hotels
  CURATED_ASIA_EUROPE_HOTELS.forEach((h) => addHotelEntry(h));
 
- // 3) Generate remaining unique non-numbered Europe & Asia hotels up to exactly 489
  let cursor = 0;
  while (catalog.length < TARGET_HOTEL_TOTAL) {
   const dest = REGION_DESTINATIONS[cursor % REGION_DESTINATIONS.length];
@@ -2059,7 +1375,6 @@ function buildHotelsCatalog489() {
 
 const HOTELS_CATALOG = buildHotelsCatalog489();
 
-// 8 Flash Deal / Promotion Slots (Non-sequential swap at #2, #5, etc. every 3 days starting Nov 26, 2026)
 const PROMO_BASE_SLOTS = [
  { slot: 1, hotelIndex: 0, discountPct: 28, daysLeft: 3, windowLabel: "Nov 26 – Nov 29" },
  { slot: 2, hotelIndex: 1, discountPct: 35, daysLeft: 2, windowLabel: "Nov 26 – Nov 28" },
@@ -2084,7 +1399,6 @@ const PROMO_REPLACEMENT_POOL = [
  { hotelIndex: 14, discountPct: 29, daysLeft: 3, windowLabel: "Dec 08 – Dec 11" }
 ];
 
-// Non-sequential slot swap map per 3-day period (skips #1, swaps #2 and #5 first, then other non-sequential slots)
 const PROMO_PERIOD_SWAP_SLOTS = [
  [],
  [2, 5],
@@ -2141,7 +1455,6 @@ function buildActivePromoDeals(nowMs = Date.now()) {
  });
 }
 
-// 8-Second Continuous Auto-Slide + User Drag/Swipe Carousel State
 let promoDealsData = buildActivePromoDeals();
 let promoCurrentIndex = 0;
 let promoAutoTimer = null;
@@ -2200,7 +1513,7 @@ function stepPromoCarousel(delta) {
  if (!promoDealsData.length) return;
  promoCurrentIndex = (promoCurrentIndex + delta + promoDealsData.length) % promoDealsData.length;
  applyPromoTransform(true, 0);
- startPromoAutoSlide(); // Continue 8s cycle from new position
+ startPromoAutoSlide();
 }
 
 function bindPromoDragEvents() {
@@ -2237,7 +1550,7 @@ function bindPromoDragEvents() {
   }
   promoDragDeltaX = 0;
   applyPromoTransform(true, 0);
-  startPromoAutoSlide(); // Resume 8s auto-slide from current position
+  startPromoAutoSlide();
  };
 
  viewport.addEventListener("pointerdown", (e) => {
@@ -2303,7 +1616,6 @@ function goToPromoSlide(idx) {
  startPromoAutoSlide();
 }
 
-// Refresh 3-day promo slot swaps automatically every minute in case cycle crosses boundary
 setInterval(() => {
  const latestDeals = buildActivePromoDeals(Date.now());
  const changed = latestDeals.some((d, i) => !promoDealsData[i] || d.hotel.id !== promoDealsData[i].hotel.id || d.discountPct !== promoDealsData[i].discountPct);
@@ -2323,6 +1635,8 @@ const DEFAULT_FX_RATE = 4750.0;
 const FX_MIN_BAND = 4489.0;
 const FX_MAX_BAND = 4999.0;
 const FX_BASE_RATE = 4500.0;
+window.FX_MIN_BAND = FX_MIN_BAND;
+window.FX_MAX_BAND = FX_MAX_BAND;
 
 const DEFAULT_ADMIN_CREDS = {
  phone: "09775191427",
@@ -2408,32 +1722,92 @@ const I18N = {
   btn_copy_link: "Copy Link",
   btn_bind_bank: "Bind Bank",
   btn_logout: "Logout",
+  admin_login_title: "Admin Console Login",
+  lbl_admin_phone: "Admin Phone",
+  lbl_admin_pass: "Admin Password",
+  btn_continue: "ဆက်သွားမယ်",
+  admin_step2_hint: "အဆင့် (၂): ဆက်လက်ဝင်ရောက်ရန် ဂဏန်း ၄ လုံး (PIN) ထည့်ပါ။",
+  lbl_4digit_pin: "4-Digit Security Code",
+  btn_back: "Back",
+  btn_login_admin: "Login to Admin",
+  adm_total_users: "Total Users",
+  adm_online_users: "Online Users",
+  adm_placing_order: "Placing Order",
+  adm_live_usd: "Live USD Rate",
+  adm_rate_sync_title: "Admin Live Dollar Rate Sync",
+  btn_update_rate: "Update Rate",
+  adm_tab_users: "အသုံးပြုသူများ",
+  adm_tab_cs: "ဝန်ဆောင်မှု",
+  adm_tab_banks: "ဘဏ်အကောင့်များ",
+  adm_tab_tiers: "အကျိုးအမြတ် အဆင့်များ ($100–$10,000)",
+  adm_tab_hotels: "ဟိုတယ်များ (489)",
+  btn_acc_info: "အကောင့် အချက်အလက်",
+  btn_save_all: "အားလုံးသိမ်းမည်",
+  adm_search_user_ph: "အမည်၊ ဖုန်း၊ အီးမေးလ် ရှာရန်...",
+  flt_all_users: "အသုံးပြုသူအားလုံး",
+  flt_online: "အွန်လိုင်း",
+  flt_live_order: "အော်ဒါတင်နေသူ",
+  flt_negative: "အနှုတ် / ပိတ်ထားသူ",
+  flt_has_rules: "အော်ဒါဖမ်းထားသူ",
+  flt_banned: "ပိတ်ပင်ထားသူ",
+  th_user: "အသုံးပြုသူ & စကားဝှက်",
+  th_balance: "လက်ကျန်ငွေ ($)",
+  th_negative: "အနှုတ် ($)",
+  th_profit_box: "အမြတ်သေတ္တာ ($)",
+  th_rules: "ဖမ်းထားသော အော်ဒါများ",
+  th_order: "အော်ဒါ",
+  th_status: "အခြေအနေ",
+  th_actions: "လုပ်ဆောင်ချက်များ",
+  cs_users_heading: "အသုံးပြုသူများ",
+  search_short_ph: "ရှာရန်...",
+  cs_select_user: "စကားပြောမည့် အသုံးပြုသူကို ရွေးပါ",
+  admin_reply_ph: "Reply as Trip Booking Support... (Enter to send, Shift+Enter for new line)",
+  adm_banks_sub: "မြန်မာပြည်သုံး Pay / Bank အမျိုးအစားကို ရွေးပြီး အကောင့်အသစ်ထည့်ခြင်း၊ ပုံသေသတ်မှတ်ခြင်း၊ ဖျက်ခြင်း ပြုလုပ်နိုင်သည်။",
+  adm_tiers_sub: "Admin-only table. Add or edit Principal (>= $100) and 30-Order Total Profit.",
+  lbl_principal: "Principal ($)",
+  lbl_profit30: "30-Order Profit ($)",
+  btn_confirm: "Confirm",
+  btn_cancel: "Cancel",
+  th_action: "Action",
+  adm_hotels_title: "Hotels Catalog (Europe & Asia · 489 Entries)",
+  th_name: "Name",
+  th_location: "Location",
+  th_stars: "Stars",
+  th_price: "Price",
+  th_view: "View",
+  lbl_phone_email: "Phone or Email",
+  lbl_fullname: "Full Name",
+  lbl_phone_opt: "Phone (optional if Email provided)",
+  lbl_email_opt: "Email (optional if Phone provided)",
+  lbl_invite_opt: "Invite Code (Optional — Valid code e.g. TPxxxx gives $18 bonus)",
+  lbl_pass_create: "Password (min 6 chars)",
   btn_book_now: "Book Now",
   order_modal_title: "Booking Order",
-  btn_cancel: "Cancel",
   btn_confirm_booking: "Confirm Booking",
   neg_notice_title: "Negative Balance Notice",
   btn_understood: "နားလည်ပါတယ်",
-  btn_continue: "ဆက်သွားမယ်",
   deposit_title: "Deposit Funds",
   lbl_pay_method: "Payment Method",
   lbl_amount_usd: "Amount ($)",
   btn_confirm_deposit: "Confirm Deposit",
   withdraw_title: "Withdraw Funds",
-  lbl_password: "Account Password",
   btn_submit_withdraw: "Submit Withdrawal",
   bind_bank_title: "Bind Bank Account",
   lbl_bank_wallet: "Bank / Wallet Name",
   lbl_acc_holder: "Account Holder Name",
   lbl_acc_num: "Account Number / Phone",
   btn_save_bank: "Save Bank",
+  acc_info_modal_title: "အသုံးပြုသူ အကောင့် အချက်အလက်များ",
+  th_invite: "Invite",
+  th_device: "Device",
+  th_coords: "Coordinates",
+  th_updated: "Updated",
+  th_map: "Map",
   nav_home: "Home",
   nav_service: "Service",
   nav_task: "Task",
   nav_history: "History",
-  nav_account: "Account",
-  adm_tab_hotels: "ဟိုတယ်များ (489)",
-  adm_hotels_title: "Hotels Catalog (Europe & Asia · 489 Entries)"
+  nav_account: "Account"
  },
  en: {
   app_title: "Trip Booking — Real-Time Platform",
@@ -2500,32 +1874,92 @@ const I18N = {
   btn_copy_link: "Copy Link",
   btn_bind_bank: "Bind Bank",
   btn_logout: "Logout",
+  admin_login_title: "Admin Console Login",
+  lbl_admin_phone: "Admin Phone",
+  lbl_admin_pass: "Admin Password",
+  btn_continue: "Continue",
+  admin_step2_hint: "Step 2: Enter your 4-digit security PIN to continue.",
+  lbl_4digit_pin: "4-Digit Security Code",
+  btn_back: "Back",
+  btn_login_admin: "Login to Admin",
+  adm_total_users: "Total Users",
+  adm_online_users: "Online Users",
+  adm_placing_order: "Placing Order",
+  adm_live_usd: "Live USD Rate",
+  adm_rate_sync_title: "Admin Live Dollar Rate Sync",
+  btn_update_rate: "Update Rate",
+  adm_tab_users: "Users",
+  adm_tab_cs: "Customer Service",
+  adm_tab_banks: "Bank Accounts",
+  adm_tab_tiers: "Profit Tiers ($100–$10,000)",
+  adm_tab_hotels: "Hotels (489)",
+  btn_acc_info: "Account Info",
+  btn_save_all: "Save All",
+  adm_search_user_ph: "Search name, phone, email...",
+  flt_all_users: "All Users",
+  flt_online: "Online",
+  flt_live_order: "Placing Order",
+  flt_negative: "Negative / Suspended",
+  flt_has_rules: "Has Catch Rules",
+  flt_banned: "Banned",
+  th_user: "User & Password",
+  th_balance: "Balance ($)",
+  th_negative: "Negative ($)",
+  th_profit_box: "Profit Box ($)",
+  th_rules: "Catch Rules",
+  th_order: "Order",
+  th_status: "Status",
+  th_actions: "Actions",
+  cs_users_heading: "Users",
+  search_short_ph: "Search...",
+  cs_select_user: "Select a user to chat",
+  admin_reply_ph: "Reply as Trip Booking Support... (Enter to send, Shift+Enter for new line)",
+  adm_banks_sub: "Select a Pay / Bank provider to add, manage, or delete accounts.",
+  adm_tiers_sub: "Admin-only table. Add or edit Principal (>= $100) and 30-Order Total Profit.",
+  lbl_principal: "Principal ($)",
+  lbl_profit30: "30-Order Profit ($)",
+  btn_confirm: "Confirm",
+  btn_cancel: "Cancel",
+  th_action: "Action",
+  adm_hotels_title: "Hotels Catalog (Europe & Asia · 489 Entries)",
+  th_name: "Name",
+  th_location: "Location",
+  th_stars: "Stars",
+  th_price: "Price",
+  th_view: "View",
+  lbl_phone_email: "Phone or Email",
+  lbl_fullname: "Full Name",
+  lbl_phone_opt: "Phone (optional if Email provided)",
+  lbl_email_opt: "Email (optional if Phone provided)",
+  lbl_invite_opt: "Invite Code (Optional — Valid code e.g. TPxxxx gives $18 bonus)",
+  lbl_pass_create: "Password (min 6 chars)",
   btn_book_now: "Book Now",
   order_modal_title: "Booking Order",
-  btn_cancel: "Cancel",
   btn_confirm_booking: "Confirm Booking",
   neg_notice_title: "Negative Balance Notice",
   btn_understood: "Understood",
-  btn_continue: "Continue",
   deposit_title: "Deposit Funds",
   lbl_pay_method: "Payment Method",
   lbl_amount_usd: "Amount ($)",
   btn_confirm_deposit: "Confirm Deposit",
   withdraw_title: "Withdraw Funds",
-  lbl_password: "Account Password",
   btn_submit_withdraw: "Submit Withdrawal",
   bind_bank_title: "Bind Bank Account",
   lbl_bank_wallet: "Bank / Wallet Name",
   lbl_acc_holder: "Account Holder Name",
   lbl_acc_num: "Account Number / Phone",
   btn_save_bank: "Save Bank",
+  acc_info_modal_title: "User Account Information",
+  th_invite: "Invite",
+  th_device: "Device",
+  th_coords: "Coordinates",
+  th_updated: "Updated",
+  th_map: "Map",
   nav_home: "Home",
   nav_service: "Service",
   nav_task: "Task",
   nav_history: "History",
-  nav_account: "Account",
-  adm_tab_hotels: "Hotels (489)",
-  adm_hotels_title: "Hotels Catalog (Europe & Asia · 489 Entries)"
+  nav_account: "Account"
  },
  th: {
   app_title: "Trip Booking — Real-Time Platform",
@@ -2642,9 +2076,11 @@ function createDefaultState() {
  const now = Date.now();
  const ticks = [];
  let cur = DEFAULT_FX_RATE;
+ const minB = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const maxB = Number(window.FX_MAX_BAND || FX_MAX_BAND);
  for (let i = 35; i >= 0; i--) {
   const jitter = Math.sin(i * 0.7) * 38 + Math.cos(i * 1.3) * 24;
-  cur = Math.max(FX_MIN_BAND, Math.min(FX_MAX_BAND, Number((DEFAULT_FX_RATE + jitter).toFixed(2))));
+  cur = Math.max(minB, Math.min(maxB, Number((DEFAULT_FX_RATE + jitter).toFixed(2))));
   ticks.push({ ts: now - i * 15000, rate: cur });
  }
  return {
@@ -2702,7 +2138,6 @@ function getActiveUser() {
  return appState.users.find((u) => u.id === currentSessionUserId) || null;
 }
 
-// Hotel Grid Rendering (489 Unique Non-Duplicate Hotels)
 function getFilteredHotels() {
  const q = (document.getElementById("hotelSearch")?.value || "").trim().toLowerCase();
  const starVal = document.getElementById("hotelStarFilter")?.value || "all";
@@ -2813,11 +2248,12 @@ function updateHeroBanner() {
  }
 }
 
-// 24H Live FX Chart
 function pushFxTick() {
  const prev = Number(appState.liveRate) || DEFAULT_FX_RATE;
  const step = (Math.random() - 0.48) * 18;
- const next = Math.max(FX_MIN_BAND, Math.min(FX_MAX_BAND, Number((prev + step).toFixed(2))));
+ const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
+ const next = Math.max(low, Math.min(high, Number((prev + step).toFixed(2))));
  appState.liveRate = next;
  appState.fxTicks.push({ ts: Date.now(), rate: next });
  if (appState.fxTicks.length > 60) {
@@ -2829,7 +2265,7 @@ function pushFxTick() {
 }
 
 function updateFxDisplay() {
- const cur = Number(appState.liveRate) || 4500.0;
+ const cur = Number(appState.liveRate) || FX_BASE_RATE;
  const firstRate = Number(appState.fxTicks?.[0]?.rate) || cur;
  const pct = firstRate > 0 ? ((cur - firstRate) / firstRate) * 100 : 0;
  const isUp = pct >= 0;
@@ -2840,6 +2276,7 @@ function updateFxDisplay() {
  const badge = document.getElementById("fxChangeBadge");
  const admStat = document.getElementById("statLiveFxRate");
  const admSum = document.getElementById("adminDollarSummaryText");
+ const formulaEl = document.getElementById("fxFormulaReadout");
  const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
  const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
 
@@ -2859,7 +2296,9 @@ function updateFxDisplay() {
  if (admSum) {
   admSum.textContent = `ဒီနေ့ဒေါ်လာ: ${formatMmk(cur)} · အကျဈေး: ${low} · အတက်ဈေး: ${high}`;
  }
-}
+ if (formulaEl) {
+  formulaEl.textContent = `Base: ${FX_BASE_RATE.toLocaleString("en-US")} · Band: ${low.toLocaleString("en-US")}–${high.toLocaleString("en-US")} MMK`;
+ }
 }
 
 function drawFxChart() {
@@ -2881,12 +2320,15 @@ function drawFxChart() {
  const h = rect.height;
  ctx.clearRect(0, 0, w, h);
 
+ const lowBand = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const highBand = Number(window.FX_MAX_BAND || FX_MAX_BAND);
+
  const ticks = Array.isArray(appState.fxTicks) && appState.fxTicks.length >= 2
   ? appState.fxTicks
-  : [{ rate: FX_MIN_BAND }, { rate: appState.liveRate || DEFAULT_FX_RATE }];
+  : [{ rate: lowBand }, { rate: appState.liveRate || DEFAULT_FX_RATE }];
 
- const minR = Math.min(FX_MIN_BAND, ...ticks.map((x) => Number(x.rate) || DEFAULT_FX_RATE));
- const maxR = Math.max(FX_MAX_BAND, ...ticks.map((x) => Number(x.rate) || DEFAULT_FX_RATE));
+ const minR = Math.min(lowBand, ...ticks.map((x) => Number(x.rate) || DEFAULT_FX_RATE));
+ const maxR = Math.max(highBand, ...ticks.map((x) => Number(x.rate) || DEFAULT_FX_RATE));
  const span = Math.max(1, maxR - minR);
 
  const padX = 12;
@@ -3026,7 +2468,6 @@ function handleCsToastClick() {
  }
 }
 
-// Auth & Session
 function openAuth(mode = "login") {
  switchAuthMode(mode);
  openModal("authModal");
@@ -3168,7 +2609,6 @@ function loginUser() {
  const errEl = document.getElementById("loginErr");
  if (errEl) errEl.textContent = "";
 
- // Admin Phone + Password စစ်ဆေးပြီး PIN ကွက်လက် ၄ ခု ဖွင့်ပြရန်
  if (idInput === DEFAULT_ADMIN_CREDS.phone && passInput === DEFAULT_ADMIN_CREDS.pass) {
   const pinWrap = document.getElementById("loginPinStepBox");
   if (!pendingAdminAuthStep) {
@@ -3193,7 +2633,6 @@ function loginUser() {
   }
  }
 
- // ပုံမှန် User Login ဆက်လုပ်ရန်
  const user = appState.users.find((u) =>
   (u.phone && u.phone.toLowerCase() === idInput.toLowerCase()) ||
   (u.email && u.email.toLowerCase() === idInput.toLowerCase()) ||
@@ -3218,6 +2657,7 @@ function loginUser() {
  closeModal("authModal");
  syncAllUI();
 }
+
 function logoutUser() {
  const u = getActiveUser();
  if (u) u.online = false;
@@ -3231,7 +2671,6 @@ function handleLogoClick() {
  showPage("homePage");
 }
 
-// 30-Order Booking & Profit Tier System
 function getTierProfitForBalance(bal) {
  const tiers = Array.isArray(appState.profitTiers) ? appState.profitTiers.slice() : [];
  tiers.sort((a, b) => Number(a.principal) - Number(b.principal));
@@ -3537,7 +2976,6 @@ function copyPlatformLink() {
  showCenterRoundedAlert("Copied", "Platform link copied.");
 }
 
-// Support Chat (User <-> Admin)
 function sendSupportMessage() {
  const user = getActiveUser();
  if (!user) {
@@ -3675,7 +3113,6 @@ function handleChatPhotoUpload(event, role) {
  event.target.value = "";
 }
 
-// Admin Console Logic
 function verifyAdminStep1() {
  const ph = (document.getElementById("adminPhoneInput")?.value || "").trim();
  const pw = document.getElementById("adminPassInput")?.value || "";
@@ -3813,7 +3250,8 @@ function confirmDollarBand() {
  updateFxDisplay();
  drawFxChart();
  showCenterRoundedAlert("အတည်ပြုပြီးပါပြီ", `1 USD = ${formatMmk(appState.liveRate)} (${low} – ${high} MMK)`);
-} 
+}
+
 function renderAdminAll() {
  const totalEl = document.getElementById("statTotalUsers");
  const onlineEl = document.getElementById("statOnlineUsers");
@@ -4217,7 +3655,6 @@ function openAccountInfoModal() {
  openModal("accountInfoModal");
 }
 
-// Activity Ticker & UI Sync
 function updateActivityTicker() {
  const track = document.getElementById("activityTickerSlide");
  if (!track) return;
@@ -4309,8 +3746,10 @@ function syncAllUI() {
  if (isAdminLoggedIn) renderAdminAll();
 }
 
-// Boot Initialization
 (function initPlatform() {
+ if (typeof window.FX_MIN_BAND !== "number") window.FX_MIN_BAND = FX_MIN_BAND;
+ if (typeof window.FX_MAX_BAND !== "number") window.FX_MAX_BAND = FX_MAX_BAND;
+
  const savedTheme = localStorage.getItem("tb_theme_mode");
  if (savedTheme === "light") document.body.classList.remove("dark");
  else document.body.classList.add("dark");
