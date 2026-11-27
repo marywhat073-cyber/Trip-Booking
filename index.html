@@ -22,17 +22,17 @@
 }
 
 body.dark {
- --fb-bg: #0f141a;
- --fb-card: #18202a;
- --fb-surface: #202a37;
- --fb-text: #e7edf5;
- --fb-muted: #9aa7b8;
- --fb-border: #2c3848;
- --fb-primary: #1d7dfa;
- --fb-primary-hover: #318aff;
- --fb-success: #2fb344;
- --fb-danger: #f85149;
- --fb-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  --fb-bg: #091326;
+  --fb-card: rgba(15, 29, 56, 0.72);
+  --fb-surface: rgba(18, 36, 70, 0.78);
+  --fb-text: #eef4ff;
+  --fb-muted: rgba(196, 214, 245, 0.75);
+  --fb-border: rgba(148, 184, 255, 0.22);
+  --fb-primary: #3b82f6;
+  --fb-primary-hover: #2563eb;
+  --fb-success: #10b981;
+  --fb-danger: #f43f5e;
+  --fb-shadow: 0 12px 30px rgba(2, 8, 23, 0.45);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -307,15 +307,29 @@ body {
 .price { font-weight: 800; color: var(--fb-text); font-size: 16px; }
 .load-more-wrap { display: flex; justify-content: center; margin-top: 18px; }
 
-.panel {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
- padding: 16px; box-shadow: var(--fb-shadow); margin-bottom: 14px;
+#adminConsole .panel {
+  background: rgba(15, 29, 56, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 184, 255, 0.22);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(2, 8, 23, 0.45);
+  margin-bottom: 14px;
 }
+.panel { background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px; padding: 16px; box-shadow: var(--fb-shadow); margin-bottom: 14px; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; margin-bottom: 14px; }
-.stat {
- background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
- padding: 14px; box-shadow: var(--fb-shadow);
+#adminConsole .stat {
+  background: rgba(15, 29, 56, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 184, 255, 0.22);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 12px 30px rgba(2, 8, 23, 0.45);
 }
+.stat { background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px; padding: 14px; box-shadow: var(--fb-shadow); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; margin-bottom: 14px; }
 .stat h2 { font-size: 21px; margin-top: 4px; color: var(--fb-text); }
 
 .order-circle {
@@ -5741,9 +5755,7 @@ if (isToday && r.status === "partial") {
 if (countEl) {
   countEl.textContent = `ပြသနေသော မှတ်တမ်းအရေအတွက်: ${rows.length}`;
 }
- }
-
- function renderUserDualHistorySections() {
+function renderUserDualHistorySections() {
   const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
   if (!user) return;
   ensureUserDualHistory(user);
