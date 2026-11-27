@@ -592,17 +592,40 @@
       <h2 id="statLiveFxRate">4,750.00</h2>
      </div>
     </div>
+<div class="panel" id="adminDollarConfigPanel">
+   <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div>
+     <strong data-i18n="adm_rate_sync_title">Admin Live Dollar Rate Sync</strong>
+     <div class="small muted" id="adminDollarSummaryText">ဒီနေ့ဒေါ်လာ: 4,500.00 MMK · အကျဈေး / အတက်ဈေး စီမံရန်</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+     <input id="adminFxRateInput" type="number" step="0.01" min="1000" max="20000" class="mini-input" style="width:120px" />
+     <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()" data-i18n="btn_update_rate">Update Rate</button>
+     <button type="button" id="adminDollarToggleBtn" class="btn btn-secondary btn-sm" onclick="toggleAdminDollarEditor()">Dollar</button>
+    </div>
+   </div>
 
-    <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-     <div>
-      <strong data-i18n="adm_rate_sync_title">Admin Live Dollar Rate Sync</strong>
-      <div class="small muted" data-i18n="adm_rate_sync_sub">Change USD ↔ MMK rate and push immediately to all users &amp; live chart.</div>
+   <div id="adminDollarEditorBox" class="hidden" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--fb-border)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+     <div class="field" style="margin:0">
+      <label>ဒီနေ့ လက်ရှိဈေး</label>
+      <input id="dollarCurrentInput" type="number" step="0.01" value="4500" />
      </div>
-     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <input id="adminFxRateInput" type="number" step="0.01" min="1000" max="20000" class="mini-input" style="width:120px" placeholder="4750.00" />
-      <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()" data-i18n="btn_update_rate">Update Rate</button>
+     <div class="field" style="margin:0">
+      <label>အကျဈေး (အနိမ့်ဆုံး)</label>
+      <input id="dollarLowInput" type="number" step="0.01" placeholder="ဥပမာ 4489" />
+     </div>
+     <div class="field" style="margin:0">
+      <label>အတက်ဈေး (အမြင့်ဆုံး)</label>
+      <input id="dollarHighInput" type="number" step="0.01" placeholder="ဥပမာ 4999" />
      </div>
     </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+     <button type="button" class="btn btn-secondary btn-sm" onclick="settleDollarBand()">တည်ဖြတ်မည်</button>
+     <button type="button" class="btn btn-success btn-sm" onclick="confirmDollarBand()">အတည်ပြုမည်</button>
+    </div>
+   </div>
+  </div>
 
     <div class="panel">
      <div class="section-head">
@@ -871,10 +894,15 @@
      <label data-i18n="lbl_password">Password</label>
      <input id="loginPassword" type="password" placeholder="Enter password" required />
     </div>
-    <div id="loginPinStepBox" class="field hidden">
-     <label data-i18n="lbl_admin_pin">Admin 4-Digit Security PIN</label>
-     <input id="loginAdminPin" type="password" maxlength="4" placeholder="Enter 4-digit PIN" />
-    </div>
+   <div id="loginPinStepBox" class="field hidden">
+   <label>ကွက်လက် ၄ ခုဖြင့် PIN အတည်ပြုပါ</label>
+   <div id="adminPinBoxes" style="display:flex;gap:8px;justify-content:center;margin-top:6px">
+    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(0)" onkeydown="handleAdminPinBoxKey(event, 0)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(1)" onkeydown="handleAdminPinBoxKey(event, 1)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(2)" onkeydown="handleAdminPinBoxKey(event, 2)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+    <input type="password" inputmode="numeric" maxlength="1" class="admin-pin-box" oninput="handleAdminPinBoxInput(3)" onkeydown="handleAdminPinBoxKey(event, 3)" style="width:48px;height:48px;text-align:center;font-size:20px;font-weight:800;border-radius:10px" />
+   </div>
+  </div>
     <div id="loginErr" class="error-text"></div>
     <button type="submit" id="loginSubmitBtn" class="btn btn-primary" style="width:100%;margin-top:6px" data-i18n="btn_login">အကောင့်ဝင်ရန်</button>
    </form>
@@ -2801,19 +2829,24 @@ function pushFxTick() {
 }
 
 function updateFxDisplay() {
- const cur = Number(appState.liveRate) || DEFAULT_FX_RATE;
+ const cur = Number(appState.liveRate) || 4500.0;
  const firstRate = Number(appState.fxTicks?.[0]?.rate) || cur;
  const pct = firstRate > 0 ? ((cur - firstRate) / firstRate) * 100 : 0;
  const isUp = pct >= 0;
 
+ const heroLbl = document.getElementById("todayFxRateLabel");
  const heroVal = document.getElementById("todayFxRateValue");
  const curDisp = document.getElementById("fxCurrentRateDisplay");
  const badge = document.getElementById("fxChangeBadge");
  const admStat = document.getElementById("statLiveFxRate");
+ const admSum = document.getElementById("adminDollarSummaryText");
+ const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
 
- if (heroVal) heroVal.textContent = `1 USD = ${formatMmk(cur)}`;
+ if (heroLbl) heroLbl.textContent = "ဒီနေ့ဒေါ်လာ";
+ if (heroVal) heroVal.textContent = formatMmk(cur);
  if (curDisp) {
-  curDisp.textContent = `1 USD = ${formatMmk(cur)}`;
+  curDisp.textContent = `ဒီနေ့ဒေါ်လာ: ${formatMmk(cur)}`;
   curDisp.className = `fx-current-rate ${isUp ? "is-up" : "is-down"}`;
  }
  if (badge) {
@@ -2823,6 +2856,10 @@ function updateFxDisplay() {
  if (admStat) {
   admStat.textContent = cur.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
  }
+ if (admSum) {
+  admSum.textContent = `ဒီနေ့ဒေါ်လာ: ${formatMmk(cur)} · အကျဈေး: ${low} · အတက်ဈေး: ${high}`;
+ }
+}
 }
 
 function drawFxChart() {
@@ -3103,12 +3140,60 @@ function registerUser() {
  showRegSuccessToast(hasBonus ? "Invite bonus +$18.00 credited!" : t("reg_success_sub"));
 }
 
+let pendingAdminAuthStep = false;
+
+function handleAdminPinBoxInput(idx) {
+ const boxes = Array.from(document.querySelectorAll("#adminPinBoxes .admin-pin-box"));
+ if (boxes[idx] && boxes[idx].value && boxes[idx + 1]) {
+  boxes[idx + 1].focus();
+ }
+}
+
+function handleAdminPinBoxKey(e, idx) {
+ const boxes = Array.from(document.querySelectorAll("#adminPinBoxes .admin-pin-box"));
+ if (e.key === "Backspace" && !boxes[idx]?.value && boxes[idx - 1]) {
+  boxes[idx - 1].focus();
+ }
+}
+
+function getEnteredAdminPin4() {
+ return Array.from(document.querySelectorAll("#adminPinBoxes .admin-pin-box"))
+  .map((b) => b.value)
+  .join("");
+}
+
 function loginUser() {
  const idInput = (document.getElementById("loginPhone")?.value || "").trim();
  const passInput = document.getElementById("loginPassword")?.value || "";
  const errEl = document.getElementById("loginErr");
  if (errEl) errEl.textContent = "";
 
+ // Admin Phone + Password စစ်ဆေးပြီး PIN ကွက်လက် ၄ ခု ဖွင့်ပြရန်
+ if (idInput === DEFAULT_ADMIN_CREDS.phone && passInput === DEFAULT_ADMIN_CREDS.pass) {
+  const pinWrap = document.getElementById("loginPinStepBox");
+  if (!pendingAdminAuthStep) {
+   pendingAdminAuthStep = true;
+   pinWrap?.classList.remove("hidden");
+   document.querySelector("#adminPinBoxes .admin-pin-box")?.focus();
+   if (errEl) errEl.textContent = "ကွက်လက် ၄ ခုတွင် PIN (2006) ရိုက်ထည့်ပြီး အတည်ပြုပါ။";
+   return;
+  }
+  if (getEnteredAdminPin4() === DEFAULT_ADMIN_CREDS.pin) {
+   pendingAdminAuthStep = false;
+   isAdminLoggedIn = true;
+   localStorage.setItem(STORAGE_KEYS.adminAuth, "1");
+   closeModal("authModal");
+   showPage("adminPage");
+   syncAdminVisibility();
+   renderAdminAll();
+   return;
+  } else {
+   if (errEl) errEl.textContent = "PIN မှားယွင်းနေပါသည်။";
+   return;
+  }
+ }
+
+ // ပုံမှန် User Login ဆက်လုပ်ရန်
  const user = appState.users.find((u) =>
   (u.phone && u.phone.toLowerCase() === idInput.toLowerCase()) ||
   (u.email && u.email.toLowerCase() === idInput.toLowerCase()) ||
@@ -3133,7 +3218,6 @@ function loginUser() {
  closeModal("authModal");
  syncAllUI();
 }
-
 function logoutUser() {
  const u = getActiveUser();
  if (u) u.online = false;
@@ -3672,8 +3756,10 @@ function saveAllAdminChanges() {
 
 function adminUpdateLiveRate() {
  const val = Number(document.getElementById("adminFxRateInput")?.value || 0);
- if (!val || val < FX_MIN_BAND || val > FX_MAX_BAND) {
-  showCenterRoundedAlert("Rate Out of Band", `Enter rate between ${FX_MIN_BAND} and ${FX_MAX_BAND} MMK.`, true);
+ const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
+ if (!val || val < low || val > high) {
+  showCenterRoundedAlert("Rate Out of Band", `Enter rate between ${low} and ${high} MMK.`, true);
   return;
  }
  appState.liveRate = Number(val.toFixed(2));
@@ -3685,6 +3771,49 @@ function adminUpdateLiveRate() {
  showCenterRoundedAlert("Rate Updated", `1 USD = ${formatMmk(appState.liveRate)}`);
 }
 
+function toggleAdminDollarEditor() {
+ const box = document.getElementById("adminDollarEditorBox");
+ const curIn = document.getElementById("dollarCurrentInput");
+ const lowIn = document.getElementById("dollarLowInput");
+ const highIn = document.getElementById("dollarHighInput");
+ if (curIn) curIn.value = String(appState.liveRate || 4500);
+ if (lowIn) lowIn.value = String(window.FX_MIN_BAND || FX_MIN_BAND);
+ if (highIn) highIn.value = String(window.FX_MAX_BAND || FX_MAX_BAND);
+ box?.classList.toggle("hidden");
+}
+
+function settleDollarBand() {
+ const cur = Number(document.getElementById("dollarCurrentInput")?.value || 4500);
+ const low = Number(document.getElementById("dollarLowInput")?.value || FX_MIN_BAND);
+ const high = Number(document.getElementById("dollarHighInput")?.value || FX_MAX_BAND);
+ if (low > high) {
+  showCenterRoundedAlert("သတိပေးချက်", "အကျဈေးသည် အတက်ဈေးထက် ကျော်လွန်၍ မရပါ။", true);
+  return;
+ }
+ const clampedCur = Math.min(high, Math.max(low, cur));
+ const curEl = document.getElementById("dollarCurrentInput");
+ if (curEl) curEl.value = String(clampedCur);
+ showCenterRoundedAlert("တည်ဖြတ်ပြီးပါပြီ", `လက်ရှိဈေး: ${clampedCur} · အကျဈေး: ${low} · အတက်ဈေး: ${high}`);
+}
+
+function confirmDollarBand() {
+ const cur = Number(document.getElementById("dollarCurrentInput")?.value || 4500);
+ const low = Number(document.getElementById("dollarLowInput")?.value || FX_MIN_BAND);
+ const high = Number(document.getElementById("dollarHighInput")?.value || FX_MAX_BAND);
+ if (!cur || !low || !high || low > high) {
+  showCenterRoundedAlert("သတိပေးချက်", "ဈေးနှုန်းများကို မှန်ကန်စွာ ထည့်ပါ။", true);
+  return;
+ }
+ window.FX_MIN_BAND = low;
+ window.FX_MAX_BAND = high;
+ appState.liveRate = Math.min(high, Math.max(low, cur));
+ appState.fxTicks.push({ ts: Date.now(), rate: appState.liveRate });
+ if (appState.fxTicks.length > 60) appState.fxTicks.shift();
+ saveState();
+ updateFxDisplay();
+ drawFxChart();
+ showCenterRoundedAlert("အတည်ပြုပြီးပါပြီ", `1 USD = ${formatMmk(appState.liveRate)} (${low} – ${high} MMK)`);
+} 
 function renderAdminAll() {
  const totalEl = document.getElementById("statTotalUsers");
  const onlineEl = document.getElementById("statOnlineUsers");
