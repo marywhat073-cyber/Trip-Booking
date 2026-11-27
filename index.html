@@ -40,7 +40,7 @@ body {
  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
  background: var(--fb-bg);
  color: var(--fb-text);
- padding-bottom: 84px;
+ padding-bottom: 88px;
  transition: background 0.2s ease, color 0.2s ease;
 }
 
@@ -49,19 +49,32 @@ body {
 .small { font-size: 13px; }
 .error-text { color: var(--fb-danger); font-size: 13px; margin: 6px 0; min-height: 18px; }
 
+.outline-icon {
+ width: 18px;
+ height: 18px;
+ display: inline-block;
+ vertical-align: middle;
+ stroke: currentColor;
+ fill: none;
+ stroke-width: 1.8;
+ stroke-linecap: round;
+ stroke-linejoin: round;
+ flex-shrink: 0;
+}
+
 .topbar {
  position: sticky; top: 0; z-index: 40;
  background: var(--fb-card); border-bottom: 1px solid var(--fb-border);
  padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
  box-shadow: var(--fb-shadow);
 }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: var(--fb-primary); }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; color: var(--fb-text); }
 .brand .logo {
- width: 38px; height: 38px; border-radius: 50%; background: #0b1120;
- border: 2px solid #22d3ee; box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
- display: grid; place-items: center; flex-shrink: 0;
+ width: 38px; height: 38px; border-radius: 50%; background: transparent;
+ border: 1.5px solid var(--fb-border);
+ display: grid; place-items: center; flex-shrink: 0; color: var(--fb-text);
 }
-.top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
 
 .lang-select, .filter-select {
  padding: 7px 10px; border-radius: 8px; border: 1px solid var(--fb-border);
@@ -70,6 +83,7 @@ body {
 .icon-btn {
  border: 1px solid var(--fb-border); background: var(--fb-surface); color: var(--fb-text);
  border-radius: 8px; padding: 7px 10px; cursor: pointer; font-weight: 700; font-size: 13px;
+ display: inline-flex; align-items: center; justify-content: center;
 }
 .icon-btn:hover { background: var(--fb-border); }
 
@@ -94,8 +108,8 @@ body {
  padding: 7px 16px; font-size: 12.5px; overflow: hidden;
 }
 .activity-ticker-label {
- background: rgba(24, 119, 242, 0.14); color: var(--fb-primary);
- border: 1px solid rgba(24, 119, 242, 0.3); font-weight: 800;
+ background: transparent; color: var(--fb-text);
+ border: 1px solid var(--fb-border); font-weight: 800;
  font-size: 11px; padding: 2px 8px; border-radius: 999px; flex-shrink: 0;
 }
 .activity-ticker-viewport { flex: 1; overflow: hidden; white-space: nowrap; }
@@ -137,11 +151,11 @@ body {
  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
 }
 .fx-hero-label { font-size: 12px; font-weight: 700; color: var(--fb-muted); text-transform: uppercase; letter-spacing: 0.4px; }
-.fx-hero-rate { font-size: 22px; font-weight: 900; color: var(--fb-primary); margin-top: 2px; }
+.fx-hero-rate { font-size: 22px; font-weight: 900; color: var(--fb-text); margin-top: 2px; }
 .fx-hero-sub { font-size: 12px; color: var(--fb-muted); margin-top: 2px; }
 .fx-hero-pill {
- background: rgba(47, 179, 68, 0.14); color: var(--fb-success);
- border: 1px solid rgba(47, 179, 68, 0.35); font-size: 12px; font-weight: 800;
+ background: transparent; color: var(--fb-text);
+ border: 1px solid var(--fb-border); font-size: 12px; font-weight: 800;
  padding: 6px 12px; border-radius: 999px;
 }
 
@@ -151,7 +165,7 @@ body {
 }
 .fx-chart-header {
  display: flex; align-items: center; justify-content: space-between;
- gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+ gap: 10px; flex-wrap: wrap; margin-bottom: 10px;
 }
 .fx-chart-title { font-size: 16px; font-weight: 800; }
 .fx-chart-sub { font-size: 12.5px; color: var(--fb-muted); }
@@ -160,9 +174,28 @@ body {
 .fx-current-rate.is-up { color: #2fb344; }
 .fx-current-rate.is-down { color: #f85149; }
 
+.fx-timeframe-bar {
+ display: flex; align-items: center; justify-content: space-between;
+ gap: 8px; flex-wrap: wrap; margin-bottom: 10px;
+ padding-bottom: 8px; border-bottom: 1px solid var(--fb-border);
+}
+.fx-tf-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.fx-tf-btn {
+ border: 1px solid transparent; background: transparent; color: var(--fb-muted);
+ font-weight: 700; font-size: 12.5px; padding: 5px 10px; border-radius: 7px; cursor: pointer;
+ transition: 0.14s ease;
+}
+.fx-tf-btn:hover { color: var(--fb-text); background: var(--fb-surface); }
+.fx-tf-btn.active {
+ color: var(--fb-primary); background: rgba(24, 119, 242, 0.12);
+ border-color: rgba(24, 119, 242, 0.35);
+}
+.fx-scrub-readout { font-size: 12px; font-weight: 700; color: var(--fb-text); }
+
 .fx-canvas-box {
- position: relative; width: 100%; height: 220px; border-radius: 10px;
+ position: relative; width: 100%; height: 245px; border-radius: 10px;
  overflow: hidden; background: var(--fb-surface); border: 1px solid var(--fb-border);
+ touch-action: none;
 }
 #fxLiveCanvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
 
@@ -184,8 +217,8 @@ body {
 .promo-deals-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .promo-cycle-pill {
  font-size: 11.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
- background: rgba(248, 81, 73, 0.15); color: var(--fb-danger);
- border: 1px solid rgba(248, 81, 73, 0.35);
+ background: transparent; color: var(--fb-text);
+ border: 1px solid var(--fb-border);
 }
 .promo-viewport {
  position: relative; width: 100%; overflow: hidden; border-radius: 12px;
@@ -246,257 +279,368 @@ body {
  .promo-slide-card { flex: 0 0 84%; min-width: 220px; }
  .promo-img-box { height: 132px; }
 }
+
+.section-head {
+ display: flex; align-items: center; justify-content: space-between;
+ gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
+}
+.count-badge {
+ background: transparent; color: var(--fb-text); border: 1px solid var(--fb-border);
+ font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+}
+.search-input {
+ padding: 8px 12px; border-radius: 8px; border: 1px solid var(--fb-border);
+ background: var(--fb-card); color: var(--fb-text); font-size: 14px; min-width: 220px;
+}
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 14px; }
+.hotel-card {
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
+ overflow: hidden; box-shadow: var(--fb-shadow); display: flex; flex-direction: column;
+ transition: transform 0.15s ease;
+}
+.hotel-card:hover { transform: translateY(-2px); }
+.hotel-card img { width: 100%; height: 162px; object-fit: cover; background: var(--fb-surface); }
+.hotel-body { padding: 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.hotel-title { font-weight: 700; font-size: 15.5px; }
+.stars { color: var(--fb-muted); font-size: 13.5px; letter-spacing: 1px; }
+.price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 8px; }
+.price { font-weight: 800; color: var(--fb-text); font-size: 16px; }
+.load-more-wrap { display: flex; justify-content: center; margin-top: 18px; }
+
+.panel {
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
+ padding: 16px; box-shadow: var(--fb-shadow); margin-bottom: 14px;
+}
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.stat {
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
+ padding: 14px; box-shadow: var(--fb-shadow);
+}
+.stat h2 { font-size: 21px; margin-top: 4px; color: var(--fb-text); }
+
+.order-circle {
+ width: 132px; height: 132px; border-radius: 50%; margin: 18px auto;
+ display: grid; place-items: center; font-weight: 800; font-size: 22px;
+ background: conic-gradient(var(--fb-text) 0deg, var(--fb-border) 0deg);
+ position: relative;
+}
+.order-circle::before {
+ content: ""; position: absolute; width: 104px; height: 104px; border-radius: 50%;
+ background: var(--fb-card);
+}
+.order-circle span { position: relative; z-index: 1; }
+
+.pending-profit-banner {
+ margin: 10px auto 6px; max-width: 560px; padding: 10px 14px; border-radius: 10px;
+ background: var(--fb-surface); border: 1px solid var(--fb-border);
+ color: var(--fb-text); font-size: 13px; font-weight: 600; text-align: left;
+}
+.last-order-box {
+ margin: 14px auto 0; max-width: 520px; padding: 12px 14px; border-radius: 10px;
+ background: var(--fb-surface); border: 1px solid var(--fb-border); text-align: left; font-size: 13.5px;
+}
+
+.profile-head { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.profile-avatar-wrap { display: flex; flex-direction: column; align-items: center; }
+.avatar {
+ width: 76px; height: 76px; border-radius: 50%; background: var(--fb-surface); color: var(--fb-text);
+ border: 1.5px solid var(--fb-border);
+ display: grid; place-items: center; font-size: 28px; font-weight: 800;
+}
+.avatar-img {
+ width: 76px; height: 76px; border-radius: 50%; object-fit: cover;
+ border: 2px solid var(--fb-border); background: var(--fb-surface);
+}
+.profile-info-grid {
+ display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+ gap: 10px; margin-top: 8px;
+}
+.profile-info-box {
+ background: var(--fb-surface); border: 1px solid var(--fb-border);
+ border-radius: 10px; padding: 9px 11px;
+}
+.profile-info-val { font-weight: 800; font-size: 14px; margin-top: 2px; word-break: break-word; }
+.profile-copy-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; }
+.share-link-box {
+ display: flex; align-items: center; justify-content: space-between; gap: 10px;
+ flex-wrap: wrap; background: var(--fb-surface); border: 1px solid var(--fb-border);
+ border-radius: 10px; padding: 10px 12px;
+}
+.share-link-text {
+ font-size: 12.5px; font-weight: 700; color: var(--fb-text);
+ word-break: break-all; margin-top: 2px;
+}
+.profile-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+.suspended-banner {
+ background: #cf222e; color: #fff; padding: 10px 16px;
+ font-size: 13.5px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.suspended-banner-inner {
+ max-width: 1180px; margin: 0 auto; display: flex;
+ align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+.live-order-banner {
+ background: var(--fb-surface); border: 1px solid var(--fb-border);
+ color: var(--fb-text); padding: 10px 14px; border-radius: 10px;
+ font-size: 13px; font-weight: 700; margin-bottom: 12px;
+}
+.admin-header-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 9px 10px; border-bottom: 1px solid var(--fb-border); text-align: left; vertical-align: middle; }
+th { background: var(--fb-surface); font-weight: 700; white-space: nowrap; }
+.mini-input {
+ width: 78px; padding: 5px 7px; border-radius: 6px; border: 1px solid var(--fb-border);
+ background: var(--fb-surface); color: var(--fb-text); font-size: 12.5px;
+}
+.status-pill { padding: 3px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; display: inline-block; }
+.pill-online { background: rgba(47, 179, 68, 0.16); color: #2fb344; }
+.pill-offline { background: rgba(154, 167, 184, 0.18); color: var(--fb-muted); }
+.pill-warn { background: rgba(248, 81, 73, 0.16); color: #f85149; }
+.pill-partial { background: rgba(245, 158, 11, 0.18); color: #f59e0b; }
+.history-list { display: flex; flex-direction: column; gap: 8px; }
+.history-item {
+ background: var(--fb-surface); border: 1px solid var(--fb-border); border-radius: 10px;
+ padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13.5px;
+}
+
+.support-chat-card {
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 14px;
+ box-shadow: var(--fb-shadow); overflow: hidden; display: flex; flex-direction: column; height: 72vh; min-height: 460px;
+}
+.support-chat-header {
+ padding: 12px 16px; border-bottom: 1px solid var(--fb-border);
+ display: flex; align-items: center; gap: 10px; background: var(--fb-card);
+}
+.support-agent-avatar {
+ width: 38px; height: 38px; border-radius: 50%; background: var(--fb-surface);
+ border: 1.5px solid var(--fb-border);
+ color: var(--fb-text); display: grid; place-items: center; font-weight: 800;
+}
+.support-messages, .cs-messages {
+ flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+ background: var(--fb-surface);
+}
+.cs-messages { height: 390px; flex: none; }
+.chat-msg {
+ max-width: 78%; padding: 9px 12px; border-radius: 12px; font-size: 13.5px; line-height: 1.45; word-break: break-word;
+}
+.chat-msg.user { align-self: flex-end; background: var(--fb-primary); color: #fff; border-bottom-right-radius: 3px; }
+.chat-msg.admin { align-self: flex-start; background: var(--fb-card); color: var(--fb-text); border: 1px solid var(--fb-border); border-bottom-left-radius: 3px; }
+.chat-meta { font-size: 11px; opacity: 0.75; margin-top: 4px; }
+.chat-photo-img {
+ max-width: 220px; max-height: 220px; border-radius: 8px; display: block; margin-top: 4px; object-fit: cover;
+}
+.support-composer, .admin-cs-composer {
+ display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--fb-border);
+ background: var(--fb-card); align-items: flex-end;
+}
+.support-composer textarea, .admin-cs-composer textarea {
+ flex: 1; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--fb-border);
+ background: var(--fb-surface); color: var(--fb-text); font-size: 13.5px;
+ font-family: inherit; line-height: 1.4; resize: none; max-height: 120px; overflow-y: auto;
+}
+.bound-bank-strip {
+ margin: 8px 14px 0; padding: 8px 12px; border-radius: 10px;
+ background: var(--fb-surface); border: 1px solid var(--fb-border);
+ font-size: 12.5px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+}
+.bank-picker-panel {
+ position: absolute; bottom: 58px; left: 12px; right: 12px; max-width: 460px;
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 12px;
+ box-shadow: 0 10px 28px rgba(0,0,0,0.28); padding: 10px; z-index: 35;
+ max-height: 250px; overflow-y: auto;
+}
+.bank-picker-item {
+ display: flex; align-items: center; justify-content: space-between; gap: 8px;
+ padding: 8px 10px; border-radius: 8px; border: 1px solid var(--fb-border);
+ background: var(--fb-surface); margin-bottom: 6px; font-size: 12.5px;
+}
+.bank-picker-item:last-child { margin-bottom: 0; }
+
+.bank-provider-grid {
+ display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+ gap: 10px; margin-top: 10px;
+}
+.bank-provider-card {
+ background: var(--fb-surface); border: 1px solid var(--fb-border);
+ border-radius: 12px; padding: 12px; cursor: pointer;
+ transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+ display: flex; flex-direction: column; gap: 4px;
+}
+.bank-provider-card:hover { transform: translateY(-2px); border-color: var(--fb-primary); }
+.bank-provider-card.active {
+ border-color: var(--fb-primary); background: rgba(24, 119, 242, 0.12);
+ box-shadow: 0 0 0 1px var(--fb-primary);
+}
+.bank-provider-name { font-weight: 800; font-size: 14px; }
+.bank-provider-type { font-size: 11.5px; color: var(--fb-muted); font-weight: 600; }
+.bank-provider-count { font-size: 11.5px; color: var(--fb-text); font-weight: 700; margin-top: 2px; }
+.bank-entry-form-card {
+ margin-top: 12px; padding: 14px; border-radius: 12px;
+ background: var(--fb-surface); border: 1px solid var(--fb-border);
+}
+.bank-form-head {
+ display: flex; align-items: center; justify-content: space-between;
+ gap: 8px; margin-bottom: 10px;
+}
+
+.cs-layout { display: grid; grid-template-columns: 290px 1fr; gap: 12px; }
+.cs-client-list { border: 1px solid var(--fb-border); border-radius: 10px; overflow: hidden; background: var(--fb-surface); }
+.cs-list-head { padding: 10px; border-bottom: 1px solid var(--fb-border); display: flex; gap: 6px; align-items: center; }
+.cs-thread-item {
+ padding: 10px 12px; border-bottom: 1px solid var(--fb-border); cursor: pointer;
+ display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.cs-thread-item:hover, .cs-thread-item.active { background: rgba(24, 119, 242, 0.14); }
+.cs-chat-pane { border: 1px solid var(--fb-border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; background: var(--fb-card); }
+.cs-pane-head { padding: 10px 14px; border-bottom: 1px solid var(--fb-border); background: var(--fb-surface); }
+
+.cs-incoming-toast {
+ position: fixed; top: 68px; right: 16px; z-index: 95; width: 310px; max-width: calc(100vw - 32px);
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-left: 4px solid var(--fb-text);
+ border-radius: 12px; padding: 11px 13px; box-shadow: 0 10px 28px rgba(0,0,0,0.28); cursor: pointer;
+}
+.cs-toast-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.cs-toast-badge { font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--fb-border); color: var(--fb-text); }
+.cs-toast-time { font-size: 11px; color: var(--fb-muted); }
+.cs-toast-sender { font-weight: 800; font-size: 13.5px; margin-bottom: 2px; }
+.cs-toast-preview { font-size: 12.5px; color: var(--fb-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.reg-success-toast {
+ position: fixed; top: 68px; left: 50%; transform: translateX(-50%); z-index: 96;
+ min-width: 280px; max-width: calc(100vw - 32px);
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-left: 4px solid var(--fb-text);
+ border-radius: 12px; padding: 11px 14px; box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+ display: flex; align-items: center; gap: 10px;
+}
+.reg-toast-check {
+ width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--fb-border);
+ color: var(--fb-text); display: grid; place-items: center; font-weight: 900; flex-shrink: 0;
+}
+.reg-toast-title { font-weight: 800; font-size: 13.5px; }
+.reg-toast-sub { font-size: 12px; color: var(--fb-muted); margin-top: 2px; }
+
+.center-rounded-alert {
+ position: fixed; inset: 0; z-index: 120;
+ background: rgba(0, 0, 0, 0.52); backdrop-filter: blur(2px);
+ display: flex; align-items: center; justify-content: center; padding: 18px;
+}
+.center-rounded-card {
+ width: 100%; max-width: 370px; background: var(--fb-card);
+ border: 1px solid var(--fb-border); border-radius: 22px;
+ padding: 22px 20px 18px; box-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
+ text-align: center; animation: fadeIn 0.16s ease;
+}
+.center-rounded-badge {
+ display: inline-block; font-size: 11px; font-weight: 800;
+ padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; letter-spacing: 0.4px;
+ border: 1px solid var(--fb-border); color: var(--fb-text);
+}
+.center-rounded-title { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+.center-rounded-msg { font-size: 13.5px; color: var(--fb-muted); line-height: 1.5; white-space: pre-line; }
+.center-rounded-actions { margin-top: 16px; display: flex; justify-content: center; }
+
+.bottom-nav {
+ position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+ background: var(--fb-card); border-top: 1px solid var(--fb-border);
+ display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 4px;
+ box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+}
+.bottom-nav button {
+ background: none; border: none; color: var(--fb-muted);
+ display: flex; flex-direction: column; align-items: center; gap: 3px;
+ font-size: 11px; font-weight: 700; padding: 5px 2px; cursor: pointer; border-radius: 8px;
+}
+.bottom-nav button.active { color: var(--fb-text); background: var(--fb-surface); }
+
+.modal-backdrop {
+ position: fixed; inset: 0; background: rgba(0,0,0,0.58); z-index: 80;
+ display: flex; align-items: center; justify-content: center; padding: 14px;
+}
+.modal-card {
+ background: var(--fb-card); border: 1px solid var(--fb-border); border-radius: 14px;
+ width: 100%; max-width: 440px; padding: 18px; box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+ max-height: 90vh; overflow-y: auto;
+}
+.modal-card.wide-modal { max-width: 820px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.close-x { background: none; border: none; color: var(--fb-muted); font-size: 20px; cursor: pointer; }
+.field { margin-bottom: 11px; }
+.field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 4px; color: var(--fb-muted); }
+.field input, .field select {
+ width: 100%; padding: 9px 11px; border-radius: 8px; border: 1px solid var(--fb-border);
+ background: var(--fb-surface); color: var(--fb-text); font-size: 14px;
+}
+
+@media (max-width: 820px) {
+ .cs-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+ .topbar { padding: 8px 10px; gap: 6px; }
+ .brand { font-size: 15px; gap: 6px; }
+ .brand .logo { width: 32px; height: 32px; }
+ .lang-select { padding: 5px 6px; font-size: 11.5px; }
+ .icon-btn { padding: 6px 8px; font-size: 12px; }
+ .topbar .btn-sm { padding: 6px 8px; font-size: 11.5px; white-space: nowrap; }
+ .hero h1 { font-size: 20px; }
+ .fx-canvas-box { height: 210px; }
+ .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+ .hotel-card img { height: 124px; }
+ .hotel-body { padding: 9px; gap: 4px; }
+ .hotel-title { font-size: 13.5px; line-height: 1.25; }
+ .stars { font-size: 11.5px; }
+ .price { font-size: 14px; }
+ .hotel-body .btn-sm { padding: 5px 8px; font-size: 11.5px; }
+}
  </style>
 </head>
-<body class="dark">
-<!-- Intro Splash (3s Stage 1 + 2s Stage 2 Loading Platform -> Auto Remove) -->
- <div id="introSplash" class="tb-intro-overlay" data-intro-stage="1">
-  <style>
-   .tb-intro-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    background-color: #0b0f19;
-    background-image: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1920&q=80');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
-   }
-   .tb-intro-overlay::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(11, 15, 25, 0.45) 0%, rgba(11, 15, 25, 0.72) 100%);
-    pointer-events: none;
-   }
-   .tb-intro-overlay.tb-hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-   }
-   .tb-stage {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    width: min(92vw, 540px);
-    transition: opacity 0.45s ease, transform 0.45s ease;
-   }
-   .tb-stage.tb-hidden-stage {
-    display: none;
-   }
-   .tb-stage.tb-fade-out {
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
-   }
-   .tb-glass-card {
-    position: relative;
-    width: 100%;
-    padding: 52px 28px 34px;
-    margin-top: 28px;
-    border-radius: 22px;
-    background: rgba(11, 15, 25, 0.48);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-   }
-   .tb-globe-badge {
-    position: absolute;
-    top: -36px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: #0b1120;
-    border: 2px solid #22d3ee;
-    box-shadow: 0 0 24px rgba(34, 211, 238, 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-   }
-   .tb-welcome-txt {
-    font-size: 12px;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #cbd5e1;
-    margin-bottom: 8px;
-    font-weight: 600;
-   }
-   .tb-brand-title {
-    margin: 0 0 22px 0;
-    font-size: clamp(30px, 5.5vw, 44px);
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    color: #ffffff;
-    line-height: 1.15;
-   }
-   .tb-brand-title span {
-    color: #38bdf8;
-   }
-   .tb-platform-wrap {
-    display: inline-block;
-    padding: 10px 24px;
-    border-top: 1px solid rgba(34, 211, 238, 0.65);
-    border-bottom: 1px solid rgba(34, 211, 238, 0.65);
-    color: #f8fafc;
-    font-size: clamp(11px, 2.3vw, 13px);
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    font-weight: 600;
-   }
-   .tb-loader-card {
-    padding: 28px 34px;
-    border-radius: 18px;
-    background: rgba(11, 15, 25, 0.72);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    min-width: 240px;
-   }
-   .tb-loader-wrap {
-    position: relative;
-    width: 66px;
-    height: 66px;
-   }
-   .tb-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 3.5px solid transparent;
-   }
-   .tb-ring-1 {
-    border-top-color: #38bdf8;
-    border-right-color: #1d7dfa;
-    animation: tbSpin 1s linear infinite;
-   }
-   .tb-ring-2 {
-    inset: 8px;
-    border-bottom-color: #10b981;
-    border-left-color: #34d399;
-    animation: tbSpinReverse 1.3s linear infinite;
-   }
-   .tb-ring-3 {
-    inset: 16px;
-    border-top-color: #f59e0b;
-    border-right-color: #fbbf24;
-    animation: tbSpin 0.85s linear infinite;
-   }
-   .tb-loading-text {
-    font-size: 12.5px;
-    letter-spacing: 0.22em;
-    color: #f8fafc;
-    text-transform: uppercase;
-    font-weight: 600;
-   }
-   @keyframes tbSpin {
-    to { transform: rotate(360deg); }
-   }
-   @keyframes tbSpinReverse {
-    to { transform: rotate(-360deg); }
-   }
-  </style>
-
-  <!-- Stage 1 (3 Seconds) -->
-  <div id="introStageOne" class="tb-stage">
-   <div class="tb-glass-card">
-    <div class="tb-globe-badge" aria-hidden="true">
-     <svg viewBox="0 0 40 40" width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="20" cy="20" r="13" stroke="#38bdf8" stroke-width="1.8" />
-      <ellipse cx="20" cy="20" rx="6.5" ry="13" stroke="#38bdf8" stroke-width="1.5" />
-      <line x1="7" y1="20" x2="33" y2="20" stroke="#38bdf8" stroke-width="1.5" />
-      <circle cx="20" cy="20" r="2.6" fill="#22d3ee" />
-     </svg>
-    </div>
-    <div class="tb-welcome-txt">Welcome To</div>
-    <h1 class="tb-brand-title">Trip <span>Booking</span></h1>
-    <div class="tb-platform-wrap">International Hotel Platform</div>
-   </div>
-  </div>
-
-  <!-- Stage 2 (2 Seconds) -->
-  <div id="introStageTwo" class="tb-stage tb-hidden-stage tb-fade-out">
-   <div class="tb-loader-card">
-    <div class="tb-loader-wrap">
-     <div class="tb-ring tb-ring-1"></div>
-     <div class="tb-ring tb-ring-2"></div>
-     <div class="tb-ring tb-ring-3"></div>
-    </div>
-    <div class="tb-loading-text">Loading Platform...</div>
-   </div>
-  </div>
-
-  <script>
-   (function () {
-    const overlay = document.getElementById('introSplash');
-    const stageOne = document.getElementById('introStageOne');
-    const stageTwo = document.getElementById('introStageTwo');
-
-    setTimeout(() => {
-     if (overlay) overlay.setAttribute('data-intro-stage', '2');
-     if (stageOne) {
-      stageOne.classList.add('tb-fade-out');
-      setTimeout(() => stageOne.classList.add('tb-hidden-stage'), 400);
-     }
-     if (stageTwo) {
-      stageTwo.classList.remove('tb-hidden-stage');
-      requestAnimationFrame(() => stageTwo.classList.remove('tb-fade-out'));
-     }
-
-     setTimeout(() => {
-      if (overlay) {
-       overlay.setAttribute('data-intro-stage', 'done');
-       overlay.classList.add('tb-hidden');
-       setTimeout(() => overlay.remove(), 650);
-      }
-     }, 2000);
-    }, 3000);
-   })();
-  </script>
- </div>
-
- <!-- Topbar -->
+<body>
  <header class="topbar">
   <div class="brand" onclick="handleLogoClick()" style="cursor:pointer">
-   <span class="logo" aria-hidden="true">
-    <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <circle cx="20" cy="20" r="13" stroke="#38bdf8" stroke-width="2" />
-     <ellipse cx="20" cy="20" rx="6.5" ry="13" stroke="#38bdf8" stroke-width="1.6" />
-     <line x1="7" y1="20" x2="33" y2="20" stroke="#38bdf8" stroke-width="1.6" />
-     <circle cx="20" cy="20" r="2.8" fill="#22d3ee" />
+   <div class="logo">
+    <svg class="outline-icon" viewBox="0 0 24 24">
+     <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z" />
     </svg>
-   </span>
+   </div>
    <span data-i18n="brand_name">Trip Booking</span>
   </div>
-
   <div class="top-actions">
-   <select id="language" class="lang-select" onchange="changeLanguage(this.value)" aria-label="Language">
+   <select id="language" class="lang-select" aria-label="Language" onchange="changeLanguage(this.value)">
     <option value="my">မြန်မာ (MY)</option>
     <option value="en">English (EN)</option>
     <option value="th">ไทย (TH)</option>
     <option value="zh">中文 (ZH)</option>
    </select>
-   <button type="button" class="icon-btn" onclick="toggleTheme()" title="Toggle Theme">◐</button>
+   <button type="button" class="icon-btn" onclick="toggleTheme()" title="Theme">
+    <svg class="outline-icon" viewBox="0 0 24 24">
+     <circle cx="12" cy="12" r="9" />
+     <path d="M12 3a9 9 0 0 0 0 18V3z" />
+    </svg>
+   </button>
    <button type="button" id="headerAuthBtn" class="btn btn-primary btn-sm" onclick="openAuth('login')" data-i18n="btn_login">အကောင့်ဝင်ရန်</button>
   </div>
  </header>
 
- <!-- Activity Ticker -->
+ <div id="csIncomingToast" class="cs-incoming-toast hidden" onclick="handleCsToastClick()">
+  <div class="cs-toast-top">
+   <span class="cs-toast-badge" data-i18n="new_msg_badge">NEW MESSAGE</span>
+   <span id="csToastTime" class="cs-toast-time"></span>
+  </div>
+  <div id="csToastSender" class="cs-toast-sender">Trip Booking Support</div>
+  <div id="csToastPreview" class="cs-toast-preview"></div>
+ </div>
+
+ <div id="regSuccessToast" class="reg-success-toast hidden" role="status" aria-live="polite">
+  <div class="reg-toast-check">✓</div>
+  <div>
+   <div id="regSuccessTitle" class="reg-toast-title" data-i18n="reg_success_title">အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်</div>
+   <div id="regSuccessBonusText" class="reg-toast-sub" data-i18n="reg_success_sub">Trip Booking သို့ ကြိုဆိုပါသည်။</div>
+  </div>
+ </div>
+
  <div class="activity-ticker-wrap">
   <span class="activity-ticker-label" data-i18n="live_badge">LIVE</span>
   <div class="activity-ticker-viewport">
@@ -504,26 +648,6 @@ body {
   </div>
  </div>
 
- <!-- Incoming CS Toast -->
- <div id="csIncomingToast" class="cs-incoming-toast hidden" onclick="handleCsToastClick()">
-  <div class="cs-toast-top">
-   <span class="cs-toast-badge" data-i18n="new_msg_badge">NEW MESSAGE</span>
-   <span id="csToastTime" class="cs-toast-time"></span>
-  </div>
-  <div id="csToastSender" class="cs-toast-sender"></div>
-  <div id="csToastPreview" class="cs-toast-preview"></div>
- </div>
-
- <!-- Registration Success Toast -->
- <div id="regSuccessToast" class="reg-success-toast hidden">
-  <div class="reg-toast-check">✓</div>
-  <div class="reg-toast-body">
-   <div class="reg-toast-title" data-i18n="reg_success_title">အကောင့်ဖွင့်ခြင်း အောင်မြင်ပါသည်</div>
-   <div id="regSuccessBonusText" class="reg-toast-sub" data-i18n="reg_success_sub">Trip Booking သို့ ကြိုဆိုပါသည်။</div>
-  </div>
- </div>
-
- <!-- Main Pages Container -->
  <main class="container">
   <!-- HOME PAGE -->
   <section id="homePage" class="page active">
@@ -531,15 +655,15 @@ body {
     <div class="hero-content">
      <h1 data-i18n="hero_title">Premium Stay &amp; Travel Booking</h1>
      <p data-i18n="hero_sub">Real-time hotel orders, live currency trend analytics, and instant support.</p>
-     <div id="heroHotelNameLabel" class="hero-hotel-tag" data-i18n="hero_loading">Featured stay loading...</div>
+     <span id="heroHotelNameLabel" class="hero-hotel-tag" data-i18n="hero_loading">Featured stay loading...</span>
     </div>
    </div>
 
    <div class="fx-hero-card">
     <div>
      <div id="todayFxRateLabel" class="fx-hero-label" data-i18n="fx_hero_label">24H Live Exchange Rate</div>
-     <div id="todayFxRateValue" class="fx-hero-rate">1 USD = 4,750.00 MMK</div>
-     <div class="fx-hero-sub" data-i18n="fx_hero_sub">24-hour live tick stream (Band ~4,489 – 4,999 MMK · Green = Rising, Red = Falling)</div>
+     <div id="todayFxRateValue" class="fx-hero-rate">4,500.00 MMK</div>
+     <div class="fx-hero-sub" data-i18n="fx_hero_sub">24-hour live tick stream (2s green/red pulse · 1D to 1Y history)</div>
     </div>
     <span class="fx-hero-pill" data-i18n="fx_24h_pill">24H LIVE</span>
    </div>
@@ -548,52 +672,60 @@ body {
     <div class="fx-chart-header">
      <div>
       <div class="fx-chart-title" data-i18n="fx_chart_title">USD ↔ MMK Live Rate Trend</div>
-      <div class="fx-chart-sub" data-i18n="fx_chart_sub">24H live ticks · Green on rise, Red on drop</div>
+      <div class="fx-chart-sub" data-i18n="fx_chart_sub">2s rise/drop pulse · Drag/hover to inspect date, time &amp; direction</div>
      </div>
      <div class="fx-chart-live-readout">
-      <span id="fxCurrentRateDisplay" class="fx-current-rate is-up">1 USD = 4,750.00 MMK</span>
+      <span id="fxCurrentRateDisplay" class="fx-current-rate is-up">ဒီနေ့ဒေါ်လာ: 4,500.00 MMK</span>
       <span id="fxChangeBadge" class="status-pill pill-online">▲ +0.00%</span>
      </div>
     </div>
 
-    <div class="fx-canvas-box">
+    <div class="fx-timeframe-bar">
+     <div class="fx-tf-group" role="tablist" aria-label="Timeframe">
+      <button type="button" id="fxTf_1D" class="fx-tf-btn active" onclick="setFxTimeframe('1D')">1D</button>
+      <button type="button" id="fxTf_1W" class="fx-tf-btn" onclick="setFxTimeframe('1W')">1W</button>
+      <button type="button" id="fxTf_1M" class="fx-tf-btn" onclick="setFxTimeframe('1M')">1M</button>
+      <button type="button" id="fxTf_6M" class="fx-tf-btn" onclick="setFxTimeframe('6M')">6M</button>
+      <button type="button" id="fxTf_1Y" class="fx-tf-btn" onclick="setFxTimeframe('1Y')">1Y</button>
+     </div>
+     <div id="fxScrubReadout" class="fx-scrub-readout" data-i18n="fx_inspect_hint">ဆွဲကြည့်ရန် သို့မဟုတ် ထိကြည့်ပါ (Date &amp; Trend)</div>
+    </div>
+
+    <div id="fxCanvasBox" class="fx-canvas-box">
      <canvas id="fxLiveCanvas"></canvas>
     </div>
 
     <div class="fx-chart-footer">
-     <span id="fxPointDetailText" data-i18n="fx_inspect_hint">Live ticks · Hover/touch to inspect</span>
-     <span id="fxFormulaReadout" data-i18n="fx_band_label">Base: 4,500 · Band: 4,489–4,999 MMK</span>
+     <span id="fxChartStatusNote">2s pulse · Non-repeating wave</span>
+     <span id="fxFormulaReadout" data-i18n="fx_band_label">Base: 4,500 · Dip: 4490.91–4490.99 · Peak: ~4799</span>
     </div>
    </div>
 
-   <!-- 8 HOTEL FLASH DEALS & PROMOTIONS CAROUSEL (8S AUTO-SLIDE · DRAG/SWIPE · 3-DAY CYCLE SWAP) -->
-   <section id="promoDealsSection" class="promo-deals-wrap" aria-label="Hotel Flash Deals & Promotions">
+   <div id="promoDealsSection" class="promo-deals-wrap">
     <div class="promo-deals-head">
      <div>
-      <h3 id="promoDealsHeading" class="promo-deals-title" data-i18n="promo_heading">🔥 ဟိုတယ် ရှော့စျေးနှင့် ပရိုးမိုးရှင်း ကမ်းလှမ်းချက်များ</h3>
-      <div id="promoDealsSub" class="promo-deals-sub" data-i18n="promo_sub">၈ စက္ကန့်တစ်ခါ ဘယ်ညာ အလိုအလျောက် ရွေ့သည် · ဘယ်ညာ ဆွဲကြည့်နိုင်သည် · ၃ ရက်တစ်ခါ အစားထိုးပြောင်းလဲသည်</div>
+      <div class="promo-deals-title" data-i18n="promo_heading">🔥 ဟိုတယ် ရှော့စျေးနှင့် ပရိုးမိုးရှင်း ကမ်းလှမ်းချက်များ</div>
+      <div class="promo-deals-sub" data-i18n="promo_sub">၈ စက္ကန့်တစ်ခါ ဘယ်ညာ အလိုအလျောက် ရွေ့သည် · ဘယ်ညာ ဆွဲကြည့်နိုင်သည် · ၃ ရက်တစ်ခါ အစားထိုးပြောင်းလဲသည်</div>
      </div>
      <div class="promo-deals-controls">
-      <span id="promoCycleBadge" class="promo-cycle-pill">3-Day Cycle</span>
-      <button type="button" class="btn btn-secondary btn-xs" onclick="stepPromoCarousel(-1)" aria-label="Previous Promotion">‹</button>
-      <button type="button" class="btn btn-secondary btn-xs" onclick="stepPromoCarousel(1)" aria-label="Next Promotion">›</button>
+      <span id="promoCycleBadge" class="promo-cycle-pill">3-Day Cycle #1</span>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="stepPromoCarousel(-1)" aria-label="Previous">◀</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="stepPromoCarousel(1)" aria-label="Next">▶</button>
      </div>
     </div>
-
     <div id="promoViewport" class="promo-viewport">
      <div id="promoTrack" class="promo-track"></div>
     </div>
-
     <div id="promoDots" class="promo-dots"></div>
-   </section>
+   </div>
 
    <div class="section-head">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
      <h2 data-i18n="hotels_heading">Featured Hotels (Europe &amp; Asia)</h2>
      <span id="hotelCountBadge" class="count-badge">489</span>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-     <select id="hotelStarFilter" class="filter-select" onchange="renderHotels()" aria-label="Filter by Stars">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+     <select id="hotelStarFilter" class="filter-select" onchange="renderHotels()">
       <option value="all" data-i18n="star_all">All Stars (1–5★)</option>
       <option value="5" data-i18n="star_5">5 Stars</option>
       <option value="4" data-i18n="star_4">4 Stars</option>
@@ -601,7 +733,7 @@ body {
       <option value="2" data-i18n="star_2">2 Stars</option>
       <option value="1" data-i18n="star_1">1 Star</option>
      </select>
-     <select id="hotelPriceSort" class="filter-select" onchange="renderHotels()" aria-label="Sort by Price">
+     <select id="hotelPriceSort" class="filter-select" onchange="renderHotels()">
       <option value="default" data-i18n="sort_default">Default Order</option>
       <option value="price_asc" data-i18n="sort_price_asc">Price: Low to High</option>
       <option value="price_desc" data-i18n="sort_price_desc">Price: High to Low</option>
@@ -616,11 +748,19 @@ body {
     <button type="button" id="loadMoreHotelsBtn" class="btn btn-secondary" onclick="toggleShowAllHotels()" data-i18n="show_all">Show All</button>
    </div>
   </section>
+
   <!-- SUPPORT PAGE (USER CHAT) -->
   <section id="supportPage" class="page">
    <div class="support-chat-card">
     <div class="support-chat-header">
-     <div class="support-agent-avatar">☏</div>
+     <div class="support-agent-avatar">
+      <svg class="outline-icon" viewBox="0 0 24 24">
+       <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
+       <rect x="2" y="13" width="4" height="6" rx="2" />
+       <rect x="18" y="13" width="4" height="6" rx="2" />
+       <path d="M18 19a4 4 0 0 1-4 2h-2" />
+      </svg>
+     </div>
      <div>
       <div style="font-weight:800;font-size:16px" data-i18n="cs_live_title">Customer Service Live</div>
       <div id="userSideTypingIndicator" class="small muted" data-i18n="cs_online_sub">Online · Direct synchronization with Admin &amp; Support</div>
@@ -635,9 +775,9 @@ body {
     <div style="position:relative">
      <div id="userBankPickerBox" class="bank-picker-panel hidden"></div>
      <div class="support-composer">
-      <button type="button" id="userBankCardBtn" class="btn btn-secondary btn-sm hidden" onclick="toggleBankPicker('user')" title="ဘဏ်ကဒ်" data-i18n="btn_bank_card">💳 ဘဏ်ကဒ်</button>
+      <button type="button" id="userBankCardBtn" class="btn btn-secondary btn-sm hidden" onclick="toggleBankPicker('user')" title="ဘဏ်ကဒ်" data-i18n="btn_bank_card">ဘဏ်ကဒ်</button>
       <label class="btn btn-secondary btn-sm" style="cursor:pointer;margin:0" title="Photo">
-       <span data-i18n="btn_photo">📎 Photo</span>
+       <span data-i18n="btn_photo">Photo</span>
        <input type="file" accept="image/*" style="display:none" onchange="handleChatPhotoUpload(event, 'user')" />
       </label>
       <textarea
@@ -649,7 +789,7 @@ body {
        onfocus="handleSupportInputFocus()"
        oninput="handleComposerTyping('user', this)"
       ></textarea>
-      <button type="button" class="btn btn-primary btn-sm" onclick="sendSupportMessage()" data-i18n="btn_send">➤ Send</button>
+      <button type="button" class="btn btn-primary btn-sm" onclick="sendSupportMessage()" data-i18n="btn_send">Send</button>
      </div>
     </div>
    </div>
@@ -724,7 +864,12 @@ body {
     <div class="panel">
      <div class="profile-head">
       <div class="profile-avatar-wrap">
-       <div id="profileAvatar" class="avatar">◯</div>
+       <div id="profileAvatar" class="avatar">
+        <svg class="outline-icon" style="width:34px;height:34px" viewBox="0 0 24 24">
+         <circle cx="12" cy="8" r="4" />
+         <path d="M4 20c0-3.5 3.6-6 8-6s8 2.5 8 6" />
+        </svg>
+       </div>
        <img id="profileAvatarImg" class="avatar-img hidden" alt="Profile Photo" />
        <label class="btn btn-secondary btn-xs" style="margin-top:8px;cursor:pointer">
         <span data-i18n="btn_upload_photo">Upload Photo</span>
@@ -793,7 +938,7 @@ body {
       <input id="adminPassInput" type="password" placeholder="Enter password" />
      </div>
      <div id="adminLoginErr" class="error-text"></div>
-     <button type="button" class="btn btn-primary" style="width:100%;margin-top:8px" onclick="verifyAdminStep1()" data-i18n="btn_continue">Continue</button>
+     <button type="button" class="btn btn-primary" style="width:100%;margin-top:8px" onclick="verifyAdminStep1()" data-i18n="btn_continue">ဆက်သွားမယ်</button>
     </div>
 
     <div id="adminStep2Box" class="hidden">
@@ -830,7 +975,7 @@ body {
      </div>
      <div class="stat">
       <div class="small muted" data-i18n="adm_live_usd">Live USD Rate</div>
-      <h2 id="statLiveFxRate">4,750.00</h2>
+      <h2 id="statLiveFxRate">4,500.00</h2>
      </div>
     </div>
 
@@ -838,28 +983,30 @@ body {
      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
       <div>
        <strong data-i18n="adm_rate_sync_title">Admin Live Dollar Rate Sync</strong>
-       <div class="small muted" id="adminDollarSummaryText">ဒီနေ့ဒေါ်လာ: 4,500.00 MMK · အကျဈေး / အတက်ဈေး စီမံရန်</div>
+       <div class="small muted" id="adminDollarSummaryText">ဒီနေ့ဒေါ်လာ: 4,500.00 MMK · ပလက်ဖောင်းတစ်ခုလုံး ငွေကြေးစီမံခန့်ခွဲမှု</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-       <input id="adminFxRateInput" type="number" step="0.01" min="1000" max="20000" class="mini-input" style="width:120px" />
-       <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()" data-i18n="btn_update_rate">Update Rate</button>
+       <input id="adminFxRateInput" type="number" step="0.01" min="100" max="50000" class="mini-input" style="width:120px" placeholder="4500" />
+       <button type="button" class="btn btn-primary btn-sm" onclick="adminUpdateLiveRate()" data-i18n="btn_update_rate">ငွေကြေးပြောင်းမည်</button>
+       <button type="button" class="btn btn-danger btn-sm" onclick="triggerOneMinuteDropHold()" data-i18n="btn_1m_drop">၁ မိနစ် ထိုးကျထားမည်</button>
        <button type="button" id="adminDollarToggleBtn" class="btn btn-secondary btn-sm" onclick="toggleAdminDollarEditor()">Dollar</button>
       </div>
      </div>
+     <div id="adminDropHoldStatus" class="small muted hidden" style="margin-top:8px;font-weight:700;color:var(--fb-danger)"></div>
 
      <div id="adminDollarEditorBox" class="hidden" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--fb-border)">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
        <div class="field" style="margin:0">
-        <label>ဒီနေ့ လက်ရှိဈေး</label>
+        <label>ဒီနေ့ လက်ရှိဈေး (Platform Base)</label>
         <input id="dollarCurrentInput" type="number" step="0.01" value="4500" />
        </div>
        <div class="field" style="margin:0">
-        <label>အကျဈေး (အနိမ့်ဆုံး)</label>
-        <input id="dollarLowInput" type="number" step="0.01" placeholder="ဥပမာ 4489" />
+        <label>အကျဈေး (ဥပမာ 4490.91)</label>
+        <input id="dollarLowInput" type="number" step="0.01" placeholder="4490.91" />
        </div>
        <div class="field" style="margin:0">
-        <label>အတက်ဈေး (အမြင့်ဆုံး)</label>
-        <input id="dollarHighInput" type="number" step="0.01" placeholder="ဥပမာ 4999" />
+        <label>အတက်ဈေး (ဥပမာ 4799)</label>
+        <input id="dollarHighInput" type="number" step="0.01" placeholder="4799" />
        </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
@@ -943,9 +1090,9 @@ body {
         <div style="position:relative">
          <div id="adminBankPickerBox" class="bank-picker-panel hidden"></div>
          <div class="admin-cs-composer">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="toggleBankPicker('admin')" title="ဘဏ်ကဒ်" data-i18n="btn_bank_card">💳 ဘဏ်ကဒ်</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="toggleBankPicker('admin')" title="ဘဏ်ကဒ်" data-i18n="btn_bank_card">ဘဏ်ကဒ်</button>
           <label class="btn btn-secondary btn-sm" style="cursor:pointer;margin:0" title="Photo">
-           <span data-i18n="btn_photo">📎 ဓာတ်ပုံ</span>
+           <span data-i18n="btn_photo">ဓာတ်ပုံ</span>
            <input type="file" accept="image/*" style="display:none" onchange="handleChatPhotoUpload(event, 'admin')" />
           </label>
           <textarea
@@ -957,7 +1104,7 @@ body {
            onkeydown="handleComposerKeydown(event, 'admin')"
            oninput="handleComposerTyping('admin', this)"
           ></textarea>
-          <button type="button" class="btn btn-primary btn-sm" onclick="sendAdminCsMessage()" data-i18n="btn_send">➤ ပို့မည်</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="sendAdminCsMessage()" data-i18n="btn_send">ပို့မည်</button>
          </div>
         </div>
        </div>
@@ -1090,26 +1237,43 @@ body {
   </section>
  </main>
 
- <!-- Bottom Navigation -->
- <nav class="bottom-nav">
+ <!-- Fixed Bottom Navigation with Monochrome Outline Icons -->
+ <nav class="bottom-nav" aria-label="Bottom Navigation">
   <button type="button" class="active" onclick="showPage('homePage', this)">
-   <span>⌂</span>
+   <svg class="outline-icon" viewBox="0 0 24 24">
+    <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9.5z" />
+   </svg>
    <span data-i18n="nav_home">Home</span>
   </button>
   <button type="button" onclick="showPage('supportPage', this)">
-   <span>☏</span>
+   <svg class="outline-icon" viewBox="0 0 24 24">
+    <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
+    <rect x="2" y="13" width="4" height="6" rx="2" />
+    <rect x="18" y="13" width="4" height="6" rx="2" />
+   </svg>
    <span data-i18n="nav_service">Service</span>
   </button>
   <button type="button" onclick="showPage('bookingPage', this)">
-   <span>▤</span>
+   <svg class="outline-icon" viewBox="0 0 24 24">
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <line x1="8" y1="9" x2="16" y2="9" />
+    <line x1="8" y1="13" x2="16" y2="13" />
+    <line x1="8" y1="17" x2="13" y2="17" />
+   </svg>
    <span data-i18n="nav_task">Task</span>
   </button>
   <button type="button" onclick="showPage('historyPage', this)">
-   <span>◷</span>
+   <svg class="outline-icon" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" />
+    <polyline points="12 7 12 12 15.5 14" />
+   </svg>
    <span data-i18n="nav_history">History</span>
   </button>
   <button type="button" onclick="showPage('profilePage', this)">
-   <span>◯</span>
+   <svg class="outline-icon" viewBox="0 0 24 24">
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 20c0-3.5 3.6-6 8-6s8 2.5 8 6" />
+   </svg>
    <span data-i18n="nav_account">Account</span>
   </button>
  </nav>
@@ -1382,9 +1546,9 @@ body {
   </div>
  </div>
  <script>
-const PROMO_CYCLE_ANCHOR_MS = Date.UTC(2026, 10, 26, 0, 0, 0); // Nov 26, 2026
-const PROMO_CYCLE_DAYS = 3; // 3-day cycle (change to 7 for weekly)
-const PROMO_SLIDE_INTERVAL_MS = 8000; // 8 seconds auto-slide
+const PROMO_CYCLE_ANCHOR_MS = Date.UTC(2026, 10, 26, 0, 0, 0);
+const PROMO_CYCLE_DAYS = 3;
+const PROMO_SLIDE_INTERVAL_MS = 8000;
 const TARGET_HOTEL_TOTAL = 489;
 
 const UNIQUE_HOTEL_PHOTOS = [
@@ -1867,14 +2031,14 @@ setInterval(() => {
 </script>
 <script>
 const STORAGE_KEYS = {
- state: "tb_platform_state_v2",
- session: "tb_platform_session_v2",
- adminAuth: "tb_platform_admin_auth_v2"
+ state: "tb_platform_state_v3",
+ session: "tb_platform_session_v3",
+ adminAuth: "tb_platform_admin_auth_v3"
 };
 
-const DEFAULT_FX_RATE = 4750.0;
-const FX_MIN_BAND = 4489.0;
-const FX_MAX_BAND = 4999.0;
+const DEFAULT_FX_RATE = 4500.0;
+const FX_MIN_BAND = 4490.91;
+const FX_MAX_BAND = 4799.0;
 const FX_BASE_RATE = 4500.0;
 window.FX_MIN_BAND = FX_MIN_BAND;
 window.FX_MAX_BAND = FX_MAX_BAND;
@@ -1911,12 +2075,12 @@ const I18N = {
   hero_sub: "Real-time hotel orders, live currency trend analytics, and instant support.",
   hero_loading: "Featured stay loading...",
   fx_hero_label: "24H Live Exchange Rate",
-  fx_hero_sub: "24-hour live tick stream (Band ~4,489 – 4,999 MMK · Green = Rising, Red = Falling)",
+  fx_hero_sub: "၂ စက္ကန့် အတက်(အစိမ်း)/အကျ(အနီ) · 1D မှ 1Y အထိ ရက်စွဲအလိုက် ကြည့်နိုင်သည်",
   fx_24h_pill: "24H LIVE",
   fx_chart_title: "USD ↔ MMK Live Rate Trend",
-  fx_chart_sub: "24H live ticks · Green on rise, Red on drop",
-  fx_inspect_hint: "Live ticks · Hover/touch to inspect",
-  fx_band_label: "Base: 4,500 · Band: 4,489–4,999 MMK",
+  fx_chart_sub: "၂ စက္ကန့် အတက်/အကျ · ဆွဲကြည့်/ထိကြည့်၍ ရက်စွဲနှင့် တက်/ကျ စစ်ဆေးပါ",
+  fx_inspect_hint: "ဆွဲကြည့်ရန် သို့မဟုတ် ထိကြည့်ပါ (Date & Trend)",
+  fx_band_label: "Base: 4,500 · Dip: 4490.91–4490.99 · Peak: ~4799",
   promo_heading: "🔥 ဟိုတယ် ရှော့စျေးနှင့် ပရိုးမိုးရှင်း ကမ်းလှမ်းချက်များ",
   promo_sub: "၈ စက္ကန့်တစ်ခါ ဘယ်ညာ အလိုအလျောက် ရွေ့သည် · ဘယ်ညာ ဆွဲကြည့်နိုင်သည် · ၃ ရက်တစ်ခါ အစားထိုးပြောင်းလဲသည်",
   hotels_heading: "Featured Hotels (Europe & Asia)",
@@ -1936,10 +2100,10 @@ const I18N = {
   view_btn: "View",
   cs_live_title: "Customer Service Live",
   cs_online_sub: "Online · Direct synchronization with Admin & Support",
-  btn_bank_card: "💳 ဘဏ်ကဒ်",
-  btn_photo: "📎 Photo",
+  btn_bank_card: "ဘဏ်ကဒ်",
+  btn_photo: "ဓာတ်ပုံ",
   support_input_ph: "Type a message or enter amount... (Enter to send, Shift+Enter for new line)",
-  btn_send: "➤ Send",
+  btn_send: "ပို့မည်",
   stat_wallet: "Wallet Balance",
   stat_profit: "Cycle Profit",
   stat_pending_box: "Profit Box (Pending)",
@@ -1976,7 +2140,8 @@ const I18N = {
   adm_placing_order: "Placing Order",
   adm_live_usd: "Live USD Rate",
   adm_rate_sync_title: "Admin Live Dollar Rate Sync",
-  btn_update_rate: "Update Rate",
+  btn_update_rate: "ငွေကြေးပြောင်းမည်",
+  btn_1m_drop: "၁ မိနစ် ထိုးကျထားမည်",
   adm_tab_users: "အသုံးပြုသူများ",
   adm_tab_cs: "ဝန်ဆောင်မှု",
   adm_tab_banks: "ဘဏ်အကောင့်များ",
@@ -2063,12 +2228,12 @@ const I18N = {
   hero_sub: "Real-time hotel orders, live currency trend analytics, and instant support.",
   hero_loading: "Featured stay loading...",
   fx_hero_label: "24H Live Exchange Rate",
-  fx_hero_sub: "24-hour live tick stream (Band ~4,489 – 4,999 MMK · Green = Rising, Red = Falling)",
+  fx_hero_sub: "2s green(rise)/red(fall) pulse · Inspect date & trend from 1D to 1Y",
   fx_24h_pill: "24H LIVE",
   fx_chart_title: "USD ↔ MMK Live Rate Trend",
-  fx_chart_sub: "24H live ticks · Green on rise, Red on drop",
-  fx_inspect_hint: "Live ticks · Hover/touch to inspect",
-  fx_band_label: "Base: 4,500 · Band: 4,489–4,999 MMK",
+  fx_chart_sub: "2s pulse · Drag/hover to inspect date, time & rise/drop",
+  fx_inspect_hint: "Drag or hover to inspect (Date & Trend)",
+  fx_band_label: "Base: 4,500 · Dip: 4490.91–4490.99 · Peak: ~4799",
   promo_heading: "🔥 Hotel Flash Deals & Promotions",
   promo_sub: "Auto-slides every 8s · Drag/swipe left or right · Non-sequential slot swap every 3 days",
   hotels_heading: "Featured Hotels (Europe & Asia)",
@@ -2088,10 +2253,10 @@ const I18N = {
   view_btn: "View",
   cs_live_title: "Customer Service Live",
   cs_online_sub: "Online · Direct synchronization with Admin & Support",
-  btn_bank_card: "💳 Bank Card",
-  btn_photo: "📎 Photo",
+  btn_bank_card: "Bank Card",
+  btn_photo: "Photo",
   support_input_ph: "Type a message or enter amount... (Enter to send, Shift+Enter for new line)",
-  btn_send: "➤ Send",
+  btn_send: "Send",
   stat_wallet: "Wallet Balance",
   stat_profit: "Cycle Profit",
   stat_pending_box: "Profit Box (Pending)",
@@ -2129,6 +2294,7 @@ const I18N = {
   adm_live_usd: "Live USD Rate",
   adm_rate_sync_title: "Admin Live Dollar Rate Sync",
   btn_update_rate: "Update Rate",
+  btn_1m_drop: "1m Drop Hold",
   adm_tab_users: "Users",
   adm_tab_cs: "Customer Service",
   adm_tab_banks: "Bank Accounts",
@@ -2210,7 +2376,7 @@ const I18N = {
   live_badge: "LIVE",
   new_msg_badge: "ข้อความใหม่",
   reg_success_title: "สมัครสมาชิกสำเร็จ",
-  reg_success_sub: "ยินดีต้อนรับสู่ Trip Booking",
+  reg_success_sub: "ยินดีตินรับสู่ Trip Booking",
   hero_title: "Premium Stay & Travel Booking",
   hero_sub: "Real-time hotel orders, live currency trend analytics, and instant support.",
   hero_loading: "กำลังโหลดที่พักแนะนำ...",
@@ -2275,6 +2441,14 @@ function formatMmk(val) {
  return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " MMK";
 }
 
+function formatDateTimeLabel(ts, tf = "1D") {
+ const d = new Date(ts || Date.now());
+ if (tf === "1D") {
+  return d.toLocaleString([], { month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+ }
+ return d.toLocaleDateString([], { year: "numeric", month: "short", day: "2-digit" });
+}
+
 function getCurrentLang() {
  const sel = document.getElementById("language");
  return (sel && I18N[sel.value]) ? sel.value : "my";
@@ -2313,16 +2487,49 @@ function toggleTheme() {
  drawFxChart();
 }
 
+function buildHistoricalSeriesForTimeframe(tf, anchorRate = DEFAULT_FX_RATE) {
+ const now = Date.now();
+ const dayMs = 24 * 60 * 60 * 1000;
+ const configs = {
+  "1D": { count: 48, stepMs: 30 * 60 * 1000, amp: 24 },
+  "1W": { count: 28, stepMs: 6 * 60 * 60 * 1000, amp: 48 },
+  "1M": { count: 30, stepMs: dayMs, amp: 72 },
+  "6M": { count: 45, stepMs: 4 * dayMs, amp: 105 },
+  "1Y": { count: 60, stepMs: 6 * dayMs, amp: 130 }
+ };
+ const cfg = configs[tf] || configs["1D"];
+ const points = [];
+ let cur = Number(anchorRate) || FX_BASE_RATE;
+ const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
+
+ for (let i = cfg.count - 1; i >= 0; i--) {
+  const ts = now - i * cfg.stepMs;
+  const wave = Math.sin(i * 0.63 + tf.length) * (cfg.amp * 0.45) + Math.cos(i * 1.47) * (cfg.amp * 0.35);
+  const randStep = (Math.random() - 0.49) * (cfg.amp * 0.32);
+  let next = cur + wave * 0.14 + randStep;
+  if (i === 0) {
+   next = Number(anchorRate) || cur;
+  }
+  next = Math.max(low, Math.min(high, Number(next.toFixed(2))));
+  const prevRate = points.length ? points[points.length - 1].rate : cur;
+  const dir = next > prevRate ? "up" : next < prevRate ? "down" : "flat";
+  points.push({ ts, rate: next, dir });
+  cur = next;
+ }
+ return points;
+}
+
 function createDefaultState() {
  const now = Date.now();
  const ticks = [];
  let cur = DEFAULT_FX_RATE;
  const minB = Number(window.FX_MIN_BAND || FX_MIN_BAND);
  const maxB = Number(window.FX_MAX_BAND || FX_MAX_BAND);
- for (let i = 35; i >= 0; i--) {
-  const jitter = Math.sin(i * 0.7) * 38 + Math.cos(i * 1.3) * 24;
+ for (let i = 45; i >= 0; i--) {
+  const jitter = Math.sin(i * 0.85) * 28 + Math.cos(i * 1.9) * 19 + (Math.random() - 0.5) * 12;
   cur = Math.max(minB, Math.min(maxB, Number((DEFAULT_FX_RATE + jitter).toFixed(2))));
-  ticks.push({ ts: now - i * 15000, rate: cur });
+  ticks.push({ ts: now - i * 2000, rate: cur, dir: i % 2 === 0 ? "up" : "down" });
  }
  return {
   users: [],
@@ -2338,6 +2545,8 @@ function createDefaultState() {
   ],
   liveRate: DEFAULT_FX_RATE,
   fxTicks: ticks,
+  fxDropHoldUntil: 0,
+  fxDropHoldRate: null,
   typing: {}
  };
 }
@@ -2356,6 +2565,8 @@ let appState = (function loadInitialState() {
     adminBankAccounts: Array.isArray(parsed.adminBankAccounts) ? parsed.adminBankAccounts : [],
     profitTiers: Array.isArray(parsed.profitTiers) && parsed.profitTiers.length ? parsed.profitTiers : base.profitTiers,
     fxTicks: Array.isArray(parsed.fxTicks) && parsed.fxTicks.length ? parsed.fxTicks : base.fxTicks,
+    fxDropHoldUntil: Number(parsed.fxDropHoldUntil) || 0,
+    fxDropHoldRate: parsed.fxDropHoldRate !== undefined ? parsed.fxDropHoldRate : null,
     typing: parsed.typing && typeof parsed.typing === "object" ? parsed.typing : {}
    };
   }
@@ -2367,11 +2578,49 @@ let currentSessionUserId = localStorage.getItem(STORAGE_KEYS.session) || null;
 let isAdminLoggedIn = localStorage.getItem(STORAGE_KEYS.adminAuth) === "1";
 let showAllHotelsFlag = false;
 let heroSlideIndex = 0;
+let activeFxTimeframe = "1D";
+let fxSeriesCache = {};
+let fxScrubIndex = null;
+let fxIsScrubbing = false;
+
+function refreshFxSeriesCache() {
+ const baseRate = Number(appState.liveRate) || FX_BASE_RATE;
+ ["1W", "1M", "6M", "1Y"].forEach((tf) => {
+  fxSeriesCache[tf] = buildHistoricalSeriesForTimeframe(tf, baseRate);
+ });
+}
+
+function getActiveFxPoints() {
+ if (activeFxTimeframe === "1D") {
+  const ticks = Array.isArray(appState.fxTicks) ? appState.fxTicks : [];
+  if (ticks.length >= 2) return ticks;
+ }
+ if (!fxSeriesCache[activeFxTimeframe] || !fxSeriesCache[activeFxTimeframe].length) {
+  fxSeriesCache[activeFxTimeframe] = buildHistoricalSeriesForTimeframe(activeFxTimeframe, appState.liveRate);
+ }
+ return fxSeriesCache[activeFxTimeframe];
+}
+
+function setFxTimeframe(tf) {
+ if (!["1D", "1W", "1M", "6M", "1Y"].includes(tf)) return;
+ activeFxTimeframe = tf;
+ fxScrubIndex = null;
+ ["1D", "1W", "1M", "6M", "1Y"].forEach((k) => {
+  document.getElementById(`fxTf_${k}`)?.classList.toggle("active", k === tf);
+ });
+ const readout = document.getElementById("fxScrubReadout");
+ if (readout) readout.textContent = t("fx_inspect_hint");
+ drawFxChart();
+}
 
 function saveState() {
- try {
-  localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
- } catch (_) {}
+  try {
+    if (typeof appState !== "undefined" && appState) {
+      localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
+    }
+  } catch (err) {
+    console.warn("saveState error:", err);
+  }
 }
 
 function getActiveUser() {
@@ -2490,16 +2739,60 @@ function updateHeroBanner() {
 }
 
 function pushFxTick() {
- const prev = Number(appState.liveRate) || DEFAULT_FX_RATE;
- const step = (Math.random() - 0.48) * 18;
+ const now = Date.now();
+ const prev = Number(appState.liveRate) || FX_BASE_RATE;
  const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
  const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
- const next = Math.max(low, Math.min(high, Number((prev + step).toFixed(2))));
+ let next = prev;
+ let dir = "flat";
+
+ const holdUntil = Number(appState.fxDropHoldUntil) || 0;
+ if (holdUntil > now) {
+  const baseHold = Number(appState.fxDropHoldRate) || Math.max(low, 4490.95);
+  const micro = (Math.random() - 0.5) * 0.08;
+  next = Number(Math.max(low, Math.min(4490.99, baseHold + micro)).toFixed(2));
+  dir = next < prev ? "down" : next > prev ? "up" : "down";
+ } else {
+  if (appState.fxDropHoldUntil) {
+   appState.fxDropHoldUntil = 0;
+   appState.fxDropHoldRate = null;
+  }
+  const modeRoll = Math.random();
+  let delta = 0;
+  if (modeRoll < 0.14 && prev > low + 1) {
+   const cents = (91 + Math.floor(Math.random() * 9)) / 100;
+   const targetDrop = Math.max(low, Math.min(prev - 0.5, 4490 + cents));
+   delta = targetDrop - prev;
+  } else if (modeRoll > 0.84 && prev < high - 5) {
+   const jumpSpan = Math.min(high - prev, 18 + Math.random() * 48);
+   delta = (0.35 + Math.random() * 0.65) * jumpSpan;
+  } else {
+   const irregularWave = Math.sin(now * 0.0017) * 9 + Math.cos(now * 0.0041) * 7;
+   delta = irregularWave + (Math.random() - 0.49) * 14;
+  }
+  next = Number(Math.max(low, Math.min(high, prev + delta)).toFixed(2));
+  dir = next > prev ? "up" : next < prev ? "down" : (Math.random() >= 0.5 ? "up" : "down");
+ }
+
  appState.liveRate = next;
- appState.fxTicks.push({ ts: Date.now(), rate: next });
- if (appState.fxTicks.length > 60) {
+ appState.fxTicks.push({ ts: now, rate: next, dir });
+ if (appState.fxTicks.length > 75) {
   appState.fxTicks.shift();
  }
+ if (fxSeriesCache["1W"]?.length) {
+  fxSeriesCache["1W"][fxSeriesCache["1W"].length - 1] = { ts: now, rate: next, dir };
+ }
+ if (fxSeriesCache["1M"]?.length) {
+  fxSeriesCache["1M"][fxSeriesCache["1M"].length - 1] = { ts: now, rate: next, dir };
+ }
+ if (fxSeriesCache["6M"]?.length) {
+  fxSeriesCache["6M"][fxSeriesCache["6M"].length - 1] = { ts: now, rate: next, dir };
+ }
+ if (fxSeriesCache["1Y"]?.length) {
+  fxSeriesCache["1Y"][fxSeriesCache["1Y"].length - 1] = { ts: now, rate: next, dir };
+ }
+
+ updateDropHoldBanner();
  saveState();
  updateFxDisplay();
  drawFxChart();
@@ -2538,8 +2831,20 @@ function updateFxDisplay() {
   admSum.textContent = `ဒီနေ့ဒေါ်လာ: ${formatMmk(cur)} · အကျဈေး: ${low} · အတက်ဈေး: ${high}`;
  }
  if (formulaEl) {
-  formulaEl.textContent = `Base: ${FX_BASE_RATE.toLocaleString("en-US")} · Band: ${low.toLocaleString("en-US")}–${high.toLocaleString("en-US")} MMK`;
+  formulaEl.textContent = `Base: ${cur.toLocaleString("en-US")} · Dip: ${low}–4490.99 · Peak: ~${high}`;
  }
+}
+
+function updateScrubReadout(points, idx) {
+ const readout = document.getElementById("fxScrubReadout");
+ if (!readout || !Array.isArray(points) || !points.length) return;
+ const safeIdx = Math.max(0, Math.min(points.length - 1, idx));
+ const pt = points[safeIdx];
+ const prevPt = safeIdx > 0 ? points[safeIdx - 1] : pt;
+ const diff = Number((pt.rate - prevPt.rate).toFixed(2));
+ const trendWord = diff > 0 ? "တက်ခဲ့သည် ▲" : diff < 0 ? "ကျခဲ့သည် ▼" : "တည်ငြိမ် ─";
+ const dateStr = formatDateTimeLabel(pt.ts, activeFxTimeframe);
+ readout.textContent = `${dateStr} · ${formatMmk(pt.rate)} · ${trendWord} (${diff >= 0 ? "+" : ""}${diff.toFixed(2)})`;
 }
 
 function drawFxChart() {
@@ -2563,47 +2868,141 @@ function drawFxChart() {
 
  const lowBand = Number(window.FX_MIN_BAND || FX_MIN_BAND);
  const highBand = Number(window.FX_MAX_BAND || FX_MAX_BAND);
+ const points = getActiveFxPoints();
 
- const ticks = Array.isArray(appState.fxTicks) && appState.fxTicks.length >= 2
-  ? appState.fxTicks
-  : [{ rate: lowBand }, { rate: appState.liveRate || DEFAULT_FX_RATE }];
-
- const minR = Math.min(lowBand, ...ticks.map((x) => Number(x.rate) || DEFAULT_FX_RATE));
- const maxR = Math.max(highBand, ...ticks.map((x) => Number(x.rate) || DEFAULT_FX_RATE));
+ const rates = points.map((x) => Number(x.rate) || FX_BASE_RATE);
+ const minR = Math.min(lowBand, ...rates);
+ const maxR = Math.max(highBand, ...rates);
  const span = Math.max(1, maxR - minR);
 
- const padX = 12;
- const padY = 16;
+ const padX = 14;
+ const padY = 20;
  const plotW = Math.max(10, w - padX * 2);
  const plotH = Math.max(10, h - padY * 2);
 
- ctx.strokeStyle = document.body.classList.contains("dark") ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+ const isDark = document.body.classList.contains("dark");
+ ctx.strokeStyle = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
  ctx.lineWidth = 1;
- for (let g = 0; g <= 3; g++) {
-  const gy = padY + (plotH * g) / 3;
+ for (let g = 0; g <= 4; g++) {
+  const gy = padY + (plotH * g) / 4;
   ctx.beginPath();
   ctx.moveTo(padX, gy);
   ctx.lineTo(w - padX, gy);
   ctx.stroke();
  }
 
- for (let i = 1; i < ticks.length; i++) {
-  const prevR = Number(ticks[i - 1].rate) || DEFAULT_FX_RATE;
-  const currR = Number(ticks[i].rate) || DEFAULT_FX_RATE;
-  const x1 = padX + ((i - 1) / (ticks.length - 1)) * plotW;
-  const y1 = padY + (1 - (prevR - minR) / span) * plotH;
-  const x2 = padX + (i / (ticks.length - 1)) * plotW;
-  const y2 = padY + (1 - (currR - minR) / span) * plotH;
+ const coords = points.map((pt, i) => {
+  const x = padX + (points.length > 1 ? (i / (points.length - 1)) * plotW : 0);
+  const y = padY + (1 - ((Number(pt.rate) || FX_BASE_RATE) - minR) / span) * plotH;
+  return { x, y, pt };
+ });
 
+ const lastRate = Number(points[points.length - 1]?.rate) || FX_BASE_RATE;
+ const prevRate = Number(points[Math.max(0, points.length - 2)]?.rate) || lastRate;
+ const areaIsUp = lastRate >= prevRate;
+
+ if (coords.length >= 2) {
+  const grad = ctx.createLinearGradient(0, padY, 0, h - padY);
+  if (areaIsUp) {
+   grad.addColorStop(0, "rgba(47, 179, 68, 0.28)");
+   grad.addColorStop(1, "rgba(47, 179, 68, 0.01)");
+  } else {
+   grad.addColorStop(0, "rgba(248, 81, 73, 0.28)");
+   grad.addColorStop(1, "rgba(248, 81, 73, 0.01)");
+  }
   ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.strokeStyle = currR >= prevR ? "#2fb344" : "#f85149";
-  ctx.lineWidth = 2.4;
+  ctx.moveTo(coords[0].x, h - padY);
+  coords.forEach((c) => ctx.lineTo(c.x, c.y));
+  ctx.lineTo(coords[coords.length - 1].x, h - padY);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+ }
+
+ for (let i = 1; i < coords.length; i++) {
+  const c1 = coords[i - 1];
+  const c2 = coords[i];
+  const r1 = Number(c1.pt.rate) || FX_BASE_RATE;
+  const r2 = Number(c2.pt.rate) || FX_BASE_RATE;
+  ctx.beginPath();
+  ctx.moveTo(c1.x, c1.y);
+  ctx.lineTo(c2.x, c2.y);
+  ctx.strokeStyle = r2 >= r1 ? "#2fb344" : "#f85149";
+  ctx.lineWidth = 2.3;
   ctx.stroke();
  }
 
+ if (fxScrubIndex !== null && coords[fxScrubIndex]) {
+  const sc = coords[fxScrubIndex];
+  ctx.save();
+  ctx.strokeStyle = isDark ? "rgba(231, 237, 245, 0.45)" : "rgba(28, 30, 33, 0.35)";
+  ctx.setLineDash([4, 4]);
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(sc.x, padY);
+  ctx.lineTo(sc.x, h - padY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.beginPath();
+  ctx.arc(sc.x, sc.y, 4.5, 0, Math.PI * 2);
+  ctx.fillStyle = "#1877f2";
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#ffffff";
+  ctx.stroke();
+  ctx.restore();
+ }
+
+ if (coords.length) {
+  ctx.fillStyle = isDark ? "#9aa7b8" : "#65676b";
+  ctx.font = "11px sans-serif";
+  ctx.textAlign = "left";
+  ctx.fillText(formatDateTimeLabel(coords[0].pt.ts, activeFxTimeframe), padX, h - 4);
+  ctx.textAlign = "right";
+  ctx.fillText(formatDateTimeLabel(coords[coords.length - 1].pt.ts, activeFxTimeframe), w - padX, h - 4);
+ }
+
  ctx.restore();
+}
+
+function bindFxChartScrubEvents() {
+ const canvas = document.getElementById("fxLiveCanvas");
+ if (!canvas || canvas.dataset.scrubBound === "1") return;
+ canvas.dataset.scrubBound = "1";
+
+ const updateFromClientX = (clientX) => {
+  const rect = canvas.getBoundingClientRect();
+  const points = getActiveFxPoints();
+  if (!rect.width || !points.length) return;
+  const padX = 14;
+  const plotW = Math.max(10, rect.width - padX * 2);
+  const rel = Math.max(0, Math.min(1, (clientX - rect.left - padX) / plotW));
+  fxScrubIndex = Math.round(rel * (points.length - 1));
+  updateScrubReadout(points, fxScrubIndex);
+  drawFxChart();
+ };
+
+ canvas.addEventListener("pointerdown", (e) => {
+  fxIsScrubbing = true;
+  updateFromClientX(e.clientX);
+ });
+ canvas.addEventListener("pointermove", (e) => {
+  if (fxIsScrubbing || e.pointerType === "mouse") {
+   updateFromClientX(e.clientX);
+  }
+ });
+ window.addEventListener("pointerup", () => {
+  fxIsScrubbing = false;
+ });
+ canvas.addEventListener("pointerleave", () => {
+  if (!fxIsScrubbing) {
+   fxScrubIndex = null;
+   const readout = document.getElementById("fxScrubReadout");
+   if (readout) readout.textContent = t("fx_inspect_hint");
+   drawFxChart();
+  }
+ });
 }
 
 function openModal(id) {
@@ -2644,6 +3043,7 @@ let editingAdminBankAccountId = null;
 let editingProfitTierIndex = null;
 let toastHideTimer = null;
 let regToastHideTimer = null;
+let dropHoldCountdownTimer = null;
 
 function nowTimeStr() {
  const d = new Date();
@@ -3353,15 +3753,29 @@ function handleChatPhotoUpload(event, role) {
  reader.readAsDataURL(file);
  event.target.value = "";
 }
+</script>
+<script>
+function syncAdminVisibility() {
+ const gate = document.getElementById("adminLoginGate");
+ const consoleEl = document.getElementById("adminConsole");
+ if (isAdminLoggedIn) {
+  gate?.classList.add("hidden");
+  consoleEl?.classList.remove("hidden");
+ } else {
+  consoleEl?.classList.add("hidden");
+  gate?.classList.remove("hidden");
+ }
+}
 
 function verifyAdminStep1() {
- const ph = (document.getElementById("adminPhoneInput")?.value || "").trim();
- const pw = document.getElementById("adminPassInput")?.value || "";
+ const phone = (document.getElementById("adminPhoneInput")?.value || "").trim();
+ const pass = document.getElementById("adminPassInput")?.value || "";
  const errEl = document.getElementById("adminLoginErr");
- if (ph === DEFAULT_ADMIN_CREDS.phone && pw === DEFAULT_ADMIN_CREDS.pass) {
+ if (phone === DEFAULT_ADMIN_CREDS.phone && pass === DEFAULT_ADMIN_CREDS.pass) {
   if (errEl) errEl.textContent = "";
   document.getElementById("adminStep1Box")?.classList.add("hidden");
   document.getElementById("adminStep2Box")?.classList.remove("hidden");
+  document.getElementById("adminPinInput")?.focus();
  } else {
   if (errEl) errEl.textContent = "Invalid admin phone or password.";
  }
@@ -3370,6 +3784,8 @@ function verifyAdminStep1() {
 function backToAdminStep1() {
  document.getElementById("adminStep2Box")?.classList.add("hidden");
  document.getElementById("adminStep1Box")?.classList.remove("hidden");
+ const pinErr = document.getElementById("adminPinErr");
+ if (pinErr) pinErr.textContent = "";
 }
 
 function completeAdminLogin() {
@@ -3382,186 +3798,220 @@ function completeAdminLogin() {
   syncAdminVisibility();
   renderAdminAll();
  } else {
-  if (errEl) errEl.textContent = "Invalid 4-digit security PIN.";
+  if (errEl) errEl.textContent = "Invalid 4-digit PIN.";
  }
 }
 
 function logoutAdmin() {
  isAdminLoggedIn = false;
  localStorage.removeItem(STORAGE_KEYS.adminAuth);
+ document.getElementById("adminStep2Box")?.classList.add("hidden");
+ document.getElementById("adminStep1Box")?.classList.remove("hidden");
  syncAdminVisibility();
-}
-
-function syncAdminVisibility() {
- const gate = document.getElementById("adminLoginGate");
- const consoleEl = document.getElementById("adminConsole");
- if (isAdminLoggedIn) {
-  gate?.classList.add("hidden");
-  consoleEl?.classList.remove("hidden");
- } else {
-  gate?.classList.remove("hidden");
-  consoleEl?.classList.add("hidden");
- }
 }
 
 function switchAdminTab(tabName) {
  const tabs = ["users", "cs", "banks", "tiers", "hotels"];
- tabs.forEach((tKey) => {
-  const cap = tKey.charAt(0).toUpperCase() + tKey.slice(1);
-  document.getElementById(`admin${cap}Tab`)?.classList.toggle("hidden", tKey !== tabName);
-  const btn = document.getElementById(`adminTab${cap}`);
-  if (btn) {
-   btn.className = `btn btn-sm ${tKey === tabName ? "btn-primary" : "btn-secondary"}`;
-  }
+ tabs.forEach((k) => {
+  const cap = k.charAt(0).toUpperCase() + k.slice(1);
+  document.getElementById(`adminTab${cap}`)?.classList.toggle("btn-primary", k === tabName);
+  document.getElementById(`adminTab${cap}`)?.classList.toggle("btn-secondary", k !== tabName);
+  document.getElementById(`admin${cap}Tab`)?.classList.toggle("hidden", k !== tabName);
  });
  if (tabName === "users") renderAdminUsers();
- if (tabName === "cs") renderAdminCsList();
+ if (tabName === "cs") renderAdminCsAll();
  if (tabName === "banks") renderAdminBanksTab();
- if (tabName === "tiers") renderAdminProfitTiers();
+ if (tabName === "tiers") renderProfitTiersTable();
  if (tabName === "hotels") renderAdminHotels();
 }
 
+function toggleAdminDollarEditor() {
+ const box = document.getElementById("adminDollarEditorBox");
+ const curInp = document.getElementById("dollarCurrentInput");
+ const lowInp = document.getElementById("dollarLowInput");
+ const highInp = document.getElementById("dollarHighInput");
+ if (curInp) curInp.value = String(Number(appState.liveRate) || FX_BASE_RATE);
+ if (lowInp) lowInp.value = String(Number(window.FX_MIN_BAND || FX_MIN_BAND));
+ if (highInp) highInp.value = String(Number(window.FX_MAX_BAND || FX_MAX_BAND));
+ box?.classList.toggle("hidden");
+}
+
+function settleDollarBand() {
+ const lowInp = document.getElementById("dollarLowInput");
+ const highInp = document.getElementById("dollarHighInput");
+ const curInp = document.getElementById("dollarCurrentInput");
+ const lowVal = Number(lowInp?.value);
+ const highVal = Number(highInp?.value);
+ if (!Number.isNaN(lowVal) && lowVal >= 100 && lowVal < 50000) {
+  window.FX_MIN_BAND = Number(lowVal.toFixed(2));
+ }
+ if (!Number.isNaN(highVal) && highVal >= 100 && highVal <= 50000 && highVal > Number(window.FX_MIN_BAND)) {
+  window.FX_MAX_BAND = Number(highVal.toFixed(2));
+ }
+ if (curInp) {
+  const cVal = Number(curInp.value);
+  if (!Number.isNaN(cVal) && cVal >= 100 && cVal <= 50000) {
+   appState.liveRate = Number(cVal.toFixed(2));
+  }
+ }
+ refreshFxSeriesCache();
+ saveState();
+ updateFxDisplay();
+ drawFxChart();
+ showCenterRoundedAlert("Settle Updated", `Band settled (${window.FX_MIN_BAND} – ${window.FX_MAX_BAND})`);
+}
+
+function confirmDollarBand() {
+ settleDollarBand();
+ document.getElementById("adminDollarEditorBox")?.classList.add("hidden");
+ showCenterRoundedAlert("Rate Confirmed", `Platform rate is now ${formatMmk(appState.liveRate)}`);
+}
+
+function adminUpdateLiveRate() {
+ const inp = document.getElementById("adminFxRateInput");
+ const val = Number(inp?.value);
+ if (!val || Number.isNaN(val) || val < 100 || val > 50000) {
+  showCenterRoundedAlert("Invalid Rate", "Please enter a valid rate between 100 and 50000.", true);
+  return;
+ }
+ appState.fxDropHoldUntil = 0;
+ appState.fxDropHoldRate = null;
+ appState.liveRate = Number(val.toFixed(2));
+ appState.fxTicks.push({ ts: Date.now(), rate: appState.liveRate, dir: "up" });
+ if (appState.fxTicks.length > 75) appState.fxTicks.shift();
+ refreshFxSeriesCache();
+ updateDropHoldBanner();
+ saveState();
+ updateFxDisplay();
+ drawFxChart();
+ if (inp) inp.value = "";
+ showCenterRoundedAlert("Rate Updated", `ဒီနေ့ဒေါ်လာ: ${formatMmk(appState.liveRate)}`);
+}
+
+function triggerOneMinuteDropHold() {
+ const now = Date.now();
+ const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
+ const cents = (91 + Math.floor(Math.random() * 9)) / 100;
+ const holdRate = Number(Math.max(low, 4490 + cents).toFixed(2));
+ appState.fxDropHoldUntil = now + 60 * 1000;
+ appState.fxDropHoldRate = holdRate;
+ appState.liveRate = holdRate;
+ appState.fxTicks.push({ ts: now, rate: holdRate, dir: "down" });
+ if (appState.fxTicks.length > 75) appState.fxTicks.shift();
+ refreshFxSeriesCache();
+ updateDropHoldBanner();
+ saveState();
+ updateFxDisplay();
+ drawFxChart();
+ showCenterRoundedAlert("၁ မိနစ် ထိုးကျထားမှု စတင်ပြီ", `အကျဈေး ${formatMmk(holdRate)} ဝန်းကျင်တွင် ၁ မိနစ် ထိန်းထားပါမည်။`, true);
+}
+
+function updateDropHoldBanner() {
+ const statusEl = document.getElementById("adminDropHoldStatus");
+ if (!statusEl) return;
+ const remMs = (Number(appState.fxDropHoldUntil) || 0) - Date.now();
+ if (remMs > 0) {
+  const sec = Math.ceil(remMs / 1000);
+  const r = Number(appState.fxDropHoldRate || appState.liveRate).toFixed(2);
+  statusEl.classList.remove("hidden");
+  statusEl.textContent = `၁ မိနစ် ထိုးကျထားမှု လုပ်ဆောင်နေသည် · ကျန်ချိန် ${sec}s · ဈေးနှုန်း ${r} MMK`;
+ } else {
+  statusEl.classList.add("hidden");
+  statusEl.textContent = "";
+ }
+}
+
 function handleReeschAdmin() {
+ saveState();
  renderAdminAll();
  showCenterRoundedAlert("Refreshed", "Admin console data synchronized.");
 }
 
 function saveAllAdminChanges() {
  saveState();
- syncAllUI();
+ renderAdminAll();
  showCenterRoundedAlert("Saved", "All changes saved.");
 }
 
-function adminUpdateLiveRate() {
- const val = Number(document.getElementById("adminFxRateInput")?.value || 0);
- const low = Number(window.FX_MIN_BAND || FX_MIN_BAND);
- const high = Number(window.FX_MAX_BAND || FX_MAX_BAND);
- if (!val || val < low || val > high) {
-  showCenterRoundedAlert("Rate Out of Band", `Enter rate between ${low} and ${high} MMK.`, true);
-  return;
- }
- appState.liveRate = Number(val.toFixed(2));
- appState.fxTicks.push({ ts: Date.now(), rate: appState.liveRate });
- if (appState.fxTicks.length > 60) appState.fxTicks.shift();
- saveState();
- updateFxDisplay();
- drawFxChart();
- showCenterRoundedAlert("Rate Updated", `1 USD = ${formatMmk(appState.liveRate)}`);
-}
-
-function toggleAdminDollarEditor() {
- const box = document.getElementById("adminDollarEditorBox");
- const curIn = document.getElementById("dollarCurrentInput");
- const lowIn = document.getElementById("dollarLowInput");
- const highIn = document.getElementById("dollarHighInput");
- if (curIn) curIn.value = String(appState.liveRate || 4500);
- if (lowIn) lowIn.value = String(window.FX_MIN_BAND || FX_MIN_BAND);
- if (highIn) highIn.value = String(window.FX_MAX_BAND || FX_MAX_BAND);
- box?.classList.toggle("hidden");
-}
-
-function settleDollarBand() {
- const cur = Number(document.getElementById("dollarCurrentInput")?.value || 4500);
- const low = Number(document.getElementById("dollarLowInput")?.value || FX_MIN_BAND);
- const high = Number(document.getElementById("dollarHighInput")?.value || FX_MAX_BAND);
- if (low > high) {
-  showCenterRoundedAlert("သတိပေးချက်", "အကျဈေးသည် အတက်ဈေးထက် ကျော်လွန်၍ မရပါ။", true);
-  return;
- }
- const clampedCur = Math.min(high, Math.max(low, cur));
- const curEl = document.getElementById("dollarCurrentInput");
- if (curEl) curEl.value = String(clampedCur);
- showCenterRoundedAlert("တည်ဖြတ်ပြီးပါပြီ", `လက်ရှိဈေး: ${clampedCur} · အကျဈေး: ${low} · အတက်ဈေး: ${high}`);
-}
-
-function confirmDollarBand() {
- const cur = Number(document.getElementById("dollarCurrentInput")?.value || 4500);
- const low = Number(document.getElementById("dollarLowInput")?.value || FX_MIN_BAND);
- const high = Number(document.getElementById("dollarHighInput")?.value || FX_MAX_BAND);
- if (!cur || !low || !high || low > high) {
-  showCenterRoundedAlert("သတိပေးချက်", "ဈေးနှုန်းများကို မှန်ကန်စွာ ထည့်ပါ။", true);
-  return;
- }
- window.FX_MIN_BAND = low;
- window.FX_MAX_BAND = high;
- appState.liveRate = Math.min(high, Math.max(low, cur));
- appState.fxTicks.push({ ts: Date.now(), rate: appState.liveRate });
- if (appState.fxTicks.length > 60) appState.fxTicks.shift();
- saveState();
- updateFxDisplay();
- drawFxChart();
- showCenterRoundedAlert("အတည်ပြုပြီးပါပြီ", `1 USD = ${formatMmk(appState.liveRate)} (${low} – ${high} MMK)`);
-}
-
-function renderAdminAll() {
+function renderAdminStats() {
  const totalEl = document.getElementById("statTotalUsers");
  const onlineEl = document.getElementById("statOnlineUsers");
  const placingEl = document.getElementById("statPlacingUsers");
- const countBadge = document.getElementById("adminUsersCountBadge");
+ const badgeEl = document.getElementById("adminUsersCountBadge");
+ const bannerEl = document.getElementById("adminLiveOrderBanner");
 
  const users = appState.users || [];
- if (totalEl) totalEl.textContent = String(users.length);
- if (onlineEl) onlineEl.textContent = String(users.filter((u) => u.online).length);
- if (placingEl) placingEl.textContent = String(users.filter((u) => u.isPlacingOrder).length);
- if (countBadge) countBadge.textContent = `${users.length} Users`;
+ const onlineUsers = users.filter((u) => !!u.online);
+ const placingUsers = users.filter((u) => !!u.isPlacingOrder);
 
- renderAdminUsers();
- renderAdminCsList();
- renderAdminBanksTab();
- renderAdminProfitTiers();
- renderAdminHotels();
+ if (totalEl) totalEl.textContent = String(users.length);
+ if (onlineEl) onlineEl.textContent = String(onlineUsers.length);
+ if (placingEl) placingEl.textContent = String(placingUsers.length);
+ if (badgeEl) badgeEl.textContent = `${users.length} Users`;
+
+ if (bannerEl) {
+  if (placingUsers.length > 0) {
+   bannerEl.classList.remove("hidden");
+   bannerEl.textContent = `Placing Order: ${placingUsers.map((u) => u.name).join(", ")}`;
+  } else {
+   bannerEl.classList.add("hidden");
+  }
+ }
 }
 
 function renderAdminUsers() {
  const tbody = document.getElementById("adminUsersRows");
  if (!tbody) return;
+
  const q = (document.getElementById("adminUserSearch")?.value || "").trim().toLowerCase();
  const flt = document.getElementById("adminUserFilter")?.value || "all";
 
- let list = (appState.users || []).slice();
+ let users = (appState.users || []).slice();
  if (q) {
-  list = list.filter((u) =>
+  users = users.filter((u) =>
    (u.name || "").toLowerCase().includes(q) ||
    (u.phone || "").toLowerCase().includes(q) ||
    (u.email || "").toLowerCase().includes(q)
   );
  }
- if (flt === "online") list = list.filter((u) => u.online);
- if (flt === "live_order") list = list.filter((u) => u.isPlacingOrder);
- if (flt === "negative") list = list.filter((u) => (Number(u.negativeAmount) || 0) > 0 || u.suspended);
- if (flt === "has_rules") list = list.filter((u) => Array.isArray(u.catchRules) && u.catchRules.some((r) => !r.used));
- if (flt === "banned") list = list.filter((u) => u.banned);
+ if (flt === "online") users = users.filter((u) => !!u.online);
+ if (flt === "live_order") users = users.filter((u) => !!u.isPlacingOrder);
+ if (flt === "negative") users = users.filter((u) => (Number(u.negativeAmount) || 0) > 0 || !!u.suspended);
+ if (flt === "has_rules") users = users.filter((u) => Array.isArray(u.catchRules) && u.catchRules.some((r) => !r.used));
+ if (flt === "banned") users = users.filter((u) => !!u.banned);
 
- tbody.innerHTML = list.map((u) => {
-  const activeRulesCount = Array.isArray(u.catchRules) ? u.catchRules.filter((r) => !r.used).length : 0;
+ if (!users.length) {
+  tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center">No matching users.</td></tr>`;
+  return;
+ }
+
+ tbody.innerHTML = users.map((u) => {
+  const activeRules = (u.catchRules || []).filter((r) => !r.used);
+  const rulesSummary = activeRules.length
+   ? activeRules.map((r) => `#${r.orderNum} (-$${r.negAmount || 0}, +$${r.profit || 0})`).join(", ")
+   : "-";
   return `
    <tr>
     <td>
      <strong>${escapeHtml(u.name)}</strong><br/>
-     <span class="small muted">${escapeHtml(u.phone || u.email || "-")} · PW: ${escapeHtml(u.password || "-")}</span>
+     <span class="small muted">${escapeHtml(u.phone || u.email || "")}</span><br/>
+     <span class="small muted">PW: ${escapeHtml(u.password || "")}</span>
+    </td>
+    <td><input id="admBal_${u.id}" type="number" step="0.01" class="mini-input" value="${Number(u.balance || 0).toFixed(2)}" /></td>
+    <td><input id="admNeg_${u.id}" type="number" step="0.01" class="mini-input" value="${Number(u.negativeAmount || 0).toFixed(2)}" /></td>
+    <td><input id="admBox_${u.id}" type="number" step="0.01" class="mini-input" value="${Number(u.profitBox || 0).toFixed(2)}" /></td>
+    <td><span class="small">${escapeHtml(rulesSummary)}</span></td>
+    <td><span class="small">${Number(u.completedOrders || 0)}/30</span></td>
+    <td>
+     <span class="status-pill ${u.online ? "pill-online" : "pill-offline"}">${u.online ? "Online" : "Offline"}</span>
+     ${u.banned ? `<span class="status-pill pill-warn">Banned</span>` : ""}
     </td>
     <td>
-     <input id="admBal_${u.id}" type="number" step="0.01" class="mini-input" value="${Number(u.balance || 0).toFixed(2)}" />
-    </td>
-    <td>
-     <input id="admNeg_${u.id}" type="number" step="0.01" class="mini-input" value="${Number(u.negativeAmount || 0).toFixed(2)}" />
-    </td>
-    <td>
-     <input id="admBox_${u.id}" type="number" step="0.01" class="mini-input" value="${Number(u.profitBox || 0).toFixed(2)}" />
-    </td>
-    <td>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="openAutoCatchModal('${u.id}')">Catch (${activeRulesCount})</button>
-    </td>
-    <td>${Number(u.completedOrders || 0)}/30</td>
-    <td>
-     <span class="status-pill ${u.banned ? "pill-warn" : u.online ? "pill-online" : "pill-offline"}">
-      ${u.banned ? "Banned" : u.online ? "Online" : "Offline"}
-     </span>
-    </td>
-    <td style="white-space:nowrap">
-     <button type="button" class="btn btn-primary btn-xs" onclick="adminSaveUserRow('${u.id}')">Save</button>
-     <button type="button" class="btn btn-secondary btn-xs" onclick="adminToggleSuspend('${u.id}')">${u.suspended ? "Unsuspend" : "Suspend"}</button>
-     <button type="button" class="btn btn-danger btn-xs" onclick="adminToggleBan('${u.id}')">${u.banned ? "Unban" : "Ban"}</button>
+     <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <button type="button" class="btn btn-primary btn-xs" onclick="adminSaveUserRow('${u.id}')">Save</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="openAutoCatchModal('${u.id}')">Catch</button>
+      <button type="button" class="btn btn-danger btn-xs" onclick="adminToggleBanUser('${u.id}')">${u.banned ? "Unban" : "Ban"}</button>
+     </div>
     </td>
    </tr>
   `;
@@ -3569,142 +4019,149 @@ function renderAdminUsers() {
 }
 
 function adminSaveUserRow(userId) {
- const u = (appState.users || []).find((x) => x.id === userId);
+ const u = appState.users.find((x) => x.id === userId);
  if (!u) return;
- u.balance = Number(document.getElementById(`admBal_${userId}`)?.value ?? u.balance);
- u.negativeAmount = Number(document.getElementById(`admNeg_${userId}`)?.value ?? u.negativeAmount);
- u.profitBox = Number(document.getElementById(`admBox_${userId}`)?.value ?? u.profitBox);
+ const bal = Number(document.getElementById(`admBal_${userId}`)?.value);
+ const neg = Number(document.getElementById(`admNeg_${userId}`)?.value);
+ const box = Number(document.getElementById(`admBox_${userId}`)?.value);
+ if (!Number.isNaN(bal)) u.balance = Number(bal.toFixed(2));
+ if (!Number.isNaN(neg)) u.negativeAmount = Number(Math.max(0, neg).toFixed(2));
+ if (!Number.isNaN(box)) u.profitBox = Number(Math.max(0, box).toFixed(2));
  saveState();
- syncAllUI();
+ renderAdminAll();
  showCenterRoundedAlert("Saved", `Updated ${u.name}.`);
 }
 
-function adminToggleSuspend(userId) {
- const u = (appState.users || []).find((x) => x.id === userId);
- if (!u) return;
- u.suspended = !u.suspended;
- u.suspendReason = u.suspended ? "Suspended by administrator." : "";
- saveState();
- renderAdminUsers();
- syncAllUI();
-}
-
-function adminToggleBan(userId) {
- const u = (appState.users || []).find((x) => x.id === userId);
+function adminToggleBanUser(userId) {
+ const u = appState.users.find((x) => x.id === userId);
  if (!u) return;
  u.banned = !u.banned;
  saveState();
  renderAdminUsers();
- syncAllUI();
 }
 
 function openAutoCatchModal(userId) {
- const u = (appState.users || []).find((x) => x.id === userId);
+ const u = appState.users.find((x) => x.id === userId);
  if (!u) return;
- document.getElementById("autoCatchModal")?.setAttribute("data-target-user", userId);
- const meta = document.getElementById("autoCatchUserMeta");
- if (meta) meta.textContent = `User: ${u.name} (${u.id}) · Current Order: ${u.completedOrders || 0}/30`;
- renderAutoCatchRules(u);
+ openAutoCatchModal.targetUserId = userId;
+ const titleEl = document.getElementById("autoCatchTitle");
+ const metaEl = document.getElementById("autoCatchUserMeta");
+ const errEl = document.getElementById("autoCatchErr");
+ if (titleEl) titleEl.textContent = `အော်ဒါဖမ်းယူခြင်း — ${u.name}`;
+ if (metaEl) metaEl.textContent = `Balance: ${formatMoney(u.balance)} · Orders: ${u.completedOrders || 0}/30`;
+ if (errEl) errEl.textContent = "";
+ renderAutoCatchRulesTable(u);
  openModal("autoCatchModal");
 }
 
 function confirmAutoCatchRule() {
- const userId = document.getElementById("autoCatchModal")?.getAttribute("data-target-user");
- const u = (appState.users || []).find((x) => x.id === userId);
+ const userId = openAutoCatchModal.targetUserId;
+ const u = appState.users.find((x) => x.id === userId);
  if (!u) return;
- const orderNum = Number(document.getElementById("catchOrderNumInput")?.value || 0);
+ const orderNum = Number(document.getElementById("catchOrderNumInput")?.value);
  const negAmount = Number(document.getElementById("catchNegInput")?.value || 0);
  const profit = Number(document.getElementById("catchProfitInput")?.value || 0);
  const errEl = document.getElementById("autoCatchErr");
 
  if (!orderNum || orderNum < 1 || orderNum > 30) {
-  if (errEl) errEl.textContent = "Order number must be between 1 and 30.";
+  if (errEl) errEl.textContent = "Enter order number between 1 and 30.";
   return;
  }
- if (errEl) errEl.textContent = "";
+
  u.catchRules = u.catchRules || [];
  u.catchRules.push({
-  id: "RULE-" + Date.now().toString(36),
+  id: "RUL-" + Date.now().toString(36),
   orderNum,
-  negAmount,
-  profit,
+  negAmount: Math.max(0, negAmount),
+  profit: Math.max(0, profit),
   used: false
  });
  saveState();
- renderAutoCatchRules(u);
+ renderAutoCatchRulesTable(u);
  renderAdminUsers();
 }
 
-function renderAutoCatchRules(u) {
+function deleteAutoCatchRule(userId, ruleId) {
+ const u = appState.users.find((x) => x.id === userId);
+ if (!u || !Array.isArray(u.catchRules)) return;
+ u.catchRules = u.catchRules.filter((r) => r.id !== ruleId);
+ saveState();
+ renderAutoCatchRulesTable(u);
+ renderAdminUsers();
+}
+
+function renderAutoCatchRulesTable(u) {
  const tbody = document.getElementById("autoCatchRulesRows");
  if (!tbody) return;
- const rules = Array.isArray(u.catchRules) ? u.catchRules : [];
- tbody.innerHTML = rules.map((r, idx) => `
+ const rules = u.catchRules || [];
+ if (!rules.length) {
+  tbody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center">No catch rules set.</td></tr>`;
+  return;
+ }
+ tbody.innerHTML = rules.map((r, i) => `
   <tr>
-   <td>${idx + 1}</td>
+   <td>${i + 1}</td>
    <td>#${r.orderNum}</td>
-   <td>${formatMoney(r.negAmount || 0)}</td>
-   <td>${formatMoney(r.profit || 0)}</td>
-   <td>${r.used ? "Used" : "Pending"}</td>
-   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteAutoCatchRule('${u.id}', '${r.id}')">Delete</button></td>
+   <td>${formatMoney(r.negAmount)}</td>
+   <td>${formatMoney(r.profit)}</td>
+   <td>${r.used ? "Used" : "Active"}</td>
+   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteAutoCatchRule('${u.id}', '${r.id}')">Remove</button></td>
   </tr>
  `).join("");
 }
 
-function deleteAutoCatchRule(userId, ruleId) {
- const u = (appState.users || []).find((x) => x.id === userId);
- if (!u || !Array.isArray(u.catchRules)) return;
- u.catchRules = u.catchRules.filter((r) => r.id !== ruleId);
- saveState();
- renderAutoCatchRules(u);
- renderAdminUsers();
+function renderAdminCsAll() {
+ renderAdminCsList();
+ renderAdminCsMessages();
 }
 
 function renderAdminCsList() {
- const listEl = document.getElementById("adminCsThreads");
- if (!listEl) return;
+ const wrap = document.getElementById("adminCsThreads");
+ if (!wrap) return;
  const q = (document.getElementById("csUserSearch")?.value || "").trim().toLowerCase();
  const users = (appState.users || []).filter((u) =>
   !q || (u.name || "").toLowerCase().includes(q) || (u.phone || "").toLowerCase().includes(q)
  );
+ if (!users.length) {
+  wrap.innerHTML = `<div class="small muted" style="padding:12px">No users found.</div>`;
+  return;
+ }
  if (!activeAdminCsUserId && users[0]) activeAdminCsUserId = users[0].id;
-
- listEl.innerHTML = users.map((u) => `
+ wrap.innerHTML = users.map((u) => `
   <div class="cs-thread-item ${u.id === activeAdminCsUserId ? "active" : ""}" onclick="selectAdminCsUser('${u.id}')">
    <div>
     <strong>${escapeHtml(u.name)}</strong><br/>
-    <span class="small muted">${escapeHtml(u.phone || u.email || u.id)}</span>
+    <span class="small muted">${escapeHtml(u.phone || u.email || "")}</span>
    </div>
    <span class="status-pill ${u.online ? "pill-online" : "pill-offline"}">${u.online ? "Online" : "Offline"}</span>
   </div>
  `).join("");
- renderAdminCsMessages();
 }
 
 function selectAdminCsUser(userId) {
  activeAdminCsUserId = userId;
- renderAdminCsList();
+ renderAdminCsAll();
 }
 
 function renderAdminCsMessages() {
- const pane = document.getElementById("adminCsMessages");
- const hdr = document.getElementById("adminCsActiveHeader");
- if (!pane) return;
- const user = (appState.users || []).find((u) => u.id === activeAdminCsUserId);
- if (hdr) hdr.textContent = user ? `${user.name} (${user.phone || user.email || user.id})` : "Select a user";
- if (!user) {
-  pane.innerHTML = `<div class="small muted" style="margin:auto">No user selected.</div>`;
+ const headerEl = document.getElementById("adminCsActiveHeader");
+ const box = document.getElementById("adminCsMessages");
+ const u = appState.users.find((x) => x.id === activeAdminCsUserId);
+ if (headerEl) headerEl.textContent = u ? `Chat with ${u.name}` : t("cs_select_user");
+ if (!box) return;
+ if (!u) {
+  box.innerHTML = `<div class="small muted" style="text-align:center;margin:auto">Select a user thread.</div>`;
   return;
  }
- const list = appState.messages[user.id] || [];
- pane.innerHTML = list.map((m) => `
+ const list = appState.messages[u.id] || [];
+ box.innerHTML = list.map((m) => `
   <div class="chat-msg ${m.sender === "admin" ? "user" : "admin"}">
    ${m.photoDataUrl ? `<img src="${m.photoDataUrl}" class="chat-photo-img" alt="Attachment" />` : ""}
    ${m.text ? `<div>${escapeHtml(m.text)}</div>` : ""}
-   <div class="chat-meta">${escapeHtml(m.sender)} · ${escapeHtml(m.time || "")}</div>
+   <div class="chat-meta">${escapeHtml(m.time || "")}</div>
   </div>
  `).join("");
- pane.scrollTop = pane.scrollHeight;
+ box.scrollTop = box.scrollHeight;
 }
 
 function sendAdminCsMessage() {
@@ -3728,36 +4185,21 @@ function sendAdminCsMessage() {
 
 function renderAdminBanksTab() {
  const grid = document.getElementById("adminBankProviderGrid");
- const rows = document.getElementById("adminBankAccountsRows");
- if (grid) {
-  grid.innerHTML = BANK_PROVIDERS.map((p) => {
-   const count = (appState.adminBankAccounts || []).filter((a) => a.providerId === p.id).length;
-   const active = p.id === selectedAdminBankProviderId;
-   return `
-    <div class="bank-provider-card ${active ? "active" : ""}" onclick="selectAdminBankProvider('${p.id}')">
-     <div class="bank-provider-name">${escapeHtml(p.name)}</div>
-     <div class="bank-provider-type">${escapeHtml(p.defaultCategory)}</div>
-     <div class="bank-provider-count">${count} account(s)</div>
-    </div>
-   `;
-  }).join("");
+ if (!grid) return;
+ if (!selectedAdminBankProviderId && BANK_PROVIDERS[0]) {
+  selectedAdminBankProviderId = BANK_PROVIDERS[0].id;
  }
- if (rows) {
-  const accs = appState.adminBankAccounts || [];
-  rows.innerHTML = accs.map((a, idx) => `
-   <tr>
-    <td>${idx + 1}</td>
-    <td><strong>${escapeHtml(a.providerName)}</strong></td>
-    <td>${escapeHtml(a.category)}</td>
-    <td>${escapeHtml(a.holderName)}</td>
-    <td>${escapeHtml(a.accountNumber)}</td>
-    <td><span class="status-pill pill-online">${a.isDefault ? "Default" : "Active"}</span></td>
-    <td>
-     <button type="button" class="btn btn-danger btn-xs" onclick="deleteAdminBankAccount('${a.id}')">Delete</button>
-    </td>
-   </tr>
-  `).join("");
- }
+ grid.innerHTML = BANK_PROVIDERS.map((p) => {
+  const count = (appState.adminBankAccounts || []).filter((a) => a.providerId === p.id).length;
+  return `
+   <div class="bank-provider-card ${p.id === selectedAdminBankProviderId ? "active" : ""}" onclick="selectAdminBankProvider('${p.id}')">
+    <div class="bank-provider-name">${escapeHtml(p.name)}</div>
+    <div class="bank-provider-type">${escapeHtml(p.defaultCategory)}</div>
+    <div class="bank-provider-count">${count} Account(s)</div>
+   </div>
+  `;
+ }).join("");
+ renderAdminBankAccountsRows();
 }
 
 function selectAdminBankProvider(providerId) {
@@ -3773,85 +4215,158 @@ function selectAdminBankProvider(providerId) {
 }
 
 function cancelAdminProviderBankForm() {
- selectedAdminBankProviderId = null;
+ editingAdminBankAccountId = null;
  document.getElementById("adminBankFormPanel")?.classList.add("hidden");
- renderAdminBanksTab();
 }
 
 function saveAdminProviderBankAccount() {
- const prov = BANK_PROVIDERS.find((p) => p.id === selectedAdminBankProviderId);
- const category = document.getElementById("admBankCategorySelect")?.value || "Pay";
+ const prov = BANK_PROVIDERS.find((p) => p.id === selectedAdminBankProviderId) || BANK_PROVIDERS[0];
+ const category = document.getElementById("admBankCategorySelect")?.value || prov.defaultCategory;
  const holderName = (document.getElementById("admBankHolderInput")?.value || "").trim();
  const accountNumber = (document.getElementById("admBankNumberInput")?.value || "").trim();
  const errEl = document.getElementById("adminBankErr");
 
- if (!prov || !holderName || !accountNumber) {
-  if (errEl) errEl.textContent = "Please select provider and enter holder name & account/phone.";
+ if (!holderName || !accountNumber) {
+  if (errEl) errEl.textContent = "Please enter holder name and phone/account number.";
   return;
  }
  if (errEl) errEl.textContent = "";
+
  appState.adminBankAccounts = appState.adminBankAccounts || [];
- appState.adminBankAccounts.push({
-  id: "BNK-" + Date.now().toString(36),
-  providerId: prov.id,
-  providerName: prov.name,
-  category,
-  holderName,
-  accountNumber,
-  isDefault: appState.adminBankAccounts.length === 0
- });
- document.getElementById("admBankHolderInput").value = "";
- document.getElementById("admBankNumberInput").value = "";
+ if (editingAdminBankAccountId) {
+  const item = appState.adminBankAccounts.find((a) => a.id === editingAdminBankAccountId);
+  if (item) {
+   item.providerId = prov.id;
+   item.providerName = prov.name;
+   item.category = category;
+   item.holderName = holderName;
+   item.accountNumber = accountNumber;
+  }
+  editingAdminBankAccountId = null;
+ } else {
+  appState.adminBankAccounts.push({
+   id: "BNK-" + Date.now().toString(36).toUpperCase(),
+   providerId: prov.id,
+   providerName: prov.name,
+   category,
+   holderName,
+   accountNumber,
+   isDefault: appState.adminBankAccounts.length === 0
+  });
+ }
+
+ const hInp = document.getElementById("admBankHolderInput");
+ const nInp = document.getElementById("admBankNumberInput");
+ if (hInp) hInp.value = "";
+ if (nInp) nInp.value = "";
+ document.getElementById("adminBankFormPanel")?.classList.add("hidden");
  saveState();
  renderAdminBanksTab();
 }
 
-function deleteAdminBankAccount(accId) {
+function setDefaultAdminBank(accId) {
+ (appState.adminBankAccounts || []).forEach((a) => {
+  a.isDefault = a.id === accId;
+ });
+ saveState();
+ renderAdminBankAccountsRows();
+}
+
+function deleteAdminBank(accId) {
  appState.adminBankAccounts = (appState.adminBankAccounts || []).filter((a) => a.id !== accId);
  saveState();
  renderAdminBanksTab();
 }
 
-function renderAdminProfitTiers() {
+function renderAdminBankAccountsRows() {
+ const tbody = document.getElementById("adminBankAccountsRows");
+ if (!tbody) return;
+ const list = appState.adminBankAccounts || [];
+ if (!list.length) {
+  tbody.innerHTML = `<tr><td colspan="7" class="muted" style="text-align:center">No bank accounts added yet.</td></tr>`;
+  return;
+ }
+ tbody.innerHTML = list.map((a, idx) => `
+  <tr>
+   <td>${idx + 1}</td>
+   <td><strong>${escapeHtml(a.providerName)}</strong></td>
+   <td>${escapeHtml(a.category)}</td>
+   <td>${escapeHtml(a.holderName)}</td>
+   <td>${escapeHtml(a.accountNumber)}</td>
+   <td><span class="status-pill ${a.isDefault ? "pill-online" : "pill-offline"}">${a.isDefault ? "Default" : "Active"}</span></td>
+   <td>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+     <button type="button" class="btn btn-secondary btn-xs" onclick="setDefaultAdminBank('${a.id}')">Default</button>
+     <button type="button" class="btn btn-danger btn-xs" onclick="deleteAdminBank('${a.id}')">Delete</button>
+    </div>
+   </td>
+  </tr>
+ `).join("");
+}
+
+function renderProfitTiersTable() {
  const tbody = document.getElementById("adminProfitTiersRows");
  if (!tbody) return;
  const tiers = appState.profitTiers || [];
- tbody.innerHTML = tiers.map((tier, idx) => `
+ tbody.innerHTML = tiers.map((tr, idx) => `
   <tr>
    <td>${idx + 1}</td>
-   <td>${formatMoney(tier.principal)}</td>
-   <td>${formatMoney(tier.profit30)}</td>
-   <td><button type="button" class="btn btn-danger btn-xs" onclick="deleteProfitTier(${idx})">Delete</button></td>
+   <td>${formatMoney(tr.principal)}</td>
+   <td>${formatMoney(tr.profit30)}</td>
+   <td>
+    <div style="display:flex;gap:5px">
+     <button type="button" class="btn btn-secondary btn-xs" onclick="startEditProfitTier(${idx})">Edit</button>
+     <button type="button" class="btn btn-danger btn-xs" onclick="deleteProfitTier(${idx})">Delete</button>
+    </div>
+   </td>
   </tr>
  `).join("");
 }
 
 function confirmProfitTierEntry() {
- const pVal = Number(document.getElementById("tierPrincipalInput")?.value || 0);
- const prVal = Number(document.getElementById("tierProfitInput")?.value || 0);
+ const pVal = Number(document.getElementById("tierPrincipalInput")?.value);
+ const prVal = Number(document.getElementById("tierProfitInput")?.value);
  const errEl = document.getElementById("adminTierErr");
- if (pVal < 100 || prVal < 0) {
-  if (errEl) errEl.textContent = "Principal must be at least $100.";
+ if (Number.isNaN(pVal) || pVal < 100 || Number.isNaN(prVal) || prVal < 0) {
+  if (errEl) errEl.textContent = "Principal must be >= $100 and profit >= $0.";
   return;
  }
  if (errEl) errEl.textContent = "";
  appState.profitTiers = appState.profitTiers || [];
- appState.profitTiers.push({ principal: pVal, profit30: prVal });
+ if (editingProfitTierIndex !== null && appState.profitTiers[editingProfitTierIndex]) {
+  appState.profitTiers[editingProfitTierIndex] = { principal: pVal, profit30: prVal };
+  editingProfitTierIndex = null;
+ } else {
+  appState.profitTiers.push({ principal: pVal, profit30: prVal });
+ }
+ appState.profitTiers.sort((a, b) => a.principal - b.principal);
  document.getElementById("tierPrincipalInput").value = "";
  document.getElementById("tierProfitInput").value = "";
+ document.getElementById("tierCancelEditBtn")?.classList.add("hidden");
  saveState();
- renderAdminProfitTiers();
+ renderProfitTiersTable();
+}
+
+function startEditProfitTier(idx) {
+ const item = appState.profitTiers?.[idx];
+ if (!item) return;
+ editingProfitTierIndex = idx;
+ document.getElementById("tierPrincipalInput").value = item.principal;
+ document.getElementById("tierProfitInput").value = item.profit30;
+ document.getElementById("tierCancelEditBtn")?.classList.remove("hidden");
 }
 
 function cancelProfitTierEdit() {
  editingProfitTierIndex = null;
+ document.getElementById("tierPrincipalInput").value = "";
+ document.getElementById("tierProfitInput").value = "";
  document.getElementById("tierCancelEditBtn")?.classList.add("hidden");
 }
 
 function deleteProfitTier(idx) {
  appState.profitTiers.splice(idx, 1);
  saveState();
- renderAdminProfitTiers();
+ renderProfitTiersTable();
 }
 
 function renderAdminHotels() {
@@ -3859,16 +4374,12 @@ function renderAdminHotels() {
  if (!tbody) return;
  const q = (document.getElementById("adminHotelSearch")?.value || "").trim().toLowerCase();
  const list = HOTELS_CATALOG.filter((h) =>
-  !q ||
-  h.name.toLowerCase().includes(q) ||
-  h.city.toLowerCase().includes(q) ||
-  h.country.toLowerCase().includes(q) ||
-  h.id.toLowerCase().includes(q)
+  !q || h.name.toLowerCase().includes(q) || h.city.toLowerCase().includes(q) || h.country.toLowerCase().includes(q)
  );
- tbody.innerHTML = list.map((h) => `
+ tbody.innerHTML = list.slice(0, 100).map((h) => `
   <tr>
    <td>${escapeHtml(h.id)}</td>
-   <td><strong>${escapeHtml(h.name)}</strong></td>
+   <td>${escapeHtml(h.name)}</td>
    <td>${escapeHtml(h.city)}, ${escapeHtml(h.country)}</td>
    <td>${"★".repeat(h.stars)}</td>
    <td>$${h.price}</td>
@@ -3884,116 +4395,152 @@ function openAccountInfoModal() {
  tbody.innerHTML = users.map((u, idx) => `
   <tr>
    <td>${idx + 1}</td>
-   <td><strong>${escapeHtml(u.name)}</strong><br/><span class="small muted">${escapeHtml(u.phone || u.email || "-")}</span></td>
-   <td>${escapeHtml(u.password || "-")}</td>
+   <td><strong>${escapeHtml(u.name)}</strong><br/><span class="small muted">${escapeHtml(u.phone || u.email || "")}</span></td>
+   <td>${escapeHtml(u.password || "")}</td>
    <td>${escapeHtml(u.inviteCode || "-")}</td>
-   <td>Web</td>
-   <td>-</td>
-   <td>${escapeHtml(u.history?.[0]?.ts || "-")}</td>
+   <td class="small">${escapeHtml(navigator.platform || "Web")}</td>
+   <td class="small muted">-</td>
+   <td class="small muted">${nowTimeStr()}</td>
    <td>-</td>
   </tr>
  `).join("");
  openModal("accountInfoModal");
 }
 
-function updateActivityTicker() {
+function renderAdminAll() {
+ renderAdminStats();
+ renderAdminUsers();
+ renderAdminCsAll();
+ renderAdminBanksTab();
+ renderProfitTiersTable();
+ renderAdminHotels();
+}
+
+function renderActivityTicker() {
  const track = document.getElementById("activityTickerSlide");
  if (!track) return;
- const sample = HOTELS_CATALOG.slice(0, 8);
- track.textContent = sample
-  .map((h) => `● ${h.name} (${h.city}, ${h.country}) — $${h.price}/night · Live booking active`)
-  .join("     ·     ");
+ const items = [
+  "Member ***419 completed Pan Pacific Yangon booking (+$12.50)",
+  "Live USD ↔ MMK feed active · 2s rise/drop pulse · 1D to 1Y history",
+  "Member ***882 bound KBZ Pay & completed 30/30 orders",
+  "New Europe & Asia hotel deals added to catalog"
+ ];
+ track.textContent = items.join("   ·   ");
+}
+
+function syncUserUI() {
+ const user = getActiveUser();
+ const headerAuthBtn = document.getElementById("headerAuthBtn");
+ const guestCard = document.getElementById("guestAuthGateCard");
+ const loggedCard = document.getElementById("loggedInProfileCard");
+
+ if (user) {
+  if (headerAuthBtn) headerAuthBtn.textContent = user.name;
+  guestCard?.classList.add("hidden");
+  loggedCard?.classList.remove("hidden");
+
+  const nameEl = document.getElementById("profileName");
+  const idEl = document.getElementById("profileAccountId");
+  const phoneEl = document.getElementById("profilePhone");
+  const balEl = document.getElementById("profileBalance");
+  const invEl = document.getElementById("profileInvite");
+  const linkEl = document.getElementById("platformShareLinkText");
+  const avDiv = document.getElementById("profileAvatar");
+  const avImg = document.getElementById("profileAvatarImg");
+  const suspBox = document.getElementById("suspendedAccountNotice");
+  const suspReason = document.getElementById("suspendedReasonText");
+
+  if (nameEl) nameEl.textContent = user.name;
+  if (idEl) idEl.textContent = user.id;
+  if (phoneEl) phoneEl.textContent = user.phone || user.email || "-";
+  if (balEl) balEl.textContent = formatMoney(user.balance);
+  if (invEl) invEl.textContent = user.inviteCode || "-";
+  if (linkEl) linkEl.textContent = `${window.location.origin}${window.location.pathname}?ref=${encodeURIComponent(user.inviteCode || "")}`;
+
+  if (user.avatarDataUrl && avImg && avDiv) {
+   avImg.src = user.avatarDataUrl;
+   avImg.classList.remove("hidden");
+   avDiv.classList.add("hidden");
+  } else if (avImg && avDiv) {
+   avImg.classList.add("hidden");
+   avDiv.classList.remove("hidden");
+  }
+
+  if (suspBox && suspReason) {
+   if (user.suspended) {
+    suspBox.classList.remove("hidden");
+    suspReason.textContent = user.suspendReason || "Suspended by admin";
+   } else {
+    suspBox.classList.add("hidden");
+   }
+  }
+ } else {
+  if (headerAuthBtn) headerAuthBtn.textContent = t("btn_login");
+  guestCard?.classList.remove("hidden");
+  loggedCard?.classList.add("hidden");
+ }
+
+ const ordersDone = user ? (Number(user.completedOrders) || 0) : 0;
+ const walletVal = user ? (Number(user.balance) || 0) : 0;
+ const profitVal = user ? (Number(user.cycleProfit) || 0) : 0;
+ const boxVal = user ? (Number(user.profitBox) || 0) : 0;
+
+ const tWallet = document.getElementById("taskWallet");
+ const tProfit = document.getElementById("taskProfit");
+ const tPending = document.getElementById("taskPendingProfit");
+ const tOrders = document.getElementById("taskOrdersText");
+ const circle = document.getElementById("orderCircle");
+ const noticeBox = document.getElementById("pendingProfitNoticeBox");
+
+ if (tWallet) tWallet.textContent = formatMoney(walletVal);
+ if (tProfit) tProfit.textContent = formatMoney(profitVal);
+ if (tPending) tPending.textContent = formatMoney(boxVal);
+ if (tOrders) tOrders.textContent = `${ordersDone}/30`;
+
+ if (circle) {
+  const deg = Math.min(360, Math.round((ordersDone / 30) * 360));
+  circle.style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg)`;
+  const sp = circle.querySelector("span");
+  if (sp) sp.textContent = `${ordersDone}/30`;
+ }
+
+ if (noticeBox) {
+  if (boxVal > 0) {
+   noticeBox.classList.remove("hidden");
+   noticeBox.textContent = `Profit Box pending: ${formatMoney(boxVal)} (released when cycle completes with $0 negative).`;
+  } else {
+   noticeBox.classList.add("hidden");
+  }
+ }
+
+ const histList = document.getElementById("historyList");
+ if (histList) {
+  const items = user?.history || [];
+  histList.innerHTML = items.length
+   ? items.map((h) => `<div class="history-item"><span>${escapeHtml(h.text)}</span><span class="small muted">${escapeHtml(h.ts || "")}</span></div>`).join("")
+   : `<div class="small muted">No activity history yet.</div>`;
+ }
+
+ renderSupportMessages();
 }
 
 function syncAllUI() {
- const user = getActiveUser();
- const headerAuthBtn = document.getElementById("headerAuthBtn");
- const guestGate = document.getElementById("guestAuthGateCard");
- const loggedProfile = document.getElementById("loggedInProfileCard");
-
- if (user) {
-  if (headerAuthBtn) {
-   headerAuthBtn.textContent = user.name;
-   headerAuthBtn.onclick = () => showPage("profilePage");
-  }
-  guestGate?.classList.add("hidden");
-  loggedProfile?.classList.remove("hidden");
-
-  document.getElementById("profileName") && (document.getElementById("profileName").textContent = user.name);
-  document.getElementById("profileAccountId") && (document.getElementById("profileAccountId").textContent = user.id);
-  document.getElementById("profilePhone") && (document.getElementById("profilePhone").textContent = user.phone || user.email || "-");
-  document.getElementById("profileBalance") && (document.getElementById("profileBalance").textContent = formatMoney(user.balance));
-  document.getElementById("profileInvite") && (document.getElementById("profileInvite").textContent = user.inviteCode || "-");
-
-  const avText = document.getElementById("profileAvatar");
-  const avImg = document.getElementById("profileAvatarImg");
-  if (user.avatarDataUrl && avImg) {
-   avImg.src = user.avatarDataUrl;
-   avImg.classList.remove("hidden");
-   avText?.classList.add("hidden");
-  } else if (avText) {
-   avText.textContent = (user.name || "U").charAt(0).toUpperCase();
-   avText.classList.remove("hidden");
-   avImg?.classList.add("hidden");
-  }
-
-  const suspNotice = document.getElementById("suspendedAccountNotice");
-  const suspReason = document.getElementById("suspendedReasonText");
-  if (suspNotice) {
-   suspNotice.classList.toggle("hidden", !user.suspended);
-   if (suspReason) suspReason.textContent = user.suspendReason || "Account suspended";
-  }
-
-  document.getElementById("taskWallet") && (document.getElementById("taskWallet").textContent = formatMoney(user.balance));
-  document.getElementById("taskProfit") && (document.getElementById("taskProfit").textContent = formatMoney(user.cycleProfit));
-  document.getElementById("taskPendingProfit") && (document.getElementById("taskPendingProfit").textContent = formatMoney(user.profitBox));
-  const ordCount = Number(user.completedOrders) || 0;
-  document.getElementById("taskOrdersText") && (document.getElementById("taskOrdersText").textContent = `${ordCount}/30`);
-
-  const circle = document.getElementById("orderCircle");
-  if (circle) {
-   const deg = Math.min(360, Math.round((ordCount / 30) * 360));
-   circle.style.background = `conic-gradient(var(--fb-primary) ${deg}deg, var(--fb-border) ${deg}deg)`;
-   const sp = circle.querySelector("span");
-   if (sp) sp.textContent = `${ordCount}/30`;
-  }
-
-  const histList = document.getElementById("historyList");
-  if (histList) {
-   const hArr = Array.isArray(user.history) ? user.history : [];
-   histList.innerHTML = hArr.length
-    ? hArr.map((h) => `<div class="history-item"><span>${escapeHtml(h.text)}</span><span class="small muted">${escapeHtml(h.ts || "")}</span></div>`).join("")
-    : `<div class="small muted">No history yet.</div>`;
-  }
- } else {
-  if (headerAuthBtn) {
-   headerAuthBtn.textContent = t("btn_login");
-   headerAuthBtn.onclick = () => openAuth("login");
-  }
-  guestGate?.classList.remove("hidden");
-  loggedProfile?.classList.add("hidden");
-
-  document.getElementById("taskWallet") && (document.getElementById("taskWallet").textContent = "$0.00");
-  document.getElementById("taskProfit") && (document.getElementById("taskProfit").textContent = "$0.00");
-  document.getElementById("taskPendingProfit") && (document.getElementById("taskPendingProfit").textContent = "$0.00");
-  document.getElementById("taskOrdersText") && (document.getElementById("taskOrdersText").textContent = "0/30");
-  document.getElementById("historyList") && (document.getElementById("historyList").innerHTML = `<div class="small muted">Please login to view history.</div>`);
+ applyTranslations();
+ renderHotels();
+ renderPromoCarousel();
+ updateFxDisplay();
+ drawFxChart();
+ renderActivityTicker();
+ syncUserUI();
+ syncAdminVisibility();
+ if (isAdminLoggedIn) {
+  renderAdminAll();
  }
-
- const shareEl = document.getElementById("platformShareLinkText");
- if (shareEl) shareEl.textContent = window.location.href;
-
- renderSupportMessages();
- if (isAdminLoggedIn) renderAdminAll();
 }
 
-(function initPlatform() {
- if (typeof window.FX_MIN_BAND !== "number") window.FX_MIN_BAND = FX_MIN_BAND;
- if (typeof window.FX_MAX_BAND !== "number") window.FX_MAX_BAND = FX_MAX_BAND;
-
+document.addEventListener("DOMContentLoaded", () => {
  const savedTheme = localStorage.getItem("tb_theme_mode");
- if (savedTheme === "light") document.body.classList.remove("dark");
- else document.body.classList.add("dark");
+ if (savedTheme === "dark") document.body.classList.add("dark");
 
  const savedLang = localStorage.getItem("tb_preferred_lang");
  if (savedLang && I18N[savedLang]) {
@@ -4001,19 +4548,1288 @@ function syncAllUI() {
   if (sel) sel.value = savedLang;
  }
 
- applyTranslations();
- updateActivityTicker();
+ refreshFxSeriesCache();
+ bindFxChartScrubEvents();
  updateHeroBanner();
- renderPromoCarousel();
- renderHotels();
- updateFxDisplay();
- drawFxChart();
- syncAdminVisibility();
  syncAllUI();
 
- setInterval(updateHeroBanner, 8000);
- setInterval(pushFxTick, 4000);
- window.addEventListener("resize", () => drawFxChart());
+ setInterval(pushFxTick, 2000);
+ setInterval(updateHeroBanner, 7000);
+ dropHoldCountdownTimer = setInterval(updateDropHoldBanner, 1000);
+ window.addEventListener("resize", () => {
+  drawFxChart();
+  applyPromoTransform(false, 0);
+ });
+});
+</script>
+ <script>
+// Keep User & Admin session across page refresh / reload without touching earlier code
+document.addEventListener("DOMContentLoaded", () => {
+ const savedSessionId = localStorage.getItem(STORAGE_KEYS.session);
+ if (savedSessionId) {
+  currentSessionUserId = savedSessionId;
+  const activeUser = appState.users.find((u) => u.id === savedSessionId);
+  if (activeUser && !activeUser.banned) {
+   activeUser.online = true;
+   saveState();
+  }
+ }
+
+ if (localStorage.getItem(STORAGE_KEYS.adminAuth) === "1") {
+  isAdminLoggedIn = true;
+ }
+
+ if (typeof syncAllUI === "function") {
+  syncAllUI();
+ }
+});
+</script>
+ <script>
+window.TB_FIREBASE_CONFIG = {
+ databaseURL: "https://trip-boooking-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+</script>
+
+ <script>
+// Part 4D & 4E: Pending Deposit/Withdraw Approval, Referral ?ref= Auto-Fill, CS Unread & Top-Sort, Cross-Tab & Optional Firebase Sync
+(function () {
+ if (window.__TB_EXTENSIONS_4DE_LOADED__) return;
+ window.__TB_EXTENSIONS_4DE_LOADED__ = true;
+
+ appState.txRequests = Array.isArray(appState.txRequests) ? appState.txRequests : [];
+ appState.csReadState = appState.csReadState && typeof appState.csReadState === "object"
+  ? appState.csReadState
+  : { adminLastRead: {}, userLastRead: {} };
+
+ function ensureTxAdminUI() {
+  const adminConsole = document.getElementById("adminConsole");
+  if (!adminConsole || document.getElementById("adminTabTx")) return;
+
+  const tabsContainer = adminConsole.querySelector(".panel .section-head > div");
+  if (tabsContainer) {
+   const txBtn = document.createElement("button");
+   txBtn.type = "button";
+   txBtn.id = "adminTabTx";
+   txBtn.className = "btn btn-secondary btn-sm";
+   txBtn.innerHTML = 'ငွေသွင်း/ထုတ် <span id="adminTxPendingBadge" class="count-badge hidden">0</span>';
+   txBtn.onclick = () => switchExtAdminTab("tx");
+
+   const hotelsBtn = document.getElementById("adminTabHotels");
+   if (hotelsBtn) {
+    tabsContainer.insertBefore(txBtn, hotelsBtn);
+   } else {
+    tabsContainer.appendChild(txBtn);
+   }
+  }
+
+  const adminPanel = adminConsole.querySelectorAll(".panel")[1] || adminConsole.querySelector(".panel");
+  if (adminPanel && !document.getElementById("adminTxTab")) {
+   const txSection = document.createElement("div");
+   txSection.id = "adminTxTab";
+   txSection.className = "hidden";
+   txSection.innerHTML = `
+    <div class="section-head">
+     <div>
+      <h3>ငွေသွင်း / ငွေထုတ် တောင်းဆိုမှုများ (Pending Approval)</h3>
+      <div class="small muted">Approve နှိပ်လျှင် ငွေသွင်းအတွက် အလိုအလျောက် ထည့်ပေးပြီး ငွေထုတ်အတွက် အလိုအလျောက် ဖြတ်ပေးပါမည်။</div>
+     </div>
+     <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <select id="adminTxFilter" class="filter-select" onchange="renderAdminTxRequests()">
+       <option value="all">အားလုံး</option>
+       <option value="pending">စောင့်ဆိုင်းဆဲ (Pending)</option>
+       <option value="deposit">ငွေသွင်း (Deposit)</option>
+       <option value="withdraw">ငွေထုတ် (Withdraw)</option>
+       <option value="approved">အတည်ပြုပြီး</option>
+       <option value="rejected">ငြင်းပယ်ပြီး</option>
+      </select>
+     </div>
+    </div>
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr>
+        <th>#</th>
+        <th>အသုံးပြုသူ</th>
+        <th>အမျိုးအစား</th>
+        <th>ပမာဏ ($)</th>
+        <th>နည်းလမ်း / ဘဏ်</th>
+        <th>အချိန်</th>
+        <th>အခြေအနေ</th>
+        <th>လုပ်ဆောင်ချက်</th>
+       </tr>
+      </thead>
+      <tbody id="adminTxRows"></tbody>
+     </table>
+    </div>
+   `;
+   adminPanel.appendChild(txSection);
+  }
+
+  const origSwitch = window.switchAdminTab;
+  window.switchAdminTab = function (tabName) {
+   document.getElementById("adminTxTab")?.classList.add("hidden");
+   document.getElementById("adminTabTx")?.classList.remove("btn-primary");
+   document.getElementById("adminTabTx")?.classList.add("btn-secondary");
+   if (typeof origSwitch === "function") {
+    origSwitch(tabName);
+   }
+   if (tabName === "tx") {
+    ["users", "cs", "banks", "tiers", "hotels"].forEach((k) => {
+     const cap = k.charAt(0).toUpperCase() + k.slice(1);
+     document.getElementById(`adminTab${cap}`)?.classList.remove("btn-primary");
+     document.getElementById(`adminTab${cap}`)?.classList.add("btn-secondary");
+     document.getElementById(`admin${cap}Tab`)?.classList.add("hidden");
+    });
+    document.getElementById("adminTabTx")?.classList.remove("btn-secondary");
+    document.getElementById("adminTabTx")?.classList.add("btn-primary");
+    document.getElementById("adminTxTab")?.classList.remove("hidden");
+    renderAdminTxRequests();
+   }
+  };
+ }
+
+ window.switchExtAdminTab = function (tabName) {
+  ensureTxAdminUI();
+  window.switchAdminTab(tabName);
+ };
+
+ window.renderAdminTxRequests = function () {
+  ensureTxAdminUI();
+  const tbody = document.getElementById("adminTxRows");
+  const badge = document.getElementById("adminTxPendingBadge");
+  const list = Array.isArray(appState.txRequests) ? appState.txRequests : [];
+  const pendingCount = list.filter((r) => r.status === "pending").length;
+
+  if (badge) {
+   badge.textContent = String(pendingCount);
+   badge.classList.toggle("hidden", pendingCount === 0);
+  }
+  if (!tbody) return;
+
+  const flt = document.getElementById("adminTxFilter")?.value || "all";
+  const filtered = list.filter((r) => {
+   if (flt === "pending") return r.status === "pending";
+   if (flt === "deposit") return r.type === "deposit";
+   if (flt === "withdraw") return r.type === "withdraw";
+   if (flt === "approved") return r.status === "approved";
+   if (flt === "rejected") return r.status === "rejected";
+   return true;
+  });
+
+  if (!filtered.length) {
+   tbody.innerHTML = `<tr><td colspan="8" class="muted" style="text-align:center">တောင်းဆိုမှု မရှိသေးပါ။</td></tr>`;
+   return;
+  }
+ const countInfoHtml = `<tr><td colspan="8" class="small muted" style="background:var(--fb-surface);">ပြသနေသော မှတ်တမ်းအရေအတွက်: <strong>${filtered.length}</strong> / စုစုပေါင်း <strong>${list.length}</strong></td></tr>`;
+ tbody.innerHTML = countInfoHtml + filtered.map((r, idx) => {
+   const isDep = r.type === "deposit";
+   const statusPill = r.status === "approved"
+  ? `<span class="status-pill pill-online">Approved</span>`
+  : r.status === "rejected"
+    ? `<span class="status-pill pill-warn">Rejected</span>`
+    : r.status === "partial"
+      ? `<span class="status-pill pill-partial">Partial</span>`
+      : `<span class="status-pill pill-offline">Pending</span>`;
+   const actionsHtml = r.status === "pending"
+    ? `<div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="btn btn-success btn-xs" onclick="approveTxRequest('${r.id}')">Approve</button>
+        <button type="button" class="btn btn-danger btn-xs" onclick="rejectTxRequest('${r.id}')">Reject</button>
+       </div>`
+    : `<span class="small muted">${escapeHtml(r.decidedAt || "-")}</span>`;
+
+   return `
+    <tr>
+     <td>${idx + 1}</td>
+     <td><strong>${escapeHtml(r.userName)}</strong><br/><span class="small muted">${escapeHtml(r.userId)}</span></td>
+     <td><strong style="color:${isDep ? "var(--fb-success)" : "var(--fb-danger)"}">${isDep ? "Deposit (ငွေသွင်း)" : "Withdraw (ငွေထုတ်)"}</strong></td>
+     <td><strong>${formatMoney(r.amount)}</strong></td>
+     <td class="small">${escapeHtml(r.method || "-")}</td>
+     <td class="small muted">${escapeHtml(r.createdAt || "")}</td>
+     <td>${statusPill}</td>
+     <td>${actionsHtml}</td>
+    </tr>
+   `;
+  }).join("");
+ };
+
+window.approveTxRequest = function (reqId) {
+ const req = (appState.txRequests || []).find((x) => x.id === reqId);
+  if (!req) return;
+  if (req.status === "approved" || req.status === "rejected" || req.__approvingLock) {
+    showCenterRoundedAlert("အသိပေးချက်", "ဤတောင်းဆိုချက်ကို ပြီးစီးပြီးသား ဖြစ်ပါသည်", true);
+    return;
+  }
+  req.__approvingLock = true;
+  const user = appState.users.find((u) => u.id === req.userId);
+  if (!user) {
+    showCenterRoundedAlert("Error", "အသုံးပြုသူ အကောင့် မတွေ့ပါ", true);
+    return;
+  }
+
+  const requestedAmt = Number(req.amount) || 0;
+  const labelText = req.type === "deposit" ? "အမှန်တကယ် ဝင်လာသော ငွေသွင်းပမာဏ ($)" : "အမှန်တကယ် ထုတ်ပေးသော ငွေထုတ်ပမာဏ ($)";
+  const inputVal = window.prompt(`${labelText} (တောင်းဆိုထားသည်မှာ $${requestedAmt} ဖြစ်ပါသည်):`, String(requestedAmt));
+
+  if (inputVal === null) return;
+  const amt = Number(inputVal);
+
+  if (!Number.isFinite(amt) || amt <= 0) {
+    showCenterRoundedAlert("Error", "မှန်ကန်သော ပမာဏ (0 ထက်ကြီးသော ဂဏန်း) ရိုက်ထည့်ပါ", true);
+    return;
+  }
+
+  if (amt > requestedAmt) {
+    showCenterRoundedAlert("Error", `တောင်းဆိုထားသော ပမာဏ ($${requestedAmt}) ထက် ကျော်လွန်နေပါသည်`, true);
+    return;
+  }
+
+  if (req.type === "deposit") {
+    user.balance = Number(((Number(user.balance) || 0) + amt).toFixed(2));
+    if ((Number(user.negativeAmount) || 0) > 0) {
+      const cleared = Math.min(Number(user.negativeAmount), amt);
+      user.negativeAmount = Number(((Number(user.negativeAmount) || 0) - cleared).toFixed(2));
+    }
+    user.history = user.history || [];
+    user.history.unshift({ ts: nowTimeStr(), text: `Deposit Approved: +${formatMoney(amt)} (${req.method})` });
+  } else if (req.type === "withdraw") {
+    const currentBal = Number(user.balance) || 0;
+    if (currentBal < amt) {
+      showCenterRoundedAlert("လက်ကျန် မလုံလောက်ပါ", `${user.name} ၏ လက်ကျန်ငွေမှာ ${formatMoney(currentBal)} သာ ရှိပါသည်`, true);
+      return;
+    }
+    user.balance = Number(((currentBal - amt).toFixed(2)));
+    user.history = user.history || [];
+    user.history.unshift({ ts: nowTimeStr(), text: `Withdraw Approved: -${formatMoney(amt)} (${req.method})` });
+  }
+
+  req.approvedAmount = amt;
+  req.status = "approved";
+  req.decidedAt = nowTimeStr();
+  req.__approvingLock = false;
+  saveState();
+  syncAllUI();
+  renderAdminTxRequests();
+  showCenterRoundedAlert(
+    "အတည်ပြုပြီးပါပြီ",
+    req.type === "deposit"
+      ? `${user.name} အကောင့်ထဲ +${formatMoney(amt)} အလိုအလျောက် ထည့်သွင်းပြီးပါပြီ`
+      : `${user.name} အကောင့်မှ -${formatMoney(amt)} အလိုအလျောက် ဖြတ်ယူပြီးပါပြီ`
+  );
+};
+
+ window.rejectTxRequest = function (reqId) {
+  const req = (appState.txRequests || []).find((x) => x.id === reqId);
+ if (!req || !["pending", "partial"].includes(req.status)) return;
+  const okReject = window.confirm(`ဤတောင်းဆိုချက်ကို ငြင်းပယ်မှာ သေချာပါသလား?\nပမာဏ: ${formatMoney(req.amount)}`);
+if (!okReject) return;
+  const user = appState.users.find((u) => u.id === req.userId);
+  if (user) {
+  user.history = user.history || [];
+  user.history.unshift({
+    ts: nowTimeStr(),
+    status: "rejected",
+    text: `${req.type === "deposit" ? "Deposit" : "Withdraw"} Rejected: ${formatMoney(req.amount)} (${req.method})`
+  });
+}
+
+  req.status = "rejected";
+  req.decidedAt = nowTimeStr();
+  saveState();
+  syncAllUI();
+  renderAdminTxRequests();
+  showCenterRoundedAlert("ငြင်းပယ်ပြီးပါပြီ", `${req.type === "deposit" ? "ငွေသွင်း" : "ငွေထုတ်"} တောင်းဆိုချက်ကို ငြင်းပယ်လိုက်ပါသည်။`, true);
+ };
+
+ window.submitDeposit = function () {
+  const user = getActiveUser();
+  if (!user) {
+   openAuth("login");
+   return;
+  }
+  const method = document.getElementById("depositMethod")?.value || "KBZ Pay";
+  const amt = Number(document.getElementById("depositAmount")?.value || 0);
+  const errEl = document.getElementById("depositErr");
+
+  if (!amt || amt <= 0) {
+   if (errEl) errEl.textContent = "Please enter a valid deposit amount.";
+   return;
+  }
+
+  appState.txRequests = appState.txRequests || [];
+ appState.txRequests.unshift({
+  id: "TX-" + Date.now().toString(36).toUpperCase(),
+  userId: user.id,
+  userName: user.name,
+  type: "deposit",
+  amount: Number(amt.toFixed(2)),
+  originalAmount: Number(amt.toFixed(2)),
+  approvedAmount: 0,
+  method,
+  status: "pending",
+  createdAt: nowTimeStr(),
+  decidedAt: ""
+});
+
+  user.history = user.history || [];
+  user.history.unshift({ ts: nowTimeStr(), text: `Deposit requested: ${formatMoney(amt)} via ${method} (Pending Admin)` });
+
+  const amtInp = document.getElementById("depositAmount");
+  if (amtInp) amtInp.value = "";
+  saveState();
+  closeModal("depositModal");
+  syncAllUI();
+  renderAdminTxRequests();
+  showCenterRoundedAlert("တောင်းဆိုချက် ပို့ပြီးပါပြီ", `${formatMoney(amt)} ငွေသွင်းတောင်းဆိုချက်ကို Admin အတည်ပြုရန် စောင့်ဆိုင်းနေပါသည်။`);
+ };
+
+ window.submitWithdraw = function () {
+  const user = getActiveUser();
+  if (!user) {
+   openAuth("login");
+   return;
+  }
+  const amt = Number(document.getElementById("withdrawAmount")?.value || 0);
+  const pass = document.getElementById("withdrawPass")?.value || "";
+  const errEl = document.getElementById("withdrawErr");
+
+  if (pass !== user.password) {
+   if (errEl) errEl.textContent = "Incorrect account password.";
+   return;
+  }
+  if ((Number(user.negativeAmount) || 0) > 0) {
+   if (errEl) errEl.textContent = "Clear negative balance before withdrawing.";
+   return;
+  }
+  if (!amt || amt <= 0 || amt > (Number(user.balance) || 0)) {
+   if (errEl) errEl.textContent = "Invalid or insufficient balance.";
+   return;
+  }
+
+  const bankLabel = user.boundBank
+   ? `${user.boundBank.bankName} (${user.boundBank.accountNumber})`
+   : "Bound Account";
+
+  appState.txRequests = appState.txRequests || [];
+ appState.txRequests.unshift({
+  id: "TX-" + Date.now().toString(36).toUpperCase(),
+  userId: user.id,
+  userName: user.name,
+  type: "withdraw",
+  amount: Number(amt.toFixed(2)),
+  originalAmount: Number(amt.toFixed(2)),
+  approvedAmount: 0,
+  method: bankLabel,
+  status: "pending",
+  createdAt: nowTimeStr(),
+  decidedAt: ""
+});
+
+  user.history = user.history || [];
+  user.history.unshift({ ts: nowTimeStr(), text: `Withdraw requested: ${formatMoney(amt)} -> ${bankLabel} (Pending Admin)` });
+
+  const amtInp = document.getElementById("withdrawAmount");
+  const passInp = document.getElementById("withdrawPass");
+  if (amtInp) amtInp.value = "";
+  if (passInp) passInp.value = "";
+  saveState();
+  closeModal("withdrawModal");
+  syncAllUI();
+  renderAdminTxRequests();
+  showCenterRoundedAlert("ငွေထုတ်တောင်းဆိုချက် ပို့ပြီးပါပြီ", `${formatMoney(amt)} ငွေထုတ်တောင်းဆိုချက်ကို Admin Approve လုပ်မှ အကောင့်ထဲမှ ဖြတ်ယူပါမည်။`);
+ };
+
+ function getRefCodeFromUrl() {
+  try {
+   const params = new URLSearchParams(window.location.search || "");
+   const ref = (params.get("ref") || "").trim();
+   if (ref) {
+    sessionStorage.setItem("tb_pending_ref_code", ref);
+    return ref;
+   }
+  } catch (_) {}
+  return (sessionStorage.getItem("tb_pending_ref_code") || "").trim();
+ }
+
+ function applyRefCodeToRegisterForm() {
+  const refCode = getRefCodeFromUrl();
+  if (!refCode) return;
+  const regInvite = document.getElementById("regInvite");
+  if (regInvite && !regInvite.value.trim()) {
+   regInvite.value = refCode;
+  }
+ }
+
+ const origSwitchAuthMode = window.switchAuthMode;
+ window.switchAuthMode = function (mode) {
+  if (typeof origSwitchAuthMode === "function") {
+   origSwitchAuthMode(mode);
+  }
+  if (mode === "register") {
+   applyRefCodeToRegisterForm();
+  }
+ };
+
+ function getUnreadForAdminUser(userId) {
+  const list = appState.messages?.[userId] || [];
+  const lastReadIdx = Number(appState.csReadState?.adminLastRead?.[userId] ?? -1);
+  let count = 0;
+  for (let i = lastReadIdx + 1; i < list.length; i++) {
+   if (list[i] && list[i].sender === "user") count += 1;
+  }
+  return count;
+ }
+
+ function getUnreadForCurrentUser(userId) {
+  const list = appState.messages?.[userId] || [];
+  const lastReadIdx = Number(appState.csReadState?.userLastRead?.[userId] ?? -1);
+  let count = 0;
+  for (let i = lastReadIdx + 1; i < list.length; i++) {
+   if (list[i] && list[i].sender === "admin") count += 1;
+  }
+  return count;
+ }
+
+ function markAdminRead(userId) {
+  if (!userId) return;
+  const len = (appState.messages?.[userId] || []).length;
+  appState.csReadState.adminLastRead[userId] = Math.max(0, len - 1);
+  saveState();
+ }
+
+ function markUserRead(userId) {
+  if (!userId) return;
+  const len = (appState.messages?.[userId] || []).length;
+  appState.csReadState.userLastRead[userId] = Math.max(0, len - 1);
+  saveState();
+ }
+
+ function updateServiceNavBadges() {
+  const navServiceBtn = document.querySelectorAll(".bottom-nav button")[1];
+  const adminUnreadBadge = document.getElementById("adminCsUnreadBadge");
+
+  const totalAdminUnread = (appState.users || []).reduce((sum, u) => sum + getUnreadForAdminUser(u.id), 0);
+  if (adminUnreadBadge) {
+   adminUnreadBadge.textContent = String(totalAdminUnread);
+   adminUnreadBadge.classList.toggle("hidden", totalAdminUnread === 0);
+  }
+
+  const activeUser = getActiveUser();
+  const userUnread = activeUser ? getUnreadForCurrentUser(activeUser.id) : 0;
+  const badgeCount = isAdminLoggedIn ? totalAdminUnread : userUnread;
+
+  if (navServiceBtn) {
+   let pill = navServiceBtn.querySelector(".ext-nav-unread");
+   if (!pill) {
+    pill = document.createElement("span");
+    pill.className = "ext-nav-unread";
+    pill.style.cssText = "position:absolute;top:2px;right:14px;background:#e41e3f;color:#fff;font-size:10px;font-weight:800;padding:1px 5px;border-radius:999px;line-height:1.2;";
+    navServiceBtn.style.position = "relative";
+    navServiceBtn.appendChild(pill);
+   }
+   pill.textContent = String(badgeCount);
+   pill.style.display = badgeCount > 0 ? "inline-block" : "none";
+  }
+ }
+
+ const origRenderAdminCsList = window.renderAdminCsList;
+ window.renderAdminCsList = function () {
+  const wrap = document.getElementById("adminCsThreads");
+  if (!wrap) return;
+  const q = (document.getElementById("csUserSearch")?.value || "").trim().toLowerCase();
+
+  const sortedUsers = (appState.users || [])
+   .filter((u) => !q || (u.name || "").toLowerCase().includes(q) || (u.phone || "").toLowerCase().includes(q))
+   .slice()
+   .sort((a, b) => {
+    const aMsgs = appState.messages?.[a.id] || [];
+    const bMsgs = appState.messages?.[b.id] || [];
+    const aLast = aMsgs[aMsgs.length - 1];
+    const bLast = bMsgs[bMsgs.length - 1];
+    const aUserLast = aLast && aLast.sender === "user" ? 1 : 0;
+    const bUserLast = bLast && bLast.sender === "user" ? 1 : 0;
+    if (bUserLast !== aUserLast) return bUserLast - aUserLast;
+    return bMsgs.length - aMsgs.length;
+   });
+
+  if (!sortedUsers.length) {
+   wrap.innerHTML = `<div class="small muted" style="padding:12px">No users found.</div>`;
+   return;
+  }
+  if (!activeAdminCsUserId && sortedUsers[0]) {
+   activeAdminCsUserId = sortedUsers[0].id;
+  }
+
+  wrap.innerHTML = sortedUsers.map((u) => {
+   const unread = getUnreadForAdminUser(u.id);
+   const msgs = appState.messages?.[u.id] || [];
+   const lastMsg = msgs[msgs.length - 1];
+   const previewText = lastMsg ? (lastMsg.text || (lastMsg.photoDataUrl ? "[Photo]" : "")) : "";
+   return `
+    <div class="cs-thread-item ${u.id === activeAdminCsUserId ? "active" : ""}" onclick="selectAdminCsUser('${u.id}')">
+     <div style="min-width:0;flex:1">
+      <div style="display:flex;align-items:center;gap:6px">
+       <strong>${escapeHtml(u.name)}</strong>
+       ${unread > 0 ? `<span class="count-badge">${unread}</span>` : ""}
+      </div>
+      <div class="small muted" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(previewText || u.phone || u.email || "")}</div>
+     </div>
+     <span class="status-pill ${u.online ? "pill-online" : "pill-offline"}">${u.online ? "Online" : "Offline"}</span>
+    </div>
+   `;
+  }).join("");
+  updateServiceNavBadges();
+ };
+
+ const origSelectAdminCsUser = window.selectAdminCsUser;
+ window.selectAdminCsUser = function (userId) {
+  if (typeof origSelectAdminCsUser === "function") {
+   origSelectAdminCsUser(userId);
+  }
+  markAdminRead(userId);
+  renderAdminCsList();
+ };
+
+ const origRenderSupportMessages = window.renderSupportMessages;
+ window.renderSupportMessages = function () {
+  if (typeof origRenderSupportMessages === "function") {
+   origRenderSupportMessages();
+  }
+  const activeUser = getActiveUser();
+  const supportPageActive = document.getElementById("supportPage")?.classList.contains("active");
+  if (activeUser && supportPageActive) {
+   markUserRead(activeUser.id);
+  }
+  updateServiceNavBadges();
+ };
+
+ const origSyncAllUI = window.syncAllUI;
+ window.syncAllUI = function () {
+  ensureTxAdminUI();
+  applyRefCodeToRegisterForm();
+  if (typeof origSyncAllUI === "function") {
+   origSyncAllUI();
+  }
+  renderAdminTxRequests();
+  updateServiceNavBadges();
+ };
+
+ // Cross-tab real-time sync via storage event
+ window.addEventListener("storage", (e) => {
+  if (e.key === STORAGE_KEYS.state && e.newValue) {
+   try {
+    const parsed = JSON.parse(e.newValue);
+    if (parsed && typeof parsed === "object") {
+     appState = { ...appState, ...parsed };
+     window.syncAllUI();
+    }
+   } catch (_) {}
+  }
+  if (e.key === STORAGE_KEYS.session) {
+   currentSessionUserId = e.newValue || null;
+   window.syncAllUI();
+  }
+  if (e.key === STORAGE_KEYS.adminAuth) {
+   isAdminLoggedIn = e.newValue === "1";
+   window.syncAllUI();
+  }
+ });
+
+ // Optional Firebase Realtime Database / Firestore hook when window.TB_FIREBASE_CONFIG is provided
+ async function initOptionalFirebaseSync() {
+  const cfg = window.TB_FIREBASE_CONFIG;
+  if (!cfg || !cfg.databaseURL) return;
+  try {
+   const baseUrl = String(cfg.databaseURL).replace(/\/+$/, "");
+   const res = await fetch(`${baseUrl}/tb_platform_state_v3.json`);
+   if (res.ok) {
+    const remoteState = await res.json();
+    if (remoteState && typeof remoteState === "object") {
+     appState = { ...appState, ...remoteState };
+     saveState();
+     window.syncAllUI();
+    }
+   }
+   const origSaveState = window.saveState;
+   window.saveState = function () {
+    if (typeof origSaveState === "function") origSaveState();
+    fetch(`${baseUrl}/tb_platform_state_v3.json`, {
+     method: "PUT",
+     headers: { "Content-Type": "application/json" },
+     body: JSON.stringify(appState)
+    }).catch(() => {});
+   };
+  } catch (_) {}
+ }
+
+ document.addEventListener("DOMContentLoaded", () => {
+  applyRefCodeToRegisterForm();
+  if (getRefCodeFromUrl()) {
+   const regInvite = document.getElementById("regInvite");
+   if (regInvite) regInvite.value = getRefCodeFromUrl();
+  }
+  ensureTxAdminUI();
+  window.syncAllUI();
+  initOptionalFirebaseSync();
+ });
+})();
+</script>
+ <script>
+// Part 4F: Firebase Live Poll Sync, Connection Status Pill & Mobile Responsive Polish
+(function () {
+ if (window.__TB_EXT_4F_LOADED__) return;
+ window.__TB_EXT_4F_LOADED__ = true;
+
+ const style = document.createElement("style");
+ style.textContent = `
+  .tb-sync-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+  .tb-sync-on { background:#e7f8ee; color:#137333; border:1px solid #b7e1c4; }
+  .tb-sync-off { background:#f1f3f4; color:#5f6368; border:1px solid #dadce0; }
+  @media (max-width: 640px) {
+   .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+   table { min-width: 640px; }
+   .section-head { flex-direction:column; align-items:flex-start !important; gap:8px; }
+  }
+ `;
+ document.head.appendChild(style);
+
+ function renderFirebaseStatusBadge() {
+  const adminConsole = document.getElementById("adminConsole");
+  if (!adminConsole) return;
+  const head = adminConsole.querySelector(".panel .section-head");
+  if (!head) return;
+
+  const hasFb = Boolean(window.TB_FIREBASE_CONFIG && window.TB_FIREBASE_CONFIG.databaseURL);
+  let badge = document.getElementById("tbFirebaseStatusBadge");
+  if (!badge) {
+   badge = document.createElement("span");
+   badge.id = "tbFirebaseStatusBadge";
+   badge.className = "tb-sync-pill";
+   head.appendChild(badge);
+  }
+  badge.className = "tb-sync-pill " + (hasFb ? "tb-sync-on" : "tb-sync-off");
+  badge.textContent = hasFb ? "Firebase Sync: Active (ချိတ်ဆက်ထားသည်)" : "Firebase Sync: Local Only (Local သာသုံးသည်)";
+ }
+
+ let lastRemoteSnapshot = "";
+ async function pollFirebaseState() {
+  const cfg = window.TB_FIREBASE_CONFIG;
+  if (!cfg || !cfg.databaseURL) return;
+
+  const activeTag = document.activeElement ? document.activeElement.tagName : "";
+  if (activeTag === "INPUT" || activeTag === "TEXTAREA" || activeTag === "SELECT") return;
+
+  try {
+   const baseUrl = String(cfg.databaseURL).replace(/\/+$/, "");
+   const res = await fetch(`${baseUrl}/tb_platform_state_v3.json`, { cache: "no-store" });
+   if (!res.ok) return;
+   const remoteData = await res.json();
+   if (!remoteData || typeof remoteData !== "object") return;
+
+   const snap = JSON.stringify(remoteData);
+   if (snap && snap !== lastRemoteSnapshot) {
+    lastRemoteSnapshot = snap;
+    const currentSnap = JSON.stringify(appState);
+    if (snap !== currentSnap) {
+   appState = {
+  ...appState,
+  ...remoteData,
+  users: Array.isArray(remoteData.users) ? remoteData.users : (appState.users || []),
+  txRequests: Array.isArray(remoteData.txRequests) ? remoteData.txRequests : (appState.txRequests || [])
+};
+     if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
+      localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
+     }
+    if (typeof window.syncAllUI === "function") {
+  window.syncAllUI();
+}
+   }
+  } catch (_) {}
+ }
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof renderFirebaseStatusBadge === "function") renderFirebaseStatusBadge();
+  let pollingBusy = false;
+  setInterval(() => {
+    if (pollingBusy) return;
+    pollingBusy = true;
+    try {
+      if (typeof renderFirebaseStatusBadge === "function") renderFirebaseStatusBadge();
+      if (typeof pollFirebaseState === "function") pollFirebaseState();
+    } finally {
+      pollingBusy = false;
+    }
+  }, 3000);
+});
+ });
+})();
+</script>
+ <script>
+// Part 4G: Partial Remaining Balance, Req vs Approved Amount, Admin Full Ledger Table,
+// User Dual History (Booking Profit vs Deposit/Withdraw), Filter/Search & JSON Backup/Export
+(function () {
+ if (window.__TB_EXT_4G_LOADED__) return;
+ window.__TB_EXT_4G_LOADED__ = true;
+
+ const style = document.createElement("style");
+ style.textContent = `
+  .tb-4g-toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0; }
+  .tb-4g-input, .tb-4g-select { padding:6px 10px; border-radius:8px; border:1px solid #d0d7de; background:#fff; color:#111; font-size:13px; }
+  .tb-4g-pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+  .tb-4g-partial { background:#fff4e5; color:#9a4e00; border:1px solid #f5c27b; }
+  .tb-4g-approved { background:#e7f8ee; color:#137333; border:1px solid #b7e1c4; }
+  .tb-4g-rejected { background:#fce8e6; color:#c5221f; border:1px solid #f6aea9; }
+  .tb-4g-pending { background:#f1f3f4; color:#5f6368; border:1px solid #dadce0; }
+  .tb-4g-tabs { display:flex; gap:8px; margin:8px 0 12px; flex-wrap:wrap; }
+  .tb-4g-tab-btn { padding:6px 12px; border-radius:8px; border:1px solid #d0d7de; background:#f8f9fa; color:#111; cursor:pointer; font-size:13px; font-weight:600; }
+  .tb-4g-tab-btn.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
+  .tb-4g-box { border:1px solid #e0e4e8; border-radius:10px; padding:10px; margin-top:10px; background:#fff; }
+  @media (max-width: 768px) {
+  .tb-4g-toolbar,
+  .tb-4g-tabs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tb-4g-input,
+  .tb-4g-select,
+  .tb-4g-tab-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .tb-4g-box {
+    overflow-x: auto;
+    padding: 8px;
+  }
+  .tb-4g-box table {
+    min-width: 600px;
+    font-size: 12px;
+  }
+}
+ `;
+ document.head.appendChild(style);
+
+ function formatDateTimeNow() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+ }
+
+ function safeMoney(v) {
+  const n = Number(v) || 0;
+  return typeof window.formatMoney === "function" ? window.formatMoney(n) : `$${n.toFixed(2)}`;
+ }
+
+ function esc(s) {
+  const str = String(s ?? "");
+  return typeof window.escapeHtml === "function"
+   ? window.escapeHtml(str)
+   : str.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+ }
+
+ function ensureUserDualHistory(user) {
+  if (!user || typeof user !== "object") return;
+  user.history = Array.isArray(user.history) ? user.history : [];
+  user.bookingProfitHistory = Array.isArray(user.bookingProfitHistory) ? user.bookingProfitHistory : [];
+  user.txHistory = Array.isArray(user.txHistory) ? user.txHistory : [];
+
+  if (user.bookingProfitHistory.length === 0 && user.txHistory.length === 0 && user.history.length > 0) {
+   user.history.forEach((h) => {
+    const txt = String(h?.text || "");
+    const lower = txt.toLowerCase();
+    if (lower.includes("deposit") || lower.includes("withdraw") || lower.includes("ငွေသွင်း") || lower.includes("ငွေထုတ်")) {
+     user.txHistory.push(h);
+    } else if (lower.includes("booking") || lower.includes("profit") || lower.includes("commission") || lower.includes("အမြတ်") || lower.includes("ဘွတ်ကင်")) {
+     user.bookingProfitHistory.push(h);
+    }
+   });
+  }
+ }
+
+ function pushUserDualLog(user, kind, entry) {
+  if (!user) return;
+  ensureUserDualHistory(user);
+  user.history.unshift(entry);
+  if (kind === "booking") {
+   user.bookingProfitHistory.unshift(entry);
+  } else {
+   user.txHistory.unshift(entry);
+  }
+ }
+
+ function hookBookingProfitLogs() {
+  const candidateNames = ["completeBooking", "finishBooking", "settleBooking", "confirmBooking", "addBookingProfit"];
+  candidateNames.forEach((fnName) => {
+   const orig = window[fnName];
+   if (typeof orig === "function" && !orig.__tb4gWrapped) {
+    const wrapped = function (...args) {
+     const res = orig.apply(this, args);
+     try {
+      const activeUser = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
+      if (activeUser) ensureUserDualHistory(activeUser);
+      if (typeof window.saveState === "function") window.saveState();
+      renderUserDualHistorySections();
+     } catch (_) {}
+     return res;
+    };
+    wrapped.__tb4gWrapped = true;
+    window[fnName] = wrapped;
+   }
+  });
+ }
+
+ window.approveTxRequest = function (reqId) {
+  const list = Array.isArray(appState.txRequests) ? appState.txRequests : [];
+  const req = list.find((x) => x.id === reqId);
+  if (!req) return;
+  if (req.status === "approved" || req.status === "rejected") {
+   if (typeof showCenterRoundedAlert === "function") {
+    showCenterRoundedAlert("အသိပေးချက်", "ဤတောင်းဆိုချက်ကို ပြီးစီးပြီးသား ဖြစ်ပါသည်", true);
+   }
+   return;
+  }
+
+  const user = (appState.users || []).find((u) => u.id === req.userId);
+  if (!user) {
+   if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", "အသုံးပြုသူ အကောင့် မတွေ့ပါ", true);
+   return;
+  }
+const totalReqAmt = Number(req.originalAmount ?? req.amount) || 0;
+const alreadyApproved = Number(req.approvedAmount) || 0;
+const remainingAmt = Number(Math.max(0, totalReqAmt - alreadyApproved).toFixed(2));
+const targetMax = remainingAmt > 0 ? remainingAmt : totalReqAmt;
+if (targetMax <= 0) {
+  if (typeof showCenterRoundedAlert === "function") {
+    showCenterRoundedAlert("အသိပေးချက်", "အတည်ပြုရန် ကျန်ငွေ မရှိတော့ပါ", true);
+  }
+  return;
+}
+
+const actionLabel = req.type === "deposit"
+  ? "အမှန်တကယ် ဝင်လာသော ငွေသွင်းပမာဏ ($)"
+  : "အမှန်တကယ် ထုတ်ပေးသော ငွေထုတ်ပမာဏ ($)";
+
+const promptMsg = `${actionLabel}\n(မူလတောင်းဆို: ${safeMoney(totalReqAmt)} | အတည်ပြုပြီး: ${safeMoney(alreadyApproved)} | ကျန်ငွေ: ${safeMoney(targetMax)})`;
+const inputVal = window.prompt(promptMsg, String(targetMax));
+if (inputVal === null) return;
+
+const amt = Number(inputVal);
+if (!Number.isFinite(amt) || amt <= 0) {
+  if (typeof showCenterRoundedAlert === "function") {
+    showCenterRoundedAlert("Error", "0 ထက်ကြီးသော မှန်ကန်သော ပမာဏ ရိုက်ထည့်ပါ", true);
+  }
+  return;
+  }
+  if (amt > targetMax + 1e-9) {
+   if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", `ကျန်ရှိသော ပမာဏ (${safeMoney(targetMax)}) ထက် ကျော်လွန်နေပါသည်`, true);
+   return;
+  }
+  const okConfirm = window.confirm(`${actionLabel}\nပမာဏ: ${safeMoney(amt)}\nဆက်လက်လုပ်ဆောင်မှာ သေချာပါသလား?`);
+if (!okConfirm) return;
+  const dtStr = formatDateTimeNow();
+  const timeStr = typeof nowTimeStr === "function" ? nowTimeStr() : dtStr;
+
+  if (req.type === "deposit") {
+   user.balance = Number(((Number(user.balance) || 0) + amt).toFixed(2));
+   if ((Number(user.negativeAmount) || 0) > 0) {
+    const cleared = Math.min(Number(user.negativeAmount), amt);
+    user.negativeAmount = Number(((Number(user.negativeAmount) || 0) - cleared).toFixed(2));
+   }
+   pushUserDualLog(user, "tx", {
+    ts: dtStr,
+    timeShort: timeStr,
+    kind: "deposit",
+    requestedAmount: totalReqAmt,
+    approvedAmount: amt,
+    method: req.method || "-",
+    text: `[${dtStr}] Deposit Approved: +${safeMoney(amt)} (Req: ${safeMoney(totalReqAmt)}) via ${req.method || "-"}`
+   });
+  } else if (req.type === "withdraw") {
+   const currentBal = Number(user.balance) || 0;
+   if (currentBal < amt) {
+    if (typeof showCenterRoundedAlert === "function") {
+     showCenterRoundedAlert("လက်ကျန် မလုံလောက်ပါ", `${user.name} ၏ လက်ကျန်ငွေမှာ ${safeMoney(currentBal)} သာ ရှိပါသည်`, true);
+    }
+    return;
+   }
+   user.balance = Number(((currentBal - amt).toFixed(2)));
+   pushUserDualLog(user, "tx", {
+    ts: dtStr,
+    timeShort: timeStr,
+    kind: "withdraw",
+    requestedAmount: totalReqAmt,
+    approvedAmount: amt,
+    method: req.method || "-",
+    text: `[${dtStr}] Withdraw Approved: -${safeMoney(amt)} (Req: ${safeMoney(totalReqAmt)}) via ${req.method || "-"}`
+   });
+  }
+
+  req.originalAmount = totalReqAmt;
+  req.approvedAmount = Number((alreadyApproved + amt).toFixed(2));
+  req.remainingAmount = Number(Math.max(0, totalReqAmt - req.approvedAmount).toFixed(2));
+  req.lastApprovedAt = dtStr;
+  req.decidedAt = dtStr;
+
+  if (req.remainingAmount > 0) {
+   req.status = "partial";
+   req.amount = req.remainingAmount;
+  } else {
+   req.status = "approved";
+   req.amount = totalReqAmt;
+  }
+
+if (typeof saveState === "function") saveState();
+if (typeof syncAllUI === "function") syncAllUI();
+if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  if (typeof showCenterRoundedAlert === "function") {
+   showCenterRoundedAlert(
+    req.status === "partial" ? "တစ်စိတ်တစ်ပိုင်း အတည်ပြုပြီးပါပြီ" : "အတည်ပြုပြီးပါပြီ",
+    `${user.name} (${user.id}) အတွက် ${safeMoney(amt)} အတည်ပြုပြီးပါပြီ။ ကျန်ပမာဏ: ${safeMoney(req.remainingAmount)}`
+   );
+  }
+ };
+
+ function exportPlatformBackupJson() {
+  try {
+   const payload = {
+    exportedAt: formatDateTimeNow(),
+    storageNode: "tb_platform_state_v3",
+    data: appState
+   };
+   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+   const url = URL.createObjectURL(blob);
+   const a = document.createElement("a");
+   a.href = url;
+   a.download = `tb_platform_backup_${Date.now()}.json`;
+   document.body.appendChild(a);
+   a.click();
+   a.remove();
+   URL.revokeObjectURL(url);
+  } catch (_) {}
+ }
+
+ function importPlatformBackupJson(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+   try {
+    const parsed = JSON.parse(String(reader.result || "{}"));
+    const nextState = parsed && parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+    appState = {
+  ...appState,
+  ...nextState,
+  users: Array.isArray(nextState.users) ? nextState.users : (appState.users || []),
+  txRequests: Array.isArray(nextState.txRequests) ? nextState.txRequests : (appState.txRequests || [])
+};
+if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
+  localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
+}
+if (typeof saveState === "function") saveState();
+if (typeof syncAllUI === "function") syncAllUI();
+if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Backup ပြန်ထည့်ပြီးပါပြီ", "JSON Backup Data ကို အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ", false);
+   } catch (_) {
+    if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", "မှန်ကန်သော JSON Backup ဖိုင် မဟုတ်ပါ", true);
+   }
+  };
+  reader.readAsText(file);
+ }
+window.copyTextValue = function (val) {
+  const text = String(val ?? "");
+  if (!text) return;
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+    navigator.clipboard.writeText(text).catch(function () {});
+  }
+  if (typeof showCenterRoundedAlert === "function") {
+    showCenterRoundedAlert("Copy", "ID ကို ကူးယူပြီးပါပြီ: " + text, true);
+  }
+};
+ function renderAdminLedgerAndControls() {
+  const txTab = document.getElementById("adminTxTab");
+  if (!txTab) return;
+
+  let controls = document.getElementById("tb4gAdminControls");
+  if (!controls) {
+   controls = document.createElement("div");
+   controls.id = "tb4gAdminControls";
+   controls.className = "tb-4g-toolbar";
+   controls.innerHTML = `
+    <select id="tb4gStatusFilter" class="tb-4g-select">
+     <option value="all">အခြေအနေအားလုံး (All)</option>
+     <option value="pending">စောင့်ဆိုင်းဆဲ (Pending)</option>
+     <option value="partial">တစ်စိတ်တစ်ပိုင်း (Partial)</option>
+     <option value="approved">အတည်ပြုပြီး (Approved)</option>
+     <option value="rejected">ငြင်းပယ်ပြီး (Rejected)</option>
+    </select>
+    <select id="tb4gTypeFilter" class="tb-4g-select">
+     <option value="all">ငွေသွင်း / ငွေထုတ် အားလုံး</option>
+     <option value="deposit">ငွေသွင်း (Deposit)</option>
+     <option value="withdraw">ငွေထုတ် (Withdraw)</option>
+    </select>
+    <input id="tb4gSearchInput" type="text" class="tb-4g-input" placeholder="အကောင့် / နံပါတ် / နည်းလမ်း ရှာရန်..." />
+    <button id="tb4gExportBtn" type="button" class="btn btn-secondary btn-sm">JSON Backup ထုတ်ရန်</button>
+    <label class="btn btn-secondary btn-sm" style="cursor:pointer;margin:0;">
+     JSON Restore
+     <input id="tb4gImportInput" type="file" accept="application/json" style="display:none;" />
+    </label>
+   `;
+   const tableWrap = txTab.querySelector(".table-wrap");
+   if (tableWrap) txTab.insertBefore(controls, tableWrap);
+   else txTab.appendChild(controls);
+
+   document.getElementById("tb4gStatusFilter")?.addEventListener("change", renderAdminLedgerAndControls);
+   document.getElementById("tb4gTypeFilter")?.addEventListener("change", renderAdminLedgerAndControls);
+   document.getElementById("tb4gSearchInput")?.addEventListener("input", renderAdminLedgerAndControls);
+   document.getElementById("tb4gExportBtn")?.addEventListener("click", exportPlatformBackupJson);
+   document.getElementById("tb4gImportInput")?.addEventListener("change", (e) => {
+    importPlatformBackupJson(e.target.files && e.target.files[0]);
+    e.target.value = "";
+   });
+  }
+  let summaryBox = document.getElementById("tb4gDailySummaryBox");
+  if (!summaryBox) {
+   summaryBox = document.createElement("div");
+   summaryBox.id = "tb4gDailySummaryBox";
+   summaryBox.className = "tb-4g-box";
+   txTab.insertBefore(summaryBox, controls || null);
+  }
+
+  const todayPrefix = new Date().toISOString().slice(0, 10);
+  let todayDeposit = 0;
+  let todayWithdraw = 0;
+  let totalPartialRem = 0;
+  let todayPartialApproved = 0;
+  (Array.isArray(appState.txRequests) ? appState.txRequests : []).forEach((r) => {
+   const reqAmt = Number(r.originalAmount ?? r.amount) || 0;
+   const appAmt = Number(r.approvedAmount) || 0;
+   const remAmt = r.remainingAmount !== undefined
+    ? Number(r.remainingAmount) || 0
+    : (r.status === "pending" ? reqAmt : Math.max(0, reqAmt - appAmt));
+   if (r.status === "partial") totalPartialRem += remAmt;
+
+   const dt = String(r.decidedAt || r.lastApprovedAt || r.createdAt || "");
+   const isToday = dt.startsWith(todayPrefix);
+   if (isToday && r.status === "approved") {
+  if (r.type === "deposit") todayDeposit += appAmt;
+  if (r.type === "withdraw") todayWithdraw += appAmt;
+}
+if (isToday && r.status === "partial") {
+  todayPartialApproved += appAmt;
+}
+   }
+  });
+
+  summaryBox.innerHTML = `
+   <div style="display:flex;flex-wrap:wrap;gap:14px;font-weight:700;">
+    <span>ယနေ့ ငွေသွင်း (Approved): ${safeMoney(todayDeposit)}</span>
+    <span>ယနေ့ ငွေထုတ် (Approved): ${safeMoney(todayWithdraw)}</span>
+    <span>Partial ကျန်ငွေ စုစုပေါင်း: ${safeMoney(totalPartialRem)}</span>
+   </div>
+  `;
+  let ledgerWrap = document.getElementById("tb4gFullLedgerWrap");
+  if (!ledgerWrap) {
+   ledgerWrap = document.createElement("div");
+   ledgerWrap.id = "tb4gFullLedgerWrap";
+   ledgerWrap.className = "tb-4g-box";
+   ledgerWrap.innerHTML = `
+ <h4 style="margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;"><span>ငွေသွင်း / ငွေထုတ် အချက်အလက်အစုံ ဇယား (Full Ledger)</span><span id="tb4gAdminCount" class="small muted"></span></h4>
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr>
+        <th>#</th>
+        <th>အကောင့် / နံပါတ်</th>
+        <th>အမျိုးအစား</th>
+        <th>တောင်းဆိုပမာဏ</th>
+        <th>အတည်ပြုပမာဏ</th>
+        <th>ကျန်ပမာဏ</th>
+        <th>နည်းလမ်း / အချိန် / နေ့ရက်</th>
+        <th>အခြေအနေ</th>
+        <th>လုပ်ဆောင်ချက်</th>
+       </tr>
+      </thead>
+      <tbody id="tb4gFullLedgerBody"></tbody>
+     </table>
+    </div>
+   `;
+   txTab.appendChild(ledgerWrap);
+  }
+
+  const statusFilter = document.getElementById("tb4gStatusFilter")?.value || "all";
+  const typeFilter = document.getElementById("tb4gTypeFilter")?.value || "all";
+  const q = String(document.getElementById("tb4gSearchInput")?.value || "").trim().toLowerCase();
+
+  const allTx = Array.isArray(appState.txRequests) ? appState.txRequests : [];
+  const filtered = allTx.filter((r) => {
+   const st = r.status || "pending";
+   if (statusFilter !== "all" && st !== statusFilter) return false;
+   if (typeFilter !== "all" && r.type !== typeFilter) return false;
+   if (!q) return true;
+   const hay = [r.id, r.txId, r.transactionId, r.userId, r.userName, r.accountNo, r.accountNumber, r.phone, r.method, r.type, r.note, st].filter(Boolean).join(" ").toLowerCase();
+  return hay.includes(q);
+  });
+
+  const tbody = document.getElementById("tb4gFullLedgerBody");
+  if (!tbody) return;
+
+  if (!filtered.length) {
+   tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;" class="muted">မှတ်တမ်း မရှိသေးပါ</td></tr>`;
+   return;
+  }
+
+  tbody.innerHTML = filtered.map((r, i) => {
+   const reqAmt = Number(r.originalAmount ?? r.amount) || 0;
+   const appAmt = Number(r.approvedAmount) || 0;
+   const remAmt = r.remainingAmount !== undefined
+    ? Number(r.remainingAmount) || 0
+    : (r.status === "pending" ? reqAmt : Math.max(0, reqAmt - appAmt));
+
+   const st = r.status || "pending";
+   const pillClass = st === "partial"
+    ? "tb-4g-partial"
+    : st === "approved"
+     ? "tb-4g-approved"
+     : st === "rejected"
+      ? "tb-4g-rejected"
+      : "tb-4g-pending";
+
+   const stLabel = st === "partial"
+    ? "Partial (ကျန်ငွေရှိ)"
+    : st === "approved"
+     ? "Approved"
+     : st === "rejected"
+      ? "Rejected"
+      : "Pending";
+
+   const canAct = st === "pending" || st === "partial";
+   const actions = canAct
+    ? `<div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button type="button" class="btn btn-success btn-xs" onclick="approveTxRequest('${esc(r.id)}')">Approve</button>
+        <button type="button" class="btn btn-danger btn-xs" onclick="rejectTxRequest('${esc(r.id)}')">Reject</button>
+       </div>`
+    : `<span class="small muted">${esc(r.decidedAt || r.lastApprovedAt || "-")}</span>`;
+
+   const typeLabel = r.type === "deposit" ? "ငွေသွင်း (Deposit)" : "ငွေထုတ် (Withdraw)";
+   const dtInfo = r.decidedAt || r.lastApprovedAt || r.createdAt || "-";
+
+   return `
+    <tr>
+     <td>${i + 1}</td>
+  <td><strong>${esc(r.userName || "-")}</strong><br><span class="small muted">ID/နံပါတ်: ${esc(r.userId || "-")}</span><br><span class="small muted">TxID: ${esc(r.id || "-")}</span> <button type="button" class="btn btn-xs" onclick="copyTextValue('${esc(r.id || "")}')">Copy</button></td>
+     <td>${esc(typeLabel)}</td>
+     <td><strong>${safeMoney(reqAmt)}</strong></td>
+     <td>${safeMoney(appAmt)}</td>
+     <td>${safeMoney(remAmt)}</td>
+     <td class="small">${esc(r.method || "-")}<br><span class="muted">${esc(dtInfo)}</span></td>
+     <td><span class="tb-4g-pill ${pillClass}">${esc(stLabel)}</span></td>
+     <td>${actions}</td>
+    </tr>
+   `;
+  }).join("");
+  const countEl = document.getElementById("tb4gAdminCount");
+if (countEl) {
+  countEl.textContent = `ပြသနေသော မှတ်တမ်းအရေအတွက်: ${rows.length}`;
+}
+ }
+
+ function renderUserDualHistorySections() {
+  const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
+  if (!user) return;
+  ensureUserDualHistory(user);
+
+  let host = document.getElementById("tb4gUserDualHistory");
+  if (!host) {
+   const profileOrAccount = document.getElementById("accountPage")
+    || document.getElementById("profilePage")
+    || document.getElementById("mePage")
+    || document.querySelector(".main-content")
+    || document.body;
+
+   host = document.createElement("div");
+   host.id = "tb4gUserDualHistory";
+   host.className = "tb-4g-box";
+   host.innerHTML = `
+    <h4 style="margin:0 0 6px;">အသုံးပြုသူ မှတ်တမ်းများ (၂ မျိုးခွဲခြားချက်)</h4>
+    <div class="tb-4g-tabs">
+     <button id="tb4gTabBooking" type="button" class="tb-4g-tab-btn active">၁။ ဘွတ်ကင်တင်လို့ရတဲ့ အမြတ်မှတ်တမ်း</button>
+     <button id="tb4gTabTx" type="button" class="tb-4g-tab-btn">၂။ ငွေသွင်း / ငွေထုတ် မှတ်တမ်း</button>
+    </div>
+    <div id="tb4gPanelBooking"></div>
+    <div id="tb4gPanelTx" style="display:none;"></div>
+   `;
+   profileOrAccount.appendChild(host);
+
+   document.getElementById("tb4gTabBooking")?.addEventListener("click", () => {
+    document.getElementById("tb4gTabBooking")?.classList.add("active");
+    document.getElementById("tb4gTabTx")?.classList.remove("active");
+    const pB = document.getElementById("tb4gPanelBooking");
+    const pT = document.getElementById("tb4gPanelTx");
+    if (pB) pB.style.display = "block";
+    if (pT) pT.style.display = "none";
+   });
+
+   document.getElementById("tb4gTabTx")?.addEventListener("click", () => {
+    document.getElementById("tb4gTabTx")?.classList.add("active");
+    document.getElementById("tb4gTabBooking")?.classList.remove("active");
+    const pB = document.getElementById("tb4gPanelBooking");
+    const pT = document.getElementById("tb4gPanelTx");
+    if (pB) pB.style.display = "none";
+    if (pT) pT.style.display = "block";
+   });
+  }
+
+  const pB = document.getElementById("tb4gPanelBooking");
+  const pT = document.getElementById("tb4gPanelTx");
+
+  if (pB) {
+   pB.innerHTML = user.bookingProfitHistory.length
+    ? `<ul style="margin:0;padding-left:18px;">${user.bookingProfitHistory.map((item) => `<li><span class="small muted">${esc(item.ts || "")}</span> — ${esc(item.text || "")}</li>`).join("")}</ul>`
+    : `<div class="small muted">ဘွတ်ကင်အမြတ် မှတ်တမ်း မရှိသေးပါ</div>`;
+  }
+
+ if (pT) {
+   const curFilter = pT.dataset.txFilter || "all";
+   const filteredTx = (user.txHistory || []).filter((item) => {
+    const txt = String(item?.text || item?.type || item?.label || "").toLowerCase();
+    if (curFilter === "deposit") return txt.includes("deposit") || txt.includes("ငွေသွင်း");
+    if (curFilter === "withdraw") return txt.includes("withdraw") || txt.includes("ငွေထုတ်");
+    return true;
+   });
+
+   pT.innerHTML = `
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+     <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး (All)</button>
+     <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း (Deposit)</button>
+     <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ် (Withdraw)</button>
+    </div>
+    ${filteredTx.length
+ ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => { const st = String(item?.status || "pending").toLowerCase(); const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending"; return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`; }).join("")}</ul>`
+     : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
+    }
+   `;
+
+   const origSync = window.syncAllUI;
+window.syncAllUI = function (...args) {
+  const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
+  if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  return res;
+};
+
+const origRenderTx = window.renderAdminTxRequests;
+window.renderAdminTxRequests = function (...args) {
+  const res = typeof origRenderTx === "function" ? origRenderTx.apply(this, args) : undefined;
+  if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+  return res;
+};
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof hookBookingProfitLogs === "function") hookBookingProfitLogs();
+  if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  setInterval(() => {
+    if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+    if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  }, 4000);
+});
 })();
 </script>
 </body>
