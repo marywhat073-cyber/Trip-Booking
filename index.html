@@ -3439,13 +3439,180 @@ function setBookingStar(starNum) {
   renderBookingPresetList();
 }
 
+const BOOKING_EXTERNAL_PHOTOS = [
+  "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1000&q=80",
+  "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80"
+];
+
+const BOOKING_FALLBACK_PHOTO =
+  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=80";
+
+const STAR_COMMENT_BANK = {
+  en: {
+    1: ["Room late at check-in.", "AC needed service.", "Hallway noise at night.", "Slow reception reply."],
+    2: ["Basic room setup.", "Limited breakfast choices.", "Spotty Wi-Fi signal.", "Slow elevator wait."],
+    3: ["Clean bed and linen.", "Good central spot.", "Calm room at night.", "Fair stay overall."],
+    4: ["Spacious, clean room.", "Helpful front desk.", "Quiet nights, nice view.", "Smooth check-in."],
+    5: ["Top suite and service.", "Spotless room, great view.", "Fast, warm hospitality.", "Smooth stay throughout."]
+  },
+  my: {
+    1: ["Check-in နောက်ကျသည်။", "AC ပြင်ရန်လိုသည်။", "ညဘက် အသံဆူသည်။", "ဝန်ဆောင်မှု နှေးသည်။"],
+    2: ["အခန်း သာမန်သာရှိသည်။", "မနက်စာ ရွေးစရာနည်းသည်။", "Wi-Fi လိုင်းမငြိမ်ပါ။", "ဓာတ်လှေကား စောင့်ရသည်။"],
+    3: ["အိပ်ရာ၊ အခင်း သန့်သည်။", "နေရာကောင်း ရှိသည်။", "ညဘက် တိတ်ဆိတ်သည်။", "တည်းရတာ သင့်တော်သည်။"],
+    4: ["အခန်းကျယ်ပြီး သန့်သည်။", "ဝန်ထမ်း ကူညီတတ်သည်။", "မြင်ကွင်းကောင်းပြီး ငြိမ်သည်။", "Check-in လွယ်ကူသည်။"],
+    5: ["အခန်း၊ ဝန်ဆောင်မှု အကောင်းဆုံး။", "အလွန်သန့်ပြီး မြင်ကွင်းလှသည်။", "ဧည့်ဝတ်ကျေပွန်သည်။", "အစအဆုံး အဆင်ပြေသည်။"]
+  }
+};
+
+const BOOKING_STORAGE_KEY = "tb_booking_cycle_state_v1";
+
+const bookingCycle = Object.assign(
+  {
+    orderCount: 0,
+    maxOrders: 30,
+    isLocked: false,
+    usedPhotoIndexes: [],
+    prevCyclePhotoIndexes: [],
+    usedProfits: [],
+    selectedStar: 5,
+    selectedComment: "",
+    currentOrder: null,
+    historyRecords: []
+  },
+  window.bookingCycle || {}
+);
+window.bookingCycle = bookingCycle;
+
+function getBookingLang() {
+  const raw =
+    window.currentLang ||
+    document.documentElement.getAttribute("lang") ||
+    localStorage.getItem("lang") ||
+    localStorage.getItem("tb_lang") ||
+    "";
+  return String(raw).toLowerCase().startsWith("my") ? "my" : "en";
+}
+
+function getStarComments(starNum, lang = getBookingLang()) {
+  const s = Math.min(5, Math.max(1, Number(starNum) || 5));
+  const bank = STAR_COMMENT_BANK[lang] || STAR_COMMENT_BANK.en;
+  return bank[s] || bank[5];
+}
+
+function persistBookingCycleState() {
+  try {
+    localStorage.setItem(
+      BOOKING_STORAGE_KEY,
+      JSON.stringify({
+        orderCount: bookingCycle.orderCount,
+        maxOrders: bookingCycle.maxOrders,
+        isLocked: bookingCycle.isLocked,
+        usedPhotoIndexes: bookingCycle.usedPhotoIndexes,
+        prevCyclePhotoIndexes: bookingCycle.prevCyclePhotoIndexes,
+        usedProfits: bookingCycle.usedProfits,
+        selectedStar: bookingCycle.selectedStar,
+        selectedComment: bookingCycle.selectedComment,
+        currentOrder: bookingCycle.currentOrder,
+        historyRecords: bookingCycle.historyRecords
+      })
+    );
+  } catch (_) {}
+}
+
+function restoreBookingCycleState() {
+  try {
+    const raw = localStorage.getItem(BOOKING_STORAGE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (!saved || typeof saved !== "object") return;
+    bookingCycle.orderCount = Number(saved.orderCount) || 0;
+    bookingCycle.maxOrders = Number(saved.maxOrders) || 30;
+    bookingCycle.isLocked = Boolean(saved.isLocked) || bookingCycle.orderCount >= bookingCycle.maxOrders;
+    bookingCycle.usedPhotoIndexes = Array.isArray(saved.usedPhotoIndexes) ? saved.usedPhotoIndexes : [];
+    bookingCycle.prevCyclePhotoIndexes = Array.isArray(saved.prevCyclePhotoIndexes) ? saved.prevCyclePhotoIndexes : [];
+    bookingCycle.usedProfits = Array.isArray(saved.usedProfits) ? saved.usedProfits : [];
+    bookingCycle.selectedStar = Math.min(5, Math.max(1, Number(saved.selectedStar) || 5));
+    bookingCycle.selectedComment = saved.selectedComment || getStarComments(bookingCycle.selectedStar)[0];
+    bookingCycle.currentOrder = saved.currentOrder || null;
+    bookingCycle.historyRecords = Array.isArray(saved.historyRecords) ? saved.historyRecords : [];
+  } catch (_) {}
+}
+
+function pickUniquePhotoIndex() {
+  const total = BOOKING_EXTERNAL_PHOTOS.length;
+  let pool = [];
+  for (let i = 0; i < total; i++) {
+    if (!bookingCycle.usedPhotoIndexes.includes(i) && !bookingCycle.prevCyclePhotoIndexes.includes(i)) {
+      pool.push(i);
+    }
+  }
+  if (!pool.length) {
+    for (let i = 0; i < total; i++) {
+      if (!bookingCycle.usedPhotoIndexes.includes(i)) pool.push(i);
+    }
+  }
+  if (!pool.length) {
+    bookingCycle.usedPhotoIndexes = [];
+    for (let i = 0; i < total; i++) pool.push(i);
+  }
+  const chosen = pool[(bookingCycle.orderCount * 3 + pool.length) % pool.length];
+  bookingCycle.usedPhotoIndexes.push(chosen);
+  return chosen;
+}
+
+function pickUniqueProfit(orderNum) {
+  let val = Number((24.5 + ((orderNum * 11) % 27) + (((orderNum * 17) % 89) + 10) / 100).toFixed(2));
+  while (bookingCycle.usedProfits.includes(val)) {
+    val = Number((val + 0.43).toFixed(2));
+  }
+  bookingCycle.usedProfits.push(val);
+  return val;
+}
+
+function highlightSelectedStarOnly(starNum) {
+  const groupEl = document.getElementById("bookingStarGroup");
+  if (!groupEl) return;
+  const btns = groupEl.querySelectorAll("button");
+  btns.forEach((btn, idx) => {
+    const isPicked = idx + 1 === starNum;
+    btn.style.background = isPicked ? "#facc15" : "";
+    btn.style.color = isPicked ? "#111827" : "";
+    btn.style.borderColor = isPicked ? "#eab308" : "";
+    btn.style.fontWeight = isPicked ? "700" : "";
+  });
+}
+
+function setBookingStar(starNum) {
+  const cleanStar = Math.min(5, Math.max(1, Number(starNum) || 5));
+  const comments = getStarComments(cleanStar);
+  bookingCycle.selectedStar = cleanStar;
+  bookingCycle.selectedComment = comments[0];
+  const inputEl = document.getElementById("bookingCommentInput");
+  if (inputEl) inputEl.value = bookingCycle.selectedComment;
+  highlightSelectedStarOnly(cleanStar);
+  renderBookingPresetList();
+  persistBookingCycleState();
+}
+
 function renderBookingPresetList() {
   const listEl = document.getElementById("bookingPresetList");
   if (!listEl) return;
-  const presets = STAR_COMMENT_BANK[bookingCycle.selectedStar] || STAR_COMMENT_BANK[5];
-  listEl.innerHTML = presets.map((txt, idx) =>
-    `<button type="button" class="btn btn-sm" onclick="selectPresetComment(${idx})">${idx + 1}. ${txt}</button>`
-  ).join("");
+  const presets = getStarComments(bookingCycle.selectedStar);
+  listEl.innerHTML = presets
+    .map((txt, idx) => {
+      const active = bookingCycle.selectedComment === txt;
+      const activeStyle = active
+        ? 'style="background:#fef08a;color:#111827;border-color:#eab308;font-weight:600;"'
+        : "";
+      return `<button type="button" class="btn btn-sm" ${activeStyle} onclick="selectPresetComment(${idx})">${idx + 1}. ${txt}</button>`;
+    })
+    .join("");
 }
 
 function toggleBookingPresetList() {
@@ -3456,18 +3623,40 @@ function toggleBookingPresetList() {
 }
 
 function selectPresetComment(index) {
-  const presets = STAR_COMMENT_BANK[bookingCycle.selectedStar] || STAR_COMMENT_BANK[5];
+  const presets = getStarComments(bookingCycle.selectedStar);
   const chosen = presets[index] || presets[0];
   bookingCycle.selectedComment = chosen;
   const inputEl = document.getElementById("bookingCommentInput");
   if (inputEl) inputEl.value = chosen;
+  renderBookingPresetList();
+  persistBookingCycleState();
   const listEl = document.getElementById("bookingPresetList");
   if (listEl) listEl.style.display = "none";
+}
+
+function appendBookingHistoryRecord(orderObj) {
+  const record = {
+    orderNum: orderObj.orderNum,
+    profit: orderObj.profit,
+    star: bookingCycle.selectedStar,
+    comment: bookingCycle.selectedComment || getStarComments(bookingCycle.selectedStar)[0],
+    time: new Date().toLocaleTimeString()
+  };
+  bookingCycle.historyRecords.unshift(record);
+  const historyListEl = document.getElementById("historyList");
+  if (historyListEl) {
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "history-item";
+    itemDiv.style.cssText = "padding:8px 10px;border-bottom:1px solid rgba(148,163,184,0.2);font-size:13px;";
+    itemDiv.textContent = `#${record.orderNum} · ${record.star}★ · +$${Number(record.profit).toFixed(2)} · ${record.comment}`;
+    historyListEl.prepend(itemDiv);
+  }
 }
 
 function openBookingOrderModal() {
   if (bookingCycle.isLocked || bookingCycle.orderCount >= bookingCycle.maxOrders) {
     bookingCycle.isLocked = true;
+    persistBookingCycleState();
     syncBookingCycleUI();
     return;
   }
@@ -3480,22 +3669,38 @@ function openBookingOrderModal() {
     profit
   };
   const imgEl = document.getElementById("bookingModalHotelImg");
-  if (imgEl) imgEl.src = bookingCycle.currentOrder.photoUrl;
-  setBookingStar(5);
+  if (imgEl) {
+    imgEl.onerror = function () {
+      imgEl.onerror = null;
+      imgEl.src = BOOKING_FALLBACK_PHOTO;
+    };
+    imgEl.src = bookingCycle.currentOrder.photoUrl;
+  }
+  setBookingStar(bookingCycle.selectedStar || 5);
+  persistBookingCycleState();
   document.getElementById("centerOrderModal")?.classList.remove("hidden");
 }
 
 function completeBookingOrder() {
   if (bookingCycle.isLocked || bookingCycle.orderCount >= bookingCycle.maxOrders) {
     bookingCycle.isLocked = true;
+    persistBookingCycleState();
     syncBookingCycleUI();
-    return;
+    return false;
   }
+  const activeOrder = bookingCycle.currentOrder || {
+    orderNum: bookingCycle.orderCount + 1,
+    profit: pickUniqueProfit(bookingCycle.orderCount + 1)
+  };
+  appendBookingHistoryRecord(activeOrder);
   bookingCycle.orderCount += 1;
+  bookingCycle.currentOrder = null;
   if (bookingCycle.orderCount >= bookingCycle.maxOrders) {
     bookingCycle.isLocked = true;
   }
+  persistBookingCycleState();
   syncBookingCycleUI();
+  return true;
 }
 
 function adminResetBookingCycle() {
@@ -3505,6 +3710,8 @@ function adminResetBookingCycle() {
   bookingCycle.usedPhotoIndexes = [];
   bookingCycle.usedProfits = [];
   bookingCycle.currentOrder = null;
+  setBookingStar(5);
+  persistBookingCycleState();
   syncBookingCycleUI();
 }
 
@@ -3512,11 +3719,79 @@ function syncBookingCycleUI() {
   const startBtn = document.getElementById("startBookingOrderBtn");
   const lockMsg = document.getElementById("bookingCycleLockMsg");
   const ordersText = document.getElementById("taskOrdersText");
+  const isMy = getBookingLang() === "my";
   if (ordersText) ordersText.textContent = `${bookingCycle.orderCount}/${bookingCycle.maxOrders}`;
-  if (startBtn) startBtn.disabled = bookingCycle.isLocked;
-  if (lockMsg) lockMsg.style.display = bookingCycle.isLocked ? "block" : "none";
+  if (startBtn) {
+    startBtn.disabled = bookingCycle.isLocked;
+    if (bookingCycle.isLocked) {
+      startBtn.textContent = isMy ? "၃၀/၃၀ ပြည့်သွားပါပြီ" : "30/30 Cycle Completed";
+    }
+  }
+  if (lockMsg) {
+    lockMsg.style.display = bookingCycle.isLocked ? "block" : "none";
+    if (bookingCycle.isLocked) {
+      lockMsg.textContent = isMy
+        ? "၃၀/၃၀ ပြီးဆုံးပါပြီ — Admin Reset ကို စောင့်ဆိုင်းနေပါသည်"
+        : "30/30 Completed - Waiting for Admin Reset";
+    }
+  }
   document.getElementById("bookingCenterDepositBtn")?.remove();
   document.getElementById("bookingCenterWithdrawBtn")?.remove();
+}
+
+(function hookBookingCyclePersistence() {
+  restoreBookingCycleState();
+  const origSaveState = window.saveState;
+  if (typeof origSaveState === "function" && !origSaveState.__tbCycleHooked) {
+    window.saveState = function (...args) {
+      persistBookingCycleState();
+      return origSaveState.apply(this, args);
+    };
+    window.saveState.__tbCycleHooked = true;
+  }
+  const origSubmit = window.submitCenterOrder;
+  if (typeof origSubmit === "function" && !origSubmit.__tbCycleHooked) {
+    window.submitCenterOrder = function (...args) {
+      if (bookingCycle.isLocked || bookingCycle.orderCount >= bookingCycle.maxOrders) {
+        bookingCycle.isLocked = true;
+        persistBookingCycleState();
+        syncBookingCycleUI();
+        return;
+      }
+      const res = origSubmit.apply(this, args);
+      const errEl = document.getElementById("centerOrderErr");
+      const hasErr = errEl && errEl.textContent && errEl.textContent.trim().length > 0;
+      if (!hasErr) {
+        completeBookingOrder();
+      }
+      return res;
+    };
+    window.submitCenterOrder.__tbCycleHooked = true;
+  }
+  syncBookingCycleUI();
+})();
+ (function hookBookingLangSwitch() {
+  const origSetLang = window.setLang || window.switchLang || window.applyLang;
+  if (typeof origSetLang === "function" && !origSetLang.__tbLangHooked) {
+    const wrapped = function (...args) {
+      const res = origSetLang.apply(this, args);
+      const inputEl = document.getElementById("bookingCommentInput");
+      const comments = getStarComments(bookingCycle.selectedStar);
+      if (!comments.includes(bookingCycle.selectedComment)) {
+        bookingCycle.selectedComment = comments[0];
+        if (inputEl) inputEl.value = bookingCycle.selectedComment;
+      }
+      renderBookingPresetList();
+      syncBookingCycleUI();
+      persistBookingCycleState();
+      return res;
+    };
+    wrapped.__tbLangHooked = true;
+    if (window.setLang === origSetLang) window.setLang = wrapped;
+    if (window.switchLang === origSetLang) window.switchLang = wrapped;
+    if (window.applyLang === origSetLang) window.applyLang = wrapped;
+  }
+})();
 }
 function triggerGetOrder() {
  const user = getActiveUser();
