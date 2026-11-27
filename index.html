@@ -763,7 +763,7 @@ th { background: var(--fb-surface); font-weight: 700; white-space: nowrap; }
      </div>
      <div>
       <div style="font-weight:800;font-size:16px" data-i18n="cs_live_title">Customer Service Live</div>
-      <div id="userSideTypingIndicator" class="small muted" data-i18n="cs_online_sub">Online · Direct synchronization with Admin &amp; Support</div>
+      <div id="userSideTypingIndicator" class="small muted" data-i18n="cs_online_sub">Online · 24 hour service</div>
      </div>
     </div>
 
@@ -2099,7 +2099,7 @@ const I18N = {
   show_less: "Show Less",
   view_btn: "View",
   cs_live_title: "Customer Service Live",
-  cs_online_sub: "Online · Direct synchronization with Admin & Support",
+  cs_online_sub: "Online · 24 hour service",
   btn_bank_card: "ဘဏ်ကဒ်",
   btn_photo: "ဓာတ်ပုံ",
   support_input_ph: "Type a message or enter amount... (Enter to send, Shift+Enter for new line)",
@@ -3753,7 +3753,6 @@ function handleChatPhotoUpload(event, role) {
       renderSupportMessages();
     }
   };
- };
  reader.readAsDataURL(file);
  event.target.value = "";
 }
@@ -5275,7 +5274,6 @@ document.addEventListener("DOMContentLoaded", () => {
       pollingBusy = false;
     }
   }, 3000);
-});
  });
 })();
 </script>
@@ -5632,9 +5630,6 @@ window.copyTextValue = function (val) {
 if (isToday && r.status === "partial") {
   todayPartialApproved += appAmt;
 }
-   }
-  });
-
   summaryBox.innerHTML = `
    <div style="display:flex;flex-wrap:wrap;gap:14px;font-weight:700;">
     <span>ယနေ့ ငွေသွင်း (Approved): ${safeMoney(todayDeposit)}</span>
