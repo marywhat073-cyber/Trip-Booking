@@ -3438,57 +3438,7 @@ function setBookingStar(starNum) {
   if (inputEl) inputEl.value = bookingCycle.selectedComment;
   renderBookingPresetList();
 }
-
-const BOOKING_EXTERNAL_PHOTOS = [
-  "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1000&q=80",
-  "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80"
-];
-
-const BOOKING_FALLBACK_PHOTO =
-  "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=80";
-
-const STAR_COMMENT_BANK = {
-  en: {
-    1: ["Room late at check-in.", "AC needed service.", "Hallway noise at night.", "Slow reception reply."],
-    2: ["Basic room setup.", "Limited breakfast choices.", "Spotty Wi-Fi signal.", "Slow elevator wait."],
-    3: ["Clean bed and linen.", "Good central spot.", "Calm room at night.", "Fair stay overall."],
-    4: ["Spacious, clean room.", "Helpful front desk.", "Quiet nights, nice view.", "Smooth check-in."],
-    5: ["Top suite and service.", "Spotless room, great view.", "Fast, warm hospitality.", "Smooth stay throughout."]
-  },
-  my: {
-    1: ["Check-in နောက်ကျသည်။", "AC ပြင်ရန်လိုသည်။", "ညဘက် အသံဆူသည်။", "ဝန်ဆောင်မှု နှေးသည်။"],
-    2: ["အခန်း သာမန်သာရှိသည်။", "မနက်စာ ရွေးစရာနည်းသည်။", "Wi-Fi လိုင်းမငြိမ်ပါ။", "ဓာတ်လှေကား စောင့်ရသည်။"],
-    3: ["အိပ်ရာ၊ အခင်း သန့်သည်။", "နေရာကောင်း ရှိသည်။", "ညဘက် တိတ်ဆိတ်သည်။", "တည်းရတာ သင့်တော်သည်။"],
-    4: ["အခန်းကျယ်ပြီး သန့်သည်။", "ဝန်ထမ်း ကူညီတတ်သည်။", "မြင်ကွင်းကောင်းပြီး ငြိမ်သည်။", "Check-in လွယ်ကူသည်။"],
-    5: ["အခန်း၊ ဝန်ဆောင်မှု အကောင်းဆုံး။", "အလွန်သန့်ပြီး မြင်ကွင်းလှသည်။", "ဧည့်ဝတ်ကျေပွန်သည်။", "အစအဆုံး အဆင်ပြေသည်။"]
-  }
-};
-
-const BOOKING_STORAGE_KEY = "tb_booking_cycle_state_v1";
-
-const bookingCycle = Object.assign(
-  {
-    orderCount: 0,
-    maxOrders: 30,
-    isLocked: false,
-    usedPhotoIndexes: [],
-    prevCyclePhotoIndexes: [],
-    usedProfits: [],
-    selectedStar: 5,
-    selectedComment: "",
-    currentOrder: null,
-    historyRecords: []
-  },
-  window.bookingCycle || {}
-);
-window.bookingCycle = bookingCycle;
-
+ 
 function getBookingLang() {
   const raw =
     window.currentLang ||
@@ -5563,7 +5513,7 @@ if (!okReject) return;
   markAdminRead(userId);
   renderAdminCsList();
  };
-
+ let activeAdminCsUserId = null;
  const origRenderSupportMessages = window.renderSupportMessages;
  window.renderSupportMessages = function () {
   if (typeof origRenderSupportMessages === "function") {
@@ -6259,8 +6209,8 @@ function renderUserDualHistorySections() {
     if (pB) pB.style.display = "none";
     if (pT) pT.style.display = "block";
    });
-  });
 
+   
   const pB = document.getElementById("tb4gPanelBooking");
   const pT = document.getElementById("tb4gPanelTx");
 
@@ -6314,7 +6264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   }, 4000);
 });
-})();
+
 </script>
 </body>
 </html>
