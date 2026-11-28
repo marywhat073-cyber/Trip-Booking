@@ -5641,62 +5641,63 @@ window.syncAllUI = function () {
  }
 
  let lastRemoteSnapshot = "";
- async function pollFirebaseState() {
-  const cfg = window.TB_FIREBASE_CONFIG;
-  if (!cfg || !cfg.databaseURL) return;
+async function pollFirebaseState() {
+ const cfg = window.TB_FIREBASE_CONFIG;
+ if (!cfg || !cfg.databaseURL) return;
 
-  const activeTag = document.activeElement ? document.activeElement.tagName : "";
-  if (activeTag === "INPUT" || activeTag === "TEXTAREA" || activeTag === "SELECT") return;
+ const activeTag = document.activeElement ? document.activeElement.tagName : "";
+ if (activeTag === "INPUT" || activeTag === "TEXTAREA" || activeTag === "SELECT") return;
 
-  try {
-   const baseUrl = String(cfg.databaseURL).replace(/\/+$/, "");
-   const res = await fetch(`${baseUrl}/tb_platform_state_v3.json`, { cache: "no-store" });
-   if (!res.ok) return;
-   const remoteData = await res.json();
-   if (!remoteData || typeof remoteData !== "object") return;
+ try {
+  const baseUrl = String(cfg.databaseURL).replace(/\/+$/, "");
+  const res = await fetch(`${baseUrl}/tb_platform_state_v3.json`, { cache: "no-store" });
+  if (!res.ok) return;
+  const remoteData = await res.json();
+  if (!remoteData || typeof remoteData !== "object") return;
 
-   const snap = JSON.stringify(remoteData);
-   if (snap && snap !== lastRemoteSnapshot) {
-    lastRemoteSnapshot = snap;
-    const currentSnap = JSON.stringify(appState);
-    if (snap !== currentSnap) {
- appState = {
-  ...appState,
-  ...remoteData,
-  users: Array.isArray(remoteData.users) && remoteData.users.length > 0
-    ? remoteData.users
-    : (Array.isArray(appState.users) ? appState.users : []),
-  txRequests: Array.isArray(remoteData.txRequests)
-    ? remoteData.txRequests
-    : (Array.isArray(appState.txRequests) ? appState.txRequests : []),
-  messages: remoteData.messages && typeof remoteData.messages === "object"
-    ? remoteData.messages
-    : (appState.messages && typeof appState.messages === "object" ? appState.messages : {})
-};
-if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
-  localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
-}
-if (typeof window.syncAllUI === "function") {
-  window.syncAllUI();
-}
-}
-   }
-  } catch (_) {}
- }
-document.addEventListener("DOMContentLoaded", () => {
-  if (typeof renderFirebaseStatusBadge === "function") renderFirebaseStatusBadge();
-  let pollingBusy = false;
-  setInterval(() => {
-    if (pollingBusy) return;
-    pollingBusy = true;
-    try {
-      if (typeof renderFirebaseStatusBadge === "function") renderFirebaseStatusBadge();
-      if (typeof pollFirebaseState === "function") pollFirebaseState();
-    } finally {
-      pollingBusy = false;
+  const snap = JSON.stringify(remoteData);
+  if (snap && snap !== lastRemoteSnapshot) {
+   lastRemoteSnapshot = snap;
+   const currentSnap = JSON.stringify(appState);
+   if (snap !== currentSnap) {
+    appState = {
+     ...appState,
+     ...remoteData,
+     users: Array.isArray(remoteData.users) && remoteData.users.length > 0
+      ? remoteData.users
+      : (Array.isArray(appState.users) ? appState.users : []),
+     txRequests: Array.isArray(remoteData.txRequests)
+      ? remoteData.txRequests
+      : (Array.isArray(appState.txRequests) ? appState.txRequests : []),
+     messages: remoteData.messages && typeof remoteData.messages === "object"
+      ? remoteData.messages
+      : (appState.messages && typeof appState.messages === "object" ? appState.messages : {})
+    };
+    if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
+     localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
     }
-  }, 3000);
- });
+    if (typeof window.syncAllUI === "function") {
+     window.syncAllUI();
+    }
+   }
+  }
+ } catch (_) {}
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+ if (typeof renderFirebaseStatusBadge === "function") renderFirebaseStatusBadge();
+ let pollingBusy = false;
+ setInterval(() => {
+  if (pollingBusy) return;
+  pollingBusy = true;
+  try {
+   if (typeof renderFirebaseStatusBadge === "function") renderFirebaseStatusBadge();
+   if (typeof pollFirebaseState === "function") pollFirebaseState();
+  } finally {
+   pollingBusy = false;
+  }
+ }, 3000);
+});
 })();
 </script>
  <script>
@@ -6207,7 +6208,7 @@ function renderUserDualHistorySections() {
     if (pB) pB.style.display = "none";
     if (pT) pT.style.display = "block";
    });
-
+ } 
    
   const pB = document.getElementById("tb4gPanelBooking");
   const pT = document.getElementById("tb4gPanelTx");
