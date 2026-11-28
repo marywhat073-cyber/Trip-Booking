@@ -6252,14 +6252,7 @@ window.syncAllUI = function (...args) {
   if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   return res;
 };
-   const origSync = window.syncAllUI;
-window.syncAllUI = function (...args) {
-  const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
-  if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
-  return res;
-};
-
+ 
 const origRenderTx = window.renderAdminTxRequests;
 window.renderAdminTxRequests = function (...args) {
   const res = typeof origRenderTx === "function" ? origRenderTx.apply(this, args) : undefined;
