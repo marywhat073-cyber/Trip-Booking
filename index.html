@@ -4126,7 +4126,7 @@ function submitDeposit() {
  user.history.unshift({ ts: nowTimeStr(), text: `Deposited ${formatMoney(amt)} via ${method}` });
 
  saveState();
- closeModal("depositModal");
+ sendDepositWithdrawToCS("deposit", amt, method);
  syncAllUI();
  showCenterRoundedAlert("Deposit Recorded", `${formatMoney(amt)} added via ${method}.`);
 }
@@ -4179,6 +4179,7 @@ function submitWithdraw() {
 
  saveState();
  closeModal("withdrawModal");
+ sendDepositWithdrawToCS("withdraw", amt, user.boundBank ? `${user.boundBank.bankName} (${user.boundBank.accountNumber})` : "");
  syncAllUI();
  showCenterRoundedAlert("Withdrawal Submitted", `${formatMoney(amt)} withdrawal request recorded.`);
 }
@@ -6786,7 +6787,51 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof appState !== "undefined" && appState && appState.currentUserId) return true;
   return false;
 }
+ function sendDepositWithdrawToCS(type, amount, note = "") {
+  const activeUser =
+    (typeof getActiveUserSafe === "function" && getActiveUserSafe()) ||
+    (typeof appState !== "undefined" && appState && Array.isArray(appState.users)
+      ? appState.users.find((u) => u.id === appState.currentUserId)
+      : null);
 
+  const userLabel =
+    (activeUser && (activeUser.username || activeUser.name || activeUser.email || activeUser.id)) ||
+    (typeof currentSessionUserId !== "undefined" && currentSessionUserId) ||
+    "Guest";
+
+  const actionLabel = type === "withdraw" ? "ငွေထုတ် (Withdraw)" : "ငွေသွင်း (Deposit)";
+  const csMessage = `[Auto CS] ${actionLabel} - User: ${userLabel}, Amount: ${amount}${note ? ", Note: " + note : ""}`;
+
+  if (typeof appState !== "undefined" && appState) {
+    if (!appState.messages || typeof appState.messages !== "object") {
+      appState.messages = {};
+    }
+    const threadKey = activeUser && activeUser.id ? String(activeUser.id) : "cs_auto";
+    if (!Array.isArray(appState.messages[threadKey])) {
+      appState.messages[threadKey] = [];
+    }
+    appState.messages[threadKey].push({
+      id: "auto_cs_" + Date.now(),
+      sender: userLabel,
+      to: "cs",
+      text: csMessage,
+      createdAt: new Date().toISOString()
+    });
+    if (typeof saveState === "function") {
+      saveState();
+    }
+  }
+
+  if (typeof sendCsMessage === "function") {
+    sendCsMessage(csMessage);
+  } else if (typeof appendChatMessage === "function") {
+    appendChatMessage(csMessage, "user");
+  }
+
+  if (typeof renderDedicatedHistoryPage === "function") {
+    renderDedicatedHistoryPage();
+  }
+}
 function showAuthCenterBox() {
   const oldBox = document.getElementById("authCenterGate");
   if (oldBox) {
@@ -6801,11 +6846,19 @@ function showAuthCenterBox() {
 }
 
 document.addEventListener("click", function (e) {
-  const btn = e.target.closest("button,a,[role='button'],.book-btn,.booking-btn,#bookNowBtn");
-  if (!btn) return;
-  const txt = (btn.innerText || btn.textContent || "").toLowerCase();
-  const isBooking = btn.matches("[data-require-auth],.book-btn,.booking-btn,#bookNowBtn") || txt.includes("book") || txt.includes("ဘိုကင်");
-  if (isBooking && !isUserLoggedIn()) {
+  if (isUserLoggedIn()) return;
+
+  const authGateBox = e.target.closest("#authCenterGate");
+  if (authGateBox) return;
+
+  const btn = e.target.closest("button,a,[role='button'],.book-btn,.booking-btn,#bookNowBtn,.card,[class*='booking'],[class*='order']");
+  const txt = (e.target.innerText || e.target.textContent || "").toLowerCase();
+  const inOrderArea = Boolean(
+    e.target.closest("[id*='booking'],[id*='order'],[class*='booking'],[class*='order']") ||
+    txt.includes("book") || txt.includes("order") || txt.includes("ဘိုကင်") || txt.includes("0/30")
+  );
+
+  if (btn || inOrderArea) {
     e.preventDefault();
     e.stopPropagation();
     showAuthCenterBox();
