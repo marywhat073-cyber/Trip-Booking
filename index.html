@@ -5700,47 +5700,36 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 })();
 </script>
- <script>
-// Part 4G: Partial Remaining Balance, Req vs Approved Amount, Admin Full Ledger Table,
-// User Dual History (Booking Profit vs Deposit/Withdraw), Filter/Search & JSON Backup/Export
+<script>
+// Part 4G Clean: Dedicated History View, Clean User Status Text, Non-blocking Booking Button
 (function () {
- if (window.__TB_EXT_4G_LOADED__) return;
- window.__TB_EXT_4G_LOADED__ = true;
+ if (window.__TB_EXT_4G_CLEAN_LOADED__) return;
+ window.__TB_EXT_4G_CLEAN_LOADED__ = true;
+
+ // Remove old inline box if previously injected into account/profile
+ document.getElementById("tb4gUserDualHistory")?.remove();
 
  const style = document.createElement("style");
  style.textContent = `
   .tb-4g-toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0; }
   .tb-4g-input, .tb-4g-select { padding:6px 10px; border-radius:8px; border:1px solid #d0d7de; background:#fff; color:#111; font-size:13px; }
-  .tb-4g-pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+  .tb-4g-pill { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; font-weight:700; }
   .tb-4g-partial { background:#fff4e5; color:#9a4e00; border:1px solid #f5c27b; }
   .tb-4g-approved { background:#e7f8ee; color:#137333; border:1px solid #b7e1c4; }
   .tb-4g-rejected { background:#fce8e6; color:#c5221f; border:1px solid #f6aea9; }
-  .tb-4g-pending { background:#f1f3f4; color:#5f6368; border:1px solid #dadce0; }
+  .tb-4g-pending { background:#f1f3f4; color:#3c4043; border:1px solid #dadce0; }
   .tb-4g-tabs { display:flex; gap:8px; margin:8px 0 12px; flex-wrap:wrap; }
-  .tb-4g-tab-btn { padding:6px 12px; border-radius:8px; border:1px solid #d0d7de; background:#f8f9fa; color:#111; cursor:pointer; font-size:13px; font-weight:600; }
+  .tb-4g-tab-btn { padding:7px 12px; border-radius:8px; border:1px solid #d0d7de; background:#f8f9fa; color:#111; cursor:pointer; font-size:13px; font-weight:600; }
   .tb-4g-tab-btn.active { background:#1a73e8; color:#fff; border-color:#1a73e8; }
-  .tb-4g-box { border:1px solid #e0e4e8; border-radius:10px; padding:10px; margin-top:10px; background:#fff; }
+  .tb-4g-box { border:1px solid #e0e4e8; border-radius:10px; padding:12px; margin-top:10px; background:#fff; color:#111; }
+  .tb-4g-list-item { padding:8px 0; border-bottom:1px solid #eef1f4; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .tb-4g-list-item:last-child { border-bottom:none; }
   @media (max-width: 768px) {
-  .tb-4g-toolbar,
-  .tb-4g-tabs {
-    flex-direction: column;
-    align-items: stretch;
+   .tb-4g-toolbar, .tb-4g-tabs { flex-direction: column; align-items: stretch; }
+   .tb-4g-input, .tb-4g-select, .tb-4g-tab-btn { width: 100%; box-sizing: border-box; }
+   .tb-4g-box { overflow-x: auto; padding: 10px; }
+   .tb-4g-box table { min-width: 600px; font-size: 12px; }
   }
-  .tb-4g-input,
-  .tb-4g-select,
-  .tb-4g-tab-btn {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .tb-4g-box {
-    overflow-x: auto;
-    padding: 8px;
-  }
-  .tb-4g-box table {
-    min-width: 600px;
-    font-size: 12px;
-  }
-}
  `;
  document.head.appendChild(style);
 
@@ -5762,6 +5751,25 @@ document.addEventListener("DOMContentLoaded", () => {
    : str.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
  }
 
+ function formatUserFriendlyTxText(item) {
+  const rawText = String(item?.text || item?.label || "");
+  const lower = rawText.toLowerCase();
+  const kind = String(item?.kind || item?.type || "").toLowerCase();
+  const isWithdraw = kind.includes("withdraw") || lower.includes("withdraw") || rawText.includes("ငွေထုတ်");
+  const isDeposit = kind.includes("deposit") || lower.includes("deposit") || rawText.includes("ငွေသွင်း");
+  const status = String(item?.status || "pending").toLowerCase();
+
+  if (status === "pending") {
+   if (isWithdraw) return "ငွေထုတ်တောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ";
+   if (isDeposit) return "ငွေသွင်းတောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ";
+  }
+
+  return rawText
+   .replace(/\(Pending Admin\)/gi, "")
+   .replace(/Pending Admin/gi, "ခေတ္တစောင့်ဆိုင်းပါ")
+   .trim();
+ }
+
  function ensureUserDualHistory(user) {
   if (!user || typeof user !== "object") return;
   user.history = Array.isArray(user.history) ? user.history : [];
@@ -5772,9 +5780,9 @@ document.addEventListener("DOMContentLoaded", () => {
    user.history.forEach((h) => {
     const txt = String(h?.text || "");
     const lower = txt.toLowerCase();
-    if (lower.includes("deposit") || lower.includes("withdraw") || lower.includes("ငွေသွင်း") || lower.includes("ငွေထုတ်")) {
+    if (lower.includes("deposit") || lower.includes("withdraw") || txt.includes("ငွေသွင်း") || txt.includes("ငွေထုတ်")) {
      user.txHistory.push(h);
-    } else if (lower.includes("booking") || lower.includes("profit") || lower.includes("commission") || lower.includes("အမြတ်") || lower.includes("ဘွတ်ကင်")) {
+    } else if (lower.includes("booking") || lower.includes("profit") || lower.includes("commission") || txt.includes("အမြတ်") || txt.includes("ဘွတ်ကင်")) {
      user.bookingProfitHistory.push(h);
     }
    });
@@ -5803,7 +5811,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const activeUser = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
       if (activeUser) ensureUserDualHistory(activeUser);
       if (typeof window.saveState === "function") window.saveState();
-      renderUserDualHistorySections();
+      renderDedicatedHistoryPage();
      } catch (_) {}
      return res;
     };
@@ -5829,6 +5837,7 @@ document.addEventListener("DOMContentLoaded", () => {
    if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", "အသုံးပြုသူ အကောင့် မတွေ့ပါ", true);
    return;
   }
+
   const totalReqAmt = Number(req.originalAmount ?? req.amount) || 0;
   const alreadyApproved = Number(req.approvedAmount) || 0;
   const remainingAmt = Number(Math.max(0, totalReqAmt - alreadyApproved).toFixed(2));
@@ -5861,6 +5870,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   const okConfirm = window.confirm(`${actionLabel}\nပမာဏ: ${safeMoney(amt)}\nဆက်လက်လုပ်ဆောင်မှာ သေချာပါသလား?`);
   if (!okConfirm) return;
+
   const dtStr = formatDateTimeNow();
   const timeStr = typeof nowTimeStr === "function" ? nowTimeStr() : dtStr;
 
@@ -5874,10 +5884,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ts: dtStr,
     timeShort: timeStr,
     kind: "deposit",
+    status: "approved",
     requestedAmount: totalReqAmt,
     approvedAmount: amt,
     method: req.method || "-",
-    text: `[${dtStr}] Deposit Approved: +${safeMoney(amt)} (Req: ${safeMoney(totalReqAmt)}) via ${req.method || "-"}`
+    text: `[${dtStr}] ငွေသွင်း အတည်ပြုပြီး: +${safeMoney(amt)} (${req.method || "-"})`
    });
   } else if (req.type === "withdraw") {
    const currentBal = Number(user.balance) || 0;
@@ -5892,10 +5903,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ts: dtStr,
     timeShort: timeStr,
     kind: "withdraw",
+    status: "approved",
     requestedAmount: totalReqAmt,
     approvedAmount: amt,
     method: req.method || "-",
-    text: `[${dtStr}] Withdraw Approved: -${safeMoney(amt)} (Req: ${safeMoney(totalReqAmt)}) via ${req.method || "-"}`
+    text: `[${dtStr}] ငွေထုတ် အတည်ပြုပြီး: -${safeMoney(amt)} (${req.method || "-"})`
    });
   }
 
@@ -5916,7 +5928,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof saveState === "function") saveState();
   if (typeof syncAllUI === "function") syncAllUI();
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  renderDedicatedHistoryPage();
   if (typeof showCenterRoundedAlert === "function") {
    showCenterRoundedAlert(
     req.status === "partial" ? "တစ်စိတ်တစ်ပိုင်း အတည်ပြုပြီးပါပြီ" : "အတည်ပြုပြီးပါပြီ",
@@ -5963,7 +5975,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof saveState === "function") saveState();
     if (typeof syncAllUI === "function") syncAllUI();
     if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-    if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+    renderDedicatedHistoryPage();
     if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Backup ပြန်ထည့်ပြီးပါပြီ", "JSON Backup Data ကို အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ", false);
    } catch (_) {
     if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", "မှန်ကန်သော JSON Backup ဖိုင် မဟုတ်ပါ", true);
@@ -6073,7 +6085,10 @@ document.addEventListener("DOMContentLoaded", () => {
    ledgerWrap.id = "tb4gFullLedgerWrap";
    ledgerWrap.className = "tb-4g-box";
    ledgerWrap.innerHTML = `
-    <h4 style="margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;"><span>ငွေသွင်း / ငွေထုတ် အချက်အလက်အစုံ ဇယား (Full Ledger)</span><span id="tb4gAdminCount" class="small muted"></span></h4>
+    <h4 style="margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+     <span>ငွေသွင်း / ငွေထုတ် အချက်အလက်အစုံ ဇယား (Full Ledger)</span>
+     <span id="tb4gAdminCount" class="small muted"></span>
+    </h4>
     <div class="table-wrap">
      <table>
       <thead>
@@ -6115,58 +6130,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!filtered.length) {
    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;" class="muted">မှတ်တမ်း မရှိသေးပါ</td></tr>`;
-   return;
+  } else {
+   tbody.innerHTML = filtered.map((r, i) => {
+    const reqAmt = Number(r.originalAmount ?? r.amount) || 0;
+    const appAmt = Number(r.approvedAmount) || 0;
+    const remAmt = r.remainingAmount !== undefined
+     ? Number(r.remainingAmount) || 0
+     : (r.status === "pending" ? reqAmt : Math.max(0, reqAmt - appAmt));
+
+    const st = r.status || "pending";
+    const pillClass = st === "partial"
+     ? "tb-4g-partial"
+     : st === "approved"
+      ? "tb-4g-approved"
+      : st === "rejected"
+       ? "tb-4g-rejected"
+       : "tb-4g-pending";
+
+    const stLabel = st === "partial"
+     ? "Partial (ကျန်ငွေရှိ)"
+     : st === "approved"
+      ? "Approved"
+      : st === "rejected"
+       ? "Rejected"
+       : "Pending";
+
+    const canAct = st === "pending" || st === "partial";
+    const actions = canAct
+     ? `<div style="display:flex;gap:6px;flex-wrap:wrap;">
+         <button type="button" class="btn btn-success btn-xs" onclick="approveTxRequest('${esc(r.id)}')">Approve</button>
+         <button type="button" class="btn btn-danger btn-xs" onclick="rejectTxRequest('${esc(r.id)}')">Reject</button>
+        </div>`
+     : `<span class="small muted">${esc(r.decidedAt || r.lastApprovedAt || "-")}</span>`;
+
+    const typeLabel = r.type === "deposit" ? "ငွေသွင်း (Deposit)" : "ငွေထုတ် (Withdraw)";
+    const dtInfo = r.decidedAt || r.lastApprovedAt || r.createdAt || "-";
+
+    return `
+     <tr>
+      <td>${i + 1}</td>
+      <td><strong>${esc(r.userName || "-")}</strong><br><span class="small muted">ID/နံပါတ်: ${esc(r.userId || "-")}</span><br><span class="small muted">TxID: ${esc(r.id || "-")}</span> <button type="button" class="btn btn-xs" onclick="copyTextValue('${esc(r.id || "")}')">Copy</button></td>
+      <td>${esc(typeLabel)}</td>
+      <td><strong>${safeMoney(reqAmt)}</strong></td>
+      <td>${safeMoney(appAmt)}</td>
+      <td>${safeMoney(remAmt)}</td>
+      <td class="small">${esc(r.method || "-")}<br><span class="muted">${esc(dtInfo)}</span></td>
+      <td><span class="tb-4g-pill ${pillClass}">${esc(stLabel)}</span></td>
+      <td>${actions}</td>
+     </tr>
+    `;
+   }).join("");
   }
-
-  tbody.innerHTML = filtered.map((r, i) => {
-   const reqAmt = Number(r.originalAmount ?? r.amount) || 0;
-   const appAmt = Number(r.approvedAmount) || 0;
-   const remAmt = r.remainingAmount !== undefined
-    ? Number(r.remainingAmount) || 0
-    : (r.status === "pending" ? reqAmt : Math.max(0, reqAmt - appAmt));
-
-   const st = r.status || "pending";
-   const pillClass = st === "partial"
-    ? "tb-4g-partial"
-    : st === "approved"
-     ? "tb-4g-approved"
-     : st === "rejected"
-      ? "tb-4g-rejected"
-      : "tb-4g-pending";
-
-   const stLabel = st === "partial"
-    ? "Partial (ကျန်ငွေရှိ)"
-    : st === "approved"
-     ? "Approved"
-     : st === "rejected"
-      ? "Rejected"
-      : "Pending";
-
-   const canAct = st === "pending" || st === "partial";
-   const actions = canAct
-    ? `<div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button type="button" class="btn btn-success btn-xs" onclick="approveTxRequest('${esc(r.id)}')">Approve</button>
-        <button type="button" class="btn btn-danger btn-xs" onclick="rejectTxRequest('${esc(r.id)}')">Reject</button>
-       </div>`
-    : `<span class="small muted">${esc(r.decidedAt || r.lastApprovedAt || "-")}</span>`;
-
-   const typeLabel = r.type === "deposit" ? "ငွေသွင်း (Deposit)" : "ငွေထုတ် (Withdraw)";
-   const dtInfo = r.decidedAt || r.lastApprovedAt || r.createdAt || "-";
-
-   return `
-    <tr>
-     <td>${i + 1}</td>
-     <td><strong>${esc(r.userName || "-")}</strong><br><span class="small muted">ID/နံပါတ်: ${esc(r.userId || "-")}</span><br><span class="small muted">TxID: ${esc(r.id || "-")}</span> <button type="button" class="btn btn-xs" onclick="copyTextValue('${esc(r.id || "")}')">Copy</button></td>
-     <td>${esc(typeLabel)}</td>
-     <td><strong>${safeMoney(reqAmt)}</strong></td>
-     <td>${safeMoney(appAmt)}</td>
-     <td>${safeMoney(remAmt)}</td>
-     <td class="small">${esc(r.method || "-")}<br><span class="muted">${esc(dtInfo)}</span></td>
-     <td><span class="tb-4g-pill ${pillClass}">${esc(stLabel)}</span></td>
-     <td>${actions}</td>
-    </tr>
-   `;
-  }).join("");
 
   const countEl = document.getElementById("tb4gAdminCount");
   if (countEl) {
@@ -6174,32 +6188,35 @@ document.addEventListener("DOMContentLoaded", () => {
   }
  }
 
- function renderUserDualHistorySections() {
-  const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
-  if (!user) return;
-  ensureUserDualHistory(user);
-
-  let host = document.getElementById("tb4gUserDualHistory");
-  if (!host) {
-   const profileOrAccount = document.getElementById("accountPage")
-    || document.getElementById("profilePage")
-    || document.getElementById("mePage")
-    || document.querySelector(".main-content")
-    || document.body;
-
-   host = document.createElement("div");
-   host.id = "tb4gUserDualHistory";
-   host.className = "tb-4g-box";
-   host.innerHTML = `
-    <h4 style="margin:0 0 6px;">အသုံးပြုသူ မှတ်တမ်းများ (၂ မျိုးခွဲခြားချက်)</h4>
-    <div class="tb-4g-tabs">
-     <button id="tb4gTabBooking" type="button" class="tb-4g-tab-btn active">၁။ ဘွတ်ကင်တင်လို့ရတဲ့ အမြတ်မှတ်တမ်း</button>
-     <button id="tb4gTabTx" type="button" class="tb-4g-tab-btn">၂။ ငွေသွင်း / ငွေထုတ် မှတ်တမ်း</button>
+ // Dedicated History Page (shown only when opened via History nav/tab/button)
+ function ensureDedicatedHistoryPage() {
+  let page = document.getElementById("tb4gHistoryPage");
+  if (!page) {
+   page = document.createElement("section");
+   page.id = "tb4gHistoryPage";
+   page.className = "page";
+   page.style.display = "none";
+   page.innerHTML = `
+    <div class="tb-4g-box">
+     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+      <h3 style="margin:0;">မှတ်တမ်းစာမျက်နှာ</h3>
+      <button id="tb4gBackFromHistoryBtn" type="button" class="btn btn-secondary btn-sm">ပြန်သွားရန်</button>
+     </div>
+     <div class="tb-4g-tabs">
+      <button id="tb4gTabBooking" type="button" class="tb-4g-tab-btn active">၁။ ဘွတ်ကင်အမြတ် မှတ်တမ်း</button>
+      <button id="tb4gTabTx" type="button" class="tb-4g-tab-btn">၂။ ငွေသွင်း / ငွေထုတ် မှတ်တမ်း</button>
+     </div>
+     <div id="tb4gPanelBooking"></div>
+     <div id="tb4gPanelTx" style="display:none;"></div>
     </div>
-    <div id="tb4gPanelBooking"></div>
-    <div id="tb4gPanelTx" style="display:none;"></div>
    `;
-   profileOrAccount.appendChild(host);
+   (document.querySelector(".main-content") || document.body).appendChild(page);
+
+   document.getElementById("tb4gBackFromHistoryBtn")?.addEventListener("click", () => {
+    page.style.display = "none";
+    const acc = document.getElementById("accountPage") || document.getElementById("profilePage") || document.getElementById("mePage");
+    if (acc) acc.style.display = "";
+   });
 
    document.getElementById("tb4gTabBooking")?.addEventListener("click", () => {
     document.getElementById("tb4gTabBooking")?.classList.add("active");
@@ -6220,12 +6237,45 @@ document.addEventListener("DOMContentLoaded", () => {
    });
   }
 
+  // Hook existing History navigation triggers without touching Account page layout
+  document.querySelectorAll("a, button, [role='button'], .nav-item, .tab-btn").forEach((el) => {
+   if (el.dataset.tb4gHistoryHooked === "1") return;
+   const t = (el.textContent || "").trim().toLowerCase();
+   if (t === "history" || t.includes("မှတ်တမ်း")) {
+    el.dataset.tb4gHistoryHooked = "1";
+    el.addEventListener("click", () => {
+     setTimeout(() => {
+      const existingHistorySection = document.getElementById("historyPage");
+      if (!existingHistorySection) {
+       document.querySelectorAll(".page").forEach((sec) => {
+        if (sec.id !== "tb4gHistoryPage") sec.style.display = "none";
+       });
+       page.style.display = "block";
+       renderDedicatedHistoryPage();
+      }
+     }, 60);
+    });
+   }
+  });
+ }
+
+ function renderDedicatedHistoryPage() {
+  ensureDedicatedHistoryPage();
+  const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
+  if (!user) return;
+  ensureUserDualHistory(user);
+
   const pB = document.getElementById("tb4gPanelBooking");
   const pT = document.getElementById("tb4gPanelTx");
 
   if (pB) {
    pB.innerHTML = user.bookingProfitHistory.length
-    ? `<ul style="margin:0;padding-left:18px;">${user.bookingProfitHistory.map((item) => `<li><span class="small muted">${esc(item.ts || "")}</span> — ${esc(item.text || "")}</li>`).join("")}</ul>`
+    ? `<div>${user.bookingProfitHistory.map((item) => `
+       <div class="tb-4g-list-item">
+        <span>${esc(item.text || "")}</span>
+        <span class="small muted">${esc(item.ts || "")}</span>
+       </div>
+      `).join("")}</div>`
     : `<div class="small muted">ဘွတ်ကင်အမြတ် မှတ်တမ်း မရှိသေးပါ</div>`;
   }
 
@@ -6239,20 +6289,34 @@ document.addEventListener("DOMContentLoaded", () => {
    });
 
    pT.innerHTML = `
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-      <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး (All)</button>
-      <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း (Deposit)</button>
-      <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ် (Withdraw)</button>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+     <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး</button>
+     <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း</button>
+     <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ်</button>
     </div>
     ${filteredTx.length
-      ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => {
-          const st = String(item?.status || "pending").toLowerCase();
-          const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending";
-          return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`;
-        }).join("")}</ul>`
-      : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
+     ? `<div>${filteredTx.map((item) => {
+        const st = String(item?.status || "pending").toLowerCase();
+        const friendlyMsg = formatUserFriendlyTxText(item);
+        const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending";
+        const badgeLabel = st === "pending" ? "ခေတ္တစောင့်ဆိုင်းပါ" : st === "approved" ? "အတည်ပြုပြီး" : st === "rejected" ? "ငြင်းပယ်ပြီး" : "တစ်စိတ်တစ်ပိုင်း";
+        return `
+         <div class="tb-4g-list-item">
+          <span>${esc(friendlyMsg)}</span>
+          <span class="tb-4g-pill ${cls}">${esc(badgeLabel)}</span>
+         </div>
+        `;
+       }).join("")}</div>`
+     : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
     }
    `;
+
+   pT.querySelectorAll("[data-tx-filter]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+     pT.dataset.txFilter = btn.dataset.txFilter || "all";
+     renderDedicatedHistoryPage();
+    });
+   });
   }
  }
 
@@ -6378,47 +6442,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
  });
 
- function ensureBookingOrderAction() {
-  const buttons = Array.from(document.querySelectorAll("button, [role='button'], a.btn, .btn"));
-  const bookingBtn = buttons.find((el) =>
-   (el.textContent || "").toLowerCase().includes("start booking order")
-  );
-  if (!bookingBtn || bookingBtn.dataset.tbBookingBound === "1") return;
-  bookingBtn.dataset.tbBookingBound = "1";
-
-  bookingBtn.addEventListener("click", (e) => {
-   if (typeof window.startBookingOrder === "function") {
-    window.startBookingOrder(e);
-    return;
-   }
-   if (typeof window.handleStartBooking === "function") {
-    window.handleStartBooking(e);
-    return;
-   }
-
-   const progressEl = document.querySelector("[data-booking-progress], .booking-progress, .order-progress");
-   if (progressEl && /\d+\s*\/\s*\d+/.test(progressEl.textContent || "")) {
-    const match = (progressEl.textContent || "").match(/(\d+)\s*\/\s*(\d+)/);
-    if (match) {
-     const cur = Number(match[1]);
-     const max = Number(match[2]);
-     if (cur < max) {
-      progressEl.textContent = (progressEl.textContent || "").replace(
-       `${cur}/${max}`,
-       `${cur + 1}/${max}`
-      );
-     }
-    }
-   }
-
-   if (typeof window.syncAllUI === "function") {
-    window.syncAllUI();
-   }
-  });
- }
-
- document.addEventListener("DOMContentLoaded", ensureBookingOrderAction);
- setInterval(ensureBookingOrderAction, 1500);
+ // Do NOT intercept or hijack "Start Booking Order" — let the app's native handler run cleanly.
 
  function ensureCsImageTools() {
   if (document.getElementById("tbCsLightboxModal")) return;
@@ -6546,7 +6570,7 @@ document.addEventListener("DOMContentLoaded", () => {
  window.syncAllUI = function (...args) {
   const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  renderDedicatedHistoryPage();
   return res;
  };
 
@@ -6558,12 +6582,12 @@ document.addEventListener("DOMContentLoaded", () => {
  };
 
  document.addEventListener("DOMContentLoaded", () => {
+  ensureDedicatedHistoryPage();
   if (typeof hookBookingProfitLogs === "function") hookBookingProfitLogs();
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  renderDedicatedHistoryPage();
   setInterval(() => {
    if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-   if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   }, 4000);
  });
 })();
