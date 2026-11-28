@@ -5701,6 +5701,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
  <script>
+<script>
 // Part 4G: Partial Remaining Balance, Req vs Approved Amount, Admin Full Ledger Table,
 // User Dual History (Booking Profit vs Deposit/Withdraw), Filter/Search & JSON Backup/Export
 (function () {
@@ -5829,38 +5830,38 @@ document.addEventListener("DOMContentLoaded", () => {
    if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", "အသုံးပြုသူ အကောင့် မတွေ့ပါ", true);
    return;
   }
-const totalReqAmt = Number(req.originalAmount ?? req.amount) || 0;
-const alreadyApproved = Number(req.approvedAmount) || 0;
-const remainingAmt = Number(Math.max(0, totalReqAmt - alreadyApproved).toFixed(2));
-const targetMax = remainingAmt > 0 ? remainingAmt : totalReqAmt;
-if (targetMax <= 0) {
-  if (typeof showCenterRoundedAlert === "function") {
+  const totalReqAmt = Number(req.originalAmount ?? req.amount) || 0;
+  const alreadyApproved = Number(req.approvedAmount) || 0;
+  const remainingAmt = Number(Math.max(0, totalReqAmt - alreadyApproved).toFixed(2));
+  const targetMax = remainingAmt > 0 ? remainingAmt : totalReqAmt;
+  if (targetMax <= 0) {
+   if (typeof showCenterRoundedAlert === "function") {
     showCenterRoundedAlert("အသိပေးချက်", "အတည်ပြုရန် ကျန်ငွေ မရှိတော့ပါ", true);
+   }
+   return;
   }
-  return;
-}
 
-const actionLabel = req.type === "deposit"
-  ? "အမှန်တကယ် ဝင်လာသော ငွေသွင်းပမာဏ ($)"
-  : "အမှန်တကယ် ထုတ်ပေးသော ငွေထုတ်ပမာဏ ($)";
+  const actionLabel = req.type === "deposit"
+   ? "အမှန်တကယ် ဝင်လာသော ငွေသွင်းပမာဏ ($)"
+   : "အမှန်တကယ် ထုတ်ပေးသော ငွေထုတ်ပမာဏ ($)";
 
-const promptMsg = `${actionLabel}\n(မူလတောင်းဆို: ${safeMoney(totalReqAmt)} | အတည်ပြုပြီး: ${safeMoney(alreadyApproved)} | ကျန်ငွေ: ${safeMoney(targetMax)})`;
-const inputVal = window.prompt(promptMsg, String(targetMax));
-if (inputVal === null) return;
+  const promptMsg = `${actionLabel}\n(မူလတောင်းဆို: ${safeMoney(totalReqAmt)} | အတည်ပြုပြီး: ${safeMoney(alreadyApproved)} | ကျန်ငွေ: ${safeMoney(targetMax)})`;
+  const inputVal = window.prompt(promptMsg, String(targetMax));
+  if (inputVal === null) return;
 
-const amt = Number(inputVal);
-if (!Number.isFinite(amt) || amt <= 0) {
-  if (typeof showCenterRoundedAlert === "function") {
+  const amt = Number(inputVal);
+  if (!Number.isFinite(amt) || amt <= 0) {
+   if (typeof showCenterRoundedAlert === "function") {
     showCenterRoundedAlert("Error", "0 ထက်ကြီးသော မှန်ကန်သော ပမာဏ ရိုက်ထည့်ပါ", true);
-  }
-  return;
+   }
+   return;
   }
   if (amt > targetMax + 1e-9) {
    if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", `ကျန်ရှိသော ပမာဏ (${safeMoney(targetMax)}) ထက် ကျော်လွန်နေပါသည်`, true);
    return;
   }
   const okConfirm = window.confirm(`${actionLabel}\nပမာဏ: ${safeMoney(amt)}\nဆက်လက်လုပ်ဆောင်မှာ သေချာပါသလား?`);
-if (!okConfirm) return;
+  if (!okConfirm) return;
   const dtStr = formatDateTimeNow();
   const timeStr = typeof nowTimeStr === "function" ? nowTimeStr() : dtStr;
 
@@ -5913,10 +5914,10 @@ if (!okConfirm) return;
    req.amount = totalReqAmt;
   }
 
-if (typeof saveState === "function") saveState();
-if (typeof syncAllUI === "function") syncAllUI();
-if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  if (typeof saveState === "function") saveState();
+  if (typeof syncAllUI === "function") syncAllUI();
+  if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   if (typeof showCenterRoundedAlert === "function") {
    showCenterRoundedAlert(
     req.status === "partial" ? "တစ်စိတ်တစ်ပိုင်း အတည်ပြုပြီးပါပြီ" : "အတည်ပြုပြီးပါပြီ",
@@ -5952,35 +5953,37 @@ if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySe
     const parsed = JSON.parse(String(reader.result || "{}"));
     const nextState = parsed && parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
     appState = {
-  ...appState,
-  ...nextState,
-  users: Array.isArray(nextState.users) ? nextState.users : (appState.users || []),
-  txRequests: Array.isArray(nextState.txRequests) ? nextState.txRequests : (appState.txRequests || [])
-};
-if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
-  localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
-}
-if (typeof saveState === "function") saveState();
-if (typeof syncAllUI === "function") syncAllUI();
-if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
-if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Backup ပြန်ထည့်ပြီးပါပြီ", "JSON Backup Data ကို အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ", false);
+     ...appState,
+     ...nextState,
+     users: Array.isArray(nextState.users) ? nextState.users : (appState.users || []),
+     txRequests: Array.isArray(nextState.txRequests) ? nextState.txRequests : (appState.txRequests || [])
+    };
+    if (typeof STORAGE_KEYS !== "undefined" && STORAGE_KEYS.state) {
+     localStorage.setItem(STORAGE_KEYS.state, JSON.stringify(appState));
+    }
+    if (typeof saveState === "function") saveState();
+    if (typeof syncAllUI === "function") syncAllUI();
+    if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+    if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+    if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Backup ပြန်ထည့်ပြီးပါပြီ", "JSON Backup Data ကို အောင်မြင်စွာ ထည့်သွင်းပြီးပါပြီ", false);
    } catch (_) {
     if (typeof showCenterRoundedAlert === "function") showCenterRoundedAlert("Error", "မှန်ကန်သော JSON Backup ဖိုင် မဟုတ်ပါ", true);
    }
   };
   reader.readAsText(file);
  }
-window.copyTextValue = function (val) {
+
+ window.copyTextValue = function (val) {
   const text = String(val ?? "");
   if (!text) return;
   if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
-    navigator.clipboard.writeText(text).catch(function () {});
+   navigator.clipboard.writeText(text).catch(function () {});
   }
   if (typeof showCenterRoundedAlert === "function") {
-    showCenterRoundedAlert("Copy", "ID ကို ကူးယူပြီးပါပြီ: " + text, true);
+   showCenterRoundedAlert("Copy", "ID ကို ကူးယူပြီးပါပြီ: " + text, true);
   }
-};
+ };
+
  function renderAdminLedgerAndControls() {
   const txTab = document.getElementById("adminTxTab");
   if (!txTab) return;
@@ -6023,6 +6026,7 @@ window.copyTextValue = function (val) {
     e.target.value = "";
    });
   }
+
   let summaryBox = document.getElementById("tb4gDailySummaryBox");
   if (!summaryBox) {
    summaryBox = document.createElement("div");
@@ -6047,26 +6051,30 @@ window.copyTextValue = function (val) {
    const dt = String(r.decidedAt || r.lastApprovedAt || r.createdAt || "");
    const isToday = dt.startsWith(todayPrefix);
    if (isToday && r.status === "approved") {
-  if (r.type === "deposit") todayDeposit += appAmt;
-  if (r.type === "withdraw") todayWithdraw += appAmt;
-}
-if (isToday && r.status === "partial") {
-  todayPartialApproved += appAmt;
-}
+    if (r.type === "deposit") todayDeposit += appAmt;
+    if (r.type === "withdraw") todayWithdraw += appAmt;
+   }
+   if (isToday && r.status === "partial") {
+    todayPartialApproved += appAmt;
+   }
+  });
+
   summaryBox.innerHTML = `
    <div style="display:flex;flex-wrap:wrap;gap:14px;font-weight:700;">
     <span>ယနေ့ ငွေသွင်း (Approved): ${safeMoney(todayDeposit)}</span>
     <span>ယနေ့ ငွေထုတ် (Approved): ${safeMoney(todayWithdraw)}</span>
     <span>Partial ကျန်ငွေ စုစုပေါင်း: ${safeMoney(totalPartialRem)}</span>
+    <span>ယနေ့ Partial အတည်ပြုပြီး: ${safeMoney(todayPartialApproved)}</span>
    </div>
   `;
+
   let ledgerWrap = document.getElementById("tb4gFullLedgerWrap");
   if (!ledgerWrap) {
    ledgerWrap = document.createElement("div");
    ledgerWrap.id = "tb4gFullLedgerWrap";
    ledgerWrap.className = "tb-4g-box";
    ledgerWrap.innerHTML = `
- <h4 style="margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;"><span>ငွေသွင်း / ငွေထုတ် အချက်အလက်အစုံ ဇယား (Full Ledger)</span><span id="tb4gAdminCount" class="small muted"></span></h4>
+    <h4 style="margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;"><span>ငွေသွင်း / ငွေထုတ် အချက်အလက်အစုံ ဇယား (Full Ledger)</span><span id="tb4gAdminCount" class="small muted"></span></h4>
     <div class="table-wrap">
      <table>
       <thead>
@@ -6100,7 +6108,7 @@ if (isToday && r.status === "partial") {
    if (typeFilter !== "all" && r.type !== typeFilter) return false;
    if (!q) return true;
    const hay = [r.id, r.txId, r.transactionId, r.userId, r.userName, r.accountNo, r.accountNumber, r.phone, r.method, r.type, r.note, st].filter(Boolean).join(" ").toLowerCase();
-  return hay.includes(q);
+   return hay.includes(q);
   });
 
   const tbody = document.getElementById("tb4gFullLedgerBody");
@@ -6149,7 +6157,7 @@ if (isToday && r.status === "partial") {
    return `
     <tr>
      <td>${i + 1}</td>
-  <td><strong>${esc(r.userName || "-")}</strong><br><span class="small muted">ID/နံပါတ်: ${esc(r.userId || "-")}</span><br><span class="small muted">TxID: ${esc(r.id || "-")}</span> <button type="button" class="btn btn-xs" onclick="copyTextValue('${esc(r.id || "")}')">Copy</button></td>
+     <td><strong>${esc(r.userName || "-")}</strong><br><span class="small muted">ID/နံပါတ်: ${esc(r.userId || "-")}</span><br><span class="small muted">TxID: ${esc(r.id || "-")}</span> <button type="button" class="btn btn-xs" onclick="copyTextValue('${esc(r.id || "")}')">Copy</button></td>
      <td>${esc(typeLabel)}</td>
      <td><strong>${safeMoney(reqAmt)}</strong></td>
      <td>${safeMoney(appAmt)}</td>
@@ -6160,11 +6168,14 @@ if (isToday && r.status === "partial") {
     </tr>
    `;
   }).join("");
+
   const countEl = document.getElementById("tb4gAdminCount");
-if (countEl) {
-  countEl.textContent = `ပြသနေသော မှတ်တမ်းအရေအတွက်: ${filtered.length}`;
-}
-function renderUserDualHistorySections() {
+  if (countEl) {
+   countEl.textContent = `ပြသနေသော မှတ်တမ်းအရေအတွက်: ${filtered.length}`;
+  }
+ }
+
+ function renderUserDualHistorySections() {
   const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
   if (!user) return;
   ensureUserDualHistory(user);
@@ -6208,8 +6219,8 @@ function renderUserDualHistorySections() {
     if (pB) pB.style.display = "none";
     if (pT) pT.style.display = "block";
    });
- } 
-   
+  }
+
   const pB = document.getElementById("tb4gPanelBooking");
   const pT = document.getElementById("tb4gPanelTx");
 
@@ -6219,7 +6230,7 @@ function renderUserDualHistorySections() {
     : `<div class="small muted">ဘွတ်ကင်အမြတ် မှတ်တမ်း မရှိသေးပါ</div>`;
   }
 
- if (pT) {
+  if (pT) {
    const curFilter = pT.dataset.txFilter || "all";
    const filteredTx = (user.txHistory || []).filter((item) => {
     const txt = String(item?.text || item?.type || item?.label || "").toLowerCase();
@@ -6242,102 +6253,103 @@ function renderUserDualHistorySections() {
         }).join("")}</ul>`
       : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
     }
-  `;
+   `;
+  }
  }
-}
 
-function buildTxMessage({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
+ function buildTxMessage({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
   const title = type === "withdraw" ? "ငွေထုတ်တောင်းဆိုချက်" : "ငွေသွင်းတောင်းဆိုချက်";
   const userName = user?.name || user?.fullName || user?.username || "User";
   const accountId = user?.accountId || user?.id || user?.uid || "-";
 
   return [
-    title,
-    `အကောင့်နာမည်- ${userName}`,
-    `အကောင့်အိုင်ဒီ- ${accountId}`,
-    `ဘဏ်အမျိုးအစား- ${bank}`,
-    `အကောင့်နံပါတ်- ${accountNo}`,
-    `ပမာဏ - ${amount}`
+   title,
+   `အကောင့်နာမည်- ${userName}`,
+   `အကောင့်အိုင်ဒီ- ${accountId}`,
+   `ဘဏ်အမျိုးအစား- ${bank}`,
+   `အကောင့်နံပါတ်- ${accountNo}`,
+   `ပမာဏ - ${amount}`
   ].join("\n");
-}
-  function sendTxToCustomerService({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
+ }
+
+ function sendTxToCustomerService({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
   const msgText = buildTxMessage({ type, bank, accountNo, amount, user });
 
   const csInput =
-    document.querySelector("#csInput, #supportInput, [data-cs-input], textarea[placeholder*='message' i], input[placeholder*='message' i]");
+   document.querySelector("#csInput, #supportInput, [data-cs-input], textarea[placeholder*='message' i], input[placeholder*='message' i]");
   const csSendBtn =
-    document.querySelector("#csSendBtn, #supportSendBtn, [data-cs-send], button[data-action='send-cs']");
+   document.querySelector("#csSendBtn, #supportSendBtn, [data-cs-send], button[data-action='send-cs']");
 
   if (csInput) {
-    csInput.value = msgText;
-    csInput.dispatchEvent(new Event("input", { bubbles: true }));
-    csInput.dispatchEvent(new Event("change", { bubbles: true }));
+   csInput.value = msgText;
+   csInput.dispatchEvent(new Event("input", { bubbles: true }));
+   csInput.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
   if (csSendBtn) {
-    csSendBtn.click();
+   csSendBtn.click();
   } else {
-    const csList =
-      document.querySelector("#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages]");
-    if (csList) {
-      const wrap = document.createElement("div");
-      wrap.className = "tb-tx-cs-msg center-rounded-msg";
-      wrap.style.cssText = "white-space:pre-line;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(255,255,255,0.06);";
+   const csList =
+    document.querySelector("#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages]");
+   if (csList) {
+    const wrap = document.createElement("div");
+    wrap.className = "tb-tx-cs-msg center-rounded-msg";
+    wrap.style.cssText = "white-space:pre-line;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(255,255,255,0.06);";
 
-      const textEl = document.createElement("div");
-      textEl.textContent = msgText;
+    const textEl = document.createElement("div");
+    textEl.textContent = msgText;
 
-      const copyBtn = document.createElement("button");
-      copyBtn.type = "button";
-      copyBtn.className = "tb-copy-tx-btn";
-      copyBtn.textContent = "Copy";
-      copyBtn.style.cssText = "margin-top:8px;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;";
-      copyBtn.addEventListener("click", () => {
-        navigator.clipboard?.writeText(msgText).catch(() => {
-          const ta = document.createElement("textarea");
-          ta.value = msgText;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          ta.remove();
-        });
-        copyBtn.textContent = "Copied";
-        setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
-      });
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "tb-copy-tx-btn";
+    copyBtn.textContent = "Copy";
+    copyBtn.style.cssText = "margin-top:8px;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;";
+    copyBtn.addEventListener("click", () => {
+     navigator.clipboard?.writeText(msgText).catch(() => {
+      const ta = document.createElement("textarea");
+      ta.value = msgText;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+     });
+     copyBtn.textContent = "Copied";
+     setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
+    });
 
-      wrap.appendChild(textEl);
-      wrap.appendChild(copyBtn);
-      csList.appendChild(wrap);
-      csList.scrollTop = csList.scrollHeight;
-    }
+    wrap.appendChild(textEl);
+    wrap.appendChild(copyBtn);
+    csList.appendChild(wrap);
+    csList.scrollTop = csList.scrollHeight;
+   }
   }
 
   return msgText;
-}
+ }
 
-document.addEventListener("click", (e) => {
+ document.addEventListener("click", (e) => {
   const btn = e.target.closest("button, [role='button']");
   if (!btn) return;
 
   const modal = btn.closest(".modal, .modal-card, .modal-backdrop, [role='dialog'], form") || document;
   const labelText = `${btn.textContent || ""} ${btn.dataset.action || ""}`.toLowerCase();
   const isConfirm =
-    labelText.includes("confirm") ||
-    labelText.includes("submit") ||
-    labelText.includes("အတည်ပြု") ||
-    btn.matches("[data-confirm], .confirm-btn, .tb-confirm-tx");
+   labelText.includes("confirm") ||
+   labelText.includes("submit") ||
+   labelText.includes("အတည်ပြု") ||
+   btn.matches("[data-confirm], .confirm-btn, .tb-confirm-tx");
 
   if (!isConfirm) return;
 
   const modalText = (modal.textContent || "").toLowerCase();
   const isWithdraw =
-    modalText.includes("withdraw") ||
-    modalText.includes("ငွေထုတ်") ||
-    Boolean(modal.querySelector("[name*='withdraw' i], [id*='withdraw' i], [data-tx-type='withdraw']"));
+   modalText.includes("withdraw") ||
+   modalText.includes("ငွေထုတ်") ||
+   Boolean(modal.querySelector("[name*='withdraw' i], [id*='withdraw' i], [data-tx-type='withdraw']"));
   const isDeposit =
-    modalText.includes("deposit") ||
-    modalText.includes("ငွေသွင်း") ||
-    Boolean(modal.querySelector("[name*='deposit' i], [id*='deposit' i], [data-tx-type='deposit']"));
+   modalText.includes("deposit") ||
+   modalText.includes("ငွေသွင်း") ||
+   Boolean(modal.querySelector("[name*='deposit' i], [id*='deposit' i], [data-tx-type='deposit']"));
 
   if (!isWithdraw && !isDeposit) return;
 
@@ -6352,79 +6364,81 @@ document.addEventListener("click", (e) => {
   if (!bank && !accountNo && !amount) return;
 
   const currentUser =
-    window.currentUser ||
-    window.activeUser ||
-    window.loggedInUser ||
-    (typeof getCurrentUser === "function" ? getCurrentUser() : null) ||
-    {};
+   window.currentUser ||
+   window.activeUser ||
+   window.loggedInUser ||
+   (typeof getCurrentUser === "function" ? getCurrentUser() : null) ||
+   {};
 
   sendTxToCustomerService({
-    type: isWithdraw ? "withdraw" : "deposit",
-    bank,
-    accountNo,
-    amount,
-    user: currentUser
+   type: isWithdraw ? "withdraw" : "deposit",
+   bank,
+   accountNo,
+   amount,
+   user: currentUser
   });
-});
+ });
+
  function ensureBookingOrderAction() {
   const buttons = Array.from(document.querySelectorAll("button, [role='button'], a.btn, .btn"));
   const bookingBtn = buttons.find((el) =>
-    (el.textContent || "").toLowerCase().includes("start booking order")
+   (el.textContent || "").toLowerCase().includes("start booking order")
   );
   if (!bookingBtn || bookingBtn.dataset.tbBookingBound === "1") return;
   bookingBtn.dataset.tbBookingBound = "1";
 
   bookingBtn.addEventListener("click", (e) => {
-    if (typeof window.startBookingOrder === "function") {
-      window.startBookingOrder(e);
-      return;
-    }
-    if (typeof window.handleStartBooking === "function") {
-      window.handleStartBooking(e);
-      return;
-    }
+   if (typeof window.startBookingOrder === "function") {
+    window.startBookingOrder(e);
+    return;
+   }
+   if (typeof window.handleStartBooking === "function") {
+    window.handleStartBooking(e);
+    return;
+   }
 
-    const progressEl = document.querySelector("[data-booking-progress], .booking-progress, .order-progress");
-    if (progressEl && /\d+\s*\/\s*\d+/.test(progressEl.textContent || "")) {
-      const match = (progressEl.textContent || "").match(/(\d+)\s*\/\s*(\d+)/);
-      if (match) {
-        const cur = Number(match[1]);
-        const max = Number(match[2]);
-        if (cur < max) {
-          progressEl.textContent = (progressEl.textContent || "").replace(
-            `${cur}/${max}`,
-            `${cur + 1}/${max}`
-          );
-        }
-      }
+   const progressEl = document.querySelector("[data-booking-progress], .booking-progress, .order-progress");
+   if (progressEl && /\d+\s*\/\s*\d+/.test(progressEl.textContent || "")) {
+    const match = (progressEl.textContent || "").match(/(\d+)\s*\/\s*(\d+)/);
+    if (match) {
+     const cur = Number(match[1]);
+     const max = Number(match[2]);
+     if (cur < max) {
+      progressEl.textContent = (progressEl.textContent || "").replace(
+       `${cur}/${max}`,
+       `${cur + 1}/${max}`
+      );
+     }
     }
+   }
 
-    if (typeof window.syncAllUI === "function") {
-      window.syncAllUI();
-    }
+   if (typeof window.syncAllUI === "function") {
+    window.syncAllUI();
+   }
   });
-}
+ }
 
-document.addEventListener("DOMContentLoaded", ensureBookingOrderAction);
-setInterval(ensureBookingOrderAction, 1500);
+ document.addEventListener("DOMContentLoaded", ensureBookingOrderAction);
+ setInterval(ensureBookingOrderAction, 1500);
+
  function ensureCsImageTools() {
   if (document.getElementById("tbCsLightboxModal")) return;
 
   const modal = document.createElement("div");
   modal.id = "tbCsLightboxModal";
   modal.style.cssText =
-    "display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.86);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;";
+   "display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.86);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;";
 
   const imgEl = document.createElement("img");
   imgEl.id = "tbCsLightboxImg";
   imgEl.style.cssText =
-    "max-width:92vw;max-height:76vh;border-radius:10px;object-fit:contain;box-shadow:0 8px 28px rgba(0,0,0,0.5);";
+   "max-width:92vw;max-height:76vh;border-radius:10px;object-fit:contain;box-shadow:0 8px 28px rgba(0,0,0,0.5);";
 
   const bar = document.createElement("div");
   bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;justify-content:center;";
 
   const btnStyle =
-    "padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);background:#1f2937;color:#fff;font-size:13px;font-weight:600;cursor:pointer;";
+   "padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);background:#1f2937;color:#fff;font-size:13px;font-weight:600;cursor:pointer;";
 
   const dlBtn = document.createElement("button");
   dlBtn.type = "button";
@@ -6444,61 +6458,61 @@ setInterval(ensureBookingOrderAction, 1500);
   let currentSrc = "";
 
   const closeModal = () => {
-    modal.style.display = "none";
-    imgEl.src = "";
-    currentSrc = "";
+   modal.style.display = "none";
+   imgEl.src = "";
+   currentSrc = "";
   };
 
   closeBtn.addEventListener("click", closeModal);
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeModal();
+   if (e.target === modal) closeModal();
   });
 
   dlBtn.addEventListener("click", async () => {
-    if (!currentSrc) return;
-    try {
-      const res = await fetch(currentSrc);
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `cs-image-${Date.now()}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-    } catch {
-      const a = document.createElement("a");
-      a.href = currentSrc;
-      a.download = `cs-image-${Date.now()}.png`;
-      a.target = "_blank";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
+   if (!currentSrc) return;
+   try {
+    const res = await fetch(currentSrc);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cs-image-${Date.now()}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+   } catch {
+    const a = document.createElement("a");
+    a.href = currentSrc;
+    a.download = `cs-image-${Date.now()}.png`;
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+   }
   });
 
   copyBtn.addEventListener("click", async () => {
-    if (!currentSrc) return;
-    try {
-      const res = await fetch(currentSrc);
-      const blob = await res.blob();
-      if (navigator.clipboard && window.ClipboardItem) {
-        await navigator.clipboard.write([new ClipboardItem({ [blob.type || "image/png"]: blob })]);
-        copyBtn.textContent = "Copied!";
-        setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
-        return;
-      }
-    } catch {}
-
-    try {
-      await navigator.clipboard?.writeText(currentSrc);
-      copyBtn.textContent = "Link Copied";
-      setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
-    } catch {
-      copyBtn.textContent = "Copy Failed";
-      setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+   if (!currentSrc) return;
+   try {
+    const res = await fetch(currentSrc);
+    const blob = await res.blob();
+    if (navigator.clipboard && window.ClipboardItem) {
+     await navigator.clipboard.write([new ClipboardItem({ [blob.type || "image/png"]: blob })]);
+     copyBtn.textContent = "Copied!";
+     setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+     return;
     }
+   } catch {}
+
+   try {
+    await navigator.clipboard?.writeText(currentSrc);
+    copyBtn.textContent = "Link Copied";
+    setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+   } catch {
+    copyBtn.textContent = "Copy Failed";
+    setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+   }
   });
 
   bar.appendChild(dlBtn);
@@ -6509,48 +6523,51 @@ setInterval(ensureBookingOrderAction, 1500);
   document.body.appendChild(modal);
 
   document.addEventListener("click", (e) => {
-    const img = e.target.closest("img");
-    if (!img || img.id === "tbCsLightboxImg") return;
+   const img = e.target.closest("img");
+   if (!img || img.id === "tbCsLightboxImg") return;
 
-    const inCs = img.closest(
-      "#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages], .cs-chat, .support-chat"
-    );
-    if (!inCs) return;
+   const inCs = img.closest(
+    "#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages], .cs-chat, .support-chat"
+   );
+   if (!inCs) return;
 
-    const src = img.currentSrc || img.src;
-    if (!src) return;
+   const src = img.currentSrc || img.src;
+   if (!src) return;
 
-    currentSrc = src;
-    imgEl.src = src;
-    modal.style.display = "flex";
+   currentSrc = src;
+   imgEl.src = src;
+   modal.style.display = "flex";
   });
-}
+ }
 
-document.addEventListener("DOMContentLoaded", ensureCsImageTools);
-setInterval(ensureCsImageTools, 1500);
-const origSync = window.syncAllUI;
-window.syncAllUI = function (...args) {
+ document.addEventListener("DOMContentLoaded", ensureCsImageTools);
+ setInterval(ensureCsImageTools, 1500);
+
+ const origSync = window.syncAllUI;
+ window.syncAllUI = function (...args) {
   const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
   if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   return res;
-};
- 
-const origRenderTx = window.renderAdminTxRequests;
-window.renderAdminTxRequests = function (...args) {
+ };
+
+ const origRenderTx = window.renderAdminTxRequests;
+ window.renderAdminTxRequests = function (...args) {
   const res = typeof origRenderTx === "function" ? origRenderTx.apply(this, args) : undefined;
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
   return res;
-};
-document.addEventListener("DOMContentLoaded", () => {
+ };
+
+ document.addEventListener("DOMContentLoaded", () => {
   if (typeof hookBookingProfitLogs === "function") hookBookingProfitLogs();
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
   if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   setInterval(() => {
-    if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-    if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+   if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   }, 4000);
  });
+})();
 </script>
 </body>
 </html>
