@@ -6161,7 +6161,7 @@ if (isToday && r.status === "partial") {
   }).join("");
   const countEl = document.getElementById("tb4gAdminCount");
 if (countEl) {
-  countEl.textContent = `ပြသနေသော မှတ်တမ်းအရေအတွက်: ${rows.length}`;
+  countEl.textContent = `ပြသနေသော မှတ်တမ်းအရေအတွက်: ${filtered.length}`;
 }
 function renderUserDualHistorySections() {
   const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
@@ -6227,18 +6227,31 @@ function renderUserDualHistorySections() {
     return true;
    });
 
-   pT.innerHTML = `
+    pT.innerHTML = `
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-     <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး (All)</button>
-     <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း (Deposit)</button>
-     <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ် (Withdraw)</button>
+      <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး (All)</button>
+      <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း (Deposit)</button>
+      <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ် (Withdraw)</button>
     </div>
     ${filteredTx.length
-  ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => { const st = String(item?.status || "pending").toLowerCase(); const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending"; return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`; }).join("")}</ul>`
-    : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
-    } }
+      ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => {
+          const st = String(item?.status || "pending").toLowerCase();
+          const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending";
+          return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`;
+        }).join("")}</ul>`
+      : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
+    }
   `;
+  }
+}
 
+const origSync = window.syncAllUI;
+window.syncAllUI = function (...args) {
+  const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
+  if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
+  if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
+  return res;
+};
    const origSync = window.syncAllUI;
 window.syncAllUI = function (...args) {
   const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
