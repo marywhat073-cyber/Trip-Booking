@@ -3742,7 +3742,7 @@ function syncBookingCycleUI() {
     if (window.applyLang === origSetLang) window.applyLang = wrapped;
   }
 })();
-}
+ 
 function triggerGetOrder() {
  const user = getActiveUser();
  if (!user) {
@@ -4535,7 +4535,7 @@ function renderAutoCatchRulesTable(u) {
   </tr>
  `).join("");
 }
-
+let activeAdminCsUserId = null;
 function renderAdminCsAll() {
  renderAdminCsList();
  renderAdminCsMessages();
@@ -5513,7 +5513,6 @@ if (!okReject) return;
   markAdminRead(userId);
   renderAdminCsList();
  };
- let activeAdminCsUserId = null;
  const origRenderSupportMessages = window.renderSupportMessages;
  window.renderSupportMessages = function () {
   if (typeof origRenderSupportMessages === "function") {
@@ -6264,7 +6263,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof renderUserDualHistorySections === "function") renderUserDualHistorySections();
   }, 4000);
 });
-
+})();
 </script>
 </body>
 </html>
