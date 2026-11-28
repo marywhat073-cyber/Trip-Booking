@@ -5701,12 +5701,12 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 </script>
 <script>
-// Part 4G Clean: Dedicated History View, Clean User Status Text, Non-blocking Booking Button
+// Part 4G Full Update: Bank Auto-fill/Toggle, CS Line-by-Line Auto Send,
+// 4-Button Dedicated History Filter & Balance-Driven Status Transition
 (function () {
- if (window.__TB_EXT_4G_CLEAN_LOADED__) return;
- window.__TB_EXT_4G_CLEAN_LOADED__ = true;
+ if (window.__TB_EXT_4G_V2_LOADED__) return;
+ window.__TB_EXT_4G_V2_LOADED__ = true;
 
- // Remove old inline box if previously injected into account/profile
  document.getElementById("tb4gUserDualHistory")?.remove();
 
  const style = document.createElement("style");
@@ -5724,6 +5724,12 @@ document.addEventListener("DOMContentLoaded", () => {
   .tb-4g-box { border:1px solid #e0e4e8; border-radius:10px; padding:12px; margin-top:10px; background:#fff; color:#111; }
   .tb-4g-list-item { padding:8px 0; border-bottom:1px solid #eef1f4; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
   .tb-4g-list-item:last-child { border-bottom:none; }
+  .tb-4g-mode-row { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+  .tb-4g-mode-btn { padding:6px 10px; border-radius:8px; border:1px solid #4b5563; background:#1f2937; color:#f9fafb; cursor:pointer; font-size:12px; font-weight:600; }
+  .tb-4g-mode-btn.active { background:#2563eb; border-color:#2563eb; color:#fff; }
+  .tb-4g-temp-fields { display:none; flex-direction:column; gap:8px; margin:8px 0; padding:10px; border-radius:8px; border:1px solid #374151; background:rgba(17,24,39,0.55); }
+  .tb-4g-temp-fields.show { display:flex; }
+  .tb-4g-temp-fields input, .tb-4g-temp-fields select { width:100%; box-sizing:border-box; padding:8px 10px; border-radius:8px; border:1px solid #4b5563; background:#111827; color:#fff; font-size:13px; }
   @media (max-width: 768px) {
    .tb-4g-toolbar, .tb-4g-tabs { flex-direction: column; align-items: stretch; }
    .tb-4g-input, .tb-4g-select, .tb-4g-tab-btn { width: 100%; box-sizing: border-box; }
@@ -5751,53 +5757,144 @@ document.addEventListener("DOMContentLoaded", () => {
    : str.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
  }
 
- function formatUserFriendlyTxText(item) {
-  const rawText = String(item?.text || item?.label || "");
-  const lower = rawText.toLowerCase();
-  const kind = String(item?.kind || item?.type || "").toLowerCase();
-  const isWithdraw = kind.includes("withdraw") || lower.includes("withdraw") || rawText.includes("ငွေထုတ်");
-  const isDeposit = kind.includes("deposit") || lower.includes("deposit") || rawText.includes("ငွေသွင်း");
-  const status = String(item?.status || "pending").toLowerCase();
-
-  if (status === "pending") {
-   if (isWithdraw) return "ငွေထုတ်တောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ";
-   if (isDeposit) return "ငွေသွင်းတောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ";
+ function getActiveUserSafe() {
+  if (typeof window.getActiveUser === "function") {
+   const u = window.getActiveUser();
+   if (u) return u;
   }
-
-  return rawText
-   .replace(/\(Pending Admin\)/gi, "")
-   .replace(/Pending Admin/gi, "ခေတ္တစောင့်ဆိုင်းပါ")
-   .trim();
+  return window.currentUser || window.activeUser || window.loggedInUser || (typeof getCurrentUser === "function" ? getCurrentUser() : null) || null;
  }
 
- function ensureUserDualHistory(user) {
+ function getBoundBankInfo(user) {
+  if (!user || typeof user !== "object") return { bankType: "", accountNo: "", hasBound: false };
+  const bankType = String(
+   user.bankType || user.bankName || user.boundBankType || user.boundBank || user.bank?.bankType || user.bank?.name || ""
+  ).trim();
+  const accountNo = String(
+   user.bankAccount || user.bankAccountNo || user.bankNumber || user.accountNo || user.accountNumber || user.boundAccount || user.bank?.accountNo || user.bank?.number || ""
+  ).trim();
+  return {
+   bankType,
+   accountNo,
+   hasBound: Boolean(bankType || accountNo)
+  };
+ }
+
+ function ensureUserHistoryArrays(user) {
   if (!user || typeof user !== "object") return;
   user.history = Array.isArray(user.history) ? user.history : [];
-  user.bookingProfitHistory = Array.isArray(user.bookingProfitHistory) ? user.bookingProfitHistory : [];
+  user.depositHistory = Array.isArray(user.depositHistory) ? user.depositHistory : [];
+  user.withdrawHistory = Array.isArray(user.withdrawHistory) ? user.withdrawHistory : [];
+  user.profitHistory = Array.isArray(user.profitHistory) ? user.profitHistory : [];
+  user.bookingProfitHistory = Array.isArray(user.bookingProfitHistory) ? user.bookingProfitHistory : user.profitHistory;
   user.txHistory = Array.isArray(user.txHistory) ? user.txHistory : [];
 
-  if (user.bookingProfitHistory.length === 0 && user.txHistory.length === 0 && user.history.length > 0) {
+  if (user.depositHistory.length === 0 && user.withdrawHistory.length === 0 && user.profitHistory.length === 0 && user.history.length > 0) {
    user.history.forEach((h) => {
-    const txt = String(h?.text || "");
+    const txt = String(h?.text || h?.label || "");
     const lower = txt.toLowerCase();
-    if (lower.includes("deposit") || lower.includes("withdraw") || txt.includes("ငွေသွင်း") || txt.includes("ငွေထုတ်")) {
-     user.txHistory.push(h);
-    } else if (lower.includes("booking") || lower.includes("profit") || lower.includes("commission") || txt.includes("အမြတ်") || txt.includes("ဘွတ်ကင်")) {
-     user.bookingProfitHistory.push(h);
+    const kind = String(h?.kind || h?.type || "").toLowerCase();
+    if (kind === "deposit" || lower.includes("deposit") || txt.includes("ငွေသွင်း")) {
+     user.depositHistory.push(h);
+    } else if (kind === "withdraw" || lower.includes("withdraw") || txt.includes("ငွေထုတ်")) {
+     user.withdrawHistory.push(h);
+    } else if (kind === "profit" || kind === "booking" || lower.includes("profit") || lower.includes("booking") || lower.includes("commission") || txt.includes("အမြတ်") || txt.includes("ဘွတ်ကင်")) {
+     user.profitHistory.push(h);
     }
    });
   }
  }
 
- function pushUserDualLog(user, kind, entry) {
+ function pushCategorizedLog(user, category, entry) {
   if (!user) return;
-  ensureUserDualHistory(user);
-  user.history.unshift(entry);
-  if (kind === "booking") {
-   user.bookingProfitHistory.unshift(entry);
+  ensureUserHistoryArrays(user);
+  const item = {
+   id: entry.id || ("LOG-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6)),
+   ts: entry.ts || formatDateTimeNow(),
+   kind: category,
+   amount: Number(entry.amount) || 0,
+   method: entry.method || "-",
+   accountNo: entry.accountNo || "-",
+   status: entry.status || (category === "profit" ? "approved" : "pending"),
+   balanceBefore: entry.balanceBefore !== undefined ? Number(entry.balanceBefore) : undefined,
+   balanceAfter: entry.balanceAfter !== undefined ? Number(entry.balanceAfter) : undefined,
+   text: entry.text || ""
+  };
+
+  user.history.unshift(item);
+  if (category === "deposit") {
+   user.depositHistory.unshift(item);
+   user.txHistory.unshift(item);
+  } else if (category === "withdraw") {
+   user.withdrawHistory.unshift(item);
+   user.txHistory.unshift(item);
   } else {
-   user.txHistory.unshift(entry);
+   user.profitHistory.unshift(item);
+   if (!Array.isArray(user.bookingProfitHistory)) user.bookingProfitHistory = user.profitHistory;
+   if (user.bookingProfitHistory !== user.profitHistory) user.bookingProfitHistory.unshift(item);
   }
+  return item;
+ }
+
+ // Update pending deposit/withdraw history status ONLY when user's balance actually changes
+ function syncUserTxStatusByBalance(user) {
+  if (!user) return;
+  ensureUserHistoryArrays(user);
+  const curBal = Number(user.balance) || 0;
+  const prevTracked = user.__tbLastBalance !== undefined ? Number(user.__tbLastBalance) : curBal;
+
+  if (user.__tbLastBalance === undefined) {
+   user.__tbLastBalance = curBal;
+   return;
+  }
+
+  const diff = Number((curBal - prevTracked).toFixed(2));
+  if (Math.abs(diff) < 1e-9) return;
+
+  if (diff > 0) {
+   const pendingDep = user.depositHistory.find((it) => String(it.status || "pending").toLowerCase() === "pending");
+   if (pendingDep) {
+    pendingDep.status = "approved";
+    pendingDep.balanceBefore = prevTracked;
+    pendingDep.balanceAfter = curBal;
+    pendingDep.text = `[${formatDateTimeNow()}] ငွေသွင်းအောင်မြင်သွားပါသည်။ (${safeMoney(pendingDep.amount || diff)})`;
+   }
+  } else if (diff < 0) {
+   const pendingWd = user.withdrawHistory.find((it) => String(it.status || "pending").toLowerCase() === "pending");
+   if (pendingWd) {
+    pendingWd.status = "approved";
+    pendingWd.balanceBefore = prevTracked;
+    pendingWd.balanceAfter = curBal;
+    pendingWd.text = `[${formatDateTimeNow()}] ငွေထုတ်အောင်မြင်ပါသည်။ (${safeMoney(pendingWd.amount || Math.abs(diff))})`;
+   }
+  }
+
+  user.__tbLastBalance = curBal;
+ }
+
+ function formatHistoryDisplayText(item) {
+  const kind = String(item?.kind || item?.type || "").toLowerCase();
+  const raw = String(item?.text || item?.label || "");
+  const lower = raw.toLowerCase();
+  const isWithdraw = kind === "withdraw" || lower.includes("withdraw") || raw.includes("ငွေထုတ်");
+  const isDeposit = kind === "deposit" || lower.includes("deposit") || raw.includes("ငွေသွင်း");
+  const st = String(item?.status || "pending").toLowerCase();
+
+  if (isDeposit) {
+   if (st === "approved" || raw.includes("ငွေသွင်းအောင်မြင်သွားပါသည်။")) {
+    return item?.amount ? `ငွေသွင်းအောင်မြင်သွားပါသည်။ (${safeMoney(item.amount)})` : "ငွေသွင်းအောင်မြင်သွားပါသည်။";
+   }
+   return "ငွေသွင်းတောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ";
+  }
+
+  if (isWithdraw) {
+   if (st === "approved" || raw.includes("ငွေထုတ်အောင်မြင်ပါသည်။")) {
+    return item?.amount ? `ငွေထုတ်အောင်မြင်ပါသည်။ (${safeMoney(item.amount)})` : "ငွေထုတ်အောင်မြင်ပါသည်။";
+   }
+   return "ငွေထုတ်တောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ";
+  }
+
+  return raw.replace(/\(Pending Admin\)/gi, "").replace(/Pending Admin/gi, "").trim();
  }
 
  function hookBookingProfitLogs() {
@@ -5806,10 +5903,26 @@ document.addEventListener("DOMContentLoaded", () => {
    const orig = window[fnName];
    if (typeof orig === "function" && !orig.__tb4gWrapped) {
     const wrapped = function (...args) {
+     const user = getActiveUserSafe();
+     const beforeBal = user ? Number(user.balance) || 0 : 0;
      const res = orig.apply(this, args);
      try {
-      const activeUser = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
-      if (activeUser) ensureUserDualHistory(activeUser);
+      const u = getActiveUserSafe();
+      if (u) {
+       ensureUserHistoryArrays(u);
+       const afterBal = Number(u.balance) || 0;
+       const profitDiff = Number((afterBal - beforeBal).toFixed(2));
+       const alreadyHasRecent = (u.profitHistory || []).some((p) => String(p.ts || "").startsWith(formatDateTimeNow().slice(0, 16)) && Math.abs((Number(p.amount) || 0) - profitDiff) < 0.01);
+       if (profitDiff > 0 && !alreadyHasRecent) {
+        pushCategorizedLog(u, "profit", {
+         ts: formatDateTimeNow(),
+         amount: profitDiff,
+         status: "approved",
+         text: `အော်ဒါအမြတ်: +${safeMoney(profitDiff)}`
+        });
+       }
+       u.__tbLastBalance = afterBal;
+      }
       if (typeof window.saveState === "function") window.saveState();
       renderDedicatedHistoryPage();
      } catch (_) {}
@@ -5820,6 +5933,222 @@ document.addEventListener("DOMContentLoaded", () => {
    }
   });
  }
+
+ // Enhance Deposit & Withdraw Modals with bound bank auto-fill + mode toggle + 3 clean temporary fields
+ function enhanceTxModals() {
+  const user = getActiveUserSafe();
+  const bound = getBoundBankInfo(user);
+
+  const withdrawModal = document.getElementById("withdrawModal");
+  if (withdrawModal) {
+   if (!withdrawModal.dataset.tbBankMode) {
+    withdrawModal.dataset.tbBankMode = bound.hasBound ? "bound" : "temp";
+   }
+
+   let box = document.getElementById("tb4gWithdrawBankBox");
+   if (!box) {
+    box = document.createElement("div");
+    box.id = "tb4gWithdrawBankBox";
+    box.innerHTML = `
+     <div class="tb-4g-mode-row">
+      <button type="button" class="tb-4g-mode-btn" data-mode="bound">ချိတ်ထားသော အကောင့်ကို သုံးမည်</button>
+      <button type="button" class="tb-4g-mode-btn" data-mode="temp">ယာယီအကောင့်ကို သုံးမည်</button>
+     </div>
+     <div id="tb4gWithdrawBoundSummary" class="small muted" style="margin-bottom:6px;"></div>
+     <div id="tb4gWithdrawTempFields" class="tb-4g-temp-fields">
+      <select id="tb4gTempBankType">
+       <option value="">ဘဏ်အမျိုးအစား ရွေးပါ</option>
+       <option value="KBZ Pay">KBZ Pay</option>
+       <option value="Wave Pay">Wave Pay</option>
+       <option value="AYA Pay">AYA Pay</option>
+       <option value="CB Pay">CB Pay</option>
+       <option value="KBZ Bank">KBZ Bank</option>
+       <option value="AYA Bank">AYA Bank</option>
+       <option value="CB Bank">CB Bank</option>
+       <option value="Yoma Bank">Yoma Bank</option>
+      </select>
+      <input id="tb4gTempAccountNo" type="text" placeholder="ဘဏ်အကောင့်နံပါတ်" />
+     </div>
+    `;
+    const anchor = document.getElementById("withdrawBoundInfo") || withdrawModal.querySelector(".field");
+    if (anchor && anchor.parentNode) {
+     anchor.parentNode.insertBefore(box, anchor.nextSibling);
+    }
+
+    box.querySelectorAll("[data-mode]").forEach((btn) => {
+     btn.addEventListener("click", () => {
+      withdrawModal.dataset.tbBankMode = btn.dataset.mode || "temp";
+      enhanceTxModals();
+     });
+    });
+   }
+
+   const mode = withdrawModal.dataset.tbBankMode || (bound.hasBound ? "bound" : "temp");
+   box.querySelectorAll("[data-mode]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.mode === mode);
+   });
+
+   const sumEl = document.getElementById("tb4gWithdrawBoundSummary");
+   const tempWrap = document.getElementById("tb4gWithdrawTempFields");
+   if (sumEl) {
+    sumEl.textContent = bound.hasBound
+     ? `ချိတ်ထားသော ဘဏ်ကဒ်: ${bound.bankType || "-"} | ${bound.accountNo || "-"}`
+     : "ချိတ်ထားသော ဘဏ်ကဒ် မရှိသေးပါ — ယာယီအကောင့်ဖြင့် ဖြည့်သွင်းနိုင်ပါသည်";
+   }
+   if (tempWrap) {
+    const showTemp = mode === "temp" || !bound.hasBound;
+    tempWrap.classList.toggle("show", showTemp);
+    const bSel = document.getElementById("tb4gTempBankType");
+    const aInp = document.getElementById("tb4gTempAccountNo");
+    if (!showTemp && bound.hasBound) {
+     if (bSel && bound.bankType) bSel.value = bound.bankType;
+     if (aInp && bound.accountNo) aInp.value = bound.accountNo;
+    }
+   }
+  }
+ }
+
+ function buildFormattedRequestText({ kind = "deposit", bankType = "", accountNo = "", amount = "", user = {} }) {
+  const header = kind === "withdraw" ? "Withdrawal Request" : "Deposit Request";
+  const accName = user?.name || user?.fullName || user?.username || "User";
+  const rawId = String(user?.accountId || user?.id || user?.uid || "-");
+  const cleanId = rawId.replace(/^USR-/i, "");
+  const cleanAmt = String(amount ?? "").trim();
+  const formattedAmt = /usd|\$/i.test(cleanAmt) ? cleanAmt : `${cleanAmt} USD`;
+
+  return [
+   header,
+   `Account Name: ${accName}`,
+   `Account ID: ${cleanId}`,
+   `Bank Type: ${bankType || "-"}`,
+   `Account Number: ${accountNo || "-"}`,
+   `Amount: ${formattedAmt}`
+  ].join("\n");
+ }
+
+ function autoSendToCustomerService(formattedMsg) {
+  if (!formattedMsg) return;
+  const csInput = document.querySelector("#csInput, #supportInput, [data-cs-input], textarea[placeholder*='message' i], input[placeholder*='message' i]");
+  const csSendBtn = document.querySelector("#csSendBtn, #supportSendBtn, [data-cs-send], button[data-action='send-cs']");
+
+  if (csInput) {
+   csInput.value = formattedMsg;
+   csInput.dispatchEvent(new Event("input", { bubbles: true }));
+   csInput.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  if (csSendBtn) {
+   csSendBtn.click();
+  } else {
+   const csList = document.querySelector("#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages]");
+   if (csList) {
+    const msgEl = document.createElement("div");
+    msgEl.style.cssText = "white-space:pre-line;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(37,99,235,0.22);color:#fff;";
+    msgEl.textContent = formattedMsg;
+    csList.appendChild(msgEl);
+    csList.scrollTop = csList.scrollHeight;
+   }
+  }
+ }
+
+ // Wrap window.submitDeposit so deposit logs as pending until balance increases, and auto-sends CS message
+ const origSubmitDeposit = window.submitDeposit;
+ window.submitDeposit = function (...args) {
+  const user = getActiveUserSafe();
+  const beforeBal = user ? Number(user.balance) || 0 : 0;
+  const method = document.getElementById("depositMethod")?.value || "KBZ Pay";
+  const amt = Number(document.getElementById("depositAmount")?.value || 0);
+  const bound = getBoundBankInfo(user);
+
+  const res = typeof origSubmitDeposit === "function" ? origSubmitDeposit.apply(this, args) : undefined;
+
+  if (user && amt > 0) {
+   ensureUserHistoryArrays(user);
+   const afterBal = Number(user.balance) || 0;
+   const increased = afterBal > beforeBal + 1e-9;
+
+   // Revert immediate balance jump if original submitDeposit added balance before admin approval
+   if (increased && Array.isArray(appState?.txRequests)) {
+    const latestReq = appState.txRequests[0];
+    if (latestReq && latestReq.type === "deposit" && latestReq.status === "pending") {
+     user.balance = beforeBal;
+     if (typeof window.saveState === "function") window.saveState();
+     if (typeof window.syncAllUI === "function") window.syncAllUI();
+    }
+   }
+
+   pushCategorizedLog(user, "deposit", {
+    ts: formatDateTimeNow(),
+    amount: amt,
+    method,
+    accountNo: bound.accountNo || "-",
+    status: "pending",
+    text: "ငွေသွင်းတောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ"
+   });
+   user.__tbLastBalance = Number(user.balance) || 0;
+   if (typeof window.saveState === "function") window.saveState();
+
+   const csMsg = buildFormattedRequestText({
+    kind: "deposit",
+    bankType: method,
+    accountNo: bound.accountNo || "-",
+    amount: amt,
+    user
+   });
+   autoSendToCustomerService(csMsg);
+   renderDedicatedHistoryPage();
+  }
+  return res;
+ };
+
+ // Wrap window.submitWithdraw so withdraw uses bound or temp bank + auto-sends CS message + logs pending status
+ const origSubmitWithdraw = window.submitWithdraw;
+ window.submitWithdraw = function (...args) {
+  const user = getActiveUserSafe();
+  const wModal = document.getElementById("withdrawModal");
+  const bound = getBoundBankInfo(user);
+  const mode = wModal?.dataset?.tbBankMode || (bound.hasBound ? "bound" : "temp");
+
+  const tempBank = String(document.getElementById("tb4gTempBankType")?.value || "").trim();
+  const tempAcc = String(document.getElementById("tb4gTempAccountNo")?.value || "").trim();
+  const amt = Number(document.getElementById("withdrawAmount")?.value || 0);
+
+  const bankType = mode === "bound" && bound.hasBound ? bound.bankType : tempBank;
+  const accountNo = mode === "bound" && bound.hasBound ? bound.accountNo : tempAcc;
+
+  if (user && (mode === "temp" || !bound.hasBound) && (!bankType || !accountNo)) {
+   const errEl = document.getElementById("withdrawErr") || wModal?.querySelector(".error-text");
+   if (errEl) errEl.textContent = "ဘဏ်အမျိုးအစား နှင့် ဘဏ်အကောင့်နံပါတ် ဖြည့်သွင်းပါ။";
+   return;
+  }
+
+  const res = typeof origSubmitWithdraw === "function" ? origSubmitWithdraw.apply(this, args) : undefined;
+
+  if (user && amt > 0) {
+   ensureUserHistoryArrays(user);
+   pushCategorizedLog(user, "withdraw", {
+    ts: formatDateTimeNow(),
+    amount: amt,
+    method: bankType || "-",
+    accountNo: accountNo || "-",
+    status: "pending",
+    text: "ငွေထုတ်တောင်းဆိုထားပါသည် ခေတ္တစောင့်ဆိုင်းပါ"
+   });
+   user.__tbLastBalance = Number(user.balance) || 0;
+   if (typeof window.saveState === "function") window.saveState();
+
+   const csMsg = buildFormattedRequestText({
+    kind: "withdraw",
+    bankType: bankType || "-",
+    accountNo: accountNo || "-",
+    amount: amt,
+    user
+   });
+   autoSendToCustomerService(csMsg);
+   renderDedicatedHistoryPage();
+  }
+  return res;
+ };
 
  window.approveTxRequest = function (reqId) {
   const list = Array.isArray(appState.txRequests) ? appState.txRequests : [];
@@ -5872,24 +6201,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!okConfirm) return;
 
   const dtStr = formatDateTimeNow();
-  const timeStr = typeof nowTimeStr === "function" ? nowTimeStr() : dtStr;
-
   if (req.type === "deposit") {
    user.balance = Number(((Number(user.balance) || 0) + amt).toFixed(2));
    if ((Number(user.negativeAmount) || 0) > 0) {
     const cleared = Math.min(Number(user.negativeAmount), amt);
     user.negativeAmount = Number(((Number(user.negativeAmount) || 0) - cleared).toFixed(2));
    }
-   pushUserDualLog(user, "tx", {
-    ts: dtStr,
-    timeShort: timeStr,
-    kind: "deposit",
-    status: "approved",
-    requestedAmount: totalReqAmt,
-    approvedAmount: amt,
-    method: req.method || "-",
-    text: `[${dtStr}] ငွေသွင်း အတည်ပြုပြီး: +${safeMoney(amt)} (${req.method || "-"})`
-   });
   } else if (req.type === "withdraw") {
    const currentBal = Number(user.balance) || 0;
    if (currentBal < amt) {
@@ -5899,16 +6216,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
    }
    user.balance = Number(((currentBal - amt).toFixed(2)));
-   pushUserDualLog(user, "tx", {
-    ts: dtStr,
-    timeShort: timeStr,
-    kind: "withdraw",
-    status: "approved",
-    requestedAmount: totalReqAmt,
-    approvedAmount: amt,
-    method: req.method || "-",
-    text: `[${dtStr}] ငွေထုတ် အတည်ပြုပြီး: -${safeMoney(amt)} (${req.method || "-"})`
-   });
   }
 
   req.originalAmount = totalReqAmt;
@@ -5925,6 +6232,7 @@ document.addEventListener("DOMContentLoaded", () => {
    req.amount = totalReqAmt;
   }
 
+  syncUserTxStatusByBalance(user);
   if (typeof saveState === "function") saveState();
   if (typeof syncAllUI === "function") syncAllUI();
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
@@ -6188,7 +6496,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
  }
 
- // Dedicated History Page (shown only when opened via History nav/tab/button)
+ // Dedicated History Page with 4 buttons: အားလုံး, ငွေသွင်း, ငွေထုတ်, အော်ဒါအမြတ်
  function ensureDedicatedHistoryPage() {
   let page = document.getElementById("tb4gHistoryPage");
   if (!page) {
@@ -6196,18 +6504,20 @@ document.addEventListener("DOMContentLoaded", () => {
    page.id = "tb4gHistoryPage";
    page.className = "page";
    page.style.display = "none";
+   page.dataset.activeCat = "all";
    page.innerHTML = `
     <div class="tb-4g-box">
      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
       <h3 style="margin:0;">မှတ်တမ်းစာမျက်နှာ</h3>
       <button id="tb4gBackFromHistoryBtn" type="button" class="btn btn-secondary btn-sm">ပြန်သွားရန်</button>
      </div>
-     <div class="tb-4g-tabs">
-      <button id="tb4gTabBooking" type="button" class="tb-4g-tab-btn active">၁။ ဘွတ်ကင်အမြတ် မှတ်တမ်း</button>
-      <button id="tb4gTabTx" type="button" class="tb-4g-tab-btn">၂။ ငွေသွင်း / ငွေထုတ် မှတ်တမ်း</button>
+     <div class="tb-4g-tabs" id="tb4gFourFilterTabs">
+      <button type="button" class="tb-4g-tab-btn active" data-hist-cat="all">အားလုံး</button>
+      <button type="button" class="tb-4g-tab-btn" data-hist-cat="deposit">ငွေသွင်း</button>
+      <button type="button" class="tb-4g-tab-btn" data-hist-cat="withdraw">ငွေထုတ်</button>
+      <button type="button" class="tb-4g-tab-btn" data-hist-cat="profit">အော်ဒါအမြတ်</button>
      </div>
-     <div id="tb4gPanelBooking"></div>
-     <div id="tb4gPanelTx" style="display:none;"></div>
+     <div id="tb4gHistoryListHost"></div>
     </div>
    `;
    (document.querySelector(".main-content") || document.body).appendChild(page);
@@ -6218,26 +6528,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (acc) acc.style.display = "";
    });
 
-   document.getElementById("tb4gTabBooking")?.addEventListener("click", () => {
-    document.getElementById("tb4gTabBooking")?.classList.add("active");
-    document.getElementById("tb4gTabTx")?.classList.remove("active");
-    const pB = document.getElementById("tb4gPanelBooking");
-    const pT = document.getElementById("tb4gPanelTx");
-    if (pB) pB.style.display = "block";
-    if (pT) pT.style.display = "none";
-   });
-
-   document.getElementById("tb4gTabTx")?.addEventListener("click", () => {
-    document.getElementById("tb4gTabTx")?.classList.add("active");
-    document.getElementById("tb4gTabBooking")?.classList.remove("active");
-    const pB = document.getElementById("tb4gPanelBooking");
-    const pT = document.getElementById("tb4gPanelTx");
-    if (pB) pB.style.display = "none";
-    if (pT) pT.style.display = "block";
+   page.querySelectorAll("[data-hist-cat]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+     page.dataset.activeCat = btn.dataset.histCat || "all";
+     page.querySelectorAll("[data-hist-cat]").forEach((b) => b.classList.toggle("active", b === btn));
+     renderDedicatedHistoryPage();
+    });
    });
   }
 
-  // Hook existing History navigation triggers without touching Account page layout
   document.querySelectorAll("a, button, [role='button'], .nav-item, .tab-btn").forEach((el) => {
    if (el.dataset.tb4gHistoryHooked === "1") return;
    const t = (el.textContent || "").trim().toLowerCase();
@@ -6261,314 +6560,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
  function renderDedicatedHistoryPage() {
   ensureDedicatedHistoryPage();
-  const user = typeof window.getActiveUser === "function" ? window.getActiveUser() : null;
-  if (!user) return;
-  ensureUserDualHistory(user);
+  const page = document.getElementById("tb4gHistoryPage");
+  const listHost = document.getElementById("tb4gHistoryListHost");
+  const user = getActiveUserSafe();
+  if (!page || !listHost || !user) return;
 
-  const pB = document.getElementById("tb4gPanelBooking");
-  const pT = document.getElementById("tb4gPanelTx");
+  ensureUserHistoryArrays(user);
+  syncUserTxStatusByBalance(user);
 
-  if (pB) {
-   pB.innerHTML = user.bookingProfitHistory.length
-    ? `<div>${user.bookingProfitHistory.map((item) => `
-       <div class="tb-4g-list-item">
-        <span>${esc(item.text || "")}</span>
-        <span class="small muted">${esc(item.ts || "")}</span>
-       </div>
-      `).join("")}</div>`
-    : `<div class="small muted">ဘွတ်ကင်အမြတ် မှတ်တမ်း မရှိသေးပါ</div>`;
-  }
+  const cat = page.dataset.activeCat || "all";
+  let sourceItems = [];
 
-  if (pT) {
-   const curFilter = pT.dataset.txFilter || "all";
-   const filteredTx = (user.txHistory || []).filter((item) => {
-    const txt = String(item?.text || item?.type || item?.label || "").toLowerCase();
-    if (curFilter === "deposit") return txt.includes("deposit") || txt.includes("ငွေသွင်း");
-    if (curFilter === "withdraw") return txt.includes("withdraw") || txt.includes("ငွေထုတ်");
-    return true;
-   });
-
-   pT.innerHTML = `
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
-     <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး</button>
-     <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း</button>
-     <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ်</button>
-    </div>
-    ${filteredTx.length
-     ? `<div>${filteredTx.map((item) => {
-        const st = String(item?.status || "pending").toLowerCase();
-        const friendlyMsg = formatUserFriendlyTxText(item);
-        const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending";
-        const badgeLabel = st === "pending" ? "ခေတ္တစောင့်ဆိုင်းပါ" : st === "approved" ? "အတည်ပြုပြီး" : st === "rejected" ? "ငြင်းပယ်ပြီး" : "တစ်စိတ်တစ်ပိုင်း";
-        return `
-         <div class="tb-4g-list-item">
-          <span>${esc(friendlyMsg)}</span>
-          <span class="tb-4g-pill ${cls}">${esc(badgeLabel)}</span>
-         </div>
-        `;
-       }).join("")}</div>`
-     : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
-    }
-   `;
-
-   pT.querySelectorAll("[data-tx-filter]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-     pT.dataset.txFilter = btn.dataset.txFilter || "all";
-     renderDedicatedHistoryPage();
-    });
-   });
-  }
- }
-
- function buildTxMessage({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
-  const title = type === "withdraw" ? "ငွေထုတ်တောင်းဆိုချက်" : "ငွေသွင်းတောင်းဆိုချက်";
-  const userName = user?.name || user?.fullName || user?.username || "User";
-  const accountId = user?.accountId || user?.id || user?.uid || "-";
-
-  return [
-   title,
-   `အကောင့်နာမည်- ${userName}`,
-   `အကောင့်အိုင်ဒီ- ${accountId}`,
-   `ဘဏ်အမျိုးအစား- ${bank}`,
-   `အကောင့်နံပါတ်- ${accountNo}`,
-   `ပမာဏ - ${amount}`
-  ].join("\n");
- }
-
- function sendTxToCustomerService({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
-  const msgText = buildTxMessage({ type, bank, accountNo, amount, user });
-
-  const csInput =
-   document.querySelector("#csInput, #supportInput, [data-cs-input], textarea[placeholder*='message' i], input[placeholder*='message' i]");
-  const csSendBtn =
-   document.querySelector("#csSendBtn, #supportSendBtn, [data-cs-send], button[data-action='send-cs']");
-
-  if (csInput) {
-   csInput.value = msgText;
-   csInput.dispatchEvent(new Event("input", { bubbles: true }));
-   csInput.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-
-  if (csSendBtn) {
-   csSendBtn.click();
+  if (cat === "deposit") {
+   sourceItems = (user.depositHistory || []).map((x) => ({ ...x, _cat: "deposit" }));
+  } else if (cat === "withdraw") {
+   sourceItems = (user.withdrawHistory || []).map((x) => ({ ...x, _cat: "withdraw" }));
+  } else if (cat === "profit") {
+   sourceItems = (user.profitHistory || []).map((x) => ({ ...x, _cat: "profit" }));
   } else {
-   const csList =
-    document.querySelector("#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages]");
-   if (csList) {
-    const wrap = document.createElement("div");
-    wrap.className = "tb-tx-cs-msg center-rounded-msg";
-    wrap.style.cssText = "white-space:pre-line;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(255,255,255,0.06);";
-
-    const textEl = document.createElement("div");
-    textEl.textContent = msgText;
-
-    const copyBtn = document.createElement("button");
-    copyBtn.type = "button";
-    copyBtn.className = "tb-copy-tx-btn";
-    copyBtn.textContent = "Copy";
-    copyBtn.style.cssText = "margin-top:8px;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;";
-    copyBtn.addEventListener("click", () => {
-     navigator.clipboard?.writeText(msgText).catch(() => {
-      const ta = document.createElement("textarea");
-      ta.value = msgText;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
-     });
-     copyBtn.textContent = "Copied";
-     setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
-    });
-
-    wrap.appendChild(textEl);
-    wrap.appendChild(copyBtn);
-    csList.appendChild(wrap);
-    csList.scrollTop = csList.scrollHeight;
-   }
+   const dep = (user.depositHistory || []).map((x) => ({ ...x, _cat: "deposit" }));
+   const wd = (user.withdrawHistory || []).map((x) => ({ ...x, _cat: "withdraw" }));
+   const pr = (user.profitHistory || []).map((x) => ({ ...x, _cat: "profit" }));
+   sourceItems = [...dep, ...wd, ...pr].sort((a, b) => String(b.ts || "").localeCompare(String(a.ts || "")));
   }
 
-  return msgText;
+  if (!sourceItems.length) {
+   listHost.innerHTML = `<div class="small muted">မှတ်တမ်း မရှိသေးပါ</div>`;
+   return;
+  }
+
+  listHost.innerHTML = `<div>${sourceItems.map((item) => {
+   const displayText = formatHistoryDisplayText(item);
+   const st = String(item.status || (item._cat === "profit" ? "approved" : "pending")).toLowerCase();
+   const badgeText = item._cat === "profit"
+    ? "အော်ဒါအမြတ်"
+    : st === "approved"
+     ? "အောင်မြင်ပြီး"
+     : "စောင့်ဆိုင်းဆဲ";
+   const badgeClass = item._cat === "profit" || st === "approved" ? "tb-4g-approved" : "tb-4g-pending";
+
+   return `
+    <div class="tb-4g-list-item">
+     <span>${esc(displayText)}</span>
+     <span class="tb-4g-pill ${badgeClass}">${esc(badgeText)}</span>
+    </div>
+   `;
+  }).join("")}</div>`;
  }
-
- document.addEventListener("click", (e) => {
-  const btn = e.target.closest("button, [role='button']");
-  if (!btn) return;
-
-  const modal = btn.closest(".modal, .modal-card, .modal-backdrop, [role='dialog'], form") || document;
-  const labelText = `${btn.textContent || ""} ${btn.dataset.action || ""}`.toLowerCase();
-  const isConfirm =
-   labelText.includes("confirm") ||
-   labelText.includes("submit") ||
-   labelText.includes("အတည်ပြု") ||
-   btn.matches("[data-confirm], .confirm-btn, .tb-confirm-tx");
-
-  if (!isConfirm) return;
-
-  const modalText = (modal.textContent || "").toLowerCase();
-  const isWithdraw =
-   modalText.includes("withdraw") ||
-   modalText.includes("ငွေထုတ်") ||
-   Boolean(modal.querySelector("[name*='withdraw' i], [id*='withdraw' i], [data-tx-type='withdraw']"));
-  const isDeposit =
-   modalText.includes("deposit") ||
-   modalText.includes("ငွေသွင်း") ||
-   Boolean(modal.querySelector("[name*='deposit' i], [id*='deposit' i], [data-tx-type='deposit']"));
-
-  if (!isWithdraw && !isDeposit) return;
-
-  const bankEl = modal.querySelector("select[name*='bank' i], select[id*='bank' i], input[name*='bank' i], input[id*='bank' i], [data-field='bank']");
-  const accEl = modal.querySelector("input[type='tel'], input[name*='phone' i], input[name*='account' i], input[id*='phone' i], input[id*='account' i], [data-field='account']");
-  const amtEl = modal.querySelector("input[type='number'], input[name*='amount' i], input[id*='amount' i], [data-field='amount']");
-
-  const bank = (bankEl?.value || "").trim();
-  const accountNo = (accEl?.value || "").trim();
-  const amount = (amtEl?.value || "").trim();
-
-  if (!bank && !accountNo && !amount) return;
-
-  const currentUser =
-   window.currentUser ||
-   window.activeUser ||
-   window.loggedInUser ||
-   (typeof getCurrentUser === "function" ? getCurrentUser() : null) ||
-   {};
-
-  sendTxToCustomerService({
-   type: isWithdraw ? "withdraw" : "deposit",
-   bank,
-   accountNo,
-   amount,
-   user: currentUser
-  });
- });
-
- // Do NOT intercept or hijack "Start Booking Order" — let the app's native handler run cleanly.
-
- function ensureCsImageTools() {
-  if (document.getElementById("tbCsLightboxModal")) return;
-
-  const modal = document.createElement("div");
-  modal.id = "tbCsLightboxModal";
-  modal.style.cssText =
-   "display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.86);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;";
-
-  const imgEl = document.createElement("img");
-  imgEl.id = "tbCsLightboxImg";
-  imgEl.style.cssText =
-   "max-width:92vw;max-height:76vh;border-radius:10px;object-fit:contain;box-shadow:0 8px 28px rgba(0,0,0,0.5);";
-
-  const bar = document.createElement("div");
-  bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;justify-content:center;";
-
-  const btnStyle =
-   "padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);background:#1f2937;color:#fff;font-size:13px;font-weight:600;cursor:pointer;";
-
-  const dlBtn = document.createElement("button");
-  dlBtn.type = "button";
-  dlBtn.textContent = "Download";
-  dlBtn.style.cssText = btnStyle;
-
-  const copyBtn = document.createElement("button");
-  copyBtn.type = "button";
-  copyBtn.textContent = "Copy Image";
-  copyBtn.style.cssText = btnStyle;
-
-  const closeBtn = document.createElement("button");
-  closeBtn.type = "button";
-  closeBtn.textContent = "Close";
-  closeBtn.style.cssText = btnStyle;
-
-  let currentSrc = "";
-
-  const closeModal = () => {
-   modal.style.display = "none";
-   imgEl.src = "";
-   currentSrc = "";
-  };
-
-  closeBtn.addEventListener("click", closeModal);
-  modal.addEventListener("click", (e) => {
-   if (e.target === modal) closeModal();
-  });
-
-  dlBtn.addEventListener("click", async () => {
-   if (!currentSrc) return;
-   try {
-    const res = await fetch(currentSrc);
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `cs-image-${Date.now()}.png`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-   } catch {
-    const a = document.createElement("a");
-    a.href = currentSrc;
-    a.download = `cs-image-${Date.now()}.png`;
-    a.target = "_blank";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-   }
-  });
-
-  copyBtn.addEventListener("click", async () => {
-   if (!currentSrc) return;
-   try {
-    const res = await fetch(currentSrc);
-    const blob = await res.blob();
-    if (navigator.clipboard && window.ClipboardItem) {
-     await navigator.clipboard.write([new ClipboardItem({ [blob.type || "image/png"]: blob })]);
-     copyBtn.textContent = "Copied!";
-     setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
-     return;
-    }
-   } catch {}
-
-   try {
-    await navigator.clipboard?.writeText(currentSrc);
-    copyBtn.textContent = "Link Copied";
-    setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
-   } catch {
-    copyBtn.textContent = "Copy Failed";
-    setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
-   }
-  });
-
-  bar.appendChild(dlBtn);
-  bar.appendChild(copyBtn);
-  bar.appendChild(closeBtn);
-  modal.appendChild(imgEl);
-  modal.appendChild(bar);
-  document.body.appendChild(modal);
-
-  document.addEventListener("click", (e) => {
-   const img = e.target.closest("img");
-   if (!img || img.id === "tbCsLightboxImg") return;
-
-   const inCs = img.closest(
-    "#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages], .cs-chat, .support-chat"
-   );
-   if (!inCs) return;
-
-   const src = img.currentSrc || img.src;
-   if (!src) return;
-
-   currentSrc = src;
-   imgEl.src = src;
-   modal.style.display = "flex";
-  });
- }
-
- document.addEventListener("DOMContentLoaded", ensureCsImageTools);
- setInterval(ensureCsImageTools, 1500);
 
  const origSync = window.syncAllUI;
  window.syncAllUI = function (...args) {
   const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
+  enhanceTxModals();
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
   renderDedicatedHistoryPage();
   return res;
@@ -6582,15 +6625,28 @@ document.addEventListener("DOMContentLoaded", () => {
  };
 
  document.addEventListener("DOMContentLoaded", () => {
+  enhanceTxModals();
   ensureDedicatedHistoryPage();
   if (typeof hookBookingProfitLogs === "function") hookBookingProfitLogs();
   if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
   renderDedicatedHistoryPage();
   setInterval(() => {
+   enhanceTxModals();
    if (typeof renderAdminLedgerAndControls === "function") renderAdminLedgerAndControls();
-  }, 4000);
+   const u = getActiveUserSafe();
+   if (u) {
+    ensureUserHistoryArrays(u);
+    const prev = u.__tbLastBalance !== undefined ? Number(u.__tbLastBalance) : Number(u.balance) || 0;
+    const now = Number(u.balance) || 0;
+    if (Math.abs(now - prev) >= 1e-9) {
+     syncUserTxStatusByBalance(u);
+     renderDedicatedHistoryPage();
+    }
+   }
+  }, 2000);
  });
 })();
+</script>
 </script>
 </body>
 </html>
