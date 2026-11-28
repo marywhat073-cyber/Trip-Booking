@@ -6234,7 +6234,7 @@ function renderUserDualHistorySections() {
      <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ် (Withdraw)</button>
     </div>
     ${filteredTx.length
- ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => { const st = String(item?.status || "pending").toLowerCase(); const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending"; return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`; }).join("")}</ul>`
+? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => { const st = String(item?.status || "pending").toLowerCase(); const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending"; return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`; }).join("")}</ul>`
      : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
     }
    `;
