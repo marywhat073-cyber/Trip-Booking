@@ -6227,20 +6227,306 @@ function renderUserDualHistorySections() {
     return true;
    });
 
-    pT.innerHTML = `
+   pT.innerHTML = `
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
       <button type="button" class="tb-4g-tab-btn ${curFilter === "all" ? "active" : ""}" data-tx-filter="all">အားလုံး (All)</button>
       <button type="button" class="tb-4g-tab-btn ${curFilter === "deposit" ? "active" : ""}" data-tx-filter="deposit">ငွေသွင်း (Deposit)</button>
       <button type="button" class="tb-4g-tab-btn ${curFilter === "withdraw" ? "active" : ""}" data-tx-filter="withdraw">ငွေထုတ် (Withdraw)</button>
- ${filteredTx.length
-            ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => {
-                const st = String(item?.status || "pending").toLowerCase();
-                const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending";
-                return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`;
-              }).join("")}</ul>`
-            : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
-          }
-        `;
+    </div>
+    ${filteredTx.length
+      ? `<ul style="margin:0;padding-left:18px;">${filteredTx.map((item) => {
+          const st = String(item?.status || "pending").toLowerCase();
+          const cls = st === "partial" ? "tb-4g-partial" : st === "approved" ? "tb-4g-approved" : st === "rejected" ? "tb-4g-rejected" : "tb-4g-pending";
+          return `<li><span class="small muted">${esc(item?.text || item?.label || "")}</span> <span class="tb-4g-pill ${cls}">${esc(st)}</span></li>`;
+        }).join("")}</ul>`
+      : `<div class="small muted">ငွေသွင်း / ငွေထုတ် မှတ်တမ်း မရှိသေးပါ</div>`
+    }
+  `;
+ }
+}
+
+function buildTxMessage({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
+  const title = type === "withdraw" ? "ငွေထုတ်တောင်းဆိုချက်" : "ငွေသွင်းတောင်းဆိုချက်";
+  const userName = user?.name || user?.fullName || user?.username || "User";
+  const accountId = user?.accountId || user?.id || user?.uid || "-";
+
+  return [
+    title,
+    `အကောင့်နာမည်- ${userName}`,
+    `အကောင့်အိုင်ဒီ- ${accountId}`,
+    `ဘဏ်အမျိုးအစား- ${bank}`,
+    `အကောင့်နံပါတ်- ${accountNo}`,
+    `ပမာဏ - ${amount}`
+  ].join("\n");
+}
+  function sendTxToCustomerService({ type = "deposit", bank = "", accountNo = "", amount = "", user = {} }) {
+  const msgText = buildTxMessage({ type, bank, accountNo, amount, user });
+
+  const csInput =
+    document.querySelector("#csInput, #supportInput, [data-cs-input], textarea[placeholder*='message' i], input[placeholder*='message' i]");
+  const csSendBtn =
+    document.querySelector("#csSendBtn, #supportSendBtn, [data-cs-send], button[data-action='send-cs']");
+
+  if (csInput) {
+    csInput.value = msgText;
+    csInput.dispatchEvent(new Event("input", { bubbles: true }));
+    csInput.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  if (csSendBtn) {
+    csSendBtn.click();
+  } else {
+    const csList =
+      document.querySelector("#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages]");
+    if (csList) {
+      const wrap = document.createElement("div");
+      wrap.className = "tb-tx-cs-msg center-rounded-msg";
+      wrap.style.cssText = "white-space:pre-line;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(255,255,255,0.06);";
+
+      const textEl = document.createElement("div");
+      textEl.textContent = msgText;
+
+      const copyBtn = document.createElement("button");
+      copyBtn.type = "button";
+      copyBtn.className = "tb-copy-tx-btn";
+      copyBtn.textContent = "Copy";
+      copyBtn.style.cssText = "margin-top:8px;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;";
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard?.writeText(msgText).catch(() => {
+          const ta = document.createElement("textarea");
+          ta.value = msgText;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+        });
+        copyBtn.textContent = "Copied";
+        setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
+      });
+
+      wrap.appendChild(textEl);
+      wrap.appendChild(copyBtn);
+      csList.appendChild(wrap);
+      csList.scrollTop = csList.scrollHeight;
+    }
+  }
+
+  return msgText;
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("button, [role='button']");
+  if (!btn) return;
+
+  const modal = btn.closest(".modal, .modal-card, .modal-backdrop, [role='dialog'], form") || document;
+  const labelText = `${btn.textContent || ""} ${btn.dataset.action || ""}`.toLowerCase();
+  const isConfirm =
+    labelText.includes("confirm") ||
+    labelText.includes("submit") ||
+    labelText.includes("အတည်ပြု") ||
+    btn.matches("[data-confirm], .confirm-btn, .tb-confirm-tx");
+
+  if (!isConfirm) return;
+
+  const modalText = (modal.textContent || "").toLowerCase();
+  const isWithdraw =
+    modalText.includes("withdraw") ||
+    modalText.includes("ငွေထုတ်") ||
+    Boolean(modal.querySelector("[name*='withdraw' i], [id*='withdraw' i], [data-tx-type='withdraw']"));
+  const isDeposit =
+    modalText.includes("deposit") ||
+    modalText.includes("ငွေသွင်း") ||
+    Boolean(modal.querySelector("[name*='deposit' i], [id*='deposit' i], [data-tx-type='deposit']"));
+
+  if (!isWithdraw && !isDeposit) return;
+
+  const bankEl = modal.querySelector("select[name*='bank' i], select[id*='bank' i], input[name*='bank' i], input[id*='bank' i], [data-field='bank']");
+  const accEl = modal.querySelector("input[type='tel'], input[name*='phone' i], input[name*='account' i], input[id*='phone' i], input[id*='account' i], [data-field='account']");
+  const amtEl = modal.querySelector("input[type='number'], input[name*='amount' i], input[id*='amount' i], [data-field='amount']");
+
+  const bank = (bankEl?.value || "").trim();
+  const accountNo = (accEl?.value || "").trim();
+  const amount = (amtEl?.value || "").trim();
+
+  if (!bank && !accountNo && !amount) return;
+
+  const currentUser =
+    window.currentUser ||
+    window.activeUser ||
+    window.loggedInUser ||
+    (typeof getCurrentUser === "function" ? getCurrentUser() : null) ||
+    {};
+
+  sendTxToCustomerService({
+    type: isWithdraw ? "withdraw" : "deposit",
+    bank,
+    accountNo,
+    amount,
+    user: currentUser
+  });
+});
+ function ensureBookingOrderAction() {
+  const buttons = Array.from(document.querySelectorAll("button, [role='button'], a.btn, .btn"));
+  const bookingBtn = buttons.find((el) =>
+    (el.textContent || "").toLowerCase().includes("start booking order")
+  );
+  if (!bookingBtn || bookingBtn.dataset.tbBookingBound === "1") return;
+  bookingBtn.dataset.tbBookingBound = "1";
+
+  bookingBtn.addEventListener("click", (e) => {
+    if (typeof window.startBookingOrder === "function") {
+      window.startBookingOrder(e);
+      return;
+    }
+    if (typeof window.handleStartBooking === "function") {
+      window.handleStartBooking(e);
+      return;
+    }
+
+    const progressEl = document.querySelector("[data-booking-progress], .booking-progress, .order-progress");
+    if (progressEl && /\d+\s*\/\s*\d+/.test(progressEl.textContent || "")) {
+      const match = (progressEl.textContent || "").match(/(\d+)\s*\/\s*(\d+)/);
+      if (match) {
+        const cur = Number(match[1]);
+        const max = Number(match[2]);
+        if (cur < max) {
+          progressEl.textContent = (progressEl.textContent || "").replace(
+            `${cur}/${max}`,
+            `${cur + 1}/${max}`
+          );
+        }
+      }
+    }
+
+    if (typeof window.syncAllUI === "function") {
+      window.syncAllUI();
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", ensureBookingOrderAction);
+setInterval(ensureBookingOrderAction, 1500);
+ function ensureCsImageTools() {
+  if (document.getElementById("tbCsLightboxModal")) return;
+
+  const modal = document.createElement("div");
+  modal.id = "tbCsLightboxModal";
+  modal.style.cssText =
+    "display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.86);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;";
+
+  const imgEl = document.createElement("img");
+  imgEl.id = "tbCsLightboxImg";
+  imgEl.style.cssText =
+    "max-width:92vw;max-height:76vh;border-radius:10px;object-fit:contain;box-shadow:0 8px 28px rgba(0,0,0,0.5);";
+
+  const bar = document.createElement("div");
+  bar.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;justify-content:center;";
+
+  const btnStyle =
+    "padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);background:#1f2937;color:#fff;font-size:13px;font-weight:600;cursor:pointer;";
+
+  const dlBtn = document.createElement("button");
+  dlBtn.type = "button";
+  dlBtn.textContent = "Download";
+  dlBtn.style.cssText = btnStyle;
+
+  const copyBtn = document.createElement("button");
+  copyBtn.type = "button";
+  copyBtn.textContent = "Copy Image";
+  copyBtn.style.cssText = btnStyle;
+
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.textContent = "Close";
+  closeBtn.style.cssText = btnStyle;
+
+  let currentSrc = "";
+
+  const closeModal = () => {
+    modal.style.display = "none";
+    imgEl.src = "";
+    currentSrc = "";
+  };
+
+  closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  dlBtn.addEventListener("click", async () => {
+    if (!currentSrc) return;
+    try {
+      const res = await fetch(currentSrc);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `cs-image-${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    } catch {
+      const a = document.createElement("a");
+      a.href = currentSrc;
+      a.download = `cs-image-${Date.now()}.png`;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+  });
+
+  copyBtn.addEventListener("click", async () => {
+    if (!currentSrc) return;
+    try {
+      const res = await fetch(currentSrc);
+      const blob = await res.blob();
+      if (navigator.clipboard && window.ClipboardItem) {
+        await navigator.clipboard.write([new ClipboardItem({ [blob.type || "image/png"]: blob })]);
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+        return;
+      }
+    } catch {}
+
+    try {
+      await navigator.clipboard?.writeText(currentSrc);
+      copyBtn.textContent = "Link Copied";
+      setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+    } catch {
+      copyBtn.textContent = "Copy Failed";
+      setTimeout(() => { copyBtn.textContent = "Copy Image"; }, 1500);
+    }
+  });
+
+  bar.appendChild(dlBtn);
+  bar.appendChild(copyBtn);
+  bar.appendChild(closeBtn);
+  modal.appendChild(imgEl);
+  modal.appendChild(bar);
+  document.body.appendChild(modal);
+
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest("img");
+    if (!img || img.id === "tbCsLightboxImg") return;
+
+    const inCs = img.closest(
+      "#csMessages, #supportMessages, .cs-messages, .support-messages, [data-cs-messages], .cs-chat, .support-chat"
+    );
+    if (!inCs) return;
+
+    const src = img.currentSrc || img.src;
+    if (!src) return;
+
+    currentSrc = src;
+    imgEl.src = src;
+    modal.style.display = "flex";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", ensureCsImageTools);
+setInterval(ensureCsImageTools, 1500);
 const origSync = window.syncAllUI;
 window.syncAllUI = function (...args) {
   const res = typeof origSync === "function" ? origSync.apply(this, args) : undefined;
