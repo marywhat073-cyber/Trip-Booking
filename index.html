@@ -6781,7 +6781,36 @@ document.addEventListener("DOMContentLoaded", () => {
   ensureBookingOrderModal();
   ensureDedicatedHistoryPage();
   renderDedicatedHistoryPage();
+  function isUserLoggedIn() {
+  if (typeof currentSessionUserId !== "undefined" && currentSessionUserId) return true;
+  if (typeof appState !== "undefined" && appState && appState.currentUserId) return true;
+  return false;
+}
 
+function showAuthCenterBox() {
+  const oldBox = document.getElementById("authCenterGate");
+  if (oldBox) {
+    oldBox.style.display = "flex";
+    return;
+  }
+  const box = document.createElement("div");
+  box.id = "authCenterGate";
+  box.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.65);display:flex;align-items:center;justify-content:center;z-index:99999;padding:16px;";
+  box.innerHTML = `<div style="background:#161b22;color:#f0f6fc;border:1px solid #30363d;border-radius:12px;padding:24px;max-width:380px;width:100%;text-align:center;position:relative;box-shadow:0 20px 50px rgba(0,0,0,0.5);"><button onclick="document.getElementById('authCenterGate').remove()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#8b949e;font-size:22px;cursor:pointer;">×</button><h3 style="margin:0 0 8px;">အကောင့်ဝင်ရန် / အကောင့်ဖွင့်ရန်</h3><p style="margin:0 0 18px;color:#8b949e;font-size:14px;">ဘိုကင်တင်ရန် အကောင့်အရင်ဖွင့်ပြီး အကောင့်ဝင်ပါ။</p><div style="display:flex;gap:10px;"><button onclick="document.getElementById('authCenterGate').remove();if(typeof openAuthModal==='function')openAuthModal('login');else if(typeof showLoginModal==='function')showLoginModal();" style="flex:1;padding:10px;border-radius:8px;border:none;background:#238636;color:#fff;font-weight:600;cursor:pointer;">အကောင့်ဝင်ရန်</button><button onclick="document.getElementById('authCenterGate').remove();if(typeof openAuthModal==='function')openAuthModal('register');else if(typeof showRegisterModal==='function')showRegisterModal();" style="flex:1;padding:10px;border-radius:8px;border:1px solid #30363d;background:#21262d;color:#f0f6fc;font-weight:600;cursor:pointer;">အကောင့်ဖွင့်ရန်</button></div></div>`;
+  document.body.appendChild(box);
+}
+
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest("button,a,[role='button'],.book-btn,.booking-btn,#bookNowBtn");
+  if (!btn) return;
+  const txt = (btn.innerText || btn.textContent || "").toLowerCase();
+  const isBooking = btn.matches("[data-require-auth],.book-btn,.booking-btn,#bookNowBtn") || txt.includes("book") || txt.includes("ဘိုကင်");
+  if (isBooking && !isUserLoggedIn()) {
+    e.preventDefault();
+    e.stopPropagation();
+    showAuthCenterBox();
+  }
+}, true);
   setInterval(() => {
    configureWithdrawModalLayout();
    const u = getActiveUserSafe();
