@@ -2556,12 +2556,207 @@ function createDefaultState() {
   messages: {},
   adminBankAccounts: [],
   profitTiers: [
-   { principal: 100, profit30: 25 },
-   { principal: 500, profit30: 110 },
-   { principal: 1000, profit30: 230 },
-   { principal: 3000, profit30: 720 },
-   { principal: 5000, profit30: 1250 },
-   { principal: 10000, profit30: 2600 }
+  const investmentTable = [
+  { principal: 100, profit30: 25, total: 125, roiPercent: "25.00%" },
+  { principal: 150, profit30: 28, total: 178, roiPercent: "18.67%" },
+  { principal: 200, profit30: 30, total: 230, roiPercent: "15.00%" },
+  { principal: 250, profit30: 33, total: 283, roiPercent: "13.20%" },
+  { principal: 300, profit30: 35, total: 335, roiPercent: "11.67%" },
+  { principal: 350, profit30: 38, total: 388, roiPercent: "10.86%" },
+  { principal: 400, profit30: 40, total: 440, roiPercent: "10.00%" },
+  { principal: 450, profit30: 43, total: 493, roiPercent: "9.56%" },
+  { principal: 500, profit30: 45, total: 545, roiPercent: "9.00%" },
+  { principal: 550, profit30: 48, total: 598, roiPercent: "8.73%" },
+  { principal: 600, profit30: 50, total: 650, roiPercent: "8.33%" },
+  { principal: 650, profit30: 53, total: 703, roiPercent: "8.15%" },
+  { principal: 700, profit30: 55, total: 755, roiPercent: "7.86%" },
+  { principal: 750, profit30: 58, total: 808, roiPercent: "7.73%" },
+  { principal: 800, profit30: 60, total: 860, roiPercent: "7.50%" },
+  { principal: 850, profit30: 63, total: 913, roiPercent: "7.41%" },
+  { principal: 900, profit30: 65, total: 965, roiPercent: "7.22%" },
+  { principal: 950, profit30: 68, total: 1018, roiPercent: "7.16%" },
+  { principal: 1000, profit30: 70, total: 1070, roiPercent: "7.00%" },
+  { principal: 1050, profit30: 73, total: 1123, roiPercent: "6.95%" },
+  { principal: 1100, profit30: 75, total: 1175, roiPercent: "6.82%" },
+  { principal: 1150, profit30: 78, total: 1228, roiPercent: "6.78%" },
+  { principal: 1200, profit30: 80, total: 1280, roiPercent: "6.67%" },
+  { principal: 1250, profit30: 83, total: 1333, roiPercent: "6.64%" },
+  { principal: 1300, profit30: 85, total: 1385, roiPercent: "6.54%" },
+  { principal: 1350, profit30: 88, total: 1438, roiPercent: "6.52%" },
+  { principal: 1400, profit30: 90, total: 1490, roiPercent: "6.43%" },
+  { principal: 1450, profit30: 93, total: 1543, roiPercent: "6.41%" },
+  { principal: 1500, profit30: 95, total: 1595, roiPercent: "6.33%" },
+  { principal: 1550, profit30: 98, total: 1648, roiPercent: "6.32%" },
+  { principal: 1600, profit30: 100, total: 1700, roiPercent: "6.25%" },
+  { principal: 1650, profit30: 103, total: 1753, roiPercent: "6.24%" },
+  { principal: 1700, profit30: 105, total: 1805, roiPercent: "6.18%" },
+  { principal: 1750, profit30: 108, total: 1858, roiPercent: "6.17%" },
+  { principal: 1800, profit30: 110, total: 1910, roiPercent: "6.11%" },
+  { principal: 1850, profit30: 113, total: 1963, roiPercent: "6.11%" },
+  { principal: 1900, profit30: 115, total: 2015, roiPercent: "6.05%" },
+  { principal: 1950, profit30: 118, total: 2068, roiPercent: "6.05%" },
+  { principal: 2000, profit30: 120, total: 2120, roiPercent: "6.00%" },
+  { principal: 2050, profit30: 123, total: 2173, roiPercent: "6.00%" },
+  { principal: 2100, profit30: 125, total: 2225, roiPercent: "5.95%" },
+  { principal: 2150, profit30: 128, total: 2278, roiPercent: "5.95%" },
+  { principal: 2200, profit30: 130, total: 2330, roiPercent: "5.91%" },
+  { principal: 2250, profit30: 133, total: 2383, roiPercent: "5.91%" },
+  { principal: 2300, profit30: 135, total: 2435, roiPercent: "5.87%" },
+  { principal: 2350, profit30: 138, total: 2488, roiPercent: "5.87%" },
+  { principal: 2400, profit30: 140, total: 2540, roiPercent: "5.83%" },
+  { principal: 2450, profit30: 143, total: 2593, roiPercent: "5.84%" },
+  { principal: 2500, profit30: 145, total: 2645, roiPercent: "5.80%" },
+  { principal: 2550, profit30: 148, total: 2698, roiPercent: "5.80%" },
+  { principal: 2600, profit30: 150, total: 2750, roiPercent: "5.77%" },
+  { principal: 2650, profit30: 153, total: 2803, roiPercent: "5.77%" },
+  { principal: 2700, profit30: 155, total: 2855, roiPercent: "5.74%" },
+  { principal: 2750, profit30: 158, total: 2908, roiPercent: "5.75%" },
+  { principal: 2800, profit30: 160, total: 2960, roiPercent: "5.71%" },
+  { principal: 2850, profit30: 163, total: 3013, roiPercent: "5.72%" },
+  { principal: 2900, profit30: 165, total: 3065, roiPercent: "5.69%" },
+  { principal: 2950, profit30: 168, total: 3118, roiPercent: "5.69%" },
+  { principal: 3000, profit30: 170, total: 3170, roiPercent: "5.67%" },
+  { principal: 3050, profit30: 173, total: 3223, roiPercent: "5.67%" },
+  { principal: 3100, profit30: 175, total: 3275, roiPercent: "5.65%" },
+  { principal: 3150, profit30: 178, total: 3328, roiPercent: "5.65%" },
+  { principal: 3200, profit30: 180, total: 3380, roiPercent: "5.63%" },
+  { principal: 3250, profit30: 183, total: 3433, roiPercent: "5.63%" },
+  { principal: 3300, profit30: 185, total: 3485, roiPercent: "5.61%" },
+  { principal: 3350, profit30: 188, total: 3538, roiPercent: "5.61%" },
+  { principal: 3400, profit30: 190, total: 3590, roiPercent: "5.59%" },
+  { principal: 3450, profit30: 193, total: 3643, roiPercent: "5.59%" },
+  { principal: 3500, profit30: 195, total: 3695, roiPercent: "5.57%" },
+  { principal: 3550, profit30: 198, total: 3748, roiPercent: "5.58%" },
+  { principal: 3600, profit30: 200, total: 3800, roiPercent: "5.56%" },
+  { principal: 3650, profit30: 203, total: 3853, roiPercent: "5.56%" },
+  { principal: 3700, profit30: 205, total: 3905, roiPercent: "5.54%" },
+  { principal: 3750, profit30: 208, total: 3958, roiPercent: "5.55%" },
+  { principal: 3800, profit30: 210, total: 4010, roiPercent: "5.53%" },
+  { principal: 3850, profit30: 213, total: 4063, roiPercent: "5.53%" },
+  { principal: 3900, profit30: 215, total: 4115, roiPercent: "5.51%" },
+  { principal: 3950, profit30: 218, total: 4168, roiPercent: "5.52%" },
+  { principal: 4000, profit30: 220, total: 4220, roiPercent: "5.50%" },
+  { principal: 4050, profit30: 223, total: 4273, roiPercent: "5.50%" },
+  { principal: 4100, profit30: 225, total: 4325, roiPercent: "5.49%" },
+  { principal: 4150, profit30: 228, total: 4378, roiPercent: "5.49%" },
+  { principal: 4200, profit30: 230, total: 4430, roiPercent: "5.48%" },
+  { principal: 4250, profit30: 233, total: 4483, roiPercent: "5.48%" },
+  { principal: 4300, profit30: 235, total: 4535, roiPercent: "5.47%" },
+  { principal: 4350, profit30: 238, total: 4588, roiPercent: "5.47%" },
+  { principal: 4400, profit30: 240, total: 4640, roiPercent: "5.45%" },
+  { principal: 4450, profit30: 243, total: 4693, roiPercent: "5.46%" },
+  { principal: 4500, profit30: 245, total: 4745, roiPercent: "5.44%" },
+  { principal: 4550, profit30: 248, total: 4798, roiPercent: "5.45%" },
+  { principal: 4600, profit30: 250, total: 4850, roiPercent: "5.43%" },
+  { principal: 4650, profit30: 253, total: 4903, roiPercent: "5.44%" },
+  { principal: 4700, profit30: 255, total: 4955, roiPercent: "5.43%" },
+  { principal: 4750, profit30: 258, total: 5008, roiPercent: "5.43%" },
+  { principal: 4800, profit30: 260, total: 5060, roiPercent: "5.42%" },
+  { principal: 4850, profit30: 263, total: 5113, roiPercent: "5.42%" },
+  { principal: 4900, profit30: 265, total: 5165, roiPercent: "5.41%" },
+  { principal: 4950, profit30: 268, total: 5218, roiPercent: "5.41%" },
+  { principal: 5000, profit30: 270, total: 5270, roiPercent: "5.40%" },
+  { principal: 5050, profit30: 273, total: 5323, roiPercent: "5.41%" },
+  { principal: 5100, profit30: 275, total: 5375, roiPercent: "5.39%" },
+  { principal: 5150, profit30: 278, total: 5428, roiPercent: "5.40%" },
+  { principal: 5200, profit30: 280, total: 5480, roiPercent: "5.38%" },
+  { principal: 5250, profit30: 283, total: 5533, roiPercent: "5.39%" },
+  { principal: 5300, profit30: 285, total: 5585, roiPercent: "5.38%" },
+  { principal: 5350, profit30: 288, total: 5638, roiPercent: "5.38%" },
+  { principal: 5400, profit30: 290, total: 5690, roiPercent: "5.37%" },
+  { principal: 5450, profit30: 293, total: 5743, roiPercent: "5.37%" },
+  { principal: 5500, profit30: 295, total: 5795, roiPercent: "5.36%" },
+  { principal: 5550, profit30: 298, total: 5848, roiPercent: "5.37%" },
+  { principal: 5600, profit30: 300, total: 5900, roiPercent: "5.36%" },
+  { principal: 5650, profit30: 303, total: 5953, roiPercent: "5.36%" },
+  { principal: 5700, profit30: 305, total: 6005, roiPercent: "5.35%" },
+  { principal: 5750, profit30: 308, total: 6058, roiPercent: "5.36%" },
+  { principal: 5800, profit30: 310, total: 6110, roiPercent: "5.34%" },
+  { principal: 5850, profit30: 313, total: 6163, roiPercent: "5.35%" },
+  { principal: 5900, profit30: 315, total: 6215, roiPercent: "5.34%" },
+  { principal: 5950, profit30: 318, total: 6268, roiPercent: "5.34%" },
+  { principal: 6000, profit30: 320, total: 6320, roiPercent: "5.33%" },
+  { principal: 6050, profit30: 323, total: 6373, roiPercent: "5.34%" },
+  { principal: 6100, profit30: 325, total: 6425, roiPercent: "5.33%" },
+  { principal: 6150, profit30: 328, total: 6478, roiPercent: "5.33%" },
+  { principal: 6200, profit30: 330, total: 6530, roiPercent: "5.32%" },
+  { principal: 6250, profit30: 333, total: 6583, roiPercent: "5.33%" },
+  { principal: 6300, profit30: 335, total: 6635, roiPercent: "5.32%" },
+  { principal: 6350, profit30: 338, total: 6688, roiPercent: "5.32%" },
+  { principal: 6400, profit30: 340, total: 6740, roiPercent: "5.31%" },
+  { principal: 6450, profit30: 343, total: 6793, roiPercent: "5.32%" },
+  { principal: 6500, profit30: 345, total: 6845, roiPercent: "5.31%" },
+  { principal: 6550, profit30: 348, total: 6898, roiPercent: "5.31%" },
+  { principal: 6600, profit30: 350, total: 6950, roiPercent: "5.30%" },
+  { principal: 6650, profit30: 353, total: 7003, roiPercent: "5.31%" },
+  { principal: 6700, profit30: 355, total: 7055, roiPercent: "5.30%" },
+  { principal: 6750, profit30: 358, total: 7108, roiPercent: "5.30%" },
+  { principal: 6800, profit30: 360, total: 7160, roiPercent: "5.29%" },
+  { principal: 6850, profit30: 363, total: 7213, roiPercent: "5.30%" },
+  { principal: 6900, profit30: 365, total: 7265, roiPercent: "5.29%" },
+  { principal: 6950, profit30: 368, total: 7318, roiPercent: "5.30%" },
+  { principal: 7000, profit30: 370, total: 7370, roiPercent: "5.29%" },
+  { principal: 7050, profit30: 373, total: 7423, roiPercent: "5.29%" },
+  { principal: 7100, profit30: 375, total: 7475, roiPercent: "5.28%" },
+  { principal: 7150, profit30: 378, total: 7528, roiPercent: "5.28%" },
+  { principal: 7200, profit30: 380, total: 7580, roiPercent: "5.28%" },
+  { principal: 7250, profit30: 383, total: 7633, roiPercent: "5.28%" },
+  { principal: 7300, profit30: 385, total: 7685, roiPercent: "5.27%" },
+  { principal: 7350, profit30: 388, total: 7738, roiPercent: "5.28%" },
+  { principal: 7400, profit30: 390, total: 7790, roiPercent: "5.27%" },
+  { principal: 7450, profit30: 393, total: 7843, roiPercent: "5.28%" },
+  { principal: 7500, profit30: 395, total: 7895, roiPercent: "5.27%" },
+  { principal: 7550, profit30: 398, total: 7948, roiPercent: "5.27%" },
+  { principal: 7600, profit30: 400, total: 8000, roiPercent: "5.26%" },
+  { principal: 7650, profit30: 403, total: 8053, roiPercent: "5.27%" },
+  { principal: 7700, profit30: 405, total: 8105, roiPercent: "5.26%" },
+  { principal: 7750, profit30: 408, total: 8158, roiPercent: "5.26%" },
+  { principal: 7800, profit30: 410, total: 8210, roiPercent: "5.26%" },
+  { principal: 7850, profit30: 413, total: 8263, roiPercent: "5.26%" },
+  { principal: 7900, profit30: 415, total: 8315, roiPercent: "5.25%" },
+  { principal: 7950, profit30: 418, total: 8368, roiPercent: "5.26%" },
+  { principal: 8000, profit30: 420, total: 8420, roiPercent: "5.25%" },
+  { principal: 8050, profit30: 423, total: 8473, roiPercent: "5.25%" },
+  { principal: 8100, profit30: 425, total: 8525, roiPercent: "5.25%" },
+  { principal: 8150, profit30: 428, total: 8578, roiPercent: "5.25%" },
+  { principal: 8200, profit30: 430, total: 8630, roiPercent: "5.24%" },
+  { principal: 8250, profit30: 433, total: 8683, roiPercent: "5.25%" },
+  { principal: 8300, profit30: 435, total: 8735, roiPercent: "5.24%" },
+  { principal: 8350, profit30: 438, total: 8788, roiPercent: "5.24%" },
+  { principal: 8400, profit30: 440, total: 8840, roiPercent: "5.24%" },
+  { principal: 8450, profit30: 443, total: 8893, roiPercent: "5.24%" },
+  { principal: 8500, profit30: 445, total: 8945, roiPercent: "5.24%" },
+  { principal: 8550, profit30: 448, total: 8998, roiPercent: "5.24%" },
+  { principal: 8600, profit30: 450, total: 9050, roiPercent: "5.23%" },
+  { principal: 8650, profit30: 453, total: 9103, roiPercent: "5.23%" },
+  { principal: 8700, profit30: 455, total: 9155, roiPercent: "5.23%" },
+  { principal: 8750, profit30: 458, total: 9208, roiPercent: "5.23%" },
+  { principal: 8800, profit30: 460, total: 9260, roiPercent: "5.23%" },
+  { principal: 8850, profit30: 463, total: 9313, roiPercent: "5.23%" },
+  { principal: 8900, profit30: 465, total: 9365, roiPercent: "5.22%" },
+  { principal: 8950, profit30: 468, total: 9418, roiPercent: "5.23%" },
+  { principal: 9000, profit30: 470, total: 9470, roiPercent: "5.22%" },
+  { principal: 9050, profit30: 473, total: 9523, roiPercent: "5.22%" },
+  { principal: 9100, profit30: 475, total: 9575, roiPercent: "5.22%" },
+  { principal: 9150, profit30: 478, total: 9628, roiPercent: "5.22%" },
+  { principal: 9200, profit30: 480, total: 9680, roiPercent: "5.22%" },
+  { principal: 9250, profit30: 483, total: 9733, roiPercent: "5.22%" },
+  { principal: 9300, profit30: 485, total: 9785, roiPercent: "5.22%" },
+  { principal: 9350, profit30: 488, total: 9838, roiPercent: "5.22%" },
+  { principal: 9400, profit30: 490, total: 9890, roiPercent: "5.21%" },
+  { principal: 9450, profit30: 493, total: 9943, roiPercent: "5.22%" },
+  { principal: 9500, profit30: 495, total: 9995, roiPercent: "5.21%" },
+  { principal: 9550, profit30: 498, total: 10048, roiPercent: "5.21%" },
+  { principal: 9600, profit30: 500, total: 10100, roiPercent: "5.21%" },
+  { principal: 9650, profit30: 503, total: 10153, roiPercent: "5.22%" },
+  { principal: 9700, profit30: 505, total: 10205, roiPercent: "5.21%" },
+  { principal: 9750, profit30: 508, total: 10258, roiPercent: "5.21%" },
+  { principal: 9800, profit30: 510, total: 10310, roiPercent: "5.20%" },
+  { principal: 9850, profit30: 513, total: 10363, roiPercent: "5.21%" },
+  { principal: 9900, profit30: 515, total: 10415, roiPercent: "5.20%" },
+  { principal: 9950, profit30: 518, total: 10468, roiPercent: "5.21%" },
+  { principal: 10000, profit30: 520, total: 10520, roiPercent: "5.20%" }
+],
   ],
   liveRate: DEFAULT_FX_RATE,
   fxTicks: ticks,
@@ -3332,7 +3527,7 @@ function handleLogoClick() {
  showPage("homePage");
 }
 
-function getTierProfitForBalance(bal) {
+function getTierProfitForBalance(bal, orderNum = 1, alreadyEarned = 0) {
  const tiers = Array.isArray(appState.profitTiers) ? appState.profitTiers.slice() : [];
  tiers.sort((a, b) => Number(a.principal) - Number(b.principal));
  let selected = tiers[0] || { principal: 100, profit30: 25 };
@@ -3341,8 +3536,23 @@ function getTierProfitForBalance(bal) {
    selected = item;
   }
  }
- const perOrder = Number((Number(selected.profit30 || 0) / 30).toFixed(2));
- return { tier: selected, perOrder: Math.max(0.5, perOrder) };
+ const total30 = Number(selected.profit30 || 0);
+ const step = Math.max(1, Math.min(30, Number(orderNum) || 1));
+ const earnedSoFar = Number(alreadyEarned) || 0;
+ const remainingTarget = Number(Math.max(0, total30 - earnedSoFar).toFixed(2));
+
+ if (step >= 30) {
+  return { tier: selected, perOrder: remainingTarget, total30 };
+ }
+
+ const ordersLeft = 31 - step;
+ const avgLeft = remainingTarget / ordersLeft;
+ const jitterFactor = 0.25 + (((step * 37 + Math.round((Number(bal) || 0) * 13)) % 150) / 100);
+ let amount = Number((avgLeft * jitterFactor).toFixed(2));
+ const maxSafe = Number(Math.max(0.01, remainingTarget - 0.01 * (ordersLeft - 1)).toFixed(2));
+ amount = Math.max(0.01, Math.min(amount, maxSafe));
+
+ return { tier: selected, perOrder: amount, total30 };
 }
 const BOOKING_EXTERNAL_PHOTOS = [
   "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80",
@@ -3780,8 +3990,8 @@ function triggerGetOrder() {
   ? user.catchRules.find((r) => !r.used && Number(r.orderNum) === nextOrderNum)
   : null;
 
- const tierInfo = getTierProfitForBalance(user.balance);
- const orderProfit = rule ? Number(rule.profit || tierInfo.perOrder) : tierInfo.perOrder;
+ const tierInfo = getTierProfitForBalance(user.balance, nextOrderNum, user.cycleProfit || 0);
+const orderProfit = rule ? Number(rule.profit ?? tierInfo.perOrder) : tierInfo.perOrder;
  const orderNeg = rule ? Number(rule.negAmount || 0) : 0;
 
  pendingOrderDraft = {
@@ -3836,10 +4046,10 @@ function submitCenterOrder() {
   if (r) r.used = true;
  }
 
- user.completedOrders = (Number(user.completedOrders) || 0) + 1;
- user.cycleProfit = Number(((Number(user.cycleProfit) || 0) + Number(draft.profit || 0)).toFixed(2));
- user.balance = Number(((Number(user.balance) || 0) + Number(draft.profit || 0)).toFixed(2));
-
+const earnedProfit = Number(draft.profit || 0);
+user.balance = Number((Number(user.balance || 0) + earnedProfit).toFixed(2));
+user.cycleProfit = Number((Number(user.cycleProfit || 0) + earnedProfit).toFixed(2));
+user.completedOrders = (Number(user.completedOrders) || 0) + 1;
  if (Number(draft.negAmount) > 0) {
   user.negativeAmount = Number(((Number(user.negativeAmount) || 0) + Number(draft.negAmount)).toFixed(2));
   user.profitBox = Number(((Number(user.profitBox) || 0) + Number(draft.profit || 0)).toFixed(2));
@@ -3954,6 +4164,11 @@ function submitWithdraw() {
   if (errEl) errEl.textContent = "Clear negative balance before withdrawing.";
   return;
  }
+ const activeOrders = Number(user.completedOrders) || 0;
+  if (activeOrders > 0 && activeOrders < 30) {
+    if (errEl) errEl.textContent = `Complete all 30/30 orders before withdrawing (${activeOrders}/30 completed).`;
+    return;
+  }
  if (!amt || amt <= 0 || amt > (Number(user.balance) || 0)) {
   if (errEl) errEl.textContent = "Invalid or insufficient balance.";
   return;
@@ -4435,8 +4650,9 @@ function renderAdminUsers() {
     <td>
      <div style="display:flex;gap:5px;flex-wrap:wrap">
       <button type="button" class="btn btn-primary btn-xs" onclick="adminSaveUserRow('${u.id}')">Save</button>
-      <button type="button" class="btn btn-secondary btn-xs" onclick="openAutoCatchModal('${u.id}')">Catch</button>
+      <button type="button" class="btn btn-secondary btn-xs" onclick="openAutoCatchModal('${u.id}')">Control</button>
       <button type="button" class="btn btn-danger btn-xs" onclick="adminToggleBanUser('${u.id}')">${u.banned ? "Unban" : "Ban"}</button>
+      <button type="button" class="btn btn-warning btn-xs" onclick="adminResetUserOrders('${u.id}')">Reset</button>
      </div>
     </td>
    </tr>
@@ -4453,6 +4669,15 @@ function adminSaveUserRow(userId) {
  if (!Number.isNaN(bal)) u.balance = Number(bal.toFixed(2));
  if (!Number.isNaN(neg)) u.negativeAmount = Number(Math.max(0, neg).toFixed(2));
  if (!Number.isNaN(box)) u.profitBox = Number(Math.max(0, box).toFixed(2));
+ function adminResetUserOrders(userId) {
+  const u = appState.users.find((x) => x.id === userId);
+  if (!u) return;
+  u.completedOrders = 0;
+  u.cycleProfit = 0;
+  if (typeof saveState === "function") saveState();
+  if (typeof renderAdminUsers === "function") renderAdminUsers();
+  if (typeof syncAllUI === "function") syncAllUI();
+}
  saveState();
  renderAdminAll();
  showCenterRoundedAlert("Saved", `Updated ${u.name}.`);
@@ -6179,7 +6404,14 @@ document.addEventListener("DOMContentLoaded", () => {
    if (errEl) errEl.textContent = "ဘဏ်အမျိုးအစား နှင့် ဘဏ်အကောင့်နံပါတ် ဖြည့်သွင်းပါ။";
    return;
   }
-
+  if (user) {
+    const activeOrders = Number(user.completedOrders) || 0;
+    if (activeOrders > 0 && activeOrders < 30) {
+      const errEl = document.getElementById("withdrawErr") || wModal?.querySelector(".error-text");
+      if (errEl) errEl.textContent = `Complete all 30/30 orders before withdrawing (${activeOrders}/30 completed).`;
+      return;
+    }
+  }
   const res = typeof origSubmitWithdraw === "function" ? origSubmitWithdraw.apply(this, args) : undefined;
 
   if (user && amt > 0) {
